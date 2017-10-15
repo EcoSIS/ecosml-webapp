@@ -1,9 +1,9 @@
 import {Element as PolymerElement} from "@polymer/polymer/polymer-element.js"
 import "@polymer/paper-button/paper-button.js"
-import template from "./my-app.html";
+import template from "./ecosml-app.html";
 
 
-export class MyApp extends PolymerElement {
+export class EcoSMLApp extends PolymerElement {
     
   // Define a string template instead of a `<template>` element.
   static get template() {
@@ -25,4 +25,4 @@ export class MyApp extends PolymerElement {
 
 }
 
-customElements.define('my-app', MyApp);
+customElements.define('ecosml-app', EcoSMLApp);

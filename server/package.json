@@ -12,7 +12,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.16.1"
+    "connect-redis": "^3.3.2",
+    "express": "^4.16.2",
+    "express-session": "^1.15.6",
+    "jsonwebtoken": "^8.1.0",
+    "papaparse": "^4.3.6"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
@@ -20,5 +24,29 @@
     "babel-preset-env": "^1.6.0",
     "html-loader": "^0.5.1",
     "webpack": "^3.6.0"
+  },
+  "resolutions": {
+    "qs": "6.5.1",
+    "setprototypeof": "1.1.0",
+    "inherits": "2.0.3",
+    "strip-ansi": "4.0.0",
+    "supports-color": "4.4.0",
+    "ansi-regex": "3.0.0",
+    "jsesc": "1.3.0",
+    "minimist": "1.2.0",
+    "uglify-js": "3.1.3",
+    "acorn": "5.1.2",
+    "ajv": "5.2.3",
+    "yargs": "8.0.2",
+    "string_decoder": "1.0.3",
+    "punycode": "1.3.2",
+    "hash-base": "3.0.4",
+    "camelcase": "4.1.0",
+    "cliui": "3.2.0",
+    "kind-of": "4.0.0",
+    "is-number": "3.0.0",
+    "string-width": "2.1.1",
+    "is-fullwidth-code-point": "2.0.0",
+    "assert-plus": "1.0.0"
   }
 }

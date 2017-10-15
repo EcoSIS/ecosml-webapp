@@ -100,6 +100,10 @@
   version "1.0.12"
   resolved "https://registry.yarnpkg.com/@webcomponents/webcomponentsjs/-/webcomponentsjs-1.0.12.tgz#68d14d955146c679b1b4a34a3df7991ab5cecf4e"
 
+google-charts@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/google-charts/-/google-charts-1.0.0.tgz#a7c49ae8940f35ad21182757e6552c99a5e44632"
+
 "lit-html@https://github.com/PolymerLabs/lit-html.git#master":
   version "0.6.0"
   resolved "https://github.com/PolymerLabs/lit-html.git#9d6f581f77533cb47783d0271d6d968b1f7690de"

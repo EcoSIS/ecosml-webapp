@@ -12,6 +12,8 @@ app.use(session({
     store: new RedisStore({
       host : 'redis'
     }),
+    resave : false,
+    saveUninitialized : false,
     maxAge : config.server.session.maxAge,
     secret: config.server.session.secret
 }));

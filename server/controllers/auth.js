@@ -10,14 +10,19 @@ router.get('/login', (req, res) => {
   let redirectUrl = new URL(config.server.auth.redirect);
   redirectUrl.searchParams.set('returnTo', returnToUrl);
   redirectUrl.searchParams.set('label', config.server.label);
-
-  res.redirect(config.server.auth.redirect);
+  
+  res.redirect(redirectUrl.href);
 });
 
-router.get('jwtLogin', (req, res) => {
-  let jwt = req.query.jwt;
-  let hash = req.query.hash || '#';
-  let token;
+router.get('/user', (req, res) => {
+  res.json({
+    user: req.session.user
+  });
+});
+
+router.get('/jwtLogin', (req, res) => {
+  let token = req.query.jwt;
+  let hash = req.query.hash || '';
 
   try {
     token = jwt.verify(token, config.server.jwt.secret);
@@ -31,9 +36,9 @@ router.get('jwtLogin', (req, res) => {
     return res.redirect(`${config.server.url}/#login-failed`);
   }
   
-  req.session.user = token.payload;
+  req.session.user = token;
 
-  res.send(`${config.server.url}/#${hash}`);
+  res.redirect(`${config.server.url}/#${hash}`);
 });
 
 module.exports = router;

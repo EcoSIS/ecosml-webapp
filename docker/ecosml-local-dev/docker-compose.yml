@@ -8,6 +8,9 @@ services:
       - ../../server:/app
     ports:
       - 3000:3000
+    environment:
+      - JWT_SECRET=${JWT_SECRET}
+    command: tail -f /dev/null
 
   redis:
     image: redis:3.2

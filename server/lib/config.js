@@ -13,7 +13,7 @@ module.exports = {
     },
 
     auth : {
-      redirect : env.AUTH_REDIRECT || 'http://localhost:3000/user/remotelogin'
+      redirect : env.AUTH_REDIRECT || 'http://localhost:5000/user/remotelogin'
     },
 
     session : {

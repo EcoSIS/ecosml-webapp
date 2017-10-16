@@ -1,3 +1,4 @@
 server/node_modules
 server/public/node_modules
 server/public/webcomponentsjs
+.env

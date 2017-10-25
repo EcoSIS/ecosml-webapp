@@ -1,6 +1,7 @@
 const express = require('express');
 const session = require('express-session');
 const config = require('./lib/config');
+const path = require('path');
 
 const app = express();
 
@@ -21,7 +22,7 @@ app.use(session({
 /**
  * Setup static asset dir
  */
-app.use(express.static(config.server.assets));
+app.use(express.static(path.join(__dirname, config.server.assets)));
 
 /**
  * Setup Controllers

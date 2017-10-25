@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-  entry: './public/elements/my-app.js',
+  entry: './public/elements/ecosml-app.js',
   devtool: 'inline-source-map',
   output: {
     filename: 'bundle.js',

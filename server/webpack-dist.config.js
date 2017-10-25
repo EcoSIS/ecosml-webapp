@@ -2,7 +2,7 @@ const path = require('path');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 var modern =  {
-    entry: './public/elements/my-app.js',
+    entry: './public/elements/ecosml-app.js',
     output: {
         filename: 'bundle.js',
         path: path.resolve(__dirname, 'dist')
@@ -23,7 +23,7 @@ var modern =  {
 };
 
 var ie =  {
-    entry: './public/elements/my-app.js',
+    entry: './public/elements/ecosml-app.js',
     output: {
         filename: 'ie-bundle.js',
         path: path.resolve(__dirname, 'dist')

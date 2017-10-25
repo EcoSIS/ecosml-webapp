@@ -1,5 +1,13 @@
 import {Element as PolymerElement} from "@polymer/polymer/polymer-element.js"
 import "@polymer/paper-button/paper-button.js"
+import "@polymer/app-layout/app-header/app-header.js"
+import "@polymer/app-layout/app-toolbar/app-toolbar.js"
+import "@polymer/app-layout/app-drawer/app-drawer"
+import "@polymer/paper-icon-button/paper-icon-button"
+import "@polymer/iron-icons/iron-icons"
+import "@polymer/polymer/lib/elements/custom-style"
+import "@polymer/paper-material/paper-material"
+import "@polymer/paper-styles/paper-styles"
 import template from "./ecosml-app.html";
 
 
@@ -21,6 +29,10 @@ export class EcoSMLApp extends PolymerElement {
     name: {
       Type: String
     }
+  }
+
+  toggleDrawer() {
+    this.$.drawer.toggle();
   }
 
 }

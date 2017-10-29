@@ -6,7 +6,7 @@ class AppStateStore extends BaseStore {
     super();
 
     this.data = {
-      page : 'home'
+      location : {}
     }
 
     this.events = {

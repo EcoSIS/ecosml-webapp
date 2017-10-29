@@ -12,6 +12,13 @@
     "@polymer/iron-scroll-target-behavior" "^3.0.0-pre.1"
     "@polymer/polymer" "^3.0.0-pre.1"
 
+"@polymer/app-route@3.0.0-pre.1":
+  version "3.0.0-pre.1"
+  resolved "https://registry.yarnpkg.com/@polymer/app-route/-/app-route-3.0.0-pre.1.tgz#4fc8f895f899e38461413f4ed1dfa8520aee4396"
+  dependencies:
+    "@polymer/iron-location" "^3.0.0-pre.1"
+    "@polymer/polymer" "^3.0.0-pre.1"
+
 "@polymer/font-roboto@^3.0.0-pre.1":
   version "3.0.0-pre.1"
   resolved "https://registry.yarnpkg.com/@polymer/font-roboto/-/font-roboto-3.0.0-pre.1.tgz#3b989a3b7c7d7351d4d816f8136d708512b0bd10"
@@ -70,6 +77,12 @@
   resolved "https://registry.yarnpkg.com/@polymer/iron-iconset-svg/-/iron-iconset-svg-3.0.0-pre.1.tgz#06a03d5796c4280e1fda0edc334de9de1a808f7d"
   dependencies:
     "@polymer/iron-meta" "^3.0.0-pre.1"
+    "@polymer/polymer" "^3.0.0-pre.1"
+
+"@polymer/iron-location@^3.0.0-pre.1":
+  version "3.0.0-pre.1"
+  resolved "https://registry.yarnpkg.com/@polymer/iron-location/-/iron-location-3.0.0-pre.1.tgz#e2fb5f817729102fcb1838f14a67c7da57d939fe"
+  dependencies:
     "@polymer/polymer" "^3.0.0-pre.1"
 
 "@polymer/iron-media-query@^3.0.0-pre.1":
@@ -152,7 +165,7 @@
     "@polymer/iron-flex-layout" "^3.0.0-pre.1"
     "@polymer/polymer" "^3.0.0-pre.1"
 
-"@polymer/polymer@^3.0.0-pre.1":
+"@polymer/polymer@3.0.0-pre.1", "@polymer/polymer@^3.0.0-pre.1":
   version "3.0.0-pre.1"
   resolved "https://registry.yarnpkg.com/@polymer/polymer/-/polymer-3.0.0-pre.1.tgz#9fc26b5259aad9265f324ced02de715991d2eabe"
   dependencies:
@@ -189,9 +202,9 @@ core-util-is@~1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/core-util-is/-/core-util-is-1.0.2.tgz#b5fd54220aa2bc5ab57aab7140c940754503c1a7"
 
-cork-app-utils@UCDavisLibrary/cork-app-utils:
-  version "1.0.4"
-  resolved "https://codeload.github.com/UCDavisLibrary/cork-app-utils/tar.gz/a0a275fc254d5628499dad7c8bc67c3fc08ffc60"
+cork-app-utils@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/cork-app-utils/-/cork-app-utils-1.0.5.tgz#b2cf1842a15b763129e7070a7ead7f848d0bc02e"
   dependencies:
     superagent "^3.5.2"
 
@@ -200,6 +213,10 @@ debug@^3.1.0:
   resolved "https://registry.yarnpkg.com/debug/-/debug-3.1.0.tgz#5bb5a0672628b64149566ba16819e61518c67261"
   dependencies:
     ms "2.0.0"
+
+decode-uri-component@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/decode-uri-component/-/decode-uri-component-0.2.0.tgz#eb3913333458775cb84cd1a1fae062106bb87545"
 
 delayed-stream@~1.0.0:
   version "1.0.0"
@@ -259,6 +276,10 @@ ms@2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
 
+object-assign@^4.1.0:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/object-assign/-/object-assign-4.1.1.tgz#2109adc7965887cfc05cbbd442cac8bfbb360863"
+
 process-nextick-args@~1.0.6:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/process-nextick-args/-/process-nextick-args-1.0.7.tgz#150e20b756590ad3f91093f25a4f2ad8bff30ba3"
@@ -266,6 +287,14 @@ process-nextick-args@~1.0.6:
 qs@^6.5.1:
   version "6.5.1"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.5.1.tgz#349cdf6eef89ec45c12d7d5eb3fc0c870343a6d8"
+
+query-string@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/query-string/-/query-string-5.0.1.tgz#6e2b86fe0e08aef682ecbe86e85834765402bd88"
+  dependencies:
+    decode-uri-component "^0.2.0"
+    object-assign "^4.1.0"
+    strict-uri-encode "^1.0.0"
 
 readable-stream@^2.0.5:
   version "2.3.3"
@@ -282,6 +311,10 @@ readable-stream@^2.0.5:
 safe-buffer@~5.1.0, safe-buffer@~5.1.1:
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.1.1.tgz#893312af69b2123def71f57889001671eeb2c853"
+
+strict-uri-encode@^1.0.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/strict-uri-encode/-/strict-uri-encode-1.1.0.tgz#279b225df1d582b1f54e65addd4352e18faa0713"
 
 string_decoder@~1.0.3:
   version "1.0.3"

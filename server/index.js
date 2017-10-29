@@ -2,6 +2,7 @@ const express = require('express');
 const session = require('express-session');
 const config = require('./lib/config');
 const path = require('path');
+const fs = require('fs');
 
 const app = express();
 
@@ -19,10 +20,12 @@ app.use(session({
     secret: config.server.session.secret
 }));
 
-/**
- * Setup static asset dir
- */
-app.use(express.static(path.join(__dirname, config.server.assets)));
+// setup static routes
+require('./lib/static')({
+  app: app,
+  assetsDir : path.join(__dirname, config.server.assets),
+  appRoutes : config.server.appRoutes
+});
 
 /**
  * Setup Controllers

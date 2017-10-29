@@ -16,7 +16,8 @@
     "express": "^4.16.2",
     "express-session": "^1.15.6",
     "jsonwebtoken": "^8.1.0",
-    "papaparse": "^4.3.6"
+    "papaparse": "^4.3.6",
+    "request": "^2.83.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",

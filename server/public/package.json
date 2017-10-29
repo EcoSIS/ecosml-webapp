@@ -6,6 +6,7 @@
   "license": "MIT",
   "dependencies": {
     "@polymer/app-layout": "^3.0.0-pre.1",
+    "@polymer/app-route": "3.0.0-pre.1",
     "@polymer/iron-icons": "^3.0.0-pre.1",
     "@polymer/paper-button": "^3.0.0-pre.1",
     "@polymer/paper-icon-button": "^3.0.0-pre.1",
@@ -13,11 +14,13 @@
     "@polymer/paper-styles": "^3.0.0-pre.1",
     "@polymer/polymer": "^3.0.0-pre.1",
     "@webcomponents/webcomponentsjs": "^1.0.12",
-    "cork-app-utils": "UCDavisLibrary/cork-app-utils",
+    "cork-app-utils": "^1.0.5",
     "google-charts": "^1.0.0",
-    "lit-html": "https://github.com/PolymerLabs/lit-html.git#master"
+    "lit-html": "https://github.com/PolymerLabs/lit-html.git#master",
+    "query-string": "^5.0.1"
   },
   "resolutions": {
-    "@webcomponents/webcomponentsjs": "1.0.12"
+    "@webcomponents/webcomponentsjs": "1.0.12",
+    "@polymer/polymer": "3.0.0-pre.1"
   }
 }

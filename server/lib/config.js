@@ -1,4 +1,5 @@
 const env = process.env;
+const secrets = require('../secrets');
 
 module.exports = {
 
@@ -19,8 +20,15 @@ module.exports = {
     session : {
       maxAge : (86400 * 365), // ms - year
       secret : env.SESSION_SECRET || 'not set'
-    }
+    },
 
-  }
+    appRoutes : ['newpage']
+
+  },
+
+  github : {
+    access : secrets.github,
+    org : 'ecosml'
+  },
 
 }

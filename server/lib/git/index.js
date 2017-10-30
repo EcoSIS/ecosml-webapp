@@ -1,26 +1,49 @@
 const { exec } = require('child_process');
+const fs = require('fs-extra');
 const config = require('../config');
+const path = require('path');
 
+const ROOT = config.github.fsRoot;
 const ORG = config.github.org;
-const BASE_URL = `https://github.com/${ORG}/`
+const BASE_URL = `https://github.com/${ORG}/`;
+
+if( !fs.existsSync(ROOT) ) {
+  fs.mkdirpSync(ROOT);
+}
 
 class GitCli {
 
   async clone(repoName) {
     let url = BASE_URL+repoName;
-    let {stdout, stderr} = await this.exec(`clone ${url}`);
+    let {stdout, stderr} = await this.exec(`clone ${url}`, {cwd: ROOT});
+  }
+
+  async ensureDir(repoName) {
+    let dir = path.join(ROOT, repoName);
+    if( !fs.existsSync(dir) ) {
+      await this.clone(repoName);
+    }
+    return dir;
   }
 
   async pull(repoName) {
-    let {stdout, stderr} = await this.exec(`pull`);
+    let dir = await this.ensureDir(repoName);
+    let {stdout, stderr} = await this.exec(`pull`, {cwd: dir});
   }
 
   async resetHEAD(repoName) {
-    let {stdout, stderr} = await this.exec(`reset HEAD --hard`);
+    let dir = await this.ensureDir(repoName);
+    let {stdout, stderr} = await this.exec(`reset HEAD --hard`, {cwd, dir});
   }
 
   async commit(repoName, message) {
-    let {stdout, stderr} = await this.exec(`commit -m "${message}"`);
+    let dir = await this.ensureDir(repoName);
+    let {stdout, stderr} = await this.exec(`commit -m "${message}"`, {cwd, dir});
+  }
+
+  async removeRepository(repoName) {
+    let dir = path.join(ROOT, repoName);
+    await fs.remove(dir);
   }
 
   exec(cmd, options = {}) {
@@ -37,3 +60,5 @@ class GitCli {
   }
 
 }
+
+module.exports = new GitCli();

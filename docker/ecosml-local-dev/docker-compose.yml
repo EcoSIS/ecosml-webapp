@@ -14,3 +14,8 @@ services:
 
   redis:
     image: redis:3.2
+
+  mongo:
+    image: mongo:3.5
+    ports:
+      - 27017:27017

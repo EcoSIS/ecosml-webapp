@@ -1,4 +1,5 @@
 const env = process.env;
+const path = require('path');
 const secrets = require('../secrets');
 
 module.exports = {
@@ -8,6 +9,7 @@ module.exports = {
     url : env.SERVER_URL || 'http://localhost:3000',
     label : env.SERVER_LABEL || 'EcoSML', // used for auth redirect
     assets : env.SERVER_ASSET_DIR || 'public',
+    loglevel : env.SERVER_LOG_LEVEL || 'info',
 
     jwt : {
       secret : env.JWT_SECRET || 'not set'
@@ -23,12 +25,20 @@ module.exports = {
     },
 
     appRoutes : ['newpage']
+  },
 
+  mongodb : {
+    url : 'mongodb://127.0.0.1:27017/ecosml',
+    collections : {
+      repos : 'repo'
+    }
   },
 
   github : {
     access : secrets.github,
-    org : 'ecosml'
-  },
+    org : 'ecosml',
+    fsRoot : env.GITHUB_FS_ROOT || path.join(__dirname, '..', 'gitdata'),
+    default_license : 'mit'
+  }
 
 }

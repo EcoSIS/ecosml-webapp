@@ -3,3 +3,4 @@ server/public/node_modules
 server/public/webcomponentsjs
 .env
 secrets.json
+gitdata

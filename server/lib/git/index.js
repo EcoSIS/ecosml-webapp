@@ -26,14 +26,28 @@ class GitCli {
     return dir;
   }
 
+  getRepoPath(repoName) {
+    return path.join(ROOT, repoName);
+  }
+
   async pull(repoName) {
     let dir = await this.ensureDir(repoName);
-    let {stdout, stderr} = await this.exec(`pull`, {cwd: dir});
+    return await this.exec(`pull`, {cwd: dir});
+  }
+
+  async push(repoName) {
+    let dir = await this.ensureDir(repoName);
+    return await this.exec(`push`, {cwd: dir});
   }
 
   async resetHEAD(repoName) {
     let dir = await this.ensureDir(repoName);
     let {stdout, stderr} = await this.exec(`reset HEAD --hard`, {cwd, dir});
+  }
+
+  async addAll(repoName) {
+    let dir = await this.ensureDir(repoName);
+    return await this.exec(`add --all`, {cwd: dir});
   }
 
   async commit(repoName, message) {

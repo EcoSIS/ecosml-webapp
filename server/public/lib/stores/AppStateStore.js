@@ -1,28 +1,5 @@
-var BaseStore = require('cork-app-utils').BaseStore;
+var {AppStateStore} = require('cork-app-state');
 
-class AppStateStore extends BaseStore {
+class AppStateStoreImpl extends AppStateStore {}
 
-  constructor() {
-    super();
-
-    this.data = {
-      location : {}
-    }
-
-    this.events = {
-      APP_STATE_UPDATE : 'app-state-update'
-    }
-  }
-
-  set(state) {
-    this.data = Object.assign({}, this.data, state);
-    this.emit(this.events.APP_STATE_UPDATE, this.data);
-  }
-
-  get() {
-    return this.data;
-  }
-
-}
-
-module.exports = new AppStateStore();
+module.exports = new AppStateStoreImpl();

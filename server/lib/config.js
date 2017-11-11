@@ -2,6 +2,8 @@ const env = process.env;
 const path = require('path');
 const secrets = require('../secrets');
 
+const mongoHost = env.MONGO_HOST || '127.0.0.1';
+
 module.exports = {
 
   server : {
@@ -28,7 +30,8 @@ module.exports = {
   },
 
   mongodb : {
-    url : 'mongodb://127.0.0.1:27017/ecosml',
+    host : mongoHost,
+    url : `mongodb://${mongoHost}:27017/ecosml`,
     collections : {
       repos : 'repo'
     }

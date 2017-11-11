@@ -10,6 +10,7 @@ services:
       - 3000:3000
     environment:
       - JWT_SECRET=${JWT_SECRET}
+      - MONGO_HOST=mongo
     command: tail -f /dev/null
 
   redis:

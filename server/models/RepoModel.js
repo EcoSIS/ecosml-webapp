@@ -3,8 +3,10 @@ const github = require('../lib/github');
 const mongo = require('../lib/mongo');
 const logger = require('../lib/logger');
 const config = require('../lib/config');
+const AppError = require('../lib/AppError');
 const path = require('path');
 const fs = require('fs-extra');
+const uuid = require('uuid');
 
 
 class RepoModel {
@@ -17,7 +19,7 @@ class RepoModel {
 
   verifyRequired(attrs, obj) {
     attrs.forEach(attr => {
-      if( !obj[attr] ) throw new Error(`${attr} required`);
+      if( !obj[attr] ) throw new AppError(`${attr} required`, AppError.ERROR_CODES.MISSING_ATTRIBUTE);
     });
   }
 
@@ -28,7 +30,7 @@ class RepoModel {
         body = JSON.parse(body).message
       } catch(e) {}
 
-      throw new Error(body);
+      throw new AppError(body, AppError.ERROR_CODES.BAD_API_RESPONSE);
     }
   }
 
@@ -46,12 +48,17 @@ class RepoModel {
    * @param {Object} repo.organization repository owner org
    * @param {Object} repo.owner repository owner
    */
-  async create(user, repo) {
+  async create(repo) {
     logger.info(`Creating repo: ${repo.name}`);
     this.verifyRequired(this.REQUIRED.CREATE, repo);
 
     // check access
     await this.checkAccess();
+
+    if( repo.name.length < 4 ) throw new AppError('Repository name must be at least 4 characters', AppError.ERROR_CODES.INVALID_ATTRIBUTE);
+    if( repo.description.length < 15 ) throw new AppError('Please provide a longer overview', AppError.ERROR_CODES.INVALID_ATTRIBUTE);
+
+    let ecosmlId = uuid.v4();
 
     // create Github API Request
     let githubRepo = Object.assign({}, repo);
@@ -59,13 +66,21 @@ class RepoModel {
     delete githubRepo.owner;
     githubRepo.auto_init = true;
     githubRepo.license_template = config.github.default_license;
+    githubRepo.homepage = 'https://ecosml.org/package/'+ecosmlId;
 
-    let {response} = await github.createRepository(githubRepo);
-
+    let {response, body} = await github.createRepository(githubRepo);
     this.checkStatus(response, 201);
+
+    repo = this.transformGithubRepoResponse(body);
+    repo.id = ecosmlId;
 
     await mongo.insertRepository(repo);
     await git.clone(repo.name);
+    return repo;
+  }
+
+  async get(repoNameOrId) {
+    return await mongo.getRepository(repoNameOrId);
   }
 
   /**
@@ -106,8 +121,8 @@ class RepoModel {
    * @description delete a repository
    */
   async delete(repoName) {
+    if( !repoName ) throw new AppError('Repository name required', AppError.ERROR_CODES.MISSING_ATTRIBUTE);
     logger.info(`Deleting repo: ${repoName}`);
-    if( !repoName ) throw new Error('Repository name required');
 
     let {response} = await github.deleteRepository(repoName);
     
@@ -115,6 +130,28 @@ class RepoModel {
 
     await mongo.removeRepository(repoName);
     await git.removeRepository(repoName);
+  }
+
+  transformGithubRepoResponse(repo) {
+    if( typeof repo === 'string' ) {
+      repo = JSON.parse(repo);
+    }
+
+    return {
+      githubId : repo.id,
+      cloneUrl : repo.clone_url,
+      createdAt : repo.created_at,
+      overview : repo.description,
+      downloadsUrl : repo.downloads_url,
+      fullName : repo.full_name,
+      gitUrl : repo.git_url,
+      htmlUrl : repo.html_url,
+      name : repo.name,
+      private : repo.private,
+      sshUrl : repo.ssh_url,
+      updatedAt : repo.updated_at,
+      pushedAt : repo.pushed_at
+    }
   }
 
 }

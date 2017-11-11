@@ -6,14 +6,17 @@ class RepoStore extends BaseStore {
     super();
 
     this.data = {
+      // single state objects
       create : {},
       update : {},
       delete : {},
       // hash by id
-      addedFiles : {}
+      addedFiles : {},
+      byId : {}
     }
 
     this.events = {
+      'GET_REPO_UPDATE' : 'get-repo-update',
       'CREATE_REPO_UPDATE' : 'create-repo-update',
       'DELETE_REPO_UPDATE' : 'delete-repo-update',
       'ADD_FILE_UPDATE' : 'add-file-update'
@@ -39,6 +42,27 @@ class RepoStore extends BaseStore {
     this.data.create = state;
     this.emit(this.events.CREATE_REPO_UPDATE, this.data.create);
   }
+
+  /**
+   * Get operations
+   */
+  setGetRepoLoading(id, request) {
+    this._setRepoState(id, {request, id, state: this.STATE.LOADING});
+  }
+
+  setGetRepoSuccess(id, payload) {
+    this._setRepoState(id, {payload, id, state: this.STATE.LOADED});
+  }
+
+  setGetRepoError(id, error) {
+    this._setRepoState(id, {error, id, state: this.STATE.ERROR});
+  }
+
+  _setDeleteRepoState(id, state) {
+    this.data.byId[id] = state;
+    this.emit(this.events.GET_REPO_UPDATE, this.data.byId[id]);
+  }
+
 
   /**
    * Delete operations

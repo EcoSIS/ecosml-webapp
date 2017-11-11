@@ -1,6 +1,6 @@
 const { exec } = require('child_process');
 const fs = require('fs-extra');
-const config = require('../config');
+const config = require('./config');
 const path = require('path');
 
 const ROOT = config.github.fsRoot;
@@ -15,7 +15,7 @@ class GitCli {
 
   async clone(repoName) {
     let url = BASE_URL+repoName;
-    let {stdout, stderr} = await this.exec(`clone ${url}`, {cwd: ROOT});
+    return await this.exec(`clone ${url}`, {cwd: ROOT});
   }
 
   async ensureDir(repoName) {
@@ -42,7 +42,7 @@ class GitCli {
 
   async resetHEAD(repoName) {
     let dir = await this.ensureDir(repoName);
-    let {stdout, stderr} = await this.exec(`reset HEAD --hard`, {cwd, dir});
+    return await this.exec(`reset HEAD --hard`, {cwd, dir});
   }
 
   async addAll(repoName) {
@@ -52,7 +52,7 @@ class GitCli {
 
   async commit(repoName, message) {
     let dir = await this.ensureDir(repoName);
-    let {stdout, stderr} = await this.exec(`commit -m "${message}"`, {cwd, dir});
+    return await this.exec(`commit -m "${message}"`, {cwd, dir});
   }
 
   async removeRepository(repoName) {
@@ -68,7 +68,7 @@ class GitCli {
     return new Promise((resolve, reject) => {
       exec(cmd, options, (error, stdout, stderr) => {
         if( error ) reject(error);
-        else {stdout, stderr};
+        else resolve({stdout, stderr});
       });
     });
   }

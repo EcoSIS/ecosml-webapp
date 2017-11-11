@@ -9,18 +9,18 @@ class MongoDB {
 
     return new Promise((resolve, reject) => {
       mongodb.connect(config.mongodb.url, (error, db) => {
+        if( error ) {
+          return reject(error);
+        }
+
         db.on('close', e => {
           logger.warn('MongoDB connection closed', e);
           this.db = null;
         });
 
-        if( error ) {
-          reject(error);
-        } else {
-          this.db = db;
-          logger.info('MongoDB connected');
-          resolve(db);
-        }
+        this.db = db;
+        logger.info('MongoDB connected');
+        resolve(db);
       });
     });
   }
@@ -32,12 +32,22 @@ class MongoDB {
 
   async insertRepository(repo) {
     let collection = await this.reposCollection();
-    await collection.insert(repo);
+    return await collection.insert(repo);
+  }
+
+  async getRepository(repoNameOrId) {
+    let collection = await this.reposCollection();
+    return await collection.findOne({
+      $or : [
+        {name: repoNameOrId},
+        {id : repoNameOrId}
+      ]
+    });
   }
 
   async removeRepository(repoName) {
     let collection = await this.reposCollection();
-    await collection.remove({name: repoName});
+    return await collection.remove({name: repoName});
   }
 
 }

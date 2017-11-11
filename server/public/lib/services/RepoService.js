@@ -18,9 +18,8 @@ class RepoService extends BaseService {
   async create(name, description) {
     let payload = {name, description};
 
-    debugger;
     return this.request({
-      url : '/repo/create',
+      url : '/repo',
       fetchOptions : {
         method : 'POST',
         body  : payload
@@ -32,10 +31,25 @@ class RepoService extends BaseService {
     })
   }
 
+  /**
+   * @method get
+   * @description get a repo by id.  the /repo/:id request also 
+   * accepts /repo/:name
+   * 
+   * @param {String} id repo ecosml id 
+   */
+  async get(id) {
+    return this.request({
+      url : `/repo/${id}`,
+      onLoading : request => this.store.setGetRepoLoading(id, request),
+      onLoad : result => this.store.setGetRepoSuccess(id, result.body),
+      onError : error => this.store.setGetRepoError(id, error)
+    });
+  }
+
   async delete(name) {
     return this.request({
-      url : '/repo/delete',
-      qs : {name},
+      url : `/repo/${name}`,
       fetchOptions : {
         method : 'DELETE'
       },

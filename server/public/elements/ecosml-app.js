@@ -1,40 +1,55 @@
-import "@polymer/paper-button/paper-button.js"
-import "@polymer/app-layout/app-header/app-header.js"
-import "@polymer/app-layout/app-toolbar/app-toolbar.js"
+// import styles
+import "./styles/style-properties"
+import "./styles/shared-styles"
+
+// import app framework
+import "@ucd-lib/cork-app-utils"
+import "@ucd-lib/cork-app-state/elements/app-route"
+
+// import main app library
+import "../lib"
+
+// import polymer elements
+import {Element as PolymerElement} from "@polymer/polymer/polymer-element"
+
+import "@polymer/paper-button/paper-button"
+import "@polymer/app-layout/app-header/app-header"
+import "@polymer/app-layout/app-toolbar/app-toolbar"
 import "@polymer/app-layout/app-drawer/app-drawer"
 import "@polymer/paper-icon-button/paper-icon-button"
+import "@polymer/paper-button/paper-button"
 import "@polymer/iron-icons/iron-icons"
 import "@polymer/polymer/lib/elements/custom-style"
 import "@polymer/paper-material/paper-material"
-import "@polymer/paper-styles/paper-styles"
-import "./app-route"
-import "../lib"
 
-import {Element as PolymerElement} from "@polymer/polymer/polymer-element.js"
-import Mixin from "./utils/Mixin";
-import EventMixin from "./utils/EventMixin"
+// app imports
+import "./utils/app-title-card"
+import "./management/app-repo-metadata-editor"
+
+// element imports
 import AppStateInterface from "./interfaces/AppStateInterface"
 import template from "./ecosml-app.html";
 
 export class EcoSMLApp extends Mixin(PolymerElement)
-      .with(EventMixin, AppStateInterface) {
+      .with(EventInterface, AppStateInterface) {
     
   // Define a string template instead of a `<template>` element.
   static get template() {
     return template;
   }
 
-  constructor() {
-    super();
-    this.name = '3.0 preview';
-    this.count = 1;
+  static get properties() {
+    return {
+      appRoutes : {
+        type : Array,
+        value : () => ['newpage']
+      }
+    }
   }
 
-  // properties, observers, etc. are identical to 2.x
-  static get properties() {
-    name: {
-      Type: String
-    }
+  constructor() {
+    super();
+    this.active = true;
   }
 
   toggleDrawer() {

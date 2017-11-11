@@ -3,16 +3,6 @@
     background: var(--default-primary-color);
   }
 
-  .content {
-    display: flex;
-    justify-content: center;
-  }
-
-  .content > div {
-    max-width: 1000px;
-    min-width: 300px;
-  }
-
   paper-material {
     background: white;
     display: block;
@@ -31,18 +21,7 @@
 </app-header>
 <app-drawer id="drawer" swipe-open></app-drawer>
 
-<app-route></app-route>
+<app-route app-routes="[[appRoutes]]"></app-route>
 
-<div class="content">
-  <div>
-    <!-- main content -->
-
-      <paper-material>
-          <div>This is my {{name}} app. <span>{{count}}</span></div>
-          
-          <paper-button raised>test</paper-button>
-      </paper-material>
-    <!-- end main content -->
-  </div>
-</div>
+<app-repo-metadata-editor></app-repo-metadata-editor>
 

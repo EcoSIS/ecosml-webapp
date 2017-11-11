@@ -1,26 +1,56 @@
-<style include="shared-styles"></style>
+<style include="shared-styles">
+  :host {
+    display: block;
+  }
+  app-title-card {
+    margin-bottom: 25px;
+  }
+  paper-button {
+    color: var(--default-primary-color);
+  }
+  paper-button:hover {
+    background: var(--default-background-color);
+  }
+</style>
 
-<div class="content">
-  <h1>Package Metadata</h1>
+<div class="container">
 
-  <div class="narrow-content">
+  <div class="narrow-container">
+    <h1>[[currentAction]] Package</h1>
+
     <app-title-card id="basicInformation">
-      <div slot="title">
+      <div slot="header">
         Basic Information
       </div>
       <div slot="content">
-        <paper-input id="name" label="Name"></paper-input>
-        <paper-input id="overview" label="Overview (Short Description)"></paper-input>
+        <paper-input 
+          id="title" 
+          label="Title" 
+          on-keyup="_updateTitlePreview" 
+          on-change="_updateTitlePreview" 
+          hidden$="[[!creating]]">
+        </paper-input>
+        <div hidden$="[[!creating]]">[[titlePreview]]</div>
+        <h2 hidden$="[[creating]]">[[titlePreview]]</h2>
+
+        <paper-input id="overview" label="[[schema.overview.label]]"></paper-input>
+        <div class="help">[[schema.overview.description]]</div>
+
+        <div style="text-align: right">
+          <paper-button hidden$="[[!creating]]" on-click="_onCreateBtnClicked">Create</paper-button>
+        </div>
       </div>
     </app-title-card>
 
-    <app-title-card id="basicInformation">
-      <div slot="title">
+    <app-title-card id="details" hidden$="[[creating]]">
+      <div slot="header">
         Package Details
       </div>
       <div slot="content">
         <paper-input id="description" label="Description"></paper-input>
+        <div class="help">[[schema.description.description]]</div>
         <paper-input id="keywords" label="Keywords"></paper-input>
+        <div class="help">[[schema.keywords.description]]</div>
       </div>
     </app-title-card>
   </div>

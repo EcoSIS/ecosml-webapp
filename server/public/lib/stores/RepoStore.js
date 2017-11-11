@@ -3,8 +3,11 @@ const {BaseStore} = require('@ucd-lib/cork-app-utils');
 class RepoStore extends BaseStore {
 
   constructor() {
+    super();
+
     this.data = {
       create : {},
+      update : {},
       delete : {},
       // hash by id
       addedFiles : {}

@@ -31,6 +31,7 @@ require('./lib/static')({
  * Setup Controllers
  */
 app.use('/auth', require('./controllers/auth'));
+app.use('/repo', require('./controllers/repo'));
 
 /**
  * Start server

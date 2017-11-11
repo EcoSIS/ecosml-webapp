@@ -216,9 +216,9 @@
     "@ucd-lib/cork-app-utils" "^2.0.3"
     query-string "^5.0.1"
 
-"@ucd-lib/cork-app-utils@^2.0.3":
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/@ucd-lib/cork-app-utils/-/cork-app-utils-2.0.3.tgz#c2fea7b4070019a85d01901a890c108da5418351"
+"@ucd-lib/cork-app-utils@2.0.4", "@ucd-lib/cork-app-utils@^2.0.3":
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/@ucd-lib/cork-app-utils/-/cork-app-utils-2.0.4.tgz#5baf247e6085f1b369bfdbe943ddb0181de3d36c"
   dependencies:
     isomorphic-fetch "^2.2.1"
 

@@ -1,4 +1,4 @@
-import "@polymer/paper-styles/typography"
+import "@polymer/paper-styles/paper-styles"
 import "@polymer/polymer/lib/elements/custom-style"
 
 import styles from "./style-properties.html"

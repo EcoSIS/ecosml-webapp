@@ -1,4 +1,4 @@
-var {AppStateStore} = require('cork-app-state');
+var {AppStateStore} = require('@ucd-lib/cork-app-state');
 
 class AppStateStoreImpl extends AppStateStore {}
 

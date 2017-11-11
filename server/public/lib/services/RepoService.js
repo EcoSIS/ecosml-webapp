@@ -18,6 +18,7 @@ class RepoService extends BaseService {
   async create(name, description) {
     let payload = {name, description};
 
+    debugger;
     return this.request({
       url : '/repo/create',
       fetchOptions : {
@@ -25,7 +26,7 @@ class RepoService extends BaseService {
         body  : payload
       },
       json : true,
-      onLoading : request => this.store.setCreatingRepo(request, payload),
+      onLoading : request => this.store.setCreateRepoLoading(request, payload),
       onLoad : result => this.store.setCreateRepoSuccess(result.body),
       onError : error => this.store.setCreateRepoError(error)
     })

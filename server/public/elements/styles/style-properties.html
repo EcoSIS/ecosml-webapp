@@ -1,27 +1,34 @@
 <custom-style>
-  <style>
+  <style is="custom-style">
     html {
-      --default-primary-color : #002655;
-      --light-primary-color   : #335379;
-      
-      --default-secondary-color : #daaa00;
-      --light-secondary-color   : #9be7ff;
-      --dark-secondary-color    : #2286c3;
+      --default-primary-color : #00867d;
+      --primary-color         : var(--default-primary-color); /* alt name */
+      --light-primary-color   : #4db6ac;
+
+      --default-secondary-color : #2286c3;
+      --light-secondary-color   : #64b5f6;
+
       --default-background-color : #F5F5F6;
       --dark-background-color    : #E1E2E1;
       --extra-dark-background-color : #616161;
-      --secondary-background-color : var(--default-primary-color);
       
-      --text-primary-color      : black;
+      --text-primary-color      : #313534;
       --primary-text-color      : var(--text-primary-color);
-      --secondary-text-color    : var(--default-secondary-color);
+      --secondary-text-color    : #8c9794;
       --disabled-text-color     : var(--input-border-color);
       --inverse-text-color      : white;
       --max-width               : 1200px;
       --max-text-width          : 650px;
       --font-size               : 16px;
-      --font-weight             : 200;
+      --font-weight             : 400;
+
+      /**
+       * Global Element Styles
+       */
+      /* paper-input */
+      --paper-input-container-color: var(--secondary-text-color);
     }
+
     body, html {
       @apply --paper-font-common-base;
       font-size        : var(--font-size);

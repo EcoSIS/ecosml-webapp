@@ -15,7 +15,7 @@
     "@polymer/paper-styles": "^3.0.0-pre.1",
     "@polymer/polymer": "^3.0.0-pre.1",
     "@ucd-lib/cork-app-state": "^0.0.5",
-    "@ucd-lib/cork-app-utils": "^2.0.3",
+    "@ucd-lib/cork-app-utils": "2.0.4",
     "@webcomponents/webcomponentsjs": "^1.0.12",
     "google-charts": "^1.0.0",
     "lit-html": "https://github.com/PolymerLabs/lit-html.git#master",
@@ -24,6 +24,7 @@
   },
   "resolutions": {
     "@webcomponents/webcomponentsjs": "1.0.12",
-    "@polymer/polymer": "3.0.0-pre.1"
+    "@polymer/polymer": "3.0.0-pre.1",
+    "@ucd-lib/cork-app-utils": "2.0.4"
   }
 }

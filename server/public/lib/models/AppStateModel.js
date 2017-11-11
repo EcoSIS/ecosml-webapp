@@ -1,4 +1,4 @@
-const {AppStateModel} = require('cork-app-state');
+const {AppStateModel} = require('@ucd-lib/cork-app-state');
 var AppStateStore = require('../stores/AppStateStore');
 
 

@@ -21,6 +21,7 @@ import "@polymer/paper-button/paper-button"
 import "@polymer/iron-icons/iron-icons"
 import "@polymer/polymer/lib/elements/custom-style"
 import "@polymer/paper-material/paper-material"
+import "@polymer/iron-pages/iron-pages"
 
 // app imports
 import "./utils/app-title-card"
@@ -42,7 +43,11 @@ export class EcoSMLApp extends Mixin(PolymerElement)
     return {
       appRoutes : {
         type : Array,
-        value : () => ['newpage']
+        value : () => ['package']
+      },
+      page : {
+        type : String,
+        value : 'home'
       }
     }
   }
@@ -57,9 +62,10 @@ export class EcoSMLApp extends Mixin(PolymerElement)
   }
 
   _onAppStateUpdate(e) {
+    this.page = e.location.path[0] || 'home';
+    console.log(this.page);
     console.log(e);
   }
-
 }
 
 customElements.define('ecosml-app', EcoSMLApp);

@@ -1,1 +1,1 @@
-require('./repo');
+require('./package');

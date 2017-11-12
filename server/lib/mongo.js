@@ -25,29 +25,39 @@ class MongoDB {
     });
   }
 
-  async reposCollection() {
+  async packagesCollection() {
     await this.conn();
-    return this.db.collection(config.mongodb.collections.repos);
+    return this.db.collection(config.mongodb.collections.package);
   }
 
-  async insertRepository(repo) {
-    let collection = await this.reposCollection();
-    return await collection.insert(repo);
+  async getAllPackageNames() {
+    let collection = await this.packagesCollection();
+    return await collection.find({}, {name: 1, id: 1}).toArray();
   }
 
-  async getRepository(repoNameOrId) {
-    let collection = await this.reposCollection();
+  async insertPackage(package) {
+    let collection = await this.packagesCollection();
+    return await collection.insert(package);
+  }
+
+  async getPackage(packageNameOrId) {
+    let collection = await this.packagesCollection();
     return await collection.findOne({
       $or : [
-        {name: repoNameOrId},
-        {id : repoNameOrId}
+        {name: packageNameOrId},
+        {id : packageNameOrId}
       ]
     });
   }
 
-  async removeRepository(repoName) {
-    let collection = await this.reposCollection();
-    return await collection.remove({name: repoName});
+  async removePackage(packageNameOrId) {
+    let collection = await this.packagesCollection();
+    return await collection.remove({
+      $or : [
+        {name: packageNameOrId},
+        {id : packageNameOrId}
+      ]
+    });
   }
 
 }

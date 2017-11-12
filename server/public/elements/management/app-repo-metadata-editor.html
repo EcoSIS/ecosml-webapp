@@ -24,14 +24,14 @@
       </div>
       <div slot="content">
         <paper-input 
-          id="title" 
-          label="Title" 
-          on-keyup="_updateTitlePreview" 
-          on-change="_updateTitlePreview" 
+          id="name" 
+          label="Name" 
+          on-keyup="_updateNamePreview" 
+          on-change="_updateNamePreview" 
           hidden$="[[!creating]]">
         </paper-input>
-        <div hidden$="[[!creating]]">[[titlePreview]]</div>
-        <h2 hidden$="[[creating]]">[[titlePreview]]</h2>
+        <div hidden$="[[!creating]]">[[namePreview]]</div>
+        <h2 hidden$="[[creating]]">[[namePreview]]</h2>
 
         <paper-input id="overview" label="[[schema.overview.label]]"></paper-input>
         <div class="help">[[schema.overview.description]]</div>

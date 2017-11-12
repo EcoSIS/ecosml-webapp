@@ -23,5 +23,11 @@
 
 <app-route app-routes="[[appRoutes]]"></app-route>
 
-<app-repo-metadata-editor></app-repo-metadata-editor>
+<iron-pages selected="[[page]]" attr-for-selected="id" selected-attribute="active">
+  <div id="home">
+    EcoSML Home
+  </div>
+  <app-repo-metadata-editor id="package"></app-repo-metadata-editor>
+</iron-pages>
+
 

@@ -9,7 +9,7 @@ const fs = require('fs-extra');
 const uuid = require('uuid');
 
 
-class RepoModel {
+class PackageModel {
 
   constructor() {
     this.REQUIRED = {
@@ -40,28 +40,28 @@ class RepoModel {
 
   /**
    * @method create
-   * @description create a repository
+   * @description create a package
    * 
-   * @param {Object} repo repository to create
-   * @param {Object} repo.name repository name
-   * @param {Object} repo.description repository short description
-   * @param {Object} repo.organization repository owner org
-   * @param {Object} repo.owner repository owner
+   * @param {Object} package package to create
+   * @param {Object} package.name package name
+   * @param {Object} package.description package short description
+   * @param {Object} package.organization package owner org
+   * @param {Object} package.owner package owner
    */
-  async create(repo) {
-    logger.info(`Creating repo: ${repo.name}`);
-    this.verifyRequired(this.REQUIRED.CREATE, repo);
+  async create(package) {
+    logger.info(`Creating package: ${package.name}`);
+    this.verifyRequired(this.REQUIRED.CREATE, package);
 
     // check access
     await this.checkAccess();
 
-    if( repo.name.length < 4 ) throw new AppError('Repository name must be at least 4 characters', AppError.ERROR_CODES.INVALID_ATTRIBUTE);
-    if( repo.description.length < 15 ) throw new AppError('Please provide a longer overview', AppError.ERROR_CODES.INVALID_ATTRIBUTE);
+    if( package.name.length < 4 ) throw new AppError('Package name must be at least 4 characters', AppError.ERROR_CODES.INVALID_ATTRIBUTE);
+    if( package.description.length < 15 ) throw new AppError('Please provide a longer overview', AppError.ERROR_CODES.INVALID_ATTRIBUTE);
 
     let ecosmlId = uuid.v4();
 
     // create Github API Request
-    let githubRepo = Object.assign({}, repo);
+    let githubRepo = Object.assign({}, package);
     delete githubRepo.organization;
     delete githubRepo.owner;
     githubRepo.auto_init = true;
@@ -71,28 +71,28 @@ class RepoModel {
     let {response, body} = await github.createRepository(githubRepo);
     this.checkStatus(response, 201);
 
-    repo = this.transformGithubRepoResponse(body);
-    repo.id = ecosmlId;
+    package = this.transformGithubRepoResponse(body);
+    package.id = ecosmlId;
 
-    await mongo.insertRepository(repo);
-    await git.clone(repo.name);
-    return repo;
+    await mongo.insertPackage(package);
+    await git.clone(package.name);
+    return package;
   }
 
-  async get(repoNameOrId) {
-    return await mongo.getRepository(repoNameOrId);
+  async get(packageNameOrId) {
+    return await mongo.getPackage(packageNameOrId);
   }
 
   /**
    * @method addFile
-   * @description add file to repository
+   * @description add file to package
    * 
    * @param {Object} user 
    * @param {Object} options 
    * @param {String} options.filename
    * @param {String} options.filepath 
-   * @param {String} options.repoName 
-   * @param {String} options.repoPath 
+   * @param {String} options.packagename 
+   * @param {String} options.packagepath 
    */
   async addFile(user, options) {
 
@@ -100,36 +100,36 @@ class RepoModel {
     await this.checkAccess(user);
 
     // make repo path
-    let repoPath = git.getRepoPath(options.repoName);
-    fs.mkdirsSync(repoPath);
+    let packagepath = git.getRepoPath(options.packagename);
+    fs.mkdirsSync(packagepath);
 
     // get full repo path name
-    let repoFilePath = path.join(repoPath, options.filename);
+    let repoFilePath = path.join(packagepath, options.filename);
     
     // move file
     await fs.move(options.filepath, repoFilePath);
   }
 
-  async commit(repoName, message) {
-    await git.addAll(repoName);
-    await git.commit(repoName, message);
-    return await git.push(repoName);
+  async commit(packageName, message) {
+    await git.addAll(packageName);
+    await git.commit(packageName, message);
+    return await git.push(packageName);
   }
 
   /**
    * @method delete
-   * @description delete a repository
+   * @description delete a package
    */
-  async delete(repoName) {
-    if( !repoName ) throw new AppError('Repository name required', AppError.ERROR_CODES.MISSING_ATTRIBUTE);
-    logger.info(`Deleting repo: ${repoName}`);
+  async delete(packageName) {
+    if( !packageName ) throw new AppError('Package name required', AppError.ERROR_CODES.MISSING_ATTRIBUTE);
+    logger.info(`Deleting package: ${packageName}`);
 
-    let {response} = await github.deleteRepository(repoName);
+    let {response} = await github.deleteRepository(packageName);
     
     this.checkStatus(response, 204);
 
-    await mongo.removeRepository(repoName);
-    await git.removeRepository(repoName);
+    await mongo.removePackage(packageName);
+    await git.removeRepository(packageName);
   }
 
   transformGithubRepoResponse(repo) {
@@ -156,4 +156,4 @@ class RepoModel {
 
 }
 
-module.exports = new RepoModel();
+module.exports = new PackageModel();

@@ -3,9 +3,10 @@ import "@polymer/paper-input/paper-input"
 
 import template from "./app-repo-metadata-editor.html"
 import RepoInterface from "../interfaces/RepoInterface"
+import AppStateInterface from "../interfaces/AppStateInterface"
 
 class AppRepoMetadataEditor extends Mixin(PolymerElement)
-      .with(EventInterface, RepoInterface) {
+      .with(EventInterface, AppStateInterface, RepoInterface) {
 
   static get template() {
     return template;
@@ -32,8 +33,8 @@ class AppRepoMetadataEditor extends Mixin(PolymerElement)
         value : {}
       },
 
-      // used for displaying title
-      titlePreview : {
+      // used for displaying package name
+      namePreview : {
         type : String,
         value : ''
       }
@@ -43,6 +44,15 @@ class AppRepoMetadataEditor extends Mixin(PolymerElement)
   constructor() {
     super();
     this.schema = this._getRepoSchema();
+  }
+
+  onAppStateUpdate(e) {
+    if( e.location.path[0] !== 'package' ) return;
+    if( e.location.path.length > 1 ) {
+      this.fetchAndUpdatePackage( e.location.path[1] );
+    } else {
+      this.createPackage();
+    }
   }
 
   get(attr) {
@@ -71,19 +81,33 @@ class AppRepoMetadataEditor extends Mixin(PolymerElement)
   createPackage() {
     this.currentAction = 'Create';
     this.creating = true;
-    this.titlePreview = '';
+    this.namePreview = '';
     for( var key in schema ) this.set(key);
   }
 
+  /**
+   * @method _onCreateBtnClicked
+   * @description function fired when the create button is clicked
+   */
   _onCreateBtnClicked() {
-    if( this.titlePreview.length < 4 ) {
-      return alert('Title must be at least 4 characters');
+    if( this.namePreview.length < 4 ) {
+      return alert('Name must be at least 4 characters');
     }
     if( this.get('overview').length < 15 ) {
       return alert('Please provide a longer overview');
     }
 
-    this._createRepo(this.titlePreview, this.get('overview'));
+    this._createRepo(this.namePreview, this.get('overview'));
+  }
+
+  async fetchAndUpdatePackage(pkgId) {
+    let repo;
+    try {
+      repo = await this._getRepo(pkgId);
+    } catch(e) {
+      return alert('Failed to fetch package with id: '+pkgId);
+    }
+    this.updatePackage(repo);
   }
 
   /**
@@ -96,7 +120,7 @@ class AppRepoMetadataEditor extends Mixin(PolymerElement)
     this.currentAction = 'Update';
     this.creating = false;
 
-    this.titlePreview = pkgData.title;
+    this.namePreview = pkgData.name;
 
     let schema = this._getRepoSchema();
     for( var key in schema ) {
@@ -106,13 +130,16 @@ class AppRepoMetadataEditor extends Mixin(PolymerElement)
   }
 
   /**
-   * Fired from title input
+   * Fired from name input
    */
-  _updateTitlePreview() {
-    this.titlePreview = this.get('title').toLowerCase().replace(/ /g, '-');
+  _updateNamePreview() {
+    this.namePreview = this.get('name').toLowerCase().replace(/ /g, '-');
   }
 
   _onCreateRepoUpdate(e) {
+    if( e.state === 'loaded' ) {
+
+    }
     console.log(e);
   }
 

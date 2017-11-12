@@ -3,51 +3,50 @@ const multer = require('multer');
 const upload = multer({ 
   dest: 'uploads/' 
 });
-const model = require('../models/RepoModel');
+const model = require('../models/PackageModel');
 const utils = require('./utils');
 const AppError = require('../lib/AppError');
 
 router.post('/', async (req, res) => {
-  let repo = req.body;
+  let package = req.body;
   
   // TODO
-  // repo.owner = req.user.username;
-  repo.owner = 'bob';
-  repo.organization = 'myorg';
+  // package.owner = req.user.username;
+  package.owner = 'bob';
+  package.organization = 'myorg';
 
   try {
-    repo = await model.create(repo);
-    console.log('here');
-    res.sendStatus(201).json(repo);
+    package = await model.create(package);
+    res.sendStatus(201).json(package);
   } catch(e) {
     utils.handleError(res, e);
   }
 });
 
 router.get('/:name', async(req, res) => {
-  let repoName = req.params.name;
-  if( !repoName ) {
-    let e = new AppError('Repository name or id required. /repo/:name', AppError.ERROR_CODES.MISSING_ATTRIBUTE)
+  let packageName = req.params.name;
+  if( !packageName ) {
+    let e = new AppError('Package name or id required. /api/package/:name', AppError.ERROR_CODES.MISSING_ATTRIBUTE)
     return utils.handleError(res, e);
   }
 
   try {
-    let repo = await model.get(repoName);
-    res.json(repo);
+    let package = await model.get(packageName);
+    res.json(package);
   } catch(e) {
     utils.handleError(res, e);
   }
 });
 
 router.delete('/:name', async (req, res) => {
-  let repoName = req.params.name;
-  if( !repoName ) {
-    let e = new AppError('Repository name required. /repo/:name', AppError.ERROR_CODES.MISSING_ATTRIBUTE)
+  let packageName = req.params.name;
+  if( !packageName ) {
+    let e = new AppError('Package name required. /api/package/:name', AppError.ERROR_CODES.MISSING_ATTRIBUTE)
     return utils.handleError(res, e);
   }
 
   try {
-    await model.delete(repoName);
+    await model.delete(packageName);
     res.sendStatus(204);
   } catch(e) {
     utils.handleError(res, e);
@@ -61,8 +60,8 @@ router.post('/addFile', upload.any(), async (req, res) => {
   await model.addFile(req.user, {
     filename : req.file.filename,
     filepath : req.file.destination,
-    repoName : req.body.repoName,
-    repoPath : req.body.repoPath
+    packageName : req.body.packageName,
+    packagePath : req.body.packagePath
   })
 });
 

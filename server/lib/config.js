@@ -26,14 +26,14 @@ module.exports = {
       secret : env.SESSION_SECRET || 'not set'
     },
 
-    appRoutes : ['newpage']
+    appRoutes : ['package']
   },
 
   mongodb : {
     host : mongoHost,
     url : `mongodb://${mongoHost}:27017/ecosml`,
     collections : {
-      repos : 'repo'
+      package : 'package'
     }
   },
 

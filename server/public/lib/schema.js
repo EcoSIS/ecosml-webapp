@@ -1,8 +1,8 @@
 module.exports = {
   repo : {
-    title : {
+    name : {
       type : String,
-      label : 'Title'
+      label : 'Name'
     },
     overview : {
       type : String,

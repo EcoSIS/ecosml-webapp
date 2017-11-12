@@ -11,6 +11,10 @@ module.exports = subclass =>
       return this.RepoModel.schema;
     }
 
+    async _getRepo(id) {
+      return this.RepoModel.get(id);
+    }
+
     async _createRepo(name, overview) {
       return this.RepoModel.create(name, overview);
     }

@@ -1,5 +1,5 @@
 module.exports = {
-  repo : {
+  package : {
     name : {
       type : String,
       label : 'Name'

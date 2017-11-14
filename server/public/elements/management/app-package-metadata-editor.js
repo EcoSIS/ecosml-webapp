@@ -1,12 +1,12 @@
 import {Element as PolymerElement} from "@polymer/polymer/polymer-element"
 import "@polymer/paper-input/paper-input"
 
-import template from "./app-repo-metadata-editor.html"
-import RepoInterface from "../interfaces/RepoInterface"
+import template from "./app-package-metadata-editor.html"
+import PackageInterface from "../interfaces/PackageInterface"
 import AppStateInterface from "../interfaces/AppStateInterface"
 
-class AppRepoMetadataEditor extends Mixin(PolymerElement)
-      .with(EventInterface, AppStateInterface, RepoInterface) {
+class AppPackageMetadataEditor extends Mixin(PolymerElement)
+      .with(EventInterface, AppStateInterface, PackageInterface) {
 
   static get template() {
     return template;
@@ -27,7 +27,7 @@ class AppRepoMetadataEditor extends Mixin(PolymerElement)
         value : () => ['basicInformation', 'details']
       },
 
-      // repo schema object
+      // package schema object
       schema : {
         type : Object,
         value : {}
@@ -43,7 +43,7 @@ class AppRepoMetadataEditor extends Mixin(PolymerElement)
 
   constructor() {
     super();
-    this.schema = this._getRepoSchema();
+    this.schema = this._getPackageSchema();
   }
 
   onAppStateUpdate(e) {
@@ -97,17 +97,17 @@ class AppRepoMetadataEditor extends Mixin(PolymerElement)
       return alert('Please provide a longer overview');
     }
 
-    this._createRepo(this.namePreview, this.get('overview'));
+    this._createPackage(this.namePreview, this.get('overview'));
   }
 
   async fetchAndUpdatePackage(pkgId) {
-    let repo;
+    let pkg;
     try {
-      repo = await this._getRepo(pkgId);
+      pkg = await this._getPackage(pkgId);
     } catch(e) {
       return alert('Failed to fetch package with id: '+pkgId);
     }
-    this.updatePackage(repo);
+    this.updatePackage(pkg);
   }
 
   /**
@@ -122,7 +122,7 @@ class AppRepoMetadataEditor extends Mixin(PolymerElement)
 
     this.namePreview = pkgData.name;
 
-    let schema = this._getRepoSchema();
+    let schema = this._getPackageSchema();
     for( var key in schema ) {
       if( pkgData[key] ) this.set(key, pkgData[key]);
       else this.set(key);
@@ -136,7 +136,7 @@ class AppRepoMetadataEditor extends Mixin(PolymerElement)
     this.namePreview = this.get('name').toLowerCase().replace(/ /g, '-');
   }
 
-  _onCreateRepoUpdate(e) {
+  _onCreatePackageUpdate(e) {
     if( e.state === 'loaded' ) {
 
     }
@@ -149,4 +149,4 @@ class AppRepoMetadataEditor extends Mixin(PolymerElement)
 
 
 }
-customElements.define('app-repo-metadata-editor', AppRepoMetadataEditor);
+customElements.define('app-package-metadata-editor', AppPackageMetadataEditor);

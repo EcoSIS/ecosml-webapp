@@ -35,9 +35,9 @@ class MongoDB {
     return await collection.find({}, {name: 1, id: 1}).toArray();
   }
 
-  async insertPackage(package) {
+  async insertPackage(pkg) {
     let collection = await this.packagesCollection();
-    return await collection.insert(package);
+    return await collection.insert(pkg);
   }
 
   async getPackage(packageNameOrId) {

@@ -25,7 +25,7 @@ import "@polymer/iron-pages/iron-pages"
 
 // app imports
 import "./utils/app-title-card"
-import "./management/app-repo-metadata-editor"
+import "./management/app-package-metadata-editor"
 
 // element imports
 import AppStateInterface from "./interfaces/AppStateInterface"
@@ -55,6 +55,10 @@ export class EcoSMLApp extends Mixin(PolymerElement)
   constructor() {
     super();
     this.active = true;
+
+    setTimeout(() => {
+      this._setWindowLocation('/package');
+    }, 1000);
   }
 
   toggleDrawer() {

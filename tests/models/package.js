@@ -22,12 +22,12 @@ describe('Package Model Methods', function() {
       assert.equal(e, null);
     }
 
-    // make sure the repo was pulled to filesystem
+    // make sure the git repo was pulled to filesystem
     let rpath = git.getRepoPath(package.name);
     let readmePath = path.join(rpath, 'README.md');
     assert.equal(fs.existsSync(readmePath), true);
 
-    // make the repo was inserted into mongo
+    // make the package was inserted into mongo
     let mpackage = await mongo.getPackage(package.name);
     assert.equal(mpackage.name, package.name);
   }).timeout(10000);

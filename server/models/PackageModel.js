@@ -42,26 +42,26 @@ class PackageModel {
    * @method create
    * @description create a package
    * 
-   * @param {Object} package package to create
-   * @param {Object} package.name package name
-   * @param {Object} package.description package short description
-   * @param {Object} package.organization package owner org
-   * @param {Object} package.owner package owner
+   * @param {Object} pkg package to create
+   * @param {Object} pkg.name package name
+   * @param {Object} pkg.description package short description
+   * @param {Object} pkg.organization package owner org
+   * @param {Object} pkg.owner package owner
    */
-  async create(package) {
-    logger.info(`Creating package: ${package.name}`);
-    this.verifyRequired(this.REQUIRED.CREATE, package);
+  async create(pkg) {
+    logger.info(`Creating package: ${pkg.name}`);
+    this.verifyRequired(this.REQUIRED.CREATE, pkg);
 
     // check access
     await this.checkAccess();
 
-    if( package.name.length < 4 ) throw new AppError('Package name must be at least 4 characters', AppError.ERROR_CODES.INVALID_ATTRIBUTE);
-    if( package.description.length < 15 ) throw new AppError('Please provide a longer overview', AppError.ERROR_CODES.INVALID_ATTRIBUTE);
+    if( pkg.name.length < 4 ) throw new AppError('Package name must be at least 4 characters', AppError.ERROR_CODES.INVALID_ATTRIBUTE);
+    if( pkg.description.length < 15 ) throw new AppError('Please provide a longer overview', AppError.ERROR_CODES.INVALID_ATTRIBUTE);
 
     let ecosmlId = uuid.v4();
 
     // create Github API Request
-    let githubRepo = Object.assign({}, package);
+    let githubRepo = Object.assign({}, pkg);
     delete githubRepo.organization;
     delete githubRepo.owner;
     githubRepo.auto_init = true;
@@ -71,12 +71,12 @@ class PackageModel {
     let {response, body} = await github.createRepository(githubRepo);
     this.checkStatus(response, 201);
 
-    package = this.transformGithubRepoResponse(body);
-    package.id = ecosmlId;
+    pkg = this.transformGithubRepoResponse(body);
+    pkg.id = ecosmlId;
 
-    await mongo.insertPackage(package);
-    await git.clone(package.name);
-    return package;
+    await mongo.insertPackage(pkg);
+    await git.clone(pkg.name);
+    return pkg;
   }
 
   async get(packageNameOrId) {

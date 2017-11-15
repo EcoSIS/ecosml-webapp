@@ -55,10 +55,6 @@ export class EcoSMLApp extends Mixin(PolymerElement)
   constructor() {
     super();
     this.active = true;
-
-    setTimeout(() => {
-      this._setWindowLocation('/package');
-    }, 1000);
   }
 
   toggleDrawer() {
@@ -67,7 +63,6 @@ export class EcoSMLApp extends Mixin(PolymerElement)
 
   _onAppStateUpdate(e) {
     this.page = e.location.path[0] || 'home';
-    console.log(this.page);
     console.log(e);
   }
 }

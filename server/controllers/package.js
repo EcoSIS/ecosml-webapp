@@ -17,7 +17,7 @@ router.post('/', async (req, res) => {
 
   try {
     package = await model.create(package);
-    res.sendStatus(201).json(package);
+    res.status(201).json(package);
   } catch(e) {
     utils.handleError(res, e);
   }
@@ -47,7 +47,7 @@ router.delete('/:name', async (req, res) => {
 
   try {
     await model.delete(packageName);
-    res.sendStatus(204);
+    res.status(204);
   } catch(e) {
     utils.handleError(res, e);
   }

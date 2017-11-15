@@ -1,5 +1,6 @@
 import {Element as PolymerElement} from "@polymer/polymer/polymer-element"
 import "@polymer/paper-input/paper-input"
+import "@polymer/paper-input/paper-textarea"
 
 import template from "./app-package-metadata-editor.html"
 import PackageInterface from "../interfaces/PackageInterface"
@@ -46,9 +47,11 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
     this.schema = this._getPackageSchema();
   }
 
-  onAppStateUpdate(e) {
+  _onAppStateUpdate(e) {
     if( e.location.path[0] !== 'package' ) return;
     if( e.location.path.length > 1 ) {
+      if( this.packageId === e.location.path[1] ) return;
+      this.packageId = e.location.path[1];
       this.fetchAndUpdatePackage( e.location.path[1] );
     } else {
       this.createPackage();
@@ -82,7 +85,7 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
     this.currentAction = 'Create';
     this.creating = true;
     this.namePreview = '';
-    for( var key in schema ) this.set(key);
+    for( var key in this.schema ) this.set(key);
   }
 
   /**
@@ -100,14 +103,24 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
     this._createPackage(this.namePreview, this.get('overview'));
   }
 
+  /**
+   * @method _onDeleteBtnClicked
+   * @description function fired when the delete button is clicked
+   */
+  _onDeleteBtnClicked() {
+    if( !confirm('Are you sure you want to delete this package and all it\s contents?') ) return;
+    if( !confirm('Are you really sure?') ) return;
+    this._deletePackage(this.packageId); 
+  }
+
   async fetchAndUpdatePackage(pkgId) {
-    let pkg;
+    let result;
     try {
-      pkg = await this._getPackage(pkgId);
+      result = await this._getPackage(pkgId);
     } catch(e) {
       return alert('Failed to fetch package with id: '+pkgId);
     }
-    this.updatePackage(pkg);
+    this.updatePackage(result.body);
   }
 
   /**
@@ -117,6 +130,7 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
    * @param {Object} pkgData package to render
    */
   updatePackage(pkgData) {
+    console.log(pkgData);
     this.currentAction = 'Update';
     this.creating = false;
 

@@ -7,6 +7,7 @@ class PackageService extends BaseService {
   constructor() {
     super();
     this.store = PackageStore;
+    this.baseUrl = '/api/package'
   }
 
   /**
@@ -20,7 +21,7 @@ class PackageService extends BaseService {
     let payload = {name, description};
 
     return this.request({
-      url : '/package',
+      url : this.baseUrl,
       fetchOptions : {
         method : 'POST',
         body  : payload
@@ -41,7 +42,7 @@ class PackageService extends BaseService {
    */
   async get(id) {
     return this.request({
-      url : `/package/${id}`,
+      url : `${this.baseUrl}/${id}`,
       onLoading : request => this.store.setGetPackageLoading(id, request),
       onLoad : result => this.store.setGetPackageSuccess(id, result.body),
       onError : error => this.store.setGetPackageError(id, error)
@@ -50,7 +51,7 @@ class PackageService extends BaseService {
 
   async delete(name) {
     return this.request({
-      url : `/package/${name}`,
+      url : `${this.baseUrl}/${name}`,
       fetchOptions : {
         method : 'DELETE'
       },
@@ -66,7 +67,7 @@ class PackageService extends BaseService {
     let payload = {filename};
 
     return this.request({
-      url : '/package/addFile',
+      url : `${this.baseUrl}/addFile`,
       fetchOptions : {
         method : 'POST',
         body : formData
@@ -76,7 +77,6 @@ class PackageService extends BaseService {
       onError : error => this.store.setFileSaveError(fileId, error)
     });
   }
-
 }
 
 module.exports = new PackageService();

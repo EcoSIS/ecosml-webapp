@@ -58,7 +58,7 @@ class PackageStore extends BaseStore {
     this._setPackageState(id, {error, id, state: this.STATE.ERROR});
   }
 
-  _setDeletePackageState(id, state) {
+  _setPackageState(id, state) {
     this.data.byId[id] = state;
     this.emit(this.events.GET_PACKAGE_UPDATE, this.data.byId[id]);
   }
@@ -67,7 +67,7 @@ class PackageStore extends BaseStore {
   /**
    * Delete operations
    */
-  setDeletePackageLoading(request, payload) {
+  setDeletingPackage(request, payload) {
     this._setDeletePackageState({request, payload, state: this.STATE.LOADING});
   }
 

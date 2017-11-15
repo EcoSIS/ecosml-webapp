@@ -67,7 +67,7 @@ class PackageModel {
     githubRepo.auto_init = true;
     githubRepo.license_template = config.github.default_license;
     githubRepo.homepage = 'https://ecosml.org/package/'+ecosmlId;
-
+    
     let {response, body} = await github.createRepository(githubRepo);
     this.checkStatus(response, 201);
 
@@ -120,16 +120,19 @@ class PackageModel {
    * @method delete
    * @description delete a package
    */
-  async delete(packageName) {
-    if( !packageName ) throw new AppError('Package name required', AppError.ERROR_CODES.MISSING_ATTRIBUTE);
-    logger.info(`Deleting package: ${packageName}`);
+  async delete(packageNameOrId) {
+    if( !packageNameOrId ) throw new AppError('Package name or id required', AppError.ERROR_CODES.MISSING_ATTRIBUTE);
+    logger.info(`Deleting package: ${packageNameOrId}`);
 
-    let {response} = await github.deleteRepository(packageName);
+    // in case name is actually an id
+    let pkg = this.get(packageNameOrId);
+
+    let {response} = await github.deleteRepository(pkg.name);
     
     this.checkStatus(response, 204);
 
-    await mongo.removePackage(packageName);
-    await git.removeRepository(packageName);
+    await mongo.removePackage(pkg.name);
+    await git.removeRepository(pkg.name);
   }
 
   transformGithubRepoResponse(repo) {

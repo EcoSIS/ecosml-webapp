@@ -31,6 +31,7 @@
           hidden$="[[!creating]]">
         </paper-input>
         <div hidden$="[[!creating]]">[[namePreview]]</div>
+        <div hidden$="[[creating]]">Package Name</div>
         <h2 hidden$="[[creating]]">[[namePreview]]</h2>
 
         <paper-input id="overview" label="[[schema.overview.label]]"></paper-input>
@@ -47,11 +48,15 @@
         Package Details
       </div>
       <div slot="content">
-        <paper-input id="description" label="Description"></paper-input>
+        <paper-textarea id="description" rows="5" label="Description"></paper-textarea>
         <div class="help">[[schema.description.description]]</div>
         <paper-input id="keywords" label="Keywords"></paper-input>
         <div class="help">[[schema.keywords.description]]</div>
       </div>
     </app-title-card>
+
+    <div hidden$="[[creating]]">
+      <paper-button on-click="_onDeleteBtnClicked">Delete Package</paper-button>
+    </div>
   </div>
 </div>

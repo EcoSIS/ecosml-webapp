@@ -20,6 +20,7 @@
     "@webcomponents/webcomponentsjs": "^1.0.12",
     "google-charts": "^1.0.0",
     "lit-html": "https://github.com/PolymerLabs/lit-html.git#master",
+    "markdown": "^0.5.0",
     "query-string": "^5.0.1",
     "uuid": "^3.1.0"
   },

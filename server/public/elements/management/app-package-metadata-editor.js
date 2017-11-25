@@ -5,6 +5,8 @@ import "@polymer/paper-input/paper-textarea"
 import template from "./app-package-metadata-editor.html"
 import PackageInterface from "../interfaces/PackageInterface"
 import AppStateInterface from "../interfaces/AppStateInterface"
+import "./app-markdown-editor"
+
 
 class AppPackageMetadataEditor extends Mixin(PolymerElement)
       .with(EventInterface, AppStateInterface, PackageInterface) {
@@ -130,7 +132,6 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
    * @param {Object} pkgData package to render
    */
   updatePackage(pkgData) {
-    console.log(pkgData);
     this.currentAction = 'Update';
     this.creating = false;
 
@@ -150,11 +151,23 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
     this.namePreview = this.get('name').toLowerCase().replace(/ /g, '-');
   }
 
+  /**
+   * Fired when create package state updates
+   */
   _onCreatePackageUpdate(e) {
-    if( e.state === 'loaded' ) {
-
+    if( e.state === 'loading' ) {
+      this.$.createBtn.setAttribute('disabled', 'disabled');
+      this.$.createBtn.innerHTML = 'Creating...';
+      return;
     }
-    console.log(e);
+
+    this.$.createBtn.removeAttribute('disabled', 'disabled');
+    this.$.createBtn.innerHTML = 'Create';
+    if( e.state === 'error' ) {
+      return alert('Failed to create package :( '+e.error.message);
+    }
+
+    this._setWindowLocation('/package/'+e.payload.id);
   }
 
   _valueToArray(value) {

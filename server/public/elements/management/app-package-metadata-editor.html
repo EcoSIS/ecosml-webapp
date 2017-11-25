@@ -38,7 +38,11 @@
         <div class="help">[[schema.overview.description]]</div>
 
         <div style="text-align: right">
-          <paper-button hidden$="[[!creating]]" on-click="_onCreateBtnClicked">Create</paper-button>
+          <paper-button 
+            hidden$="[[!creating]]" 
+            id="createBtn"
+            on-click="_onCreateBtnClicked">Create
+          </paper-button>
         </div>
       </div>
     </app-title-card>
@@ -48,7 +52,8 @@
         Package Details
       </div>
       <div slot="content">
-        <paper-textarea id="description" rows="5" label="Description"></paper-textarea>
+        <app-markdown-editor label="Description" id="description"></app-markdown-editor>
+
         <div class="help">[[schema.description.description]]</div>
         <paper-input id="keywords" label="Keywords"></paper-input>
         <div class="help">[[schema.keywords.description]]</div>

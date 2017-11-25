@@ -143,7 +143,7 @@ class PackageModel {
     return {
       githubId : repo.id,
       cloneUrl : repo.clone_url,
-      createdAt : repo.created_at,
+      createdAt : new Date(repo.created_at),
       overview : repo.description,
       downloadsUrl : repo.downloads_url,
       fullName : repo.full_name,
@@ -152,8 +152,8 @@ class PackageModel {
       name : repo.name,
       private : repo.private,
       sshUrl : repo.ssh_url,
-      updatedAt : repo.updated_at,
-      pushedAt : repo.pushed_at
+      updatedAt : new Date(repo.updated_at),
+      pushedAt : new Date(repo.pushed_at)
     }
   }
 

@@ -35,22 +35,40 @@ module.exports = {
     collections : {
       package : 'package'
     },
-    textIndex : {
-      package : [{
-        name: "text",
-        desciption : "text",
-        keywords: "text",
-        overview: "text"
-      },
-      {
-        weights: {
-          name: 10,
-          keywords: 10,
-          overview : 5,
-          desciption : 2
+    indexes : {
+      package : [
+        {
+          index : {
+            name: "text",
+            desciption : "text",
+            keywords: "text",
+            overview: "text"
+          },
+          options : {
+            weights: {
+              name: 10,
+              keywords: 10,
+              overview : 5,
+              desciption : 2
+            },
+            name: "TextIndex"
+          }
         },
-        name: "TextIndex"
-      }]
+        {
+          index : {
+            name: 1,
+            keywords: 1,
+            id: 1,
+            private : 1,
+            createdAt : 1,
+            pushedAt : 1,
+            createdAt : 1
+          },
+          options : {
+            name: "KeywordIndex"
+          }
+        }
+      ]
     }
   },
 

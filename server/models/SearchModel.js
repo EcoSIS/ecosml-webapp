@@ -23,7 +23,7 @@ class SearchModel {
 
   async recreateIndex() {
     // TODO, check auth
-    return await mongo.recreateSeachIndex();
+    return await mongo.recreatePackageIndexes();
   }
 
 }

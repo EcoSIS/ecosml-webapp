@@ -30,15 +30,23 @@ class MongoDB {
     return this.db.collection(config.mongodb.collections.package);
   }
 
-  async recreateSeachIndex() {
+  async recreatePackageIndexes() {
     let collection = await this.packagesCollection();
-    let packageIndex = config.mongodb.textIndex.package;
+    let indexes = config.mongodb.indexes.package;
 
-    try {
-      await collection.dropIndex(packageIndex[1].name);
-    } catch(e) {}
+    let results = [];
+    for( var i = 0; i < indexes.length; i++ ) {
+      let index = indexes[i];
 
-    return await collection.createIndex(packageIndex[0], packageIndex[1]);
+      try {
+        await collection.dropIndex(index.options.name);
+      } catch(e) {}
+
+      let result = await collection.createIndex(index.index, index.options);
+      results.push(result);
+    }
+
+    return results;
   }
 
   async search(query = {}, options = {}, projection = {}) {

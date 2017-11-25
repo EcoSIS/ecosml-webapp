@@ -1,0 +1,39 @@
+<style include="shared-styles">
+  :host {
+    display: block;
+  }
+  .btns {
+    display: flex;
+    align-items: center;
+  }
+
+  textarea {
+    width: 100%;
+    min-height: 200px;
+  }
+
+  #preview {
+    min-height: 200px;
+    border: 1px solid #aaa;
+  }
+
+  paper-icon-button[disabled] {
+    color: #aaa;
+  }
+</style>
+
+
+<div class="btns">
+  <div style="flex:1">
+    <span hidden$="[[previewMode]]">Edit</span>
+    <span hidden$="[[!previewMode]]">Preview</span> 
+    [[label]]
+  </div>
+  <paper-icon-button icon="code" disabled$="[[!previewMode]]" on-click="_toggle"></paper-icon-button>
+  <paper-icon-button icon="visibility" disabled$="[[previewMode]]" on-click="_toggle"></paper-icon-button>
+</div>
+
+<iron-pages selected="[[selected]]" attr-for-selected="id">
+  <textarea id="input"></textarea>
+  <div id="preview"></div>
+</iron-pages>

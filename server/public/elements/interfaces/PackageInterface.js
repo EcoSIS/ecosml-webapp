@@ -26,6 +26,4 @@ module.exports = subclass =>
     async _updatePackage(data) {
       return this.PackageModel.update(data);
     }
-
-
   }

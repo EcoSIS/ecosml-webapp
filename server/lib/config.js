@@ -34,6 +34,23 @@ module.exports = {
     url : `mongodb://${mongoHost}:27017/ecosml`,
     collections : {
       package : 'package'
+    },
+    textIndex : {
+      package : [{
+        name: "text",
+        desciption : "text",
+        keywords: "text",
+        overview: "text"
+      },
+      {
+        weights: {
+          name: 10,
+          keywords: 10,
+          overview : 5,
+          desciption : 2
+        },
+        name: "TextIndex"
+      }]
     }
   },
 

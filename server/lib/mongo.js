@@ -30,6 +30,32 @@ class MongoDB {
     return this.db.collection(config.mongodb.collections.package);
   }
 
+  async recreateSeachIndex() {
+    let collection = await this.packagesCollection();
+    let packageIndex = config.mongodb.textIndex.package;
+
+    try {
+      await collection.dropIndex(packageIndex[1].name);
+    } catch(e) {}
+
+    return await collection.createIndex(packageIndex[0], packageIndex[1]);
+  }
+
+  async search(query = {}, options = {}, projection = {}) {
+    let offset = options.offset || 0;
+    let limit = options.limit || 10;
+    if( limit > 100 ) limit = 100;
+    let sort = options.sort || {name: 1};
+
+    let collection = await this.packagesCollection();
+    return await collection
+                    .find(query, options)
+                    .limit(limit)
+                    .skip(offset)
+                    .sort(sort)
+                    .toArray();
+  }
+
   async getAllPackageNames() {
     let collection = await this.packagesCollection();
     return await collection.find({}, {name: 1, id: 1}).toArray();

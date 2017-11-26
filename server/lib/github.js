@@ -30,6 +30,13 @@ class GithubApi {
     });
   }
 
+  async getRepository(repoName) {
+    return await this.request({
+      method : 'GET',
+      uri : `/repos/${ORG}/${repoName}`,
+    });
+  }
+
   /**
    * @method deleteRepository
    * @description Requires admin.
@@ -39,6 +46,19 @@ class GithubApi {
     return await this.request({
       method : 'DELETE',
       uri : `/repos/${ORG}/${repoName}`
+    });
+  }
+
+  /**
+   * @method editRepository
+   * @description Requires admin.
+   * https://developer.github.com/v3/repos/#edit
+   */
+  async editRepository(repo) {
+    return await this.request({
+      method : 'PATCH',
+      uri : `/repos/${ORG}/${repo.name}`,
+      body : JSON.stringify(repo)
     });
   }
   

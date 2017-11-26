@@ -1,11 +1,13 @@
 import {Element as PolymerElement} from "@polymer/polymer/polymer-element"
 import "@polymer/paper-input/paper-input"
 import "@polymer/paper-input/paper-textarea"
+import "@polymer/paper-toast/paper-toast"
 
 import template from "./app-package-metadata-editor.html"
 import PackageInterface from "../interfaces/PackageInterface"
 import AppStateInterface from "../interfaces/AppStateInterface"
 import "./app-markdown-editor"
+import "./app-keyword-input"
 
 
 class AppPackageMetadataEditor extends Mixin(PolymerElement)
@@ -46,10 +48,21 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
 
   constructor() {
     super();
+    this._autoUpdateTimer = -1;
     this.schema = this._getPackageSchema();
   }
 
   _onAppStateUpdate(e) {
+    if( this.unsavedData ) {
+      if( confirm('You have unsaved changes, are you sure you want to leave?') ) {
+        this.unsavedData = null;
+        this.$.savingToast.close();
+      } else {
+        this._setWindowLocation('/package/'+this.packageId);
+        return;
+      }
+    }
+
     if( e.location.path[0] !== 'package' ) return;
     if( e.location.path.length > 1 ) {
       if( this.packageId === e.location.path[1] ) return;
@@ -61,22 +74,11 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
   }
 
   get(attr) {
-    switch(attr) {
-      case 'keywords':
-        return this._valueToArray(this.$.keywords.value)
-                   .map(value => value.toLowerCase());
-      default:
-        return this.$[attr].value;
-    }
+    return this.$[attr].value;
   }
 
   set(attr, value) {
-    switch(attr) {
-      case 'keywords':
-        return this.$.keywords.value = value ? value.join(', ') : '';
-      default:
-        return this.$[attr].value = value || '';
-    }
+    this.$[attr].value = value || '';
   }
 
   /**
@@ -168,6 +170,43 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
     }
 
     this._setWindowLocation('/package/'+e.payload.id);
+  }
+
+  /**
+   * Fired when input elements update
+   */  
+  _onDataChange() {
+    if( this.creating ) return;
+
+    this.unsavedData = {
+      name : this.namePreview,
+      overview : this.get('overview'),
+      description : this.get('description'),
+      keywords : this.get('keywords')
+    }
+
+    this.$.unsavedMsg.style.display = 'block';
+    this.$.savingMsg.style.display = 'none';
+    this.$.savingToast.open();
+  }
+
+  _onSaveChangesClicked() {
+    this._updatePackage(this.unsavedData);
+  }
+
+  _onEditPackageUpdate(e) {
+    if( e.state === 'loading' ) {
+      this.$.unsavedMsg.style.display = 'none';
+      this.$.savingMsg.style.display = 'block';
+    } else if( e.state === 'loaded' ) {
+      this.unsavedData = null;
+      this.$.savingToast.close();
+      this.$.savedToast.open();
+    } else if( e.state === 'error' ) {
+      this.$.unsavedMsg.style.display = 'block';
+      this.$.savingMsg.style.display = 'none';
+      alert('Failed to save package data :( '+e.payload.message);
+    }
   }
 
   _valueToArray(value) {

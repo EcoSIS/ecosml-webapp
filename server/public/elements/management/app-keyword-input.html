@@ -1,0 +1,37 @@
+
+<style>
+  div {
+    display: flex;
+    align-items: center;
+  }
+
+  span {
+    padding-left: 10px;
+    display: inline-block;
+  }
+
+  paper-button {
+    background: var(--dark-background-color)
+  }
+
+  paper-button:hover {
+    color: var(--inverse-text-color);
+    background: var(--default-primary-color);
+  }
+</style>
+
+<paper-input 
+  id="input" 
+  label="[[label]]"
+  on-change="_onChange" 
+  on-keypress="_onKeyPress">
+</paper-input>
+
+<div>
+  <template is="dom-repeat" items="[[keywords]]">
+    <paper-button value$="[[item]]" on-click="_onRemoveClicked">
+      <iron-icon icon="clear"></iron-icon>
+      <span>[[item]]</span>
+    </paper-button>
+  </template>
+</div>

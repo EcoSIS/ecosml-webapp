@@ -19,6 +19,10 @@ module.exports = subclass =>
       return this.PackageModel.create(name, overview);
     }
 
+    async _updatePackage(pkg) {
+      return this.PackageModel.update(pkg);
+    }
+
     async _deletePackage(name) {
       return this.PackageModel.delete(name);
     }

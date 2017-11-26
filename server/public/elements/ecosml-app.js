@@ -43,7 +43,7 @@ export class EcoSMLApp extends Mixin(PolymerElement)
     return {
       appRoutes : {
         type : Array,
-        value : () => ['package']
+        value : () => ['package', '']
       },
       page : {
         type : String,

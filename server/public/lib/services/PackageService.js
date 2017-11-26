@@ -33,6 +33,22 @@ class PackageService extends BaseService {
     })
   }
 
+  async update(pkg) {
+    let payload = pkg;
+
+    return this.request({
+      url : this.baseUrl,
+      fetchOptions : {
+        method : 'PATCH',
+        body  : payload
+      },
+      json : true,
+      onLoading : request => this.store.setUpdatePackageLoading(request, payload),
+      onLoad : result => this.store.setUpdatePackageSuccess(result.body),
+      onError : error => this.store.setUpdatePackageError(error)
+    })
+  }
+
   /**
    * @method get
    * @description get a package by id.  the /package/:id request also 

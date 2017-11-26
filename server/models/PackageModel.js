@@ -43,10 +43,10 @@ class PackageModel {
    * @description create a package
    * 
    * @param {Object} pkg package to create
-   * @param {Object} pkg.name package name
-   * @param {Object} pkg.description package short description
-   * @param {Object} pkg.organization package owner org
-   * @param {Object} pkg.owner package owner
+   * @param {String} pkg.name package name
+   * @param {String} pkg.description package short description
+   * @param {String} pkg.organization package owner org
+   * @param {String} pkg.owner package owner
    */
   async create(pkg) {
     logger.info(`Creating package: ${pkg.name}`);
@@ -79,8 +79,69 @@ class PackageModel {
     return pkg;
   }
 
+  /**
+   * @method update
+   * @description update a package
+   * 
+   * @param {Object} pkg package to update
+   * @param {String} pkg.name package name, does not change
+   * @param {String} pkg.overview package short description
+   * @param {String} pkg.description package readme
+   * @param {Array} pkg.keywords package keywords
+   */
+  async update(pkg) {
+    await git.resetHEAD(pkg.name);
+
+    let cpkg = await mongo.getPackage(pkg.name);
+
+    // First update readme if it changed via git
+    if( pkg.description ) {
+      let README = path.join(git.getRepoPath(pkg.name), 'README.md');
+      await fs.writeFile(README, pkg.description || '');
+
+      let changes = await git.currentChangesCount(pkg.name);
+      if( changes > 0 ) {
+        await git.addAll(pkg.name);
+        await git.commit(pkg.name, 'Updating readme');
+        await git.push(pkg.name);
+      }
+    }
+    
+    // update package overview in github
+    let body;
+    if( cpkg.overview !== pkg.overview ) {
+      let response = await github.editRepository({
+        name : pkg.name,
+        description : pkg.overview
+      });
+      body = response.body;
+    }
+
+    // grab current github api repo state if we didn't update
+    if( !body ) {
+      let response = await github.getRepository(pkg.name);
+      body = response.body;
+    }
+
+    let gpkg = this.transformGithubRepoResponse(body);
+    gpkg.description = pkg.description;
+    gpkg.keywords = pkg.keywords;
+
+    // now save changes in mongo
+    await mongo.updatePackage(pkg.name, gpkg);
+
+    return mongo.getPackage(pkg.name);
+  }
+
+  /**
+   * @method get
+   * @description get a package by name or id
+   * 
+   * @param {String} packageNameOrId package name or id
+   * @return {Promise}
+   */
   async get(packageNameOrId) {
-    return await mongo.getPackage(packageNameOrId);
+    return mongo.getPackage(packageNameOrId);
   }
 
   /**
@@ -156,7 +217,6 @@ class PackageModel {
       pushedAt : new Date(repo.pushed_at)
     }
   }
-
 }
 
 module.exports = new PackageModel();

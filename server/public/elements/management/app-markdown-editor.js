@@ -36,6 +36,10 @@ export default class AppMarkdownEditor extends PolymerElement {
     if( this.previewMode ) this._updatePreview();
   }
 
+  _triggerChangeEvent() {
+    this.dispatchEvent(new CustomEvent('markdown-change', {detail: this.value}));
+  }
+
   /**
    * Called by observer
    */
@@ -54,6 +58,7 @@ export default class AppMarkdownEditor extends PolymerElement {
     if( e.currentTarget.icon === 'code' ) {
       this.selected = 'input';
     } else {
+      this.$.preview.style.height = this.$.input.offsetHeight+'px';
       this.selected = 'preview';
       this._updatePreview();
     }

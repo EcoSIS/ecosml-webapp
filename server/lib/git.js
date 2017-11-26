@@ -2,10 +2,11 @@ const { exec } = require('child_process');
 const fs = require('fs-extra');
 const config = require('./config');
 const path = require('path');
+const GITHUB_ACCESS = config.github.access;
 
 const ROOT = config.github.fsRoot;
 const ORG = config.github.org;
-const BASE_URL = `https://github.com/${ORG}/`;
+const BASE_URL = `https://${GITHUB_ACCESS.username}:${GITHUB_ACCESS.token}@github.com/${ORG}/`;
 
 if( !fs.existsSync(ROOT) ) {
   fs.mkdirpSync(ROOT);
@@ -13,9 +14,18 @@ if( !fs.existsSync(ROOT) ) {
 
 class GitCli {
 
+  constructor() {
+    this.init();
+  }
+
+  async init() {
+    await this.exec('config --global user.email "admin@ecosml.org"');
+    await this.exec('config --global user.name "EcoSML Admin"');
+  }
+
   async clone(repoName) {
     let url = BASE_URL+repoName;
-    return await this.exec(`clone ${url}`, {cwd: ROOT});
+    return this.exec(`clone ${url}`, {cwd: ROOT});
   }
 
   async ensureDir(repoName) {
@@ -32,32 +42,38 @@ class GitCli {
 
   async pull(repoName) {
     let dir = await this.ensureDir(repoName);
-    return await this.exec(`pull`, {cwd: dir});
+    return this.exec(`pull`, {cwd: dir});
   }
 
   async push(repoName) {
     let dir = await this.ensureDir(repoName);
-    return await this.exec(`push`, {cwd: dir});
+    return this.exec(`push`, {cwd: dir});
   }
 
   async resetHEAD(repoName) {
     let dir = await this.ensureDir(repoName);
-    return await this.exec(`reset HEAD --hard`, {cwd, dir});
+    return this.exec(`reset HEAD --hard`, {cwd: dir});
   }
 
   async addAll(repoName) {
     let dir = await this.ensureDir(repoName);
-    return await this.exec(`add --all`, {cwd: dir});
+    return this.exec(`add --all`, {cwd: dir});
   }
 
   async commit(repoName, message) {
     let dir = await this.ensureDir(repoName);
-    return await this.exec(`commit -m "${message}"`, {cwd, dir});
+    return this.exec(`commit -m "${message}"`, {cwd: dir});
   }
 
   async removeRepository(repoName) {
     let dir = path.join(ROOT, repoName);
     await fs.remove(dir);
+  }
+
+  async currentChangesCount(repoName) {
+    let dir = await this.ensureDir(repoName);
+    let {stdout, stderr} = await this.exec(`status -s | wc -l`, {cwd: dir});
+    return parseInt(stdout.trim());
   }
 
   exec(cmd, options = {}) {

@@ -38,6 +38,17 @@ router.get('/:name', async(req, res) => {
   }
 });
 
+router.patch('/', async(req, res) => {
+  let package = req.body;
+
+  try {
+    package = await model.update(package);
+    res.json(package);
+  } catch(e) {
+    utils.handleError(res, e);
+  }
+});
+
 router.delete('/:name', async (req, res) => {
   let packageName = req.params.name;
   if( !packageName ) {

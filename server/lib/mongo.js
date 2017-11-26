@@ -74,6 +74,27 @@ class MongoDB {
     return await collection.insert(pkg);
   }
 
+  /**
+   * @method updatePackage
+   * @description update package data.  this will patch provided data.
+   * 
+   * @param {String} packageNameOrId package name or id
+   * @param {Object} data package data to update
+   * 
+   * @returns {Promise}
+   */
+  async updatePackage(packageNameOrId, data) {
+    let collection = await this.packagesCollection();
+    return await collection.update({
+      $or : [
+        {name: packageNameOrId},
+        {id : packageNameOrId}
+      ]
+    }, {
+      $set: data
+    });
+  }
+
   async getPackage(packageNameOrId) {
     let collection = await this.packagesCollection();
     return await collection.findOne({

@@ -11,10 +11,37 @@
   paper-button:hover {
     background: var(--default-background-color);
   }
+  h2 {
+    margin : 0 0 5px 0;
+  }
+  #unsavedMsg paper-button {
+    color: var(--inverse-text-color);
+    border: 1px solid var(--inverse-text-color);
+  }
+  #unsavedMsg paper-button:hover {
+    color: var(--default-primary-color);
+    border: 1px solid var(--default-primary-color);
+  }
+  #savedToast {
+    --paper-toast-background-color: var(--default-primary-color);
+    --paper-toast-color: var(--inverse-text-color);
+  }
 </style>
 
-<div class="container">
+<paper-toast id="savingToast" duration="0">
+  <div id="unsavedMsg">
+    You have unsaved changes
+    <paper-button on-click="_onSaveChangesClicked">Save</paper-button>  
+  </div>
+  <div id="savingMsg">
+    Saving...
+  </div>
+</paper-toast>
+<paper-toast id="savedToast">
+  Package Data Saved!
+</paper-toast>
 
+<div class="container">
   <div class="narrow-container">
     <h1>[[currentAction]] Package</h1>
 
@@ -31,10 +58,10 @@
           hidden$="[[!creating]]">
         </paper-input>
         <div hidden$="[[!creating]]">[[namePreview]]</div>
-        <div hidden$="[[creating]]">Package Name</div>
+        <div hidden$="[[creating]]" class="help">Package Name</div>
         <h2 hidden$="[[creating]]">[[namePreview]]</h2>
 
-        <paper-input id="overview" label="[[schema.overview.label]]"></paper-input>
+        <paper-input id="overview" label="[[schema.overview.label]]" on-change="_onDataChange"></paper-input>
         <div class="help">[[schema.overview.description]]</div>
 
         <div style="text-align: right">
@@ -52,10 +79,10 @@
         Package Details
       </div>
       <div slot="content">
-        <app-markdown-editor label="Description" id="description"></app-markdown-editor>
-
+        <app-markdown-editor label="Description" id="description" on-markdown-change="_onDataChange"></app-markdown-editor>
         <div class="help">[[schema.description.description]]</div>
-        <paper-input id="keywords" label="Keywords"></paper-input>
+
+        <app-keyword-input id="keywords" label="Keywords.  Comma Separate" on-keyword-change="_onDataChange"></app-keyword-input>
         <div class="help">[[schema.keywords.description]]</div>
       </div>
     </app-title-card>

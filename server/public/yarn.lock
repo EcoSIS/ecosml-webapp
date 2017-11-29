@@ -245,9 +245,9 @@
     "@webcomponents/shadycss" "^1.0.0"
     "@webcomponents/webcomponentsjs" "^1.0.0"
 
-"@ucd-lib/cork-app-state@^0.0.5":
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/@ucd-lib/cork-app-state/-/cork-app-state-0.0.5.tgz#b7a90e343247f3d35699a1c0f69729e991201b22"
+"@ucd-lib/cork-app-state@0.0.8":
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/@ucd-lib/cork-app-state/-/cork-app-state-0.0.8.tgz#470cf08656c042f0efab449900d13dfdfbf48062"
   dependencies:
     "@polymer/app-route" "^3.0.0-pre.1"
     "@polymer/polymer" "^3.0.0-pre.1"

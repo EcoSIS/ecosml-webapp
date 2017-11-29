@@ -26,7 +26,7 @@ module.exports = {
       secret : env.SESSION_SECRET || 'not set'
     },
 
-    appRoutes : ['package']
+    appRoutes : ['package', 'search']
   },
 
   mongodb : {

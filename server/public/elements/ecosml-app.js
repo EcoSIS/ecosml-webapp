@@ -26,6 +26,7 @@ import "@polymer/iron-pages/iron-pages"
 // app imports
 import "./utils/app-title-card"
 import "./management/app-package-metadata-editor"
+import "./search/app-package-search"
 
 // element imports
 import AppStateInterface from "./interfaces/AppStateInterface"
@@ -43,7 +44,7 @@ export class EcoSMLApp extends Mixin(PolymerElement)
     return {
       appRoutes : {
         type : Array,
-        value : () => ['package', '']
+        value : () => ['package', 'search']
       },
       page : {
         type : String,

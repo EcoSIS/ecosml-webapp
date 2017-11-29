@@ -1,6 +1,7 @@
 import {Element as PolymerElement} from "@polymer/polymer/polymer-element"
 
-import template from "./app-package-search"
+import template from "./app-package-search.html"
+import "./app-search-header"
 
 class AppPackageSearch extends PolymerElement {
 

@@ -1,4 +1,4 @@
-<style>
+<style include="shared-styles">
   app-header {
     background: var(--default-primary-color);
   }
@@ -9,13 +9,17 @@
     padding: 10px;
     margin: 10px;
   }
+
+  [icon="menu"], [main-title] {
+    color: var(--inverse-text-color);
+  }
 </style>
 
 <app-header reveals>
   <app-toolbar>
     <paper-icon-button icon="menu" on-click="toggleDrawer"></paper-icon-button>
     <div main-title>EcoSML</div>
-    <a href="/"><paper-icon-button icon="search"></paper-icon-button></a>
+    <a href="/" inverse><paper-icon-button icon="home"></paper-icon-button></a>
     <paper-progress value="10" indeterminate bottom-item></paper-progress>
   </app-toolbar>
 </app-header>
@@ -25,9 +29,12 @@
 
 <iron-pages selected="[[page]]" attr-for-selected="id" selected-attribute="active">
   <div id="home">
-    EcoSML Home
+    <h2>EcoSML Home</h2>
+    <div><a href="/search">Search</a></div>
+    <div><a href="/package">Create Package</a></div>
   </div>
   <app-package-metadata-editor id="package"></app-package-metadata-editor>
+  <app-package-search id="search"></app-package-search>
 </iron-pages>
 
 

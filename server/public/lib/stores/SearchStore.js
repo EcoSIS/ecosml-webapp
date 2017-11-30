@@ -5,7 +5,11 @@ class SearchStore extends BaseStore {
   constructor() {
     super();
 
-    this.data = {}
+    this.data = {
+      search : {
+        state : this.STATE.INIT
+      }
+    }
 
     this.events = {
       'SEARCH_PACKAGES_UPDATE' : 'search-packages-update'
@@ -25,8 +29,8 @@ class SearchStore extends BaseStore {
   }
 
   _setSearchState(state) {
-    this.data.create = state;
-    this.emit(this.events.SEARCH_PACKAGES_UPDATE, this.data.create);
+    this.data.search = state;
+    this.emit(this.events.SEARCH_PACKAGES_UPDATE, this.data.search);
   }
 }
 

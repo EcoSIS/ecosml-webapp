@@ -1,7 +1,7 @@
 const {BaseService} = require('@ucd-lib/cork-app-utils');
 const SearchStore = require('../stores/SearchStore');
 
-class PackageService extends BaseService {
+class SearchService extends BaseService {
 
   constructor() {
     super();
@@ -32,23 +32,23 @@ class PackageService extends BaseService {
       },
       json : true,
       onLoading : request => {
-        if( !this._isCurrentSearch(id) ) return;
-        this.store.setCreatePackageLoading(request, payload)
+        if( !this._isCurrentSearch(searchId) ) return;
+        this.store.setSearchLoading(request, payload)
       },
       onLoad : result => {
-        if( !this._isCurrentSearch(id) ) return;
-        this.store.setCreatePackageSuccess(result.body)
+        if( !this._isCurrentSearch(searchId) ) return;
+        this.store.setSearchSuccess(result.body)
       },
       onError : error => {
-        if( !this._isCurrentSearch(id) ) return;
-        this.store.setCreatePackageError(error)
+        if( !this._isCurrentSearch(searchId) ) return;
+        this.store.setSearchError(error)
       }
     })
   }
 
   _isCurrentSearch(id) {
-    return (id !== this.currentSearchId);
+    return (id === this.currentSearchId);
   }
 }
 
-module.exports = new PackageService();
+module.exports = new SearchService();

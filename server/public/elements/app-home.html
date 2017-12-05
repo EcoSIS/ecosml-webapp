@@ -1,0 +1,89 @@
+<style include="shared-styles">
+  :host {
+    display: block;
+  }
+ 
+  .root {
+    display: flex;
+    justify-content: center;
+  }
+  .root > div {
+    margin-top: 20px;
+    padding: 40px;
+    background-color: white;
+    width: 100%;
+    max-width: 1200px;
+    min-height: 600px;
+  }
+
+  h2 {
+    border-bottom-width: 2px;
+    border-bottom-style: solid;
+    margin: 0 20px 10px 0;
+    padding-bottom: 5px;
+  }
+
+  h2.blue {
+    border-bottom-color: var(--default-secondary-color);
+  }
+  h2.green {
+    border-bottom-color: var(--default-primary-color);
+  }
+  h2.lightblue {
+    border-bottom-color: var(--light-secondary-color);
+  }
+  h2.dark {
+    border-bottom-color: var(--text-primary-color);
+  }
+
+  .row {
+    display: flex;
+  }
+  .row > * {
+    flex : 1;
+  }
+</style>
+
+<app-search-header></app-search-header>
+
+
+<div class="root">
+  <h1>Ecological Spectral Model Library</h1>
+</div>
+
+<div class="root">
+  <div>
+
+    <div class="row" style="margin-bottom: 35px">
+      <div>
+        <h2 class="blue">Top Organizations</h2>
+        <div>UW EnSpec </div>
+        <div>University of Utah</div>
+        <div>Foundational Datasets</div>
+        <div>The Remote Sensing Laboratory</div>
+        <div>University of California Santa Barbara</div>
+      </div>
+      <div>
+        <h2 class="green">Top Keywords</h2>
+        <div>nitrogen </div>
+        <div>lma</div>
+        <div>carbon</div>
+        <div>lignin</div>
+        <div>reflectance</div>
+      </div>
+      <div>
+        <h2 class="lightblue">Top Themes</h2>
+        <div>ecology</div>
+        <div>biochemistry</div>
+        <div>agriculture</div>
+        <div>forest</div>
+        <div>physiology</div>
+      </div>
+    </div>
+    
+    
+
+    <h2 class="dark">Package Management</h2>
+    <div><a href="/package">Create Package</a></div>
+  </div>
+</div>

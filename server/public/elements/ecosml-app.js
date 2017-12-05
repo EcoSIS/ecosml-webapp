@@ -27,6 +27,7 @@ import "@polymer/iron-pages/iron-pages"
 import "./utils/app-title-card"
 import "./management/app-package-metadata-editor"
 import "./search/app-package-search"
+import "./app-home"
 
 // element imports
 import AppStateInterface from "./interfaces/AppStateInterface"

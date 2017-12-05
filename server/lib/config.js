@@ -35,6 +35,7 @@ module.exports = {
     collections : {
       package : 'package'
     },
+    filters : ['keywords'],
     indexes : {
       package : [
         {

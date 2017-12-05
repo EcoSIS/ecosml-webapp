@@ -1,4 +1,8 @@
 <style include="shared-styles">
+  :host {
+    display: block;
+  }
+
   app-header {
     background: var(--default-primary-color);
   }
@@ -28,11 +32,7 @@
 <app-route app-routes="[[appRoutes]]"></app-route>
 
 <iron-pages selected="[[page]]" attr-for-selected="id" selected-attribute="active">
-  <div id="home">
-    <h2>EcoSML Home</h2>
-    <div><a href="/search">Search</a></div>
-    <div><a href="/package">Create Package</a></div>
-  </div>
+  <app-home id="home"></app-home>
   <app-package-metadata-editor id="package"></app-package-metadata-editor>
   <app-package-search id="search"></app-package-search>
 </iron-pages>

@@ -1,6 +1,7 @@
 const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
+
 const config = require('./lib/config');
 const logger = require('./lib/logger');
 const path = require('path');
@@ -41,11 +42,7 @@ app.use(bodyParser.json())
 /**
  * Setup static routes for webapp
  **/
-require('./lib/static')({
-  app: app,
-  assetsDir : path.join(__dirname, config.server.assets),
-  appRoutes : config.server.appRoutes
-});
+require('./lib/static')(app);
 
 /**
  * Setup Controllers

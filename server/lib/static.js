@@ -1,20 +1,21 @@
-const express = require('express');
-const path = require('path');
-const fs = require('fs');
+const config = require('./config');
+const spaMiddleware = require('@ucd-lib/spa-router-middleware');
 
-module.exports = (args) => {
-  /**
-   * Setup static asset dir
-   */
-  args.app.use(express.static(args.assetsDir));
-
-  /**
-   * Setup SPA app routes
-   */
-  args.appRoutes.forEach(route => {
-    args.app.use(`/${route}*`, (req, res) => {
-      res.set('Content-Type', 'text/html');
-      res.send(fs.readFileSync(path.join(args.assetsDir, 'index.html')));
-    });
+module.exports = function(app) {
+  let assetsDir = path.join(__dirname, '..', config.server.assets);
+  
+  spaMiddleware({
+    app: app,
+    htmlFile : path.join(assetsDir, 'index.html'),
+    isRoot : true,
+    appRoutes : config.server.appRoutes,
+    getConfig : (req, res) => {
+      return {
+        user : null,
+        appRoutes : config.server.appRoutes
+      }
+    }
   });
+
+  app.use(express.static(assetsDir));
 }

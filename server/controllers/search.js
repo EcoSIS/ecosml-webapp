@@ -16,42 +16,26 @@ router.get('/', search);
 
 async function search(req, res) {
   try {
-    let params;
+    let query = {};
     if( req.method === 'POST'  ) {
-      params = req.body;
+      query = req.body;
     } else {
-      params = req.query;
-      if( params.query ) {
-        params.query = JSON.parse(params.query);
+      query = req.query;
+      if( query.filters ) {
+        query.filters = JSON.parse(query.filters);
       }
-      if( params.offset ) {
-        params.offset = parseInt(params.offset);
+      if( query.offset ) {
+        query.offset = parseInt(query.offset);
       }
-      if( params.limit ) {
-        params.limit = parseInt(params.limit);
+      if( query.limit ) {
+        query.limit = parseInt(query.limit);
       }
-      if( params.sort ) {
-        params.sort = JSON.parse(params.sort);
-      }
-      if( params.projection ) {
-        params.projection = JSON.parse(params.projection);
+      if( query.sort ) {
+        query.sort = JSON.parse(query.sort);
       }
     }
 
-    let query = params.query || {};
-    if( !query.$text && params.text ) {
-      query.$text = {
-        $search : params.text
-      }
-    }
-
-    let options = {
-      offset : params.offset || 0,
-      limit : params.limit || 100,
-      sort : params.sort || {name: 1}
-    }
-
-    results = await model.search(query, options, params.projection);
+    results = await model.search(query);
     res.json(results);
   } catch(e) {
     utils.handleError(res, e);

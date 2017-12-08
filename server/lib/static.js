@@ -1,4 +1,6 @@
 const config = require('./config');
+const path = require('path');
+const express = require('express');
 const spaMiddleware = require('@ucd-lib/spa-router-middleware');
 
 module.exports = function(app) {

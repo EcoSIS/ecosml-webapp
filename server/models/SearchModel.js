@@ -16,9 +16,21 @@ class SearchModel {
    * 
    * @returns {Promise} mongodb query promise, resolves to array
    */
-  async search(query = {}, options = {}, projection = {}) {
-    logger.info('package search', query, options, projection);
-    return await mongo.search(query, options, projection);
+  async search(query = {}) {
+
+    let mongoQuery = query.filters || {};
+    if( query.text ) {
+      mongoQuery.$text = {$search: query.text};
+    }
+
+    let mongoOptions = {
+      limit : query.limit || 10,
+      offset : query.offset || 0,
+      sort : query.sort || {name: 1}
+    }
+
+    logger.info('package search', mongoQuery, mongoOptions);
+    return await mongo.search(mongoQuery, mongoOptions, {});
   }
 
   async recreateIndex() {

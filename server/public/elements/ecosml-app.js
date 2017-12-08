@@ -63,9 +63,23 @@ export class EcoSMLApp extends Mixin(PolymerElement)
     this.$.drawer.toggle();
   }
 
+
   _onAppStateUpdate(e) {
-    this.page = e.location.path[0] || 'home';
-    console.log(e);
+    let page = e.location.path[0] || 'home';
+    if( page === this.page ) return;
+    
+    window.scrollTo(0, 0);
+    this.page = page;
+  }
+
+  /**
+   * @method _onSearchPackagesUpdate
+   * @description SearchInterface, fired when search query updates.
+   * used to set the window url
+   * 
+   */
+  _onSearchPackagesUpdate(e) {
+    this._setWindowLocation('/search/'+this._searchQueryToUrl(e));
   }
 }
 

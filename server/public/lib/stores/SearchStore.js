@@ -16,16 +16,16 @@ class SearchStore extends BaseStore {
     }
   }
 
-  setSearchLoading(request, payload) {
-    this._setSearchState({request, payload, state: this.STATE.LOADING});
+  setSearchLoading(request, query) {
+    this._setSearchState({request, query, state: this.STATE.LOADING});
   }
 
-  setSearchSuccess(payload) {
-    this._setSearchState({payload, state: this.STATE.LOADED});
+  setSearchSuccess(payload, query) {
+    this._setSearchState({payload, query, state: this.STATE.LOADED});
   }
 
   setSearchError(error) {
-    this._setSearchState({error, state: this.STATE.ERROR});
+    this._setSearchState({error, query, state: this.STATE.ERROR});
   }
 
   _setSearchState(state) {

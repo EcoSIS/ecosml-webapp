@@ -17,31 +17,28 @@ class SearchService extends BaseService {
    * @param {Object} query mongo query object
    * @param {Object} options query options
    */
-  async search(query, options) {
-    let payload = {query, options};
-    
+  async search(query) {    
     this.currentSearchId++;
     let searchId = this.currentSearchId;
-    
 
     return this.request({
       url : this.baseUrl,
       fetchOptions : {
         method : 'POST',
-        body  : payload
+        body  : query
       },
       json : true,
       onLoading : request => {
         if( !this._isCurrentSearch(searchId) ) return;
-        this.store.setSearchLoading(request, payload)
+        this.store.setSearchLoading(request, query)
       },
       onLoad : result => {
         if( !this._isCurrentSearch(searchId) ) return;
-        this.store.setSearchSuccess(result.body)
+        this.store.setSearchSuccess(result.body, query)
       },
       onError : error => {
         if( !this._isCurrentSearch(searchId) ) return;
-        this.store.setSearchError(error)
+        this.store.setSearchError(error, query)
       }
     })
   }

@@ -16,6 +16,14 @@ class SearchStore extends BaseStore {
     }
   }
 
+  getSearchQuery() {
+    return this.data.search.query;
+  }
+
+  setSearchQuery(query) {
+    this.data.search.query = query;
+  }
+
   setSearchLoading(request, query) {
     this._setSearchState({request, query, state: this.STATE.LOADING});
   }

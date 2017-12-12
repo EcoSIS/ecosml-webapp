@@ -1,0 +1,21 @@
+<style include="shared-styles">
+  :host {
+    display: block;
+  }
+</style>
+
+<div>
+  <div>[[filter.key]]</div>
+
+  <div hidden$="[[!hasActiveFilters]]">
+    <div>Active</div>
+    <template is="dom-repeat" items="[[activeFilters]]">
+      <app-filter-checkbox></app-filter-checkbox>
+    </template>
+  </div>
+
+  <div hidden$="[[!hasActiveFilters]]">Additional</div>
+  <template is="dom-repeat" items="[[filter.values]]">
+    <app-filter-checkbox filter="[[item]]" on-change="_onFilterClicked"></app-filter-checkbox>
+  </template>
+</div>

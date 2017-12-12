@@ -20,3 +20,8 @@ services:
     image: mongo:3.5
     ports:
       - 27017:27017
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:

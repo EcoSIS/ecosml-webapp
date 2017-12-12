@@ -62,7 +62,7 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
         return;
       }
     }
-
+    
     if( e.location.path[0] !== 'package' ) return;
     if( e.location.path.length > 1 ) {
       if( this.packageId === e.location.path[1] ) return;

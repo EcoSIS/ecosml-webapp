@@ -28,6 +28,16 @@ class SearchModel extends BaseModel {
     this.register('SearchModel');
   }
 
+  getEmptyQuery() {
+    return {
+      text : '',
+      filters : [],
+      sort : null,
+      limit : 0,
+      offset : 0
+    }
+  }
+
   /**
    * @method toUrl
    * @description convert a query object to a url slug
@@ -55,13 +65,7 @@ class SearchModel extends BaseModel {
       url = url.split('/');
     }
 
-    let query = {
-      text : '',
-      filters : {},
-      sort : null,
-      limit : 0,
-      offset : 0
-    };
+    let query = this.getEmptyQuery();
 
     let i = 0;
     while( urlParts.length > 0 ) {
@@ -72,7 +76,7 @@ class SearchModel extends BaseModel {
           query.text = part;
           break;
         case 1:
-          query.filters = part ? JSON.parse(part) : {};
+          query.filters = part ? JSON.parse(part) : [];
           break;
         case 2:
           query.sort = part || null;
@@ -91,8 +95,67 @@ class SearchModel extends BaseModel {
     return query;
   }
 
-  search(query = {}) {
-    return this.service.search(query);
+  getQuery() {
+    if( !this.store.getSearchQuery() ) {
+      this.store.setSearchQuery(this.getEmptyQuery());
+    }
+    return  this.store.getSearchQuery();
+  }
+
+  setOffset(offset) {
+    let query = this.getQuery();
+    query.offset = offset;
+    return query;
+  }
+
+  setLimit(limit) {
+    let query = this.getQuery();
+    query.limit = limit;
+    return query;
+  }
+
+  setText(text) {
+    let query = this.getQuery();
+    query.text = text;
+    return query;
+  }
+
+  appendFilter(key, value) {
+    let query = this.getQuery();
+    if( this._hasFilter(query.filters, key, value) ) return;
+    query.filters.push({[key] : value});
+    return query;
+  }
+
+  removeFilter(key, value) {
+    let query = this.getQuery();
+    let filters = query.filters;
+
+    for( var i = filters.length; i >= 0; i-- ) {
+      if( filters[i][key] ) {
+        if( value ) {
+          if( filters[i][key] === value ) {
+            filters.splice(i, 1);
+            return;
+          }
+        } else {
+          filters.splice(i, 1);
+        }
+      }
+    }
+
+    return query;
+  }
+
+  _hasFilter(filters, key, value) {
+    for( var i = 0; i < filters.length; i++ ) {
+      if( filters[i][key] === value ) return true;
+    }
+    return false;
+  }
+
+  search(query) {
+    return this.service.search(query || this.getQuery());
   }
 }
 

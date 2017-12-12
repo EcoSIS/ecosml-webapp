@@ -2,7 +2,9 @@ import {Element as PolymerElement} from "@polymer/polymer/polymer-element"
 
 import template from "./app-package-search.html"
 import "./app-search-header"
+import "./filters/app-filters-panel"
 import SearchInterface from "../interfaces/SearchInterface"
+
 
 class AppPackageSearch extends Mixin(PolymerElement)
       .with(EventInterface, SearchInterface) {

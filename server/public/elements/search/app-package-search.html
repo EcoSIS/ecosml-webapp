@@ -1,7 +1,25 @@
 <style include="shared-styles">
+  :host {
+    display: block;
+  }
 
+  .layout {
+    display: flex;
+    justify-content: center;
+  }
+  .inner-layout {
+    display: flex;
+  }
 </style>
 
 <app-search-header></app-search-header>
 
-Search
+<div class="layout">
+  <div class="inner-layout">
+    <app-filters-panel></app-filters-panel>
+    <div>
+        Search Content
+    </div>
+  </div>
+</div>
+

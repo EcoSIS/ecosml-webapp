@@ -7,15 +7,35 @@ module.exports = subclass =>
       this._injectModel('SearchModel');
     }
 
+    _appendSearchFilter(key, value) {
+      return this.SearchModel.appendFilter(key, value);
+    }
+
+    _removeSearchFilter(key, value) {
+      return this.SearchModel.removeFilter(key, value);
+    }
+
+    _setText(text) {
+      return this.SearchModel.setText(text);
+    }
+
+    _setSearchLimit(limit) {
+      return this.SearchModel.setLimit(limit);
+    }
+
+    _setSearchOffset(offset) {
+      return this.SearchModel.setOffset(offset);
+    }
+
     async _searchPackages(query) {
       return this.SearchModel.search(query);
     }
 
-    async _searchQueryToUrl(query) {
+    _searchQueryToUrl(query) {
       return this.SearchModel.toUrl(query);
     }
 
-    async _urlToSearchQuery(url) {
+    _urlToSearchQuery(url) {
       return this.SearchModel.fromUrl(url);
     }
   }

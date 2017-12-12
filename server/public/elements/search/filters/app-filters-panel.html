@@ -1,0 +1,27 @@
+<style include="shared-styles">
+  :host {
+    display: block;
+  }
+  .title {
+    display: flex;
+    align-items: center;
+  }
+  .title h2 {
+    flex: 1;
+  }
+  .clear-filters {
+    display: none;
+  }
+  .clear-filters[active] {
+    display: inline-block;
+  }
+</style>
+
+<div class="title">
+  <h2>Filters</h2>
+  <button class="clear-filters">Clear Filters</button>
+</div>
+
+<template is="dom-repeat" items="[[filters]]">
+  <app-filter-panel filter="[[item]]"></app-filter-panel>
+</template>

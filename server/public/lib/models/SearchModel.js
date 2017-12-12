@@ -127,7 +127,7 @@ class SearchModel extends BaseModel {
     return query;
   }
 
-  removeFilter(key, value) {
+  removesFilter(key, value) {
     let query = this.getQuery();
     let filters = query.filters;
 

@@ -78,6 +78,11 @@ module.exports = {
     org : 'ecosml',
     fsRoot : env.GITHUB_FS_ROOT || path.join(__dirname, '..', 'gitdata'),
     default_license : 'mit'
+  },
+
+  git : {
+    name : 'EcoSML Admin',
+    email : 'admin@ecosml.org'
   }
 
 }

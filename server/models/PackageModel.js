@@ -15,6 +15,8 @@ class PackageModel {
     this.REQUIRED = {
       CREATE : ['name', 'description', 'owner', 'organization']
     }
+
+    git.initConfig();
   }
 
   verifyRequired(attrs, obj) {

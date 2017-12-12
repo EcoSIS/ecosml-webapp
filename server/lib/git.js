@@ -14,13 +14,13 @@ if( !fs.existsSync(ROOT) ) {
 
 class GitCli {
 
-  constructor() {
-    this.init();
-  }
-
-  async init() {
-    await this.exec('config --global user.email "admin@ecosml.org"');
-    await this.exec('config --global user.name "EcoSML Admin"');
+  /**
+   * @method initConfig
+   * @description make sure the git config username/email is set correctly
+   */
+  async initConfig() {
+    await this.exec(`config --global user.email "${config.git.email}"`);
+    await this.exec(`config --global user.name "${config.git.name}"`);
   }
 
   async clone(repoName) {

@@ -10,7 +10,7 @@
   <div hidden$="[[!hasActiveFilters]]">
     <div>Active</div>
     <template is="dom-repeat" items="[[activeFilters]]">
-      <app-filter-checkbox></app-filter-checkbox>
+      <app-filter-checkbox filter="[[item]]" active-filter checked></app-filter-checkbox>
     </template>
   </div>
 

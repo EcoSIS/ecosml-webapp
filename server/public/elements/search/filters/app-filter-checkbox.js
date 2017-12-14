@@ -16,8 +16,7 @@ export default class AppFilterCheckbox extends PolymerElement {
       checked : {
         type : Boolean,
         value : false,
-        reflectToAttribute : true,
-        observer : '_onValueChanged'
+        reflectToAttribute : true
       }
     }
   }
@@ -29,7 +28,11 @@ export default class AppFilterCheckbox extends PolymerElement {
 
   _onClick() {
     this.toggle();
-    this.dispatchEvent(new CustomEvent('change', {detail: {checked: this.checked}}));
+    let e = {
+      filter: this.filter.filter,
+      checked: this.checked
+    };
+    this.dispatchEvent(new CustomEvent('change', {detail: e}));
   }
 
   toggle() {

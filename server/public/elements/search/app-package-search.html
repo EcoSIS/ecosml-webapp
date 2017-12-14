@@ -7,8 +7,19 @@
     display: flex;
     justify-content: center;
   }
+
   .inner-layout {
+    background-color: white;
     display: flex;
+    width: 100%;
+    max-width: 1200px;
+    padding: 20px;
+    margin-top: 20px;
+  }
+
+  app-filters-panel {
+    width: 100%;
+    max-width: 300px;
   }
 </style>
 
@@ -17,9 +28,7 @@
 <div class="layout">
   <div class="inner-layout">
     <app-filters-panel></app-filters-panel>
-    <div>
-        Search Content
-    </div>
+    <app-search-results-panel style="flex:1"></app-search-results-panel>
   </div>
 </div>
 

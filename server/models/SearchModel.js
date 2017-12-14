@@ -18,9 +18,12 @@ class SearchModel {
    */
   async search(query = {}) {
 
-    let mongoQuery = query.filters || {};
+    let mongoQuery = {};
     if( query.text ) {
       mongoQuery.$text = {$search: query.text};
+    }
+    if( query.filters && query.filters.length > 0 ) {
+      mongoQuery.$and = query.filters;
     }
 
     let mongoOptions = {
@@ -30,7 +33,24 @@ class SearchModel {
     }
 
     logger.info('package search', mongoQuery, mongoOptions);
-    return await mongo.search(mongoQuery, mongoOptions, {});
+    let result = await mongo.search(mongoQuery, mongoOptions, {});
+
+    // strip out any active filters
+    if( query.filters && query.filters.length > 0 ) {
+      query.filters.forEach(filter => {
+        let key = Object.keys(filter)[0];
+        let value = filter[key];
+        if( typeof value === 'object' ) return;
+
+        if( result.filters[key] ) {
+          let index = result.filters[key].findIndex(item => item.filter === value);
+          if( index > -1 ) result.filters[key].splice(index, 1);
+          if( result.filters[key].length === 0 ) delete result.filters[key];
+        }
+      });
+    }
+
+    return result;
   }
 
   async recreateIndex() {

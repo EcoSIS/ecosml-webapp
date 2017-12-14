@@ -1,0 +1,12 @@
+<style include="shared-styles">
+  :host {
+    display: block;
+    padding: 10px;
+  }
+</style>
+
+<div>
+  <template is="dom-repeat" items="[[results]]">
+    <app-search-result item="[[item]]"></app-search-result>
+  </template>
+</div>

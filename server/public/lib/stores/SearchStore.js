@@ -32,7 +32,7 @@ class SearchStore extends BaseStore {
     this._setSearchState({payload, query, state: this.STATE.LOADED});
   }
 
-  setSearchError(error) {
+  setSearchError(error, query) {
     this._setSearchState({error, query, state: this.STATE.ERROR});
   }
 

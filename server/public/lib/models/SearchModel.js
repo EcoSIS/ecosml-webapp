@@ -127,11 +127,11 @@ class SearchModel extends BaseModel {
     return query;
   }
 
-  removesFilter(key, value) {
+  removeFilter(key, value) {
     let query = this.getQuery();
     let filters = query.filters;
 
-    for( var i = filters.length; i >= 0; i-- ) {
+    for( var i = filters.length-1; i >= 0; i-- ) {
       if( filters[i][key] ) {
         if( value ) {
           if( filters[i][key] === value ) {

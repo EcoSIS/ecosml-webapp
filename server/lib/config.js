@@ -48,7 +48,7 @@ module.exports = {
           options : {
             weights: {
               name: 10,
-              keywords: 10,
+              keywords: 8,
               overview : 5,
               desciption : 2
             },

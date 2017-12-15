@@ -15,7 +15,7 @@ module.exports = subclass =>
       return this.SearchModel.removeFilter(key, value);
     }
 
-    _setText(text) {
+    _setSearchText(text) {
       return this.SearchModel.setText(text);
     }
 

@@ -35,11 +35,15 @@
 
 <div class="root">
   <div style="flex:.66">
-    <input type="text" on-keypress="_onKeyPress"/>
+    <input type="text" id="input" on-keypress="_onKeyPress"/>
   </div>
   <div>
     <button on-click="_onButtonClick">
       <iron-icon icon="search"></iron-icon>
     </button>
   </div>
+</div>
+
+<div class="root">
+<app-active-filters-panel style="flex:.66"></app-active-filters-panel>
 </div>

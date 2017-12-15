@@ -2,20 +2,15 @@
   :host {
     display: block;
   }
+  a {
+    cursor: pointer;
+    color: var(--default-primary-color);
+  }
 </style>
 
-<div>
-  <div>[[filter.key]]</div>
 
-  <div hidden$="[[!hasActiveFilters]]">
-    <div>Active</div>
-    <template is="dom-repeat" items="[[activeFilters]]">
-      <app-filter-checkbox filter="[[item]]" active-filter checked></app-filter-checkbox>
-    </template>
-  </div>
+<div><b>[[filter.key]]</b></div>
 
-  <div hidden$="[[!hasActiveFilters]]">Additional</div>
-  <template is="dom-repeat" items="[[filter.values]]">
-    <app-filter-checkbox filter="[[item]]" on-change="_onFilterClicked"></app-filter-checkbox>
-  </template>
-</div>
+<template is="dom-repeat" items="[[filter.values]]">
+  <div><a on-click="_onFilterClicked" filter$="[[item.filter]]">[[item.filter]] ([[item.count]])</a></div>
+</template>

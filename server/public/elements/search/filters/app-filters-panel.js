@@ -13,13 +13,12 @@ export default class AppFiltersPanel extends Mixin(PolymerElement)
   static get properties() {
     return {
       filters : {
-        type : Object,
-        value : () => {},
-        observer : '_onFiltersUpdate'
-      },
-      filters : {
         type : Array,
         value : () => []
+      },
+      hasFilters : {
+        type : Boolean,
+        value : true
       }
     }
   }
@@ -29,6 +28,10 @@ export default class AppFiltersPanel extends Mixin(PolymerElement)
     this.active = true;
   }
 
+  /**
+   * @method _onSearchPackagesUpdate
+   * @description from SearchInterface, called when search state updates
+   */
   _onSearchPackagesUpdate(e) {
     if( e.state !== 'loaded' ) return;
     let filters = e.payload.filters || {};
@@ -42,10 +45,8 @@ export default class AppFiltersPanel extends Mixin(PolymerElement)
     }
 
     this.filters = arr;
+    this.hasFilters = (this.filters.length > 0);
   }
-
-
-
 }
 
 customElements.define('app-filters-panel', AppFiltersPanel);

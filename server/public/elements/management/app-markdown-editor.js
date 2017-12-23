@@ -1,6 +1,6 @@
 import {Element as PolymerElement} from "@polymer/polymer/polymer-element"
 import template from "./app-markdown-editor.html"
-import "markdown"
+// import "markdown"
 import { markdown } from "markdown";
 
 export default class AppMarkdownEditor extends PolymerElement {

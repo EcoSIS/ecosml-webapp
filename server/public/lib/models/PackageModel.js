@@ -36,7 +36,13 @@ class PackageModel extends BaseModel {
    * @returns {Promise} fetch promise
    */
   async get(id) {
-    return this.service.get(id);
+    this.service.get(id);
+
+    if( this.store.data.byId[id].state === 'loading' ) {
+      await this.store.data.byId[id].request;
+    }
+    
+    return this.store.data.byId[id];
   }
 
   /**

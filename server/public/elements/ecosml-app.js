@@ -28,6 +28,7 @@ import "./utils/app-title-card"
 import "./management/app-package-metadata-editor"
 import "./search/app-package-search"
 import "./app-home"
+import "./landing/app-landing-page"
 
 // element imports
 import AppStateInterface from "./interfaces/AppStateInterface"
@@ -43,9 +44,10 @@ export class EcoSMLApp extends Mixin(PolymerElement)
 
   static get properties() {
     return {
+      // APP_CONFIG is global and injected via template from server.
       appRoutes : {
         type : Array,
-        value : () => ['package', 'search']
+        value : () => APP_CONFIG.appRoutes
       },
       page : {
         type : String,
@@ -67,6 +69,8 @@ export class EcoSMLApp extends Mixin(PolymerElement)
   _onAppStateUpdate(e) {
     let page = e.location.path[0] || 'home';
     if( page === this.page ) return;
+
+    if( page === 'create' ) page = 'edit';
     
     window.scrollTo(0, 0);
     this.page = page;

@@ -1,0 +1,48 @@
+<style include="shared-styles">
+  :host {
+    display: block;
+  }
+  .layout {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .layout > * {
+    flex: .333;
+  }
+</style>
+
+<div class="layout">
+  <div>
+    <h2>Theme</h2>
+    <select on-change="_onThemeSelect">
+      <option></option>
+      <template is="dom-repeat" items="[[themeOptions]]">
+        <option value$="[[item]]">[[item]]</option>
+      </template>
+    </select>
+  </div>
+
+  <div hidden$="[[!selectedTheme]]">
+    <h2>Family</h2>
+    <select on-change="_onFamilySelect" id="family">
+      <option></option>
+      <template is="dom-repeat" items="[[familyOptions]]">
+        <option value$="[[item]]">[[item]]</option>
+      </template>
+    </select>
+  </div>
+
+  <div hidden$="[[!selectedFamily]]">
+    <h2>Specific</h2>
+    <select on-change="_onSpecificSelect" id="specific">
+      <option></option>
+      <template is="dom-repeat" items="[[specificOptions]]">
+        <option value$="[[item]]">[[item]]</option>
+      </template>
+    </select>
+  </div>
+</div>
+
+<div>
+  Values: [[selectedTheme]] [[selectedFamily]] [[selectedSpecific]]
+</div>

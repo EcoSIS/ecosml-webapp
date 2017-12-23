@@ -2,8 +2,18 @@
   :host {
     display: block;
     padding: 10px;
+    min-height: 500px;
+  }
+
+  .no-match {
+    text-align: center;
+    padding-top: 50px;
   }
 </style>
+
+<div class="no-match" hidden$="[[hasResults]]">
+  No packages match your current search.
+</div>
 
 <div>
   <template is="dom-repeat" items="[[results]]">

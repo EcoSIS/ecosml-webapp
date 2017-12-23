@@ -84,8 +84,19 @@
 
         <app-keyword-input id="keywords" label="Keywords.  Comma Separate" on-keyword-change="_onDataChange"></app-keyword-input>
         <div class="help">[[schema.keywords.description]]</div>
+
+        <app-theme-input></app-theme-input>
       </div>
     </app-title-card>
+
+    <app-title-card hidden$="[[creating]]">
+        <div slot="header">
+          Package Releases
+        </div>
+        <div slot="content">
+          <app-create-release></app-create-release>
+        </div>
+      </app-title-card>
 
     <div hidden$="[[creating]]">
       <paper-button on-click="_onDeleteBtnClicked">Delete Package</paper-button>

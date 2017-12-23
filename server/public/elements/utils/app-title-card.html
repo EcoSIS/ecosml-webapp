@@ -2,28 +2,29 @@
   :host {
     display: block;
   }
-  paper-material {
-    display: block;
-    border-radius: 6px;
-  }
   .header {
-    background-color: var(--default-primary-color);
-    padding: 15px;
-    color: white;
-    border-radius: 6px 6px 0 0;
+    padding: 40px 40px 10px 40px;
+    background-color: white;
+  }
+  h2 {
+    font-size: 22px;
+    border-bottom: 2px solid var(--title-card-border-color, var(--default-primary-color));
+    margin : 0;
+    padding : 0 0 5px 0;
   }
   .content {
     background-color: white;
-    padding: 15px;
-    border-radius: 0 0 6px 6px;
+    padding: 10px 40px 40px 40px;
   }
 </style>
 
-<paper-material>
+<div>
   <div class="header">
-    <slot name="header"></slot>
+    <h2>
+      <slot name="header"></slot>
+    </h2>
   </div>
   <div class="content">
     <slot name="content"></slot>
   </div>
-</paper-material>
+</div>

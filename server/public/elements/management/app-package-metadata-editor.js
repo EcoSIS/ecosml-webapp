@@ -8,6 +8,8 @@ import PackageInterface from "../interfaces/PackageInterface"
 import AppStateInterface from "../interfaces/AppStateInterface"
 import "./app-markdown-editor"
 import "./app-keyword-input"
+import "./app-theme-input"
+import "./app-create-release"
 
 
 class AppPackageMetadataEditor extends Mixin(PolymerElement)
@@ -48,6 +50,7 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
 
   constructor() {
     super();
+    this.active = true;
     this._autoUpdateTimer = -1;
     this.schema = this._getPackageSchema();
   }
@@ -58,17 +61,18 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
         this.unsavedData = null;
         this.$.savingToast.close();
       } else {
-        this._setWindowLocation('/package/'+this.packageId);
+        this._setWindowLocation('/edit/'+this.packageId);
         return;
       }
     }
     
-    if( e.location.path[0] !== 'package' ) return;
-    if( e.location.path.length > 1 ) {
+    let page = e.location.path[0];
+
+    if( page === 'edit' && e.location.path.length > 0 ) {
       if( this.packageId === e.location.path[1] ) return;
       this.packageId = e.location.path[1];
       this.fetchAndUpdatePackage( e.location.path[1] );
-    } else {
+    } else if( page === 'create' ) {
       this.createPackage();
     }
   }
@@ -118,13 +122,13 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
   }
 
   async fetchAndUpdatePackage(pkgId) {
-    let result;
+    let dataWrapper;
     try {
-      result = await this._getPackage(pkgId);
+      dataWrapper = await this._getPackage(pkgId);
     } catch(e) {
       return alert('Failed to fetch package with id: '+pkgId);
     }
-    this.updatePackage(result.body);
+    this.updatePackage(dataWrapper.payload);
   }
 
   /**

@@ -22,6 +22,10 @@
   <button class="clear-filters">Clear Filters</button>
 </div>
 
+<div hidden$="[[hasFilters]]">
+  No additional filters for current search
+</div>
+
 <template is="dom-repeat" items="[[filters]]">
   <app-filter-panel filter="[[item]]"></app-filter-panel>
 </template>

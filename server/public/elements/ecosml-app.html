@@ -30,18 +30,19 @@
 </style>
 
 <div class="header">
-  <paper-icon-button icon="menu" on-click="toggleDrawer"></paper-icon-button>
+  <!-- <paper-icon-button icon="menu" on-click="toggleDrawer"></paper-icon-button> -->
   <div main-title>EcoSML <small>Ecological Spectral Model Library</small></div>
   <a href="/" inverse><paper-icon-button icon="home"></paper-icon-button></a>
 </div>
-<app-drawer id="drawer" swipe-open></app-drawer>
+<!-- <app-drawer id="drawer" swipe-open></app-drawer> -->
 
 <app-route app-routes="[[appRoutes]]"></app-route>
 
 <iron-pages selected="[[page]]" attr-for-selected="id" selected-attribute="active">
   <app-home id="home"></app-home>
-  <app-package-metadata-editor id="package"></app-package-metadata-editor>
+  <app-package-metadata-editor id="edit"></app-package-metadata-editor>
   <app-package-search id="search"></app-package-search>
+  <app-landing-page id="package"></app-landing-page>
 </iron-pages>
 
 

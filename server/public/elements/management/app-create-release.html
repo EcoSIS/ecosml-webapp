@@ -1,0 +1,30 @@
+<style>
+  :host {
+    display: block;
+  }
+
+  .layout {
+    display: flex;
+    align-items: flex-end;
+  }
+</style>
+
+<div>Current Release: [[release]]</div>
+<div class="layout">
+  <div>
+    <div>Major</div>
+    <input type="number" id="major" placeholder="1" on-change="_onInputChange" />
+  </div>
+  <div>.</div>
+  <div>
+    <div>Minor</div>
+    <input type="number" id="minor" placeholder="0" on-change="_onInputChange" />
+  </div>
+  <div>.</div>
+  <div>
+    <div>Patch</div>
+    <input type="number" id="patch" placeholder="0" on-change="_onInputChange" />
+  </div>
+</div>
+
+<div><a href="https://semver.org/" target="_blank">Help</a></div>

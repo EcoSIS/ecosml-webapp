@@ -23,6 +23,10 @@ export default class AppSearchResultsPanel extends Mixin(PolymerElement)
       results : {
         type : Array,
         value : () => []
+      },
+      hasResults : {
+        type : Boolean,
+        value : true
       }
     }
   }
@@ -45,6 +49,7 @@ export default class AppSearchResultsPanel extends Mixin(PolymerElement)
     }
 
     this.results = e.payload.results;
+    this.hasResults = (this.results.length > 0);
   }
 
 }

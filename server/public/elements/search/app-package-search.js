@@ -5,19 +5,32 @@ import "./app-search-header"
 import "./filters/app-filters-panel"
 import "./results/app-search-results-panel"
 import SearchInterface from "../interfaces/SearchInterface"
+import AppStateInterface from "../interfaces/AppStateInterface"
 
 
 class AppPackageSearch extends Mixin(PolymerElement)
-      .with(EventInterface, SearchInterface) {
+      .with(EventInterface, AppStateInterface, SearchInterface) {
 
   static get template() {
     return template;
   }
 
+  static get properties() {
+    return {
+      firstLoad : {
+        type : Boolean,
+        value : true
+      },
+      appState : {
+        type : Object,
+        value : {}
+      }
+    }
+  }
+
   constructor() {
     super();
     this.active = true;
-    this._searchPackages();
   }
 
   /**
@@ -27,9 +40,11 @@ class AppPackageSearch extends Mixin(PolymerElement)
   _onAppStateUpdate(e) {
     this.appState = e;
 
-    if( e.location.path[0] === 'search' && e.location.popstate ) {
+    if( e.location.path[0] === 'search' && (e.location.popstate || this.firstLoad) ) {
       this._searchFromAppState();
     }
+
+    this.firstLoad = false;
   }
 
   /**
@@ -43,15 +58,21 @@ class AppPackageSearch extends Mixin(PolymerElement)
     if( searchUrlParts.length > 1 ) {
       query = this._urlToSearchQuery(searchUrlParts.slice(1, searchUrlParts.length));
     } else {
-      query = this._getAppSearchDocument();
+      query = this._getEmptySearchQuery();
     }
 
     this._searchPackages(query);
   }
 
-
+  /**
+   * @method _onSearchPackagesUpdate
+   * @description SearchInterface, fired when search query updates.
+   * used to set the window url
+   * 
+   */
   _onSearchPackagesUpdate(e) {
-    console.log(e);
+    if( !e.query ) return;
+    this._setWindowLocation(this._searchQueryToUrl(e.query));
   }
 
 }

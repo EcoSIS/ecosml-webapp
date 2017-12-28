@@ -52,6 +52,10 @@ export class EcoSMLApp extends Mixin(PolymerElement)
       page : {
         type : String,
         value : 'home'
+      },
+      firstLoad : {
+        type : Boolean,
+        value : true
       }
     }
   }
@@ -65,7 +69,6 @@ export class EcoSMLApp extends Mixin(PolymerElement)
     this.$.drawer.toggle();
   }
 
-
   _onAppStateUpdate(e) {
     let page = e.location.path[0] || 'home';
     if( page === this.page ) return;
@@ -74,16 +77,6 @@ export class EcoSMLApp extends Mixin(PolymerElement)
     
     window.scrollTo(0, 0);
     this.page = page;
-  }
-
-  /**
-   * @method _onSearchPackagesUpdate
-   * @description SearchInterface, fired when search query updates.
-   * used to set the window url
-   * 
-   */
-  _onSearchPackagesUpdate(e) {
-    this._setWindowLocation('/search/'+this._searchQueryToUrl(e));
   }
 }
 

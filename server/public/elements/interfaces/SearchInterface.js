@@ -38,4 +38,8 @@ module.exports = subclass =>
     _urlToSearchQuery(url) {
       return this.SearchModel.fromUrl(url);
     }
+
+    _getEmptySearchQuery() {
+      return this.SearchModel.getEmptyQuery();
+    }
   }

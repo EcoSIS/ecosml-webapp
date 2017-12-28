@@ -14,7 +14,7 @@
 <div class="layout">
   <div>
     <h2>Theme</h2>
-    <select on-change="_onThemeSelect">
+    <select id="theme" on-change="_onThemeSelect">
       <option></option>
       <template is="dom-repeat" items="[[themeOptions]]">
         <option value$="[[item]]">[[item]]</option>

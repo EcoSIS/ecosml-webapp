@@ -64,6 +64,18 @@ router.delete('/:name', async (req, res) => {
   }
 });
 
+router.post('/:name/createRelease', async (req, res) => {
+  let releaseInfo = req.body;
+  let packageName = req.params.name;
+  
+  try {
+    package = await model.createRelease(packageName, releaseInfo);
+    res.status(201).json(package);
+  } catch(e) {
+    utils.handleError(res, e);
+  }
+});
+
 router.post('/addFile', upload.any(), async (req, res) => {
   // req.files is array of `photos` files 
   // req.body will contain the text fields, if there were any 

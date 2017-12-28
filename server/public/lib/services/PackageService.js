@@ -50,6 +50,24 @@ class PackageService extends BaseService {
   }
 
   /**
+   * @method createRelease
+   * @description create a new package release
+   */
+  async createRelease(id, payload) {
+    return this.request({
+      url : `${this.baseUrl}/${id}/createRelease`,
+      fetchOptions : {
+        method : 'POST',
+        body  : payload
+      },
+      json : true,
+      onLoading : request => this.store.setCreateReleaseLoading(request, payload),
+      onLoad : result => this.store.setCreateReleaseSuccess(result.body),
+      onError : error => this.store.setCreateReleaseError(error)
+    });
+  }
+
+  /**
    * @method get
    * @description get a package by id.  the /package/:id request also 
    * accepts /package/:name

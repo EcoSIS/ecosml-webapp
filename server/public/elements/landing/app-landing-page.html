@@ -38,31 +38,42 @@
       <div class="overview">[[package.overview]]</div>
       <div id="readme"></div>
     </div>
+    
     <div style="width: 300px">
       <div class="install">
         <iron-icon icon="chevron-right"></iron-icon>ecosml download [[package.name]]
       </div>
       <div style="padding-bottom: 20px"><a>Help</a></div>
-
+      
       <h2 class="uheader dark">Current Release</h2>
-      <div style="padding-bottom: 20px">v1.0.1</div>
+      <div style="padding-bottom: 20px" hidden$="[[!release]]">
+        <div><a href$="[[release.downloadUrl]]">[[release.name]]</a></div>
+        <div>[[release.description]]</div>
+      </div>
+      <div style="padding-bottom: 20px" hidden$="[[release]]">
+        No releases available
+      </div>
 
       <h2 class="uheader blue">Access</h2>
-      <div><a>Download Current Release</a></div>
-      <div><a href$="[[package.htmlUrl]]/releases" target="_blank">All Releases</a></div>
+      <div hidden$="[[!release]]"><a href$="[[release.downloadUrl]]">Download Current Release</a></div>
+      <div hidden$="[[!release]]"><a href$="[[package.htmlUrl]]/releases" target="_blank">All Releases</a></div>
       <div><a href$="[[package.htmlUrl]]" target="_blank">GitHub</a></div>
 
-      <h2 class="uheader green padded">Theme</h2>
-      <div>Foo</div>
-      <div>Bar</div>
+      <div hidden$="[[!package.theme]]">
+        <h2 class="uheader green padded">Theme</h2>
+        <div hidden$="[[!package.theme]]">Theme: <a href$="[[themeLink]]">[[package.theme]]</a></div>
+        <div hidden$="[[!package.family]]">Family: <a href$="[[familyLink]]">[[package.family]]</a></div>
+        <div hidden$="[[!package.specific]]">Specific: <a href$="[[specificLink]]">[[package.specific]]</a></div>
+      </div>
 
-      <h2 class="uheader lightblue padded">Keywords</h2>
-      <div>Baz</div>
-      <div>Another</div>
+      <div hidden$="[[!package.keywords]]">
+        <h2 class="uheader lightblue padded">Keywords</h2>
+        <div id="keywords"></div>
+      </div>
 
       <h2 class="uheader dark padded">Admin (if accesss)</h2>
       <div><a href$="/edit/[[package.id]]">Edit Package</a></div>
     </div>
-
+  </div>
 
 </div>

@@ -21,13 +21,30 @@ class GitCli {
   async initConfig() {
     await this.exec(`config --global user.email "${config.git.email}"`);
     await this.exec(`config --global user.name "${config.git.name}"`);
+    await this.exec(`config --global push.default matching`);
   }
 
+  /**
+   * @method clone
+   * @description clone a ecosml repository
+   * @param {String} repoName 
+   * 
+   * @return {Promise}
+   */
   async clone(repoName) {
+    await this.removeRepositoryFromDisk(repoName);
     let url = BASE_URL+repoName;
-    return this.exec(`clone ${url}`, {cwd: ROOT});
+    await this.exec(`clone ${url}`, {cwd: ROOT});
   }
 
+    /**
+   * @method ensureDir
+   * @description make sure a respository has been pulled onto server, if it 
+   * hasn't, runs clone(repoName)
+   * @param {String} repoName 
+   * 
+   * @return {Promise}
+   */
   async ensureDir(repoName) {
     let dir = path.join(ROOT, repoName);
     if( !fs.existsSync(dir) ) {
@@ -36,38 +53,90 @@ class GitCli {
     return dir;
   }
 
+  /**
+   * @method getRepoPath
+   * @description the full path to a repository on disk
+   * @param {String} repoName name of repository
+   * 
+   * @returns {String} full path 
+   */
   getRepoPath(repoName) {
     return path.join(ROOT, repoName);
   }
 
+  /**
+   * @method pull
+   * @description pull a respository
+   * @param {String} repoName name of repository
+   * 
+   * @returns {Promise} 
+   */
   async pull(repoName) {
     let dir = await this.ensureDir(repoName);
     return this.exec(`pull`, {cwd: dir});
   }
 
+  /**
+   * @method push
+   * @description push a respository
+   * @param {String} repoName name of repository
+   * 
+   * @returns {Promise} 
+   */
   async push(repoName) {
     let dir = await this.ensureDir(repoName);
     return this.exec(`push`, {cwd: dir});
   }
 
+  /**
+   * @method resetHEAD
+   * @description reset a repository to local HEAD
+   * @param {String} repoName name of repository
+   * 
+   * @returns {Promise} 
+   */
   async resetHEAD(repoName) {
     let dir = await this.ensureDir(repoName);
     return this.exec(`reset HEAD --hard`, {cwd: dir});
   }
 
+  /**
+   * @method addAll
+   * @description add all changes
+   * @param {String} repoName name of repository
+   * 
+   * @returns {Promise} 
+   */
   async addAll(repoName) {
     let dir = await this.ensureDir(repoName);
     return this.exec(`add --all`, {cwd: dir});
   }
 
+  /**
+   * @method commit
+   * @description commit changes
+   * @param {String} repoName name of repository
+   * @param {String} message commit message
+   * 
+   * @returns {Promise} 
+   */
   async commit(repoName, message) {
     let dir = await this.ensureDir(repoName);
     return this.exec(`commit -m "${message}"`, {cwd: dir});
   }
 
-  async removeRepository(repoName) {
+  /**
+   * @method removeRepositoryFromDisk
+   * @description remove a repository from disk (not github)
+   * @param {String} repoName name of repository
+   * 
+   * @returns {Promise} 
+   */
+  async removeRepositoryFromDisk(repoName) {
     let dir = path.join(ROOT, repoName);
-    await fs.remove(dir);
+    if( fs.existsSync(dir) ) {
+      await fs.remove(dir);
+    }
   }
 
   async currentChangesCount(repoName) {

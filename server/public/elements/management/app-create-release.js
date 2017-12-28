@@ -13,7 +13,11 @@ export default class AppCreateRelease extends PolymerElement {
         type : String,
         value : '',
         observer : '_render'
-      }   
+      },
+      currentRelease : {
+        type : String,
+        value : ''
+      }
     }
   }
 
@@ -53,7 +57,7 @@ export default class AppCreateRelease extends PolymerElement {
       return;
     }
 
-    let parts = this.release.split('.');
+    let parts = this.release.replace(/^v/, '').split('.');
     if( parts.length < 3 ) return;
 
     this.major = parts[0];

@@ -43,6 +43,33 @@ export default class AppThemeInput extends PolymerElement {
     }
   }
 
+  setValues(pkg) {
+    this.selectedTheme = pkg.theme || '';
+    this.$.theme.value = this.selectedTheme;
+
+    if( this.selectedTheme ) {
+      let familyOptions = [];
+      for( let family in VOCAB[this.selectedTheme] ) {
+        familyOptions.push(family);
+      }
+      this.familyOptions = familyOptions;
+    }
+
+    this.selectedFamily = pkg.family || '';
+
+    if( this.selectedFamily ) {
+      this.specificOptions = VOCAB[this.selectedTheme][this.selectedFamily];
+    }
+    this.selectedSpecific = pkg.specific || '';
+
+    // have to give dom repeat time to render :(
+    requestAnimationFrame(() => {
+      this.$.family.value = this.selectedFamily;
+      this.$.specific.value = this.selectedSpecific;
+    });
+    
+  }
+
   /**
    * @method _onThemeSelect
    * @description called when theme select box is changed
@@ -57,7 +84,10 @@ export default class AppThemeInput extends PolymerElement {
     this.selectedSpecific = '';
     this.$.specific.value = '';
 
-    if( !theme ) return;
+    if( !theme ) {
+      this._fireUpdateEvent();
+      return;
+    }
 
     let familyOptions = [];
     for( let family in VOCAB[this.selectedTheme] ) {
@@ -65,6 +95,7 @@ export default class AppThemeInput extends PolymerElement {
     }
 
     this.familyOptions = familyOptions;
+    this._fireUpdateEvent();
   }
 
   /**
@@ -82,6 +113,7 @@ export default class AppThemeInput extends PolymerElement {
     if( !family ) return;
 
     this.specificOptions = VOCAB[this.selectedTheme][this.selectedFamily];
+    this._fireUpdateEvent();
   }
 
   /**
@@ -90,6 +122,20 @@ export default class AppThemeInput extends PolymerElement {
    */
   _onSpecificSelect(e) {
     this.selectedSpecific = e.currentTarget.value;
+    this._fireUpdateEvent();
+  }
+
+  /**
+   * @method _fireUpdateEvent
+   * @description called whenever a value changes
+   */
+  _fireUpdateEvent() {
+    let e = {
+      theme : this.selectedTheme,
+      family : this.selectedFamily,
+      specific : this.selectedSpecific
+    }
+    this.dispatchEvent(new CustomEvent('update', {detail: e}));
   }
 
 

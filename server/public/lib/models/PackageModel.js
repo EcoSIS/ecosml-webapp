@@ -53,7 +53,8 @@ class PackageModel extends BaseModel {
    * @returns {Promise} fetch promise
    */
   async update(data) {
-    return this.service.update(data);
+    await this.service.update(data);
+    return this.store.data.update;
   }
 
   /**
@@ -65,6 +66,22 @@ class PackageModel extends BaseModel {
    */
   async delete(name) {
     return this.service.delete(name);
+  }
+
+  /**
+   * @method createRelease
+   * @description create a package release
+   * 
+   * @param {String} id id of package to create release for
+   * @param {Object} releaseInfo
+   * @param {String} releaseInfo.name tag name for release
+   * @param {String} releaseInfo.description
+   * 
+   * @returns {Promise} fetch promise
+   */
+  async createRelease(id, releaseInfo) {
+    this.service.createRelease(id, releaseInfo);
+
   }
 
 }

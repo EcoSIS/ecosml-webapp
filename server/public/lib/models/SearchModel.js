@@ -33,7 +33,7 @@ class SearchModel extends BaseModel {
       text : '',
       filters : [],
       sort : null,
-      limit : 0,
+      limit : 10,
       offset : 0
     }
   }
@@ -45,12 +45,12 @@ class SearchModel extends BaseModel {
    * @returns {String} url slug for query
    */
   toUrl(query) {
-    return [
+    return '/search/'+[
       encode(query.text || ''),
       encode(query.filters ? JSON.stringify(query.filters) : ''),
       encode(query.sort || ''),
-      query.offset || '',
-      query.limit || '' 
+      query.limit || '',
+      query.offset || '', 
     ].join('/')
   }
 
@@ -65,6 +65,7 @@ class SearchModel extends BaseModel {
       url = url.split('/');
     }
 
+    let urlParts = url.slice(0);
     let query = this.getEmptyQuery();
 
     let i = 0;

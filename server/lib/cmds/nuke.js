@@ -22,7 +22,7 @@ if( process.argv.length > 2 ) {
     } catch(e) {}
 
     try {
-      await git.removeRepository(names[i]);
+      await git.removeRepositoryFromDisk(names[i]);
     } catch(e) {}
 
     try {

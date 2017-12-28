@@ -10,6 +10,7 @@ class PackageStore extends BaseStore {
       create : {},
       update : {},
       delete : {},
+      createRelease : {},
       // hash by id
       addedFiles : {},
       byId : {}
@@ -20,6 +21,7 @@ class PackageStore extends BaseStore {
       'CREATE_PACKAGE_UPDATE' : 'create-package-update',
       'EDIT_PACKAGE_UPDATE'   : 'edit-package-update',
       'DELETE_PACKAGE_UPDATE' : 'delete-package-update',
+      'CREATE_PACKAGE_RELEASE_UPDATE' : 'create-package-release-update',
       'ADD_FILE_UPDATE' : 'add-file-update'
     }
   }
@@ -60,8 +62,8 @@ class PackageStore extends BaseStore {
   }
 
   _setUpdatePackageState(state) {
-    this.data.create = state;
-    this.emit(this.events.EDIT_PACKAGE_UPDATE, this.data.create);
+    this.data.update = state;
+    this.emit(this.events.EDIT_PACKAGE_UPDATE, this.data.update);
   }
 
   /**
@@ -103,6 +105,26 @@ class PackageStore extends BaseStore {
   _setDeletePackageState(state) {
     this.data.delete = state;
     this.emit(this.events.DELETE_PACKAGE_UPDATE, this.data.delete);
+  }
+
+  /**
+   * Create release operations
+   */
+  setCreateReleaseLoading(request, payload) {
+    this._setCreateReleaseState({request, payload, state: this.STATE.LOADING});
+  }
+
+  setCreateReleaseSuccess(payload) {
+    this._setCreateReleaseState({payload, state: this.STATE.LOADED});
+  }
+
+  setCreateReleaseError(error) {
+    this._setCreateReleaseState({error, state: this.STATE.ERROR});
+  }
+
+  _setCreateReleaseState(state) {
+    this.data.createRelease = state;
+    this.emit(this.events.CREATE_PACKAGE_RELEASE_UPDATE, this.data.createRelease);
   }
 
   /**

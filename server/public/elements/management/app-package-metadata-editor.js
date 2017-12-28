@@ -148,6 +148,14 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
       if( pkgData[key] ) this.set(key, pkgData[key]);
       else this.set(key);
     }
+
+    if( pkgData.releases ) {
+      let cRelease = pkgData.releases[pkgData.releases.length-1].name;
+      this.$.release.release = cRelease;
+      this.$.release.currentRelease = cRelease;
+    }
+
+    this.$.theme.setValues(pkgData);
   }
 
   /**
@@ -177,7 +185,8 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
   }
 
   /**
-   * Fired when input elements update
+   * @method _onDataChange
+   * @description Fired when input elements update
    */  
   _onDataChange() {
     if( this.creating ) return;
@@ -192,6 +201,17 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
     this.$.unsavedMsg.style.display = 'block';
     this.$.savingMsg.style.display = 'none';
     this.$.savingToast.open();
+  }
+
+  /**
+   * @method _onThemeUpdate
+   * @description called from the app-theme-input when a value updates
+   */
+  _onThemeUpdate(e) {
+    this._onDataChange();
+    for( var key in e.detail ) {
+      this.unsavedData[key] = e.detail[key];
+    }
   }
 
   _onSaveChangesClicked() {
@@ -209,7 +229,7 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
     } else if( e.state === 'error' ) {
       this.$.unsavedMsg.style.display = 'block';
       this.$.savingMsg.style.display = 'none';
-      alert('Failed to save package data :( '+e.payload.message);
+      alert('Failed to save package data :( '+e.error.message);
     }
   }
 

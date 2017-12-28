@@ -85,7 +85,7 @@
         <app-keyword-input id="keywords" label="Keywords.  Comma Separate" on-keyword-change="_onDataChange"></app-keyword-input>
         <div class="help">[[schema.keywords.description]]</div>
 
-        <app-theme-input></app-theme-input>
+        <app-theme-input id="theme" on-update="_onThemeUpdate"></app-theme-input>
       </div>
     </app-title-card>
 
@@ -94,7 +94,7 @@
           Package Releases
         </div>
         <div slot="content">
-          <app-create-release></app-create-release>
+          <app-create-release id="release"></app-create-release>
         </div>
       </app-title-card>
 

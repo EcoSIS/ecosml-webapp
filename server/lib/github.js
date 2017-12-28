@@ -1,5 +1,6 @@
 const config = require('./config');
 const request = require('request');
+const Logger = require('./logger');
 
 const ORG = config.github.org;
 const API_ROOT = 'https://api.github.com';
@@ -30,6 +31,11 @@ class GithubApi {
     });
   }
 
+  /**
+   * @method getRepository
+   * @description Requires admin.
+   * https://developer.github.com/v3/repos/#get
+   */
   async getRepository(repoName) {
     return await this.request({
       method : 'GET',
@@ -63,8 +69,19 @@ class GithubApi {
   }
   
   /**
-   * Create a release
+   * @method createRelease
+   * @description Create a release
    * https://developer.github.com/v3/repos/releases/#create-a-release
+   * 
+   * ex:
+   * {
+   *  "tag_name": "v1.0.0",
+   *  "target_commitish": "master",
+   *  "name": "v1.0.0",
+   *  "body": "Description of the release",
+   *  "draft": false,
+   *  "prerelease": false
+   * }
    */
   async createRelease(repoName, release) {
     return await this.request({
@@ -75,7 +92,8 @@ class GithubApi {
   }
 
   /**
-   * Delete a release
+   * @method deleteRelease
+   * @description Delete a release
    * https://developer.github.com/v3/repos/releases/#delete-a-release
    */
   async deleteRelease(repoName, releaseName) {
@@ -113,8 +131,9 @@ class GithubApi {
   
     return new Promise((resolve, reject) => {
       request(options, (error, response, body) => {
-        if( error ) reject(error);
-        else resolve({response, body});
+        if( error ) return reject(error);
+        Logger.info(`GitHub API request: ${options.method || 'GET'} ${options.uri}, request remaining: ${response.headers['x-ratelimit-remaining']}`);
+        resolve({response, body});
       });
     });
   }

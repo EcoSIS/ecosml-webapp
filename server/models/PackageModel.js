@@ -7,6 +7,7 @@ const AppError = require('../lib/AppError');
 const path = require('path');
 const fs = require('fs-extra');
 const uuid = require('uuid');
+const utils = require('../lib/utils')
 
 
 class PackageModel {
@@ -15,6 +16,8 @@ class PackageModel {
     this.REQUIRED = {
       CREATE : ['name', 'description', 'owner', 'organization']
     }
+    this.UPDATE_ATTRIBUTES = ['name', 'description', 'theme',
+      'family', 'specific', 'keywords'];
 
     git.initConfig();
   }
@@ -90,14 +93,19 @@ class PackageModel {
    * @param {String} pkg.overview package short description
    * @param {String} pkg.description package readme
    * @param {Array} pkg.keywords package keywords
+   * @param {String} pkg.theme
+   * @param {String} pkg.family
+   * @param {String} pkg.specific
+   * @param {Boolean} refreshFromGithub preform a full refresh from Github API?
    */
-  async update(pkg) {
-    await git.resetHEAD(pkg.name);
+  async update(pkg, refreshFromGithub = false) {
+    if( !pkg.name ) throw new AppError(AppError.ERROR_CODES.MISSING_ATTRIBUTE, 'name required');
 
     let cpkg = await mongo.getPackage(pkg.name);
 
     // First update readme if it changed via git
-    if( pkg.description ) {
+    await git.resetHEAD(pkg.name);
+    if( pkg.description !== cpkg.description ) {
       let README = path.join(git.getRepoPath(pkg.name), 'README.md');
       await fs.writeFile(README, pkg.description || '');
 
@@ -111,6 +119,7 @@ class PackageModel {
     
     // update package overview in github
     let body;
+    
     if( cpkg.overview !== pkg.overview ) {
       let response = await github.editRepository({
         name : pkg.name,
@@ -119,15 +128,22 @@ class PackageModel {
       body = response.body;
     }
 
+    let gpkg = {};
+      
     // grab current github api repo state if we didn't update
-    if( !body ) {
-      let response = await github.getRepository(pkg.name);
-      body = response.body;
+    if( refreshFromGithub ) {
+      if( !body ) {
+        let response = await github.getRepository(pkg.name);
+        body = response.body;
+      }
+      gpkg = this.transformGithubRepoResponse(body);
     }
 
-    let gpkg = this.transformGithubRepoResponse(body);
-    gpkg.description = pkg.description;
-    gpkg.keywords = pkg.keywords;
+    this.UPDATE_ATTRIBUTES.forEach(attr => {
+      if( pkg[attr] !== undefined ) {
+        gpkg[attr] = pkg[attr];
+      }
+    });
 
     // now save changes in mongo
     await mongo.updatePackage(pkg.name, gpkg);
@@ -195,7 +211,61 @@ class PackageModel {
     this.checkStatus(response, 204);
 
     await mongo.removePackage(pkg.name);
-    await git.removeRepository(pkg.name);
+    await git.removeRepositoryFromDisk(pkg.name);
+  }
+
+  /**
+   * @method createRelease
+   * @description Create a new release
+   * 
+   * @param {String} id package id
+   * @param {Object} data release data
+   * @param {String} data.name release name (v1.0.0)
+   * @param {String} data.description release description
+   * @param {Boolean} data.draft
+   * @param {Boolean} data.draft
+   */
+  async createRelease(id, data) {
+    if( !id ) throw new AppError('Package id required', AppError.ERROR_CODES.MISSING_ATTRIBUTE);
+    if( !data.name ) throw new AppError('Release name required', AppError.ERROR_CODES.MISSING_ATTRIBUTE);
+    if( !data.description ) throw new AppError('Release description required', AppError.ERROR_CODES.MISSING_ATTRIBUTE);
+    
+    let pkg = await this.get(id);
+    if( pkg.releases ) {
+      let exists = pkg.releases.find(release => release.name === data.name);
+      if( exists ) throw new AppError(`Release ${data.name} already exists`, AppError.ERROR_CODES.INVALID_ATTRIBUTE);
+    }
+    
+    let release = {
+      tag_name : data.name,
+      name : data.name,
+      body : data.description,
+      draft : data.draft ? true : false,
+      prerelease : data.prerelease ? true : false
+    }
+
+    // create release on github
+    let response = await github.createRelease(id, release);
+    response = JSON.parse(response.body);
+    
+    // clean up some stuff we don't care about
+    delete response.author;
+    response.created_at = new Date(response.created_at);
+    response.published_at = new Date(response.published_at);
+    response = utils.toCamelCase(response);
+
+    let releases = [];
+    if( pkg.releases ) {
+      releases = pkg.releases;
+    }
+    
+    releases.push(response);
+    pkg.releases = releases;
+
+    // save release data
+    await mongo.updatePackage(id, {releases});
+
+    return pkg;
   }
 
   transformGithubRepoResponse(repo) {

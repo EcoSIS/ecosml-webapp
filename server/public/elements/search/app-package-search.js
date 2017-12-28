@@ -17,10 +17,6 @@ class AppPackageSearch extends Mixin(PolymerElement)
 
   static get properties() {
     return {
-      firstLoad : {
-        type : Boolean,
-        value : true
-      },
       appState : {
         type : Object,
         value : {}
@@ -40,11 +36,8 @@ class AppPackageSearch extends Mixin(PolymerElement)
   _onAppStateUpdate(e) {
     this.appState = e;
 
-    if( e.location.path[0] === 'search' && (e.location.popstate || this.firstLoad) ) {
-      this._searchFromAppState();
-    }
-
-    this.firstLoad = false;
+    if( e.location.path[0] !== 'search' ) return;
+    this._searchFromAppState();
   }
 
   /**
@@ -61,6 +54,9 @@ class AppPackageSearch extends Mixin(PolymerElement)
       query = this._getEmptySearchQuery();
     }
 
+    // flag queries that came from the url hash updating
+    query.fromUrl = true;
+
     this._searchPackages(query);
   }
 
@@ -71,7 +67,9 @@ class AppPackageSearch extends Mixin(PolymerElement)
    * 
    */
   _onSearchPackagesUpdate(e) {
-    if( !e.query ) return;
+    if( !e.query || e.state !== 'loading' ) return;
+    if( e.query.fromUrl ) return console.log('Ignoring query from url');
+
     this._setWindowLocation(this._searchQueryToUrl(e.query));
   }
 

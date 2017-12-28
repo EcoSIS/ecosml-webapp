@@ -60,11 +60,399 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 5);
+/******/ 	return __webpack_require__(__webpack_require__.s = 70);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_legacy_legacy_element_mixin_js__ = __webpack_require__(38);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_legacy_polymer_fn_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lib_legacy_templatizer_behavior_js__ = __webpack_require__(82);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lib_elements_dom_bind_js__ = __webpack_require__(83);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lib_elements_dom_repeat_js__ = __webpack_require__(84);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__lib_elements_dom_if_js__ = __webpack_require__(85);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__lib_elements_array_selector_js__ = __webpack_require__(86);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__lib_elements_custom_style_js__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__lib_legacy_mutable_data_behavior_js__ = __webpack_require__(88);
+
+
+
+
+
+
+
+
+
+const Base = Object(__WEBPACK_IMPORTED_MODULE_0__lib_legacy_legacy_element_mixin_js__["a" /* LegacyElementMixin */])(HTMLElement).prototype;
+/* harmony export (immutable) */ __webpack_exports__["a"] = Base;
+
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__class_js__ = __webpack_require__(81);
+
+
+const Polymer = function(info) {
+  // if input is a `class` (aka a function with a prototype), use the prototype
+  // remember that the `constructor` will never be called
+  let klass;
+  if (typeof info === 'function') {
+    klass = info;
+  } else {
+    klass = Object(__WEBPACK_IMPORTED_MODULE_0__class_js__["a" /* Class */])(info);
+  }
+  customElements.define(klass.is, /** @type {!HTMLElement} */(klass));
+  return klass;
+};
+/* harmony export (immutable) */ __webpack_exports__["a"] = Polymer;
+
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export DomApi */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return matchesSelector; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_boot_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__utils_boot_js__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_settings_js__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_flattened_nodes_observer_js__ = __webpack_require__(80);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_flush_js__ = __webpack_require__(17);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_3__utils_flush_js__["b"]; });
+/* unused harmony reexport addDebouncer */
+
+
+
+
+
+const p = Element.prototype;
+/**
+ * @const {function(this:Element, string): boolean}
+ */
+const normalizedMatchesSelector = p.matches || p.matchesSelector ||
+  p.mozMatchesSelector || p.msMatchesSelector ||
+  p.oMatchesSelector || p.webkitMatchesSelector;
+
+/**
+ * Cross-platform `element.matches` shim.
+ *
+ * @function matchesSelector
+ * @memberof Polymer.dom
+ * @param {!Element} node Node to check selector against
+ * @param {string} selector Selector to match
+ * @return {boolean} True if node matched selector
+ */
+const matchesSelector = function(node, selector) {
+  return normalizedMatchesSelector.call(node, selector);
+};
+
+/**
+ * Node API wrapper class returned from `Polymer.dom.(target)` when
+ * `target` is a `Node`.
+ */
+class DomApi {
+
+  /**
+   * @param {Node} node Node for which to create a Polymer.dom helper object.
+   */
+  constructor(node) {
+    this.node = node;
+  }
+
+  /**
+   * Returns an instance of `Polymer.FlattenedNodesObserver` that
+   * listens for node changes on this element.
+   *
+   * @param {Function} callback Called when direct or distributed children
+   *   of this element changes
+   * @return {Polymer.FlattenedNodesObserver} Observer instance
+   */
+  observeNodes(callback) {
+    return new __WEBPACK_IMPORTED_MODULE_2__utils_flattened_nodes_observer_js__["a" /* FlattenedNodesObserver */](this.node, callback);
+  }
+
+  /**
+   * Disconnects an observer previously created via `observeNodes`
+   *
+   * @param {Polymer.FlattenedNodesObserver} observerHandle Observer instance
+   *   to disconnect.
+   */
+  unobserveNodes(observerHandle) {
+    observerHandle.disconnect();
+  }
+
+  /**
+   * Provided as a backwards-compatible API only.  This method does nothing.
+   */
+  notifyObserver() {}
+
+  /**
+   * Returns true if the provided node is contained with this element's
+   * light-DOM children or shadow root, including any nested shadow roots
+   * of children therein.
+   *
+   * @param {Node} node Node to test
+   * @return {boolean} Returns true if the given `node` is contained within
+   *   this element's light or shadow DOM.
+   */
+  deepContains(node) {
+    if (this.node.contains(node)) {
+      return true;
+    }
+    let n = node;
+    let doc = node.ownerDocument;
+    // walk from node to `this` or `document`
+    while (n && n !== doc && n !== this.node) {
+      // use logical parentnode, or native ShadowRoot host
+      n = n.parentNode || n.host;
+    }
+    return n === this.node;
+  }
+
+  /**
+   * Returns the root node of this node.  Equivalent to `getRoodNode()`.
+   *
+   * @return {Node} Top most element in the dom tree in which the node
+   * exists. If the node is connected to a document this is either a
+   * shadowRoot or the document; otherwise, it may be the node
+   * itself or a node or document fragment containing it.
+   */
+  getOwnerRoot() {
+    return this.node.getRootNode();
+  }
+
+  /**
+   * For slot elements, returns the nodes assigned to the slot; otherwise
+   * an empty array. It is equivalent to `<slot>.addignedNodes({flatten:true})`.
+   *
+   * @return {Array<Node>} Array of assigned nodes
+   */
+  getDistributedNodes() {
+    return (this.node.localName === 'slot') ?
+      this.node.assignedNodes({flatten: true}) :
+      [];
+  }
+
+  /**
+   * Returns an array of all slots this element was distributed to.
+   *
+   * @return {Array<HTMLSlotElement>} Description
+   */
+  getDestinationInsertionPoints() {
+    let ip$ = [];
+    let n = this.node.assignedSlot;
+    while (n) {
+      ip$.push(n);
+      n = n.assignedSlot;
+    }
+    return ip$;
+  }
+
+  /**
+   * Calls `importNode` on the `ownerDocument` for this node.
+   *
+   * @param {Node} node Node to import
+   * @param {boolean} deep True if the node should be cloned deeply during
+   *   import
+   * @return {Node} Clone of given node imported to this owner document
+   */
+  importNode(node, deep) {
+    let doc = this.node instanceof Document ? this.node :
+      this.node.ownerDocument;
+    return doc.importNode(node, deep);
+  }
+
+  /**
+   * @return {Array} Returns a flattened list of all child nodes and nodes assigned
+   * to child slots.
+   */
+  getEffectiveChildNodes() {
+    return __WEBPACK_IMPORTED_MODULE_2__utils_flattened_nodes_observer_js__["a" /* FlattenedNodesObserver */].getFlattenedNodes(this.node);
+  }
+
+  /**
+   * Returns a filtered list of flattened child elements for this element based
+   * on the given selector.
+   *
+   * @param {string} selector Selector to filter nodes against
+   * @return {Array<HTMLElement>} List of flattened child elements
+   */
+  queryDistributedElements(selector) {
+    let c$ = this.getEffectiveChildNodes();
+    let list = [];
+    for (let i=0, l=c$.length, c; (i<l) && (c=c$[i]); i++) {
+      if ((c.nodeType === Node.ELEMENT_NODE) &&
+          matchesSelector(c, selector)) {
+        list.push(c);
+      }
+    }
+    return list;
+  }
+
+  /**
+   * For shadow roots, returns the currently focused element within this
+   * shadow root.
+   *
+   * @return {Node|undefined} Currently focused element
+   */
+  get activeElement() {
+    let node = this.node;
+    return node._activeElement !== undefined ? node._activeElement : node.activeElement;
+  }
+}
+
+function forwardMethods(proto, methods) {
+  for (let i=0; i < methods.length; i++) {
+    let method = methods[i];
+    proto[method] = /** @this {DomApi} */ function() {
+      return this.node[method].apply(this.node, arguments);
+    };
+  }
+}
+
+function forwardReadOnlyProperties(proto, properties) {
+  for (let i=0; i < properties.length; i++) {
+    let name = properties[i];
+    Object.defineProperty(proto, name, {
+      get: function() {
+        return /** @type {DomApi} */ (this).node[name];
+      },
+      configurable: true
+    });
+  }
+}
+
+function forwardProperties(proto, properties) {
+  for (let i=0; i < properties.length; i++) {
+    let name = properties[i];
+    Object.defineProperty(proto, name, {
+      get: function() {
+        return /** @type {DomApi} */ (this).node[name];
+      },
+      set: function(value) {
+        /** @type {DomApi} */ (this).node[name] = value;
+      },
+      configurable: true
+    });
+  }
+}
+
+forwardMethods(DomApi.prototype, [
+  'cloneNode', 'appendChild', 'insertBefore', 'removeChild',
+  'replaceChild', 'setAttribute', 'removeAttribute',
+  'querySelector', 'querySelectorAll'
+]);
+
+forwardReadOnlyProperties(DomApi.prototype, [
+  'parentNode', 'firstChild', 'lastChild',
+  'nextSibling', 'previousSibling', 'firstElementChild',
+  'lastElementChild', 'nextElementSibling', 'previousElementSibling',
+  'childNodes', 'children', 'classList'
+]);
+
+forwardProperties(DomApi.prototype, [
+  'textContent', 'innerHTML'
+]);
+
+
+/**
+ * Event API wrapper class returned from `Polymer.dom.(target)` when
+ * `target` is an `Event`.
+ */
+class EventApi {
+  constructor(event) {
+    this.event = event;
+  }
+
+  /**
+   * Returns the first node on the `composedPath` of this event.
+   *
+   * @return {Node} The node this event was dispatched to
+   */
+  get rootTarget() {
+    return this.event.composedPath()[0];
+  }
+
+  /**
+   * Returns the local (re-targeted) target for this event.
+   *
+   * @return {Node} The local (re-targeted) target for this event.
+   */
+  get localTarget() {
+    return this.event.target;
+  }
+
+  /**
+   * Returns the `composedPath` for this event.
+   */
+  get path() {
+    return this.event.composedPath();
+  }
+}
+
+
+
+const dom = function(obj) {
+  obj = obj || document;
+  if (!obj.__domApi) {
+    let helper;
+    if (obj instanceof Event) {
+      helper = new EventApi(obj);
+    } else {
+      helper = new DomApi(obj);
+    }
+    obj.__domApi = helper;
+  }
+  return obj.__domApi;
+};
+/* harmony export (immutable) */ __webpack_exports__["a"] = dom;
+
+
+
+
+
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Element; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_mixins_element_mixin_js__ = __webpack_require__(28);
+
+
+/**
+ * Base class that provides the core API for Polymer's meta-programming
+ * features including template stamping, data-binding, attribute deserialization,
+ * and property change observation.
+ *
+ * @customElement
+ * @polymer
+ * @memberof Polymer
+ * @constructor
+ * @implements {Polymer_ElementMixin}
+ * @extends HTMLElement
+ * @appliesMixin Polymer.ElementMixin
+ * @summary Custom element base class that provides the core API for Polymer's
+ *   key meta-programming features including template stamping, data-binding,
+ *   attribute deserialization, and property change observation
+ */
+const Element = Object(__WEBPACK_IMPORTED_MODULE_0__lib_mixins_element_mixin_js__["a" /* ElementMixin */])(HTMLElement);
+
+
+
+/***/ }),
+/* 4 */
 /***/ (function(module, exports) {
 
 window.JSCompiler_renameProperty = function(prop, obj) { return prop; }
@@ -74,14 +462,597 @@ let Polymer;
 
 
 /***/ }),
-/* 1 */
+/* 5 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__boot_js__);
+
+
+/** @typedef {{run: function(function(), number=):number, cancel: function(number)}} */
+let AsyncInterface; // eslint-disable-line no-unused-vars
+
+// Microtask implemented using Mutation Observer
+let microtaskCurrHandle = 0;
+let microtaskLastHandle = 0;
+let microtaskCallbacks = [];
+let microtaskNodeContent = 0;
+let microtaskNode = document.createTextNode('');
+new window.MutationObserver(microtaskFlush).observe(microtaskNode, {characterData: true});
+
+function microtaskFlush() {
+  const len = microtaskCallbacks.length;
+  for (let i = 0; i < len; i++) {
+    let cb = microtaskCallbacks[i];
+    if (cb) {
+      try {
+        cb();
+      } catch (e) {
+        setTimeout(() => { throw e; });
+      }
+    }
+  }
+  microtaskCallbacks.splice(0, len);
+  microtaskLastHandle += len;
+}
+
+const timeOut = {
+  /**
+   * Returns a sub-module with the async interface providing the provided
+   * delay.
+   *
+   * @memberof Polymer.Async.timeOut
+   * @param {number} delay Time to wait before calling callbacks in ms
+   * @return {AsyncInterface} An async timeout interface
+   */
+  after(delay) {
+    return  {
+      run(fn) { return setTimeout(fn, delay); },
+      cancel: window.clearTimeout.bind(window)
+    };
+  },
+  /**
+   * Enqueues a function called in the next task.
+   *
+   * @memberof Polymer.Async.timeOut
+   * @param {Function} fn Callback to run
+   * @return {number} Handle used for canceling task
+   */
+  run: window.setTimeout.bind(window),
+  /**
+   * Cancels a previously enqueued `timeOut` callback.
+   *
+   * @memberof Polymer.Async.timeOut
+   * @param {number} handle Handle returned from `run` of callback to cancel
+   */
+  cancel: window.clearTimeout.bind(window)
+};
+/* harmony export (immutable) */ __webpack_exports__["timeOut"] = timeOut;
+
+
+const animationFrame = {
+  /**
+   * Enqueues a function called at `requestAnimationFrame` timing.
+   *
+   * @memberof Polymer.Async.animationFrame
+   * @param {Function} fn Callback to run
+   * @return {number} Handle used for canceling task
+   */
+  run: window.requestAnimationFrame.bind(window),
+  /**
+   * Cancels a previously enqueued `animationFrame` callback.
+   *
+   * @memberof Polymer.Async.timeOut
+   * @param {number} handle Handle returned from `run` of callback to cancel
+   */
+  cancel: window.cancelAnimationFrame.bind(window)
+};
+/* harmony export (immutable) */ __webpack_exports__["animationFrame"] = animationFrame;
+
+
+const idlePeriod = {
+  /**
+   * Enqueues a function called at `requestIdleCallback` timing.
+   *
+   * @memberof Polymer.Async.idlePeriod
+   * @param {function(IdleDeadline)} fn Callback to run
+   * @return {number} Handle used for canceling task
+   */
+  run(fn) {
+    return window.requestIdleCallback ?
+      window.requestIdleCallback(fn) :
+      window.setTimeout(fn, 16);
+  },
+  /**
+   * Cancels a previously enqueued `idlePeriod` callback.
+   *
+   * @memberof Polymer.Async.idlePeriod
+   * @param {number} handle Handle returned from `run` of callback to cancel
+   */
+  cancel(handle) {
+    window.cancelIdleCallback ?
+      window.cancelIdleCallback(handle) :
+      window.clearTimeout(handle);
+  }
+};
+/* harmony export (immutable) */ __webpack_exports__["idlePeriod"] = idlePeriod;
+
+
+const microTask = {
+
+  /**
+   * Enqueues a function called at microtask timing.
+   *
+   * @memberof Polymer.Async.microTask
+   * @param {Function} callback Callback to run
+   * @return {number} Handle used for canceling task
+   */
+  run(callback) {
+    microtaskNode.textContent = microtaskNodeContent++;
+    microtaskCallbacks.push(callback);
+    return microtaskCurrHandle++;
+  },
+
+  /**
+   * Cancels a previously enqueued `microTask` callback.
+   *
+   * @memberof Polymer.Async.microTask
+   * @param {number} handle Handle returned from `run` of callback to cancel
+   */
+  cancel(handle) {
+    const idx = handle - microtaskLastHandle;
+    if (idx >= 0) {
+      if (!microtaskCallbacks[idx]) {
+        throw new Error('invalid async handle: ' + handle);
+      }
+      microtaskCallbacks[idx] = null;
+    }
+  }
+
+};
+/* harmony export (immutable) */ __webpack_exports__["microTask"] = microTask;
+
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = {
+  BaseModel : __webpack_require__(93),
+  BaseStore : __webpack_require__(95),
+  BaseService : __webpack_require__(96),
+  Mixin : __webpack_require__(98),
+  EventInterface : __webpack_require__(99),
+  fetch : __webpack_require__(48)
+}
+
+/***/ }),
+/* 7 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__boot_js__);
+
+
+// unique global id for deduping mixins.
+let dedupeId = 0;
+
+/**
+ * @constructor
+ * @extends {Function}
+ */
+function MixinFunction(){}
+/** @type {(WeakMap | undefined)} */
+MixinFunction.prototype.__mixinApplications;
+/** @type {(Object | undefined)} */
+MixinFunction.prototype.__mixinSet;
+
+const dedupingMixin = function(mixin) {
+  let mixinApplications = /** @type {!MixinFunction} */(mixin).__mixinApplications;
+  if (!mixinApplications) {
+    mixinApplications = new WeakMap();
+    /** @type {!MixinFunction} */(mixin).__mixinApplications = mixinApplications;
+  }
+  // maintain a unique id for each mixin
+  let mixinDedupeId = dedupeId++;
+  function dedupingMixin(base) {
+    let baseSet = /** @type {!MixinFunction} */(base).__mixinSet;
+    if (baseSet && baseSet[mixinDedupeId]) {
+      return base;
+    }
+    let map = mixinApplications;
+    let extended = map.get(base);
+    if (!extended) {
+      extended = /** @type {!Function} */(mixin)(base);
+      map.set(base, extended);
+    }
+    // copy inherited mixin set from the extended class, or the base class
+    // NOTE: we avoid use of Set here because some browser (IE11)
+    // cannot extend a base Set via the constructor.
+    let mixinSet = Object.create(/** @type {!MixinFunction} */(extended).__mixinSet || baseSet || null);
+    mixinSet[mixinDedupeId] = true;
+    /** @type {!MixinFunction} */(extended).__mixinSet = mixinSet;
+    return extended;
+  }
+
+  return dedupingMixin;
+};
+/* harmony export (immutable) */ __webpack_exports__["a"] = dedupingMixin;
+
+
+
+/***/ }),
+/* 8 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+
+const $_documentContainer = document.createElement('div');
+$_documentContainer.setAttribute('style', 'display: none;');
+
+$_documentContainer.innerHTML = `<custom-style>
+  <style is="custom-style">
+    html {
+
+      --layout: {
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+      };
+
+      --layout-inline: {
+        display: -ms-inline-flexbox;
+        display: -webkit-inline-flex;
+        display: inline-flex;
+      };
+
+      --layout-horizontal: {
+        @apply --layout;
+
+        -ms-flex-direction: row;
+        -webkit-flex-direction: row;
+        flex-direction: row;
+      };
+
+      --layout-horizontal-reverse: {
+        @apply --layout;
+
+        -ms-flex-direction: row-reverse;
+        -webkit-flex-direction: row-reverse;
+        flex-direction: row-reverse;
+      };
+
+      --layout-vertical: {
+        @apply --layout;
+
+        -ms-flex-direction: column;
+        -webkit-flex-direction: column;
+        flex-direction: column;
+      };
+
+      --layout-vertical-reverse: {
+        @apply --layout;
+
+        -ms-flex-direction: column-reverse;
+        -webkit-flex-direction: column-reverse;
+        flex-direction: column-reverse;
+      };
+
+      --layout-wrap: {
+        -ms-flex-wrap: wrap;
+        -webkit-flex-wrap: wrap;
+        flex-wrap: wrap;
+      };
+
+      --layout-wrap-reverse: {
+        -ms-flex-wrap: wrap-reverse;
+        -webkit-flex-wrap: wrap-reverse;
+        flex-wrap: wrap-reverse;
+      };
+
+      --layout-flex-auto: {
+        -ms-flex: 1 1 auto;
+        -webkit-flex: 1 1 auto;
+        flex: 1 1 auto;
+      };
+
+      --layout-flex-none: {
+        -ms-flex: none;
+        -webkit-flex: none;
+        flex: none;
+      };
+
+      --layout-flex: {
+        -ms-flex: 1 1 0.000000001px;
+        -webkit-flex: 1;
+        flex: 1;
+        -webkit-flex-basis: 0.000000001px;
+        flex-basis: 0.000000001px;
+      };
+
+      --layout-flex-2: {
+        -ms-flex: 2;
+        -webkit-flex: 2;
+        flex: 2;
+      };
+
+      --layout-flex-3: {
+        -ms-flex: 3;
+        -webkit-flex: 3;
+        flex: 3;
+      };
+
+      --layout-flex-4: {
+        -ms-flex: 4;
+        -webkit-flex: 4;
+        flex: 4;
+      };
+
+      --layout-flex-5: {
+        -ms-flex: 5;
+        -webkit-flex: 5;
+        flex: 5;
+      };
+
+      --layout-flex-6: {
+        -ms-flex: 6;
+        -webkit-flex: 6;
+        flex: 6;
+      };
+
+      --layout-flex-7: {
+        -ms-flex: 7;
+        -webkit-flex: 7;
+        flex: 7;
+      };
+
+      --layout-flex-8: {
+        -ms-flex: 8;
+        -webkit-flex: 8;
+        flex: 8;
+      };
+
+      --layout-flex-9: {
+        -ms-flex: 9;
+        -webkit-flex: 9;
+        flex: 9;
+      };
+
+      --layout-flex-10: {
+        -ms-flex: 10;
+        -webkit-flex: 10;
+        flex: 10;
+      };
+
+      --layout-flex-11: {
+        -ms-flex: 11;
+        -webkit-flex: 11;
+        flex: 11;
+      };
+
+      --layout-flex-12: {
+        -ms-flex: 12;
+        -webkit-flex: 12;
+        flex: 12;
+      };
+
+      /* alignment in cross axis */
+
+      --layout-start: {
+        -ms-flex-align: start;
+        -webkit-align-items: flex-start;
+        align-items: flex-start;
+      };
+
+      --layout-center: {
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        align-items: center;
+      };
+
+      --layout-end: {
+        -ms-flex-align: end;
+        -webkit-align-items: flex-end;
+        align-items: flex-end;
+      };
+
+      --layout-baseline: {
+        -ms-flex-align: baseline;
+        -webkit-align-items: baseline;
+        align-items: baseline;
+      };
+
+      /* alignment in main axis */
+
+      --layout-start-justified: {
+        -ms-flex-pack: start;
+        -webkit-justify-content: flex-start;
+        justify-content: flex-start;
+      };
+
+      --layout-center-justified: {
+        -ms-flex-pack: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+      };
+
+      --layout-end-justified: {
+        -ms-flex-pack: end;
+        -webkit-justify-content: flex-end;
+        justify-content: flex-end;
+      };
+
+      --layout-around-justified: {
+        -ms-flex-pack: distribute;
+        -webkit-justify-content: space-around;
+        justify-content: space-around;
+      };
+
+      --layout-justified: {
+        -ms-flex-pack: justify;
+        -webkit-justify-content: space-between;
+        justify-content: space-between;
+      };
+
+      --layout-center-center: {
+        @apply --layout-center;
+        @apply --layout-center-justified;
+      };
+
+      /* self alignment */
+
+      --layout-self-start: {
+        -ms-align-self: flex-start;
+        -webkit-align-self: flex-start;
+        align-self: flex-start;
+      };
+
+      --layout-self-center: {
+        -ms-align-self: center;
+        -webkit-align-self: center;
+        align-self: center;
+      };
+
+      --layout-self-end: {
+        -ms-align-self: flex-end;
+        -webkit-align-self: flex-end;
+        align-self: flex-end;
+      };
+
+      --layout-self-stretch: {
+        -ms-align-self: stretch;
+        -webkit-align-self: stretch;
+        align-self: stretch;
+      };
+
+      --layout-self-baseline: {
+        -ms-align-self: baseline;
+        -webkit-align-self: baseline;
+        align-self: baseline;
+      };
+
+      /* multi-line alignment in main axis */
+
+      --layout-start-aligned: {
+        -ms-flex-line-pack: start;  /* IE10 */
+        -ms-align-content: flex-start;
+        -webkit-align-content: flex-start;
+        align-content: flex-start;
+      };
+
+      --layout-end-aligned: {
+        -ms-flex-line-pack: end;  /* IE10 */
+        -ms-align-content: flex-end;
+        -webkit-align-content: flex-end;
+        align-content: flex-end;
+      };
+
+      --layout-center-aligned: {
+        -ms-flex-line-pack: center;  /* IE10 */
+        -ms-align-content: center;
+        -webkit-align-content: center;
+        align-content: center;
+      };
+
+      --layout-between-aligned: {
+        -ms-flex-line-pack: justify;  /* IE10 */
+        -ms-align-content: space-between;
+        -webkit-align-content: space-between;
+        align-content: space-between;
+      };
+
+      --layout-around-aligned: {
+        -ms-flex-line-pack: distribute;  /* IE10 */
+        -ms-align-content: space-around;
+        -webkit-align-content: space-around;
+        align-content: space-around;
+      };
+
+      /*******************************
+                Other Layout
+      *******************************/
+
+      --layout-block: {
+        display: block;
+      };
+
+      --layout-invisible: {
+        visibility: hidden !important;
+      };
+
+      --layout-relative: {
+        position: relative;
+      };
+
+      --layout-fit: {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+      };
+
+      --layout-scroll: {
+        -webkit-overflow-scrolling: touch;
+        overflow: auto;
+      };
+
+      --layout-fullbleed: {
+        margin: 0;
+        height: 100vh;
+      };
+
+      /* fixed position */
+
+      --layout-fixed-top: {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+      };
+
+      --layout-fixed-right: {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+      };
+
+      --layout-fixed-bottom: {
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        left: 0;
+      };
+
+      --layout-fixed-left: {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+      };
+
+    }
+  </style>
+</custom-style>`;
+
+document.head.appendChild($_documentContainer);
+
+
+/***/ }),
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (immutable) */ __webpack_exports__["dashToCamelCase"] = dashToCamelCase;
 /* harmony export (immutable) */ __webpack_exports__["camelToDashCase"] = camelToDashCase;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__boot_js__);
 
 
@@ -105,14 +1076,384 @@ function camelToDashCase(camel) {
 
 
 /***/ }),
-/* 2 */
+/* 10 */
+/***/ (function(module, exports) {
+
+
+module.exports = subclass => 
+  class SearchInterface extends subclass {
+
+    constructor() {
+      super();
+      this._injectModel('SearchModel');
+    }
+
+    _appendSearchFilter(key, value) {
+      return this.SearchModel.appendFilter(key, value);
+    }
+
+    _removeSearchFilter(key, value) {
+      return this.SearchModel.removeFilter(key, value);
+    }
+
+    _setSearchText(text) {
+      return this.SearchModel.setText(text);
+    }
+
+    _setSearchLimit(limit) {
+      return this.SearchModel.setLimit(limit);
+    }
+
+    _setSearchOffset(offset) {
+      return this.SearchModel.setOffset(offset);
+    }
+
+    async _searchPackages(query) {
+      return this.SearchModel.search(query);
+    }
+
+    _searchQueryToUrl(query) {
+      return this.SearchModel.toUrl(query);
+    }
+
+    _urlToSearchQuery(url) {
+      return this.SearchModel.fromUrl(url);
+    }
+
+    _getEmptySearchQuery() {
+      return this.SearchModel.getEmptyQuery();
+    }
+  }
+
+/***/ }),
+/* 11 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Debouncer", function() { return Debouncer; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__boot_js__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mixin_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__async_js__ = __webpack_require__(5);
+
+
+
+
+/** @typedef {{run: function(function(), number=):number, cancel: function(number)}} */
+let AsyncModule; // eslint-disable-line no-unused-vars
+
+/**
+ * @summary Collapse multiple callbacks into one invocation after a timer.
+ * @memberof Polymer
+ */
+class Debouncer {
+  constructor() {
+    this._asyncModule = null;
+    this._callback = null;
+    this._timer = null;
+  }
+  /**
+   * Sets the scheduler; that is, a module with the Async interface,
+   * a callback and optional arguments to be passed to the run function
+   * from the async module.
+   *
+   * @param {!AsyncModule} asyncModule Object with Async interface.
+   * @param {function()} callback Callback to run.
+   */
+  setConfig(asyncModule, callback) {
+    this._asyncModule = asyncModule;
+    this._callback = callback;
+    this._timer = this._asyncModule.run(() => {
+      this._timer = null;
+      this._callback();
+    });
+  }
+  /**
+   * Cancels an active debouncer and returns a reference to itself.
+   */
+  cancel() {
+    if (this.isActive()) {
+      this._asyncModule.cancel(this._timer);
+      this._timer = null;
+    }
+  }
+  /**
+   * Flushes an active debouncer and returns a reference to itself.
+   */
+  flush() {
+    if (this.isActive()) {
+      this.cancel();
+      this._callback();
+    }
+  }
+  /**
+   * Returns true if the debouncer is active.
+   *
+   * @return {boolean} True if active.
+   */
+  isActive() {
+    return this._timer != null;
+  }
+/**
+ * Creates a debouncer if no debouncer is passed as a parameter
+ * or it cancels an active debouncer otherwise. The following
+ * example shows how a debouncer can be called multiple times within a
+ * microtask and "debounced" such that the provided callback function is
+ * called once. Add this method to a custom element:
+ *
+ * _debounceWork() {
+ *   this._debounceJob = Polymer.Debouncer.debounce(this._debounceJob,
+ *       Polymer.Async.microTask, () => {
+ *     this._doWork();
+ *   });
+ * }
+ *
+ * If the `_debounceWork` method is called multiple times within the same
+ * microtask, the `_doWork` function will be called only once at the next
+ * microtask checkpoint.
+ *
+ * Note: In testing it is often convenient to avoid asynchrony. To accomplish
+ * this with a debouncer, you can use `Polymer.enqueueDebouncer` and
+ * `Polymer.flush`. For example, extend the above example by adding
+ * `Polymer.enqueueDebouncer(this._debounceJob)` at the end of the
+ * `_debounceWork` method. Then in a test, call `Polymer.flush` to ensure
+ * the debouncer has completed.
+ *
+ * @param {Debouncer?} debouncer Debouncer object.
+ * @param {!AsyncModule} asyncModule Object with Async interface
+ * @param {function()} callback Callback to run.
+ * @return {!Debouncer} Returns a debouncer object.
+ */
+  static debounce(debouncer, asyncModule, callback) {
+    if (debouncer instanceof Debouncer) {
+      debouncer.cancel();
+    } else {
+      debouncer = new Debouncer();
+    }
+    debouncer.setConfig(asyncModule, callback);
+    return debouncer;
+  }
+}
+
+
+
+
+/***/ }),
+/* 12 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__polymer_polymer_element_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
+
+
+
+
+const IronControlState = {
+
+  properties: {
+
+    /**
+     * If true, the element currently has focus.
+     */
+    focused: {
+      type: Boolean,
+      value: false,
+      notify: true,
+      readOnly: true,
+      reflectToAttribute: true
+    },
+
+    /**
+     * If true, the user cannot interact with this element.
+     */
+    disabled: {
+      type: Boolean,
+      value: false,
+      notify: true,
+      observer: '_disabledChanged',
+      reflectToAttribute: true
+    },
+
+    _oldTabIndex: {
+      type: Number
+    },
+
+    _boundFocusBlurHandler: {
+      type: Function,
+      value: function() {
+        return this._focusBlurHandler.bind(this);
+      }
+    },
+
+    __handleEventRetargeting: {
+      type: Boolean,
+      value: function() {
+        return !this.shadowRoot && !__WEBPACK_IMPORTED_MODULE_1__polymer_polymer_element_js__["a" /* Element */];
+      }
+    }
+  },
+
+  observers: [
+    '_changedControlState(focused, disabled)'
+  ],
+
+  ready: function() {
+    this.addEventListener('focus', this._boundFocusBlurHandler, true);
+    this.addEventListener('blur', this._boundFocusBlurHandler, true);
+  },
+
+  _focusBlurHandler: function(event) {
+    // In Polymer 2.0, the library takes care of retargeting events.
+    if (__WEBPACK_IMPORTED_MODULE_1__polymer_polymer_element_js__["a" /* Element */]) {
+      this._setFocused(event.type === 'focus');
+      return;
+    }
+
+    // NOTE(cdata):  if we are in ShadowDOM land, `event.target` will
+    // eventually become `this` due to retargeting; if we are not in
+    // ShadowDOM land, `event.target` will eventually become `this` due
+    // to the second conditional which fires a synthetic event (that is also
+    // handled). In either case, we can disregard `event.path`.
+    if (event.target === this) {
+      this._setFocused(event.type === 'focus');
+    } else if (this.__handleEventRetargeting) {
+      var target = /** @type {Node} */(Object(__WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(event).localTarget);
+      if (!this.isLightDescendant(target)) {
+        this.fire(event.type, {sourceEvent: event}, {
+          node: this,
+          bubbles: event.bubbles,
+          cancelable: event.cancelable
+        });
+      }
+    }
+  },
+
+  _disabledChanged: function(disabled, old) {
+    this.setAttribute('aria-disabled', disabled ? 'true' : 'false');
+    this.style.pointerEvents = disabled ? 'none' : '';
+    if (disabled) {
+      this._oldTabIndex = this.tabIndex;
+      this._setFocused(false);
+      this.tabIndex = -1;
+      this.blur();
+    } else if (this._oldTabIndex !== undefined) {
+      this.tabIndex = this._oldTabIndex;
+    }
+  },
+
+  _changedControlState: function() {
+    // _controlStateChanged is abstract, follow-on behaviors may implement it
+    if (this._controlStateChanged) {
+      this._controlStateChanged();
+    }
+  }
+
+};
+/* harmony export (immutable) */ __webpack_exports__["a"] = IronControlState;
+
+
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const {AppStateInterface} = __webpack_require__(34);
+
+module.exports = subclass => 
+  class AppStateInterfaceImpl extends Mixin(subclass).with(AppStateInterface) {}
+
+/***/ }),
+/* 14 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return settings; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return rootPath; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return sanitizeDOMValue; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__boot_js__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__resolve_url_js__ = __webpack_require__(15);
+
+
+
+/**
+ * Legacy settings.
+ * @namespace
+ * @memberof Polymer
+ */
+const settings = undefined || {};
+const useShadow = !(window.ShadyDOM);
+/* unused harmony export useShadow */
+
+const useNativeCSSProperties = Boolean(!window.ShadyCSS || window.ShadyCSS.nativeCss);
+/* unused harmony export useNativeCSSProperties */
+
+const useNativeCustomElements = !(window.customElements.polyfillWrapFlushCallback);
+/* unused harmony export useNativeCustomElements */
+
+
+
+/**
+ * Globally settable property that is automatically assigned to
+ * `Polymer.ElementMixin` instances, useful for binding in templates to
+ * make URL's relative to an application's root.  Defaults to the main
+ * document URL, but can be overridden by users.  It may be useful to set
+ * `Polymer.rootPath` to provide a stable application mount path when
+ * using client side routing.
+ *
+ * @memberof Polymer
+ */
+let rootPath = undefined ||
+  Object(__WEBPACK_IMPORTED_MODULE_1__resolve_url_js__["a" /* pathFromUrl */])(document.baseURI || window.location.href);
+
+
+
+const setRootPath = function(path) {
+  rootPath = path;
+};
+/* unused harmony export setRootPath */
+
+
+/**
+ * A global callback used to sanitize any value before inserting it into the DOM. The callback signature is:
+ *
+ *     Polymer = {
+ *       sanitizeDOMValue: function(value, name, type, node) { ... }
+ *     }
+ *
+ * Where:
+ *
+ * `value` is the value to sanitize.
+ * `name` is the name of an attribute or property (for example, href).
+ * `type` indicates where the value is being inserted: one of property, attribute, or text.
+ * `node` is the node where the value is being inserted.
+ *
+ * @type {(function(*,string,string,Node):*)|undefined}
+ * @memberof Polymer
+ */
+let sanitizeDOMValue = undefined;
+
+
+
+const setSanitizeDOMValue = function(newSanitizeDOMValue) {
+  sanitizeDOMValue = newSanitizeDOMValue;
+};
+/* unused harmony export setSanitizeDOMValue */
+
+
+
+/***/ }),
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return resolveCss; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return resolveUrl; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return pathFromUrl; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__boot_js__);
 
 
@@ -198,211 +1539,1608 @@ function pathFromUrl(url) {
 
 
 /***/ }),
-/* 3 */
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js__ = __webpack_require__(0);
+/* harmony export (immutable) */ __webpack_exports__["d"] = isPath;
+/* harmony export (immutable) */ __webpack_exports__["g"] = root;
+/* harmony export (immutable) */ __webpack_exports__["b"] = isAncestor;
+/* harmony export (immutable) */ __webpack_exports__["c"] = isDescendant;
+/* harmony export (immutable) */ __webpack_exports__["i"] = translate;
+/* harmony export (immutable) */ __webpack_exports__["e"] = matches;
+/* harmony export (immutable) */ __webpack_exports__["f"] = normalize;
+/* unused harmony export split */
+/* harmony export (immutable) */ __webpack_exports__["a"] = get;
+/* harmony export (immutable) */ __webpack_exports__["h"] = set;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__boot_js__);
 
 
-// unique global id for deduping mixins.
-let dedupeId = 0;
-
-/**
- * @constructor
- * @extends {Function}
- */
-function MixinFunction(){}
-/** @type {(WeakMap | undefined)} */
-MixinFunction.prototype.__mixinApplications;
-/** @type {(Object | undefined)} */
-MixinFunction.prototype.__mixinSet;
-
-const dedupingMixin = function(mixin) {
-  let mixinApplications = /** @type {!MixinFunction} */(mixin).__mixinApplications;
-  if (!mixinApplications) {
-    mixinApplications = new WeakMap();
-    /** @type {!MixinFunction} */(mixin).__mixinApplications = mixinApplications;
-  }
-  // maintain a unique id for each mixin
-  let mixinDedupeId = dedupeId++;
-  function dedupingMixin(base) {
-    let baseSet = /** @type {!MixinFunction} */(base).__mixinSet;
-    if (baseSet && baseSet[mixinDedupeId]) {
-      return base;
-    }
-    let map = mixinApplications;
-    let extended = map.get(base);
-    if (!extended) {
-      extended = /** @type {!Function} */(mixin)(base);
-      map.set(base, extended);
-    }
-    // copy inherited mixin set from the extended class, or the base class
-    // NOTE: we avoid use of Set here because some browser (IE11)
-    // cannot extend a base Set via the constructor.
-    let mixinSet = Object.create(/** @type {!MixinFunction} */(extended).__mixinSet || baseSet || null);
-    mixinSet[mixinDedupeId] = true;
-    /** @type {!MixinFunction} */(extended).__mixinSet = mixinSet;
-    return extended;
-  }
-
-  return dedupingMixin;
-};
-/* harmony export (immutable) */ __webpack_exports__["a"] = dedupingMixin;
-
-
-
-/***/ }),
-/* 4 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* unused harmony export Settings */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return rootPath; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return sanitizeDOMValue; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__boot_js__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__resolve_url_js__ = __webpack_require__(2);
-
-
-
-/**
- * Legacy settings.
- * @namespace
- * @memberof Polymer
- */
-const settings = undefined || {};
-const useShadow = !(window.ShadyDOM);
-/* unused harmony export useShadow */
-
-const useNativeCSSProperties = Boolean(!window.ShadyCSS || window.ShadyCSS.nativeCss);
-/* unused harmony export useNativeCSSProperties */
-
-const useNativeCustomElements = !(window.customElements.polyfillWrapFlushCallback);
-/* unused harmony export useNativeCustomElements */
-
-
-
-/**
- * Globally settable property that is automatically assigned to
- * `Polymer.ElementMixin` instances, useful for binding in templates to
- * make URL's relative to an application's root.  Defaults to the main
- * document URL, but can be overridden by users.  It may be useful to set
- * `Polymer.rootPath` to provide a stable application mount path when
- * using client side routing.
- *
- * @memberof Polymer
- */
-let rootPath = undefined ||
-  Object(__WEBPACK_IMPORTED_MODULE_1__resolve_url_js__["a" /* pathFromUrl */])(document.baseURI || window.location.href);
-
-
-
-const setRootPath = function(path) {
-  rootPath = path;
-};
-/* unused harmony export setRootPath */
-
-
-/**
- * A global callback used to sanitize any value before inserting it into the DOM. The callback signature is:
- *
- *     Polymer = {
- *       sanitizeDOMValue: function(value, name, type, node) { ... }
- *     }
- *
- * Where:
- *
- * `value` is the value to sanitize.
- * `name` is the name of an attribute or property (for example, href).
- * `type` indicates where the value is being inserted: one of property, attribute, or text.
- * `node` is the node where the value is being inserted.
- *
- * @type {(function(*,string,string,Node):*)|undefined}
- * @memberof Polymer
- */
-let sanitizeDOMValue = undefined;
-
-
-
-const setSanitizeDOMValue = function(newSanitizeDOMValue) {
-  sanitizeDOMValue = newSanitizeDOMValue;
-};
-/* unused harmony export setSanitizeDOMValue */
-
-
-
-/***/ }),
-/* 5 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element_js__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__my_app_html__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__my_app_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__my_app_html__);
-
-
-
-
-class MyApp extends __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element_js__["a" /* Element */] {
-    
-    // Define a string template instead of a `<template>` element.
-    static get template() {
-        return __WEBPACK_IMPORTED_MODULE_1__my_app_html___default.a;
-    }
-
-    constructor() {
-        super();
-        this.name = '3.0 preview';
-        this.count = 1;
-    }
-
-    // properties, observers, etc. are identical to 2.x
-    static get properties() {
-        name: {
-            Type: String
-        }
-    }
-
+function isPath(path) {
+  return path.indexOf('.') >= 0;
 }
-/* harmony export (immutable) */ __webpack_exports__["MyApp"] = MyApp;
+
+function root(path) {
+  let dotIndex = path.indexOf('.');
+  if (dotIndex === -1) {
+    return path;
+  }
+  return path.slice(0, dotIndex);
+}
+
+function isAncestor(base, path) {
+  //     base.startsWith(path + '.');
+  return base.indexOf(path + '.') === 0;
+}
+
+function isDescendant(base, path) {
+  //     path.startsWith(base + '.');
+  return path.indexOf(base + '.') === 0;
+}
+
+function translate(base, newBase, path) {
+  return newBase + path.slice(base.length);
+}
+
+function matches(base, path) {
+  return (base === path) ||
+         isAncestor(base, path) ||
+         isDescendant(base, path);
+}
+
+function normalize(path) {
+  if (Array.isArray(path)) {
+    let parts = [];
+    for (let i=0; i<path.length; i++) {
+      let args = path[i].toString().split('.');
+      for (let j=0; j<args.length; j++) {
+        parts.push(args[j]);
+      }
+    }
+    return parts.join('.');
+  } else {
+    return path;
+  }
+}
+
+function split(path) {
+  if (Array.isArray(path)) {
+    return normalize(path).split('.');
+  }
+  return path.toString().split('.');
+}
+
+function get(root, path, info) {
+  let prop = root;
+  let parts = split(path);
+  // Loop over path parts[0..n-1] and dereference
+  for (let i=0; i<parts.length; i++) {
+    if (!prop) {
+      return;
+    }
+    let part = parts[i];
+    prop = prop[part];
+  }
+  if (info) {
+    info.path = parts.join('.');
+  }
+  return prop;
+}
+
+function set(root, path, value) {
+  let prop = root;
+  let parts = split(path);
+  let last = parts[parts.length-1];
+  if (parts.length > 1) {
+    // Loop over path parts[0..n-2] and dereference
+    for (let i=0; i<parts.length-1; i++) {
+      let part = parts[i];
+      prop = prop[part];
+      if (!prop) {
+        return;
+      }
+    }
+    // Set value to object at end of path
+    prop[last] = value;
+  } else {
+    // Simple property set
+    prop[path] = value;
+  }
+  return parts.join('.');
+}
+
+const isDeep = isPath;
+/* unused harmony export isDeep */
 
 
-customElements.define('my-app', MyApp);
 
 /***/ }),
-/* 6 */
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Element; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_mixins_element_mixin_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__boot_js__);
 
+
+let debouncerQueue = [];
+
+const enqueueDebouncer = function(debouncer) {
+  debouncerQueue.push(debouncer);
+};
+/* harmony export (immutable) */ __webpack_exports__["a"] = enqueueDebouncer;
+
+
+function flushDebouncers() {
+  const didFlush = Boolean(debouncerQueue.length);
+  while (debouncerQueue.length) {
+    try {
+      debouncerQueue.shift().flush();
+    } catch(e) {
+      setTimeout(() => {
+        throw e;
+      });
+    }
+  }
+  return didFlush;
+}
+
+const flush = function() {
+  let shadyDOM, debouncers;
+  do {
+    shadyDOM = window.ShadyDOM && ShadyDOM.flush();
+    if (window.ShadyCSS && window.ShadyCSS.ScopingShim) {
+      window.ShadyCSS.ScopingShim.flush();
+    }
+    debouncers = flushDebouncers();
+  } while (shadyDOM || debouncers);
+};
+/* harmony export (immutable) */ __webpack_exports__["b"] = flush;
+
+
+
+/***/ }),
+/* 18 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_mixin_js__ = __webpack_require__(7);
+
+
+// Common implementation for mixin & behavior
+function mutablePropertyChange(inst, property, value, old, mutableData) {
+  let isObject;
+  if (mutableData) {
+    isObject = (typeof value === 'object' && value !== null);
+    // Pull `old` for Objects from temp cache, but treat `null` as a primitive
+    if (isObject) {
+      old = inst.__dataTemp[property];
+    }
+  }
+  // Strict equality check, but return false for NaN===NaN
+  let shouldChange = (old !== value && (old === old || value === value));
+  // Objects are stored in temporary cache (cleared at end of
+  // turn), which is used for dirty-checking
+  if (isObject && shouldChange) {
+    inst.__dataTemp[property] = value;
+  }
+  return shouldChange;
+}
+
+const MutableData = Object(__WEBPACK_IMPORTED_MODULE_0__utils_mixin_js__["a" /* dedupingMixin */])(superClass => {
+
+  /**
+   * @polymer
+   * @mixinClass
+   * @implements {Polymer_MutableData}
+   */
+  class MutableData extends superClass {
+    /**
+     * Overrides `Polymer.PropertyEffects` to provide option for skipping
+     * strict equality checking for Objects and Arrays.
+     *
+     * This method pulls the value to dirty check against from the `__dataTemp`
+     * cache (rather than the normal `__data` cache) for Objects.  Since the temp
+     * cache is cleared at the end of a turn, this implementation allows
+     * side-effects of deep object changes to be processed by re-setting the
+     * same object (using the temp cache as an in-turn backstop to prevent
+     * cycles due to 2-way notification).
+     *
+     * @param {string} property Property name
+     * @param {*} value New property value
+     * @param {*} old Previous property value
+     * @return {boolean} Whether the property should be considered a change
+     * @protected
+     */
+    _shouldPropertyChange(property, value, old) {
+      return mutablePropertyChange(this, property, value, old, true);
+    }
+
+  }
+  /** @type {boolean} */
+  MutableData.prototype.mutableData = false;
+
+  return MutableData;
+
+});
+/* harmony export (immutable) */ __webpack_exports__["a"] = MutableData;
+
+
+const OptionalMutableData = Object(__WEBPACK_IMPORTED_MODULE_0__utils_mixin_js__["a" /* dedupingMixin */])(superClass => {
+
+  /**
+   * @mixinClass
+   * @polymer
+   * @implements {Polymer_OptionalMutableData}
+   */
+  class OptionalMutableData extends superClass {
+
+    static get properties() {
+      return {
+        /**
+         * Instance-level flag for configuring the dirty-checking strategy
+         * for this element.  When true, Objects and Arrays will skip dirty
+         * checking, otherwise strict equality checking will be used.
+         */
+        mutableData: Boolean
+      };
+    }
+
+    /**
+     * Overrides `Polymer.PropertyEffects` to provide option for skipping
+     * strict equality checking for Objects and Arrays.
+     *
+     * When `this.mutableData` is true on this instance, this method
+     * pulls the value to dirty check against from the `__dataTemp` cache
+     * (rather than the normal `__data` cache) for Objects.  Since the temp
+     * cache is cleared at the end of a turn, this implementation allows
+     * side-effects of deep object changes to be processed by re-setting the
+     * same object (using the temp cache as an in-turn backstop to prevent
+     * cycles due to 2-way notification).
+     *
+     * @param {string} property Property name
+     * @param {*} value New property value
+     * @param {*} old Previous property value
+     * @return {boolean} Whether the property should be considered a change
+     * @protected
+     */
+    _shouldPropertyChange(property, value, old) {
+      return mutablePropertyChange(this, property, value, old, this.mutableData);
+    }
+  }
+
+  return OptionalMutableData;
+
+});
+/* harmony export (immutable) */ __webpack_exports__["b"] = OptionalMutableData;
+
+
+// Export for use by legacy behavior
+MutableData._mutablePropertyChange = mutablePropertyChange;
+
+
+/***/ }),
+/* 19 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export CustomStyle */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__webcomponents_shadycss_entrypoints_custom_style_interface_js__ = __webpack_require__(87);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_style_gather_js__ = __webpack_require__(43);
+
+
+
+const attr = 'include';
+
+const CustomStyleInterface = window.ShadyCSS.CustomStyleInterface;
 
 /**
- * Base class that provides the core API for Polymer's meta-programming
- * features including template stamping, data-binding, attribute deserialization,
- * and property change observation.
+ * Custom element for defining styles in the main document that can take
+ * advantage of [shady DOM](https://github.com/webcomponents/shadycss) shims
+ * for style encapsulation, custom properties, and custom mixins.
+ *
+ * - Document styles defined in a `<custom-style>` are shimmed to ensure they
+ *   do not leak into local DOM when running on browsers without native
+ *   Shadow DOM.
+ * - Custom properties can be defined in a `<custom-style>`. Use the `html` selector
+ *   to define custom properties that apply to all custom elements.
+ * - Custom mixins can be defined in a `<custom-style>`, if you import the optional
+ *   [apply shim](https://github.com/webcomponents/shadycss#about-applyshim)
+ *   (`shadycss/apply-shim.html`).
+ *
+ * To use:
+ *
+ * - Import `custom-style.html`.
+ * - Place a `<custom-style>` element in the main document, wrapping an inline `<style>` tag that
+ *   contains the CSS rules you want to shim.
+ *
+ * For example:
+ *
+ * ```
+ * <!-- import apply shim--only required if using mixins -->
+ * <link rel="import href="bower_components/shadycss/apply-shim.html">
+ * <!-- import custom-style element -->
+ * <link rel="import" href="bower_components/polymer/lib/elements/custom-style.html">
+ * ...
+ * <custom-style>
+ *   <style>
+ *     html {
+ *       --custom-color: blue;
+ *       --custom-mixin: {
+ *         font-weight: bold;
+ *         color: red;
+ *       };
+ *     }
+ *   </style>
+ * </custom-style>
+ * ```
  *
  * @customElement
- * @polymer
- * @memberof Polymer
- * @constructor
- * @implements {Polymer_ElementMixin}
  * @extends HTMLElement
- * @appliesMixin Polymer.ElementMixin
- * @summary Custom element base class that provides the core API for Polymer's
- *   key meta-programming features including template stamping, data-binding,
- *   attribute deserialization, and property change observation
+ * @memberof Polymer
+ * @summary Custom element for defining styles in the main document that can
+ *   take advantage of Polymer's style scoping and custom properties shims.
  */
-const Element = Object(__WEBPACK_IMPORTED_MODULE_0__lib_mixins_element_mixin_js__["a" /* ElementMixin */])(HTMLElement);
+class CustomStyle extends HTMLElement {
+  constructor() {
+    super();
+    this._style = null;
+    CustomStyleInterface.addCustomStyle(this);
+  }
+  /**
+   * Returns the light-DOM `<style>` child this element wraps.  Upon first
+   * call any style modules referenced via the `include` attribute will be
+   * concatenated to this element's `<style>`.
+   *
+   * @return {HTMLStyleElement} This element's light-DOM `<style>`
+   */
+  getStyle() {
+    if (this._style) {
+      return this._style;
+    }
+    const style = /** @type {HTMLStyleElement} */(this.querySelector('style'));
+    if (!style) {
+      return null;
+    }
+    this._style = style;
+    const include = style.getAttribute(attr);
+    if (include) {
+      style.removeAttribute(attr);
+      style.textContent = Object(__WEBPACK_IMPORTED_MODULE_1__utils_style_gather_js__["b" /* cssFromModules */])(include) + style.textContent;
+    }
+    return this._style;
+  }
+}
+
+window.customElements.define('custom-style', CustomStyle);
 
 
 
 /***/ }),
-/* 7 */
+/* 20 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__color_js__ = __webpack_require__(47);
+
+
+const $_documentContainer = document.createElement('div');
+$_documentContainer.setAttribute('style', 'display: none;');
+
+$_documentContainer.innerHTML = `<custom-style>
+  <style is="custom-style">
+    html {
+      /*
+       * You can use these generic variables in your elements for easy theming.
+       * For example, if all your elements use \`--primary-text-color\` as its main
+       * color, then switching from a light to a dark theme is just a matter of
+       * changing the value of \`--primary-text-color\` in your application.
+       */
+      --primary-text-color: var(--light-theme-text-color);
+      --primary-background-color: var(--light-theme-background-color);
+      --secondary-text-color: var(--light-theme-secondary-color);
+      --disabled-text-color: var(--light-theme-disabled-color);
+      --divider-color: var(--light-theme-divider-color);
+      --error-color: var(--paper-deep-orange-a700);
+
+      /*
+       * Primary and accent colors. Also see color.html for more colors.
+       */
+      --primary-color: var(--paper-indigo-500);
+      --light-primary-color: var(--paper-indigo-100);
+      --dark-primary-color: var(--paper-indigo-700);
+
+      --accent-color: var(--paper-pink-a200);
+      --light-accent-color: var(--paper-pink-a100);
+      --dark-accent-color: var(--paper-pink-a400);
+
+
+      /*
+       * Material Design Light background theme
+       */
+      --light-theme-background-color: #ffffff;
+      --light-theme-base-color: #000000;
+      --light-theme-text-color: var(--paper-grey-900);
+      --light-theme-secondary-color: #737373;  /* for secondary text and icons */
+      --light-theme-disabled-color: #9b9b9b;  /* disabled/hint text */
+      --light-theme-divider-color: #dbdbdb;
+
+      /*
+       * Material Design Dark background theme
+       */
+      --dark-theme-background-color: var(--paper-grey-900);
+      --dark-theme-base-color: #ffffff;
+      --dark-theme-text-color: #ffffff;
+      --dark-theme-secondary-color: #bcbcbc;  /* for secondary text and icons */
+      --dark-theme-disabled-color: #646464;  /* disabled/hint text */
+      --dark-theme-divider-color: #3c3c3c;
+
+      /*
+       * Deprecated values because of their confusing names.
+       */
+      --text-primary-color: var(--dark-theme-text-color);
+      --default-primary-color: var(--primary-color);
+    }
+  </style>
+</custom-style>`;
+
+document.head.appendChild($_documentContainer);
+
+
+/***/ }),
+/* 21 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+
+const $_documentContainer = document.createElement('div');
+$_documentContainer.setAttribute('style', 'display: none;');
+
+$_documentContainer.innerHTML = `<custom-style>
+  <style is="custom-style">
+    html {
+
+      --shadow-transition: {
+        transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+      };
+
+      --shadow-none: {
+        box-shadow: none;
+      };
+
+      /* from http://codepen.io/shyndman/pen/c5394ddf2e8b2a5c9185904b57421cdb */
+
+      --shadow-elevation-2dp: {
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+                    0 1px 5px 0 rgba(0, 0, 0, 0.12),
+                    0 3px 1px -2px rgba(0, 0, 0, 0.2);
+      };
+
+      --shadow-elevation-3dp: {
+        box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.14),
+                    0 1px 8px 0 rgba(0, 0, 0, 0.12),
+                    0 3px 3px -2px rgba(0, 0, 0, 0.4);
+      };
+
+      --shadow-elevation-4dp: {
+        box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14),
+                    0 1px 10px 0 rgba(0, 0, 0, 0.12),
+                    0 2px 4px -1px rgba(0, 0, 0, 0.4);
+      };
+
+      --shadow-elevation-6dp: {
+        box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.14),
+                    0 1px 18px 0 rgba(0, 0, 0, 0.12),
+                    0 3px 5px -1px rgba(0, 0, 0, 0.4);
+      };
+
+      --shadow-elevation-8dp: {
+        box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14),
+                    0 3px 14px 2px rgba(0, 0, 0, 0.12),
+                    0 5px 5px -3px rgba(0, 0, 0, 0.4);
+      };
+
+      --shadow-elevation-12dp: {
+        box-shadow: 0 12px 16px 1px rgba(0, 0, 0, 0.14),
+                    0 4px 22px 3px rgba(0, 0, 0, 0.12),
+                    0 6px 7px -4px rgba(0, 0, 0, 0.4);
+      };
+
+      --shadow-elevation-16dp: {
+        box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14),
+                    0  6px 30px 5px rgba(0, 0, 0, 0.12),
+                    0  8px 10px -5px rgba(0, 0, 0, 0.4);
+      };
+
+      --shadow-elevation-24dp: {
+        box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.14),
+                    0 9px 46px 8px rgba(0, 0, 0, 0.12),
+                    0 11px 15px -7px rgba(0, 0, 0, 0.4);
+      };
+    }
+  </style>
+</custom-style>`;
+
+document.head.appendChild($_documentContainer);
+
+
+/***/ }),
+/* 22 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__font_roboto_roboto_js__ = __webpack_require__(89);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__font_roboto_roboto_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__font_roboto_roboto_js__);
+
+
+const $_documentContainer = document.createElement('div');
+$_documentContainer.setAttribute('style', 'display: none;');
+
+$_documentContainer.innerHTML = `<custom-style>
+  <style is="custom-style">
+    html {
+
+      /* Shared Styles */
+      --paper-font-common-base: {
+        font-family: 'Roboto', 'Noto', sans-serif;
+        -webkit-font-smoothing: antialiased;
+      };
+
+      --paper-font-common-code: {
+        font-family: 'Roboto Mono', 'Consolas', 'Menlo', monospace;
+        -webkit-font-smoothing: antialiased;
+      };
+
+      --paper-font-common-expensive-kerning: {
+        text-rendering: optimizeLegibility;
+      };
+
+      --paper-font-common-nowrap: {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      };
+
+      /* Material Font Styles */
+
+      --paper-font-display4: {
+        @apply --paper-font-common-base;
+        @apply --paper-font-common-nowrap;
+
+        font-size: 112px;
+        font-weight: 300;
+        letter-spacing: -.044em;
+        line-height: 120px;
+      };
+
+      --paper-font-display3: {
+        @apply --paper-font-common-base;
+        @apply --paper-font-common-nowrap;
+
+        font-size: 56px;
+        font-weight: 400;
+        letter-spacing: -.026em;
+        line-height: 60px;
+      };
+
+      --paper-font-display2: {
+        @apply --paper-font-common-base;
+
+        font-size: 45px;
+        font-weight: 400;
+        letter-spacing: -.018em;
+        line-height: 48px;
+      };
+
+      --paper-font-display1: {
+        @apply --paper-font-common-base;
+
+        font-size: 34px;
+        font-weight: 400;
+        letter-spacing: -.01em;
+        line-height: 40px;
+      };
+
+      --paper-font-headline: {
+        @apply --paper-font-common-base;
+
+        font-size: 24px;
+        font-weight: 400;
+        letter-spacing: -.012em;
+        line-height: 32px;
+      };
+
+      --paper-font-title: {
+        @apply --paper-font-common-base;
+        @apply --paper-font-common-nowrap;
+
+        font-size: 20px;
+        font-weight: 500;
+        line-height: 28px;
+      };
+
+      --paper-font-subhead: {
+        @apply --paper-font-common-base;
+
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 24px;
+      };
+
+      --paper-font-body2: {
+        @apply --paper-font-common-base;
+
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 24px;
+      };
+
+      --paper-font-body1: {
+        @apply --paper-font-common-base;
+
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 20px;
+      };
+
+      --paper-font-caption: {
+        @apply --paper-font-common-base;
+        @apply --paper-font-common-nowrap;
+
+        font-size: 12px;
+        font-weight: 400;
+        letter-spacing: 0.011em;
+        line-height: 20px;
+      };
+
+      --paper-font-menu: {
+        @apply --paper-font-common-base;
+        @apply --paper-font-common-nowrap;
+
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 24px;
+      };
+
+      --paper-font-button: {
+        @apply --paper-font-common-base;
+        @apply --paper-font-common-nowrap;
+
+        font-size: 14px;
+        font-weight: 500;
+        letter-spacing: 0.018em;
+        line-height: 24px;
+        text-transform: uppercase;
+      };
+
+      --paper-font-code2: {
+        @apply --paper-font-common-code;
+
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 20px;
+      };
+
+      --paper-font-code1: {
+        @apply --paper-font-common-code;
+
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 20px;
+      };
+
+    }
+
+  </style>
+</custom-style>`;
+
+document.head.appendChild($_documentContainer);
+
+
+/***/ }),
+/* 23 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+
+
+/**
+ * Chrome uses an older version of DOM Level 3 Keyboard Events
+ *
+ * Most keys are labeled as text, but some are Unicode codepoints.
+ * Values taken from: http://www.w3.org/TR/2007/WD-DOM-Level-3-Events-20071221/keyset.html#KeySet-Set
+ */
+var KEY_IDENTIFIER = {
+  'U+0008': 'backspace',
+  'U+0009': 'tab',
+  'U+001B': 'esc',
+  'U+0020': 'space',
+  'U+007F': 'del'
+};
+
+/**
+ * Special table for KeyboardEvent.keyCode.
+ * KeyboardEvent.keyIdentifier is better, and KeyBoardEvent.key is even better
+ * than that.
+ *
+ * Values from: https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent.keyCode#Value_of_keyCode
+ */
+var KEY_CODE = {
+  8: 'backspace',
+  9: 'tab',
+  13: 'enter',
+  27: 'esc',
+  33: 'pageup',
+  34: 'pagedown',
+  35: 'end',
+  36: 'home',
+  32: 'space',
+  37: 'left',
+  38: 'up',
+  39: 'right',
+  40: 'down',
+  46: 'del',
+  106: '*'
+};
+
+/**
+ * MODIFIER_KEYS maps the short name for modifier keys used in a key
+ * combo string to the property name that references those same keys
+ * in a KeyboardEvent instance.
+ */
+var MODIFIER_KEYS = {
+  'shift': 'shiftKey',
+  'ctrl': 'ctrlKey',
+  'alt': 'altKey',
+  'meta': 'metaKey'
+};
+
+/**
+ * KeyboardEvent.key is mostly represented by printable character made by
+ * the keyboard, with unprintable keys labeled nicely.
+ *
+ * However, on OS X, Alt+char can make a Unicode character that follows an
+ * Apple-specific mapping. In this case, we fall back to .keyCode.
+ */
+var KEY_CHAR = /[a-z0-9*]/;
+
+/**
+ * Matches a keyIdentifier string.
+ */
+var IDENT_CHAR = /U\+/;
+
+/**
+ * Matches arrow keys in Gecko 27.0+
+ */
+var ARROW_KEY = /^arrow/;
+
+/**
+ * Matches space keys everywhere (notably including IE10's exceptional name
+ * `spacebar`).
+ */
+var SPACE_KEY = /^space(bar)?/;
+
+/**
+ * Matches ESC key.
+ *
+ * Value from: http://w3c.github.io/uievents-key/#key-Escape
+ */
+var ESC_KEY = /^escape$/;
+
+/**
+ * Transforms the key.
+ * @param {string} key The KeyBoardEvent.key
+ * @param {Boolean} [noSpecialChars] Limits the transformation to
+ * alpha-numeric characters.
+ */
+function transformKey(key, noSpecialChars) {
+  var validKey = '';
+  if (key) {
+    var lKey = key.toLowerCase();
+    if (lKey === ' ' || SPACE_KEY.test(lKey)) {
+      validKey = 'space';
+    } else if (ESC_KEY.test(lKey)) {
+      validKey = 'esc';
+    } else if (lKey.length == 1) {
+      if (!noSpecialChars || KEY_CHAR.test(lKey)) {
+        validKey = lKey;
+      }
+    } else if (ARROW_KEY.test(lKey)) {
+      validKey = lKey.replace('arrow', '');
+    } else if (lKey == 'multiply') {
+      // numpad '*' can map to Multiply on IE/Windows
+      validKey = '*';
+    } else {
+      validKey = lKey;
+    }
+  }
+  return validKey;
+}
+
+function transformKeyIdentifier(keyIdent) {
+  var validKey = '';
+  if (keyIdent) {
+    if (keyIdent in KEY_IDENTIFIER) {
+      validKey = KEY_IDENTIFIER[keyIdent];
+    } else if (IDENT_CHAR.test(keyIdent)) {
+      keyIdent = parseInt(keyIdent.replace('U+', '0x'), 16);
+      validKey = String.fromCharCode(keyIdent).toLowerCase();
+    } else {
+      validKey = keyIdent.toLowerCase();
+    }
+  }
+  return validKey;
+}
+
+function transformKeyCode(keyCode) {
+  var validKey = '';
+  if (Number(keyCode)) {
+    if (keyCode >= 65 && keyCode <= 90) {
+      // ascii a-z
+      // lowercase is 32 offset from uppercase
+      validKey = String.fromCharCode(32 + keyCode);
+    } else if (keyCode >= 112 && keyCode <= 123) {
+      // function keys f1-f12
+      validKey = 'f' + (keyCode - 112 + 1);
+    } else if (keyCode >= 48 && keyCode <= 57) {
+      // top 0-9 keys
+      validKey = String(keyCode - 48);
+    } else if (keyCode >= 96 && keyCode <= 105) {
+      // num pad 0-9
+      validKey = String(keyCode - 96);
+    } else {
+      validKey = KEY_CODE[keyCode];
+    }
+  }
+  return validKey;
+}
+
+/**
+  * Calculates the normalized key for a KeyboardEvent.
+  * @param {KeyboardEvent} keyEvent
+  * @param {Boolean} [noSpecialChars] Set to true to limit keyEvent.key
+  * transformation to alpha-numeric chars. This is useful with key
+  * combinations like shift + 2, which on FF for MacOS produces
+  * keyEvent.key = @
+  * To get 2 returned, set noSpecialChars = true
+  * To get @ returned, set noSpecialChars = false
+ */
+function normalizedKeyForEvent(keyEvent, noSpecialChars) {
+  // Fall back from .key, to .detail.key for artifical keyboard events,
+  // and then to deprecated .keyIdentifier and .keyCode.
+  if (keyEvent.key) {
+    return transformKey(keyEvent.key, noSpecialChars);
+  }
+  if (keyEvent.detail && keyEvent.detail.key) {
+    return transformKey(keyEvent.detail.key, noSpecialChars);
+  }
+  return transformKeyIdentifier(keyEvent.keyIdentifier) ||
+    transformKeyCode(keyEvent.keyCode) || '';
+}
+
+function keyComboMatchesEvent(keyCombo, event) {
+  // For combos with modifiers we support only alpha-numeric keys
+  var keyEvent = normalizedKeyForEvent(event, keyCombo.hasModifiers);
+  return keyEvent === keyCombo.key &&
+    (!keyCombo.hasModifiers || (
+      !!event.shiftKey === !!keyCombo.shiftKey &&
+      !!event.ctrlKey === !!keyCombo.ctrlKey &&
+      !!event.altKey === !!keyCombo.altKey &&
+      !!event.metaKey === !!keyCombo.metaKey)
+    );
+}
+
+function parseKeyComboString(keyComboString) {
+  if (keyComboString.length === 1) {
+    return {
+      combo: keyComboString,
+      key: keyComboString,
+      event: 'keydown'
+    };
+  }
+  return keyComboString.split('+').reduce(function(parsedKeyCombo, keyComboPart) {
+    var eventParts = keyComboPart.split(':');
+    var keyName = eventParts[0];
+    var event = eventParts[1];
+
+    if (keyName in MODIFIER_KEYS) {
+      parsedKeyCombo[MODIFIER_KEYS[keyName]] = true;
+      parsedKeyCombo.hasModifiers = true;
+    } else {
+      parsedKeyCombo.key = keyName;
+      parsedKeyCombo.event = event || 'keydown';
+    }
+
+    return parsedKeyCombo;
+  }, {
+    combo: keyComboString.split(':').shift()
+  });
+}
+
+function parseEventString(eventString) {
+  return eventString.trim().split(' ').map(function(keyComboString) {
+    return parseKeyComboString(keyComboString);
+  });
+}
+
+const IronA11yKeysBehavior = {
+  properties: {
+    /**
+     * The EventTarget that will be firing relevant KeyboardEvents. Set it to
+     * `null` to disable the listeners.
+     * @type {?EventTarget}
+     */
+    keyEventTarget: {
+      type: Object,
+      value: function() {
+        return this;
+      }
+    },
+
+    /**
+     * If true, this property will cause the implementing element to
+     * automatically stop propagation on any handled KeyboardEvents.
+     */
+    stopKeyboardEventPropagation: {
+      type: Boolean,
+      value: false
+    },
+
+    _boundKeyHandlers: {
+      type: Array,
+      value: function() {
+        return [];
+      }
+    },
+
+    // We use this due to a limitation in IE10 where instances will have
+    // own properties of everything on the "prototype".
+    _imperativeKeyBindings: {
+      type: Object,
+      value: function() {
+        return {};
+      }
+    }
+  },
+
+  observers: [
+    '_resetKeyEventListeners(keyEventTarget, _boundKeyHandlers)'
+  ],
+
+
+  /**
+   * To be used to express what combination of keys  will trigger the relative
+   * callback. e.g. `keyBindings: { 'esc': '_onEscPressed'}`
+   * @type {!Object}
+   */
+  keyBindings: {},
+
+  registered: function() {
+    this._prepKeyBindings();
+  },
+
+  attached: function() {
+    this._listenKeyEventListeners();
+  },
+
+  detached: function() {
+    this._unlistenKeyEventListeners();
+  },
+
+  /**
+   * Can be used to imperatively add a key binding to the implementing
+   * element. This is the imperative equivalent of declaring a keybinding
+   * in the `keyBindings` prototype property.
+   *
+   * @param {string} eventString
+   * @param {string} handlerName
+   */
+  addOwnKeyBinding: function(eventString, handlerName) {
+    this._imperativeKeyBindings[eventString] = handlerName;
+    this._prepKeyBindings();
+    this._resetKeyEventListeners();
+  },
+
+  /**
+   * When called, will remove all imperatively-added key bindings.
+   */
+  removeOwnKeyBindings: function() {
+    this._imperativeKeyBindings = {};
+    this._prepKeyBindings();
+    this._resetKeyEventListeners();
+  },
+
+  /**
+   * Returns true if a keyboard event matches `eventString`.
+   *
+   * @param {KeyboardEvent} event
+   * @param {string} eventString
+   * @return {boolean}
+   */
+  keyboardEventMatchesKeys: function(event, eventString) {
+    var keyCombos = parseEventString(eventString);
+    for (var i = 0; i < keyCombos.length; ++i) {
+      if (keyComboMatchesEvent(keyCombos[i], event)) {
+        return true;
+      }
+    }
+    return false;
+  },
+
+  _collectKeyBindings: function() {
+    var keyBindings = this.behaviors.map(function(behavior) {
+      return behavior.keyBindings;
+    });
+
+    if (keyBindings.indexOf(this.keyBindings) === -1) {
+      keyBindings.push(this.keyBindings);
+    }
+
+    return keyBindings;
+  },
+
+  _prepKeyBindings: function() {
+    this._keyBindings = {};
+
+    this._collectKeyBindings().forEach(function(keyBindings) {
+      for (var eventString in keyBindings) {
+        this._addKeyBinding(eventString, keyBindings[eventString]);
+      }
+    }, this);
+
+    for (var eventString in this._imperativeKeyBindings) {
+      this._addKeyBinding(eventString, this._imperativeKeyBindings[eventString]);
+    }
+
+    // Give precedence to combos with modifiers to be checked first.
+    for (var eventName in this._keyBindings) {
+      this._keyBindings[eventName].sort(function (kb1, kb2) {
+        var b1 = kb1[0].hasModifiers;
+        var b2 = kb2[0].hasModifiers;
+        return (b1 === b2) ? 0 : b1 ? -1 : 1;
+      })
+    }
+  },
+
+  _addKeyBinding: function(eventString, handlerName) {
+    parseEventString(eventString).forEach(function(keyCombo) {
+      this._keyBindings[keyCombo.event] =
+        this._keyBindings[keyCombo.event] || [];
+
+      this._keyBindings[keyCombo.event].push([
+        keyCombo,
+        handlerName
+      ]);
+    }, this);
+  },
+
+  _resetKeyEventListeners: function() {
+    this._unlistenKeyEventListeners();
+
+    if (this.isAttached) {
+      this._listenKeyEventListeners();
+    }
+  },
+
+  _listenKeyEventListeners: function() {
+    if (!this.keyEventTarget) {
+      return;
+    }
+    Object.keys(this._keyBindings).forEach(function(eventName) {
+      var keyBindings = this._keyBindings[eventName];
+      var boundKeyHandler = this._onKeyBindingEvent.bind(this, keyBindings);
+
+      this._boundKeyHandlers.push([this.keyEventTarget, eventName, boundKeyHandler]);
+
+      this.keyEventTarget.addEventListener(eventName, boundKeyHandler);
+    }, this);
+  },
+
+  _unlistenKeyEventListeners: function() {
+    var keyHandlerTuple;
+    var keyEventTarget;
+    var eventName;
+    var boundKeyHandler;
+
+    while (this._boundKeyHandlers.length) {
+      // My kingdom for block-scope binding and destructuring assignment..
+      keyHandlerTuple = this._boundKeyHandlers.pop();
+      keyEventTarget = keyHandlerTuple[0];
+      eventName = keyHandlerTuple[1];
+      boundKeyHandler = keyHandlerTuple[2];
+
+      keyEventTarget.removeEventListener(eventName, boundKeyHandler);
+    }
+  },
+
+  _onKeyBindingEvent: function(keyBindings, event) {
+    if (this.stopKeyboardEventPropagation) {
+      event.stopPropagation();
+    }
+
+    // if event has been already prevented, don't do anything
+    if (event.defaultPrevented) {
+      return;
+    }
+
+    for (var i = 0; i < keyBindings.length; i++) {
+      var keyCombo = keyBindings[i][0];
+      var handlerName = keyBindings[i][1];
+      if (keyComboMatchesEvent(keyCombo, event)) {
+        this._triggerKeyHandler(keyCombo, handlerName, event);
+        // exit the loop if eventDefault was prevented
+        if (event.defaultPrevented) {
+          return;
+        }
+      }
+    }
+  },
+
+  _triggerKeyHandler: function(keyCombo, handlerName, keyboardEvent) {
+    var detail = Object.create(keyCombo);
+    detail.keyboardEvent = keyboardEvent;
+    var event = new CustomEvent(keyCombo.event, {
+      detail: detail,
+      cancelable: true
+    });
+    this[handlerName].call(this, event);
+    if (event.defaultPrevented) {
+      keyboardEvent.preventDefault();
+    }
+  }
+};
+/* harmony export (immutable) */ __webpack_exports__["a"] = IronA11yKeysBehavior;
+
+
+
+/***/ }),
+/* 24 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return nativeShadow; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return nativeCssVariables; });
+/**
+@license
+Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+*/
+
+
+
+let nativeShadow = !(window['ShadyDOM'] && window['ShadyDOM']['inUse']);
+let nativeCssVariables;
+
+/**
+ * @param {(ShadyCSSOptions | ShadyCSSInterface)=} settings
+ */
+function calcCssVariables(settings) {
+  if (settings && settings['shimcssproperties']) {
+    nativeCssVariables = false;
+  } else {
+    // chrome 49 has semi-working css vars, check if box-shadow works
+    // safari 9.1 has a recalc bug: https://bugs.webkit.org/show_bug.cgi?id=155782
+    // However, shim css custom properties are only supported with ShadyDOM enabled,
+    // so fall back on native if we do not detect ShadyDOM
+    // Edge 15: custom properties used in ::before and ::after will also be used in the parent element
+    // https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/12414257/
+    nativeCssVariables = nativeShadow || Boolean(!navigator.userAgent.match(/AppleWebKit\/601|Edge\/15/) &&
+      window.CSS && CSS.supports && CSS.supports('box-shadow', '0 0 0 var(--foo)'));
+  }
+}
+
+if (window.ShadyCSS && window.ShadyCSS.nativeCss !== undefined) {
+  nativeCssVariables = window.ShadyCSS.nativeCss;
+} else if (window.ShadyCSS) {
+  calcCssVariables(window.ShadyCSS);
+  // reset window variable to let ShadyCSS API take its place
+  window.ShadyCSS = undefined;
+} else {
+  calcCssVariables(window['WebComponents'] && window['WebComponents']['flags']);
+}
+
+/***/ }),
+/* 25 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export StyleNode */
+/* harmony export (immutable) */ __webpack_exports__["a"] = parse;
+/* harmony export (immutable) */ __webpack_exports__["b"] = stringify;
+/* unused harmony export removeCustomPropAssignment */
+/**
+@license
+Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+*/
+
+/*
+Extremely simple css parser. Intended to be not more than what we need
+and definitely not necessarily correct =).
+*/
+
+
+
+/** @unrestricted */
+class StyleNode {
+  constructor() {
+    /** @type {number} */
+    this['start'] = 0;
+    /** @type {number} */
+    this['end'] = 0;
+    /** @type {StyleNode} */
+    this['previous'] = null;
+    /** @type {StyleNode} */
+    this['parent'] = null;
+    /** @type {Array<StyleNode>} */
+    this['rules'] = null;
+    /** @type {string} */
+    this['parsedCssText'] = '';
+    /** @type {string} */
+    this['cssText'] = '';
+    /** @type {boolean} */
+    this['atRule'] = false;
+    /** @type {number} */
+    this['type'] = 0;
+    /** @type {string} */
+    this['keyframesName'] = '';
+    /** @type {string} */
+    this['selector'] = '';
+    /** @type {string} */
+    this['parsedSelector'] = '';
+  }
+}
+
+
+
+// given a string of css, return a simple rule tree
+/**
+ * @param {string} text
+ * @return {StyleNode}
+ */
+function parse(text) {
+  text = clean(text);
+  return parseCss(lex(text), text);
+}
+
+// remove stuff we don't care about that may hinder parsing
+/**
+ * @param {string} cssText
+ * @return {string}
+ */
+function clean(cssText) {
+  return cssText.replace(RX.comments, '').replace(RX.port, '');
+}
+
+// super simple {...} lexer that returns a node tree
+/**
+ * @param {string} text
+ * @return {StyleNode}
+ */
+function lex(text) {
+  let root = new StyleNode();
+  root['start'] = 0;
+  root['end'] = text.length
+  let n = root;
+  for (let i = 0, l = text.length; i < l; i++) {
+    if (text[i] === OPEN_BRACE) {
+      if (!n['rules']) {
+        n['rules'] = [];
+      }
+      let p = n;
+      let previous = p['rules'][p['rules'].length - 1] || null;
+      n = new StyleNode();
+      n['start'] = i + 1;
+      n['parent'] = p;
+      n['previous'] = previous;
+      p['rules'].push(n);
+    } else if (text[i] === CLOSE_BRACE) {
+      n['end'] = i + 1;
+      n = n['parent'] || root;
+    }
+  }
+  return root;
+}
+
+// add selectors/cssText to node tree
+/**
+ * @param {StyleNode} node
+ * @param {string} text
+ * @return {StyleNode}
+ */
+function parseCss(node, text) {
+  let t = text.substring(node['start'], node['end'] - 1);
+  node['parsedCssText'] = node['cssText'] = t.trim();
+  if (node['parent']) {
+    let ss = node['previous'] ? node['previous']['end'] : node['parent']['start'];
+    t = text.substring(ss, node['start'] - 1);
+    t = _expandUnicodeEscapes(t);
+    t = t.replace(RX.multipleSpaces, ' ');
+    // TODO(sorvell): ad hoc; make selector include only after last ;
+    // helps with mixin syntax
+    t = t.substring(t.lastIndexOf(';') + 1);
+    let s = node['parsedSelector'] = node['selector'] = t.trim();
+    node['atRule'] = (s.indexOf(AT_START) === 0);
+    // note, support a subset of rule types...
+    if (node['atRule']) {
+      if (s.indexOf(MEDIA_START) === 0) {
+        node['type'] = types.MEDIA_RULE;
+      } else if (s.match(RX.keyframesRule)) {
+        node['type'] = types.KEYFRAMES_RULE;
+        node['keyframesName'] =
+          node['selector'].split(RX.multipleSpaces).pop();
+      }
+    } else {
+      if (s.indexOf(VAR_START) === 0) {
+        node['type'] = types.MIXIN_RULE;
+      } else {
+        node['type'] = types.STYLE_RULE;
+      }
+    }
+  }
+  let r$ = node['rules'];
+  if (r$) {
+    for (let i = 0, l = r$.length, r;
+      (i < l) && (r = r$[i]); i++) {
+      parseCss(r, text);
+    }
+  }
+  return node;
+}
+
+/**
+ * conversion of sort unicode escapes with spaces like `\33 ` (and longer) into
+ * expanded form that doesn't require trailing space `\000033`
+ * @param {string} s
+ * @return {string}
+ */
+function _expandUnicodeEscapes(s) {
+  return s.replace(/\\([0-9a-f]{1,6})\s/gi, function() {
+    let code = arguments[1],
+      repeat = 6 - code.length;
+    while (repeat--) {
+      code = '0' + code;
+    }
+    return '\\' + code;
+  });
+}
+
+/**
+ * stringify parsed css.
+ * @param {StyleNode} node
+ * @param {boolean=} preserveProperties
+ * @param {string=} text
+ * @return {string}
+ */
+function stringify(node, preserveProperties, text = '') {
+  // calc rule cssText
+  let cssText = '';
+  if (node['cssText'] || node['rules']) {
+    let r$ = node['rules'];
+    if (r$ && !_hasMixinRules(r$)) {
+      for (let i = 0, l = r$.length, r;
+        (i < l) && (r = r$[i]); i++) {
+        cssText = stringify(r, preserveProperties, cssText);
+      }
+    } else {
+      cssText = preserveProperties ? node['cssText'] :
+        removeCustomProps(node['cssText']);
+      cssText = cssText.trim();
+      if (cssText) {
+        cssText = '  ' + cssText + '\n';
+      }
+    }
+  }
+  // emit rule if there is cssText
+  if (cssText) {
+    if (node['selector']) {
+      text += node['selector'] + ' ' + OPEN_BRACE + '\n';
+    }
+    text += cssText;
+    if (node['selector']) {
+      text += CLOSE_BRACE + '\n\n';
+    }
+  }
+  return text;
+}
+
+/**
+ * @param {Array<StyleNode>} rules
+ * @return {boolean}
+ */
+function _hasMixinRules(rules) {
+  let r = rules[0];
+  return Boolean(r) && Boolean(r['selector']) && r['selector'].indexOf(VAR_START) === 0;
+}
+
+/**
+ * @param {string} cssText
+ * @return {string}
+ */
+function removeCustomProps(cssText) {
+  cssText = removeCustomPropAssignment(cssText);
+  return removeCustomPropApply(cssText);
+}
+
+/**
+ * @param {string} cssText
+ * @return {string}
+ */
+function removeCustomPropAssignment(cssText) {
+  return cssText
+    .replace(RX.customProp, '')
+    .replace(RX.mixinProp, '');
+}
+
+/**
+ * @param {string} cssText
+ * @return {string}
+ */
+function removeCustomPropApply(cssText) {
+  return cssText
+    .replace(RX.mixinApply, '')
+    .replace(RX.varApply, '');
+}
+
+/** @enum {number} */
+const types = {
+  STYLE_RULE: 1,
+  KEYFRAMES_RULE: 7,
+  MEDIA_RULE: 4,
+  MIXIN_RULE: 1000
+}
+/* harmony export (immutable) */ __webpack_exports__["c"] = types;
+
+
+const OPEN_BRACE = '{';
+const CLOSE_BRACE = '}';
+
+// helper regexp's
+const RX = {
+  comments: /\/\*[^*]*\*+([^/*][^*]*\*+)*\//gim,
+  port: /@import[^;]*;/gim,
+  customProp: /(?:^[^;\-\s}]+)?--[^;{}]*?:[^{};]*?(?:[;\n]|$)/gim,
+  mixinProp: /(?:^[^;\-\s}]+)?--[^;{}]*?:[^{};]*?{[^}]*?}(?:[;\n]|$)?/gim,
+  mixinApply: /@apply\s*\(?[^);]*\)?\s*(?:[;\n]|$)?/gim,
+  varApply: /[^;:]*?:[^;]*?var\([^;]*\)(?:[;\n]|$)?/gim,
+  keyframesRule: /^@[^\s]*keyframes/,
+  multipleSpaces: /\s+/g
+}
+
+const VAR_START = '--';
+const MEDIA_START = '@media';
+const AT_START = '@';
+
+
+/***/ }),
+/* 26 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/**
+@license
+Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+*/
+
+const VAR_ASSIGN = /(?:^|[;\s{]\s*)(--[\w-]*?)\s*:\s*(?:((?:'(?:\\'|.)*?'|"(?:\\"|.)*?"|\([^)]*?\)|[^};{])+)|\{([^}]*)\}(?:(?=[;\s}])|$))/gi;
+/* harmony export (immutable) */ __webpack_exports__["c"] = VAR_ASSIGN;
+
+const MIXIN_MATCH = /(?:^|\W+)@apply\s*\(?([^);\n]*)\)?/gi;
+/* harmony export (immutable) */ __webpack_exports__["b"] = MIXIN_MATCH;
+
+const VAR_CONSUMED = /(--[\w-]+)\s*([:,;)]|$)/gi;
+/* unused harmony export VAR_CONSUMED */
+
+const ANIMATION_MATCH = /(animation\s*:)|(animation-name\s*:)/;
+/* unused harmony export ANIMATION_MATCH */
+
+const MEDIA_MATCH = /@media\s(.*)/;
+/* harmony export (immutable) */ __webpack_exports__["a"] = MEDIA_MATCH;
+
+const IS_VAR = /^--/;
+/* unused harmony export IS_VAR */
+
+const BRACKETED = /\{[^}]*\}/g;
+/* unused harmony export BRACKETED */
+
+const HOST_PREFIX = '(?:^|[^.#[:])';
+/* unused harmony export HOST_PREFIX */
+
+const HOST_SUFFIX = '($|[.:[\\s>+~])';
+/* unused harmony export HOST_SUFFIX */
+
+
+
+/***/ }),
+/* 27 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["c"] = updateNativeProperties;
+/* harmony export (immutable) */ __webpack_exports__["b"] = getComputedStyleValue;
+/* harmony export (immutable) */ __webpack_exports__["a"] = detectMixin;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__common_regex_js__ = __webpack_require__(26);
+/**
+@license
+Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+*/
+
+
+
+
+
+/**
+ * @param {Element} element
+ * @param {Object=} properties
+ */
+function updateNativeProperties(element, properties) {
+  // remove previous properties
+  for (let p in properties) {
+    // NOTE: for bc with shim, don't apply null values.
+    if (p === null) {
+      element.style.removeProperty(p);
+    } else {
+      element.style.setProperty(p, properties[p]);
+    }
+  }
+}
+
+/**
+ * @param {Element} element
+ * @param {string} property
+ * @return {string}
+ */
+function getComputedStyleValue(element, property) {
+  /**
+   * @const {string}
+   */
+  const value = window.getComputedStyle(element).getPropertyValue(property);
+  if (!value) {
+    return '';
+  } else {
+    return value.trim();
+  }
+}
+
+/**
+ * return true if `cssText` contains a mixin definition or consumption
+ * @param {string} cssText
+ * @return {boolean}
+ */
+function detectMixin(cssText) {
+  const has = __WEBPACK_IMPORTED_MODULE_0__common_regex_js__["b" /* MIXIN_MATCH */].test(cssText) || __WEBPACK_IMPORTED_MODULE_0__common_regex_js__["c" /* VAR_ASSIGN */].test(cssText);
+  // reset state of the regexes
+  __WEBPACK_IMPORTED_MODULE_0__common_regex_js__["b" /* MIXIN_MATCH */].lastIndex = 0;
+  __WEBPACK_IMPORTED_MODULE_0__common_regex_js__["c" /* VAR_ASSIGN */].lastIndex = 0;
+  return has;
+}
+
+
+/***/ }),
+/* 28 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -410,15 +3148,15 @@ const Element = Object(__WEBPACK_IMPORTED_MODULE_0__lib_mixins_element_mixin_js_
 /* unused harmony export _regLog */
 /* unused harmony export register */
 /* unused harmony export dumpRegistrations */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_boot_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_boot_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__utils_boot_js__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_settings_js__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_mixin_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_case_map_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_style_gather_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_resolve_url_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__elements_dom_module_js__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__property_effects_js__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_settings_js__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_mixin_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_case_map_js__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_style_gather_js__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_resolve_url_js__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__elements_dom_module_js__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__property_effects_js__ = __webpack_require__(30);
 
 
 
@@ -756,7 +3494,7 @@ const ElementMixin = Object(__WEBPACK_IMPORTED_MODULE_2__utils_mixin_js__["a" /*
     // support `include="module-name"`
     let cssText =
       Object(__WEBPACK_IMPORTED_MODULE_4__utils_style_gather_js__["a" /* cssFromModuleImports */])(is) +
-      Object(__WEBPACK_IMPORTED_MODULE_4__utils_style_gather_js__["b" /* cssFromTemplate */])(template, baseURI);
+      Object(__WEBPACK_IMPORTED_MODULE_4__utils_style_gather_js__["c" /* cssFromTemplate */])(template, baseURI);
     if (cssText) {
       let style = document.createElement('style');
       style.textContent = cssText;
@@ -925,7 +3663,7 @@ const ElementMixin = Object(__WEBPACK_IMPORTED_MODULE_2__utils_mixin_js__["a" /*
       }
       super._initializeProperties();
       // set path defaults
-      this.rootPath = __WEBPACK_IMPORTED_MODULE_1__utils_settings_js__["a" /* rootPath */];
+      this.rootPath = __WEBPACK_IMPORTED_MODULE_1__utils_settings_js__["b" /* rootPath */];
       this.importPath = importPath;
       // apply property defaults...
       let p$ = propertyDefaultsForClass(this.constructor);
@@ -1152,112 +3890,14 @@ const updateStyles = function(props) {
 
 
 /***/ }),
-/* 8 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* unused harmony export cssFromModules */
-/* unused harmony export cssFromModule */
-/* harmony export (immutable) */ __webpack_exports__["b"] = cssFromTemplate;
-/* harmony export (immutable) */ __webpack_exports__["a"] = cssFromModuleImports;
-/* unused harmony export _cssFromModuleImports */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__resolve_url_js__ = __webpack_require__(2);
-
-
-const MODULE_STYLE_LINK_SELECTOR = 'link[rel=import][type~=css]';
-const INCLUDE_ATTR = 'include';
-
-function importModule(moduleId) {
-  const /** Polymer.DomModule */ PolymerDomModule = customElements.get('dom-module');
-  if (!PolymerDomModule) {
-    return null;
-  }
-  return PolymerDomModule.import(moduleId);
-}
-
-/** @typedef {{assetpath: string}} */
-let templateWithAssetPath; // eslint-disable-line no-unused-vars
-
-function cssFromModules(moduleIds) {
-  let modules = moduleIds.trim().split(/\s+/);
-  let cssText = '';
-  for (let i=0; i < modules.length; i++) {
-    cssText += cssFromModule(modules[i]);
-  }
-  return cssText;
-}
-
-function cssFromModule(moduleId) {
-  let m = importModule(moduleId);
-  if (m && m._cssText === undefined) {
-    // module imports: <link rel="import" type="css">
-    let cssText = _cssFromModuleImports(m);
-    // include css from the first template in the module
-    let t = m.querySelector('template');
-    if (t) {
-      cssText += cssFromTemplate(t, /** @type {templateWithAssetPath} */(m).assetpath);
-    }
-    m._cssText = cssText || null;
-  }
-  if (!m) {
-    console.warn('Could not find style data in module named', moduleId);
-  }
-  return m && m._cssText || '';
-}
-
-function cssFromTemplate(template, baseURI) {
-  let cssText = '';
-  // if element is a template, get content from its .content
-  let e$ = template.content.querySelectorAll('style');
-  for (let i=0; i < e$.length; i++) {
-    let e = e$[i];
-    // support style sharing by allowing styles to "include"
-    // other dom-modules that contain styling
-    let include = e.getAttribute(INCLUDE_ATTR);
-    if (include) {
-      cssText += cssFromModules(include);
-    }
-    e.parentNode.removeChild(e);
-    cssText += baseURI ?
-      Object(__WEBPACK_IMPORTED_MODULE_0__resolve_url_js__["b" /* resolveCss */])(e.textContent, baseURI) : e.textContent;
-  }
-  return cssText;
-}
-
-function cssFromModuleImports(moduleId) {
-  let m = importModule(moduleId);
-  return m ? _cssFromModuleImports(m) : '';
-}
-
-function _cssFromModuleImports(module) {
-  let cssText = '';
-  let p$ = module.querySelectorAll(MODULE_STYLE_LINK_SELECTOR);
-  for (let i=0; i < p$.length; i++) {
-    let p = p$[i];
-    if (p.import) {
-      let importDoc = p.import;
-      // NOTE: polyfill affordance.
-      // under the HTMLImports polyfill, there will be no 'body',
-      // but the import pseudo-doc can be used directly.
-      let container = importDoc.body ? importDoc.body : importDoc;
-      cssText +=
-        Object(__WEBPACK_IMPORTED_MODULE_0__resolve_url_js__["b" /* resolveCss */])(container.textContent,
-          importDoc.baseURI);
-    }
-  }
-  return cssText;
-}
-
-
-/***/ }),
-/* 9 */
+/* 29 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DomModule; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_boot_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_boot_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__utils_boot_js__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_resolve_url_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_resolve_url_js__ = __webpack_require__(15);
 
 
 
@@ -1381,18 +4021,18 @@ customElements.define('dom-module', DomModule);
 
 
 /***/ }),
-/* 10 */
+/* 30 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_boot_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_boot_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__utils_boot_js__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_mixin_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_path_js__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_case_map_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__property_accessors_js__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__template_stamp_js__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__utils_settings_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_mixin_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_path_js__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_case_map_js__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__property_accessors_js__ = __webpack_require__(76);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__template_stamp_js__ = __webpack_require__(77);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__utils_settings_js__ = __webpack_require__(14);
 
 
 
@@ -1526,7 +4166,7 @@ function runEffects(inst, effects, props, oldProps, hasPaths, extraArgs) {
  */
 function runEffectsForProperty(inst, effects, dedupeId, prop, props, oldProps, hasPaths, extraArgs) {
   let ran = false;
-  let rootProperty = hasPaths ? Object(__WEBPACK_IMPORTED_MODULE_2__utils_path_js__["f" /* root */])(prop) : prop;
+  let rootProperty = hasPaths ? Object(__WEBPACK_IMPORTED_MODULE_2__utils_path_js__["g" /* root */])(prop) : prop;
   let fxs = effects[rootProperty];
   if (fxs) {
     for (let i=0, l=fxs.length, fx; (i<l) && (fx=fxs[i]); i++) {
@@ -1647,7 +4287,7 @@ function runNotifyEffects(inst, notifyProps, props, oldProps, hasPaths) {
  * @private
  */
 function notifyPath(inst, path, props) {
-  let rootProperty = Object(__WEBPACK_IMPORTED_MODULE_2__utils_path_js__["f" /* root */])(path);
+  let rootProperty = Object(__WEBPACK_IMPORTED_MODULE_2__utils_path_js__["g" /* root */])(path);
   if (rootProperty !== path) {
     let eventName = Object(__WEBPACK_IMPORTED_MODULE_3__utils_case_map_js__["camelToDashCase"])(rootProperty) + '-changed';
     dispatchNotifyEvent(inst, eventName, props[path], path);
@@ -1694,7 +4334,7 @@ function dispatchNotifyEvent(inst, eventName, value, path) {
  * @private
  */
 function runNotifyEffect(inst, property, props, oldProps, info, hasPaths) {
-  let rootProperty = hasPaths ? Object(__WEBPACK_IMPORTED_MODULE_2__utils_path_js__["f" /* root */])(property) : property;
+  let rootProperty = hasPaths ? Object(__WEBPACK_IMPORTED_MODULE_2__utils_path_js__["g" /* root */])(property) : property;
   let path = rootProperty != property ? property : null;
   let value = path ? Object(__WEBPACK_IMPORTED_MODULE_2__utils_path_js__["a" /* get */])(inst, path) : inst.__data[property];
   if (path && value === undefined) {
@@ -1724,7 +4364,7 @@ function handleNotification(event, inst, fromProp, toPath, negate) {
   let detail = /** @type {Object} */(event.detail);
   let fromPath = detail && detail.path;
   if (fromPath) {
-    toPath = Object(__WEBPACK_IMPORTED_MODULE_2__utils_path_js__["h" /* translate */])(fromProp, toPath, fromPath);
+    toPath = Object(__WEBPACK_IMPORTED_MODULE_2__utils_path_js__["i" /* translate */])(fromProp, toPath, fromPath);
     value = detail && detail.value;
   } else {
     value = event.target[fromProp];
@@ -1752,8 +4392,8 @@ function handleNotification(event, inst, fromProp, toPath, negate) {
  */
 function runReflectEffect(inst, property, props, oldProps, info) {
   let value = inst.__data[property];
-  if (__WEBPACK_IMPORTED_MODULE_6__utils_settings_js__["b" /* sanitizeDOMValue */]) {
-    value = Object(__WEBPACK_IMPORTED_MODULE_6__utils_settings_js__["b" /* sanitizeDOMValue */])(value, info.attrName, 'attribute', /** @type {Node} */(inst));
+  if (__WEBPACK_IMPORTED_MODULE_6__utils_settings_js__["c" /* sanitizeDOMValue */]) {
+    value = Object(__WEBPACK_IMPORTED_MODULE_6__utils_settings_js__["c" /* sanitizeDOMValue */])(value, info.attrName, 'attribute', /** @type {Node} */(inst));
   }
   inst._propertyToAttribute(property, info.attrName, value);
 }
@@ -1825,10 +4465,10 @@ function computeLinkedPaths(inst, path, value) {
     for (let a in links) {
       let b = links[a];
       if (Object(__WEBPACK_IMPORTED_MODULE_2__utils_path_js__["c" /* isDescendant */])(a, path)) {
-        link = Object(__WEBPACK_IMPORTED_MODULE_2__utils_path_js__["h" /* translate */])(a, b, path);
+        link = Object(__WEBPACK_IMPORTED_MODULE_2__utils_path_js__["i" /* translate */])(a, b, path);
         inst._setPendingPropertyOrPath(link, value, true, true);
       } else if (Object(__WEBPACK_IMPORTED_MODULE_2__utils_path_js__["c" /* isDescendant */])(b, path)) {
-        link = Object(__WEBPACK_IMPORTED_MODULE_2__utils_path_js__["h" /* translate */])(b, a, path);
+        link = Object(__WEBPACK_IMPORTED_MODULE_2__utils_path_js__["i" /* translate */])(b, a, path);
         inst._setPendingPropertyOrPath(link, value, true, true);
       }
     }
@@ -1936,7 +4576,7 @@ function runBindingEffect(inst, path, props, oldProps, info, hasPaths, nodeList)
       (binding.kind == 'property') && !binding.isCompound &&
       node.__dataHasAccessor && node.__dataHasAccessor[binding.target]) {
     let value = props[path];
-    path = Object(__WEBPACK_IMPORTED_MODULE_2__utils_path_js__["h" /* translate */])(part.source, binding.target, path);
+    path = Object(__WEBPACK_IMPORTED_MODULE_2__utils_path_js__["i" /* translate */])(part.source, binding.target, path);
     if (node._setPendingPropertyOrPath(path, value, false, true)) {
       inst._enqueueClient(node);
     }
@@ -1960,8 +4600,8 @@ function runBindingEffect(inst, path, props, oldProps, info, hasPaths, nodeList)
  */
 function applyBindingValue(inst, node, binding, part, value) {
   value = computeBindingValue(node, value, binding, part);
-  if (__WEBPACK_IMPORTED_MODULE_6__utils_settings_js__["b" /* sanitizeDOMValue */]) {
-    value = Object(__WEBPACK_IMPORTED_MODULE_6__utils_settings_js__["b" /* sanitizeDOMValue */])(value, binding.target, binding.kind, node);
+  if (__WEBPACK_IMPORTED_MODULE_6__utils_settings_js__["c" /* sanitizeDOMValue */]) {
+    value = Object(__WEBPACK_IMPORTED_MODULE_6__utils_settings_js__["c" /* sanitizeDOMValue */])(value, binding.target, binding.kind, node);
   }
   if (binding.kind == 'attribute') {
     // Attribute binding
@@ -2313,7 +4953,7 @@ function parseArg(rawArg) {
   }
   // if not literal, look for structured path
   if (!a.literal) {
-    a.rootProperty = Object(__WEBPACK_IMPORTED_MODULE_2__utils_path_js__["f" /* root */])(arg);
+    a.rootProperty = Object(__WEBPACK_IMPORTED_MODULE_2__utils_path_js__["g" /* root */])(arg);
     // detect structured path (has dots)
     a.structured = Object(__WEBPACK_IMPORTED_MODULE_2__utils_path_js__["d" /* isPath */])(arg);
     if (a.structured) {
@@ -2678,7 +5318,7 @@ const PropertyEffects = Object(__WEBPACK_IMPORTED_MODULE_1__utils_mixin_js__["a"
      */
     _setPendingPropertyOrPath(path, value, shouldNotify, isPathNotification) {
       if (isPathNotification ||
-          Object(__WEBPACK_IMPORTED_MODULE_2__utils_path_js__["f" /* root */])(Array.isArray(path) ? path[0] : path) !== path) {
+          Object(__WEBPACK_IMPORTED_MODULE_2__utils_path_js__["g" /* root */])(Array.isArray(path) ? path[0] : path) !== path) {
         // Dirty check changes being set to a path against the actual object,
         // since this is the entry point for paths into the system; from here
         // the only dirty checks are against the `__dataTemp` cache to prevent
@@ -2689,7 +5329,7 @@ const PropertyEffects = Object(__WEBPACK_IMPORTED_MODULE_1__utils_mixin_js__["a"
         // object has already been updated
         if (!isPathNotification) {
           let old = Object(__WEBPACK_IMPORTED_MODULE_2__utils_path_js__["a" /* get */])(this, path);
-          path = /** @type {string} */ (Object(__WEBPACK_IMPORTED_MODULE_2__utils_path_js__["g" /* set */])(this, path, value));
+          path = /** @type {string} */ (Object(__WEBPACK_IMPORTED_MODULE_2__utils_path_js__["h" /* set */])(this, path, value));
           // Use property-accessor's simpler dirty check
           if (!path || !super._shouldPropertyChange(path, value, old)) {
             return false;
@@ -3030,8 +5670,8 @@ const PropertyEffects = Object(__WEBPACK_IMPORTED_MODULE_1__utils_mixin_js__["a"
      * @public
      */
     linkPaths(to, from) {
-      to = Object(__WEBPACK_IMPORTED_MODULE_2__utils_path_js__["e" /* normalize */])(to);
-      from = Object(__WEBPACK_IMPORTED_MODULE_2__utils_path_js__["e" /* normalize */])(from);
+      to = Object(__WEBPACK_IMPORTED_MODULE_2__utils_path_js__["f" /* normalize */])(to);
+      from = Object(__WEBPACK_IMPORTED_MODULE_2__utils_path_js__["f" /* normalize */])(from);
       this.__dataLinkedPaths = this.__dataLinkedPaths || {};
       this.__dataLinkedPaths[to] = from;
     }
@@ -3046,7 +5686,7 @@ const PropertyEffects = Object(__WEBPACK_IMPORTED_MODULE_1__utils_mixin_js__["a"
      * @public
      */
     unlinkPaths(path) {
-      path = Object(__WEBPACK_IMPORTED_MODULE_2__utils_path_js__["e" /* normalize */])(path);
+      path = Object(__WEBPACK_IMPORTED_MODULE_2__utils_path_js__["f" /* normalize */])(path);
       if (this.__dataLinkedPaths) {
         delete this.__dataLinkedPaths[path];
       }
@@ -3132,7 +5772,7 @@ const PropertyEffects = Object(__WEBPACK_IMPORTED_MODULE_1__utils_mixin_js__["a"
     */
     set(path, value, root) {
       if (root) {
-        Object(__WEBPACK_IMPORTED_MODULE_2__utils_path_js__["g" /* set */])(root, path, value);
+        Object(__WEBPACK_IMPORTED_MODULE_2__utils_path_js__["h" /* set */])(root, path, value);
       } else {
         if (!this[TYPES.READ_ONLY] || !this[TYPES.READ_ONLY][/** @type {string} */(path)]) {
           if (this._setPendingPropertyOrPath(path, value, true)) {
@@ -3297,7 +5937,7 @@ const PropertyEffects = Object(__WEBPACK_IMPORTED_MODULE_1__utils_mixin_js__["a"
         propPath = info.path;
       } else if (Array.isArray(path)) {
         // Normalize path if needed
-        propPath = Object(__WEBPACK_IMPORTED_MODULE_2__utils_path_js__["e" /* normalize */])(path);
+        propPath = Object(__WEBPACK_IMPORTED_MODULE_2__utils_path_js__["f" /* normalize */])(path);
       } else {
         propPath = /** @type{string} */(path);
       }
@@ -4035,132 +6675,7851 @@ let hostStack = {
 
 
 /***/ }),
-/* 11 */
+/* 31 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (immutable) */ __webpack_exports__["d"] = isPath;
-/* harmony export (immutable) */ __webpack_exports__["f"] = root;
-/* harmony export (immutable) */ __webpack_exports__["b"] = isAncestor;
-/* harmony export (immutable) */ __webpack_exports__["c"] = isDescendant;
-/* harmony export (immutable) */ __webpack_exports__["h"] = translate;
-/* unused harmony export matches */
-/* harmony export (immutable) */ __webpack_exports__["e"] = normalize;
-/* unused harmony export split */
-/* harmony export (immutable) */ __webpack_exports__["a"] = get;
-/* harmony export (immutable) */ __webpack_exports__["g"] = set;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js__ = __webpack_require__(0);
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony export (immutable) */ __webpack_exports__["deepTargetFind"] = deepTargetFind;
+/* harmony export (immutable) */ __webpack_exports__["_findOriginalTarget"] = _findOriginalTarget;
+/* harmony export (immutable) */ __webpack_exports__["_handleNative"] = _handleNative;
+/* harmony export (immutable) */ __webpack_exports__["_handleTouchAction"] = _handleTouchAction;
+/* harmony export (immutable) */ __webpack_exports__["addListener"] = addListener;
+/* harmony export (immutable) */ __webpack_exports__["removeListener"] = removeListener;
+/* harmony export (immutable) */ __webpack_exports__["_add"] = _add;
+/* harmony export (immutable) */ __webpack_exports__["_remove"] = _remove;
+/* harmony export (immutable) */ __webpack_exports__["register"] = register;
+/* harmony export (immutable) */ __webpack_exports__["_findRecognizerByEvent"] = _findRecognizerByEvent;
+/* harmony export (immutable) */ __webpack_exports__["setTouchAction"] = setTouchAction;
+/* harmony export (immutable) */ __webpack_exports__["_fire"] = _fire;
+/* harmony export (immutable) */ __webpack_exports__["prevent"] = prevent;
+/* harmony export (immutable) */ __webpack_exports__["resetMouseCanceller"] = resetMouseCanceller;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__boot_js__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__async_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__debounce_js__ = __webpack_require__(11);
 
 
-function isPath(path) {
-  return path.indexOf('.') >= 0;
-}
 
-function root(path) {
-  let dotIndex = path.indexOf('.');
-  if (dotIndex === -1) {
-    return path;
+
+// detect native touch action support
+let HAS_NATIVE_TA = typeof document.head.style.touchAction === 'string';
+let GESTURE_KEY = '__polymerGestures';
+let HANDLED_OBJ = '__polymerGesturesHandled';
+let TOUCH_ACTION = '__polymerGesturesTouchAction';
+// radius for tap and track
+let TAP_DISTANCE = 25;
+let TRACK_DISTANCE = 5;
+// number of last N track positions to keep
+let TRACK_LENGTH = 2;
+
+// Disabling "mouse" handlers for 2500ms is enough
+let MOUSE_TIMEOUT = 2500;
+let MOUSE_EVENTS = ['mousedown', 'mousemove', 'mouseup', 'click'];
+// an array of bitmask values for mapping MouseEvent.which to MouseEvent.buttons
+let MOUSE_WHICH_TO_BUTTONS = [0, 1, 4, 2];
+let MOUSE_HAS_BUTTONS = (function() {
+  try {
+    return new MouseEvent('test', {buttons: 1}).buttons === 1;
+  } catch (e) {
+    return false;
   }
-  return path.slice(0, dotIndex);
-}
+})();
 
-function isAncestor(base, path) {
-  //     base.startsWith(path + '.');
-  return base.indexOf(path + '.') === 0;
-}
+/* eslint no-empty: ["error", { "allowEmptyCatch": true }] */
+// check for passive event listeners
+let SUPPORTS_PASSIVE = false;
+(function() {
+  try {
+    let opts = Object.defineProperty({}, 'passive', {get: function() {SUPPORTS_PASSIVE = true;}});
+    window.addEventListener('test', null, opts);
+    window.removeEventListener('test', null, opts);
+  } catch(e) {}
+})();
 
-function isDescendant(base, path) {
-  //     path.startsWith(base + '.');
-  return path.indexOf(base + '.') === 0;
-}
+// Check for touch-only devices
+let IS_TOUCH_ONLY = navigator.userAgent.match(/iP(?:[oa]d|hone)|Android/);
 
-function translate(base, newBase, path) {
-  return newBase + path.slice(base.length);
-}
+let GestureRecognizer = function(){}; // eslint-disable-line no-unused-vars
+GestureRecognizer.prototype.reset = function(){};
+/** @type {function(MouseEvent) | undefined} */
+GestureRecognizer.prototype.mousedown;
+/** @type {(function(MouseEvent) | undefined)} */
+GestureRecognizer.prototype.mousemove;
+/** @type {(function(MouseEvent) | undefined)} */
+GestureRecognizer.prototype.mouseup;
+/** @type {(function(TouchEvent) | undefined)} */
+GestureRecognizer.prototype.touchstart;
+/** @type {(function(TouchEvent) | undefined)} */
+GestureRecognizer.prototype.touchmove;
+/** @type {(function(TouchEvent) | undefined)} */
+GestureRecognizer.prototype.touchend;
+/** @type {(function(MouseEvent) | undefined)} */
+GestureRecognizer.prototype.click;
 
-function matches(base, path) {
-  return (base === path) ||
-         isAncestor(base, path) ||
-         isDescendant(base, path);
-}
-
-function normalize(path) {
-  if (Array.isArray(path)) {
-    let parts = [];
-    for (let i=0; i<path.length; i++) {
-      let args = path[i].toString().split('.');
-      for (let j=0; j<args.length; j++) {
-        parts.push(args[j]);
+// touch will make synthetic mouse events
+// `preventDefault` on touchend will cancel them,
+// but this breaks `<input>` focus and link clicks
+// disable mouse handlers for MOUSE_TIMEOUT ms after
+// a touchend to ignore synthetic mouse events
+let mouseCanceller = function(mouseEvent) {
+  // Check for sourceCapabilities, used to distinguish synthetic events
+  // if mouseEvent did not come from a device that fires touch events,
+  // it was made by a real mouse and should be counted
+  // http://wicg.github.io/InputDeviceCapabilities/#dom-inputdevicecapabilities-firestouchevents
+  let sc = mouseEvent.sourceCapabilities;
+  if (sc && !sc.firesTouchEvents) {
+    return;
+  }
+  // skip synthetic mouse events
+  mouseEvent[HANDLED_OBJ] = {skip: true};
+  // disable "ghost clicks"
+  if (mouseEvent.type === 'click') {
+    let path = mouseEvent.composedPath && mouseEvent.composedPath();
+    if (path) {
+      for (let i = 0; i < path.length; i++) {
+        if (path[i] === POINTERSTATE.mouse.target) {
+          return;
+        }
       }
     }
-    return parts.join('.');
-  } else {
-    return path;
+    mouseEvent.preventDefault();
+    mouseEvent.stopPropagation();
   }
-}
+};
 
-function split(path) {
-  if (Array.isArray(path)) {
-    return normalize(path).split('.');
-  }
-  return path.toString().split('.');
-}
-
-function get(root, path, info) {
-  let prop = root;
-  let parts = split(path);
-  // Loop over path parts[0..n-1] and dereference
-  for (let i=0; i<parts.length; i++) {
-    if (!prop) {
-      return;
+/**
+ * @param {boolean=} setup True to add, false to remove.
+ */
+function setupTeardownMouseCanceller(setup) {
+  let events = IS_TOUCH_ONLY ? ['click'] : MOUSE_EVENTS;
+  for (let i = 0, en; i < events.length; i++) {
+    en = events[i];
+    if (setup) {
+      document.addEventListener(en, mouseCanceller, true);
+    } else {
+      document.removeEventListener(en, mouseCanceller, true);
     }
-    let part = parts[i];
-    prop = prop[part];
   }
-  if (info) {
-    info.path = parts.join('.');
-  }
-  return prop;
 }
 
-function set(root, path, value) {
-  let prop = root;
-  let parts = split(path);
-  let last = parts[parts.length-1];
-  if (parts.length > 1) {
-    // Loop over path parts[0..n-2] and dereference
-    for (let i=0; i<parts.length-1; i++) {
-      let part = parts[i];
-      prop = prop[part];
-      if (!prop) {
+function ignoreMouse(e) {
+  if (!POINTERSTATE.mouse.mouseIgnoreJob) {
+    setupTeardownMouseCanceller(true);
+  }
+  let unset = function() {
+    setupTeardownMouseCanceller();
+    POINTERSTATE.mouse.target = null;
+    POINTERSTATE.mouse.mouseIgnoreJob = null;
+  };
+  POINTERSTATE.mouse.target = e.composedPath()[0];
+  POINTERSTATE.mouse.mouseIgnoreJob = __WEBPACK_IMPORTED_MODULE_2__debounce_js__["Debouncer"].debounce(
+        POINTERSTATE.mouse.mouseIgnoreJob
+      , __WEBPACK_IMPORTED_MODULE_1__async_js__["timeOut"].after(MOUSE_TIMEOUT)
+      , unset);
+}
+
+/**
+ * @param {MouseEvent} ev event to test for left mouse button down
+ * @return {boolean} has left mouse button down
+ */
+function hasLeftMouseButton(ev) {
+  let type = ev.type;
+  // exit early if the event is not a mouse event
+  if (MOUSE_EVENTS.indexOf(type) === -1) {
+    return false;
+  }
+  // ev.button is not reliable for mousemove (0 is overloaded as both left button and no buttons)
+  // instead we use ev.buttons (bitmask of buttons) or fall back to ev.which (deprecated, 0 for no buttons, 1 for left button)
+  if (type === 'mousemove') {
+    // allow undefined for testing events
+    let buttons = ev.buttons === undefined ? 1 : ev.buttons;
+    if ((ev instanceof window.MouseEvent) && !MOUSE_HAS_BUTTONS) {
+      buttons = MOUSE_WHICH_TO_BUTTONS[ev.which] || 0;
+    }
+    // buttons is a bitmask, check that the left button bit is set (1)
+    return Boolean(buttons & 1);
+  } else {
+    // allow undefined for testing events
+    let button = ev.button === undefined ? 0 : ev.button;
+    // ev.button is 0 in mousedown/mouseup/click for left button activation
+    return button === 0;
+  }
+}
+
+function isSyntheticClick(ev) {
+  if (ev.type === 'click') {
+    // ev.detail is 0 for HTMLElement.click in most browsers
+    if (ev.detail === 0) {
+      return true;
+    }
+    // in the worst case, check that the x/y position of the click is within
+    // the bounding box of the target of the event
+    // Thanks IE 10 >:(
+    let t = _findOriginalTarget(ev);
+    // make sure the target of the event is an element so we can use getBoundingClientRect,
+    // if not, just assume it is a synthetic click
+    if (!t.nodeType || /** @type {Element} */(t).nodeType !== Node.ELEMENT_NODE) {
+      return true;
+    }
+    let bcr = /** @type {Element} */(t).getBoundingClientRect();
+    // use page x/y to account for scrolling
+    let x = ev.pageX, y = ev.pageY;
+    // ev is a synthetic click if the position is outside the bounding box of the target
+    return !((x >= bcr.left && x <= bcr.right) && (y >= bcr.top && y <= bcr.bottom));
+  }
+  return false;
+}
+
+let POINTERSTATE = {
+  mouse: {
+    target: null,
+    mouseIgnoreJob: null
+  },
+  touch: {
+    x: 0,
+    y: 0,
+    id: -1,
+    scrollDecided: false
+  }
+};
+
+function firstTouchAction(ev) {
+  let ta = 'auto';
+  let path = ev.composedPath && ev.composedPath();
+  if (path) {
+    for (let i = 0, n; i < path.length; i++) {
+      n = path[i];
+      if (n[TOUCH_ACTION]) {
+        ta = n[TOUCH_ACTION];
+        break;
+      }
+    }
+  }
+  return ta;
+}
+
+function trackDocument(stateObj, movefn, upfn) {
+  stateObj.movefn = movefn;
+  stateObj.upfn = upfn;
+  document.addEventListener('mousemove', movefn);
+  document.addEventListener('mouseup', upfn);
+}
+
+function untrackDocument(stateObj) {
+  document.removeEventListener('mousemove', stateObj.movefn);
+  document.removeEventListener('mouseup', stateObj.upfn);
+  stateObj.movefn = null;
+  stateObj.upfn = null;
+}
+
+// use a document-wide touchend listener to start the ghost-click prevention mechanism
+// Use passive event listeners, if supported, to not affect scrolling performance
+document.addEventListener('touchend', ignoreMouse, SUPPORTS_PASSIVE ? {passive: true} : false);
+
+const gestures = {};
+/* harmony export (immutable) */ __webpack_exports__["gestures"] = gestures;
+
+const recognizers = [];
+/* harmony export (immutable) */ __webpack_exports__["recognizers"] = recognizers;
+
+
+function deepTargetFind(x, y) {
+  let node = document.elementFromPoint(x, y);
+  let next = node;
+  // this code path is only taken when native ShadowDOM is used
+  // if there is a shadowroot, it may have a node at x/y
+  // if there is not a shadowroot, exit the loop
+  while (next && next.shadowRoot && !window.ShadyDOM) {
+    // if there is a node at x/y in the shadowroot, look deeper
+    let oldNext = next;
+    next = next.shadowRoot.elementFromPoint(x, y);
+    // on Safari, elementFromPoint may return the shadowRoot host
+    if (oldNext === next) {
+      break;
+    }
+    if (next) {
+      node = next;
+    }
+  }
+  return node;
+}
+
+function _findOriginalTarget(ev) {
+  // shadowdom
+  if (ev.composedPath) {
+    return /** @type {EventTarget} */(ev.composedPath()[0]);
+  }
+  // shadydom
+  return ev.target;
+}
+
+function _handleNative(ev) {
+  let handled;
+  let type = ev.type;
+  let node = ev.currentTarget;
+  let gobj = node[GESTURE_KEY];
+  if (!gobj) {
+    return;
+  }
+  let gs = gobj[type];
+  if (!gs) {
+    return;
+  }
+  if (!ev[HANDLED_OBJ]) {
+    ev[HANDLED_OBJ] = {};
+    if (type.slice(0, 5) === 'touch') {
+      ev = /** @type {TouchEvent} */(ev); // eslint-disable-line no-self-assign
+      let t = ev.changedTouches[0];
+      if (type === 'touchstart') {
+        // only handle the first finger
+        if (ev.touches.length === 1) {
+          POINTERSTATE.touch.id = t.identifier;
+        }
+      }
+      if (POINTERSTATE.touch.id !== t.identifier) {
         return;
       }
+      if (!HAS_NATIVE_TA) {
+        if (type === 'touchstart' || type === 'touchmove') {
+          _handleTouchAction(ev);
+        }
+      }
     }
-    // Set value to object at end of path
-    prop[last] = value;
-  } else {
-    // Simple property set
-    prop[path] = value;
   }
-  return parts.join('.');
+  handled = ev[HANDLED_OBJ];
+  // used to ignore synthetic mouse events
+  if (handled.skip) {
+    return;
+  }
+  // reset recognizer state
+  for (let i = 0, r; i < recognizers.length; i++) {
+    r = recognizers[i];
+    if (gs[r.name] && !handled[r.name]) {
+      if (r.flow && r.flow.start.indexOf(ev.type) > -1 && r.reset) {
+        r.reset();
+      }
+    }
+  }
+  // enforce gesture recognizer order
+  for (let i = 0, r; i < recognizers.length; i++) {
+    r = recognizers[i];
+    if (gs[r.name] && !handled[r.name]) {
+      handled[r.name] = true;
+      r[type](ev);
+    }
+  }
 }
 
-const isDeep = isPath;
-/* unused harmony export isDeep */
+function _handleTouchAction(ev) {
+  let t = ev.changedTouches[0];
+  let type = ev.type;
+  if (type === 'touchstart') {
+    POINTERSTATE.touch.x = t.clientX;
+    POINTERSTATE.touch.y = t.clientY;
+    POINTERSTATE.touch.scrollDecided = false;
+  } else if (type === 'touchmove') {
+    if (POINTERSTATE.touch.scrollDecided) {
+      return;
+    }
+    POINTERSTATE.touch.scrollDecided = true;
+    let ta = firstTouchAction(ev);
+    let prevent = false;
+    let dx = Math.abs(POINTERSTATE.touch.x - t.clientX);
+    let dy = Math.abs(POINTERSTATE.touch.y - t.clientY);
+    if (!ev.cancelable) {
+      // scrolling is happening
+    } else if (ta === 'none') {
+      prevent = true;
+    } else if (ta === 'pan-x') {
+      prevent = dy > dx;
+    } else if (ta === 'pan-y') {
+      prevent = dx > dy;
+    }
+    if (prevent) {
+      ev.preventDefault();
+    } else {
+      prevent('track');
+    }
+  }
+}
+
+function addListener(node, evType, handler) {
+  if (gestures[evType]) {
+    _add(node, evType, handler);
+    return true;
+  }
+  return false;
+}
+
+function removeListener(node, evType, handler) {
+  if (gestures[evType]) {
+    _remove(node, evType, handler);
+    return true;
+  }
+  return false;
+}
+
+function _add(node, evType, handler) {
+  let recognizer = gestures[evType];
+  let deps = recognizer.deps;
+  let name = recognizer.name;
+  let gobj = node[GESTURE_KEY];
+  if (!gobj) {
+    node[GESTURE_KEY] = gobj = {};
+  }
+  for (let i = 0, dep, gd; i < deps.length; i++) {
+    dep = deps[i];
+    // don't add mouse handlers on iOS because they cause gray selection overlays
+    if (IS_TOUCH_ONLY && MOUSE_EVENTS.indexOf(dep) > -1 && dep !== 'click') {
+      continue;
+    }
+    gd = gobj[dep];
+    if (!gd) {
+      gobj[dep] = gd = {_count: 0};
+    }
+    if (gd._count === 0) {
+      node.addEventListener(dep, _handleNative);
+    }
+    gd[name] = (gd[name] || 0) + 1;
+    gd._count = (gd._count || 0) + 1;
+  }
+  node.addEventListener(evType, handler);
+  if (recognizer.touchAction) {
+    setTouchAction(node, recognizer.touchAction);
+  }
+}
+
+function _remove(node, evType, handler) {
+  let recognizer = gestures[evType];
+  let deps = recognizer.deps;
+  let name = recognizer.name;
+  let gobj = node[GESTURE_KEY];
+  if (gobj) {
+    for (let i = 0, dep, gd; i < deps.length; i++) {
+      dep = deps[i];
+      gd = gobj[dep];
+      if (gd && gd[name]) {
+        gd[name] = (gd[name] || 1) - 1;
+        gd._count = (gd._count || 1) - 1;
+        if (gd._count === 0) {
+          node.removeEventListener(dep, _handleNative);
+        }
+      }
+    }
+  }
+  node.removeEventListener(evType, handler);
+}
+
+function register(recog) {
+  recognizers.push(recog);
+  for (let i = 0; i < recog.emits.length; i++) {
+    gestures[recog.emits[i]] = recog;
+  }
+}
+
+function _findRecognizerByEvent(evName) {
+  for (let i = 0, r; i < recognizers.length; i++) {
+    r = recognizers[i];
+    for (let j = 0, n; j < r.emits.length; j++) {
+      n = r.emits[j];
+      if (n === evName) {
+        return r;
+      }
+    }
+  }
+  return null;
+}
+
+function setTouchAction(node, value) {
+  if (HAS_NATIVE_TA) {
+    node.style.touchAction = value;
+  }
+  node[TOUCH_ACTION] = value;
+}
+
+function _fire(target, type, detail) {
+  let ev = new Event(type, { bubbles: true, cancelable: true, composed: true });
+  ev.detail = detail;
+  target.dispatchEvent(ev);
+  // forward `preventDefault` in a clean way
+  if (ev.defaultPrevented) {
+    let preventer = detail.preventer || detail.sourceEvent;
+    if (preventer && preventer.preventDefault) {
+      preventer.preventDefault();
+    }
+  }
+}
+
+function prevent(evName) {
+  let recognizer = _findRecognizerByEvent(evName);
+  if (recognizer.info) {
+    recognizer.info.prevent = true;
+  }
+}
+
+function resetMouseCanceller() {
+  if (POINTERSTATE.mouse.mouseIgnoreJob) {
+    POINTERSTATE.mouse.mouseIgnoreJob.flush();
+  }
+}
+
+/* eslint-disable valid-jsdoc */
+
+register({
+  name: 'downup',
+  deps: ['mousedown', 'touchstart', 'touchend'],
+  flow: {
+    start: ['mousedown', 'touchstart'],
+    end: ['mouseup', 'touchend']
+  },
+  emits: ['down', 'up'],
+
+  info: {
+    movefn: null,
+    upfn: null
+  },
+
+  /** @this {GestureRecognizer} */
+  reset: function() {
+    untrackDocument(this.info);
+  },
+
+  /**
+   * @this {GestureRecognizer}
+   * @param {MouseEvent} e
+   */
+  mousedown: function(e) {
+    if (!hasLeftMouseButton(e)) {
+      return;
+    }
+    let t = _findOriginalTarget(e);
+    let self = this;
+    let movefn = function movefn(e) {
+      if (!hasLeftMouseButton(e)) {
+        self._fire('up', t, e);
+        untrackDocument(self.info);
+      }
+    };
+    let upfn = function upfn(e) {
+      if (hasLeftMouseButton(e)) {
+        self._fire('up', t, e);
+      }
+      untrackDocument(self.info);
+    };
+    trackDocument(this.info, movefn, upfn);
+    this._fire('down', t, e);
+  },
+  /**
+   * @this {GestureRecognizer}
+   * @param {TouchEvent} e
+   */
+  touchstart: function(e) {
+    this._fire('down', _findOriginalTarget(e), e.changedTouches[0], e);
+  },
+  /**
+   * @this {GestureRecognizer}
+   * @param {TouchEvent} e
+   */
+  touchend: function(e) {
+    this._fire('up', _findOriginalTarget(e), e.changedTouches[0], e);
+  },
+  /**
+   * @param {string} type
+   * @param {EventTarget} target
+   * @param {Event} event
+   * @param {Function} preventer
+   */
+  _fire: function(type, target, event, preventer) {
+    _fire(target, type, {
+      x: event.clientX,
+      y: event.clientY,
+      sourceEvent: event,
+      preventer: preventer,
+      prevent: function(e) {
+        return prevent(e);
+      }
+    });
+  }
+});
+
+register({
+  name: 'track',
+  touchAction: 'none',
+  deps: ['mousedown', 'touchstart', 'touchmove', 'touchend'],
+  flow: {
+    start: ['mousedown', 'touchstart'],
+    end: ['mouseup', 'touchend']
+  },
+  emits: ['track'],
+
+  info: {
+    x: 0,
+    y: 0,
+    state: 'start',
+    started: false,
+    moves: [],
+    /** @this {GestureRecognizer} */
+    addMove: function(move) {
+      if (this.moves.length > TRACK_LENGTH) {
+        this.moves.shift();
+      }
+      this.moves.push(move);
+    },
+    movefn: null,
+    upfn: null,
+    prevent: false
+  },
+
+  /** @this {GestureRecognizer} */
+  reset: function() {
+    this.info.state = 'start';
+    this.info.started = false;
+    this.info.moves = [];
+    this.info.x = 0;
+    this.info.y = 0;
+    this.info.prevent = false;
+    untrackDocument(this.info);
+  },
+
+  /**
+   * @this {GestureRecognizer}
+   * @param {number} x
+   * @param {number} y
+   * @return {boolean}
+   */
+  hasMovedEnough: function(x, y) {
+    if (this.info.prevent) {
+      return false;
+    }
+    if (this.info.started) {
+      return true;
+    }
+    let dx = Math.abs(this.info.x - x);
+    let dy = Math.abs(this.info.y - y);
+    return (dx >= TRACK_DISTANCE || dy >= TRACK_DISTANCE);
+  },
+  /**
+   * @this {GestureRecognizer}
+   * @param {MouseEvent} e
+   */
+  mousedown: function(e) {
+    if (!hasLeftMouseButton(e)) {
+      return;
+    }
+    let t = _findOriginalTarget(e);
+    let self = this;
+    let movefn = function movefn(e) {
+      let x = e.clientX, y = e.clientY;
+      if (self.hasMovedEnough(x, y)) {
+        // first move is 'start', subsequent moves are 'move', mouseup is 'end'
+        self.info.state = self.info.started ? (e.type === 'mouseup' ? 'end' : 'track') : 'start';
+        if (self.info.state === 'start') {
+          // if and only if tracking, always prevent tap
+          prevent('tap');
+        }
+        self.info.addMove({x: x, y: y});
+        if (!hasLeftMouseButton(e)) {
+          // always _fire "end"
+          self.info.state = 'end';
+          untrackDocument(self.info);
+        }
+        self._fire(t, e);
+        self.info.started = true;
+      }
+    };
+    let upfn = function upfn(e) {
+      if (self.info.started) {
+        movefn(e);
+      }
+
+      // remove the temporary listeners
+      untrackDocument(self.info);
+    };
+    // add temporary document listeners as mouse retargets
+    trackDocument(this.info, movefn, upfn);
+    this.info.x = e.clientX;
+    this.info.y = e.clientY;
+  },
+  /**
+   * @this {GestureRecognizer}
+   * @param {TouchEvent} e
+   */
+  touchstart: function(e) {
+    let ct = e.changedTouches[0];
+    this.info.x = ct.clientX;
+    this.info.y = ct.clientY;
+  },
+  /**
+   * @this {GestureRecognizer}
+   * @param {TouchEvent} e
+   */
+  touchmove: function(e) {
+    let t = _findOriginalTarget(e);
+    let ct = e.changedTouches[0];
+    let x = ct.clientX, y = ct.clientY;
+    if (this.hasMovedEnough(x, y)) {
+      if (this.info.state === 'start') {
+        // if and only if tracking, always prevent tap
+        prevent('tap');
+      }
+      this.info.addMove({x: x, y: y});
+      this._fire(t, ct);
+      this.info.state = 'track';
+      this.info.started = true;
+    }
+  },
+  /**
+   * @this {GestureRecognizer}
+   * @param {TouchEvent} e
+   */
+  touchend: function(e) {
+    let t = _findOriginalTarget(e);
+    let ct = e.changedTouches[0];
+    // only trackend if track was started and not aborted
+    if (this.info.started) {
+      // reset started state on up
+      this.info.state = 'end';
+      this.info.addMove({x: ct.clientX, y: ct.clientY});
+      this._fire(t, ct, e);
+    }
+  },
+
+  /**
+   * @this {GestureRecognizer}
+   * @param {EventTarget} target
+   * @param {Touch} touch
+   */
+  _fire: function(target, touch) {
+    let secondlast = this.info.moves[this.info.moves.length - 2];
+    let lastmove = this.info.moves[this.info.moves.length - 1];
+    let dx = lastmove.x - this.info.x;
+    let dy = lastmove.y - this.info.y;
+    let ddx, ddy = 0;
+    if (secondlast) {
+      ddx = lastmove.x - secondlast.x;
+      ddy = lastmove.y - secondlast.y;
+    }
+    _fire(target, 'track', {
+      state: this.info.state,
+      x: touch.clientX,
+      y: touch.clientY,
+      dx: dx,
+      dy: dy,
+      ddx: ddx,
+      ddy: ddy,
+      sourceEvent: touch,
+      hover: function() {
+        return deepTargetFind(touch.clientX, touch.clientY);
+      }
+    });
+  }
+
+});
+
+register({
+  name: 'tap',
+  deps: ['mousedown', 'click', 'touchstart', 'touchend'],
+  flow: {
+    start: ['mousedown', 'touchstart'],
+    end: ['click', 'touchend']
+  },
+  emits: ['tap'],
+  info: {
+    x: NaN,
+    y: NaN,
+    prevent: false
+  },
+  /** @this {GestureRecognizer} */
+  reset: function() {
+    this.info.x = NaN;
+    this.info.y = NaN;
+    this.info.prevent = false;
+  },
+  /** @this {GestureRecognizer} */
+  save: function(e) {
+    this.info.x = e.clientX;
+    this.info.y = e.clientY;
+  },
+  /**
+   * @this {GestureRecognizer}
+   * @param {MouseEvent} e
+   */
+  mousedown: function(e) {
+    if (hasLeftMouseButton(e)) {
+      this.save(e);
+    }
+  },
+  /**
+   * @this {GestureRecognizer}
+   * @param {MouseEvent} e
+   */
+  click: function(e) {
+    if (hasLeftMouseButton(e)) {
+      this.forward(e);
+    }
+  },
+  /**
+   * @this {GestureRecognizer}
+   * @param {TouchEvent} e
+   */
+  touchstart: function(e) {
+    this.save(e.changedTouches[0], e);
+  },
+  /**
+   * @this {GestureRecognizer}
+   * @param {TouchEvent} e
+   */
+  touchend: function(e) {
+    this.forward(e.changedTouches[0], e);
+  },
+  /**
+   * @this {GestureRecognizer}
+   * @param {Event | Touch} e
+   * @param {Event=} preventer
+   */
+  forward: function(e, preventer) {
+    let dx = Math.abs(e.clientX - this.info.x);
+    let dy = Math.abs(e.clientY - this.info.y);
+    // find original target from `preventer` for TouchEvents, or `e` for MouseEvents
+    let t = _findOriginalTarget((preventer || e));
+    // dx,dy can be NaN if `click` has been simulated and there was no `down` for `start`
+    if (isNaN(dx) || isNaN(dy) || (dx <= TAP_DISTANCE && dy <= TAP_DISTANCE) || isSyntheticClick(e)) {
+      // prevent taps from being generated if an event has canceled them
+      if (!this.info.prevent) {
+        _fire(t, 'tap', {
+          x: e.clientX,
+          y: e.clientY,
+          sourceEvent: e,
+          preventer: preventer
+        });
+      }
+    }
+  }
+});
+
+const findOriginalTarget = _findOriginalTarget;
+/* harmony export (immutable) */ __webpack_exports__["findOriginalTarget"] = findOriginalTarget;
+
+const add = addListener;
+/* harmony export (immutable) */ __webpack_exports__["add"] = add;
+
+const remove = removeListener;
+/* harmony export (immutable) */ __webpack_exports__["remove"] = remove;
 
 
 
 /***/ }),
-/* 12 */
+/* 32 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_boot_js__ = __webpack_require__(0);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return Templatize; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TemplateInstanceBase; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__boot_js__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mixins_property_effects_js__ = __webpack_require__(30);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__mixins_mutable_data_js__ = __webpack_require__(18);
+
+
+
+
+// Base class for HTMLTemplateElement extension that has property effects
+// machinery for propagating host properties to children. This is an ES5
+// class only because Babel (incorrectly) requires super() in the class
+// constructor even though no `this` is used and it returns an instance.
+let newInstance = null;
+/**
+ * @constructor
+ * @extends {HTMLTemplateElement}
+ */
+function HTMLTemplateElementExtension() { return newInstance; }
+HTMLTemplateElementExtension.prototype = Object.create(HTMLTemplateElement.prototype, {
+  constructor: {
+    value: HTMLTemplateElementExtension,
+    writable: true
+  }
+});
+/**
+ * @constructor
+ * @implements {Polymer_PropertyEffects}
+ * @extends {HTMLTemplateElementExtension}
+ */
+const DataTemplate = Object(__WEBPACK_IMPORTED_MODULE_1__mixins_property_effects_js__["a" /* PropertyEffects */])(HTMLTemplateElementExtension);
+/**
+ * @constructor
+ * @implements {Polymer_MutableData}
+ * @extends {DataTemplate}
+ */
+const MutableDataTemplate = Object(__WEBPACK_IMPORTED_MODULE_2__mixins_mutable_data_js__["a" /* MutableData */])(DataTemplate);
+
+// Applies a DataTemplate subclass to a <template> instance
+function upgradeTemplate(template, constructor) {
+  newInstance = template;
+  Object.setPrototypeOf(template, constructor.prototype);
+  new constructor();
+  newInstance = null;
+}
+
+// Base class for TemplateInstance's
+/**
+ * @constructor
+ * @implements {Polymer_PropertyEffects}
+ */
+const base = Object(__WEBPACK_IMPORTED_MODULE_1__mixins_property_effects_js__["a" /* PropertyEffects */])(class {});
+
+/**
+ * @polymer
+ * @customElement
+ * @appliesMixin Polymer.PropertyEffects
+ * @unrestricted
+ */
+class TemplateInstanceBase extends base {
+  constructor(props) {
+    super();
+    this._configureProperties(props);
+    this.root = this._stampTemplate(this.__dataHost);
+    // Save list of stamped children
+    let children = this.children = [];
+    for (let n = this.root.firstChild; n; n=n.nextSibling) {
+      children.push(n);
+      n.__templatizeInstance = this;
+    }
+    if (this.__templatizeOwner.__hideTemplateChildren__) {
+      this._showHideChildren(true);
+    }
+    // Flush props only when props are passed if instance props exist
+    // or when there isn't instance props.
+    let options = this.__templatizeOptions;
+    if ((props && options.instanceProps) || !options.instanceProps) {
+      this._enableProperties();
+    }
+  }
+  /**
+   * Configure the given `props` by calling `_setPendingProperty`. Also
+   * sets any properties stored in `__hostProps`.
+   * @private
+   * @param {Object} props Object of property name-value pairs to set.
+   */
+  _configureProperties(props) {
+    let options = this.__templatizeOptions;
+    if (props) {
+      for (let iprop in options.instanceProps) {
+        if (iprop in props) {
+          this._setPendingProperty(iprop, props[iprop]);
+        }
+      }
+    }
+    for (let hprop in this.__hostProps) {
+      this._setPendingProperty(hprop, this.__dataHost['_host_' + hprop]);
+    }
+  }
+  /**
+   * Forwards a host property to this instance.  This method should be
+   * called on instances from the `options.forwardHostProp` callback
+   * to propagate changes of host properties to each instance.
+   *
+   * Note this method enqueues the change, which are flushed as a batch.
+   *
+   * @param {string} prop Property or path name
+   * @param {*} value Value of the property to forward
+   */
+  forwardHostProp(prop, value) {
+    if (this._setPendingPropertyOrPath(prop, value, false, true)) {
+      this.__dataHost._enqueueClient(this);
+    }
+  }
+  /**
+   * @override
+   */
+  _addEventListenerToNode(node, eventName, handler) {
+    if (this._methodHost && this.__templatizeOptions.parentModel) {
+      // If this instance should be considered a parent model, decorate
+      // events this template instance as `model`
+      this._methodHost._addEventListenerToNode(node, eventName, (e) => {
+        e.model = this;
+        handler(e);
+      });
+    } else {
+      // Otherwise delegate to the template's host (which could be)
+      // another template instance
+      let templateHost = this.__dataHost.__dataHost;
+      if (templateHost) {
+        templateHost._addEventListenerToNode(node, eventName, handler);
+      }
+    }
+  }
+  /**
+   * Shows or hides the template instance top level child elements. For
+   * text nodes, `textContent` is removed while "hidden" and replaced when
+   * "shown."
+   * @param {boolean} hide Set to true to hide the children;
+   * set to false to show them.
+   * @protected
+   */
+  _showHideChildren(hide) {
+    let c = this.children;
+    for (let i=0; i<c.length; i++) {
+      let n = c[i];
+      // Ignore non-changes
+      if (Boolean(hide) != Boolean(n.__hideTemplateChildren__)) {
+        if (n.nodeType === Node.TEXT_NODE) {
+          if (hide) {
+            n.__polymerTextContent__ = n.textContent;
+            n.textContent = '';
+          } else {
+            n.textContent = n.__polymerTextContent__;
+          }
+        } else if (n.style) {
+          if (hide) {
+            n.__polymerDisplay__ = n.style.display;
+            n.style.display = 'none';
+          } else {
+            n.style.display = n.__polymerDisplay__;
+          }
+        }
+      }
+      n.__hideTemplateChildren__ = hide;
+      if (n._showHideChildren) {
+        n._showHideChildren(hide);
+      }
+    }
+  }
+  /**
+   * Overrides default property-effects implementation to intercept
+   * textContent bindings while children are "hidden" and cache in
+   * private storage for later retrieval.
+   *
+   * @override
+   */
+  _setUnmanagedPropertyToNode(node, prop, value) {
+    if (node.__hideTemplateChildren__ &&
+        node.nodeType == Node.TEXT_NODE && prop == 'textContent') {
+      node.__polymerTextContent__ = value;
+    } else {
+      super._setUnmanagedPropertyToNode(node, prop, value);
+    }
+  }
+  /**
+   * Find the parent model of this template instance.  The parent model
+   * is either another templatize instance that had option `parentModel: true`,
+   * or else the host element.
+   *
+   * @return {Polymer_PropertyEffects} The parent model of this instance
+   */
+  get parentModel() {
+    let model = this.__parentModel;
+    if (!model) {
+      let options;
+      model = this;
+      do {
+        // A template instance's `__dataHost` is a <template>
+        // `model.__dataHost.__dataHost` is the template's host
+        model = model.__dataHost.__dataHost;
+      } while ((options = model.__templatizeOptions) && !options.parentModel);
+      this.__parentModel = model;
+    }
+    return model;
+  }
+}
+
+/** @type {!DataTemplate} */
+TemplateInstanceBase.prototype.__dataHost;
+/** @type {!TemplatizeOptions} */
+TemplateInstanceBase.prototype.__templatizeOptions;
+/** @type {!Polymer_PropertyEffects} */
+TemplateInstanceBase.prototype._methodHost;
+/** @type {!Object} */
+TemplateInstanceBase.prototype.__templatizeOwner;
+/** @type {!Object} */
+TemplateInstanceBase.prototype.__hostProps;
+
+/**
+ * @constructor
+ * @extends {TemplateInstanceBase}
+ * @implements {Polymer_MutableData}
+ */
+const MutableTemplateInstanceBase = Object(__WEBPACK_IMPORTED_MODULE_2__mixins_mutable_data_js__["a" /* MutableData */])(TemplateInstanceBase);
+
+function findMethodHost(template) {
+  // Technically this should be the owner of the outermost template.
+  // In shadow dom, this is always getRootNode().host, but we can
+  // approximate this via cooperation with our dataHost always setting
+  // `_methodHost` as long as there were bindings (or id's) on this
+  // instance causing it to get a dataHost.
+  let templateHost = template.__dataHost;
+  return templateHost && templateHost._methodHost || templateHost;
+}
+
+/* eslint-disable valid-jsdoc */
+/**
+ * @suppress {missingProperties} class.prototype is not defined for some reason
+ */
+function createTemplatizerClass(template, templateInfo, options) {
+  // Anonymous class created by the templatize
+  let base = options.mutableData ?
+    MutableTemplateInstanceBase : TemplateInstanceBase;
+  /**
+   * @constructor
+   * @extends {base}
+   */
+  let klass = class extends base { };
+  klass.prototype.__templatizeOptions = options;
+  klass.prototype._bindTemplate(template);
+  addNotifyEffects(klass, template, templateInfo, options);
+  return klass;
+}
+
+/**
+ * @suppress {missingProperties} class.prototype is not defined for some reason
+ */
+function addPropagateEffects(template, templateInfo, options) {
+  let userForwardHostProp = options.forwardHostProp;
+  if (userForwardHostProp) {
+    // Provide data API and property effects on memoized template class
+    let klass = templateInfo.templatizeTemplateClass;
+    if (!klass) {
+      let base = options.mutableData ? MutableDataTemplate : DataTemplate;
+      klass = templateInfo.templatizeTemplateClass =
+        class TemplatizedTemplate extends base {};
+      // Add template - >instances effects
+      // and host <- template effects
+      let hostProps = templateInfo.hostProps;
+      for (let prop in hostProps) {
+        klass.prototype._addPropertyEffect('_host_' + prop,
+          klass.prototype.PROPERTY_EFFECT_TYPES.PROPAGATE,
+          {fn: createForwardHostPropEffect(prop, userForwardHostProp)});
+        klass.prototype._createNotifyingProperty('_host_' + prop);
+      }
+    }
+    upgradeTemplate(template, klass);
+    // Mix any pre-bound data into __data; no need to flush this to
+    // instances since they pull from the template at instance-time
+    if (template.__dataProto) {
+      // Note, generally `__dataProto` could be chained, but it's guaranteed
+      // to not be since this is a vanilla template we just added effects to
+      Object.assign(template.__data, template.__dataProto);
+    }
+    // Clear any pending data for performance
+    template.__dataTemp = {};
+    template.__dataPending = null;
+    template.__dataOld = null;
+    template._enableProperties();
+  }
+}
+/* eslint-enable valid-jsdoc */
+
+function createForwardHostPropEffect(hostProp, userForwardHostProp) {
+  return function forwardHostProp(template, prop, props) {
+    userForwardHostProp.call(template.__templatizeOwner,
+      prop.substring('_host_'.length), props[prop]);
+  };
+}
+
+function addNotifyEffects(klass, template, templateInfo, options) {
+  let hostProps = templateInfo.hostProps || {};
+  for (let iprop in options.instanceProps) {
+    delete hostProps[iprop];
+    let userNotifyInstanceProp = options.notifyInstanceProp;
+    if (userNotifyInstanceProp) {
+      klass.prototype._addPropertyEffect(iprop,
+        klass.prototype.PROPERTY_EFFECT_TYPES.NOTIFY,
+        {fn: createNotifyInstancePropEffect(iprop, userNotifyInstanceProp)});
+    }
+  }
+  if (options.forwardHostProp && template.__dataHost) {
+    for (let hprop in hostProps) {
+      klass.prototype._addPropertyEffect(hprop,
+        klass.prototype.PROPERTY_EFFECT_TYPES.NOTIFY,
+        {fn: createNotifyHostPropEffect()});
+    }
+  }
+}
+
+function createNotifyInstancePropEffect(instProp, userNotifyInstanceProp) {
+  return function notifyInstanceProp(inst, prop, props) {
+    userNotifyInstanceProp.call(inst.__templatizeOwner,
+      inst, prop, props[prop]);
+  };
+}
+
+function createNotifyHostPropEffect() {
+  return function notifyHostProp(inst, prop, props) {
+    inst.__dataHost._setPendingPropertyOrPath('_host_' + prop, props[prop], true, true);
+  };
+}
+
+/**
+ * Module for preparing and stamping instances of templates that utilize
+ * Polymer's data-binding and declarative event listener features.
+ *
+ * Example:
+ *
+ *     // Get a template from somewhere, e.g. light DOM
+ *     let template = this.querySelector('template');
+ *     // Prepare the template
+ *     let TemplateClass = Polymer.Templatize.templatize(template);
+ *     // Instance the template with an initial data model
+ *     let instance = new TemplateClass({myProp: 'initial'});
+ *     // Insert the instance's DOM somewhere, e.g. element's shadow DOM
+ *     this.shadowRoot.appendChild(instance.root);
+ *     // Changing a property on the instance will propagate to bindings
+ *     // in the template
+ *     instance.myProp = 'new value';
+ *
+ * The `options` dictionary passed to `templatize` allows for customizing
+ * features of the generated template class, including how outer-scope host
+ * properties should be forwarded into template instances, how any instance
+ * properties added into the template's scope should be notified out to
+ * the host, and whether the instance should be decorated as a "parent model"
+ * of any event handlers.
+ *
+ *     // Customze property forwarding and event model decoration
+ *     let TemplateClass = Polymer.Templatize.templatize(template, this, {
+ *       parentModel: true,
+ *       instanceProps: {...},
+ *       forwardHostProp(property, value) {...},
+ *       notifyInstanceProp(instance, property, value) {...},
+ *     });
+ *
+ *
+ * @namespace
+ * @memberof Polymer
+ * @summary Module for preparing and stamping instances of templates
+ *   utilizing Polymer templating features.
+ */
+
+const Templatize = {
+
+  /**
+   * Returns an anonymous `Polymer.PropertyEffects` class bound to the
+   * `<template>` provided.  Instancing the class will result in the
+   * template being stamped into document fragment stored as the instance's
+   * `root` property, after which it can be appended to the DOM.
+   *
+   * Templates may utilize all Polymer data-binding features as well as
+   * declarative event listeners.  Event listeners and inline computing
+   * functions in the template will be called on the host of the template.
+   *
+   * The constructor returned takes a single argument dictionary of initial
+   * property values to propagate into template bindings.  Additionally
+   * host properties can be forwarded in, and instance properties can be
+   * notified out by providing optional callbacks in the `options` dictionary.
+   *
+   * Valid configuration in `options` are as follows:
+   *
+   * - `forwardHostProp(property, value)`: Called when a property referenced
+   *   in the template changed on the template's host. As this library does
+   *   not retain references to templates instanced by the user, it is the
+   *   templatize owner's responsibility to forward host property changes into
+   *   user-stamped instances.  The `instance.forwardHostProp(property, value)`
+   *    method on the generated class should be called to forward host
+   *   properties into the template to prevent unnecessary property-changed
+   *   notifications. Any properties referenced in the template that are not
+   *   defined in `instanceProps` will be notified up to the template's host
+   *   automatically.
+   * - `instanceProps`: Dictionary of property names that will be added
+   *   to the instance by the templatize owner.  These properties shadow any
+   *   host properties, and changes within the template to these properties
+   *   will result in `notifyInstanceProp` being called.
+   * - `mutableData`: When `true`, the generated class will skip strict
+   *   dirty-checking for objects and arrays (always consider them to be
+   *   "dirty").
+   * - `notifyInstanceProp(instance, property, value)`: Called when
+   *   an instance property changes.  Users may choose to call `notifyPath`
+   *   on e.g. the owner to notify the change.
+   * - `parentModel`: When `true`, events handled by declarative event listeners
+   *   (`on-event="handler"`) will be decorated with a `model` property pointing
+   *   to the template instance that stamped it.  It will also be returned
+   *   from `instance.parentModel` in cases where template instance nesting
+   *   causes an inner model to shadow an outer model.
+   *
+   * Note that the class returned from `templatize` is generated only once
+   * for a given `<template>` using `options` from the first call for that
+   * template, and the cached class is returned for all subsequent calls to
+   * `templatize` for that template.  As such, `options` callbacks should not
+   * close over owner-specific properties since only the first `options` is
+   * used; rather, callbacks are called bound to the `owner`, and so context
+   * needed from the callbacks (such as references to `instances` stamped)
+   * should be stored on the `owner` such that they can be retrieved via `this`.
+   *
+   * @memberof Polymer.Templatize
+   * @param {!HTMLTemplateElement} template Template to templatize
+   * @param {!Polymer_PropertyEffects} owner Owner of the template instances;
+   *   any optional callbacks will be bound to this owner.
+   * @param {Object=} options Options dictionary (see summary for details)
+   * @return {function(new:TemplateInstanceBase)} Generated class bound to the template
+   *   provided
+   * @suppress {invalidCasts}
+   */
+  templatize(template, owner, options) {
+    options = /** @type {!TemplatizeOptions} */(options || {});
+    if (template.__templatizeOwner) {
+      throw new Error('A <template> can only be templatized once');
+    }
+    template.__templatizeOwner = owner;
+    let templateInfo = owner.constructor._parseTemplate(template);
+    // Get memoized base class for the prototypical template, which
+    // includes property effects for binding template & forwarding
+    let baseClass = templateInfo.templatizeInstanceClass;
+    if (!baseClass) {
+      baseClass = createTemplatizerClass(template, templateInfo, options);
+      templateInfo.templatizeInstanceClass = baseClass;
+    }
+    // Host property forwarding must be installed onto template instance
+    addPropagateEffects(template, templateInfo, options);
+    // Subclass base class and add reference for this specific template
+    let klass = class TemplateInstance extends baseClass {};
+    klass.prototype._methodHost = findMethodHost(template);
+    klass.prototype.__dataHost = template;
+    klass.prototype.__templatizeOwner = owner;
+    klass.prototype.__hostProps = templateInfo.hostProps;
+    return /** @type {function(new:TemplateInstanceBase)} */(klass);
+  },
+
+  /**
+   * Returns the template "model" associated with a given element, which
+   * serves as the binding scope for the template instance the element is
+   * contained in. A template model is an instance of
+   * `TemplateInstanceBase`, and should be used to manipulate data
+   * associated with this template instance.
+   *
+   * Example:
+   *
+   *   let model = modelForElement(el);
+   *   if (model.index < 10) {
+   *     model.set('item.checked', true);
+   *   }
+   *
+   * @memberof Polymer.Templatize
+   * @param {HTMLTemplateElement} template The model will be returned for
+   *   elements stamped from this template
+   * @param {Node} node Node for which to return a template model.
+   * @return {TemplateInstanceBase} Template instance representing the
+   *   binding scope for the element
+   */
+  modelForElement(template, node) {
+    let model;
+    while (node) {
+      // An element with a __templatizeInstance marks the top boundary
+      // of a scope; walk up until we find one, and then ensure that
+      // its __dataHost matches `this`, meaning this dom-repeat stamped it
+      if ((model = node.__templatizeInstance)) {
+        // Found an element stamped by another template; keep walking up
+        // from its __dataHost
+        if (model.__dataHost != template) {
+          node = model.__dataHost;
+        } else {
+          return model;
+        }
+      } else {
+        // Still in a template scope, keep going up until
+        // a __templatizeInstance is found
+        node = node.parentNode;
+      }
+    }
+    return null;
+  }
+};
+
+
+
+
+
+/***/ }),
+/* 33 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var EventEmitter = __webpack_require__(94).EventEmitter;
+
+/**
+ * @class MasterController
+ * 
+ * @description This is the global object that acts as a event bus for all models and 
+ * elements, allowing stores to notify elements of application state updates.  Elements
+ * and models can use this as a open communication platform as well.  
+ * 
+ * The MasterController also stores references to the application Models.
+ */
+class MasterController extends EventEmitter {
+
+  constructor() {
+    super();
+    
+    // setup event bus listeners.
+    // TODO: should this be configurable?
+    this.setMaxListeners(10000);
+
+    // global reference for models
+    this.models = {}
+  }
+
+  /**
+   * @method registerModel
+   * @description Register a model.  This is called from the BaseModel classes register() method.
+   * 
+   * @param {String} name model name
+   * @param {Object} model the model object to register
+   */
+  registerModel(name, model) {
+    if( this.models[name] ) {
+      throw new Error(`A model has already been registered with name: ${name}`);
+    }
+
+    this.models[name] = model;
+  }
+
+  /**
+   * @method getModel
+   * @description Get a globally registered model.  Normally called by a elements interface mixin.
+   * Sometimes called by another model to avoid cyclical depenency issues.
+   * 
+   * Throws error if model does not exist
+   * 
+   * @param {String} name model name to get
+   * @returns {Object} model object
+   */
+  getModel(name) {
+    if( !this.models[name] ) {
+      throw new Error(`No model has been registered with name: ${name}`);
+    }
+
+    return this.models[name];
+  }
+}
+
+module.exports = new MasterController();
+
+/***/ }),
+/* 34 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = {
+  AppStateInterface : __webpack_require__(50),
+  AppStateModel : __webpack_require__(110),
+  AppStateStore : __webpack_require__(111),
+  'app-route' : __webpack_require__(49)
+}
+
+/***/ }),
+/* 35 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_a11y_keys_behavior_iron_a11y_keys_behavior_js__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_control_state_js__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
+
+
+
+
+
+const IronButtonStateImpl = {
+
+  properties: {
+
+    /**
+     * If true, the user is currently holding down the button.
+     */
+    pressed: {
+      type: Boolean,
+      readOnly: true,
+      value: false,
+      reflectToAttribute: true,
+      observer: '_pressedChanged'
+    },
+
+    /**
+     * If true, the button toggles the active state with each tap or press
+     * of the spacebar.
+     */
+    toggles: {
+      type: Boolean,
+      value: false,
+      reflectToAttribute: true
+    },
+
+    /**
+     * If true, the button is a toggle and is currently in the active state.
+     */
+    active: {
+      type: Boolean,
+      value: false,
+      notify: true,
+      reflectToAttribute: true
+    },
+
+    /**
+     * True if the element is currently being pressed by a "pointer," which
+     * is loosely defined as mouse or touch input (but specifically excluding
+     * keyboard input).
+     */
+    pointerDown: {
+      type: Boolean,
+      readOnly: true,
+      value: false
+    },
+
+    /**
+     * True if the input device that caused the element to receive focus
+     * was a keyboard.
+     */
+    receivedFocusFromKeyboard: {
+      type: Boolean,
+      readOnly: true
+    },
+
+    /**
+     * The aria attribute to be set if the button is a toggle and in the
+     * active state.
+     */
+    ariaActiveAttribute: {
+      type: String,
+      value: 'aria-pressed',
+      observer: '_ariaActiveAttributeChanged'
+    }
+  },
+
+  listeners: {
+    down: '_downHandler',
+    up: '_upHandler',
+    tap: '_tapHandler'
+  },
+
+  observers: [
+    '_focusChanged(focused)',
+    '_activeChanged(active, ariaActiveAttribute)'
+  ],
+
+  keyBindings: {
+    'enter:keydown': '_asyncClick',
+    'space:keydown': '_spaceKeyDownHandler',
+    'space:keyup': '_spaceKeyUpHandler',
+  },
+
+  _mouseEventRe: /^mouse/,
+
+  _tapHandler: function() {
+    if (this.toggles) {
+     // a tap is needed to toggle the active state
+      this._userActivate(!this.active);
+    } else {
+      this.active = false;
+    }
+  },
+
+  _focusChanged: function(focused) {
+    this._detectKeyboardFocus(focused);
+
+    if (!focused) {
+      this._setPressed(false);
+    }
+  },
+
+  _detectKeyboardFocus: function(focused) {
+    this._setReceivedFocusFromKeyboard(!this.pointerDown && focused);
+  },
+
+  // to emulate native checkbox, (de-)activations from a user interaction fire
+  // 'change' events
+  _userActivate: function(active) {
+    if (this.active !== active) {
+      this.active = active;
+      this.fire('change');
+    }
+  },
+
+  _downHandler: function(event) {
+    this._setPointerDown(true);
+    this._setPressed(true);
+    this._setReceivedFocusFromKeyboard(false);
+  },
+
+  _upHandler: function() {
+    this._setPointerDown(false);
+    this._setPressed(false);
+  },
+
+  /**
+   * @param {!KeyboardEvent} event .
+   */
+  _spaceKeyDownHandler: function(event) {
+    var keyboardEvent = event.detail.keyboardEvent;
+    var target = Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(keyboardEvent).localTarget;
+
+    // Ignore the event if this is coming from a focused light child, since that
+    // element will deal with it.
+    if (this.isLightDescendant(/** @type {Node} */(target)))
+      return;
+
+    keyboardEvent.preventDefault();
+    keyboardEvent.stopImmediatePropagation();
+    this._setPressed(true);
+  },
+
+  /**
+   * @param {!KeyboardEvent} event .
+   */
+  _spaceKeyUpHandler: function(event) {
+    var keyboardEvent = event.detail.keyboardEvent;
+    var target = Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(keyboardEvent).localTarget;
+
+    // Ignore the event if this is coming from a focused light child, since that
+    // element will deal with it.
+    if (this.isLightDescendant(/** @type {Node} */(target)))
+      return;
+
+    if (this.pressed) {
+      this._asyncClick();
+    }
+    this._setPressed(false);
+  },
+
+  // trigger click asynchronously, the asynchrony is useful to allow one
+  // event handler to unwind before triggering another event
+  _asyncClick: function() {
+    this.async(function() {
+      this.click();
+    }, 1);
+  },
+
+  // any of these changes are considered a change to button state
+
+  _pressedChanged: function(pressed) {
+    this._changedButtonState();
+  },
+
+  _ariaActiveAttributeChanged: function(value, oldValue) {
+    if (oldValue && oldValue != value && this.hasAttribute(oldValue)) {
+      this.removeAttribute(oldValue);
+    }
+  },
+
+  _activeChanged: function(active, ariaActiveAttribute) {
+    if (this.toggles) {
+      this.setAttribute(this.ariaActiveAttribute,
+                        active ? 'true' : 'false');
+    } else {
+      this.removeAttribute(this.ariaActiveAttribute);
+    }
+    this._changedButtonState();
+  },
+
+  _controlStateChanged: function() {
+    if (this.disabled) {
+      this._setPressed(false);
+    } else {
+      this._changedButtonState();
+    }
+  },
+
+  // provide hook for follow-on behaviors to react to button-state
+
+  _changedButtonState: function() {
+    if (this._buttonStateChanged) {
+      this._buttonStateChanged(); // abstract
+    }
+  }
+
+};
+/* harmony export (immutable) */ __webpack_exports__["b"] = IronButtonStateImpl;
+
+
+const IronButtonState = [
+  __WEBPACK_IMPORTED_MODULE_1__iron_a11y_keys_behavior_iron_a11y_keys_behavior_js__["a" /* IronA11yKeysBehavior */],
+  IronButtonStateImpl
+];
+/* harmony export (immutable) */ __webpack_exports__["a"] = IronButtonState;
+
+
+
+/***/ }),
+/* 36 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__polymer_lib_utils_settings_js__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
+
+
+
+
+const IronResizableBehavior = {
+  properties: {
+    /**
+     * The closest ancestor element that implements `IronResizableBehavior`.
+     */
+    _parentResizable: {
+      type: Object,
+      observer: '_parentResizableChanged'
+    },
+
+    /**
+     * True if this element is currently notifying its descendant elements of
+     * resize.
+     */
+    _notifyingDescendant: {
+      type: Boolean,
+      value: false
+    }
+  },
+
+  listeners: {
+    'iron-request-resize-notifications': '_onIronRequestResizeNotifications'
+  },
+
+  created: function() {
+    // We don't really need property effects on these, and also we want them
+    // to be created before the `_parentResizable` observer fires:
+    this._interestedResizables = [];
+    this._boundNotifyResize = this.notifyResize.bind(this);
+  },
+
+  attached: function() {
+    this._requestResizeNotifications();
+  },
+
+  detached: function() {
+    if (this._parentResizable) {
+      this._parentResizable.stopResizeNotificationsFor(this);
+    } else {
+      window.removeEventListener('resize', this._boundNotifyResize);
+    }
+
+    this._parentResizable = null;
+  },
+
+  /**
+   * Can be called to manually notify a resizable and its descendant
+   * resizables of a resize change.
+   */
+  notifyResize: function() {
+    if (!this.isAttached) {
+      return;
+    }
+
+    this._interestedResizables.forEach(function(resizable) {
+      if (this.resizerShouldNotify(resizable)) {
+        this._notifyDescendant(resizable);
+      }
+    }, this);
+
+    this._fireResize();
+  },
+
+  /**
+   * Used to assign the closest resizable ancestor to this resizable
+   * if the ancestor detects a request for notifications.
+   */
+  assignParentResizable: function(parentResizable) {
+    this._parentResizable = parentResizable;
+  },
+
+  /**
+   * Used to remove a resizable descendant from the list of descendants
+   * that should be notified of a resize change.
+   */
+  stopResizeNotificationsFor: function(target) {
+    var index = this._interestedResizables.indexOf(target);
+
+    if (index > -1) {
+      this._interestedResizables.splice(index, 1);
+      this.unlisten(target, 'iron-resize', '_onDescendantIronResize');
+    }
+  },
+
+  /**
+   * This method can be overridden to filter nested elements that should or
+   * should not be notified by the current element. Return true if an element
+   * should be notified, or false if it should not be notified.
+   *
+   * @param {HTMLElement} element A candidate descendant element that
+   * implements `IronResizableBehavior`.
+   * @return {boolean} True if the `element` should be notified of resize.
+   */
+  resizerShouldNotify: function(element) { return true; },
+
+  _onDescendantIronResize: function(event) {
+    if (this._notifyingDescendant) {
+      event.stopPropagation();
+      return;
+    }
+
+    // NOTE(cdata): In ShadowDOM, event retargeting makes echoing of the
+    // otherwise non-bubbling event "just work." We do it manually here for
+    // the case where Polymer is not using shadow roots for whatever reason:
+    if (!__WEBPACK_IMPORTED_MODULE_1__polymer_lib_utils_settings_js__["a" /* Settings */].useShadow) {
+      this._fireResize();
+    }
+  },
+
+  _fireResize: function() {
+    this.fire('iron-resize', null, {
+      node: this,
+      bubbles: false
+    });
+  },
+
+  _onIronRequestResizeNotifications: function(event) {
+    var target = /** @type {!EventTarget} */ (Object(__WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(event).rootTarget);
+    if (target === this) {
+      return;
+    }
+
+    if (this._interestedResizables.indexOf(target) === -1) {
+      this._interestedResizables.push(target);
+      this.listen(target, 'iron-resize', '_onDescendantIronResize');
+    }
+
+    target.assignParentResizable(this);
+    this._notifyDescendant(target);
+
+    event.stopPropagation();
+  },
+
+  _parentResizableChanged: function(parentResizable) {
+    if (parentResizable) {
+      window.removeEventListener('resize', this._boundNotifyResize);
+    }
+  },
+
+  _notifyDescendant: function(descendant) {
+    // NOTE(cdata): In IE10, attached is fired on children first, so it's
+    // important not to notify them if the parent is not attached yet (or
+    // else they will get redundantly notified when the parent attaches).
+    if (!this.isAttached) {
+      return;
+    }
+
+    this._notifyingDescendant = true;
+    descendant.notifyResize();
+    this._notifyingDescendant = false;
+  },
+  
+  _requestResizeNotifications: function() {
+    if (!this.isAttached)
+      return;
+    
+    // NOTE(valdrin) In CustomElements v1 with native HTMLImports, the order
+    // of imports affects the order of `attached` callbacks (see webcomponents/custom-elements#15).
+    // This might cause a child to notify parents too early (as the parent
+    // still has to be upgraded), resulting in a parent not able to keep track
+    // of the `_interestedResizables`. To solve this, we wait for the document
+    // to be done loading before firing the event.
+    if (document.readyState === 'loading') {
+      var _requestResizeNotifications = this._requestResizeNotifications.bind(this);
+      document.addEventListener('readystatechange', function readystatechanged() {
+        document.removeEventListener('readystatechange', readystatechanged);
+        _requestResizeNotifications();
+      });
+    } else {
+      this.fire('iron-request-resize-notifications', null, {
+        node: this,
+        bubbles: true,
+        cancelable: true
+      });
+
+      if (!this._parentResizable) {
+        window.addEventListener('resize', this._boundNotifyResize);
+        this.notifyResize();
+      } 
+    }
+  }
+};
+/* harmony export (immutable) */ __webpack_exports__["a"] = IronResizableBehavior;
+
+
+
+/***/ }),
+/* 37 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return IronMeta; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
+
+
+
+/**
+ * @constructor
+ * @param {{type: (string|null), key: (string|null), value: *}} options
+ */
+function IronMeta(options) {
+  this.type = (options && options.type) || 'default';
+  this.key = options && options.key;
+  if ('value' in options) {
+    this.value = options.value;
+  }
+}
+
+IronMeta.types = {};
+
+IronMeta.prototype = {
+  get value() {
+    var type = this.type;
+    var key = this.key;
+
+    if (type && key) {
+      return IronMeta.types[type] && IronMeta.types[type][key];
+    }
+  },
+
+  set value(value) {
+    var type = this.type;
+    var key = this.key;
+
+    if (type && key) {
+      type = IronMeta.types[type] = IronMeta.types[type] || {};
+      if (value == null) {
+        delete type[key];
+      } else {
+        type[key] = value;
+      }
+    }
+  },
+
+  get list() {
+    var type = this.type;
+
+    if (type) {
+      return Object.keys(IronMeta.types[this.type]).map(function(key) {
+        return metaDatas[this.type][key];
+      }, this);
+    }
+  },
+
+  byKey: function(key) {
+    this.key = key;
+    return this.value;
+  }
+};
+
+
+
+var metaDatas = IronMeta.types;
+
+Object(__WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_fn_js__["a" /* Polymer */])({
+
+  is: 'iron-meta',
+
+  properties: {
+
+    /**
+     * The type of meta-data.  All meta-data of the same type is stored
+     * together.
+     * @type {string}
+     */
+    type: {
+      type: String,
+      value: 'default',
+    },
+
+    /**
+     * The key used to store `value` under the `type` namespace.
+     * @type {?string}
+     */
+    key: {
+      type: String,
+    },
+
+    /**
+     * The meta-data to store or retrieve.
+     * @type {*}
+     */
+    value: {
+      type: String,
+      notify: true,
+    },
+
+    /**
+     * If true, `value` is set to the iron-meta instance itself.
+     */
+     self: {
+      type: Boolean,
+      observer: '_selfChanged'
+    },
+
+    __meta: {
+      type: Boolean,
+      computed: '__computeMeta(type, key, value)'
+    }
+  },
+
+  hostAttributes: {
+    hidden: true
+  },
+
+  __computeMeta: function(type, key, value) {
+    var meta = new IronMeta({
+      type: type,
+      key: key
+    });
+
+    if (value !== undefined && value !== meta.value) {
+      meta.value = value;
+    } else if (this.value !== meta.value) {
+      this.value = meta.value;
+    }
+
+    return meta;
+  },
+
+  get list() {
+    return this.__meta && this.__meta.list;
+  },
+
+  _selfChanged: function(self) {
+    if (self) {
+      this.value = this;
+    }
+  },
+
+  /**
+   * Retrieves meta data value by key.
+   *
+   * @method byKey
+   * @param {string} key The key of the meta-data to be returned.
+   * @return {*}
+   */
+  byKey: function(key) {
+    return new IronMeta({
+      type: this.type,
+      key: key
+    }).value;
+  }
+});
+
+
+/***/ }),
+/* 38 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__webcomponents_shadycss_entrypoints_apply_shim_js__ = __webpack_require__(73);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mixins_element_mixin_js__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__mixins_gesture_event_listeners_js__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_mixin_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_import_href_js__ = __webpack_require__(78);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_render_status_js__ = __webpack_require__(45);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__utils_unresolved_js__ = __webpack_require__(79);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__utils_unresolved_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__utils_unresolved_js__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__polymer_dom_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__utils_gestures_js__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__utils_debounce_js__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__utils_async_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__utils_path_js__ = __webpack_require__(16);
+
+
+
+
+
+
+
+
+
+
+
+
+
+let styleInterface = window.ShadyCSS;
+
+const LegacyElementMixin = Object(__WEBPACK_IMPORTED_MODULE_3__utils_mixin_js__["a" /* dedupingMixin */])((base) => {
+
+  /**
+   * @constructor
+   * @extends {base}
+   * @implements {Polymer_ElementMixin}
+   * @implements {Polymer_GestureEventListeners}
+   */
+  const legacyElementBase = Object(__WEBPACK_IMPORTED_MODULE_2__mixins_gesture_event_listeners_js__["a" /* GestureEventListeners */])(Object(__WEBPACK_IMPORTED_MODULE_1__mixins_element_mixin_js__["a" /* ElementMixin */])(base));
+
+  /**
+   * Map of simple names to touch action names
+   * @dict
+   */
+  const DIRECTION_MAP = {
+    'x': 'pan-x',
+    'y': 'pan-y',
+    'none': 'none',
+    'all': 'auto'
+  };
+
+  /**
+   * @polymer
+   * @mixinClass
+   * @extends {legacyElementBase}
+   * @implements {Polymer_LegacyElementMixin}
+   * @unrestricted
+   */
+  class LegacyElement extends legacyElementBase {
+
+    constructor() {
+      super();
+      this.root = this;
+      /** @type {boolean} */
+      this.isAttached;
+      /** @type {WeakMap<!Element, !Object<string, !Function>>} */
+      this.__boundListeners;
+      /** @type {Object<string, Function>} */
+      this._debouncers;
+      this.created();
+    }
+
+    /**
+     * Legacy callback called during the `constructor`, for overriding
+     * by the user.
+     */
+    created() {}
+
+    /**
+     * Provides an implementation of `connectedCallback`
+     * which adds Polymer legacy API's `attached` method.
+     * @override
+     */
+    connectedCallback() {
+      super.connectedCallback();
+      this.isAttached = true;
+      this.attached();
+    }
+
+    /**
+     * Legacy callback called during `connectedCallback`, for overriding
+     * by the user.
+     */
+    attached() {}
+
+    /**
+     * Provides an implementation of `disconnectedCallback`
+     * which adds Polymer legacy API's `detached` method.
+     * @override
+     */
+    disconnectedCallback() {
+      super.disconnectedCallback();
+      this.isAttached = false;
+      this.detached();
+    }
+
+    /**
+     * Legacy callback called during `disconnectedCallback`, for overriding
+     * by the user.
+     */
+    detached() {}
+
+    /**
+     * Provides an override implementation of `attributeChangedCallback`
+     * which adds the Polymer legacy API's `attributeChanged` method.
+     * @param {string} name Name of attribute.
+     * @param {?string} old Old value of attribute.
+     * @param {?string} value Current value of attribute.
+     * @override
+     */
+    attributeChangedCallback(name, old, value) {
+      if (old !== value) {
+        super.attributeChangedCallback(name, old, value);
+        this.attributeChanged(name, old, value);
+      }
+    }
+
+    /**
+     * Legacy callback called during `attributeChangedChallback`, for overriding
+     * by the user.
+     * @param {string} name Name of attribute.
+     * @param {?string} old Old value of attribute.
+     * @param {?string} value Current value of attribute.
+     */
+    attributeChanged(name, old, value) {} // eslint-disable-line no-unused-vars
+
+    /**
+     * Overrides the default `Polymer.PropertyEffects` implementation to
+     * add support for class initialization via the `_registered` callback.
+     * This is called only when the first instance of the element is created.
+     *
+     * @override
+     */
+    _initializeProperties() {
+      let proto = Object.getPrototypeOf(this);
+      if (!proto.hasOwnProperty('__hasRegisterFinished')) {
+        proto.__hasRegisterFinished = true;
+        this._registered();
+      }
+      super._initializeProperties();
+    }
+
+    /**
+     * Called automatically when an element is initializing.
+     * Users may override this method to perform class registration time
+     * work. The implementation should ensure the work is performed
+     * only once for the class.
+     * @protected
+     */
+    _registered() {}
+
+    /**
+     * Overrides the default `Polymer.PropertyEffects` implementation to
+     * add support for installing `hostAttributes` and `listeners`.
+     *
+     * @override
+     */
+    ready() {
+      this._ensureAttributes();
+      this._applyListeners();
+      super.ready();
+    }
+
+    /**
+     * Ensures an element has required attributes. Called when the element
+     * is being readied via `ready`. Users should override to set the
+     * element's required attributes. The implementation should be sure
+     * to check and not override existing attributes added by
+     * the user of the element. Typically, setting attributes should be left
+     * to the element user and not done here; reasonable exceptions include
+     * setting aria roles and focusability.
+     * @protected
+     */
+    _ensureAttributes() {}
+
+    /**
+     * Adds element event listeners. Called when the element
+     * is being readied via `ready`. Users should override to
+     * add any required element event listeners.
+     * In performance critical elements, the work done here should be kept
+     * to a minimum since it is done before the element is rendered. In
+     * these elements, consider adding listeners asychronously so as not to
+     * block render.
+     * @protected
+     */
+    _applyListeners() {}
+
+    /**
+     * Converts a typed JavaScript value to a string.
+     *
+     * Note this method is provided as backward-compatible legacy API
+     * only.  It is not directly called by any Polymer features. To customize
+     * how properties are serialized to attributes for attribute bindings and
+     * `reflectToAttribute: true` properties as well as this method, override
+     * the `_serializeValue` method provided by `Polymer.PropertyAccessors`.
+     *
+     * @param {*} value Value to deserialize
+     * @return {string | undefined} Serialized value
+     */
+    serialize(value) {
+      return this._serializeValue(value);
+    }
+
+    /**
+     * Converts a string to a typed JavaScript value.
+     *
+     * Note this method is provided as backward-compatible legacy API
+     * only.  It is not directly called by any Polymer features.  To customize
+     * how attributes are deserialized to properties for in
+     * `attributeChangedCallback`, override `_deserializeValue` method
+     * provided by `Polymer.PropertyAccessors`.
+     *
+     * @param {string} value String to deserialize
+     * @param {*} type Type to deserialize the string to
+     * @return {*} Returns the deserialized value in the `type` given.
+     */
+    deserialize(value, type) {
+      return this._deserializeValue(value, type);
+    }
+
+    /**
+     * Serializes a property to its associated attribute.
+     *
+     * Note this method is provided as backward-compatible legacy API
+     * only.  It is not directly called by any Polymer features.
+     *
+     * @param {string} property Property name to reflect.
+     * @param {string=} attribute Attribute name to reflect.
+     * @param {*=} value Property value to refect.
+     */
+    reflectPropertyToAttribute(property, attribute, value) {
+      this._propertyToAttribute(property, attribute, value);
+    }
+
+    /**
+     * Sets a typed value to an HTML attribute on a node.
+     *
+     * Note this method is provided as backward-compatible legacy API
+     * only.  It is not directly called by any Polymer features.
+     *
+     * @param {*} value Value to serialize.
+     * @param {string} attribute Attribute name to serialize to.
+     * @param {Element} node Element to set attribute to.
+     */
+    serializeValueToAttribute(value, attribute, node) {
+      this._valueToNodeAttribute(/** @type {Element} */ (node || this), value, attribute);
+    }
+
+    /**
+     * Copies own properties (including accessor descriptors) from a source
+     * object to a target object.
+     *
+     * @param {Object} prototype Target object to copy properties to.
+     * @param {Object} api Source object to copy properties from.
+     * @return {Object} prototype object that was passed as first argument.
+     */
+    extend(prototype, api) {
+      if (!(prototype && api)) {
+        return prototype || api;
+      }
+      let n$ = Object.getOwnPropertyNames(api);
+      for (let i=0, n; (i<n$.length) && (n=n$[i]); i++) {
+        let pd = Object.getOwnPropertyDescriptor(api, n);
+        if (pd) {
+          Object.defineProperty(prototype, n, pd);
+        }
+      }
+      return prototype;
+    }
+
+    /**
+     * Copies props from a source object to a target object.
+     *
+     * Note, this method uses a simple `for...in` strategy for enumerating
+     * properties.  To ensure only `ownProperties` are copied from source
+     * to target and that accessor implementations are copied, use `extend`.
+     *
+     * @param {Object} target Target object to copy properties to.
+     * @param {Object} source Source object to copy properties from.
+     * @return {Object} Target object that was passed as first argument.
+     */
+    mixin(target, source) {
+      for (let i in source) {
+        target[i] = source[i];
+      }
+      return target;
+    }
+
+    /**
+     * Sets the prototype of an object.
+     *
+     * Note this method is provided as backward-compatible legacy API
+     * only.  It is not directly called by any Polymer features.
+     * @param {Object} object The object on which to set the prototype.
+     * @param {Object} prototype The prototype that will be set on the given
+     * `object`.
+     * @return {Object} Returns the given `object` with its prototype set
+     * to the given `prototype` object.
+     */
+    chainObject(object, prototype) {
+      if (object && prototype && object !== prototype) {
+        object.__proto__ = prototype;
+      }
+      return object;
+    }
+
+    /* **** Begin Template **** */
+
+    /**
+     * Calls `importNode` on the `content` of the `template` specified and
+     * returns a document fragment containing the imported content.
+     *
+     * @param {HTMLTemplateElement} template HTML template element to instance.
+     * @return {DocumentFragment} Document fragment containing the imported
+     *   template content.
+    */
+    instanceTemplate(template) {
+      let content = this.constructor._contentForTemplate(template);
+      let dom = /** @type {DocumentFragment} */
+        (document.importNode(content, true));
+      return dom;
+    }
+
+    /* **** Begin Events **** */
+
+
+
+    /**
+     * Dispatches a custom event with an optional detail value.
+     *
+     * @param {string} type Name of event type.
+     * @param {*=} detail Detail value containing event-specific
+     *   payload.
+     * @param {{ bubbles: (boolean|undefined), cancelable: (boolean|undefined), composed: (boolean|undefined) }=}
+     *  options Object specifying options.  These may include:
+     *  `bubbles` (boolean, defaults to `true`),
+     *  `cancelable` (boolean, defaults to false), and
+     *  `node` on which to fire the event (HTMLElement, defaults to `this`).
+     * @return {Event} The new event that was fired.
+     */
+    fire(type, detail, options) {
+      options = options || {};
+      detail = (detail === null || detail === undefined) ? {} : detail;
+      let event = new Event(type, {
+        bubbles: options.bubbles === undefined ? true : options.bubbles,
+        cancelable: Boolean(options.cancelable),
+        composed: options.composed === undefined ? true: options.composed
+      });
+      event.detail = detail;
+      let node = options.node || this;
+      node.dispatchEvent(event);
+      return event;
+    }
+
+    /**
+     * Convenience method to add an event listener on a given element,
+     * late bound to a named method on this element.
+     *
+     * @param {Element} node Element to add event listener to.
+     * @param {string} eventName Name of event to listen for.
+     * @param {string} methodName Name of handler method on `this` to call.
+     */
+    listen(node, eventName, methodName) {
+      node = /** @type {!Element} */ (node || this);
+      let hbl = this.__boundListeners ||
+        (this.__boundListeners = new WeakMap());
+      let bl = hbl.get(node);
+      if (!bl) {
+        bl = {};
+        hbl.set(node, bl);
+      }
+      let key = eventName + methodName;
+      if (!bl[key]) {
+        bl[key] = this._addMethodEventListenerToNode(
+          node, eventName, methodName, this);
+      }
+    }
+
+    /**
+     * Convenience method to remove an event listener from a given element,
+     * late bound to a named method on this element.
+     *
+     * @param {Element} node Element to remove event listener from.
+     * @param {string} eventName Name of event to stop listening to.
+     * @param {string} methodName Name of handler method on `this` to not call
+     anymore.
+     */
+    unlisten(node, eventName, methodName) {
+      node = /** @type {!Element} */ (node || this);
+      let bl = this.__boundListeners && this.__boundListeners.get(node);
+      let key = eventName + methodName;
+      let handler = bl && bl[key];
+      if (handler) {
+        this._removeEventListenerFromNode(node, eventName, handler);
+        bl[key] = null;
+      }
+    }
+
+    /**
+     * Override scrolling behavior to all direction, one direction, or none.
+     *
+     * Valid scroll directions:
+     *   - 'all': scroll in any direction
+     *   - 'x': scroll only in the 'x' direction
+     *   - 'y': scroll only in the 'y' direction
+     *   - 'none': disable scrolling for this node
+     *
+     * @param {string=} direction Direction to allow scrolling
+     * Defaults to `all`.
+     * @param {Element=} node Element to apply scroll direction setting.
+     * Defaults to `this`.
+     */
+    setScrollDirection(direction, node) {
+      Object(__WEBPACK_IMPORTED_MODULE_8__utils_gestures_js__["setTouchAction"])( (node || this), DIRECTION_MAP[direction] || 'auto');
+    }
+    /* **** End Events **** */
+
+    /**
+     * Convenience method to run `querySelector` on this local DOM scope.
+     *
+     * This function calls `Polymer.dom(this.root).querySelector(slctr)`.
+     *
+     * @param {string} slctr Selector to run on this local DOM scope
+     * @return {Element} Element found by the selector, or null if not found.
+     */
+    $$(slctr) {
+      return this.root.querySelector(slctr);
+    }
+
+    /**
+     * Return the element whose local dom within which this element
+     * is contained. This is a shorthand for
+     * `this.getRootNode().host`.
+     * @this {Element}
+     */
+    get domHost() {
+      let root = this.getRootNode();
+      return (root instanceof DocumentFragment) ? /** @type {ShadowRoot} */ (root).host : root;
+    }
+
+    /**
+     * Force this element to distribute its children to its local dom.
+     * This should not be necessary as of Polymer 2.0.2 and is provided only
+     * for backwards compatibility.
+     */
+    distributeContent() {
+      if (window.ShadyDOM && this.shadowRoot) {
+        ShadyDOM.flush();
+      }
+    }
+
+    /**
+     * Returns a list of nodes that are the effective childNodes. The effective
+     * childNodes list is the same as the element's childNodes except that
+     * any `<content>` elements are replaced with the list of nodes distributed
+     * to the `<content>`, the result of its `getDistributedNodes` method.
+     * @this {Element}
+     * @return {Array<Node>} List of effctive child nodes.
+     */
+    getEffectiveChildNodes() {
+      return (
+        /** @type {Polymer.DomApi} */ (Object(__WEBPACK_IMPORTED_MODULE_7__polymer_dom_js__["a" /* dom */])(this)).getEffectiveChildNodes()
+      );
+    }
+
+    /**
+     * Returns a list of nodes distributed within this element that match
+     * `selector`. These can be dom children or elements distributed to
+     * children that are insertion points.
+     * @param {string} selector Selector to run.
+     * @this {Element}
+     * @return {Array<Node>} List of distributed elements that match selector.
+     */
+    queryDistributedElements(selector) {
+      return (
+        /** @type {Polymer.DomApi} */ (Object(__WEBPACK_IMPORTED_MODULE_7__polymer_dom_js__["a" /* dom */])(this)).queryDistributedElements(selector)
+      );
+    }
+
+    /**
+     * Returns a list of elements that are the effective children. The effective
+     * children list is the same as the element's children except that
+     * any `<content>` elements are replaced with the list of elements
+     * distributed to the `<content>`.
+     *
+     * @return {Array<Node>} List of effctive children.
+     */
+    getEffectiveChildren() {
+      let list = this.getEffectiveChildNodes();
+      return list.filter(function(/** @type {Node} */ n) {
+        return (n.nodeType === Node.ELEMENT_NODE);
+      });
+    }
+
+    /**
+     * Returns a string of text content that is the concatenation of the
+     * text content's of the element's effective childNodes (the elements
+     * returned by <a href="#getEffectiveChildNodes>getEffectiveChildNodes</a>.
+     *
+     * @return {string} List of effctive children.
+     */
+    getEffectiveTextContent() {
+      let cn = this.getEffectiveChildNodes();
+      let tc = [];
+      for (let i=0, c; (c = cn[i]); i++) {
+        if (c.nodeType !== Node.COMMENT_NODE) {
+          tc.push(c.textContent);
+        }
+      }
+      return tc.join('');
+    }
+
+    /**
+     * Returns the first effective childNode within this element that
+     * match `selector`. These can be dom child nodes or elements distributed
+     * to children that are insertion points.
+     * @param {string} selector Selector to run.
+     * @return {Object<Node>} First effective child node that matches selector.
+     */
+    queryEffectiveChildren(selector) {
+      let e$ = this.queryDistributedElements(selector);
+      return e$ && e$[0];
+    }
+
+    /**
+     * Returns a list of effective childNodes within this element that
+     * match `selector`. These can be dom child nodes or elements distributed
+     * to children that are insertion points.
+     * @param {string} selector Selector to run.
+     * @return {Array<Node>} List of effective child nodes that match selector.
+     */
+    queryAllEffectiveChildren(selector) {
+      return this.queryDistributedElements(selector);
+    }
+
+    /**
+     * Returns a list of nodes distributed to this element's `<slot>`.
+     *
+     * If this element contains more than one `<slot>` in its local DOM,
+     * an optional selector may be passed to choose the desired content.
+     *
+     * @param {string=} slctr CSS selector to choose the desired
+     *   `<slot>`.  Defaults to `content`.
+     * @return {Array<Node>} List of distributed nodes for the `<slot>`.
+     */
+    getContentChildNodes(slctr) {
+      let content = this.root.querySelector(slctr || 'slot');
+      return content ? /** @type {Polymer.DomApi} */(Object(__WEBPACK_IMPORTED_MODULE_7__polymer_dom_js__["a" /* dom */])(content)).getDistributedNodes() : [];
+    }
+
+    /**
+     * Returns a list of element children distributed to this element's
+     * `<slot>`.
+     *
+     * If this element contains more than one `<slot>` in its
+     * local DOM, an optional selector may be passed to choose the desired
+     * content.  This method differs from `getContentChildNodes` in that only
+     * elements are returned.
+     *
+     * @param {string=} slctr CSS selector to choose the desired
+     *   `<content>`.  Defaults to `content`.
+     * @return {Array<HTMLElement>} List of distributed nodes for the
+     *   `<slot>`.
+     * @suppress {invalidCasts}
+     */
+    getContentChildren(slctr) {
+      return /** @type {Array<HTMLElement>} */(this.getContentChildNodes(slctr).filter(function(n) {
+        return (n.nodeType === Node.ELEMENT_NODE);
+      }));
+    }
+
+    /**
+     * Checks whether an element is in this element's light DOM tree.
+     *
+     * @param {?Node} node The element to be checked.
+     * @this {Element}
+     * @return {boolean} true if node is in this element's light DOM tree.
+     */
+    isLightDescendant(node) {
+      return this !== node && this.contains(node) &&
+          this.getRootNode() === node.getRootNode();
+    }
+
+    /**
+     * Checks whether an element is in this element's local DOM tree.
+     *
+     * @param {Element=} node The element to be checked.
+     * @return {boolean} true if node is in this element's local DOM tree.
+     */
+    isLocalDescendant(node) {
+      return this.root === node.getRootNode();
+    }
+
+    // NOTE: should now be handled by ShadyCss library.
+    scopeSubtree(container, shouldObserve) { // eslint-disable-line no-unused-vars
+    }
+
+    /**
+     * Returns the computed style value for the given property.
+     * @param {string} property The css property name.
+     * @return {string} Returns the computed css property value for the given
+     * `property`.
+     */
+    getComputedStyleValue(property) {
+      return styleInterface.getComputedStyleValue(this, property);
+    }
+
+    // debounce
+
+    /**
+     * Call `debounce` to collapse multiple requests for a named task into
+     * one invocation which is made after the wait time has elapsed with
+     * no new request.  If no wait time is given, the callback will be called
+     * at microtask timing (guaranteed before paint).
+     *
+     *     debouncedClickAction(e) {
+     *       // will not call `processClick` more than once per 100ms
+     *       this.debounce('click', function() {
+     *        this.processClick();
+     *       } 100);
+     *     }
+     *
+     * @param {string} jobName String to indentify the debounce job.
+     * @param {function()} callback Function that is called (with `this`
+     *   context) when the wait time elapses.
+     * @param {number} wait Optional wait time in milliseconds (ms) after the
+     *   last signal that must elapse before invoking `callback`
+     * @return {Object} Returns a debouncer object on which exists the
+     * following methods: `isActive()` returns true if the debouncer is
+     * active; `cancel()` cancels the debouncer if it is active;
+     * `flush()` immediately invokes the debounced callback if the debouncer
+     * is active.
+     */
+    debounce(jobName, callback, wait) {
+      this._debouncers = this._debouncers || {};
+      return this._debouncers[jobName] = __WEBPACK_IMPORTED_MODULE_9__utils_debounce_js__["Debouncer"].debounce(
+            this._debouncers[jobName]
+          , wait > 0 ? __WEBPACK_IMPORTED_MODULE_10__utils_async_js__["timeOut"].after(wait) : __WEBPACK_IMPORTED_MODULE_10__utils_async_js__["microTask"]
+          , callback.bind(this));
+    }
+
+    /**
+     * Returns whether a named debouncer is active.
+     *
+     * @param {string} jobName The name of the debouncer started with `debounce`
+     * @return {boolean} Whether the debouncer is active (has not yet fired).
+     */
+    isDebouncerActive(jobName) {
+      this._debouncers = this._debouncers || {};
+      let debouncer = this._debouncers[jobName];
+      return !!(debouncer && debouncer.isActive());
+    }
+
+    /**
+     * Immediately calls the debouncer `callback` and inactivates it.
+     *
+     * @param {string} jobName The name of the debouncer started with `debounce`
+     */
+    flushDebouncer(jobName) {
+      this._debouncers = this._debouncers || {};
+      let debouncer = this._debouncers[jobName];
+      if (debouncer) {
+        debouncer.flush();
+      }
+    }
+
+    /**
+     * Cancels an active debouncer.  The `callback` will not be called.
+     *
+     * @param {string} jobName The name of the debouncer started with `debounce`
+     */
+    cancelDebouncer(jobName) {
+      this._debouncers = this._debouncers || {};
+      let debouncer = this._debouncers[jobName];
+      if (debouncer) {
+        debouncer.cancel();
+      }
+    }
+
+    /**
+     * Runs a callback function asyncronously.
+     *
+     * By default (if no waitTime is specified), async callbacks are run at
+     * microtask timing, which will occur before paint.
+     *
+     * @param {Function} callback The callback function to run, bound to `this`.
+     * @param {number=} waitTime Time to wait before calling the
+     *   `callback`.  If unspecified or 0, the callback will be run at microtask
+     *   timing (before paint).
+     * @return {number} Handle that may be used to cancel the async job.
+     */
+    async(callback, waitTime) {
+      return waitTime > 0 ? __WEBPACK_IMPORTED_MODULE_10__utils_async_js__["timeOut"].run(callback.bind(this), waitTime) :
+          ~__WEBPACK_IMPORTED_MODULE_10__utils_async_js__["microTask"].run(callback.bind(this));
+    }
+
+    /**
+     * Cancels an async operation started with `async`.
+     *
+     * @param {number} handle Handle returned from original `async` call to
+     *   cancel.
+     */
+    cancelAsync(handle) {
+      handle < 0 ? __WEBPACK_IMPORTED_MODULE_10__utils_async_js__["microTask"].cancel(~handle) :
+          __WEBPACK_IMPORTED_MODULE_10__utils_async_js__["timeOut"].cancel(handle);
+    }
+
+    // other
+
+    /**
+     * Convenience method for creating an element and configuring it.
+     *
+     * @param {string} tag HTML element tag to create.
+     * @param {Object} props Object of properties to configure on the
+     *    instance.
+     * @return {Element} Newly created and configured element.
+     */
+    create(tag, props) {
+      let elt = document.createElement(tag);
+      if (props) {
+        if (elt.setProperties) {
+          elt.setProperties(props);
+        } else {
+          for (let n in props) {
+            elt[n] = props[n];
+          }
+        }
+      }
+      return elt;
+    }
+
+    /**
+     * Convenience method for importing an HTML document imperatively.
+     *
+     * This method creates a new `<link rel="import">` element with
+     * the provided URL and appends it to the document to start loading.
+     * In the `onload` callback, the `import` property of the `link`
+     * element will contain the imported document contents.
+     *
+     * @param {string} href URL to document to load.
+     * @param {Function} onload Callback to notify when an import successfully
+     *   loaded.
+     * @param {Function} onerror Callback to notify when an import
+     *   unsuccessfully loaded.
+     * @param {boolean} optAsync True if the import should be loaded `async`.
+     *   Defaults to `false`.
+     * @return {HTMLLinkElement} The link element for the URL to be loaded.
+     */
+    importHref(href, onload, onerror, optAsync) { // eslint-disable-line no-unused-vars
+      let loadFn = onload ? onload.bind(this) : null;
+      let errorFn = onerror ? onerror.bind(this) : null;
+      return Object(__WEBPACK_IMPORTED_MODULE_4__utils_import_href_js__["a" /* importHref */])(href, loadFn, errorFn, optAsync);
+    }
+
+    /**
+     * Polyfill for Element.prototype.matches, which is sometimes still
+     * prefixed.
+     *
+     * @param {string} selector Selector to test.
+     * @param {Element=} node Element to test the selector against.
+     * @return {boolean} Whether the element matches the selector.
+     */
+    elementMatches(selector, node) {
+      return Object(__WEBPACK_IMPORTED_MODULE_7__polymer_dom_js__["c" /* matchesSelector */])( (node || this), selector);
+    }
+
+    /**
+     * Toggles an HTML attribute on or off.
+     *
+     * @param {string} name HTML attribute name
+     * @param {boolean=} bool Boolean to force the attribute on or off.
+     *    When unspecified, the state of the attribute will be reversed.
+     * @param {Element=} node Node to target.  Defaults to `this`.
+     */
+    toggleAttribute(name, bool, node) {
+      node = /** @type {Element} */ (node || this);
+      if (arguments.length == 1) {
+        bool = !node.hasAttribute(name);
+      }
+      if (bool) {
+        node.setAttribute(name, '');
+      } else {
+        node.removeAttribute(name);
+      }
+    }
+
+
+    /**
+     * Toggles a CSS class on or off.
+     *
+     * @param {string} name CSS class name
+     * @param {boolean=} bool Boolean to force the class on or off.
+     *    When unspecified, the state of the class will be reversed.
+     * @param {Element=} node Node to target.  Defaults to `this`.
+     */
+    toggleClass(name, bool, node) {
+      node = /** @type {Element} */ (node || this);
+      if (arguments.length == 1) {
+        bool = !node.classList.contains(name);
+      }
+      if (bool) {
+        node.classList.add(name);
+      } else {
+        node.classList.remove(name);
+      }
+    }
+
+    /**
+     * Cross-platform helper for setting an element's CSS `transform` property.
+     *
+     * @param {string} transformText Transform setting.
+     * @param {Element=} node Element to apply the transform to.
+     * Defaults to `this`
+     */
+    transform(transformText, node) {
+      node = /** @type {Element} */ (node || this);
+      node.style.webkitTransform = transformText;
+      node.style.transform = transformText;
+    }
+
+    /**
+     * Cross-platform helper for setting an element's CSS `translate3d`
+     * property.
+     *
+     * @param {number} x X offset.
+     * @param {number} y Y offset.
+     * @param {number} z Z offset.
+     * @param {Element=} node Element to apply the transform to.
+     * Defaults to `this`.
+     */
+    translate3d(x, y, z, node) {
+      node = /** @type {Element} */ (node || this);
+      this.transform('translate3d(' + x + ',' + y + ',' + z + ')', node);
+    }
+
+    /**
+     * Removes an item from an array, if it exists.
+     *
+     * If the array is specified by path, a change notification is
+     * generated, so that observers, data bindings and computed
+     * properties watching that path can update.
+     *
+     * If the array is passed directly, **no change
+     * notification is generated**.
+     *
+     * @param {string | !Array<number|string>} arrayOrPath Path to array from which to remove the item
+     *   (or the array itself).
+     * @param {*} item Item to remove.
+     * @return {Array} Array containing item removed.
+     */
+    arrayDelete(arrayOrPath, item) {
+      let index;
+      if (Array.isArray(arrayOrPath)) {
+        index = arrayOrPath.indexOf(item);
+        if (index >= 0) {
+          return arrayOrPath.splice(index, 1);
+        }
+      } else {
+        let arr = Object(__WEBPACK_IMPORTED_MODULE_11__utils_path_js__["a" /* get */])(this, arrayOrPath);
+        index = arr.indexOf(item);
+        if (index >= 0) {
+          return this.splice(arrayOrPath, index, 1);
+        }
+      }
+      return null;
+    }
+
+    // logging
+
+    /**
+     * Facades `console.log`/`warn`/`error` as override point.
+     *
+     * @param {string} level One of 'log', 'warn', 'error'
+     * @param {Array} args Array of strings or objects to log
+     */
+    _logger(level, args) {
+      // accept ['foo', 'bar'] and [['foo', 'bar']]
+      if (Array.isArray(args) && args.length === 1) {
+        args = args[0];
+      }
+      switch(level) {
+        case 'log':
+        case 'warn':
+        case 'error':
+          console[level](...args);
+      }
+    }
+
+    /**
+     * Facades `console.log` as an override point.
+     *
+     * @param {...*} args Array of strings or objects to log
+     */
+    _log(...args) {
+      this._logger('log', args);
+    }
+
+    /**
+     * Facades `console.warn` as an override point.
+     *
+     * @param {...*} args Array of strings or objects to log
+     */
+    _warn(...args) {
+      this._logger('warn', args);
+    }
+
+    /**
+     * Facades `console.error` as an override point.
+     *
+     * @param {...*} args Array of strings or objects to log
+     */
+    _error(...args) {
+      this._logger('error', args);
+    }
+
+    /**
+     * Formats a message using the element type an a method name.
+     *
+     * @param {string} methodName Method name to associate with message
+     * @param {...*} args Array of strings or objects to log
+     * @return {Array} Array with formatting information for `console`
+     *   logging.
+     */
+    _logf(methodName, ...args) {
+      return ['[%s::%s]', this.is, methodName, ...args];
+    }
+
+  }
+
+  LegacyElement.prototype.is = '';
+
+  return LegacyElement;
+
+});
+/* harmony export (immutable) */ __webpack_exports__["a"] = LegacyElementMixin;
+
+
+
+/***/ }),
+/* 39 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["e"] = toCssText;
+/* harmony export (immutable) */ __webpack_exports__["d"] = rulesForStyle;
+/* unused harmony export isKeyframesSelector */
+/* harmony export (immutable) */ __webpack_exports__["a"] = forEachRule;
+/* unused harmony export applyCss */
+/* unused harmony export createScopeStyle */
+/* unused harmony export applyStylePlaceHolder */
+/* unused harmony export applyStyle */
+/* unused harmony export isTargetedBuild */
+/* unused harmony export getCssBuildType */
+/* harmony export (immutable) */ __webpack_exports__["c"] = processVariableAndFallback;
+/* unused harmony export setElementClassRaw */
+/* harmony export (immutable) */ __webpack_exports__["b"] = getIsExtends;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__style_settings_js__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__css_parse_js__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__common_regex_js__ = __webpack_require__(26);
+/**
+@license
+Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+*/
+
+
+
+
+ // eslint-disable-line no-unused-vars
+
+
+/**
+ * @param {string|StyleNode} rules
+ * @param {function(StyleNode)=} callback
+ * @return {string}
+ */
+function toCssText (rules, callback) {
+  if (!rules) {
+    return '';
+  }
+  if (typeof rules === 'string') {
+    rules = Object(__WEBPACK_IMPORTED_MODULE_1__css_parse_js__["a" /* parse */])(rules);
+  }
+  if (callback) {
+    forEachRule(rules, callback);
+  }
+  return Object(__WEBPACK_IMPORTED_MODULE_1__css_parse_js__["b" /* stringify */])(rules, __WEBPACK_IMPORTED_MODULE_0__style_settings_js__["a" /* nativeCssVariables */]);
+}
+
+/**
+ * @param {HTMLStyleElement} style
+ * @return {StyleNode}
+ */
+function rulesForStyle(style) {
+  if (!style['__cssRules'] && style.textContent) {
+    style['__cssRules'] = Object(__WEBPACK_IMPORTED_MODULE_1__css_parse_js__["a" /* parse */])(style.textContent);
+  }
+  return style['__cssRules'] || null;
+}
+
+// Tests if a rule is a keyframes selector, which looks almost exactly
+// like a normal selector but is not (it has nothing to do with scoping
+// for example).
+/**
+ * @param {StyleNode} rule
+ * @return {boolean}
+ */
+function isKeyframesSelector(rule) {
+  return Boolean(rule['parent']) &&
+  rule['parent']['type'] === __WEBPACK_IMPORTED_MODULE_1__css_parse_js__["c" /* types */].KEYFRAMES_RULE;
+}
+
+/**
+ * @param {StyleNode} node
+ * @param {Function=} styleRuleCallback
+ * @param {Function=} keyframesRuleCallback
+ * @param {boolean=} onlyActiveRules
+ */
+function forEachRule(node, styleRuleCallback, keyframesRuleCallback, onlyActiveRules) {
+  if (!node) {
+    return;
+  }
+  let skipRules = false;
+  let type = node['type'];
+  if (onlyActiveRules) {
+    if (type === __WEBPACK_IMPORTED_MODULE_1__css_parse_js__["c" /* types */].MEDIA_RULE) {
+      let matchMedia = node['selector'].match(__WEBPACK_IMPORTED_MODULE_2__common_regex_js__["a" /* MEDIA_MATCH */]);
+      if (matchMedia) {
+        // if rule is a non matching @media rule, skip subrules
+        if (!window.matchMedia(matchMedia[1]).matches) {
+          skipRules = true;
+        }
+      }
+    }
+  }
+  if (type === __WEBPACK_IMPORTED_MODULE_1__css_parse_js__["c" /* types */].STYLE_RULE) {
+    styleRuleCallback(node);
+  } else if (keyframesRuleCallback &&
+    type === __WEBPACK_IMPORTED_MODULE_1__css_parse_js__["c" /* types */].KEYFRAMES_RULE) {
+    keyframesRuleCallback(node);
+  } else if (type === __WEBPACK_IMPORTED_MODULE_1__css_parse_js__["c" /* types */].MIXIN_RULE) {
+    skipRules = true;
+  }
+  let r$ = node['rules'];
+  if (r$ && !skipRules) {
+    for (let i=0, l=r$.length, r; (i<l) && (r=r$[i]); i++) {
+      forEachRule(r, styleRuleCallback, keyframesRuleCallback, onlyActiveRules);
+    }
+  }
+}
+
+// add a string of cssText to the document.
+/**
+ * @param {string} cssText
+ * @param {string} moniker
+ * @param {Node} target
+ * @param {Node} contextNode
+ * @return {HTMLStyleElement}
+ */
+function applyCss(cssText, moniker, target, contextNode) {
+  let style = createScopeStyle(cssText, moniker);
+  applyStyle(style, target, contextNode);
+  return style;
+}
+
+/**
+ * @param {string} cssText
+ * @param {string} moniker
+ * @return {HTMLStyleElement}
+ */
+function createScopeStyle(cssText, moniker) {
+  let style = /** @type {HTMLStyleElement} */(document.createElement('style'));
+  if (moniker) {
+    style.setAttribute('scope', moniker);
+  }
+  style.textContent = cssText;
+  return style;
+}
+
+/**
+ * Track the position of the last added style for placing placeholders
+ * @type {Node}
+ */
+let lastHeadApplyNode = null;
+
+// insert a comment node as a styling position placeholder.
+/**
+ * @param {string} moniker
+ * @return {!Comment}
+ */
+function applyStylePlaceHolder(moniker) {
+  let placeHolder = document.createComment(' Shady DOM styles for ' +
+    moniker + ' ');
+  let after = lastHeadApplyNode ?
+    lastHeadApplyNode['nextSibling'] : null;
+  let scope = document.head;
+  scope.insertBefore(placeHolder, after || scope.firstChild);
+  lastHeadApplyNode = placeHolder;
+  return placeHolder;
+}
+
+/**
+ * @param {HTMLStyleElement} style
+ * @param {?Node} target
+ * @param {?Node} contextNode
+ */
+function applyStyle(style, target, contextNode) {
+  target = target || document.head;
+  let after = (contextNode && contextNode.nextSibling) ||
+    target.firstChild;
+  target.insertBefore(style, after);
+  if (!lastHeadApplyNode) {
+    lastHeadApplyNode = style;
+  } else {
+    // only update lastHeadApplyNode if the new style is inserted after the old lastHeadApplyNode
+    let position = style.compareDocumentPosition(lastHeadApplyNode);
+    if (position === Node.DOCUMENT_POSITION_PRECEDING) {
+      lastHeadApplyNode = style;
+    }
+  }
+}
+
+/**
+ * @param {string} buildType
+ * @return {boolean}
+ */
+function isTargetedBuild(buildType) {
+  return __WEBPACK_IMPORTED_MODULE_0__style_settings_js__["b" /* nativeShadow */] ? buildType === 'shadow' : buildType === 'shady';
+}
+
+/**
+ * @param {Element} element
+ * @return {?string}
+ */
+function getCssBuildType(element) {
+  return element.getAttribute('css-build');
+}
+
+/**
+ * Walk from text[start] matching parens and
+ * returns position of the outer end paren
+ * @param {string} text
+ * @param {number} start
+ * @return {number}
+ */
+function findMatchingParen(text, start) {
+  let level = 0;
+  for (let i=start, l=text.length; i < l; i++) {
+    if (text[i] === '(') {
+      level++;
+    } else if (text[i] === ')') {
+      if (--level === 0) {
+        return i;
+      }
+    }
+  }
+  return -1;
+}
+
+/**
+ * @param {string} str
+ * @param {function(string, string, string, string)} callback
+ */
+function processVariableAndFallback(str, callback) {
+  // find 'var('
+  let start = str.indexOf('var(');
+  if (start === -1) {
+    // no var?, everything is prefix
+    return callback(str, '', '', '');
+  }
+  //${prefix}var(${inner})${suffix}
+  let end = findMatchingParen(str, start + 3);
+  let inner = str.substring(start + 4, end);
+  let prefix = str.substring(0, start);
+  // suffix may have other variables
+  let suffix = processVariableAndFallback(str.substring(end + 1), callback);
+  let comma = inner.indexOf(',');
+  // value and fallback args should be trimmed to match in property lookup
+  if (comma === -1) {
+    // variable, no fallback
+    return callback(prefix, inner.trim(), '', suffix);
+  }
+  // var(${value},${fallback})
+  let value = inner.substring(0, comma).trim();
+  let fallback = inner.substring(comma + 1).trim();
+  return callback(prefix, value, fallback, suffix);
+}
+
+/**
+ * @param {Element} element
+ * @param {string} value
+ */
+function setElementClassRaw(element, value) {
+  // use native setAttribute provided by ShadyDOM when setAttribute is patched
+  if (__WEBPACK_IMPORTED_MODULE_0__style_settings_js__["b" /* nativeShadow */]) {
+    element.setAttribute('class', value);
+  } else {
+    window['ShadyDOM']['nativeMethods']['setAttribute'].call(element, 'class', value);
+  }
+}
+
+/**
+ * @param {Element | {is: string, extends: string}} element
+ * @return {{is: string, typeExtension: string}}
+ */
+function getIsExtends(element) {
+  let localName = element['localName'];
+  let is = '', typeExtension = '';
+  /*
+  NOTE: technically, this can be wrong for certain svg elements
+  with `-` in the name like `<font-face>`
+  */
+  if (localName) {
+    if (localName.indexOf('-') > -1) {
+      is = localName;
+    } else {
+      typeExtension = localName;
+      is = (element.getAttribute && element.getAttribute('is')) || '';
+    }
+  } else {
+    is = /** @type {?} */(element).is;
+    typeExtension = /** @type {?} */(element).extends;
+  }
+  return {is, typeExtension};
+}
+
+
+/***/ }),
+/* 40 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/**
+@license
+Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+*/
+
+
+
+/**
+ * @const {!Object<string, !HTMLTemplateElement>}
+ */
+const templateMap = {};
+/* harmony default export */ __webpack_exports__["a"] = (templateMap);
+
+
+/***/ }),
+/* 41 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = documentWait;
+/**
+@license
+Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+*/
+
+
+
+/** @type {Promise<void>} */
+let readyPromise = null;
+
+/** @type {?function(?function())} */
+let whenReady = window['HTMLImports'] && window['HTMLImports']['whenReady'] || null;
+
+/** @type {function()} */
+let resolveFn;
+
+/**
+ * @param {?function()} callback
+ */
+function documentWait(callback) {
+  requestAnimationFrame(function() {
+    if (whenReady) {
+      whenReady(callback)
+    } else {
+      if (!readyPromise) {
+        readyPromise = new Promise((resolve) => {resolveFn = resolve});
+        if (document.readyState === 'complete') {
+          resolveFn();
+        } else {
+          document.addEventListener('readystatechange', () => {
+            if (document.readyState === 'complete') {
+              resolveFn();
+            }
+          });
+        }
+      }
+      readyPromise.then(function(){ callback && callback(); });
+    }
+  });
+}
+
+
+/***/ }),
+/* 42 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export CustomStyleProvider */
+/* unused harmony export CustomStyleInterfaceInterface */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__document_wait_js__ = __webpack_require__(41);
+/**
+@license
+Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+*/
+
+
+
+
+
+/**
+ * @typedef {HTMLStyleElement | {getStyle: function():HTMLStyleElement}}
+ */
+let CustomStyleProvider;
+
+const SEEN_MARKER = '__seenByShadyCSS';
+const CACHED_STYLE = '__shadyCSSCachedStyle';
+
+/** @type {?function(!HTMLStyleElement)} */
+let transformFn = null;
+
+/** @type {?function()} */
+let validateFn = null;
+
+/**
+This interface is provided to add document-level <style> elements to ShadyCSS for processing.
+These styles must be processed by ShadyCSS to simulate ShadowRoot upper-bound encapsulation from outside styles
+In addition, these styles may also need to be processed for @apply rules and CSS Custom Properties
+
+To add document-level styles to ShadyCSS, one can call `ShadyCSS.addDocumentStyle(styleElement)` or `ShadyCSS.addDocumentStyle({getStyle: () => styleElement})`
+
+In addition, if the process used to discover document-level styles can be synchronously flushed, one should set `ShadyCSS.documentStyleFlush`.
+This function will be called when calculating styles.
+
+An example usage of the document-level styling api can be found in `examples/document-style-lib.js`
+
+@unrestricted
+*/
+class CustomStyleInterface {
+  constructor() {
+    /** @type {!Array<!CustomStyleProvider>} */
+    this['customStyles'] = [];
+    this['enqueued'] = false;
+  }
+  /**
+   * Queue a validation for new custom styles to batch style recalculations
+   */
+  enqueueDocumentValidation() {
+    if (this['enqueued'] || !validateFn) {
+      return;
+    }
+    this['enqueued'] = true;
+    Object(__WEBPACK_IMPORTED_MODULE_0__document_wait_js__["a" /* default */])(validateFn);
+  }
+  /**
+   * @param {!HTMLStyleElement} style
+   */
+  addCustomStyle(style) {
+    if (!style[SEEN_MARKER]) {
+      style[SEEN_MARKER] = true;
+      this['customStyles'].push(style);
+      this.enqueueDocumentValidation();
+    }
+  }
+  /**
+   * @param {!CustomStyleProvider} customStyle
+   * @return {HTMLStyleElement}
+   */
+  getStyleForCustomStyle(customStyle) {
+    if (customStyle[CACHED_STYLE]) {
+      return customStyle[CACHED_STYLE];
+    }
+    let style;
+    if (customStyle['getStyle']) {
+      style = customStyle['getStyle']();
+    } else {
+      style = customStyle;
+    }
+    return style;
+  }
+  /**
+   * @return {!Array<!CustomStyleProvider>}
+   */
+  processStyles() {
+    const cs = this['customStyles'];
+    for (let i = 0; i < cs.length; i++) {
+      const customStyle = cs[i];
+      if (customStyle[CACHED_STYLE]) {
+        continue;
+      }
+      const style = this.getStyleForCustomStyle(customStyle);
+      if (style) {
+        // HTMLImports polyfill may have cloned the style into the main document,
+        // which is referenced with __appliedElement.
+        const styleToTransform = /** @type {!HTMLStyleElement} */(style['__appliedElement'] || style);
+        if (transformFn) {
+          transformFn(styleToTransform);
+        }
+        customStyle[CACHED_STYLE] = styleToTransform;
+      }
+    }
+    return cs;
+  }
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = CustomStyleInterface;
+
+
+CustomStyleInterface.prototype['addCustomStyle'] = CustomStyleInterface.prototype.addCustomStyle;
+CustomStyleInterface.prototype['getStyleForCustomStyle'] = CustomStyleInterface.prototype.getStyleForCustomStyle;
+CustomStyleInterface.prototype['processStyles'] = CustomStyleInterface.prototype.processStyles;
+
+Object.defineProperties(CustomStyleInterface.prototype, {
+  'transformCallback': {
+    /** @return {?function(!HTMLStyleElement)} */
+    get() {
+      return transformFn;
+    },
+    /** @param {?function(!HTMLStyleElement)} fn */
+    set(fn) {
+      transformFn = fn;
+    }
+  },
+  'validateCallback': {
+    /** @return {?function()} */
+    get() {
+      return validateFn;
+    },
+    /**
+     * @param {?function()} fn
+     * @this {CustomStyleInterface}
+     */
+    set(fn) {
+      let needsEnqueue = false;
+      if (!validateFn) {
+        needsEnqueue = true;
+      }
+      validateFn = fn;
+      if (needsEnqueue) {
+        this.enqueueDocumentValidation();
+      }
+    },
+  }
+})
+
+/** @typedef {{
+ * customStyles: !Array<!CustomStyleProvider>,
+ * addCustomStyle: function(!CustomStyleProvider),
+ * getStyleForCustomStyle: function(!CustomStyleProvider): HTMLStyleElement,
+ * findStyles: function(),
+ * transformCallback: ?function(!HTMLStyleElement),
+ * validateCallback: ?function()
+ * }}
+ */
+let CustomStyleInterfaceInterface;
+
+
+/***/ }),
+/* 43 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["b"] = cssFromModules;
+/* unused harmony export cssFromModule */
+/* harmony export (immutable) */ __webpack_exports__["c"] = cssFromTemplate;
+/* harmony export (immutable) */ __webpack_exports__["a"] = cssFromModuleImports;
+/* unused harmony export _cssFromModuleImports */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__resolve_url_js__ = __webpack_require__(15);
+
+
+const MODULE_STYLE_LINK_SELECTOR = 'link[rel=import][type~=css]';
+const INCLUDE_ATTR = 'include';
+
+function importModule(moduleId) {
+  const /** Polymer.DomModule */ PolymerDomModule = customElements.get('dom-module');
+  if (!PolymerDomModule) {
+    return null;
+  }
+  return PolymerDomModule.import(moduleId);
+}
+
+/** @typedef {{assetpath: string}} */
+let templateWithAssetPath; // eslint-disable-line no-unused-vars
+
+function cssFromModules(moduleIds) {
+  let modules = moduleIds.trim().split(/\s+/);
+  let cssText = '';
+  for (let i=0; i < modules.length; i++) {
+    cssText += cssFromModule(modules[i]);
+  }
+  return cssText;
+}
+
+function cssFromModule(moduleId) {
+  let m = importModule(moduleId);
+  if (m && m._cssText === undefined) {
+    // module imports: <link rel="import" type="css">
+    let cssText = _cssFromModuleImports(m);
+    // include css from the first template in the module
+    let t = m.querySelector('template');
+    if (t) {
+      cssText += cssFromTemplate(t, /** @type {templateWithAssetPath} */(m).assetpath);
+    }
+    m._cssText = cssText || null;
+  }
+  if (!m) {
+    console.warn('Could not find style data in module named', moduleId);
+  }
+  return m && m._cssText || '';
+}
+
+function cssFromTemplate(template, baseURI) {
+  let cssText = '';
+  // if element is a template, get content from its .content
+  let e$ = template.content.querySelectorAll('style');
+  for (let i=0; i < e$.length; i++) {
+    let e = e$[i];
+    // support style sharing by allowing styles to "include"
+    // other dom-modules that contain styling
+    let include = e.getAttribute(INCLUDE_ATTR);
+    if (include) {
+      cssText += cssFromModules(include);
+    }
+    e.parentNode.removeChild(e);
+    cssText += baseURI ?
+      Object(__WEBPACK_IMPORTED_MODULE_0__resolve_url_js__["b" /* resolveCss */])(e.textContent, baseURI) : e.textContent;
+  }
+  return cssText;
+}
+
+function cssFromModuleImports(moduleId) {
+  let m = importModule(moduleId);
+  return m ? _cssFromModuleImports(m) : '';
+}
+
+function _cssFromModuleImports(module) {
+  let cssText = '';
+  let p$ = module.querySelectorAll(MODULE_STYLE_LINK_SELECTOR);
+  for (let i=0; i < p$.length; i++) {
+    let p = p$[i];
+    if (p.import) {
+      let importDoc = p.import;
+      // NOTE: polyfill affordance.
+      // under the HTMLImports polyfill, there will be no 'body',
+      // but the import pseudo-doc can be used directly.
+      let container = importDoc.body ? importDoc.body : importDoc;
+      cssText +=
+        Object(__WEBPACK_IMPORTED_MODULE_0__resolve_url_js__["b" /* resolveCss */])(container.textContent,
+          importDoc.baseURI);
+    }
+  }
+  return cssText;
+}
+
+
+/***/ }),
+/* 44 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_boot_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__utils_boot_js__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_mixin_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_case_map_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_async_js__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_mixin_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_gestures_js__ = __webpack_require__(31);
+
+
+
+
+/**
+ * @const {Polymer.Gestures}
+ */
+const gestures = __WEBPACK_IMPORTED_MODULE_2__utils_gestures_js__;
+
+const GestureEventListeners = Object(__WEBPACK_IMPORTED_MODULE_1__utils_mixin_js__["a" /* dedupingMixin */])(superClass => {
+
+  /**
+   * @polymer
+   * @mixinClass
+   * @implements {Polymer_GestureEventListeners}
+   */
+  class GestureEventListeners extends superClass {
+
+    _addEventListenerToNode(node, eventName, handler) {
+      if (!gestures.addListener(node, eventName, handler)) {
+        super._addEventListenerToNode(node, eventName, handler);
+      }
+    }
+
+    _removeEventListenerFromNode(node, eventName, handler) {
+      if (!gestures.removeListener(node, eventName, handler)) {
+        super._removeEventListenerFromNode(node, eventName, handler);
+      }
+    }
+
+  }
+
+  return GestureEventListeners;
+
+});
+/* harmony export (immutable) */ __webpack_exports__["a"] = GestureEventListeners;
+
+
+
+/***/ }),
+/* 45 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export beforeNextRender */
+/* harmony export (immutable) */ __webpack_exports__["a"] = afterNextRender;
+/* unused harmony export flush */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__boot_js__);
+
+
+let scheduled = false;
+let beforeRenderQueue = [];
+let afterRenderQueue = [];
+
+function schedule() {
+  scheduled = true;
+  // before next render
+  requestAnimationFrame(function() {
+    scheduled = false;
+    flushQueue(beforeRenderQueue);
+    // after the render
+    setTimeout(function() {
+      runQueue(afterRenderQueue);
+    });
+  });
+}
+
+function flushQueue(queue) {
+  while (queue.length) {
+    callMethod(queue.shift());
+  }
+}
+
+function runQueue(queue) {
+  for (let i=0, l=queue.length; i < l; i++) {
+    callMethod(queue.shift());
+  }
+}
+
+function callMethod(info) {
+  const context = info[0];
+  const callback = info[1];
+  const args = info[2];
+  try {
+    callback.apply(context, args);
+  } catch(e) {
+    setTimeout(() => {
+      throw e;
+    });
+  }
+}
+
+function flush() {
+  while (beforeRenderQueue.length || afterRenderQueue.length) {
+    flushQueue(beforeRenderQueue);
+    flushQueue(afterRenderQueue);
+  }
+  scheduled = false;
+}
+
+function beforeNextRender(context, callback, args) {
+  if (!scheduled) {
+    schedule();
+  }
+  beforeRenderQueue.push([context, callback, args]);
+}
+
+function afterNextRender(context, callback, args) {
+  if (!scheduled) {
+    schedule();
+  }
+  afterRenderQueue.push([context, callback, args]);
+}
+
+
+
+
+/***/ }),
+/* 46 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return calculateSplices; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__boot_js__);
+
+
+function newSplice(index, removed, addedCount) {
+  return {
+    index: index,
+    removed: removed,
+    addedCount: addedCount
+  };
+}
+
+const EDIT_LEAVE = 0;
+const EDIT_UPDATE = 1;
+const EDIT_ADD = 2;
+const EDIT_DELETE = 3;
+
+// Note: This function is *based* on the computation of the Levenshtein
+// "edit" distance. The one change is that "updates" are treated as two
+// edits - not one. With Array splices, an update is really a delete
+// followed by an add. By retaining this, we optimize for "keeping" the
+// maximum array items in the original array. For example:
+//
+//   'xxxx123' -> '123yyyy'
+//
+// With 1-edit updates, the shortest path would be just to update all seven
+// characters. With 2-edit updates, we delete 4, leave 3, and add 4. This
+// leaves the substring '123' intact.
+function calcEditDistances(current, currentStart, currentEnd,
+                            old, oldStart, oldEnd) {
+  // "Deletion" columns
+  let rowCount = oldEnd - oldStart + 1;
+  let columnCount = currentEnd - currentStart + 1;
+  let distances = new Array(rowCount);
+
+  // "Addition" rows. Initialize null column.
+  for (let i = 0; i < rowCount; i++) {
+    distances[i] = new Array(columnCount);
+    distances[i][0] = i;
+  }
+
+  // Initialize null row
+  for (let j = 0; j < columnCount; j++)
+    distances[0][j] = j;
+
+  for (let i = 1; i < rowCount; i++) {
+    for (let j = 1; j < columnCount; j++) {
+      if (equals(current[currentStart + j - 1], old[oldStart + i - 1]))
+        distances[i][j] = distances[i - 1][j - 1];
+      else {
+        let north = distances[i - 1][j] + 1;
+        let west = distances[i][j - 1] + 1;
+        distances[i][j] = north < west ? north : west;
+      }
+    }
+  }
+
+  return distances;
+}
+
+// This starts at the final weight, and walks "backward" by finding
+// the minimum previous weight recursively until the origin of the weight
+// matrix.
+function spliceOperationsFromEditDistances(distances) {
+  let i = distances.length - 1;
+  let j = distances[0].length - 1;
+  let current = distances[i][j];
+  let edits = [];
+  while (i > 0 || j > 0) {
+    if (i == 0) {
+      edits.push(EDIT_ADD);
+      j--;
+      continue;
+    }
+    if (j == 0) {
+      edits.push(EDIT_DELETE);
+      i--;
+      continue;
+    }
+    let northWest = distances[i - 1][j - 1];
+    let west = distances[i - 1][j];
+    let north = distances[i][j - 1];
+
+    let min;
+    if (west < north)
+      min = west < northWest ? west : northWest;
+    else
+      min = north < northWest ? north : northWest;
+
+    if (min == northWest) {
+      if (northWest == current) {
+        edits.push(EDIT_LEAVE);
+      } else {
+        edits.push(EDIT_UPDATE);
+        current = northWest;
+      }
+      i--;
+      j--;
+    } else if (min == west) {
+      edits.push(EDIT_DELETE);
+      i--;
+      current = west;
+    } else {
+      edits.push(EDIT_ADD);
+      j--;
+      current = north;
+    }
+  }
+
+  edits.reverse();
+  return edits;
+}
+
+/**
+ * Splice Projection functions:
+ *
+ * A splice map is a representation of how a previous array of items
+ * was transformed into a new array of items. Conceptually it is a list of
+ * tuples of
+ *
+ *   <index, removed, addedCount>
+ *
+ * which are kept in ascending index order of. The tuple represents that at
+ * the |index|, |removed| sequence of items were removed, and counting forward
+ * from |index|, |addedCount| items were added.
+ */
+
+/**
+ * Lacking individual splice mutation information, the minimal set of
+ * splices can be synthesized given the previous state and final state of an
+ * array. The basic approach is to calculate the edit distance matrix and
+ * choose the shortest path through it.
+ *
+ * Complexity: O(l * p)
+ *   l: The length of the current array
+ *   p: The length of the old array
+ *
+ * @param {Array} current The current "changed" array for which to
+ * calculate splices.
+ * @param {number} currentStart Starting index in the `current` array for
+ * which splices are calculated.
+ * @param {number} currentEnd Ending index in the `current` array for
+ * which splices are calculated.
+ * @param {Array} old The original "unchanged" array to compare `current`
+ * against to determine splices.
+ * @param {number} oldStart Starting index in the `old` array for
+ * which splices are calculated.
+ * @param {number} oldEnd Ending index in the `old` array for
+ * which splices are calculated.
+ * @return {Array} Returns an array of splice record objects. Each of these
+ * contains: `index` the location where the splice occurred; `removed`
+ * the array of removed items from this location; `addedCount` the number
+ * of items added at this location.
+ */
+function calcSplices(current, currentStart, currentEnd,
+                      old, oldStart, oldEnd) {
+  let prefixCount = 0;
+  let suffixCount = 0;
+  let splice;
+
+  let minLength = Math.min(currentEnd - currentStart, oldEnd - oldStart);
+  if (currentStart == 0 && oldStart == 0)
+    prefixCount = sharedPrefix(current, old, minLength);
+
+  if (currentEnd == current.length && oldEnd == old.length)
+    suffixCount = sharedSuffix(current, old, minLength - prefixCount);
+
+  currentStart += prefixCount;
+  oldStart += prefixCount;
+  currentEnd -= suffixCount;
+  oldEnd -= suffixCount;
+
+  if (currentEnd - currentStart == 0 && oldEnd - oldStart == 0)
+    return [];
+
+  if (currentStart == currentEnd) {
+    splice = newSplice(currentStart, [], 0);
+    while (oldStart < oldEnd)
+      splice.removed.push(old[oldStart++]);
+
+    return [ splice ];
+  } else if (oldStart == oldEnd)
+    return [ newSplice(currentStart, [], currentEnd - currentStart) ];
+
+  let ops = spliceOperationsFromEditDistances(
+      calcEditDistances(current, currentStart, currentEnd,
+                             old, oldStart, oldEnd));
+
+  splice = undefined;
+  let splices = [];
+  let index = currentStart;
+  let oldIndex = oldStart;
+  for (let i = 0; i < ops.length; i++) {
+    switch(ops[i]) {
+      case EDIT_LEAVE:
+        if (splice) {
+          splices.push(splice);
+          splice = undefined;
+        }
+
+        index++;
+        oldIndex++;
+        break;
+      case EDIT_UPDATE:
+        if (!splice)
+          splice = newSplice(index, [], 0);
+
+        splice.addedCount++;
+        index++;
+
+        splice.removed.push(old[oldIndex]);
+        oldIndex++;
+        break;
+      case EDIT_ADD:
+        if (!splice)
+          splice = newSplice(index, [], 0);
+
+        splice.addedCount++;
+        index++;
+        break;
+      case EDIT_DELETE:
+        if (!splice)
+          splice = newSplice(index, [], 0);
+
+        splice.removed.push(old[oldIndex]);
+        oldIndex++;
+        break;
+    }
+  }
+
+  if (splice) {
+    splices.push(splice);
+  }
+  return splices;
+}
+
+function sharedPrefix(current, old, searchLength) {
+  for (let i = 0; i < searchLength; i++)
+    if (!equals(current[i], old[i]))
+      return i;
+  return searchLength;
+}
+
+function sharedSuffix(current, old, searchLength) {
+  let index1 = current.length;
+  let index2 = old.length;
+  let count = 0;
+  while (count < searchLength && equals(current[--index1], old[--index2]))
+    count++;
+
+  return count;
+}
+
+function calculateSplices(current, previous) {
+  return calcSplices(current, 0, current.length, previous, 0,
+                          previous.length);
+}
+
+function equals(currentValue, previousValue) {
+  return currentValue === previousValue;
+}
+
+
+
+
+/***/ }),
+/* 47 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+
+const $_documentContainer = document.createElement('div');
+$_documentContainer.setAttribute('style', 'display: none;');
+
+$_documentContainer.innerHTML = `<custom-style>
+  <style is="custom-style">
+    html {
+
+      /* Material Design color palette for Google products */
+
+      --google-red-100: #f4c7c3;
+      --google-red-300: #e67c73;
+      --google-red-500: #db4437;
+      --google-red-700: #c53929;
+
+      --google-blue-100: #c6dafc;
+      --google-blue-300: #7baaf7;
+      --google-blue-500: #4285f4;
+      --google-blue-700: #3367d6;
+
+      --google-green-100: #b7e1cd;
+      --google-green-300: #57bb8a;
+      --google-green-500: #0f9d58;
+      --google-green-700: #0b8043;
+
+      --google-yellow-100: #fce8b2;
+      --google-yellow-300: #f7cb4d;
+      --google-yellow-500: #f4b400;
+      --google-yellow-700: #f09300;
+
+      --google-grey-100: #f5f5f5;
+      --google-grey-300: #e0e0e0;
+      --google-grey-500: #9e9e9e;
+      --google-grey-700: #616161;
+
+      /* Material Design color palette from online spec document */
+
+      --paper-red-50: #ffebee;
+      --paper-red-100: #ffcdd2;
+      --paper-red-200: #ef9a9a;
+      --paper-red-300: #e57373;
+      --paper-red-400: #ef5350;
+      --paper-red-500: #f44336;
+      --paper-red-600: #e53935;
+      --paper-red-700: #d32f2f;
+      --paper-red-800: #c62828;
+      --paper-red-900: #b71c1c;
+      --paper-red-a100: #ff8a80;
+      --paper-red-a200: #ff5252;
+      --paper-red-a400: #ff1744;
+      --paper-red-a700: #d50000;
+
+      --paper-pink-50: #fce4ec;
+      --paper-pink-100: #f8bbd0;
+      --paper-pink-200: #f48fb1;
+      --paper-pink-300: #f06292;
+      --paper-pink-400: #ec407a;
+      --paper-pink-500: #e91e63;
+      --paper-pink-600: #d81b60;
+      --paper-pink-700: #c2185b;
+      --paper-pink-800: #ad1457;
+      --paper-pink-900: #880e4f;
+      --paper-pink-a100: #ff80ab;
+      --paper-pink-a200: #ff4081;
+      --paper-pink-a400: #f50057;
+      --paper-pink-a700: #c51162;
+
+      --paper-purple-50: #f3e5f5;
+      --paper-purple-100: #e1bee7;
+      --paper-purple-200: #ce93d8;
+      --paper-purple-300: #ba68c8;
+      --paper-purple-400: #ab47bc;
+      --paper-purple-500: #9c27b0;
+      --paper-purple-600: #8e24aa;
+      --paper-purple-700: #7b1fa2;
+      --paper-purple-800: #6a1b9a;
+      --paper-purple-900: #4a148c;
+      --paper-purple-a100: #ea80fc;
+      --paper-purple-a200: #e040fb;
+      --paper-purple-a400: #d500f9;
+      --paper-purple-a700: #aa00ff;
+
+      --paper-deep-purple-50: #ede7f6;
+      --paper-deep-purple-100: #d1c4e9;
+      --paper-deep-purple-200: #b39ddb;
+      --paper-deep-purple-300: #9575cd;
+      --paper-deep-purple-400: #7e57c2;
+      --paper-deep-purple-500: #673ab7;
+      --paper-deep-purple-600: #5e35b1;
+      --paper-deep-purple-700: #512da8;
+      --paper-deep-purple-800: #4527a0;
+      --paper-deep-purple-900: #311b92;
+      --paper-deep-purple-a100: #b388ff;
+      --paper-deep-purple-a200: #7c4dff;
+      --paper-deep-purple-a400: #651fff;
+      --paper-deep-purple-a700: #6200ea;
+
+      --paper-indigo-50: #e8eaf6;
+      --paper-indigo-100: #c5cae9;
+      --paper-indigo-200: #9fa8da;
+      --paper-indigo-300: #7986cb;
+      --paper-indigo-400: #5c6bc0;
+      --paper-indigo-500: #3f51b5;
+      --paper-indigo-600: #3949ab;
+      --paper-indigo-700: #303f9f;
+      --paper-indigo-800: #283593;
+      --paper-indigo-900: #1a237e;
+      --paper-indigo-a100: #8c9eff;
+      --paper-indigo-a200: #536dfe;
+      --paper-indigo-a400: #3d5afe;
+      --paper-indigo-a700: #304ffe;
+
+      --paper-blue-50: #e3f2fd;
+      --paper-blue-100: #bbdefb;
+      --paper-blue-200: #90caf9;
+      --paper-blue-300: #64b5f6;
+      --paper-blue-400: #42a5f5;
+      --paper-blue-500: #2196f3;
+      --paper-blue-600: #1e88e5;
+      --paper-blue-700: #1976d2;
+      --paper-blue-800: #1565c0;
+      --paper-blue-900: #0d47a1;
+      --paper-blue-a100: #82b1ff;
+      --paper-blue-a200: #448aff;
+      --paper-blue-a400: #2979ff;
+      --paper-blue-a700: #2962ff;
+
+      --paper-light-blue-50: #e1f5fe;
+      --paper-light-blue-100: #b3e5fc;
+      --paper-light-blue-200: #81d4fa;
+      --paper-light-blue-300: #4fc3f7;
+      --paper-light-blue-400: #29b6f6;
+      --paper-light-blue-500: #03a9f4;
+      --paper-light-blue-600: #039be5;
+      --paper-light-blue-700: #0288d1;
+      --paper-light-blue-800: #0277bd;
+      --paper-light-blue-900: #01579b;
+      --paper-light-blue-a100: #80d8ff;
+      --paper-light-blue-a200: #40c4ff;
+      --paper-light-blue-a400: #00b0ff;
+      --paper-light-blue-a700: #0091ea;
+
+      --paper-cyan-50: #e0f7fa;
+      --paper-cyan-100: #b2ebf2;
+      --paper-cyan-200: #80deea;
+      --paper-cyan-300: #4dd0e1;
+      --paper-cyan-400: #26c6da;
+      --paper-cyan-500: #00bcd4;
+      --paper-cyan-600: #00acc1;
+      --paper-cyan-700: #0097a7;
+      --paper-cyan-800: #00838f;
+      --paper-cyan-900: #006064;
+      --paper-cyan-a100: #84ffff;
+      --paper-cyan-a200: #18ffff;
+      --paper-cyan-a400: #00e5ff;
+      --paper-cyan-a700: #00b8d4;
+
+      --paper-teal-50: #e0f2f1;
+      --paper-teal-100: #b2dfdb;
+      --paper-teal-200: #80cbc4;
+      --paper-teal-300: #4db6ac;
+      --paper-teal-400: #26a69a;
+      --paper-teal-500: #009688;
+      --paper-teal-600: #00897b;
+      --paper-teal-700: #00796b;
+      --paper-teal-800: #00695c;
+      --paper-teal-900: #004d40;
+      --paper-teal-a100: #a7ffeb;
+      --paper-teal-a200: #64ffda;
+      --paper-teal-a400: #1de9b6;
+      --paper-teal-a700: #00bfa5;
+
+      --paper-green-50: #e8f5e9;
+      --paper-green-100: #c8e6c9;
+      --paper-green-200: #a5d6a7;
+      --paper-green-300: #81c784;
+      --paper-green-400: #66bb6a;
+      --paper-green-500: #4caf50;
+      --paper-green-600: #43a047;
+      --paper-green-700: #388e3c;
+      --paper-green-800: #2e7d32;
+      --paper-green-900: #1b5e20;
+      --paper-green-a100: #b9f6ca;
+      --paper-green-a200: #69f0ae;
+      --paper-green-a400: #00e676;
+      --paper-green-a700: #00c853;
+
+      --paper-light-green-50: #f1f8e9;
+      --paper-light-green-100: #dcedc8;
+      --paper-light-green-200: #c5e1a5;
+      --paper-light-green-300: #aed581;
+      --paper-light-green-400: #9ccc65;
+      --paper-light-green-500: #8bc34a;
+      --paper-light-green-600: #7cb342;
+      --paper-light-green-700: #689f38;
+      --paper-light-green-800: #558b2f;
+      --paper-light-green-900: #33691e;
+      --paper-light-green-a100: #ccff90;
+      --paper-light-green-a200: #b2ff59;
+      --paper-light-green-a400: #76ff03;
+      --paper-light-green-a700: #64dd17;
+
+      --paper-lime-50: #f9fbe7;
+      --paper-lime-100: #f0f4c3;
+      --paper-lime-200: #e6ee9c;
+      --paper-lime-300: #dce775;
+      --paper-lime-400: #d4e157;
+      --paper-lime-500: #cddc39;
+      --paper-lime-600: #c0ca33;
+      --paper-lime-700: #afb42b;
+      --paper-lime-800: #9e9d24;
+      --paper-lime-900: #827717;
+      --paper-lime-a100: #f4ff81;
+      --paper-lime-a200: #eeff41;
+      --paper-lime-a400: #c6ff00;
+      --paper-lime-a700: #aeea00;
+
+      --paper-yellow-50: #fffde7;
+      --paper-yellow-100: #fff9c4;
+      --paper-yellow-200: #fff59d;
+      --paper-yellow-300: #fff176;
+      --paper-yellow-400: #ffee58;
+      --paper-yellow-500: #ffeb3b;
+      --paper-yellow-600: #fdd835;
+      --paper-yellow-700: #fbc02d;
+      --paper-yellow-800: #f9a825;
+      --paper-yellow-900: #f57f17;
+      --paper-yellow-a100: #ffff8d;
+      --paper-yellow-a200: #ffff00;
+      --paper-yellow-a400: #ffea00;
+      --paper-yellow-a700: #ffd600;
+
+      --paper-amber-50: #fff8e1;
+      --paper-amber-100: #ffecb3;
+      --paper-amber-200: #ffe082;
+      --paper-amber-300: #ffd54f;
+      --paper-amber-400: #ffca28;
+      --paper-amber-500: #ffc107;
+      --paper-amber-600: #ffb300;
+      --paper-amber-700: #ffa000;
+      --paper-amber-800: #ff8f00;
+      --paper-amber-900: #ff6f00;
+      --paper-amber-a100: #ffe57f;
+      --paper-amber-a200: #ffd740;
+      --paper-amber-a400: #ffc400;
+      --paper-amber-a700: #ffab00;
+
+      --paper-orange-50: #fff3e0;
+      --paper-orange-100: #ffe0b2;
+      --paper-orange-200: #ffcc80;
+      --paper-orange-300: #ffb74d;
+      --paper-orange-400: #ffa726;
+      --paper-orange-500: #ff9800;
+      --paper-orange-600: #fb8c00;
+      --paper-orange-700: #f57c00;
+      --paper-orange-800: #ef6c00;
+      --paper-orange-900: #e65100;
+      --paper-orange-a100: #ffd180;
+      --paper-orange-a200: #ffab40;
+      --paper-orange-a400: #ff9100;
+      --paper-orange-a700: #ff6500;
+
+      --paper-deep-orange-50: #fbe9e7;
+      --paper-deep-orange-100: #ffccbc;
+      --paper-deep-orange-200: #ffab91;
+      --paper-deep-orange-300: #ff8a65;
+      --paper-deep-orange-400: #ff7043;
+      --paper-deep-orange-500: #ff5722;
+      --paper-deep-orange-600: #f4511e;
+      --paper-deep-orange-700: #e64a19;
+      --paper-deep-orange-800: #d84315;
+      --paper-deep-orange-900: #bf360c;
+      --paper-deep-orange-a100: #ff9e80;
+      --paper-deep-orange-a200: #ff6e40;
+      --paper-deep-orange-a400: #ff3d00;
+      --paper-deep-orange-a700: #dd2c00;
+
+      --paper-brown-50: #efebe9;
+      --paper-brown-100: #d7ccc8;
+      --paper-brown-200: #bcaaa4;
+      --paper-brown-300: #a1887f;
+      --paper-brown-400: #8d6e63;
+      --paper-brown-500: #795548;
+      --paper-brown-600: #6d4c41;
+      --paper-brown-700: #5d4037;
+      --paper-brown-800: #4e342e;
+      --paper-brown-900: #3e2723;
+
+      --paper-grey-50: #fafafa;
+      --paper-grey-100: #f5f5f5;
+      --paper-grey-200: #eeeeee;
+      --paper-grey-300: #e0e0e0;
+      --paper-grey-400: #bdbdbd;
+      --paper-grey-500: #9e9e9e;
+      --paper-grey-600: #757575;
+      --paper-grey-700: #616161;
+      --paper-grey-800: #424242;
+      --paper-grey-900: #212121;
+
+      --paper-blue-grey-50: #eceff1;
+      --paper-blue-grey-100: #cfd8dc;
+      --paper-blue-grey-200: #b0bec5;
+      --paper-blue-grey-300: #90a4ae;
+      --paper-blue-grey-400: #78909c;
+      --paper-blue-grey-500: #607d8b;
+      --paper-blue-grey-600: #546e7a;
+      --paper-blue-grey-700: #455a64;
+      --paper-blue-grey-800: #37474f;
+      --paper-blue-grey-900: #263238;
+
+      /* opacity for dark text on a light background */
+      --dark-divider-opacity: 0.12;
+      --dark-disabled-opacity: 0.38; /* or hint text or icon */
+      --dark-secondary-opacity: 0.54;
+      --dark-primary-opacity: 0.87;
+
+      /* opacity for light text on a dark background */
+      --light-divider-opacity: 0.12;
+      --light-disabled-opacity: 0.3; /* or hint text or icon */
+      --light-secondary-opacity: 0.7;
+      --light-primary-opacity: 1.0;
+
+    }
+
+  </style>
+</custom-style>`;
+
+document.head.appendChild($_documentContainer);
+
+
+/***/ }),
+/* 48 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// the whatwg-fetch polyfill installs the fetch() function
+// on the global object (window or self)
+//
+// Return that as the export for use in Webpack, Browserify etc.
+__webpack_require__(97);
+module.exports = self.fetch.bind(self);
+
+
+/***/ }),
+/* 49 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__polymer_app_route_app_location__ = __webpack_require__(100);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ucd_lib_cork_app_utils__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ucd_lib_cork_app_utils___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__ucd_lib_cork_app_utils__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_query_string__ = __webpack_require__(104);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_query_string___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_query_string__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lib_AppStateInterface__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lib_AppStateInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__lib_AppStateInterface__);
+
+
+
+
+
+
+
+class AppRoute extends Object(__WEBPACK_IMPORTED_MODULE_2__ucd_lib_cork_app_utils__["Mixin"])(__WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__["a" /* Element */])
+      .with(__WEBPACK_IMPORTED_MODULE_2__ucd_lib_cork_app_utils__["EventInterface"], __WEBPACK_IMPORTED_MODULE_4__lib_AppStateInterface___default.a) {
+  
+  static get template() {
+    return '<app-location url-space-regex="[[appRoutesRegex]]"></app-location>';
+  }
+
+  static get properties() {
+    return {
+      route: {
+        type: Object
+      },
+      appRoutes : {
+        type : Array,
+        value : []
+      },
+      appRoutesRegex : {
+        type : RegExp,
+        computed : '_makeRegex(appRoutes)'
+      }
+    }
+  }
+
+  constructor() {
+    super();
+    // register the app-route element with the model
+    this.AppStateModel.setLocationElement(this);
+
+    this._onLocationChange();
+    window.addEventListener('location-changed', () => this._onLocationChangeAsync());
+    window.addEventListener('popstate', () => this._onLocationChangeAsync(true));
+  }
+
+  /**
+   * Fired when user manually sets a path location.  Called from AppStateModel
+   * 
+   * @param {String} location 
+   */
+  setWindowLocation(location) {
+    window.history.pushState(null, null, location);
+    this._onLocationChangeAsync();
+  }
+
+  _makeRegex() {
+    let arr = this.appRoutes.map(route => '/'+route)
+    arr.push('/');
+
+    let re = '^('+ arr.join('|') + ')';
+    re = new RegExp(re, 'i');
+    return re;
+  }
+
+  _onLocationChangeAsync(popstate) {
+    this.debounce('_onLocationChangeAsync', () => this._onLocationChange(popstate), 50);
+  }
+
+  _onLocationChange(popstate = false) {
+    this.location = {
+      pathname : window.location.pathname,
+      path : window.location.pathname.replace(/(^\/|\/$)/g, '').split('/'),
+      query : __WEBPACK_IMPORTED_MODULE_3_query_string___default.a.parse(window.location.search),
+      popstate
+    }
+
+    this._setAppState({
+      location : this.location
+    });
+  }
+}
+
+customElements.define('app-route', AppRoute);
+
+/***/ }),
+/* 50 */
+/***/ (function(module, exports) {
+
+module.exports = subclass => 
+  class AppStateInterface extends subclass {
+    
+    constructor() {
+      super();
+      this._injectModel('AppStateModel');
+    }
+
+    ready() {
+      super.ready();
+
+      if( !this._onAppStateUpdate ) return;
+      this._getAppState().then(e => this._onAppStateUpdate(e));
+    }
+    
+    _setAppState(state) {
+      return this.AppStateModel.set(state);
+    }
+
+    _getAppState() {
+      return this.AppStateModel.get();
+    }
+
+    _setWindowLocation(location) {
+      this.AppStateModel.setLocation(location);
+    }
+  }
+
+/***/ }),
+/* 51 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const {BaseStore} = __webpack_require__(6);
+
+class PackageStore extends BaseStore {
+
+  constructor() {
+    super();
+
+    this.data = {
+      // single state objects
+      create : {},
+      update : {},
+      delete : {},
+      createRelease : {},
+      // hash by id
+      addedFiles : {},
+      byId : {}
+    }
+
+    this.events = {
+      'GET_PACKAGE_UPDATE' : 'get-package-update',
+      'CREATE_PACKAGE_UPDATE' : 'create-package-update',
+      'EDIT_PACKAGE_UPDATE'   : 'edit-package-update',
+      'DELETE_PACKAGE_UPDATE' : 'delete-package-update',
+      'CREATE_PACKAGE_RELEASE_UPDATE' : 'create-package-release-update',
+      'ADD_FILE_UPDATE' : 'add-file-update'
+    }
+  }
+
+  /**
+   * Create operations
+   */
+  setCreatePackageLoading(request, payload) {
+    this._setCreatePackageState({request, payload, state: this.STATE.LOADING});
+  }
+
+  setCreatePackageSuccess(payload) {
+    this._setCreatePackageState({payload, state: this.STATE.LOADED});
+  }
+
+  setCreatePackageError(error) {
+    this._setCreatePackageState({error, state: this.STATE.ERROR});
+  }
+
+  _setCreatePackageState(state) {
+    this.data.create = state;
+    this.emit(this.events.CREATE_PACKAGE_UPDATE, this.data.create);
+  }
+
+  /**
+   * Update operations
+   */
+  setUpdatePackageLoading(request, payload) {
+    this._setUpdatePackageState({request, payload, state: this.STATE.LOADING});
+  }
+
+  setUpdatePackageSuccess(payload) {
+    this._setUpdatePackageState({payload, state: this.STATE.LOADED});
+  }
+
+  setUpdatePackageError(error) {
+    this._setUpdatePackageState({error, state: this.STATE.ERROR});
+  }
+
+  _setUpdatePackageState(state) {
+    this.data.update = state;
+    this.emit(this.events.EDIT_PACKAGE_UPDATE, this.data.update);
+  }
+
+  /**
+   * Get operations
+   */
+  setGetPackageLoading(id, request) {
+    this._setPackageState(id, {request, id, state: this.STATE.LOADING});
+  }
+
+  setGetPackageSuccess(id, payload) {
+    this._setPackageState(id, {payload, id, state: this.STATE.LOADED});
+  }
+
+  setGetPackageError(id, error) {
+    this._setPackageState(id, {error, id, state: this.STATE.ERROR});
+  }
+
+  _setPackageState(id, state) {
+    this.data.byId[id] = state;
+    this.emit(this.events.GET_PACKAGE_UPDATE, this.data.byId[id]);
+  }
+
+
+  /**
+   * Delete operations
+   */
+  setDeletingPackage(request, payload) {
+    this._setDeletePackageState({request, payload, state: this.STATE.LOADING});
+  }
+
+  setDeletePackageSuccess(payload) {
+    this._setDeletePackageState({payload, state: this.STATE.LOADED});
+  }
+
+  setDeletePackageError(error) {
+    this._setDeletePackageState({error, state: this.STATE.ERROR});
+  }
+
+  _setDeletePackageState(state) {
+    this.data.delete = state;
+    this.emit(this.events.DELETE_PACKAGE_UPDATE, this.data.delete);
+  }
+
+  /**
+   * Create release operations
+   */
+  setCreateReleaseLoading(request, payload) {
+    this._setCreateReleaseState({request, payload, state: this.STATE.LOADING});
+  }
+
+  setCreateReleaseSuccess(payload) {
+    this._setCreateReleaseState({payload, state: this.STATE.LOADED});
+  }
+
+  setCreateReleaseError(error) {
+    this._setCreateReleaseState({error, state: this.STATE.ERROR});
+  }
+
+  _setCreateReleaseState(state) {
+    this.data.createRelease = state;
+    this.emit(this.events.CREATE_PACKAGE_RELEASE_UPDATE, this.data.createRelease);
+  }
+
+  /**
+   * Add File Operations
+   */
+  setFileSaving(request, fileId, payload) {
+    this._setFileSaveState(fileId, {request, payload, fileId, state: this.STATE.SAVING});
+  }
+
+  setFileSaved(fileId, payload) {
+    this._setFileSaveState(fileId, {payload, fileId, state: this.STATE.LOADED});
+  }
+
+  setFileSaveError(fileId, error) {
+    this._setFileSaveState(fileId, {error, fileId, state: this.STATE.SAVE_ERROR});
+  }
+
+  _setFileSaveState(fileId, state) {
+    this.data.addedFiles[fileId] = state;
+    this.emit(this.events.ADD_FILE_UPDATE, this.data.addedFiles[fileId]);
+  }
+}
+
+module.exports = new PackageStore();
+
+/***/ }),
+/* 52 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(global) {// Unique ID creation requires a high quality random # generator.  In the
+// browser this is a little complicated due to unknown quality of Math.random()
+// and inconsistent support for the `crypto` API.  We do the best we can via
+// feature-detection
+var rng;
+
+var crypto = global.crypto || global.msCrypto; // for IE 11
+if (crypto && crypto.getRandomValues) {
+  // WHATWG crypto RNG - http://wiki.whatwg.org/wiki/Crypto
+  var rnds8 = new Uint8Array(16); // eslint-disable-line no-undef
+  rng = function whatwgRNG() {
+    crypto.getRandomValues(rnds8);
+    return rnds8;
+  };
+}
+
+if (!rng) {
+  // Math.random()-based (RNG)
+  //
+  // If all else fails, use Math.random().  It's fast, but is of unspecified
+  // quality.
+  var rnds = new Array(16);
+  rng = function() {
+    for (var i = 0, r; i < 16; i++) {
+      if ((i & 0x03) === 0) r = Math.random() * 0x100000000;
+      rnds[i] = r >>> ((i & 0x03) << 3) & 0xff;
+    }
+
+    return rnds;
+  };
+}
+
+module.exports = rng;
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(53)))
+
+/***/ }),
+/* 53 */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
+/* 54 */
+/***/ (function(module, exports) {
+
+/**
+ * Convert array of 16 byte values to UUID string format of the form:
+ * XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+ */
+var byteToHex = [];
+for (var i = 0; i < 256; ++i) {
+  byteToHex[i] = (i + 0x100).toString(16).substr(1);
+}
+
+function bytesToUuid(buf, offset) {
+  var i = offset || 0;
+  var bth = byteToHex;
+  return bth[buf[i++]] + bth[buf[i++]] +
+          bth[buf[i++]] + bth[buf[i++]] + '-' +
+          bth[buf[i++]] + bth[buf[i++]] + '-' +
+          bth[buf[i++]] + bth[buf[i++]] + '-' +
+          bth[buf[i++]] + bth[buf[i++]] + '-' +
+          bth[buf[i++]] + bth[buf[i++]] +
+          bth[buf[i++]] + bth[buf[i++]] +
+          bth[buf[i++]] + bth[buf[i++]];
+}
+
+module.exports = bytesToUuid;
+
+
+/***/ }),
+/* 55 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const {BaseStore} = __webpack_require__(6);
+
+class SearchStore extends BaseStore {
+
+  constructor() {
+    super();
+
+    this.data = {
+      search : {
+        state : this.STATE.INIT
+      }
+    }
+
+    this.events = {
+      'SEARCH_PACKAGES_UPDATE' : 'search-packages-update'
+    }
+  }
+
+  getSearchQuery() {
+    return this.data.search.query;
+  }
+
+  setSearchQuery(query) {
+    this.data.search.query = query;
+  }
+
+  setSearchLoading(request, query) {
+    this._setSearchState({request, query, state: this.STATE.LOADING});
+  }
+
+  setSearchSuccess(payload, query) {
+    this._setSearchState({payload, query, state: this.STATE.LOADED});
+  }
+
+  setSearchError(error, query) {
+    this._setSearchState({error, query, state: this.STATE.ERROR});
+  }
+
+  _setSearchState(state) {
+    this.data.search = state;
+    this.emit(this.events.SEARCH_PACKAGES_UPDATE, this.data.search);
+  }
+}
+
+module.exports = new SearchStore();
+
+/***/ }),
+/* 56 */
+/***/ (function(module, exports) {
+
+module.exports = {
+  chemistry : {
+    nitrogen : ['N', '15N'],
+    carbon : ['C', '13C'],
+    'defense compounds' : ['phenolic glycocide', 'condensed tannins']
+  },
+  physiology : {
+    fiber : ['% Cellulose'],
+    lignen : ['% ADL', '% ADF'],
+    LMA : [],
+    photosynthesis : ['Vcmax', 'Jmax', 'Ev', 'A-Ci'],
+    fluorescence : ['fPAR', 'GPP']
+  }
+}
+
+/***/ }),
+/* 57 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_flex_layout_iron_flex_layout_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__paper_behaviors_paper_button_behavior_js__ = __webpack_require__(121);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__paper_styles_element_styles_paper_material_styles_js__ = __webpack_require__(123);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
+
+
+
+
+
+const $_documentContainer = document.createElement('div');
+$_documentContainer.setAttribute('style', 'display: none;');
+
+$_documentContainer.innerHTML = `<dom-module id="paper-button">
+  <template strip-whitespace="">
+    <style include="paper-material-styles">
+      /* Need to specify the same specificity as the styles imported from paper-material. */
+      :host {
+        @apply --layout-inline;
+        @apply --layout-center-center;
+        position: relative;
+        box-sizing: border-box;
+        min-width: 5.14em;
+        margin: 0 0.29em;
+        background: transparent;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        -webkit-tap-highlight-color: transparent;
+        font: inherit;
+        text-transform: uppercase;
+        outline-width: 0;
+        border-radius: 3px;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        -webkit-user-select: none;
+        user-select: none;
+        cursor: pointer;
+        z-index: 0;
+        padding: 0.7em 0.57em;
+
+        @apply --paper-font-common-base;
+        @apply --paper-button;
+      }
+
+      :host([elevation="1"]) {
+        @apply --paper-material-elevation-1;
+      }
+
+      :host([elevation="2"]) {
+        @apply --paper-material-elevation-2;
+      }
+
+      :host([elevation="3"]) {
+        @apply --paper-material-elevation-3;
+      }
+
+      :host([elevation="4"]) {
+        @apply --paper-material-elevation-4;
+      }
+
+      :host([elevation="5"]) {
+        @apply --paper-material-elevation-5;
+      }
+
+      :host([hidden]) {
+        display: none !important;
+      }
+
+      :host([raised].keyboard-focus) {
+        font-weight: bold;
+        @apply --paper-button-raised-keyboard-focus;
+      }
+
+      :host(:not([raised]).keyboard-focus) {
+        font-weight: bold;
+        @apply --paper-button-flat-keyboard-focus;
+      }
+
+      :host([disabled]) {
+        background: #eaeaea;
+        color: #a8a8a8;
+        cursor: auto;
+        pointer-events: none;
+
+        @apply --paper-button-disabled;
+      }
+
+      :host([animated]) {
+        @apply --shadow-transition;
+      }
+
+      paper-ripple {
+        color: var(--paper-button-ink-color);
+      }
+    </style>
+
+    <slot></slot>
+  </template>
+
+  
+</dom-module>`;
+
+document.head.appendChild($_documentContainer);
+Object(__WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__["a" /* Polymer */])({
+  is: 'paper-button',
+
+  behaviors: [
+    __WEBPACK_IMPORTED_MODULE_2__paper_behaviors_paper_button_behavior_js__["a" /* PaperButtonBehavior */]
+  ],
+
+  properties: {
+    /**
+     * If true, the button should be styled with a shadow.
+     */
+    raised: {
+      type: Boolean,
+      reflectToAttribute: true,
+      value: false,
+      observer: '_calculateElevation'
+    }
+  },
+
+  _calculateElevation: function() {
+    if (!this.raised) {
+      this._setElevation(0);
+    } else {
+      __WEBPACK_IMPORTED_MODULE_2__paper_behaviors_paper_button_behavior_js__["b" /* PaperButtonBehaviorImpl */]._calculateElevation.apply(this);
+    }
+  }
+
+  /**
+  Fired when the animation finishes.
+  This is useful if you want to wait until
+  the ripple animation finishes to perform some action.
+
+  @event transitionend
+  Event param: {{node: Object}} detail Contains the animated node.
+  */
+});
+
+
+/***/ }),
+/* 58 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__paper_ripple_paper_ripple_js__ = __webpack_require__(122);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_behaviors_iron_button_state_js__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
+
+
+
+
+
+const PaperRippleBehavior = {
+  properties: {
+    /**
+     * If true, the element will not produce a ripple effect when interacted
+     * with via the pointer.
+     */
+    noink: {
+      type: Boolean,
+      observer: '_noinkChanged'
+    },
+
+    /**
+     * @type {Element|undefined}
+     */
+    _rippleContainer: {
+      type: Object,
+    }
+  },
+
+  /**
+   * Ensures a `<paper-ripple>` element is available when the element is
+   * focused.
+   */
+  _buttonStateChanged: function() {
+    if (this.focused) {
+      this.ensureRipple();
+    }
+  },
+
+  /**
+   * In addition to the functionality provided in `IronButtonState`, ensures
+   * a ripple effect is created when the element is in a `pressed` state.
+   */
+  _downHandler: function(event) {
+    __WEBPACK_IMPORTED_MODULE_2__iron_behaviors_iron_button_state_js__["b" /* IronButtonStateImpl */]._downHandler.call(this, event);
+    if (this.pressed) {
+      this.ensureRipple(event);
+    }
+  },
+
+  /**
+   * Ensures this element contains a ripple effect. For startup efficiency
+   * the ripple effect is dynamically on demand when needed.
+   * @param {!Event=} optTriggeringEvent (optional) event that triggered the
+   * ripple.
+   */
+  ensureRipple: function(optTriggeringEvent) {
+    if (!this.hasRipple()) {
+      this._ripple = this._createRipple();
+      this._ripple.noink = this.noink;
+      var rippleContainer = this._rippleContainer || this.root;
+      if (rippleContainer) {
+        Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(rippleContainer).appendChild(this._ripple);
+      }
+      if (optTriggeringEvent) {
+        // Check if the event happened inside of the ripple container
+        // Fall back to host instead of the root because distributed text
+        // nodes are not valid event targets
+        var domContainer = Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(this._rippleContainer || this);
+        var target = Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(optTriggeringEvent).rootTarget;
+        if (domContainer.deepContains( /** @type {Node} */(target))) {
+          this._ripple.uiDownAction(optTriggeringEvent);
+        }
+      }
+    }
+  },
+
+  /**
+   * Returns the `<paper-ripple>` element used by this element to create
+   * ripple effects. The element's ripple is created on demand, when
+   * necessary, and calling this method will force the
+   * ripple to be created.
+   */
+  getRipple: function() {
+    this.ensureRipple();
+    return this._ripple;
+  },
+
+  /**
+   * Returns true if this element currently contains a ripple effect.
+   * @return {boolean}
+   */
+  hasRipple: function() {
+    return Boolean(this._ripple);
+  },
+
+  /**
+   * Create the element's ripple effect via creating a `<paper-ripple>`.
+   * Override this method to customize the ripple element.
+   * @return {!PaperRippleElement} Returns a `<paper-ripple>` element.
+   */
+  _createRipple: function() {
+    return /** @type {!PaperRippleElement} */ (
+        document.createElement('paper-ripple'));
+  },
+
+  _noinkChanged: function(noink) {
+    if (this.hasRipple()) {
+      this._ripple.noink = noink;
+    }
+  }
+};
+/* harmony export (immutable) */ __webpack_exports__["a"] = PaperRippleBehavior;
+
+
+
+/***/ }),
+/* 59 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_meta_iron_meta_js__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_flex_layout_iron_flex_layout_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
+
+
+
+
+
+
+Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_fn_js__["a" /* Polymer */])({
+  _template: `
+    <style>
+      :host {
+        @apply --layout-inline;
+        @apply --layout-center-center;
+        position: relative;
+
+        vertical-align: middle;
+
+        fill: var(--iron-icon-fill-color, currentcolor);
+        stroke: var(--iron-icon-stroke-color, none);
+
+        width: var(--iron-icon-width, 24px);
+        height: var(--iron-icon-height, 24px);
+        @apply --iron-icon;
+      }
+
+      :host([hidden]) {
+        display: none;
+      }
+    </style>
+`,
+
+  is: 'iron-icon',
+
+  properties: {
+
+    /**
+     * The name of the icon to use. The name should be of the form:
+     * `iconset_name:icon_name`.
+     */
+    icon: {
+      type: String
+    },
+
+    /**
+     * The name of the theme to used, if one is specified by the
+     * iconset.
+     */
+    theme: {
+      type: String
+    },
+
+    /**
+     * If using iron-icon without an iconset, you can set the src to be
+     * the URL of an individual icon image file. Note that this will take
+     * precedence over a given icon attribute.
+     */
+    src: {
+      type: String
+    },
+
+    /**
+     * @type {!Polymer.IronMeta}
+     */
+    _meta: {
+      value: __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__["a" /* Base */].create('iron-meta', {type: 'iconset'})
+    }
+
+  },
+
+  observers: [
+    '_updateIcon(_meta, isAttached)',
+    '_updateIcon(theme, isAttached)',
+    '_srcChanged(src, isAttached)',
+    '_iconChanged(icon, isAttached)'
+  ],
+
+  _DEFAULT_ICONSET: 'icons',
+
+  _iconChanged: function(icon) {
+    var parts = (icon || '').split(':');
+    this._iconName = parts.pop();
+    this._iconsetName = parts.pop() || this._DEFAULT_ICONSET;
+    this._updateIcon();
+  },
+
+  _srcChanged: function(src) {
+    this._updateIcon();
+  },
+
+  _usesIconset: function() {
+    return this.icon || !this.src;
+  },
+
+  /** @suppress {visibility} */
+  _updateIcon: function() {
+    if (this._usesIconset()) {
+      if (this._img && this._img.parentNode) {
+        Object(__WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(this.root).removeChild(this._img);
+      }
+      if (this._iconName === "") {
+        if (this._iconset) {
+          this._iconset.removeIcon(this);
+        }
+      } else if (this._iconsetName && this._meta) {
+        this._iconset = /** @type {?Polymer.Iconset} */ (
+          this._meta.byKey(this._iconsetName));
+        if (this._iconset) {
+          this._iconset.applyIcon(this, this._iconName, this.theme);
+          this.unlisten(window, 'iron-iconset-added', '_updateIcon');
+        } else {
+          this.listen(window, 'iron-iconset-added', '_updateIcon');
+        }
+      }
+    } else {
+      if (this._iconset) {
+        this._iconset.removeIcon(this);
+      }
+      if (!this._img) {
+        this._img = document.createElement('img');
+        this._img.style.width = '100%';
+        this._img.style.height = '100%';
+        this._img.draggable = false;
+      }
+      this._img.src = this.src;
+      Object(__WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(this.root).appendChild(this._img);
+    }
+  }
+});
+
+
+/***/ }),
+/* 60 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__polymer_polymer_element_js__ = __webpack_require__(3);
+
+
+
+const IronFormElementBehavior = {
+
+  properties: {
+    /**
+     * Fired when the element is added to an `iron-form`.
+     *
+     * @event iron-form-element-register
+     */
+
+    /**
+     * Fired when the element is removed from an `iron-form`.
+     *
+     * @event iron-form-element-unregister
+     */
+     
+    /**
+     * The name of this element.
+     */
+    name: {
+      type: String
+    },
+
+    /**
+     * The value for this element.
+     */
+    value: {
+      notify: true,
+      type: String
+    },
+
+    /**
+     * Set to true to mark the input as required. If used in a form, a
+     * custom element that uses this behavior should also use
+     * Polymer.IronValidatableBehavior and define a custom validation method.
+     * Otherwise, a `required` element will always be considered valid.
+     * It's also strongly recommended to provide a visual style for the element
+     * when its value is invalid.
+     */
+    required: {
+      type: Boolean,
+      value: false
+    },
+
+    /**
+     * The form that the element is registered to.
+     */
+    _parentForm: {
+      type: Object
+    }
+  },
+
+  attached: __WEBPACK_IMPORTED_MODULE_1__polymer_polymer_element_js__["a" /* Element */] ? null : function() {
+    // Note: the iron-form that this element belongs to will set this
+    // element's _parentForm property when handling this event.
+    this.fire('iron-form-element-register');
+  },
+
+  detached: __WEBPACK_IMPORTED_MODULE_1__polymer_polymer_element_js__["a" /* Element */] ? null : function() {
+    if (this._parentForm) {
+      this._parentForm.fire('iron-form-element-unregister', {target: this});
+    }
+  }
+
+};
+/* harmony export (immutable) */ __webpack_exports__["a"] = IronFormElementBehavior;
+
+
+
+/***/ }),
+/* 61 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
+
+
+
+const IronA11yAnnouncer = Object(__WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_fn_js__["a" /* Polymer */])({
+  _template: `
+    <style>
+      :host {
+        display: inline-block;
+        position: fixed;
+        clip: rect(0px,0px,0px,0px);
+      }
+    </style>
+    <div aria-live\$="[[mode]]">[[_text]]</div>
+`,
+
+  is: 'iron-a11y-announcer',
+
+  properties: {
+
+    /**
+     * The value of mode is used to set the `aria-live` attribute
+     * for the element that will be announced. Valid values are: `off`,
+     * `polite` and `assertive`.
+     */
+    mode: {
+      type: String,
+      value: 'polite'
+    },
+
+    _text: {
+      type: String,
+      value: ''
+    }
+  },
+
+  created: function() {
+    if (!IronA11yAnnouncer.instance) {
+      IronA11yAnnouncer.instance = this;
+    }
+
+    document.body.addEventListener('iron-announce', this._onIronAnnounce.bind(this));
+  },
+
+  /**
+   * Cause a text string to be announced by screen readers.
+   *
+   * @param {string} text The text that should be announced.
+   */
+  announce: function(text) {
+    this._text = '';
+    this.async(function() {
+      this._text = text;
+    }, 100);
+  },
+
+  _onIronAnnounce: function(event) {
+    if (event.detail && event.detail.text) {
+      this.announce(event.detail.text);
+    }
+  }
+});
+/* harmony export (immutable) */ __webpack_exports__["a"] = IronA11yAnnouncer;
+
+
+IronA11yAnnouncer.instance = null;
+
+IronA11yAnnouncer.requestAvailability = function() {
+  if (!IronA11yAnnouncer.instance) {
+    IronA11yAnnouncer.instance = document.createElement('iron-a11y-announcer');
+  }
+
+  document.body.appendChild(IronA11yAnnouncer.instance);
+};
+
+
+/***/ }),
+/* 62 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export IronValidatableBehaviorMeta */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_meta_iron_meta_js__ = __webpack_require__(37);
+
+
+let IronValidatableBehaviorMeta = null;
+
+const IronValidatableBehavior = {
+
+  properties: {
+    /**
+     * Name of the validator to use.
+     */
+    validator: {
+      type: String
+    },
+
+    /**
+     * True if the last call to `validate` is invalid.
+     */
+    invalid: {
+      notify: true,
+      reflectToAttribute: true,
+      type: Boolean,
+      value: false,
+      observer: '_invalidChanged'
+    },
+  },
+
+  registered: function() {
+    IronValidatableBehaviorMeta = new __WEBPACK_IMPORTED_MODULE_1__iron_meta_iron_meta_js__["a" /* IronMeta */]({type: 'validator'});
+  },
+
+  _invalidChanged: function() {
+    if (this.invalid) {
+      this.setAttribute('aria-invalid', 'true');
+    } else {
+      this.removeAttribute('aria-invalid');
+    }
+  },
+
+  /* Recompute this every time it's needed, because we don't know if the
+   * underlying IronValidatableBehaviorMeta has changed. */
+  get _validator() {
+    return IronValidatableBehaviorMeta &&
+        IronValidatableBehaviorMeta.byKey(this.validator);
+  },
+
+  /**
+   * @return {boolean} True if the validator `validator` exists.
+   */
+  hasValidator: function() {
+    return this._validator != null;
+  },
+
+  /**
+   * Returns true if the `value` is valid, and updates `invalid`. If you want
+   * your element to have custom validation logic, do not override this method;
+   * override `_getValidity(value)` instead.
+
+   * @param {Object} value Deprecated: The value to be validated. By default,
+   * it is passed to the validator's `validate()` function, if a validator is set.
+   * If this argument is not specified, then the element's `value` property
+   * is used, if it exists.
+   * @return {boolean} True if `value` is valid.
+   */
+  validate: function(value) {
+    // If this is an element that also has a value property, and there was
+    // no explicit value argument passed, use the element's property instead.
+    if (value === undefined && this.value !== undefined)
+      this.invalid = !this._getValidity(this.value);
+    else
+      this.invalid = !this._getValidity(value);
+    return !this.invalid;
+  },
+
+  /**
+   * Returns true if `value` is valid.  By default, it is passed
+   * to the validator's `validate()` function, if a validator is set. You
+   * should override this method if you want to implement custom validity
+   * logic for your element.
+   *
+   * @param {Object} value The value to be validated.
+   * @return {boolean} True if `value` is valid.
+   */
+
+  _getValidity: function(value) {
+    if (this.hasValidator()) {
+      return this._validator.validate(value);
+    }
+    return true;
+  }
+};
+/* harmony export (immutable) */ __webpack_exports__["a"] = IronValidatableBehavior;
+
+
+
+/***/ }),
+/* 63 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_a11y_keys_behavior_iron_a11y_keys_behavior_js__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_behaviors_iron_control_state_js__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_polymer_element_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
+
+
+
+
+
+const PaperInputHelper = {};
+/* unused harmony export PaperInputHelper */
+
+PaperInputHelper.NextLabelID = 1;
+PaperInputHelper.NextAddonID = 1;
+
+const PaperInputBehaviorImpl = {
+
+  properties: {
+    /**
+     * Fired when the input changes due to user interaction.
+     *
+     * @event change
+     */
+
+    /**
+     * The label for this input. If you're using PaperInputBehavior to
+     * implement your own paper-input-like element, bind this to
+     * `<label>`'s content and `hidden` property, e.g.
+     * `<label hidden$="[[!label]]">[[label]]</label>` in your `template`
+     */
+    label: {
+      type: String
+    },
+
+    /**
+     * The value for this input. If you're using PaperInputBehavior to
+     * implement your own paper-input-like element, bind this to
+     * the `<iron-input>`'s `bindValue`
+     * property, or the value property of your input that is `notify:true`.
+     */
+    value: {
+      notify: true,
+      type: String
+    },
+
+    /**
+     * Set to true to disable this input. If you're using PaperInputBehavior to
+     * implement your own paper-input-like element, bind this to
+     * both the `<paper-input-container>`'s and the input's `disabled` property.
+     */
+    disabled: {
+      type: Boolean,
+      value: false
+    },
+
+    /**
+     * Returns true if the value is invalid. If you're using PaperInputBehavior to
+     * implement your own paper-input-like element, bind this to both the
+     * `<paper-input-container>`'s and the input's `invalid` property.
+     *
+     * If `autoValidate` is true, the `invalid` attribute is managed automatically,
+     * which can clobber attempts to manage it manually.
+     */
+    invalid: {
+      type: Boolean,
+      value: false,
+      notify: true
+    },
+
+    /**
+     * Set this to specify the pattern allowed by `preventInvalidInput`. If
+     * you're using PaperInputBehavior to implement your own paper-input-like
+     * element, bind this to the `<input is="iron-input">`'s `allowedPattern`
+     * property.
+     */
+    allowedPattern: {
+      type: String
+    },
+
+    /**
+     * The type of the input. The supported types are `text`, `number` and `password`.
+     * If you're using PaperInputBehavior to implement your own paper-input-like element,
+     * bind this to the `<input is="iron-input">`'s `type` property.
+     */
+    type: {
+      type: String
+    },
+
+    /**
+     * The datalist of the input (if any). This should match the id of an existing `<datalist>`.
+     * If you're using PaperInputBehavior to implement your own paper-input-like
+     * element, bind this to the `<input is="iron-input">`'s `list` property.
+     */
+    list: {
+      type: String
+    },
+
+    /**
+     * A pattern to validate the `input` with. If you're using PaperInputBehavior to
+     * implement your own paper-input-like element, bind this to
+     * the `<input is="iron-input">`'s `pattern` property.
+     */
+    pattern: {
+      type: String
+    },
+
+    /**
+     * Set to true to mark the input as required. If you're using PaperInputBehavior to
+     * implement your own paper-input-like element, bind this to
+     * the `<input is="iron-input">`'s `required` property.
+     */
+    required: {
+      type: Boolean,
+      value: false
+    },
+
+    /**
+     * The error message to display when the input is invalid. If you're using
+     * PaperInputBehavior to implement your own paper-input-like element,
+     * bind this to the `<paper-input-error>`'s content, if using.
+     */
+    errorMessage: {
+      type: String
+    },
+
+    /**
+     * Set to true to show a character counter.
+     */
+    charCounter: {
+      type: Boolean,
+      value: false
+    },
+
+    /**
+     * Set to true to disable the floating label. If you're using PaperInputBehavior to
+     * implement your own paper-input-like element, bind this to
+     * the `<paper-input-container>`'s `noLabelFloat` property.
+     */
+    noLabelFloat: {
+      type: Boolean,
+      value: false
+    },
+
+    /**
+     * Set to true to always float the label. If you're using PaperInputBehavior to
+     * implement your own paper-input-like element, bind this to
+     * the `<paper-input-container>`'s `alwaysFloatLabel` property.
+     */
+    alwaysFloatLabel: {
+      type: Boolean,
+      value: false
+    },
+
+    /**
+     * Set to true to auto-validate the input value. If you're using PaperInputBehavior to
+     * implement your own paper-input-like element, bind this to
+     * the `<paper-input-container>`'s `autoValidate` property.
+     */
+    autoValidate: {
+      type: Boolean,
+      value: false
+    },
+
+    /**
+     * Name of the validator to use. If you're using PaperInputBehavior to
+     * implement your own paper-input-like element, bind this to
+     * the `<input is="iron-input">`'s `validator` property.
+     */
+    validator: {
+      type: String
+    },
+
+    // HTMLInputElement attributes for binding if needed
+
+    /**
+     * If you're using PaperInputBehavior to implement your own paper-input-like
+     * element, bind this to the `<input is="iron-input">`'s `autocomplete` property.
+     */
+    autocomplete: {
+      type: String,
+      value: 'off'
+    },
+
+    /**
+     * If you're using PaperInputBehavior to implement your own paper-input-like
+     * element, bind this to the `<input is="iron-input">`'s `autofocus` property.
+     */
+    autofocus: {
+      type: Boolean,
+      observer: '_autofocusChanged'
+    },
+
+    /**
+     * If you're using PaperInputBehavior to implement your own paper-input-like
+     * element, bind this to the `<input is="iron-input">`'s `inputmode` property.
+     */
+    inputmode: {
+      type: String
+    },
+
+    /**
+     * The minimum length of the input value.
+     * If you're using PaperInputBehavior to implement your own paper-input-like
+     * element, bind this to the `<input is="iron-input">`'s `minlength` property.
+     */
+    minlength: {
+      type: Number
+    },
+
+    /**
+     * The maximum length of the input value.
+     * If you're using PaperInputBehavior to implement your own paper-input-like
+     * element, bind this to the `<input is="iron-input">`'s `maxlength` property.
+     */
+    maxlength: {
+      type: Number
+    },
+
+    /**
+     * The minimum (numeric or date-time) input value.
+     * If you're using PaperInputBehavior to implement your own paper-input-like
+     * element, bind this to the `<input is="iron-input">`'s `min` property.
+     */
+    min: {
+      type: String
+    },
+
+    /**
+     * The maximum (numeric or date-time) input value.
+     * Can be a String (e.g. `"2000-01-01"`) or a Number (e.g. `2`).
+     * If you're using PaperInputBehavior to implement your own paper-input-like
+     * element, bind this to the `<input is="iron-input">`'s `max` property.
+     */
+    max: {
+      type: String
+    },
+
+    /**
+     * Limits the numeric or date-time increments.
+     * If you're using PaperInputBehavior to implement your own paper-input-like
+     * element, bind this to the `<input is="iron-input">`'s `step` property.
+     */
+    step: {
+      type: String
+    },
+
+    /**
+     * If you're using PaperInputBehavior to implement your own paper-input-like
+     * element, bind this to the `<input is="iron-input">`'s `name` property.
+     */
+    name: {
+      type: String
+    },
+
+    /**
+     * A placeholder string in addition to the label. If this is set, the label will always float.
+     */
+    placeholder: {
+      type: String,
+      // need to set a default so _computeAlwaysFloatLabel is run
+      value: ''
+    },
+
+    /**
+     * If you're using PaperInputBehavior to implement your own paper-input-like
+     * element, bind this to the `<input is="iron-input">`'s `readonly` property.
+     */
+    readonly: {
+      type: Boolean,
+      value: false
+    },
+
+    /**
+     * If you're using PaperInputBehavior to implement your own paper-input-like
+     * element, bind this to the `<input is="iron-input">`'s `size` property.
+     */
+    size: {
+      type: Number
+    },
+
+    // Nonstandard attributes for binding if needed
+
+    /**
+     * If you're using PaperInputBehavior to implement your own paper-input-like
+     * element, bind this to the `<input is="iron-input">`'s `autocapitalize` property.
+     */
+    autocapitalize: {
+      type: String,
+      value: 'none'
+    },
+
+    /**
+     * If you're using PaperInputBehavior to implement your own paper-input-like
+     * element, bind this to the `<input is="iron-input">`'s `autocorrect` property.
+     */
+    autocorrect: {
+      type: String,
+      value: 'off'
+    },
+
+    /**
+     * If you're using PaperInputBehavior to implement your own paper-input-like
+     * element, bind this to the `<input is="iron-input">`'s `autosave` property,
+     * used with type=search.
+     */
+    autosave: {
+      type: String
+    },
+
+    /**
+     * If you're using PaperInputBehavior to implement your own paper-input-like
+     * element, bind this to the `<input is="iron-input">`'s `results` property,
+     * used with type=search.
+     */
+    results: {
+      type: Number
+    },
+
+    /**
+     * If you're using PaperInputBehavior to implement your own paper-input-like
+     * element, bind this to the `<input is="iron-input">`'s `accept` property,
+     * used with type=file.
+     */
+    accept: {
+      type: String
+    },
+
+    /**
+     * If you're using PaperInputBehavior to implement your own paper-input-like
+     * element, bind this to the`<input is="iron-input">`'s `multiple` property,
+     * used with type=file.
+     */
+    multiple: {
+      type: Boolean
+    },
+
+    _ariaDescribedBy: {
+      type: String,
+      value: ''
+    },
+
+    _ariaLabelledBy: {
+      type: String,
+      value: ''
+    }
+
+  },
+
+  listeners: {
+    'addon-attached': '_onAddonAttached',
+  },
+
+  keyBindings: {
+    'shift+tab:keydown': '_onShiftTabDown'
+  },
+
+  hostAttributes: {
+    tabindex: 0
+  },
+
+  /**
+   * Returns a reference to the input element.
+   */
+  get inputElement() {
+    return this.$.input;
+  },
+
+  /**
+   * Returns a reference to the focusable element.
+   */
+  get _focusableElement() {
+    return this.inputElement;
+  },
+
+  created: function() {
+    // These types have some default placeholder text; overlapping
+    // the label on top of it looks terrible. Auto-float the label in this case.
+    this._typesThatHaveText = ["date", "datetime", "datetime-local", "month",
+        "time", "week", "file"];
+  },
+
+  attached: function() {
+    this._updateAriaLabelledBy();
+
+    // In the 2.0 version of the element, this is handled in `onIronInputReady`,
+    // i.e. after the native input has finished distributing. In the 1.0 version,
+    // the input is in the shadow tree, so it's already available.
+    if (!__WEBPACK_IMPORTED_MODULE_3__polymer_polymer_element_js__["a" /* Element */] && this.inputElement &&
+        this._typesThatHaveText.indexOf(this.inputElement.type) !== -1) {
+      this.alwaysFloatLabel = true;
+    }
+  },
+
+  _appendStringWithSpace: function(str, more) {
+    if (str) {
+      str = str + ' ' + more;
+    } else {
+      str = more;
+    }
+    return str;
+  },
+
+  _onAddonAttached: function(event) {
+    var target = Object(__WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(event).rootTarget;
+    if (target.id) {
+      this._ariaDescribedBy = this._appendStringWithSpace(this._ariaDescribedBy, target.id);
+    } else {
+      var id = 'paper-input-add-on-' + PaperInputHelper.NextAddonID++;
+      target.id = id;
+      this._ariaDescribedBy = this._appendStringWithSpace(this._ariaDescribedBy, id);
+    }
+  },
+
+  /**
+   * Validates the input element and sets an error style if needed.
+   *
+   * @return {boolean}
+   */
+  validate: function() {
+    return this.inputElement.validate();
+  },
+
+  /**
+   * Forward focus to inputElement. Overriden from IronControlState.
+   */
+  _focusBlurHandler: function(event) {
+    __WEBPACK_IMPORTED_MODULE_2__iron_behaviors_iron_control_state_js__["a" /* IronControlState */]._focusBlurHandler.call(this, event);
+
+    // Forward the focus to the nested input.
+    if (this.focused && !this._shiftTabPressed && this._focusableElement) {
+      this._focusableElement.focus();
+    }
+  },
+
+  /**
+   * Handler that is called when a shift+tab keypress is detected by the menu.
+   *
+   * @param {CustomEvent} event A key combination event.
+   */
+  _onShiftTabDown: function(event) {
+    var oldTabIndex = this.getAttribute('tabindex');
+    this._shiftTabPressed = true;
+    this.setAttribute('tabindex', '-1');
+    this.async(function() {
+      this.setAttribute('tabindex', oldTabIndex);
+      this._shiftTabPressed = false;
+    }, 1);
+  },
+
+  /**
+   * If `autoValidate` is true, then validates the element.
+   */
+  _handleAutoValidate: function() {
+    if (this.autoValidate)
+      this.validate();
+  },
+
+  /**
+   * Restores the cursor to its original position after updating the value.
+   * @param {string} newValue The value that should be saved.
+   */
+  updateValueAndPreserveCaret: function(newValue) {
+    // Not all elements might have selection, and even if they have the
+    // right properties, accessing them might throw an exception (like for
+    // <input type=number>)
+    try {
+      var start = this.inputElement.selectionStart;
+      this.value = newValue;
+
+      // The cursor automatically jumps to the end after re-setting the value,
+      // so restore it to its original position.
+      this.inputElement.selectionStart = start;
+      this.inputElement.selectionEnd = start;
+    } catch (e) {
+      // Just set the value and give up on the caret.
+      this.value = newValue;
+    }
+  },
+
+  _computeAlwaysFloatLabel: function(alwaysFloatLabel, placeholder) {
+    return placeholder || alwaysFloatLabel;
+  },
+
+  _updateAriaLabelledBy: function() {
+    var label = Object(__WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(this.root).querySelector('label');
+    if (!label) {
+      this._ariaLabelledBy = '';
+      return;
+    }
+    var labelledBy;
+    if (label.id) {
+      labelledBy = label.id;
+    } else {
+      labelledBy = 'paper-input-label-' + PaperInputHelper.NextLabelID++;
+      label.id = labelledBy;
+    }
+    this._ariaLabelledBy = labelledBy;
+  },
+
+  _onChange:function(event) {
+    // In the Shadow DOM, the `change` event is not leaked into the
+    // ancestor tree, so we must do this manually.
+    // See https://w3c.github.io/webcomponents/spec/shadow/#events-that-are-not-leaked-into-ancestor-trees.
+    if (this.shadowRoot) {
+      this.fire(event.type, {sourceEvent: event}, {
+        node: this,
+        bubbles: event.bubbles,
+        cancelable: event.cancelable
+      });
+    }
+  },
+
+  _autofocusChanged: function() {
+    // Firefox doesn't respect the autofocus attribute if it's applied after
+    // the page is loaded (Chrome/WebKit do respect it), preventing an
+    // autofocus attribute specified in markup from taking effect when the
+    // element is upgraded. As a workaround, if the autofocus property is set,
+    // and the focus hasn't already been moved elsewhere, we take focus.
+    if (this.autofocus && this._focusableElement) {
+
+      // In IE 11, the default document.activeElement can be the page's
+      // outermost html element, but there are also cases (under the
+      // polyfill?) in which the activeElement is not a real HTMLElement, but
+      // just a plain object. We identify the latter case as having no valid
+      // activeElement.
+      var activeElement = document.activeElement;
+      var isActiveElementValid = activeElement instanceof HTMLElement;
+
+      // Has some other element has already taken the focus?
+      var isSomeElementActive = isActiveElementValid &&
+          activeElement !== document.body &&
+          activeElement !== document.documentElement; /* IE 11 */
+      if (!isSomeElementActive) {
+        // No specific element has taken the focus yet, so we can take it.
+        this._focusableElement.focus();
+      }
+    }
+  }
+};
+/* unused harmony export PaperInputBehaviorImpl */
+
+
+const PaperInputBehavior = [
+  __WEBPACK_IMPORTED_MODULE_2__iron_behaviors_iron_control_state_js__["a" /* IronControlState */],
+  __WEBPACK_IMPORTED_MODULE_1__iron_a11y_keys_behavior_iron_a11y_keys_behavior_js__["a" /* IronA11yKeysBehavior */],
+  PaperInputBehaviorImpl
+];
+/* harmony export (immutable) */ __webpack_exports__["a"] = PaperInputBehavior;
+
+
+
+/***/ }),
+/* 64 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__paper_styles_typography_js__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__paper_input_addon_behavior_js__ = __webpack_require__(65);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
+
+
+
+
+Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_fn_js__["a" /* Polymer */])({
+  _template: `
+    <style>
+      :host {
+        display: inline-block;
+        float: right;
+
+        @apply --paper-font-caption;
+        @apply --paper-input-char-counter;
+      }
+
+      :host([hidden]) {
+        display: none !important;
+      }
+
+      :host-context([dir="rtl"]) {
+        float: left;
+      }
+    </style>
+
+    <span>[[_charCounterStr]]</span>
+`,
+
+  is: 'paper-input-char-counter',
+
+  behaviors: [
+    __WEBPACK_IMPORTED_MODULE_2__paper_input_addon_behavior_js__["a" /* PaperInputAddonBehavior */]
+  ],
+
+  properties: {
+    _charCounterStr: {
+      type: String,
+      value: '0'
+    }
+  },
+
+  /**
+   * This overrides the update function in PaperInputAddonBehavior.
+   * @param {{
+   *   inputElement: (Element|undefined),
+   *   value: (string|undefined),
+   *   invalid: boolean
+   * }} state -
+   *     inputElement: The input element.
+   *     value: The input value.
+   *     invalid: True if the input value is invalid.
+   */
+  update: function(state) {
+    if (!state.inputElement) {
+      return;
+    }
+
+    state.value = state.value || '';
+
+    var counter = state.value.toString().length.toString();
+
+    if (state.inputElement.hasAttribute('maxlength')) {
+      counter += '/' + state.inputElement.getAttribute('maxlength');
+    }
+
+    this._charCounterStr = counter;
+  }
+});
+
+
+/***/ }),
+/* 65 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
+
+
+
+const PaperInputAddonBehavior = {
+  attached: function() {
+    // Workaround for https://github.com/webcomponents/shadydom/issues/96
+    Object(__WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_dom_js__["b" /* flush */])();
+    this.fire('addon-attached');
+  },
+
+  /**
+   * The function called by `<paper-input-container>` when the input value or validity changes.
+   * @param {{
+   *   inputElement: (Element|undefined),
+   *   value: (string|undefined),
+   *   invalid: boolean
+   * }} state -
+   *     inputElement: The input element.
+   *     value: The input value.
+   *     invalid: True if the input value is invalid.
+   */
+  update: function(state) {
+  }
+
+};
+/* harmony export (immutable) */ __webpack_exports__["a"] = PaperInputAddonBehavior;
+
+
+
+/***/ }),
+/* 66 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_flex_layout_iron_flex_layout_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__paper_styles_default_theme_js__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__paper_styles_typography_js__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__polymer_lib_utils_case_map_js__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
+
+
+
+
+
+
+
+Object(__WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__["a" /* Polymer */])({
+  _template: `
+    <style>
+      :host {
+        display: block;
+        padding: 8px 0;
+
+        --paper-input-container-shared-input-style: {
+          position: relative; /* to make a stacking context */
+          outline: none;
+          box-shadow: none;
+          padding: 0;
+          width: 100%;
+          max-width: 100%;
+          background: transparent;
+          border: none;
+          color: var(--paper-input-container-input-color, var(--primary-text-color));
+          -webkit-appearance: none;
+          text-align: inherit;
+          vertical-align: bottom;
+
+          @apply --paper-font-subhead;
+        };
+
+        @apply --paper-input-container;
+      }
+
+      :host([inline]) {
+        display: inline-block;
+      }
+
+      :host([disabled]) {
+        pointer-events: none;
+        opacity: 0.33;
+
+        @apply --paper-input-container-disabled;
+      }
+
+      :host([hidden]) {
+        display: none !important;
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+
+      .floated-label-placeholder {
+        @apply --paper-font-caption;
+      }
+
+      .underline {
+        height: 2px;
+        position: relative;
+      }
+
+      .focused-line {
+        @apply --layout-fit;
+        border-bottom: 2px solid var(--paper-input-container-focus-color, var(--primary-color));
+
+        -webkit-transform-origin: center center;
+        transform-origin: center center;
+        -webkit-transform: scale3d(0,1,1);
+        transform: scale3d(0,1,1);
+
+        @apply --paper-input-container-underline-focus;
+      }
+
+      .underline.is-highlighted .focused-line {
+        -webkit-transform: none;
+        transform: none;
+        -webkit-transition: -webkit-transform 0.25s;
+        transition: transform 0.25s;
+
+        @apply --paper-transition-easing;
+      }
+
+      .underline.is-invalid .focused-line {
+        border-color: var(--paper-input-container-invalid-color, var(--error-color));
+        -webkit-transform: none;
+        transform: none;
+        -webkit-transition: -webkit-transform 0.25s;
+        transition: transform 0.25s;
+
+        @apply --paper-transition-easing;
+      }
+
+      .unfocused-line {
+        @apply --layout-fit;
+        border-bottom: 1px solid var(--paper-input-container-color, var(--secondary-text-color));
+        @apply --paper-input-container-underline;
+      }
+
+      :host([disabled]) .unfocused-line {
+        border-bottom: 1px dashed;
+        border-color: var(--paper-input-container-color, var(--secondary-text-color));
+        @apply --paper-input-container-underline-disabled;
+      }
+
+      .input-wrapper {
+        @apply --layout-horizontal;
+        @apply --layout-center;
+        position: relative;
+      }
+
+      .input-content {
+        @apply --layout-flex-auto;
+        @apply --layout-relative;
+        max-width: 100%;
+      }
+
+      .input-content ::slotted(label),
+      .input-content ::slotted(.paper-input-label) {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        width: 100%;
+        font: inherit;
+        color: var(--paper-input-container-color, var(--secondary-text-color));
+        -webkit-transition: -webkit-transform 0.25s, width 0.25s;
+        transition: transform 0.25s, width 0.25s;
+        -webkit-transform-origin: left top;
+        transform-origin: left top;
+
+        @apply --paper-font-common-nowrap;
+        @apply --paper-font-subhead;
+        @apply --paper-input-container-label;
+        @apply --paper-transition-easing;
+      }
+
+      .input-content.label-is-floating ::slotted(label),
+      .input-content.label-is-floating ::slotted(.paper-input-label) {
+        -webkit-transform: translateY(-75%) scale(0.75);
+        transform: translateY(-75%) scale(0.75);
+
+        /* Since we scale to 75/100 of the size, we actually have 100/75 of the
+        original space now available */
+        width: 133%;
+
+        @apply --paper-input-container-label-floating;
+      }
+
+      :host-context([dir="rtl"]) .input-content.label-is-floating ::slotted(label),
+      :host-context([dir="rtl"]) .input-content.label-is-floating ::slotted(.paper-input-label) {
+        /* TODO(noms): Figure out why leaving the width at 133% before the animation
+         * actually makes
+         * it wider on the right side, not left side, as you would expect in RTL */
+        width: 100%;
+        -webkit-transform-origin: right top;
+        transform-origin: right top;
+      }
+
+      .input-content.label-is-highlighted ::slotted(label),
+      .input-content.label-is-highlighted ::slotted(.paper-input-label) {
+        color: var(--paper-input-container-focus-color, var(--primary-color));
+
+        @apply --paper-input-container-label-focus;
+      }
+
+      .input-content.is-invalid ::slotted(label),
+      .input-content.is-invalid ::slotted(.paper-input-label) {
+        color: var(--paper-input-container-invalid-color, var(--error-color));
+      }
+
+      .input-content.label-is-hidden ::slotted(label),
+      .input-content.label-is-hidden ::slotted(.paper-input-label) {
+        visibility: hidden;
+      }
+
+      .input-content ::slotted(iron-input) {
+        @apply --paper-input-container-shared-input-style;
+      }
+      
+      .input-content ::slotted(input),
+      .input-content ::slotted(textarea),
+      .input-content ::slotted(iron-autogrow-textarea),
+      .input-content ::slotted(.paper-input-input) {
+        @apply --paper-input-container-shared-input-style;
+        @apply --paper-input-container-input;
+      }
+
+      .input-content ::slotted(input)::-webkit-outer-spin-button,
+      .input-content ::slotted(input)::-webkit-inner-spin-button {
+        @apply --paper-input-container-input-webkit-spinner;
+      }
+      
+      .input-content.focused ::slotted(input),
+      .input-content.focused ::slotted(textarea),
+      .input-content.focused ::slotted(iron-autogrow-textarea),
+      .input-content.focused ::slotted(.paper-input-input) {
+        @apply --paper-input-container-input-focus;
+      }
+
+      .input-content.is-invalid ::slotted(input),
+      .input-content.is-invalid ::slotted(textarea),
+      .input-content.is-invalid ::slotted(iron-autogrow-textarea),
+      .input-content.is-invalid ::slotted(.paper-input-input) {
+        @apply --paper-input-container-input-invalid;
+      }
+      
+      .prefix ::slotted(*) {
+        display: inline-block;
+        @apply --paper-font-subhead;
+        @apply --layout-flex-none;
+        @apply --paper-input-prefix;
+      }
+
+      .suffix ::slotted(*) {
+        display: inline-block;
+        @apply --paper-font-subhead;
+        @apply --layout-flex-none;
+
+        @apply --paper-input-suffix;
+      }
+
+      /* Firefox sets a min-width on the input, which can cause layout issues */
+      .input-content ::slotted(input) {
+        min-width: 0;
+      }
+
+      .input-content ::slotted(textarea) {
+        resize: none;
+      }
+
+      .add-on-content {
+        position: relative;
+      }
+
+      .add-on-content.is-invalid ::slotted(*) {
+        color: var(--paper-input-container-invalid-color, var(--error-color));
+      }
+
+      .add-on-content.is-highlighted ::slotted(*) {
+        color: var(--paper-input-container-focus-color, var(--primary-color));
+      }
+    </style>
+
+    <div class="floated-label-placeholder" aria-hidden="true" hidden="[[noLabelFloat]]">&nbsp;</div>
+
+    <div class="input-wrapper">
+      <span class="prefix"><slot name="prefix"></slot></span>
+
+      <div class\$="[[_computeInputContentClass(noLabelFloat,alwaysFloatLabel,focused,invalid,_inputHasContent)]]" id="labelAndInputContainer">
+        <slot name="label"></slot>
+        <slot name="input"></slot>
+      </div>
+
+      <span class="suffix"><slot name="suffix"></slot></span>
+    </div>
+
+    <div class\$="[[_computeUnderlineClass(focused,invalid)]]">
+      <div class="unfocused-line"></div>
+      <div class="focused-line"></div>
+    </div>
+
+    <div class\$="[[_computeAddOnContentClass(focused,invalid)]]">
+      <slot name="add-on"></slot>
+    </div>
+`,
+
+  is: 'paper-input-container',
+
+  properties: {
+    /**
+     * Set to true to disable the floating label. The label disappears when the input value is
+     * not null.
+     */
+    noLabelFloat: {
+      type: Boolean,
+      value: false
+    },
+
+    /**
+     * Set to true to always float the floating label.
+     */
+    alwaysFloatLabel: {
+      type: Boolean,
+      value: false
+    },
+
+    /**
+     * The attribute to listen for value changes on.
+     */
+    attrForValue: {
+      type: String,
+      value: 'bind-value'
+    },
+
+    /**
+     * Set to true to auto-validate the input value when it changes.
+     */
+    autoValidate: {
+      type: Boolean,
+      value: false
+    },
+
+    /**
+     * True if the input is invalid. This property is set automatically when the input value
+     * changes if auto-validating, or when the `iron-input-validate` event is heard from a child.
+     */
+    invalid: {
+      observer: '_invalidChanged',
+      type: Boolean,
+      value: false
+    },
+
+    /**
+     * True if the input has focus.
+     */
+    focused: {
+      readOnly: true,
+      type: Boolean,
+      value: false,
+      notify: true
+    },
+
+    _addons: {
+      type: Array
+      // do not set a default value here intentionally - it will be initialized lazily when a
+      // distributed child is attached, which may occur before configuration for this element
+      // in polyfill.
+    },
+
+    _inputHasContent: {
+      type: Boolean,
+      value: false
+    },
+
+    _inputSelector: {
+      type: String,
+      value: 'input,iron-input,textarea,.paper-input-input'
+    },
+
+    _boundOnFocus: {
+      type: Function,
+      value: function() {
+        return this._onFocus.bind(this);
+      }
+    },
+
+    _boundOnBlur: {
+      type: Function,
+      value: function() {
+        return this._onBlur.bind(this);
+      }
+    },
+
+    _boundOnInput: {
+      type: Function,
+      value: function() {
+        return this._onInput.bind(this);
+      }
+    },
+
+    _boundValueChanged: {
+      type: Function,
+      value: function() {
+        return this._onValueChanged.bind(this);
+      }
+    }
+  },
+
+  listeners: {
+    'addon-attached': '_onAddonAttached',
+    'iron-input-validate': '_onIronInputValidate'
+  },
+
+  get _valueChangedEvent() {
+    return this.attrForValue + '-changed';
+  },
+
+  get _propertyForValue() {
+    return Object(__WEBPACK_IMPORTED_MODULE_5__polymer_lib_utils_case_map_js__["dashToCamelCase"])(this.attrForValue);
+  },
+
+  get _inputElement() {
+    return Object(__WEBPACK_IMPORTED_MODULE_6__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(this).querySelector(this._inputSelector);
+  },
+
+  get _inputElementValue() {
+    return this._inputElement[this._propertyForValue] || this._inputElement.value;
+  },
+
+  ready: function() {
+    if (!this._addons) {
+      this._addons = [];
+    }
+    this.addEventListener('focus', this._boundOnFocus, true);
+    this.addEventListener('blur', this._boundOnBlur, true);
+  },
+
+  attached: function() {
+    if (this.attrForValue) {
+      this._inputElement.addEventListener(this._valueChangedEvent, this._boundValueChanged);
+    } else {
+      this.addEventListener('input', this._onInput);
+    }
+
+    // Only validate when attached if the input already has a value.
+    if (this._inputElementValue && this._inputElementValue != '') {
+      this._handleValueAndAutoValidate(this._inputElement);
+    } else {
+      this._handleValue(this._inputElement);
+    }
+  },
+
+  _onAddonAttached: function(event) {
+    if (!this._addons) {
+      this._addons = [];
+    }
+    var target = event.target;
+    if (this._addons.indexOf(target) === -1) {
+      this._addons.push(target);
+      if (this.isAttached) {
+        this._handleValue(this._inputElement);
+      }
+    }
+  },
+
+  _onFocus: function() {
+    this._setFocused(true);
+  },
+
+  _onBlur: function() {
+    this._setFocused(false);
+    this._handleValueAndAutoValidate(this._inputElement);
+  },
+
+  _onInput: function(event) {
+    this._handleValueAndAutoValidate(event.target);
+  },
+
+  _onValueChanged: function(event) {
+    var input = event.target;
+
+    // Problem: if the input is required but has no text entered, we should
+    // only validate it on blur (so that an empty form doesn't come up red
+    // immediately; however, in this handler, we don't know whether this is
+    // the booting up value or a value in the future. I am assuming that the
+    // case  we care about manifests itself when the value is undefined.
+    // If this causes future problems, we need to do something like track whether
+    // the iron-input-ready event has fired, and this handler came before that.
+
+    if (input.value === undefined) {
+      return;
+    }
+
+    this._handleValueAndAutoValidate(event.target);
+  },
+
+  _handleValue: function(inputElement) {
+    var value = this._inputElementValue;
+
+    // type="number" hack needed because this.value is empty until it's valid
+    if (value || value === 0 || (inputElement.type === 'number' && !inputElement.checkValidity())) {
+      this._inputHasContent = true;
+    } else {
+      this._inputHasContent = false;
+    }
+
+    this.updateAddons({
+      inputElement: inputElement,
+      value: value,
+      invalid: this.invalid
+    });
+  },
+
+  _handleValueAndAutoValidate: function(inputElement) {
+    if (this.autoValidate && inputElement) {
+      var valid;
+
+      if (inputElement.validate) {
+        valid = inputElement.validate(this._inputElementValue);
+      } else {
+        valid = inputElement.checkValidity();
+      }
+      this.invalid = !valid;
+    }
+
+    // Call this last to notify the add-ons.
+    this._handleValue(inputElement);
+  },
+
+  _onIronInputValidate: function(event) {
+    this.invalid = this._inputElement.invalid;
+  },
+
+  _invalidChanged: function() {
+    if (this._addons) {
+      this.updateAddons({invalid: this.invalid});
+    }
+  },
+
+  /**
+   * Call this to update the state of add-ons.
+   * @param {Object} state Add-on state.
+   */
+  updateAddons: function(state) {
+    for (var addon, index = 0; addon = this._addons[index]; index++) {
+      addon.update(state);
+    }
+  },
+
+  _computeInputContentClass: function(noLabelFloat, alwaysFloatLabel, focused, invalid, _inputHasContent) {
+    var cls = 'input-content';
+    if (!noLabelFloat) {
+      var label = this.querySelector('label');
+
+      if (alwaysFloatLabel || _inputHasContent) {
+        cls += ' label-is-floating';
+        // If the label is floating, ignore any offsets that may have been
+        // applied from a prefix element.
+        this.$.labelAndInputContainer.style.position = 'static';
+
+        if (invalid) {
+          cls += ' is-invalid';
+        } else if (focused) {
+          cls += " label-is-highlighted";
+        }
+      } else {
+        // When the label is not floating, it should overlap the input element.
+        if (label) {
+          this.$.labelAndInputContainer.style.position = 'relative';
+        }
+        if (invalid) {
+          cls += ' is-invalid';
+        }
+      }
+    } else {
+      if (_inputHasContent) {
+        cls += ' label-is-hidden';
+      }
+      if (invalid) {
+        cls += ' is-invalid';
+      }
+    }
+    if (focused) {
+      cls += ' focused';
+    }
+    return cls;
+  },
+
+  _computeUnderlineClass: function(focused, invalid) {
+    var cls = 'underline';
+    if (invalid) {
+      cls += ' is-invalid';
+    } else if (focused) {
+      cls += ' is-highlighted'
+    }
+    return cls;
+  },
+
+  _computeAddOnContentClass: function(focused, invalid) {
+    var cls = 'add-on-content';
+    if (invalid) {
+      cls += ' is-invalid';
+    } else if (focused) {
+      cls += ' is-highlighted'
+    }
+    return cls;
+  }
+});
+
+
+/***/ }),
+/* 67 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__paper_styles_default_theme_js__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__paper_styles_typography_js__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__paper_input_addon_behavior_js__ = __webpack_require__(65);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
+
+
+
+
+
+Object(__WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__["a" /* Polymer */])({
+  _template: `
+    <style>
+      :host {
+        display: inline-block;
+        visibility: hidden;
+
+        color: var(--paper-input-container-invalid-color, var(--error-color));
+
+        @apply --paper-font-caption;
+        @apply --paper-input-error;
+        position: absolute;
+        left:0;
+        right:0;
+      }
+
+      :host([invalid]) {
+        visibility: visible;
+      };
+    </style>
+
+    <slot></slot>
+`,
+
+  is: 'paper-input-error',
+
+  behaviors: [
+    __WEBPACK_IMPORTED_MODULE_3__paper_input_addon_behavior_js__["a" /* PaperInputAddonBehavior */]
+  ],
+
+  properties: {
+    /**
+     * True if the error is showing.
+     */
+    invalid: {
+      readOnly: true,
+      reflectToAttribute: true,
+      type: Boolean
+    }
+  },
+
+  /**
+   * This overrides the update function in PaperInputAddonBehavior.
+   * @param {{
+   *   inputElement: (Element|undefined),
+   *   value: (string|undefined),
+   *   invalid: boolean
+   * }} state -
+   *     inputElement: The input element.
+   *     value: The input value.
+   *     invalid: True if the input value is invalid.
+   */
+  update: function(state) {
+    this._setInvalid(state.invalid);
+  }
+});
+
+
+/***/ }),
+/* 68 */
+/***/ (function(module, exports) {
+
+
+module.exports = subclass => 
+  class PackageInterface extends subclass {
+
+    constructor() {
+      super();
+      this._injectModel('PackageModel');
+    }
+
+    _getPackageSchema() {
+      return this.PackageModel.schema;
+    }
+
+    async _getPackage(id) {
+      return this.PackageModel.get(id);
+    }
+
+    async _createPackage(name, overview) {
+      return this.PackageModel.create(name, overview);
+    }
+
+    async _updatePackage(pkg) {
+      return this.PackageModel.update(pkg);
+    }
+
+    async _deletePackage(name) {
+      return this.PackageModel.delete(name);
+    }
+
+    async _updatePackage(data) {
+      return this.PackageModel.update(data);
+    }
+  }
+
+/***/ }),
+/* 69 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// super simple module for the most common nodejs use case.
+exports.markdown = __webpack_require__(156);
+exports.parse = exports.markdown.toHTML;
+
+
+/***/ }),
+/* 70 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__styles_style_properties__ = __webpack_require__(71);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__styles_shared_styles__ = __webpack_require__(91);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ucd_lib_cork_app_utils__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ucd_lib_cork_app_utils___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__ucd_lib_cork_app_utils__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ucd_lib_cork_app_state_elements_app_route__ = __webpack_require__(49);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lib__ = __webpack_require__(108);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__polymer_polymer_polymer_element__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__polymer_paper_button_paper_button__ = __webpack_require__(57);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__polymer_app_layout_app_header_app_header__ = __webpack_require__(124);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__polymer_app_layout_app_toolbar_app_toolbar__ = __webpack_require__(129);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__polymer_app_layout_app_drawer_app_drawer__ = __webpack_require__(130);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__polymer_paper_icon_button_paper_icon_button__ = __webpack_require__(131);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__polymer_iron_icons_iron_icons__ = __webpack_require__(133);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__polymer_polymer_lib_elements_custom_style__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__polymer_paper_material_paper_material__ = __webpack_require__(135);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__polymer_iron_pages_iron_pages__ = __webpack_require__(137);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__utils_app_title_card__ = __webpack_require__(140);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__management_app_package_metadata_editor__ = __webpack_require__(142);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__search_app_package_search__ = __webpack_require__(167);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__app_home__ = __webpack_require__(181);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__landing_app_landing_page__ = __webpack_require__(183);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__interfaces_AppStateInterface__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__interfaces_AppStateInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_20__interfaces_AppStateInterface__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__ecosml_app_html__ = __webpack_require__(185);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__ecosml_app_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_21__ecosml_app_html__);
+// import styles
+
+
+
+// import app framework
+
+
+
+// import main app library
+
+
+// import polymer elements
+
+
+
+
+
+
+
+
+
+
+
+
+
+// app imports
+
+
+
+
+
+
+// element imports
+
+
+
+class EcoSMLApp extends Mixin(__WEBPACK_IMPORTED_MODULE_5__polymer_polymer_polymer_element__["a" /* Element */])
+      .with(EventInterface, __WEBPACK_IMPORTED_MODULE_20__interfaces_AppStateInterface___default.a) {
+    
+  // Define a string template instead of a `<template>` element.
+  static get template() {
+    return __WEBPACK_IMPORTED_MODULE_21__ecosml_app_html___default.a;
+  }
+
+  static get properties() {
+    return {
+      // APP_CONFIG is global and injected via template from server.
+      appRoutes : {
+        type : Array,
+        value : () => APP_CONFIG.appRoutes
+      },
+      page : {
+        type : String,
+        value : 'home'
+      },
+      firstLoad : {
+        type : Boolean,
+        value : true
+      }
+    }
+  }
+
+  constructor() {
+    super();
+    this.active = true;
+  }
+
+  toggleDrawer() {
+    this.$.drawer.toggle();
+  }
+
+  _onAppStateUpdate(e) {
+    let page = e.location.path[0] || 'home';
+    if( page === this.page ) return;
+
+    if( page === 'create' ) page = 'edit';
+    
+    window.scrollTo(0, 0);
+    this.page = page;
+  }
+}
+/* harmony export (immutable) */ __webpack_exports__["EcoSMLApp"] = EcoSMLApp;
+
+
+customElements.define('ecosml-app', EcoSMLApp);
+
+/***/ }),
+/* 71 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_paper_styles_paper_styles__ = __webpack_require__(72);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__polymer_polymer_lib_elements_custom_style__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__style_properties_html__ = __webpack_require__(90);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__style_properties_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__style_properties_html__);
+
+
+
+
+let styleWrapper = document.createElement('div');
+styleWrapper.style.display = 'none';
+styleWrapper.innerHTML = __WEBPACK_IMPORTED_MODULE_2__style_properties_html___default.a;
+document.head.appendChild(styleWrapper);
+
+/***/ }),
+/* 72 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__iron_flex_layout_iron_flex_layout_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__color_js__ = __webpack_require__(47);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__default_theme_js__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__shadow_js__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__typography_js__ = __webpack_require__(22);
+
+
+
+
+
+
+
+/***/ }),
+/* 73 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__src_apply_shim_js__ = __webpack_require__(74);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__src_template_map_js__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__src_style_util_js__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__src_apply_shim_utils_js__ = __webpack_require__(75);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__src_document_wait_js__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__src_common_utils_js__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__src_custom_style_interface_js__ = __webpack_require__(42);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__src_style_settings_js__ = __webpack_require__(24);
+/**
+@license
+Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+*/
+
+
+
+
+
+
+
+
+
+ // eslint-disable-line no-unused-vars
+
+
+/** @const {ApplyShim} */
+const applyShim = new __WEBPACK_IMPORTED_MODULE_0__src_apply_shim_js__["a" /* default */]();
+
+class ApplyShimInterface {
+  constructor() {
+    /** @type {?CustomStyleInterfaceInterface} */
+    this.customStyleInterface = null;
+    Object(__WEBPACK_IMPORTED_MODULE_4__src_document_wait_js__["a" /* default */])(() => {
+      this.ensure();
+    });
+    applyShim['invalidCallback'] = __WEBPACK_IMPORTED_MODULE_3__src_apply_shim_utils_js__["a" /* invalidate */];
+  }
+  ensure() {
+    if (this.customStyleInterface) {
+      return;
+    }
+    this.customStyleInterface = window.ShadyCSS.CustomStyleInterface;
+    if (this.customStyleInterface) {
+      this.customStyleInterface['transformCallback'] = (style) => {
+        applyShim.transformCustomStyle(style);
+      };
+      this.customStyleInterface['validateCallback'] = () => {
+        requestAnimationFrame(() => {
+          if (this.customStyleInterface['enqueued']) {
+            this.flushCustomStyles();
+          }
+        });
+      }
+    }
+  }
+  /**
+   * @param {!HTMLTemplateElement} template
+   * @param {string} elementName
+   */
+  prepareTemplate(template, elementName) {
+    this.ensure();
+    __WEBPACK_IMPORTED_MODULE_1__src_template_map_js__["a" /* default */][elementName] = template;
+    let ast = applyShim.transformTemplate(template, elementName);
+    // save original style ast to use for revalidating instances
+    template['_styleAst'] = ast;
+  }
+  flushCustomStyles() {
+    this.ensure();
+    if (!this.customStyleInterface) {
+      return;
+    }
+    let styles = this.customStyleInterface['processStyles']();
+    if (!this.customStyleInterface['enqueued']) {
+      return;
+    }
+    for (let i = 0; i < styles.length; i++ ) {
+      let cs = styles[i];
+      let style = this.customStyleInterface['getStyleForCustomStyle'](cs);
+      if (style) {
+        applyShim.transformCustomStyle(style);
+      }
+    }
+    this.customStyleInterface['enqueued'] = false;
+  }
+  /**
+   * @param {HTMLElement} element
+   * @param {Object=} properties
+   */
+  styleSubtree(element, properties) {
+    this.ensure();
+    if (properties) {
+      Object(__WEBPACK_IMPORTED_MODULE_5__src_common_utils_js__["c" /* updateNativeProperties */])(element, properties);
+    }
+    if (element.shadowRoot) {
+      this.styleElement(element);
+      let shadowChildren = element.shadowRoot.children || element.shadowRoot.childNodes;
+      for (let i = 0; i < shadowChildren.length; i++) {
+        this.styleSubtree(/** @type {HTMLElement} */(shadowChildren[i]));
+      }
+    } else {
+      let children = element.children || element.childNodes;
+      for (let i = 0; i < children.length; i++) {
+        this.styleSubtree(/** @type {HTMLElement} */(children[i]));
+      }
+    }
+  }
+  /**
+   * @param {HTMLElement} element
+   */
+  styleElement(element) {
+    this.ensure();
+    let {is} = Object(__WEBPACK_IMPORTED_MODULE_2__src_style_util_js__["b" /* getIsExtends */])(element);
+    let template = __WEBPACK_IMPORTED_MODULE_1__src_template_map_js__["a" /* default */][is];
+    if (template && !__WEBPACK_IMPORTED_MODULE_3__src_apply_shim_utils_js__["c" /* templateIsValid */](template)) {
+      // only revalidate template once
+      if (!__WEBPACK_IMPORTED_MODULE_3__src_apply_shim_utils_js__["d" /* templateIsValidating */](template)) {
+        this.prepareTemplate(template, is);
+        __WEBPACK_IMPORTED_MODULE_3__src_apply_shim_utils_js__["b" /* startValidatingTemplate */](template);
+      }
+      // update this element instance
+      let root = element.shadowRoot;
+      if (root) {
+        let style = /** @type {HTMLStyleElement} */(root.querySelector('style'));
+        if (style) {
+          // reuse the template's style ast, it has all the original css text
+          style['__cssRules'] = template['_styleAst'];
+          style.textContent = Object(__WEBPACK_IMPORTED_MODULE_2__src_style_util_js__["e" /* toCssText */])(template['_styleAst'])
+        }
+      }
+    }
+  }
+  /**
+   * @param {Object=} properties
+   */
+  styleDocument(properties) {
+    this.ensure();
+    this.styleSubtree(document.body, properties);
+  }
+}
+
+if (!window.ShadyCSS || !window.ShadyCSS.ScopingShim) {
+  const applyShimInterface = new ApplyShimInterface();
+  let CustomStyleInterface = window.ShadyCSS && window.ShadyCSS.CustomStyleInterface;
+
+  window.ShadyCSS = {
+    /**
+     * @param {!HTMLTemplateElement} template
+     * @param {string} elementName
+     * @param {string=} elementExtends
+     */
+    prepareTemplate(template, elementName, elementExtends) { // eslint-disable-line no-unused-vars
+      applyShimInterface.flushCustomStyles();
+      applyShimInterface.prepareTemplate(template, elementName)
+    },
+
+    /**
+     * @param {!HTMLElement} element
+     * @param {Object=} properties
+     */
+    styleSubtree(element, properties) {
+      applyShimInterface.flushCustomStyles();
+      applyShimInterface.styleSubtree(element, properties);
+    },
+
+    /**
+     * @param {!HTMLElement} element
+     */
+    styleElement(element) {
+      applyShimInterface.flushCustomStyles();
+      applyShimInterface.styleElement(element);
+    },
+
+    /**
+     * @param {Object=} properties
+     */
+    styleDocument(properties) {
+      applyShimInterface.flushCustomStyles();
+      applyShimInterface.styleDocument(properties);
+    },
+
+    /**
+     * @param {Element} element
+     * @param {string} property
+     * @return {string}
+     */
+    getComputedStyleValue(element, property) {
+      return Object(__WEBPACK_IMPORTED_MODULE_5__src_common_utils_js__["b" /* getComputedStyleValue */])(element, property);
+    },
+    nativeCss: __WEBPACK_IMPORTED_MODULE_7__src_style_settings_js__["a" /* nativeCssVariables */],
+    nativeShadow: __WEBPACK_IMPORTED_MODULE_7__src_style_settings_js__["b" /* nativeShadow */]
+  };
+
+  if (CustomStyleInterface) {
+    window.ShadyCSS.CustomStyleInterface = CustomStyleInterface;
+  }
+}
+
+window.ShadyCSS.ApplyShim = applyShim;
+
+/***/ }),
+/* 74 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__style_util_js__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__common_regex_js__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__common_utils_js__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__css_parse_js__ = __webpack_require__(25);
+/**
+@license
+Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+*/
+/*
+ * The apply shim simulates the behavior of `@apply` proposed at
+ * https://tabatkins.github.io/specs/css-apply-rule/.
+ * The approach is to convert a property like this:
+ *
+ *    --foo: {color: red; background: blue;}
+ *
+ * to this:
+ *
+ *    --foo_-_color: red;
+ *    --foo_-_background: blue;
+ *
+ * Then where `@apply --foo` is used, that is converted to:
+ *
+ *    color: var(--foo_-_color);
+ *    background: var(--foo_-_background);
+ *
+ * This approach generally works but there are some issues and limitations.
+ * Consider, for example, that somewhere *between* where `--foo` is set and used,
+ * another element sets it to:
+ *
+ *    --foo: { border: 2px solid red; }
+ *
+ * We must now ensure that the color and background from the previous setting
+ * do not apply. This is accomplished by changing the property set to this:
+ *
+ *    --foo_-_border: 2px solid red;
+ *    --foo_-_color: initial;
+ *    --foo_-_background: initial;
+ *
+ * This works but introduces one new issue.
+ * Consider this setup at the point where the `@apply` is used:
+ *
+ *    background: orange;
+ *    `@apply` --foo;
+ *
+ * In this case the background will be unset (initial) rather than the desired
+ * `orange`. We address this by altering the property set to use a fallback
+ * value like this:
+ *
+ *    color: var(--foo_-_color);
+ *    background: var(--foo_-_background, orange);
+ *    border: var(--foo_-_border);
+ *
+ * Note that the default is retained in the property set and the `background` is
+ * the desired `orange`. This leads us to a limitation.
+ *
+ * Limitation 1:
+
+ * Only properties in the rule where the `@apply`
+ * is used are considered as default values.
+ * If another rule matches the element and sets `background` with
+ * less specificity than the rule in which `@apply` appears,
+ * the `background` will not be set.
+ *
+ * Limitation 2:
+ *
+ * When using Polymer's `updateStyles` api, new properties may not be set for
+ * `@apply` properties.
+
+*/
+
+
+
+
+
+
+ // eslint-disable-line no-unused-vars
+
+const APPLY_NAME_CLEAN = /;\s*/m;
+const INITIAL_INHERIT = /^\s*(initial)|(inherit)\s*$/;
+
+// separator used between mixin-name and mixin-property-name when producing properties
+// NOTE: plain '-' may cause collisions in user styles
+const MIXIN_VAR_SEP = '_-_';
+
+/**
+ * @typedef {!Object<string, string>}
+ */
+let PropertyEntry; // eslint-disable-line no-unused-vars
+
+/**
+ * @typedef {!Object<string, boolean>}
+ */
+let DependantsEntry; // eslint-disable-line no-unused-vars
+
+/** @typedef {{
+ *    properties: PropertyEntry,
+ *    dependants: DependantsEntry
+ * }}
+ */
+let MixinMapEntry; // eslint-disable-line no-unused-vars
+
+// map of mixin to property names
+// --foo: {border: 2px} -> {properties: {(--foo, ['border'])}, dependants: {'element-name': proto}}
+class MixinMap {
+  constructor() {
+    /** @type {!Object<string, !MixinMapEntry>} */
+    this._map = {};
+  }
+  /**
+   * @param {string} name
+   * @param {!PropertyEntry} props
+   */
+  set(name, props) {
+    name = name.trim();
+    this._map[name] = {
+      properties: props,
+      dependants: {}
+    }
+  }
+  /**
+   * @param {string} name
+   * @return {MixinMapEntry}
+   */
+  get(name) {
+    name = name.trim();
+    return this._map[name] || null;
+  }
+}
+
+/**
+ * Callback for when an element is marked invalid
+ * @type {?function(string)}
+ */
+let invalidCallback = null;
+
+/** @unrestricted */
+class ApplyShim {
+  constructor() {
+    /** @type {?string} */
+    this._currentElement = null;
+    /** @type {HTMLMetaElement} */
+    this._measureElement = null;
+    this._map = new MixinMap();
+  }
+  /**
+   * return true if `cssText` contains a mixin definition or consumption
+   * @param {string} cssText
+   * @return {boolean}
+   */
+  detectMixin(cssText) {
+    return Object(__WEBPACK_IMPORTED_MODULE_2__common_utils_js__["a" /* detectMixin */])(cssText);
+  }
+  /**
+   * @param {!HTMLTemplateElement} template
+   * @param {string} elementName
+   * @return {StyleNode}
+   */
+  transformTemplate(template, elementName) {
+    const style = /** @type {HTMLStyleElement} */(template.content.querySelector('style'));
+    /** @type {StyleNode} */
+    let ast = null;
+    if (style) {
+      ast = this.transformStyle(style, elementName);
+    }
+    return ast;
+  }
+  /**
+   * @param {!HTMLStyleElement} style
+   * @param {string} elementName
+   * @return {StyleNode}
+   */
+  transformStyle(style, elementName = '') {
+    let ast = Object(__WEBPACK_IMPORTED_MODULE_0__style_util_js__["d" /* rulesForStyle */])(style);
+    this.transformRules(ast, elementName);
+    style.textContent = Object(__WEBPACK_IMPORTED_MODULE_0__style_util_js__["e" /* toCssText */])(ast);
+    return ast;
+  }
+  /**
+   * @param {!HTMLStyleElement} style
+   * @return {StyleNode}
+   */
+  transformCustomStyle(style) {
+    let ast = Object(__WEBPACK_IMPORTED_MODULE_0__style_util_js__["d" /* rulesForStyle */])(style);
+    Object(__WEBPACK_IMPORTED_MODULE_0__style_util_js__["a" /* forEachRule */])(ast, (rule) => {
+      if (rule['selector'] === ':root') {
+        rule['selector'] = 'html';
+      }
+      this.transformRule(rule);
+    })
+    style.textContent = Object(__WEBPACK_IMPORTED_MODULE_0__style_util_js__["e" /* toCssText */])(ast);
+    return ast;
+  }
+  /**
+   * @param {StyleNode} rules
+   * @param {string} elementName
+   */
+  transformRules(rules, elementName) {
+    this._currentElement = elementName;
+    Object(__WEBPACK_IMPORTED_MODULE_0__style_util_js__["a" /* forEachRule */])(rules, (r) => {
+      this.transformRule(r);
+    });
+    this._currentElement = null;
+  }
+  /**
+   * @param {!StyleNode} rule
+   */
+  transformRule(rule) {
+    rule['cssText'] = this.transformCssText(rule['parsedCssText']);
+    // :root was only used for variable assignment in property shim,
+    // but generates invalid selectors with real properties.
+    // replace with `:host > *`, which serves the same effect
+    if (rule['selector'] === ':root') {
+      rule['selector'] = ':host > *';
+    }
+  }
+  /**
+   * @param {string} cssText
+   * @return {string}
+   */
+  transformCssText(cssText) {
+    // produce variables
+    cssText = cssText.replace(__WEBPACK_IMPORTED_MODULE_1__common_regex_js__["c" /* VAR_ASSIGN */], (matchText, propertyName, valueProperty, valueMixin) =>
+      this._produceCssProperties(matchText, propertyName, valueProperty, valueMixin));
+    // consume mixins
+    return this._consumeCssProperties(cssText);
+  }
+  /**
+   * @param {string} property
+   * @return {string}
+   */
+  _getInitialValueForProperty(property) {
+    if (!this._measureElement) {
+      this._measureElement = /** @type {HTMLMetaElement} */(document.createElement('meta'));
+      this._measureElement.setAttribute('apply-shim-measure', '');
+      this._measureElement.style.all = 'initial';
+      document.head.appendChild(this._measureElement);
+    }
+    return window.getComputedStyle(this._measureElement).getPropertyValue(property);
+  }
+  /**
+   * replace mixin consumption with variable consumption
+   * @param {string} text
+   * @return {string}
+   */
+  _consumeCssProperties(text) {
+    /** @type {Array} */
+    let m = null;
+    // loop over text until all mixins with defintions have been applied
+    while((m = __WEBPACK_IMPORTED_MODULE_1__common_regex_js__["b" /* MIXIN_MATCH */].exec(text))) {
+      let matchText = m[0];
+      let mixinName = m[1];
+      let idx = m.index;
+      // collect properties before apply to be "defaults" if mixin might override them
+      // match includes a "prefix", so find the start and end positions of @apply
+      let applyPos = idx + matchText.indexOf('@apply');
+      let afterApplyPos = idx + matchText.length;
+      // find props defined before this @apply
+      let textBeforeApply = text.slice(0, applyPos);
+      let textAfterApply = text.slice(afterApplyPos);
+      let defaults = this._cssTextToMap(textBeforeApply);
+      let replacement = this._atApplyToCssProperties(mixinName, defaults);
+      // use regex match position to replace mixin, keep linear processing time
+      text = `${textBeforeApply}${replacement}${textAfterApply}`;
+      // move regex search to _after_ replacement
+      __WEBPACK_IMPORTED_MODULE_1__common_regex_js__["b" /* MIXIN_MATCH */].lastIndex = idx + replacement.length;
+    }
+    return text;
+  }
+  /**
+   * produce variable consumption at the site of mixin consumption
+   * `@apply` --foo; -> for all props (${propname}: var(--foo_-_${propname}, ${fallback[propname]}}))
+   * Example:
+   *  border: var(--foo_-_border); padding: var(--foo_-_padding, 2px)
+   *
+   * @param {string} mixinName
+   * @param {Object} fallbacks
+   * @return {string}
+   */
+  _atApplyToCssProperties(mixinName, fallbacks) {
+    mixinName = mixinName.replace(APPLY_NAME_CLEAN, '');
+    let vars = [];
+    let mixinEntry = this._map.get(mixinName);
+    // if we depend on a mixin before it is created
+    // make a sentinel entry in the map to add this element as a dependency for when it is defined.
+    if (!mixinEntry) {
+      this._map.set(mixinName, {});
+      mixinEntry = this._map.get(mixinName);
+    }
+    if (mixinEntry) {
+      if (this._currentElement) {
+        mixinEntry.dependants[this._currentElement] = true;
+      }
+      let p, parts, f;
+      for (p in mixinEntry.properties) {
+        f = fallbacks && fallbacks[p];
+        parts = [p, ': var(', mixinName, MIXIN_VAR_SEP, p];
+        if (f) {
+          parts.push(',', f);
+        }
+        parts.push(')');
+        vars.push(parts.join(''));
+      }
+    }
+    return vars.join('; ');
+  }
+
+  /**
+   * @param {string} property
+   * @param {string} value
+   * @return {string}
+   */
+  _replaceInitialOrInherit(property, value) {
+    let match = INITIAL_INHERIT.exec(value);
+    if (match) {
+      if (match[1]) {
+        // initial
+        // replace `initial` with the concrete initial value for this property
+        value = this._getInitialValueForProperty(property);
+      } else {
+        // inherit
+        // with this purposfully illegal value, the variable will be invalid at
+        // compute time (https://www.w3.org/TR/css-variables/#invalid-at-computed-value-time)
+        // and for inheriting values, will behave similarly
+        // we cannot support the same behavior for non inheriting values like 'border'
+        value = 'apply-shim-inherit';
+      }
+    }
+    return value;
+  }
+
+  /**
+   * "parse" a mixin definition into a map of properties and values
+   * cssTextToMap('border: 2px solid black') -> ('border', '2px solid black')
+   * @param {string} text
+   * @return {!Object<string, string>}
+   */
+  _cssTextToMap(text) {
+    let props = text.split(';');
+    let property, value;
+    let out = {};
+    for (let i = 0, p, sp; i < props.length; i++) {
+      p = props[i];
+      if (p) {
+        sp = p.split(':');
+        // ignore lines that aren't definitions like @media
+        if (sp.length > 1) {
+          property = sp[0].trim();
+          // some properties may have ':' in the value, like data urls
+          value = this._replaceInitialOrInherit(property, sp.slice(1).join(':'));
+          out[property] = value;
+        }
+      }
+    }
+    return out;
+  }
+
+  /**
+   * @param {MixinMapEntry} mixinEntry
+   */
+  _invalidateMixinEntry(mixinEntry) {
+    if (!invalidCallback) {
+      return;
+    }
+    for (let elementName in mixinEntry.dependants) {
+      if (elementName !== this._currentElement) {
+        invalidCallback(elementName);
+      }
+    }
+  }
+
+  /**
+   * @param {string} matchText
+   * @param {string} propertyName
+   * @param {?string} valueProperty
+   * @param {?string} valueMixin
+   * @return {string}
+   */
+  _produceCssProperties(matchText, propertyName, valueProperty, valueMixin) {
+    // handle case where property value is a mixin
+    if (valueProperty) {
+      // form: --mixin2: var(--mixin1), where --mixin1 is in the map
+      Object(__WEBPACK_IMPORTED_MODULE_0__style_util_js__["c" /* processVariableAndFallback */])(valueProperty, (prefix, value) => {
+        if (value && this._map.get(value)) {
+          valueMixin = `@apply ${value};`
+        }
+      });
+    }
+    if (!valueMixin) {
+      return matchText;
+    }
+    let mixinAsProperties = this._consumeCssProperties(valueMixin);
+    let prefix = matchText.slice(0, matchText.indexOf('--'));
+    let mixinValues = this._cssTextToMap(mixinAsProperties);
+    let combinedProps = mixinValues;
+    let mixinEntry = this._map.get(propertyName);
+    let oldProps = mixinEntry && mixinEntry.properties;
+    if (oldProps) {
+      // NOTE: since we use mixin, the map of properties is updated here
+      // and this is what we want.
+      combinedProps = Object.assign(Object.create(oldProps), mixinValues);
+    } else {
+      this._map.set(propertyName, combinedProps);
+    }
+    let out = [];
+    let p, v;
+    // set variables defined by current mixin
+    let needToInvalidate = false;
+    for (p in combinedProps) {
+      v = mixinValues[p];
+      // if property not defined by current mixin, set initial
+      if (v === undefined) {
+        v = 'initial';
+      }
+      if (oldProps && !(p in oldProps)) {
+        needToInvalidate = true;
+      }
+      out.push(`${propertyName}${MIXIN_VAR_SEP}${p}: ${v}`);
+    }
+    if (needToInvalidate) {
+      this._invalidateMixinEntry(mixinEntry);
+    }
+    if (mixinEntry) {
+      mixinEntry.properties = combinedProps;
+    }
+    // because the mixinMap is global, the mixin might conflict with
+    // a different scope's simple variable definition:
+    // Example:
+    // some style somewhere:
+    // --mixin1:{ ... }
+    // --mixin2: var(--mixin1);
+    // some other element:
+    // --mixin1: 10px solid red;
+    // --foo: var(--mixin1);
+    // In this case, we leave the original variable definition in place.
+    if (valueProperty) {
+      prefix = `${matchText};${prefix}`;
+    }
+    return `${prefix}${out.join('; ')};`;
+  }
+}
+
+/* exports */
+ApplyShim.prototype['detectMixin'] = ApplyShim.prototype.detectMixin;
+ApplyShim.prototype['transformStyle'] = ApplyShim.prototype.transformStyle;
+ApplyShim.prototype['transformCustomStyle'] = ApplyShim.prototype.transformCustomStyle;
+ApplyShim.prototype['transformRules'] = ApplyShim.prototype.transformRules;
+ApplyShim.prototype['transformRule'] = ApplyShim.prototype.transformRule;
+ApplyShim.prototype['transformTemplate'] = ApplyShim.prototype.transformTemplate;
+ApplyShim.prototype['_separator'] = MIXIN_VAR_SEP;
+Object.defineProperty(ApplyShim.prototype, 'invalidCallback', {
+  /** @return {?function(string)} */
+  get() {
+    return invalidCallback;
+  },
+  /** @param {?function(string)} cb */
+  set(cb) {
+    invalidCallback = cb;
+  }
+});
+
+/* harmony default export */ __webpack_exports__["a"] = (ApplyShim);
+
+/***/ }),
+/* 75 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = invalidate;
+/* unused harmony export invalidateTemplate */
+/* unused harmony export isValid */
+/* harmony export (immutable) */ __webpack_exports__["c"] = templateIsValid;
+/* unused harmony export isValidating */
+/* harmony export (immutable) */ __webpack_exports__["d"] = templateIsValidating;
+/* unused harmony export startValidating */
+/* harmony export (immutable) */ __webpack_exports__["b"] = startValidatingTemplate;
+/* unused harmony export elementsAreInvalid */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__template_map_js__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__css_parse_js__ = __webpack_require__(25);
+/**
+@license
+Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+*/
+
+
+
+ // eslint-disable-line no-unused-vars
+
+/*
+ * Utilities for handling invalidating apply-shim mixins for a given template.
+ *
+ * The invalidation strategy involves keeping track of the "current" version of a template's mixins, and updating that count when a mixin is invalidated.
+ * The template
+ */
+
+/** @const {string} */
+const CURRENT_VERSION = '_applyShimCurrentVersion';
+
+/** @const {string} */
+const NEXT_VERSION = '_applyShimNextVersion';
+
+/** @const {string} */
+const VALIDATING_VERSION = '_applyShimValidatingVersion';
+
+/**
+ * @const {Promise<void>}
+ */
+const promise = Promise.resolve();
+
+/**
+ * @param {string} elementName
+ */
+function invalidate(elementName){
+  let template = __WEBPACK_IMPORTED_MODULE_0__template_map_js__["a" /* default */][elementName];
+  if (template) {
+    invalidateTemplate(template);
+  }
+}
+
+/**
+ * This function can be called multiple times to mark a template invalid
+ * and signal that the style inside must be regenerated.
+ *
+ * Use `startValidatingTemplate` to begin an asynchronous validation cycle.
+ * During that cycle, call `templateIsValidating` to see if the template must
+ * be revalidated
+ * @param {HTMLTemplateElement} template
+ */
+function invalidateTemplate(template) {
+  // default the current version to 0
+  template[CURRENT_VERSION] = template[CURRENT_VERSION] || 0;
+  // ensure the "validating for" flag exists
+  template[VALIDATING_VERSION] = template[VALIDATING_VERSION] || 0;
+  // increment the next version
+  template[NEXT_VERSION] = (template[NEXT_VERSION] || 0) + 1;
+}
+
+/**
+ * @param {string} elementName
+ * @return {boolean}
+ */
+function isValid(elementName) {
+  let template = __WEBPACK_IMPORTED_MODULE_0__template_map_js__["a" /* default */][elementName];
+  if (template) {
+    return templateIsValid(template);
+  }
+  return true;
+}
+
+/**
+ * @param {HTMLTemplateElement} template
+ * @return {boolean}
+ */
+function templateIsValid(template) {
+  return template[CURRENT_VERSION] === template[NEXT_VERSION];
+}
+
+/**
+ * @param {string} elementName
+ * @return {boolean}
+ */
+function isValidating(elementName) {
+  let template = __WEBPACK_IMPORTED_MODULE_0__template_map_js__["a" /* default */][elementName];
+  if (template) {
+    return templateIsValidating(template);
+  }
+  return false;
+}
+
+/**
+ * Returns true if the template is currently invalid and `startValidating` has been called since the last invalidation.
+ * If false, the template must be validated.
+ * @param {HTMLTemplateElement} template
+ * @return {boolean}
+ */
+function templateIsValidating(template) {
+  return !templateIsValid(template) && template[VALIDATING_VERSION] === template[NEXT_VERSION];
+}
+
+/**
+ * the template is marked as `validating` for one microtask so that all instances
+ * found in the tree crawl of `applyStyle` will update themselves,
+ * but the template will only be updated once.
+ * @param {string} elementName
+*/
+function startValidating(elementName) {
+  let template = __WEBPACK_IMPORTED_MODULE_0__template_map_js__["a" /* default */][elementName];
+  startValidatingTemplate(template);
+}
+
+/**
+ * Begin an asynchronous invalidation cycle.
+ * This should be called after every validation of a template
+ *
+ * After one microtask, the template will be marked as valid until the next call to `invalidateTemplate`
+ * @param {HTMLTemplateElement} template
+ */
+function startValidatingTemplate(template) {
+  // remember that the current "next version" is the reason for this validation cycle
+  template[VALIDATING_VERSION] = template[NEXT_VERSION];
+  // however, there only needs to be one async task to clear the counters
+  if (!template._validating) {
+    template._validating = true;
+    promise.then(function() {
+      // sync the current version to let future invalidations cause a refresh cycle
+      template[CURRENT_VERSION] = template[NEXT_VERSION];
+      template._validating = false;
+    });
+  }
+}
+
+/**
+ * @return {boolean}
+ */
+function elementsAreInvalid() {
+  for (let elementName in __WEBPACK_IMPORTED_MODULE_0__template_map_js__["a" /* default */]) {
+    let template = __WEBPACK_IMPORTED_MODULE_0__template_map_js__["a" /* default */][elementName];
+    if (!templateIsValid(template)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/***/ }),
+/* 76 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_boot_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__utils_boot_js__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_mixin_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_case_map_js__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_async_js__ = __webpack_require__(5);
 
 
 
@@ -4168,7 +14527,7 @@ const isDeep = isPath;
 
 let caseMap = __WEBPACK_IMPORTED_MODULE_2__utils_case_map_js__;
 
-let microtask = __WEBPACK_IMPORTED_MODULE_3__utils_async_js__["a" /* microTask */];
+let microtask = __WEBPACK_IMPORTED_MODULE_3__utils_async_js__["microTask"];
 
 // Save map of native properties; this forms a blacklist or properties
 // that won't have their values "saved" by `saveAccessorValue`, since
@@ -4749,167 +15108,13 @@ const PropertyAccessors = Object(__WEBPACK_IMPORTED_MODULE_1__utils_mixin_js__["
 
 
 /***/ }),
-/* 13 */
+/* 77 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__boot_js__);
-
-
-/** @typedef {{run: function(function(), number=):number, cancel: function(number)}} */
-let AsyncInterface; // eslint-disable-line no-unused-vars
-
-// Microtask implemented using Mutation Observer
-let microtaskCurrHandle = 0;
-let microtaskLastHandle = 0;
-let microtaskCallbacks = [];
-let microtaskNodeContent = 0;
-let microtaskNode = document.createTextNode('');
-new window.MutationObserver(microtaskFlush).observe(microtaskNode, {characterData: true});
-
-function microtaskFlush() {
-  const len = microtaskCallbacks.length;
-  for (let i = 0; i < len; i++) {
-    let cb = microtaskCallbacks[i];
-    if (cb) {
-      try {
-        cb();
-      } catch (e) {
-        setTimeout(() => { throw e; });
-      }
-    }
-  }
-  microtaskCallbacks.splice(0, len);
-  microtaskLastHandle += len;
-}
-
-const timeOut = {
-  /**
-   * Returns a sub-module with the async interface providing the provided
-   * delay.
-   *
-   * @memberof Polymer.Async.timeOut
-   * @param {number} delay Time to wait before calling callbacks in ms
-   * @return {AsyncInterface} An async timeout interface
-   */
-  after(delay) {
-    return  {
-      run(fn) { return setTimeout(fn, delay); },
-      cancel: window.clearTimeout.bind(window)
-    };
-  },
-  /**
-   * Enqueues a function called in the next task.
-   *
-   * @memberof Polymer.Async.timeOut
-   * @param {Function} fn Callback to run
-   * @return {number} Handle used for canceling task
-   */
-  run: window.setTimeout.bind(window),
-  /**
-   * Cancels a previously enqueued `timeOut` callback.
-   *
-   * @memberof Polymer.Async.timeOut
-   * @param {number} handle Handle returned from `run` of callback to cancel
-   */
-  cancel: window.clearTimeout.bind(window)
-};
-/* unused harmony export timeOut */
-
-
-const animationFrame = {
-  /**
-   * Enqueues a function called at `requestAnimationFrame` timing.
-   *
-   * @memberof Polymer.Async.animationFrame
-   * @param {Function} fn Callback to run
-   * @return {number} Handle used for canceling task
-   */
-  run: window.requestAnimationFrame.bind(window),
-  /**
-   * Cancels a previously enqueued `animationFrame` callback.
-   *
-   * @memberof Polymer.Async.timeOut
-   * @param {number} handle Handle returned from `run` of callback to cancel
-   */
-  cancel: window.cancelAnimationFrame.bind(window)
-};
-/* unused harmony export animationFrame */
-
-
-const idlePeriod = {
-  /**
-   * Enqueues a function called at `requestIdleCallback` timing.
-   *
-   * @memberof Polymer.Async.idlePeriod
-   * @param {function(IdleDeadline)} fn Callback to run
-   * @return {number} Handle used for canceling task
-   */
-  run(fn) {
-    return window.requestIdleCallback ?
-      window.requestIdleCallback(fn) :
-      window.setTimeout(fn, 16);
-  },
-  /**
-   * Cancels a previously enqueued `idlePeriod` callback.
-   *
-   * @memberof Polymer.Async.idlePeriod
-   * @param {number} handle Handle returned from `run` of callback to cancel
-   */
-  cancel(handle) {
-    window.cancelIdleCallback ?
-      window.cancelIdleCallback(handle) :
-      window.clearTimeout(handle);
-  }
-};
-/* unused harmony export idlePeriod */
-
-
-const microTask = {
-
-  /**
-   * Enqueues a function called at microtask timing.
-   *
-   * @memberof Polymer.Async.microTask
-   * @param {Function} callback Callback to run
-   * @return {number} Handle used for canceling task
-   */
-  run(callback) {
-    microtaskNode.textContent = microtaskNodeContent++;
-    microtaskCallbacks.push(callback);
-    return microtaskCurrHandle++;
-  },
-
-  /**
-   * Cancels a previously enqueued `microTask` callback.
-   *
-   * @memberof Polymer.Async.microTask
-   * @param {number} handle Handle returned from `run` of callback to cancel
-   */
-  cancel(handle) {
-    const idx = handle - microtaskLastHandle;
-    if (idx >= 0) {
-      if (!microtaskCallbacks[idx]) {
-        throw new Error('invalid async handle: ' + handle);
-      }
-      microtaskCallbacks[idx] = null;
-    }
-  }
-
-};
-/* harmony export (immutable) */ __webpack_exports__["a"] = microTask;
-
-
-
-/***/ }),
-/* 14 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_boot_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_boot_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__utils_boot_js__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_mixin_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_mixin_js__ = __webpack_require__(7);
 
 
 
@@ -5367,10 +15572,17215 @@ const TemplateStamp = Object(__WEBPACK_IMPORTED_MODULE_1__utils_mixin_js__["a" /
 
 
 /***/ }),
-/* 15 */
+/* 78 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__boot_js__);
+
+
+// run a callback when HTMLImports are ready or immediately if
+// this api is not available.
+function whenImportsReady(cb) {
+  if (window.HTMLImports) {
+    HTMLImports.whenReady(cb);
+  } else {
+    cb();
+  }
+}
+
+const importHref = function(href, onload, onerror, optAsync) {
+  let link = /** @type {HTMLLinkElement} */
+    (document.head.querySelector('link[href="' + href + '"][import-href]'));
+  if (!link) {
+    link = /** @type {HTMLLinkElement} */ (document.createElement('link'));
+    link.rel = 'import';
+    link.href = href;
+    link.setAttribute('import-href', '');
+  }
+  // always ensure link has `async` attribute if user specified one,
+  // even if it was previously not async. This is considered less confusing.
+  if (optAsync) {
+    link.setAttribute('async', '');
+  }
+  // NOTE: the link may now be in 3 states: (1) pending insertion,
+  // (2) inflight, (3) already laoded. In each case, we need to add
+  // event listeners to process callbacks.
+  let cleanup = function() {
+    link.removeEventListener('load', loadListener);
+    link.removeEventListener('error', errorListener);
+  };
+  let loadListener = function(event) {
+    cleanup();
+    // In case of a successful load, cache the load event on the link so
+    // that it can be used to short-circuit this method in the future when
+    // it is called with the same href param.
+    link.__dynamicImportLoaded = true;
+    if (onload) {
+      whenImportsReady(() => {
+        onload(event);
+      });
+    }
+  };
+  let errorListener = function(event) {
+    cleanup();
+    // In case of an error, remove the link from the document so that it
+    // will be automatically created again the next time `importHref` is
+    // called.
+    if (link.parentNode) {
+      link.parentNode.removeChild(link);
+    }
+    if (onerror) {
+      whenImportsReady(() => {
+        onerror(event);
+      });
+    }
+  };
+  link.addEventListener('load', loadListener);
+  link.addEventListener('error', errorListener);
+  if (link.parentNode == null) {
+    document.head.appendChild(link);
+  // if the link already loaded, dispatch a fake load event
+  // so that listeners are called and get a proper event argument.
+  } else if (link.__dynamicImportLoaded) {
+    link.dispatchEvent(new Event('load'));
+  }
+  return link;
+};
+/* harmony export (immutable) */ __webpack_exports__["a"] = importHref;
+
+
+
+/***/ }),
+/* 79 */
 /***/ (function(module, exports) {
 
-module.exports = "<div>This is my {{name}} app. <span>{{count}}</span></div>";
+function resolve() {
+  document.body.removeAttribute('unresolved');
+}
+
+if (document.readyState === 'interactive' || document.readyState === 'complete') {
+  resolve();
+} else {
+  window.addEventListener('DOMContentLoaded', resolve);
+}
+
+
+/***/ }),
+/* 80 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FlattenedNodesObserver; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__boot_js__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__array_splice_js__ = __webpack_require__(46);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__async_js__ = __webpack_require__(5);
+
+
+
+
+/**
+ * Returns true if `node` is a slot element
+ * @param {HTMLElement} node Node to test.
+ * @return {boolean} Returns true if the given `node` is a slot
+ * @private
+ */
+function isSlot(node) {
+  return (node.localName === 'slot');
+}
+
+/**
+ * Class that listens for changes (additions or removals) to
+ * "flattened nodes" on a given `node`. The list of flattened nodes consists
+ * of a node's children and, for any children that are `<slot>` elements,
+ * the expanded flattened list of `assignedNodes`.
+ * For example, if the observed node has children `<a></a><slot></slot><b></b>`
+ * and the `<slot>` has one `<div>` assigned to it, then the flattened
+ * nodes list is `<a></a><div></div><b></b>`. If the `<slot>` has other
+ * `<slot>` elements assigned to it, these are flattened as well.
+ *
+ * The provided `callback` is called whenever any change to this list
+ * of flattened nodes occurs, where an addition or removal of a node is
+ * considered a change. The `callback` is called with one argument, an object
+ * containing an array of any `addedNodes` and `removedNodes`.
+ *
+ * Note: the callback is called asynchronous to any changes
+ * at a microtask checkpoint. This is because observation is performed using
+ * `MutationObserver` and the `<slot>` element's `slotchange` event which
+ * are asynchronous.
+ *
+ * @memberof Polymer
+ * @summary Class that listens for changes (additions or removals) to
+ * "flattened nodes" on a given `node`.
+ */
+class FlattenedNodesObserver {
+
+  /**
+   * Returns the list of flattened nodes for the given `node`.
+   * This list consists of a node's children and, for any children
+   * that are `<slot>` elements, the expanded flattened list of `assignedNodes`.
+   * For example, if the observed node has children `<a></a><slot></slot><b></b>`
+   * and the `<slot>` has one `<div>` assigned to it, then the flattened
+   * nodes list is `<a></a><div></div><b></b>`. If the `<slot>` has other
+   * `<slot>` elements assigned to it, these are flattened as well.
+   *
+   * @param {HTMLElement|HTMLSlotElement} node The node for which to return the list of flattened nodes.
+   * @return {Array} The list of flattened nodes for the given `node`.
+  */
+  static getFlattenedNodes(node) {
+    if (isSlot(node)) {
+      return /** @type {HTMLSlotElement} */ (node).assignedNodes({flatten: true});
+    } else {
+      return Array.from(node.childNodes).map(node => {
+        if (isSlot(node)) {
+          return /** @type {HTMLSlotElement} */ (node).assignedNodes({flatten: true});
+        } else {
+          return [node];
+        }
+      }).reduce((a, b) => a.concat(b), []);
+    }
+  }
+
+  /**
+   * @param {Node} target Node on which to listen for changes.
+   * @param {Function} callback Function called when there are additions
+   * or removals from the target's list of flattened nodes.
+  */
+  constructor(target, callback) {
+    /** @type {MutationObserver} */
+    this._shadyChildrenObserver = null;
+    /** @type {MutationObserver} */
+    this._nativeChildrenObserver = null;
+    this._connected = false;
+    this._target = target;
+    this.callback = callback;
+    this._effectiveNodes = [];
+    this._observer = null;
+    this._scheduled = false;
+    /** @type {function()} */
+    this._boundSchedule = () => {
+      this._schedule();
+    };
+    this.connect();
+    this._schedule();
+  }
+
+  /**
+   * Activates an observer. This method is automatically called when
+   * a `FlattenedNodesObserver` is created. It should only be called to
+   * re-activate an observer that has been deactivated via the `disconnect` method.
+   */
+  connect() {
+    if (isSlot(this._target)) {
+      this._listenSlots([this._target]);
+    } else {
+      this._listenSlots(this._target.children);
+      if (window.ShadyDOM) {
+        this._shadyChildrenObserver =
+          ShadyDOM.observeChildren(this._target, (mutations) => {
+            this._processMutations(mutations);
+          });
+      } else {
+        this._nativeChildrenObserver =
+          new MutationObserver((mutations) => {
+            this._processMutations(mutations);
+          });
+        this._nativeChildrenObserver.observe(this._target, {childList: true});
+      }
+    }
+    this._connected = true;
+  }
+
+  /**
+   * Deactivates the flattened nodes observer. After calling this method
+   * the observer callback will not be called when changes to flattened nodes
+   * occur. The `connect` method may be subsequently called to reactivate
+   * the observer.
+   */
+  disconnect() {
+    if (isSlot(this._target)) {
+      this._unlistenSlots([this._target]);
+    } else {
+      this._unlistenSlots(this._target.children);
+      if (window.ShadyDOM && this._shadyChildrenObserver) {
+        ShadyDOM.unobserveChildren(this._shadyChildrenObserver);
+        this._shadyChildrenObserver = null;
+      } else if (this._nativeChildrenObserver) {
+        this._nativeChildrenObserver.disconnect();
+        this._nativeChildrenObserver = null;
+      }
+    }
+    this._connected = false;
+  }
+
+  _schedule() {
+    if (!this._scheduled) {
+      this._scheduled = true;
+      __WEBPACK_IMPORTED_MODULE_2__async_js__["microTask"].run(() => this.flush());
+    }
+  }
+
+  _processMutations(mutations) {
+    this._processSlotMutations(mutations);
+    this.flush();
+  }
+
+  _processSlotMutations(mutations) {
+    if (mutations) {
+      for (let i=0; i < mutations.length; i++) {
+        let mutation = mutations[i];
+        if (mutation.addedNodes) {
+          this._listenSlots(mutation.addedNodes);
+        }
+        if (mutation.removedNodes) {
+          this._unlistenSlots(mutation.removedNodes);
+        }
+      }
+    }
+  }
+
+  /**
+   * Flushes the observer causing any pending changes to be immediately
+   * delivered the observer callback. By default these changes are delivered
+   * asynchronously at the next microtask checkpoint.
+   *
+   * @return {boolean} Returns true if any pending changes caused the observer
+   * callback to run.
+   */
+  flush() {
+    if (!this._connected) {
+      return false;
+    }
+    if (window.ShadyDOM) {
+      ShadyDOM.flush();
+    }
+    if (this._nativeChildrenObserver) {
+      this._processSlotMutations(this._nativeChildrenObserver.takeRecords());
+    } else if (this._shadyChildrenObserver) {
+      this._processSlotMutations(this._shadyChildrenObserver.takeRecords());
+    }
+    this._scheduled = false;
+    let info = {
+      target: this._target,
+      addedNodes: [],
+      removedNodes: []
+    };
+    let newNodes = this.constructor.getFlattenedNodes(this._target);
+    let splices = Object(__WEBPACK_IMPORTED_MODULE_1__array_splice_js__["a" /* calculateSplices */])(newNodes,
+      this._effectiveNodes);
+    // process removals
+    for (let i=0, s; (i<splices.length) && (s=splices[i]); i++) {
+      for (let j=0, n; (j < s.removed.length) && (n=s.removed[j]); j++) {
+        info.removedNodes.push(n);
+      }
+    }
+    // process adds
+    for (let i=0, s; (i<splices.length) && (s=splices[i]); i++) {
+      for (let j=s.index; j < s.index + s.addedCount; j++) {
+        info.addedNodes.push(newNodes[j]);
+      }
+    }
+    // update cache
+    this._effectiveNodes = newNodes;
+    let didFlush = false;
+    if (info.addedNodes.length || info.removedNodes.length) {
+      didFlush = true;
+      this.callback.call(this._target, info);
+    }
+    return didFlush;
+  }
+
+  _listenSlots(nodeList) {
+    for (let i=0; i < nodeList.length; i++) {
+      let n = nodeList[i];
+      if (isSlot(n)) {
+        n.addEventListener('slotchange', this._boundSchedule);
+      }
+    }
+  }
+
+  _unlistenSlots(nodeList) {
+    for (let i=0; i < nodeList.length; i++) {
+      let n = nodeList[i];
+      if (isSlot(n)) {
+        n.removeEventListener('slotchange', this._boundSchedule);
+      }
+    }
+  }
+
+}
+
+
+
+
+/***/ }),
+/* 81 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export mixinBehaviors */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__legacy_element_mixin_js__ = __webpack_require__(38);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__elements_dom_module_js__ = __webpack_require__(29);
+
+
+
+let metaProps = {
+  attached: true,
+  detached: true,
+  ready: true,
+  created: true,
+  beforeRegister: true,
+  registered: true,
+  attributeChanged: true,
+  // meta objects
+  behaviors: true
+};
+
+/**
+ * Applies a "legacy" behavior or array of behaviors to the provided class.
+ *
+ * Note: this method will automatically also apply the `Polymer.LegacyElementMixin`
+ * to ensure that any legacy behaviors can rely on legacy Polymer API on
+ * the underlying element.
+ *
+ * @param {!(Object|Array)} behaviors Behavior object or array of behaviors.
+ * @param {!HTMLElement|function(new:HTMLElement)} klass Element class.
+ * @return {function(new:HTMLElement)} Returns a new Element class extended by the
+ * passed in `behaviors` and also by `Polymer.LegacyElementMixin`.
+ * @memberof Polymer
+ * @suppress {invalidCasts, checkTypes}
+ */
+function mixinBehaviors(behaviors, klass) {
+  if (!behaviors) {
+    return /** @type {HTMLElement} */(klass);
+  }
+  // NOTE: ensure the bahevior is extending a class with
+  // legacy element api. This is necessary since behaviors expect to be able
+  // to access 1.x legacy api.
+  klass = Object(__WEBPACK_IMPORTED_MODULE_0__legacy_element_mixin_js__["a" /* LegacyElementMixin */])(klass);
+  if (!Array.isArray(behaviors)) {
+    behaviors = [behaviors];
+  }
+  let superBehaviors = klass.prototype.behaviors;
+  // get flattened, deduped list of behaviors *not* already on super class
+  behaviors = flattenBehaviors(behaviors, null, superBehaviors);
+  // mixin new behaviors
+  klass = _mixinBehaviors(behaviors, klass);
+  if (superBehaviors) {
+    behaviors = superBehaviors.concat(behaviors);
+  }
+  // Set behaviors on prototype for BC...
+  klass.prototype.behaviors = behaviors;
+  return klass;
+}
+
+// NOTE:
+// 1.x
+// Behaviors were mixed in *in reverse order* and de-duped on the fly.
+// The rule was that behavior properties were copied onto the element
+// prototype if and only if the property did not already exist.
+// Given: Polymer{ behaviors: [A, B, C, A, B]}, property copy order was:
+// (1), B, (2), A, (3) C. This means prototype properties win over
+// B properties win over A win over C. This mirrors what would happen
+// with inheritance if element extended B extended A extended C.
+//
+// Again given, Polymer{ behaviors: [A, B, C, A, B]}, the resulting
+// `behaviors` array was [C, A, B].
+// Behavior lifecycle methods were called in behavior array order
+// followed by the element, e.g. (1) C.created, (2) A.created,
+// (3) B.created, (4) element.created. There was no support for
+// super, and "super-behavior" methods were callable only by name).
+//
+// 2.x
+// Behaviors are made into proper mixins which live in the
+// element's prototype chain. Behaviors are placed in the element prototype
+// eldest to youngest and de-duped youngest to oldest:
+// So, first [A, B, C, A, B] becomes [C, A, B] then,
+// the element prototype becomes (oldest) (1) Polymer.Element, (2) class(C),
+// (3) class(A), (4) class(B), (5) class(Polymer({...})).
+// Result:
+// This means element properties win over B properties win over A win
+// over C. (same as 1.x)
+// If lifecycle is called (super then me), order is
+// (1) C.created, (2) A.created, (3) B.created, (4) element.created
+// (again same as 1.x)
+function _mixinBehaviors(behaviors, klass) {
+  for (let i=0; i<behaviors.length; i++) {
+    let b = behaviors[i];
+    if (b) {
+      klass = Array.isArray(b) ? _mixinBehaviors(b, klass) :
+        GenerateClassFromInfo(b, klass);
+    }
+  }
+  return klass;
+}
+
+/**
+ * @param {Array} behaviors List of behaviors to flatten.
+ * @param {Array=} list Target list to flatten behaviors into.
+ * @param {Array=} exclude List of behaviors to exclude from the list.
+ * @return {!Array} Returns the list of flattened behaviors.
+ */
+function flattenBehaviors(behaviors, list, exclude) {
+  list = list || [];
+  for (let i=behaviors.length-1; i >= 0; i--) {
+    let b = behaviors[i];
+    if (b) {
+      if (Array.isArray(b)) {
+        flattenBehaviors(b, list);
+      } else {
+        // dedup
+        if (list.indexOf(b) < 0 && (!exclude || exclude.indexOf(b) < 0)) {
+          list.unshift(b);
+        }
+      }
+    } else {
+      console.warn('behavior is null, check for missing or 404 import');
+    }
+  }
+  return list;
+}
+
+/**
+ * @param {!PolymerInit} info Polymer info object
+ * @param {function(new:HTMLElement)} Base base class to extend with info object
+ * @return {function(new:HTMLElement)} Generated class
+ * @suppress {checkTypes}
+ * @private
+ */
+function GenerateClassFromInfo(info, Base) {
+
+  class PolymerGenerated extends Base {
+
+    static get properties() {
+      return info.properties;
+    }
+
+    static get observers() {
+      return info.observers;
+    }
+
+    /**
+     * @return {HTMLTemplateElement} template for this class
+     */
+    static get template() {
+      // get template first from any imperative set in `info._template`
+      return info._template ||
+        // next look in dom-module associated with this element's is.
+        __WEBPACK_IMPORTED_MODULE_1__elements_dom_module_js__["a" /* DomModule */] && __WEBPACK_IMPORTED_MODULE_1__elements_dom_module_js__["a" /* DomModule */].import(this.is, 'template') ||
+        // next look for superclass template (note: use superclass symbol
+        // to ensure correct `this.is`)
+        Base.template ||
+        // finally fall back to `_template` in element's protoype.
+        this.prototype._template ||
+        null;
+    }
+
+    created() {
+      super.created();
+      if (info.created) {
+        info.created.call(this);
+      }
+    }
+
+    _registered() {
+      super._registered();
+      /* NOTE: `beforeRegister` is called here for bc, but the behavior
+       is different than in 1.x. In 1.0, the method was called *after*
+       mixing prototypes together but *before* processing of meta-objects.
+       However, dynamic effects can still be set here and can be done either
+       in `beforeRegister` or `registered`. It is no longer possible to set
+       `is` in `beforeRegister` as you could in 1.x.
+      */
+      if (info.beforeRegister) {
+        info.beforeRegister.call(Object.getPrototypeOf(this));
+      }
+      if (info.registered) {
+        info.registered.call(Object.getPrototypeOf(this));
+      }
+    }
+
+    _applyListeners() {
+      super._applyListeners();
+      if (info.listeners) {
+        for (let l in info.listeners) {
+          this._addMethodEventListenerToNode(this, l, info.listeners[l]);
+        }
+      }
+    }
+
+    // note: exception to "super then me" rule;
+    // do work before calling super so that super attributes
+    // only apply if not already set.
+    _ensureAttributes() {
+      if (info.hostAttributes) {
+        for (let a in info.hostAttributes) {
+          this._ensureAttribute(a, info.hostAttributes[a]);
+        }
+      }
+      super._ensureAttributes();
+    }
+
+    ready() {
+      super.ready();
+      if (info.ready) {
+        info.ready.call(this);
+      }
+    }
+
+    attached() {
+      super.attached();
+      if (info.attached) {
+        info.attached.call(this);
+      }
+    }
+
+    detached() {
+      super.detached();
+      if (info.detached) {
+        info.detached.call(this);
+      }
+    }
+
+    attributeChanged(name, old, value) {
+      super.attributeChanged(name, old, value);
+      if (info.attributeChanged) {
+        info.attributeChanged.call(this, name, old, value);
+      }
+   }
+  }
+
+  PolymerGenerated.generatedFrom = info;
+
+  for (let p in info) {
+    // NOTE: cannot copy `metaProps` methods onto prototype at least because
+    // `super.ready` must be called and is not included in the user fn.
+    if (!(p in metaProps)) {
+      let pd = Object.getOwnPropertyDescriptor(info, p);
+      if (pd) {
+        Object.defineProperty(PolymerGenerated.prototype, p, pd);
+      }
+    }
+  }
+
+  return PolymerGenerated;
+}
+
+const Class = function(info) {
+  if (!info) {
+    console.warn('Polymer.Class requires `info` argument');
+  }
+  let klass = GenerateClassFromInfo(info, info.behaviors ?
+    // note: mixinBehaviors ensures `LegacyElementMixin`.
+    mixinBehaviors(info.behaviors, HTMLElement) :
+    Object(__WEBPACK_IMPORTED_MODULE_0__legacy_element_mixin_js__["a" /* LegacyElementMixin */])(HTMLElement));
+  // decorate klass with registration info
+  klass.is = info.is;
+  return klass;
+};
+/* harmony export (immutable) */ __webpack_exports__["a"] = Class;
+
+
+
+
+
+/***/ }),
+/* 82 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export Templatizer */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_templatize_js__ = __webpack_require__(32);
+
+
+let TemplateInstanceBase = __WEBPACK_IMPORTED_MODULE_0__utils_templatize_js__["a" /* TemplateInstanceBase */]; // eslint-disable-line
+
+/**
+ * @typedef {{
+ *   _templatizerTemplate: HTMLTemplateElement,
+ *   _parentModel: boolean,
+ *   _instanceProps: Object,
+ *   _forwardHostPropV2: Function,
+ *   _notifyInstancePropV2: Function,
+ *   ctor: TemplateInstanceBase
+ * }}
+ */
+let TemplatizerUser; // eslint-disable-line
+
+/**
+ * The `Polymer.Templatizer` behavior adds methods to generate instances of
+ * templates that are each managed by an anonymous `Polymer.PropertyEffects`
+ * instance where data-bindings in the stamped template content are bound to
+ * accessors on itself.
+ *
+ * This behavior is provided in Polymer 2.x as a hybrid-element convenience
+ * only.  For non-hybrid usage, the `Polymer.Templatize` library
+ * should be used instead.
+ *
+ * Example:
+ *
+ *     // Get a template from somewhere, e.g. light DOM
+ *     let template = this.querySelector('template');
+ *     // Prepare the template
+ *     this.templatize(template);
+ *     // Instance the template with an initial data model
+ *     let instance = this.stamp({myProp: 'initial'});
+ *     // Insert the instance's DOM somewhere, e.g. light DOM
+ *     Polymer.dom(this).appendChild(instance.root);
+ *     // Changing a property on the instance will propagate to bindings
+ *     // in the template
+ *     instance.myProp = 'new value';
+ *
+ * Users of `Templatizer` may need to implement the following abstract
+ * API's to determine how properties and paths from the host should be
+ * forwarded into to instances:
+ *
+ *     _forwardHostPropV2: function(prop, value)
+ *
+ * Likewise, users may implement these additional abstract API's to determine
+ * how instance-specific properties that change on the instance should be
+ * forwarded out to the host, if necessary.
+ *
+ *     _notifyInstancePropV2: function(inst, prop, value)
+ *
+ * In order to determine which properties are instance-specific and require
+ * custom notification via `_notifyInstanceProp`, define an `_instanceProps`
+ * object containing keys for each instance prop, for example:
+ *
+ *     _instanceProps: {
+ *       item: true,
+ *       index: true
+ *     }
+ *
+ * Any properties used in the template that are not defined in _instanceProp
+ * will be forwarded out to the Templatize `owner` automatically.
+ *
+ * Users may also implement the following abstract function to show or
+ * hide any DOM generated using `stamp`:
+ *
+ *     _showHideChildren: function(shouldHide)
+ *
+ * Note that some callbacks are suffixed with `V2` in the Polymer 2.x behavior
+ * as the implementations will need to differ from the callbacks required
+ * by the 1.x Templatizer API due to changes in the `TemplateInstance` API
+ * between versions 1.x and 2.x.
+ *
+ * @polymerBehavior
+ * @memberof Polymer
+ */
+let Templatizer = {
+
+  /**
+   * Generates an anonymous `TemplateInstance` class (stored as `this.ctor`)
+   * for the provided template.  This method should be called once per
+   * template to prepare an element for stamping the template, followed
+   * by `stamp` to create new instances of the template.
+   *
+   * @param {HTMLTemplateElement} template Template to prepare
+   * @param {boolean=} mutableData When `true`, the generated class will skip
+   *   strict dirty-checking for objects and arrays (always consider them to
+   *   be "dirty"). Defaults to false.
+   * @this {TemplatizerUser}
+   */
+  templatize(template, mutableData) {
+    this._templatizerTemplate = template;
+    this.ctor = __WEBPACK_IMPORTED_MODULE_0__utils_templatize_js__["b" /* Templatize */].templatize(template, this, {
+      mutableData: Boolean(mutableData),
+      parentModel: this._parentModel,
+      instanceProps: this._instanceProps,
+      forwardHostProp: this._forwardHostPropV2,
+      notifyInstanceProp: this._notifyInstancePropV2
+    });
+  },
+
+  /**
+   * Creates an instance of the template prepared by `templatize`.  The object
+   * returned is an instance of the anonymous class generated by `templatize`
+   * whose `root` property is a document fragment containing newly cloned
+   * template content, and which has property accessors corresponding to
+   * properties referenced in template bindings.
+   *
+   * @param {Object=} model Object containing initial property values to
+   *   populate into the template bindings.
+   * @return {TemplateInstanceBase} Returns the created instance of
+   * the template prepared by `templatize`.
+   * @this {TemplatizerUser}
+   */
+  stamp(model) {
+    return new this.ctor(model);
+  },
+
+  /**
+   * Returns the template "model" (`TemplateInstance`) associated with
+   * a given element, which serves as the binding scope for the template
+   * instance the element is contained in.  A template model should be used
+   * to manipulate data associated with this template instance.
+   *
+   * @param {HTMLElement} el Element for which to return a template model.
+   * @return {TemplateInstanceBase} Model representing the binding scope for
+   *   the element.
+   * @this {TemplatizerUser}
+   */
+  modelForElement(el) {
+    return __WEBPACK_IMPORTED_MODULE_0__utils_templatize_js__["b" /* Templatize */].modelForElement(this._templatizerTemplate, el);
+  }
+};
+
+
+
+
+/***/ }),
+/* 83 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export DomBind */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_boot_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__utils_boot_js__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mixins_property_effects_js__ = __webpack_require__(30);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__mixins_mutable_data_js__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__mixins_gesture_event_listeners_js__ = __webpack_require__(44);
+
+
+
+
+
+/**
+ * @constructor
+ * @extends {HTMLElement}
+ * @implements {Polymer_PropertyEffects}
+ * @implements {Polymer_OptionalMutableData}
+ * @implements {Polymer_GestureEventListeners}
+ */
+const domBindBase =
+  Object(__WEBPACK_IMPORTED_MODULE_3__mixins_gesture_event_listeners_js__["a" /* GestureEventListeners */])(
+    Object(__WEBPACK_IMPORTED_MODULE_2__mixins_mutable_data_js__["b" /* OptionalMutableData */])(
+      Object(__WEBPACK_IMPORTED_MODULE_1__mixins_property_effects_js__["a" /* PropertyEffects */])(HTMLElement)));
+
+/**
+ * Custom element to allow using Polymer's template features (data binding,
+ * declarative event listeners, etc.) in the main document without defining
+ * a new custom element.
+ *
+ * `<template>` tags utilizing bindings may be wrapped with the `<dom-bind>`
+ * element, which will immediately stamp the wrapped template into the main
+ * document and bind elements to the `dom-bind` element itself as the
+ * binding scope.
+ *
+ * @polymer
+ * @customElement
+ * @appliesMixin Polymer.PropertyEffects
+ * @appliesMixin Polymer.OptionalMutableData
+ * @appliesMixin Polymer.GestureEventListeners
+ * @extends {domBindBase}
+ * @memberof Polymer
+ * @summary Custom element to allow using Polymer's template features (data
+ *   binding, declarative event listeners, etc.) in the main document.
+ */
+class DomBind extends domBindBase {
+
+  static get observedAttributes() { return ['mutable-data']; }
+
+  constructor() {
+    super();
+    this.root = null;
+    this.$ = null;
+    this.__children = null;
+  }
+
+  // assumes only one observed attribute
+  attributeChangedCallback() {
+    this.mutableData = true;
+  }
+
+  connectedCallback() {
+    this.render();
+  }
+
+  disconnectedCallback() {
+    this.__removeChildren();
+  }
+
+  __insertChildren() {
+    this.parentNode.insertBefore(this.root, this);
+  }
+
+  __removeChildren() {
+    if (this.__children) {
+      for (let i=0; i<this.__children.length; i++) {
+        this.root.appendChild(this.__children[i]);
+      }
+    }
+  }
+
+  /**
+   * Forces the element to render its content. This is typically only
+   * necessary to call if HTMLImports with the async attribute are used.
+   */
+  render() {
+    let template;
+    if (!this.__children) {
+      template = /** @type {HTMLTemplateElement} */(template || this.querySelector('template'));
+      if (!template) {
+        // Wait until childList changes and template should be there by then
+        let observer = new MutationObserver(() => {
+          template = /** @type {HTMLTemplateElement} */(this.querySelector('template'));
+          if (template) {
+            observer.disconnect();
+            this.render();
+          } else {
+            throw new Error('dom-bind requires a <template> child');
+          }
+        });
+        observer.observe(this, {childList: true});
+        return;
+      }
+      this.root = this._stampTemplate(template);
+      this.$ = this.root.$;
+      this.__children = [];
+      for (let n=this.root.firstChild; n; n=n.nextSibling) {
+        this.__children[this.__children.length] = n;
+      }
+      this._enableProperties();
+    }
+    this.__insertChildren();
+    this.dispatchEvent(new CustomEvent('dom-change', {
+      bubbles: true,
+      composed: true
+    }));
+  }
+
+}
+
+customElements.define('dom-bind', DomBind);
+
+
+
+
+/***/ }),
+/* 84 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export DomRepeat */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_element_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_templatize_js__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_debounce_js__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_flush_js__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__mixins_mutable_data_js__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_path_js__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__utils_async_js__ = __webpack_require__(5);
+
+
+
+
+
+
+
+
+let TemplateInstanceBase = __WEBPACK_IMPORTED_MODULE_1__utils_templatize_js__["a" /* TemplateInstanceBase */]; // eslint-disable-line
+
+/**
+ * @constructor
+ * @implements {Polymer_OptionalMutableData}
+ * @extends {Polymer.Element}
+ */
+const domRepeatBase = Object(__WEBPACK_IMPORTED_MODULE_4__mixins_mutable_data_js__["b" /* OptionalMutableData */])(__WEBPACK_IMPORTED_MODULE_0__polymer_element_js__["a" /* Element */]);
+
+/**
+ * The `<dom-repeat>` element will automatically stamp and binds one instance
+ * of template content to each object in a user-provided array.
+ * `dom-repeat` accepts an `items` property, and one instance of the template
+ * is stamped for each item into the DOM at the location of the `dom-repeat`
+ * element.  The `item` property will be set on each instance's binding
+ * scope, thus templates should bind to sub-properties of `item`.
+ *
+ * Example:
+ *
+ * ```html
+ * <dom-module id="employee-list">
+ *
+ *   <template>
+ *
+ *     <div> Employee list: </div>
+ *     <template is="dom-repeat" items="{{employees}}">
+ *         <div>First name: <span>{{item.first}}</span></div>
+ *         <div>Last name: <span>{{item.last}}</span></div>
+ *     </template>
+ *
+ *   </template>
+ *
+ *   <script>
+ *     Polymer({
+ *       is: 'employee-list',
+ *       ready: function() {
+ *         this.employees = [
+ *             {first: 'Bob', last: 'Smith'},
+ *             {first: 'Sally', last: 'Johnson'},
+ *             ...
+ *         ];
+ *       }
+ *     });
+ *   < /script>
+ *
+ * </dom-module>
+ * ```
+ *
+ * Notifications for changes to items sub-properties will be forwarded to template
+ * instances, which will update via the normal structured data notification system.
+ *
+ * Mutations to the `items` array itself should be made using the Array
+ * mutation API's on `Polymer.Base` (`push`, `pop`, `splice`, `shift`,
+ * `unshift`), and template instances will be kept in sync with the data in the
+ * array.
+ *
+ * Events caught by event handlers within the `dom-repeat` template will be
+ * decorated with a `model` property, which represents the binding scope for
+ * each template instance.  The model is an instance of Polymer.Base, and should
+ * be used to manipulate data on the instance, for example
+ * `event.model.set('item.checked', true);`.
+ *
+ * Alternatively, the model for a template instance for an element stamped by
+ * a `dom-repeat` can be obtained using the `modelForElement` API on the
+ * `dom-repeat` that stamped it, for example
+ * `this.$.domRepeat.modelForElement(event.target).set('item.checked', true);`.
+ * This may be useful for manipulating instance data of event targets obtained
+ * by event handlers on parents of the `dom-repeat` (event delegation).
+ *
+ * A view-specific filter/sort may be applied to each `dom-repeat` by supplying a
+ * `filter` and/or `sort` property.  This may be a string that names a function on
+ * the host, or a function may be assigned to the property directly.  The functions
+ * should implemented following the standard `Array` filter/sort API.
+ *
+ * In order to re-run the filter or sort functions based on changes to sub-fields
+ * of `items`, the `observe` property may be set as a space-separated list of
+ * `item` sub-fields that should cause a re-filter/sort when modified.  If
+ * the filter or sort function depends on properties not contained in `items`,
+ * the user should observe changes to those properties and call `render` to update
+ * the view based on the dependency change.
+ *
+ * For example, for an `dom-repeat` with a filter of the following:
+ *
+ * ```js
+ * isEngineer: function(item) {
+ *     return item.type == 'engineer' || item.manager.type == 'engineer';
+ * }
+ * ```
+ *
+ * Then the `observe` property should be configured as follows:
+ *
+ * ```html
+ * <template is="dom-repeat" items="{{employees}}"
+ *           filter="isEngineer" observe="type manager.type">
+ * ```
+ *
+ * @customElement
+ * @polymer
+ * @memberof Polymer
+ * @extends {domRepeatBase}
+ * @appliesMixin Polymer.OptionalMutableData
+ * @summary Custom element for stamping instance of a template bound to
+ *   items in an array.
+ */
+class DomRepeat extends domRepeatBase {
+
+  // Not needed to find template; can be removed once the analyzer
+  // can find the tag name from customElements.define call
+  static get is() { return 'dom-repeat'; }
+
+  static get template() { return null; }
+
+  static get properties() {
+
+    /**
+     * Fired whenever DOM is added or removed by this template (by
+     * default, rendering occurs lazily).  To force immediate rendering, call
+     * `render`.
+     *
+     * @event dom-change
+     */
+    return {
+
+      /**
+       * An array containing items determining how many instances of the template
+       * to stamp and that that each template instance should bind to.
+       */
+      items: {
+        type: Array
+      },
+
+      /**
+       * The name of the variable to add to the binding scope for the array
+       * element associated with a given template instance.
+       */
+      as: {
+        type: String,
+        value: 'item'
+      },
+
+      /**
+       * The name of the variable to add to the binding scope with the index
+       * of the instance in the sorted and filtered list of rendered items.
+       * Note, for the index in the `this.items` array, use the value of the
+       * `itemsIndexAs` property.
+       */
+      indexAs: {
+        type: String,
+        value: 'index'
+      },
+
+      /**
+       * The name of the variable to add to the binding scope with the index
+       * of the instance in the `this.items` array. Note, for the index of
+       * this instance in the sorted and filtered list of rendered items,
+       * use the value of the `indexAs` property.
+       */
+      itemsIndexAs: {
+        type: String,
+        value: 'itemsIndex'
+      },
+
+      /**
+       * A function that should determine the sort order of the items.  This
+       * property should either be provided as a string, indicating a method
+       * name on the element's host, or else be an actual function.  The
+       * function should match the sort function passed to `Array.sort`.
+       * Using a sort function has no effect on the underlying `items` array.
+       */
+      sort: {
+        type: Function,
+        observer: '__sortChanged'
+      },
+
+      /**
+       * A function that can be used to filter items out of the view.  This
+       * property should either be provided as a string, indicating a method
+       * name on the element's host, or else be an actual function.  The
+       * function should match the sort function passed to `Array.filter`.
+       * Using a filter function has no effect on the underlying `items` array.
+       */
+      filter: {
+        type: Function,
+        observer: '__filterChanged'
+      },
+
+      /**
+       * When using a `filter` or `sort` function, the `observe` property
+       * should be set to a space-separated list of the names of item
+       * sub-fields that should trigger a re-sort or re-filter when changed.
+       * These should generally be fields of `item` that the sort or filter
+       * function depends on.
+       */
+      observe: {
+        type: String,
+        observer: '__observeChanged'
+      },
+
+      /**
+       * When using a `filter` or `sort` function, the `delay` property
+       * determines a debounce time after a change to observed item
+       * properties that must pass before the filter or sort is re-run.
+       * This is useful in rate-limiting shuffing of the view when
+       * item changes may be frequent.
+       */
+      delay: Number,
+
+      /**
+       * Count of currently rendered items after `filter` (if any) has been applied.
+       * If "chunking mode" is enabled, `renderedItemCount` is updated each time a
+       * set of template instances is rendered.
+       *
+       */
+      renderedItemCount: {
+        type: Number,
+        notify: true,
+        readOnly: true
+      },
+
+      /**
+       * Defines an initial count of template instances to render after setting
+       * the `items` array, before the next paint, and puts the `dom-repeat`
+       * into "chunking mode".  The remaining items will be created and rendered
+       * incrementally at each animation frame therof until all instances have
+       * been rendered.
+       */
+      initialCount: {
+        type: Number,
+        observer: '__initializeChunking'
+      },
+
+      /**
+       * When `initialCount` is used, this property defines a frame rate to
+       * target by throttling the number of instances rendered each frame to
+       * not exceed the budget for the target frame rate.  Setting this to a
+       * higher number will allow lower latency and higher throughput for
+       * things like event handlers, but will result in a longer time for the
+       * remaining items to complete rendering.
+       */
+      targetFramerate: {
+        type: Number,
+        value: 20
+      },
+
+      _targetFrameTime: {
+        type: Number,
+        computed: '__computeFrameTime(targetFramerate)'
+      }
+
+    };
+
+  }
+
+  static get observers() {
+    return [ '__itemsChanged(items.*)' ];
+  }
+
+  constructor() {
+    super();
+    this.__instances = [];
+    this.__limit = Infinity;
+    this.__pool = [];
+    this.__renderDebouncer = null;
+    this.__itemsIdxToInstIdx = {};
+    this.__chunkCount = null;
+    this.__lastChunkTime = null;
+    this.__sortFn = null;
+    this.__filterFn = null;
+    this.__observePaths = null;
+    this.__ctor = null;
+    this.__isDetached = true;
+    this.template = null;
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.__isDetached = true;
+    for (let i=0; i<this.__instances.length; i++) {
+      this.__detachInstance(i);
+    }
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    // only perform attachment if the element was previously detached.
+    if (this.__isDetached) {
+      this.__isDetached = false;
+      let parent = this.parentNode;
+      for (let i=0; i<this.__instances.length; i++) {
+        this.__attachInstance(i, parent);
+      }
+    }
+  }
+
+  __ensureTemplatized() {
+    // Templatizing (generating the instance constructor) needs to wait
+    // until ready, since won't have its template content handed back to
+    // it until then
+    if (!this.__ctor) {
+      let template = this.template = this.querySelector('template');
+      if (!template) {
+        // // Wait until childList changes and template should be there by then
+        let observer = new MutationObserver(() => {
+          if (this.querySelector('template')) {
+            observer.disconnect();
+            this.__render();
+          } else {
+            throw new Error('dom-repeat requires a <template> child');
+          }
+        });
+        observer.observe(this, {childList: true});
+        return false;
+      }
+      // Template instance props that should be excluded from forwarding
+      let instanceProps = {};
+      instanceProps[this.as] = true;
+      instanceProps[this.indexAs] = true;
+      instanceProps[this.itemsIndexAs] = true;
+      this.__ctor = __WEBPACK_IMPORTED_MODULE_1__utils_templatize_js__["b" /* Templatize */].templatize(template, this, {
+        mutableData: this.mutableData,
+        parentModel: true,
+        instanceProps: instanceProps,
+        /**
+         * @this {this}
+         * @param {string} prop Property to set
+         * @param {*} value Value to set property to
+         */
+        forwardHostProp: function(prop, value) {
+          let i$ = this.__instances;
+          for (let i=0, inst; (i<i$.length) && (inst=i$[i]); i++) {
+            inst.forwardHostProp(prop, value);
+          }
+        },
+        /**
+         * @this {this}
+         * @param {Object} inst Instance to notify
+         * @param {string} prop Property to notify
+         * @param {*} value Value to notify
+         */
+        notifyInstanceProp: function(inst, prop, value) {
+          if (Object(__WEBPACK_IMPORTED_MODULE_5__utils_path_js__["e" /* matches */])(this.as, prop)) {
+            let idx = inst[this.itemsIndexAs];
+            if (prop == this.as) {
+              this.items[idx] = value;
+            }
+            let path = Object(__WEBPACK_IMPORTED_MODULE_5__utils_path_js__["i" /* translate */])(this.as, 'items.' + idx, prop);
+            this.notifyPath(path, value);
+          }
+        }
+      });
+    }
+    return true;
+  }
+
+  __getMethodHost() {
+    // Technically this should be the owner of the outermost template.
+    // In shadow dom, this is always getRootNode().host, but we can
+    // approximate this via cooperation with our dataHost always setting
+    // `_methodHost` as long as there were bindings (or id's) on this
+    // instance causing it to get a dataHost.
+    return this.__dataHost._methodHost || this.__dataHost;
+  }
+
+  __sortChanged(sort) {
+    let methodHost = this.__getMethodHost();
+    this.__sortFn = sort && (typeof sort == 'function' ? sort :
+      function() { return methodHost[sort].apply(methodHost, arguments); });
+    if (this.items) {
+      this.__debounceRender(this.__render);
+    }
+  }
+
+  __filterChanged(filter) {
+    let methodHost = this.__getMethodHost();
+    this.__filterFn = filter && (typeof filter == 'function' ? filter :
+      function() { return methodHost[filter].apply(methodHost, arguments); });
+    if (this.items) {
+      this.__debounceRender(this.__render);
+    }
+  }
+
+  __computeFrameTime(rate) {
+    return Math.ceil(1000/rate);
+  }
+
+  __initializeChunking() {
+    if (this.initialCount) {
+      this.__limit = this.initialCount;
+      this.__chunkCount = this.initialCount;
+      this.__lastChunkTime = performance.now();
+    }
+  }
+
+  __tryRenderChunk() {
+    // Debounced so that multiple calls through `_render` between animation
+    // frames only queue one new rAF (e.g. array mutation & chunked render)
+    if (this.items && this.__limit < this.items.length) {
+      this.__debounceRender(this.__requestRenderChunk);
+    }
+  }
+
+  __requestRenderChunk() {
+    requestAnimationFrame(()=>this.__renderChunk());
+  }
+
+  __renderChunk() {
+    // Simple auto chunkSize throttling algorithm based on feedback loop:
+    // measure actual time between frames and scale chunk count by ratio
+    // of target/actual frame time
+    let currChunkTime = performance.now();
+    let ratio = this._targetFrameTime / (currChunkTime - this.__lastChunkTime);
+    this.__chunkCount = Math.round(this.__chunkCount * ratio) || 1;
+    this.__limit += this.__chunkCount;
+    this.__lastChunkTime = currChunkTime;
+    this.__debounceRender(this.__render);
+  }
+
+  __observeChanged() {
+    this.__observePaths = this.observe &&
+      this.observe.replace('.*', '.').split(' ');
+  }
+
+  __itemsChanged(change) {
+    if (this.items && !Array.isArray(this.items)) {
+      console.warn('dom-repeat expected array for `items`, found', this.items);
+    }
+    // If path was to an item (e.g. 'items.3' or 'items.3.foo'), forward the
+    // path to that instance synchronously (retuns false for non-item paths)
+    if (!this.__handleItemPath(change.path, change.value)) {
+      // Otherwise, the array was reset ('items') or spliced ('items.splices'),
+      // so queue a full refresh
+      this.__initializeChunking();
+      this.__debounceRender(this.__render);
+    }
+  }
+
+  __handleObservedPaths(path) {
+    if (this.__observePaths) {
+      path = path.substring(path.indexOf('.') + 1);
+      let paths = this.__observePaths;
+      for (let i=0; i<paths.length; i++) {
+        if (path.indexOf(paths[i]) === 0) {
+          this.__debounceRender(this.__render, this.delay);
+          return true;
+        }
+      }
+    }
+  }
+
+  /**
+   * @param {function(this:DomRepeat)} fn Function to debounce.
+   * @param {number=} delay Delay in ms to debounce by.
+   */
+  __debounceRender(fn, delay = 0) {
+    this.__renderDebouncer = __WEBPACK_IMPORTED_MODULE_2__utils_debounce_js__["Debouncer"].debounce(
+          this.__renderDebouncer
+        , delay > 0 ? __WEBPACK_IMPORTED_MODULE_6__utils_async_js__["timeOut"].after(delay) : __WEBPACK_IMPORTED_MODULE_6__utils_async_js__["microTask"]
+        , fn.bind(this));
+    Object(__WEBPACK_IMPORTED_MODULE_3__utils_flush_js__["a" /* enqueueDebouncer */])(this.__renderDebouncer);
+  }
+
+  /**
+   * Forces the element to render its content. Normally rendering is
+   * asynchronous to a provoking change. This is done for efficiency so
+   * that multiple changes trigger only a single render. The render method
+   * should be called if, for example, template rendering is required to
+   * validate application state.
+   */
+  render() {
+    // Queue this repeater, then flush all in order
+    this.__debounceRender(this.__render);
+    Object(__WEBPACK_IMPORTED_MODULE_3__utils_flush_js__["b" /* flush */])();
+  }
+
+  __render() {
+    if (!this.__ensureTemplatized()) {
+      // No template found yet
+      return;
+    }
+    this.__applyFullRefresh();
+    // Reset the pool
+    // TODO(kschaaf): Reuse pool across turns and nested templates
+    // Now that objects/arrays are re-evaluated when set, we can safely
+    // reuse pooled instances across turns, however we still need to decide
+    // semantics regarding how long to hold, how many to hold, etc.
+    this.__pool.length = 0;
+    // Set rendered item count
+    this._setRenderedItemCount(this.__instances.length);
+    // Notify users
+    this.dispatchEvent(new CustomEvent('dom-change', {
+      bubbles: true,
+      composed: true
+    }));
+    // Check to see if we need to render more items
+    this.__tryRenderChunk();
+  }
+
+  __applyFullRefresh() {
+    let items = this.items || [];
+    let isntIdxToItemsIdx = new Array(items.length);
+    for (let i=0; i<items.length; i++) {
+      isntIdxToItemsIdx[i] = i;
+    }
+    // Apply user filter
+    if (this.__filterFn) {
+      isntIdxToItemsIdx = isntIdxToItemsIdx.filter((i, idx, array) =>
+        this.__filterFn(items[i], idx, array));
+    }
+    // Apply user sort
+    if (this.__sortFn) {
+      isntIdxToItemsIdx.sort((a, b) => this.__sortFn(items[a], items[b]));
+    }
+    // items->inst map kept for item path forwarding
+    const itemsIdxToInstIdx = this.__itemsIdxToInstIdx = {};
+    let instIdx = 0;
+    // Generate instances and assign items
+    const limit = Math.min(isntIdxToItemsIdx.length, this.__limit);
+    for (; instIdx<limit; instIdx++) {
+      let inst = this.__instances[instIdx];
+      let itemIdx = isntIdxToItemsIdx[instIdx];
+      let item = items[itemIdx];
+      itemsIdxToInstIdx[itemIdx] = instIdx;
+      if (inst && instIdx < this.__limit) {
+        inst._setPendingProperty(this.as, item);
+        inst._setPendingProperty(this.indexAs, instIdx);
+        inst._setPendingProperty(this.itemsIndexAs, itemIdx);
+        inst._flushProperties();
+      } else {
+        this.__insertInstance(item, instIdx, itemIdx);
+      }
+    }
+    // Remove any extra instances from previous state
+    for (let i=this.__instances.length-1; i>=instIdx; i--) {
+      this.__detachAndRemoveInstance(i);
+    }
+  }
+
+  __detachInstance(idx) {
+    let inst = this.__instances[idx];
+    for (let i=0; i<inst.children.length; i++) {
+      let el = inst.children[i];
+      inst.root.appendChild(el);
+    }
+    return inst;
+  }
+
+  __attachInstance(idx, parent) {
+    let inst = this.__instances[idx];
+    parent.insertBefore(inst.root, this);
+  }
+
+  __detachAndRemoveInstance(idx) {
+    let inst = this.__detachInstance(idx);
+    if (inst) {
+      this.__pool.push(inst);
+    }
+    this.__instances.splice(idx, 1);
+  }
+
+  __stampInstance(item, instIdx, itemIdx) {
+    let model = {};
+    model[this.as] = item;
+    model[this.indexAs] = instIdx;
+    model[this.itemsIndexAs] = itemIdx;
+    return new this.__ctor(model);
+  }
+
+  __insertInstance(item, instIdx, itemIdx) {
+    let inst = this.__pool.pop();
+    if (inst) {
+      // TODO(kschaaf): If the pool is shared across turns, hostProps
+      // need to be re-set to reused instances in addition to item
+      inst._setPendingProperty(this.as, item);
+      inst._setPendingProperty(this.indexAs, instIdx);
+      inst._setPendingProperty(this.itemsIndexAs, itemIdx);
+      inst._flushProperties();
+    } else {
+      inst = this.__stampInstance(item, instIdx, itemIdx);
+    }
+    let beforeRow = this.__instances[instIdx + 1];
+    let beforeNode = beforeRow ? beforeRow.children[0] : this;
+    this.parentNode.insertBefore(inst.root, beforeNode);
+    this.__instances[instIdx] = inst;
+    return inst;
+  }
+
+  // Implements extension point from Templatize mixin
+  _showHideChildren(hidden) {
+    for (let i=0; i<this.__instances.length; i++) {
+      this.__instances[i]._showHideChildren(hidden);
+    }
+  }
+
+  // Called as a side effect of a host items.<key>.<path> path change,
+  // responsible for notifying item.<path> changes to inst for key
+  __handleItemPath(path, value) {
+    let itemsPath = path.slice(6); // 'items.'.length == 6
+    let dot = itemsPath.indexOf('.');
+    let itemsIdx = dot < 0 ? itemsPath : itemsPath.substring(0, dot);
+    // If path was index into array...
+    if (itemsIdx == parseInt(itemsIdx, 10)) {
+      let itemSubPath = dot < 0 ? '' : itemsPath.substring(dot+1);
+      // If the path is observed, it will trigger a full refresh
+      this.__handleObservedPaths(itemSubPath);
+      // Note, even if a rull refresh is triggered, always do the path
+      // notification because unless mutableData is used for dom-repeat
+      // and all elements in the instance subtree, a full refresh may
+      // not trigger the proper update.
+      let instIdx = this.__itemsIdxToInstIdx[itemsIdx];
+      let inst = this.__instances[instIdx];
+      if (inst) {
+        let itemPath = this.as + (itemSubPath ? '.' + itemSubPath : '');
+        // This is effectively `notifyPath`, but avoids some of the overhead
+        // of the public API
+        inst._setPendingPropertyOrPath(itemPath, value, false, true);
+        inst._flushProperties();
+      }
+      return true;
+    }
+  }
+
+  /**
+   * Returns the item associated with a given element stamped by
+   * this `dom-repeat`.
+   *
+   * Note, to modify sub-properties of the item,
+   * `modelForElement(el).set('item.<sub-prop>', value)`
+   * should be used.
+   *
+   * @param {HTMLElement} el Element for which to return the item.
+   * @return {*} Item associated with the element.
+   */
+  itemForElement(el) {
+    let instance = this.modelForElement(el);
+    return instance && instance[this.as];
+  }
+
+  /**
+   * Returns the inst index for a given element stamped by this `dom-repeat`.
+   * If `sort` is provided, the index will reflect the sorted order (rather
+   * than the original array order).
+   *
+   * @param {HTMLElement} el Element for which to return the index.
+   * @return {*} Row index associated with the element (note this may
+   *   not correspond to the array index if a user `sort` is applied).
+   */
+  indexForElement(el) {
+    let instance = this.modelForElement(el);
+    return instance && instance[this.indexAs];
+  }
+
+  /**
+   * Returns the template "model" associated with a given element, which
+   * serves as the binding scope for the template instance the element is
+   * contained in. A template model is an instance of `Polymer.Base`, and
+   * should be used to manipulate data associated with this template instance.
+   *
+   * Example:
+   *
+   *   let model = modelForElement(el);
+   *   if (model.index < 10) {
+   *     model.set('item.checked', true);
+   *   }
+   *
+   * @param {HTMLElement} el Element for which to return a template model.
+   * @return {TemplateInstanceBase} Model representing the binding scope for
+   *   the element.
+   */
+  modelForElement(el) {
+    return __WEBPACK_IMPORTED_MODULE_1__utils_templatize_js__["b" /* Templatize */].modelForElement(this.template, el);
+  }
+
+}
+
+customElements.define(DomRepeat.is, DomRepeat);
+
+
+
+
+/***/ }),
+/* 85 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export DomIf */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_element_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_templatize_js__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_debounce_js__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_flush_js__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_async_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_path_js__ = __webpack_require__(16);
+
+
+
+
+
+
+
+/**
+ * The `<dom-if>` element will stamp a light-dom `<template>` child when
+ * the `if` property becomes truthy, and the template can use Polymer
+ * data-binding and declarative event features when used in the context of
+ * a Polymer element's template.
+ *
+ * When `if` becomes falsey, the stamped content is hidden but not
+ * removed from dom. When `if` subsequently becomes truthy again, the content
+ * is simply re-shown. This approach is used due to its favorable performance
+ * characteristics: the expense of creating template content is paid only
+ * once and lazily.
+ *
+ * Set the `restamp` property to true to force the stamped content to be
+ * created / destroyed when the `if` condition changes.
+ *
+ * @customElement
+ * @polymer
+ * @extends Polymer.Element
+ * @memberof Polymer
+ * @summary Custom element that conditionally stamps and hides or removes
+ *   template content based on a boolean flag.
+ */
+class DomIf extends __WEBPACK_IMPORTED_MODULE_0__polymer_element_js__["a" /* Element */] {
+
+  // Not needed to find template; can be removed once the analyzer
+  // can find the tag name from customElements.define call
+  static get is() { return 'dom-if'; }
+
+  static get template() { return null; }
+
+  static get properties() {
+
+    return {
+
+      /**
+       * Fired whenever DOM is added or removed/hidden by this template (by
+       * default, rendering occurs lazily).  To force immediate rendering, call
+       * `render`.
+       *
+       * @event dom-change
+       */
+
+      /**
+       * A boolean indicating whether this template should stamp.
+       */
+      if: {
+        type: Boolean,
+        observer: '__debounceRender'
+      },
+
+      /**
+       * When true, elements will be removed from DOM and discarded when `if`
+       * becomes false and re-created and added back to the DOM when `if`
+       * becomes true.  By default, stamped elements will be hidden but left
+       * in the DOM when `if` becomes false, which is generally results
+       * in better performance.
+       */
+      restamp: {
+        type: Boolean,
+        observer: '__debounceRender'
+      }
+
+    };
+
+  }
+
+  constructor() {
+    super();
+    this.__renderDebouncer = null;
+    this.__invalidProps = null;
+    this.__instance = null;
+    this._lastIf = false;
+    this.__ctor = null;
+  }
+
+  __debounceRender() {
+    // Render is async for 2 reasons:
+    // 1. To eliminate dom creation trashing if user code thrashes `if` in the
+    //    same turn. This was more common in 1.x where a compound computed
+    //    property could result in the result changing multiple times, but is
+    //    mitigated to a large extent by batched property processing in 2.x.
+    // 2. To avoid double object propagation when a bag including values bound
+    //    to the `if` property as well as one or more hostProps could enqueue
+    //    the <dom-if> to flush before the <template>'s host property
+    //    forwarding. In that scenario creating an instance would result in
+    //    the host props being set once, and then the enqueued changes on the
+    //    template would set properties a second time, potentially causing an
+    //    object to be set to an instance more than once.  Creating the
+    //    instance async from flushing data ensures this doesn't happen. If
+    //    we wanted a sync option in the future, simply having <dom-if> flush
+    //    (or clear) its template's pending host properties before creating
+    //    the instance would also avoid the problem.
+    this.__renderDebouncer = __WEBPACK_IMPORTED_MODULE_2__utils_debounce_js__["Debouncer"].debounce(
+          this.__renderDebouncer
+        , __WEBPACK_IMPORTED_MODULE_4__utils_async_js__["microTask"]
+        , () => this.__render());
+    Object(__WEBPACK_IMPORTED_MODULE_3__utils_flush_js__["a" /* enqueueDebouncer */])(this.__renderDebouncer);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    if (!this.parentNode ||
+        (this.parentNode.nodeType == Node.DOCUMENT_FRAGMENT_NODE &&
+         !this.parentNode.host)) {
+      this.__teardownInstance();
+    }
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    if (this.if) {
+      this.__debounceRender();
+    }
+  }
+
+  /**
+   * Forces the element to render its content. Normally rendering is
+   * asynchronous to a provoking change. This is done for efficiency so
+   * that multiple changes trigger only a single render. The render method
+   * should be called if, for example, template rendering is required to
+   * validate application state.
+   */
+  render() {
+    Object(__WEBPACK_IMPORTED_MODULE_3__utils_flush_js__["b" /* flush */])();
+  }
+
+  __render() {
+    if (this.if) {
+      if (!this.__ensureInstance()) {
+        // No template found yet
+        return;
+      }
+      this._showHideChildren();
+    } else if (this.restamp) {
+      this.__teardownInstance();
+    }
+    if (!this.restamp && this.__instance) {
+      this._showHideChildren();
+    }
+    if (this.if != this._lastIf) {
+      this.dispatchEvent(new CustomEvent('dom-change', {
+        bubbles: true,
+        composed: true
+      }));
+      this._lastIf = this.if;
+    }
+  }
+
+  __ensureInstance() {
+    let parentNode = this.parentNode;
+    // Guard against element being detached while render was queued
+    if (parentNode) {
+      if (!this.__ctor) {
+        let template = this.querySelector('template');
+        if (!template) {
+          // Wait until childList changes and template should be there by then
+          let observer = new MutationObserver(() => {
+            if (this.querySelector('template')) {
+              observer.disconnect();
+              this.__render();
+            } else {
+              throw new Error('dom-if requires a <template> child');
+            }
+          });
+          observer.observe(this, {childList: true});
+          return false;
+        }
+        this.__ctor = __WEBPACK_IMPORTED_MODULE_1__utils_templatize_js__["b" /* Templatize */].templatize(template, this, {
+          // dom-if templatizer instances require `mutable: true`, as
+          // `__syncHostProperties` relies on that behavior to sync objects
+          mutableData: true,
+          /**
+           * @param {string} prop Property to forward
+           * @param {*} value Value of property
+           * @this {this}
+           */
+          forwardHostProp: function(prop, value) {
+            if (this.__instance) {
+              if (this.if) {
+                this.__instance.forwardHostProp(prop, value);
+              } else {
+                // If we have an instance but are squelching host property
+                // forwarding due to if being false, note the invalidated
+                // properties so `__syncHostProperties` can sync them the next
+                // time `if` becomes true
+                this.__invalidProps = this.__invalidProps || Object.create(null);
+                this.__invalidProps[Object(__WEBPACK_IMPORTED_MODULE_5__utils_path_js__["g" /* root */])(prop)] = true;
+              }
+            }
+          }
+        });
+      }
+      if (!this.__instance) {
+        this.__instance = new this.__ctor();
+        parentNode.insertBefore(this.__instance.root, this);
+      } else {
+        this.__syncHostProperties();
+        let c$ = this.__instance.children;
+        if (c$ && c$.length) {
+          // Detect case where dom-if was re-attached in new position
+          let lastChild = this.previousSibling;
+          if (lastChild !== c$[c$.length-1]) {
+            for (let i=0, n; (i<c$.length) && (n=c$[i]); i++) {
+              parentNode.insertBefore(n, this);
+            }
+          }
+        }
+      }
+    }
+    return true;
+  }
+
+  __syncHostProperties() {
+    let props = this.__invalidProps;
+    if (props) {
+      for (let prop in props) {
+        this.__instance._setPendingProperty(prop, this.__dataHost[prop]);
+      }
+      this.__invalidProps = null;
+      this.__instance._flushProperties();
+    }
+  }
+
+  __teardownInstance() {
+    if (this.__instance) {
+      let c$ = this.__instance.children;
+      if (c$ && c$.length) {
+        // use first child parent, for case when dom-if may have been detached
+        let parent = c$[0].parentNode;
+        for (let i=0, n; (i<c$.length) && (n=c$[i]); i++) {
+          parent.removeChild(n);
+        }
+      }
+      this.__instance = null;
+      this.__invalidProps = null;
+    }
+  }
+
+  _showHideChildren() {
+    let hidden = this.__hideTemplateChildren__ || !this.if;
+    if (this.__instance) {
+      this.__instance._showHideChildren(hidden);
+    }
+  }
+
+}
+
+customElements.define(DomIf.is, DomIf);
+
+
+
+
+/***/ }),
+/* 86 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export ArraySelectorMixin */
+/* unused harmony export ArraySelector */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_element_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_mixin_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_array_splice_js__ = __webpack_require__(46);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__mixins_element_mixin_js__ = __webpack_require__(28);
+
+
+
+
+
+/**
+ * Element mixin for recording dynamic associations between item paths in a
+ * master `items` array and a `selected` array such that path changes to the
+ * master array (at the host) element or elsewhere via data-binding) are
+ * correctly propagated to items in the selected array and vice-versa.
+ *
+ * The `items` property accepts an array of user data, and via the
+ * `select(item)` and `deselect(item)` API, updates the `selected` property
+ * which may be bound to other parts of the application, and any changes to
+ * sub-fields of `selected` item(s) will be kept in sync with items in the
+ * `items` array.  When `multi` is false, `selected` is a property
+ * representing the last selected item.  When `multi` is true, `selected`
+ * is an array of multiply selected items.
+ *
+ * @polymer
+ * @mixinFunction
+ * @appliesMixin Polymer.ElementMixin
+ * @memberof Polymer
+ * @summary Element mixin for recording dynamic associations between item paths in a
+ * master `items` array and a `selected` array
+ */
+let ArraySelectorMixin = Object(__WEBPACK_IMPORTED_MODULE_1__utils_mixin_js__["a" /* dedupingMixin */])(superClass => {
+
+  /**
+   * @constructor
+   * @extends {superClass}
+   * @implements {Polymer_ElementMixin}
+   */
+  let elementBase = Object(__WEBPACK_IMPORTED_MODULE_3__mixins_element_mixin_js__["a" /* ElementMixin */])(superClass);
+
+  /**
+   * @polymer
+   * @mixinClass
+   * @implements {Polymer_ArraySelectorMixin}
+   * @unrestricted
+   */
+  class ArraySelectorMixin extends elementBase {
+
+    static get properties() {
+
+      return {
+
+        /**
+         * An array containing items from which selection will be made.
+         */
+        items: {
+          type: Array,
+        },
+
+        /**
+         * When `true`, multiple items may be selected at once (in this case,
+         * `selected` is an array of currently selected items).  When `false`,
+         * only one item may be selected at a time.
+         */
+        multi: {
+          type: Boolean,
+          value: false,
+        },
+
+        /**
+         * When `multi` is true, this is an array that contains any selected.
+         * When `multi` is false, this is the currently selected item, or `null`
+         * if no item is selected.
+         * @type {?(Object|Array<!Object>)}
+         */
+        selected: {
+          type: Object,
+          notify: true
+        },
+
+        /**
+         * When `multi` is false, this is the currently selected item, or `null`
+         * if no item is selected.
+         * @type {?Object}
+         */
+        selectedItem: {
+          type: Object,
+          notify: true
+        },
+
+        /**
+         * When `true`, calling `select` on an item that is already selected
+         * will deselect the item.
+         */
+        toggle: {
+          type: Boolean,
+          value: false
+        }
+
+      };
+    }
+
+    static get observers() {
+      return ['__updateSelection(multi, items.*)'];
+    }
+
+    constructor() {
+      super();
+      this.__lastItems = null;
+      this.__lastMulti = null;
+      this.__selectedMap = null;
+    }
+
+    __updateSelection(multi, itemsInfo) {
+      let path = itemsInfo.path;
+      if (path == 'items') {
+        // Case 1 - items array changed, so diff against previous array and
+        // deselect any removed items and adjust selected indices
+        let newItems = itemsInfo.base || [];
+        let lastItems = this.__lastItems;
+        let lastMulti = this.__lastMulti;
+        if (multi !== lastMulti) {
+          this.clearSelection();
+        }
+        if (lastItems) {
+          let splices = Object(__WEBPACK_IMPORTED_MODULE_2__utils_array_splice_js__["a" /* calculateSplices */])(newItems, lastItems);
+          this.__applySplices(splices);
+        }
+        this.__lastItems = newItems;
+        this.__lastMulti = multi;
+      } else if (itemsInfo.path == 'items.splices') {
+        // Case 2 - got specific splice information describing the array mutation:
+        // deselect any removed items and adjust selected indices
+        this.__applySplices(itemsInfo.value.indexSplices);
+      } else {
+        // Case 3 - an array element was changed, so deselect the previous
+        // item for that index if it was previously selected
+        let part = path.slice('items.'.length);
+        let idx = parseInt(part, 10);
+        if ((part.indexOf('.') < 0) && part == idx) {
+          this.__deselectChangedIdx(idx);
+        }
+      }
+    }
+
+    __applySplices(splices) {
+      let selected = this.__selectedMap;
+      // Adjust selected indices and mark removals
+      for (let i=0; i<splices.length; i++) {
+        let s = splices[i];
+        selected.forEach((idx, item) => {
+          if (idx < s.index) {
+            // no change
+          } else if (idx >= s.index + s.removed.length) {
+            // adjust index
+            selected.set(item, idx + s.addedCount - s.removed.length);
+          } else {
+            // remove index
+            selected.set(item, -1);
+          }
+        });
+        for (let j=0; j<s.addedCount; j++) {
+          let idx = s.index + j;
+          if (selected.has(this.items[idx])) {
+            selected.set(this.items[idx], idx);
+          }
+        }
+      }
+      // Update linked paths
+      this.__updateLinks();
+      // Remove selected items that were removed from the items array
+      let sidx = 0;
+      selected.forEach((idx, item) => {
+        if (idx < 0) {
+          if (this.multi) {
+            this.splice('selected', sidx, 1);
+          } else {
+            this.selected = this.selectedItem = null;
+          }
+          selected.delete(item);
+        } else {
+          sidx++;
+        }
+      });
+    }
+
+    __updateLinks() {
+      this.__dataLinkedPaths = {};
+      if (this.multi) {
+        let sidx = 0;
+        this.__selectedMap.forEach(idx => {
+          if (idx >= 0) {
+            this.linkPaths('items.' + idx, 'selected.' + sidx++);
+          }
+        });
+      } else {
+        this.__selectedMap.forEach(idx => {
+          this.linkPaths('selected', 'items.' + idx);
+          this.linkPaths('selectedItem', 'items.' + idx);
+        });
+      }
+    }
+
+    /**
+     * Clears the selection state.
+     *
+     */
+    clearSelection() {
+      // Unbind previous selection
+      this.__dataLinkedPaths = {};
+      // The selected map stores 3 pieces of information:
+      // key: items array object
+      // value: items array index
+      // order: selected array index
+      this.__selectedMap = new Map();
+      // Initialize selection
+      this.selected = this.multi ? [] : null;
+      this.selectedItem = null;
+    }
+
+    /**
+     * Returns whether the item is currently selected.
+     *
+     * @param {*} item Item from `items` array to test
+     * @return {boolean} Whether the item is selected
+     */
+    isSelected(item) {
+      return this.__selectedMap.has(item);
+    }
+
+    /**
+     * Returns whether the item is currently selected.
+     *
+     * @param {number} idx Index from `items` array to test
+     * @return {boolean} Whether the item is selected
+     */
+    isIndexSelected(idx) {
+      return this.isSelected(this.items[idx]);
+    }
+
+    __deselectChangedIdx(idx) {
+      let sidx = this.__selectedIndexForItemIndex(idx);
+      if (sidx >= 0) {
+        let i = 0;
+        this.__selectedMap.forEach((idx, item) => {
+          if (sidx == i++) {
+            this.deselect(item);
+          }
+        });
+      }
+    }
+
+    __selectedIndexForItemIndex(idx) {
+      let selected = this.__dataLinkedPaths['items.' + idx];
+      if (selected) {
+        return parseInt(selected.slice('selected.'.length), 10);
+      }
+    }
+
+    /**
+     * Deselects the given item if it is already selected.
+     *
+     * @param {*} item Item from `items` array to deselect
+     */
+    deselect(item) {
+      let idx = this.__selectedMap.get(item);
+      if (idx >= 0) {
+        this.__selectedMap.delete(item);
+        let sidx;
+        if (this.multi) {
+          sidx = this.__selectedIndexForItemIndex(idx);
+        }
+        this.__updateLinks();
+        if (this.multi) {
+          this.splice('selected', sidx, 1);
+        } else {
+          this.selected = this.selectedItem = null;
+        }
+      }
+    }
+
+    /**
+     * Deselects the given index if it is already selected.
+     *
+     * @param {number} idx Index from `items` array to deselect
+     */
+    deselectIndex(idx) {
+      this.deselect(this.items[idx]);
+    }
+
+    /**
+     * Selects the given item.  When `toggle` is true, this will automatically
+     * deselect the item if already selected.
+     *
+     * @param {*} item Item from `items` array to select
+     */
+    select(item) {
+      this.selectIndex(this.items.indexOf(item));
+    }
+
+    /**
+     * Selects the given index.  When `toggle` is true, this will automatically
+     * deselect the item if already selected.
+     *
+     * @param {number} idx Index from `items` array to select
+     */
+    selectIndex(idx) {
+      let item = this.items[idx];
+      if (!this.isSelected(item)) {
+        if (!this.multi) {
+          this.__selectedMap.clear();
+        }
+        this.__selectedMap.set(item, idx);
+        this.__updateLinks();
+        if (this.multi) {
+          this.push('selected', item);
+        } else {
+          this.selected = this.selectedItem = item;
+        }
+      } else if (this.toggle) {
+        this.deselectIndex(idx);
+      }
+    }
+
+  }
+
+  return ArraySelectorMixin;
+
+});
+
+
+
+/**
+ * @constructor
+ * @extends {Polymer.Element}
+ * @implements {Polymer_ArraySelectorMixin}
+ */
+let baseArraySelector = ArraySelectorMixin(__WEBPACK_IMPORTED_MODULE_0__polymer_element_js__["a" /* Element */]);
+
+/**
+ * Element implementing the `Polymer.ArraySelector` mixin, which records
+ * dynamic associations between item paths in a master `items` array and a
+ * `selected` array such that path changes to the master array (at the host)
+ * element or elsewhere via data-binding) are correctly propagated to items
+ * in the selected array and vice-versa.
+ *
+ * The `items` property accepts an array of user data, and via the
+ * `select(item)` and `deselect(item)` API, updates the `selected` property
+ * which may be bound to other parts of the application, and any changes to
+ * sub-fields of `selected` item(s) will be kept in sync with items in the
+ * `items` array.  When `multi` is false, `selected` is a property
+ * representing the last selected item.  When `multi` is true, `selected`
+ * is an array of multiply selected items.
+ *
+ * Example:
+ *
+ * ```html
+ * <dom-module id="employee-list">
+ *
+ *   <template>
+ *
+ *     <div> Employee list: </div>
+ *     <template is="dom-repeat" id="employeeList" items="{{employees}}">
+ *         <div>First name: <span>{{item.first}}</span></div>
+ *         <div>Last name: <span>{{item.last}}</span></div>
+ *         <button on-click="toggleSelection">Select</button>
+ *     </template>
+ *
+ *     <array-selector id="selector" items="{{employees}}" selected="{{selected}}" multi toggle></array-selector>
+ *
+ *     <div> Selected employees: </div>
+ *     <template is="dom-repeat" items="{{selected}}">
+ *         <div>First name: <span>{{item.first}}</span></div>
+ *         <div>Last name: <span>{{item.last}}</span></div>
+ *     </template>
+ *
+ *   </template>
+ *
+ * </dom-module>
+ * ```
+ *
+ * ```js
+ * Polymer({
+ *   is: 'employee-list',
+ *   ready() {
+ *     this.employees = [
+ *         {first: 'Bob', last: 'Smith'},
+ *         {first: 'Sally', last: 'Johnson'},
+ *         ...
+ *     ];
+ *   },
+ *   toggleSelection(e) {
+ *     let item = this.$.employeeList.itemForElement(e.target);
+ *     this.$.selector.select(item);
+ *   }
+ * });
+ * ```
+ *
+ * @polymer
+ * @customElement
+ * @extends {baseArraySelector}
+ * @appliesMixin Polymer.ArraySelectorMixin
+ * @memberof Polymer
+ * @summary Custom element that links paths between an input `items` array and
+ *   an output `selected` item or array based on calls to its selection API.
+ */
+class ArraySelector extends baseArraySelector {
+  // Not needed to find template; can be removed once the analyzer
+  // can find the tag name from customElements.define call
+  static get is() { return 'array-selector'; }
+}
+customElements.define(ArraySelector.is, ArraySelector);
+
+
+
+/***/ }),
+/* 87 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__src_custom_style_interface_js__ = __webpack_require__(42);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__src_common_utils_js__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__src_style_settings_js__ = __webpack_require__(24);
+/**
+@license
+Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+*/
+
+
+
+
+
+
+
+const customStyleInterface = new __WEBPACK_IMPORTED_MODULE_0__src_custom_style_interface_js__["a" /* default */]();
+
+if (!window.ShadyCSS) {
+  window.ShadyCSS = {
+    /**
+     * @param {HTMLTemplateElement} template
+     * @param {string} elementName
+     * @param {string=} elementExtends
+     */
+    prepareTemplate(template, elementName, elementExtends) {}, // eslint-disable-line no-unused-vars
+
+    /**
+     * @param {Element} element
+     * @param {Object=} properties
+     */
+    styleSubtree(element, properties) {
+      customStyleInterface.processStyles();
+      Object(__WEBPACK_IMPORTED_MODULE_1__src_common_utils_js__["c" /* updateNativeProperties */])(element, properties);
+    },
+
+    /**
+     * @param {Element} element
+     */
+    styleElement(element) { // eslint-disable-line no-unused-vars
+      customStyleInterface.processStyles();
+    },
+
+    /**
+     * @param {Object=} properties
+     */
+    styleDocument(properties) {
+      customStyleInterface.processStyles();
+      Object(__WEBPACK_IMPORTED_MODULE_1__src_common_utils_js__["c" /* updateNativeProperties */])(document.body, properties);
+    },
+
+    /**
+     * @param {Element} element
+     * @param {string} property
+     * @return {string}
+     */
+    getComputedStyleValue(element, property) {
+      return Object(__WEBPACK_IMPORTED_MODULE_1__src_common_utils_js__["b" /* getComputedStyleValue */])(element, property);
+    },
+    nativeCss: __WEBPACK_IMPORTED_MODULE_2__src_style_settings_js__["a" /* nativeCssVariables */],
+    nativeShadow: __WEBPACK_IMPORTED_MODULE_2__src_style_settings_js__["b" /* nativeShadow */]
+  }
+}
+
+window.ShadyCSS.CustomStyleInterface = customStyleInterface;
+
+/***/ }),
+/* 88 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixins_mutable_data_js__ = __webpack_require__(18);
+
+
+let mutablePropertyChange;
+(
+  /** @suppress {missingProperties} */
+  (function() {
+  mutablePropertyChange = __WEBPACK_IMPORTED_MODULE_0__mixins_mutable_data_js__["a" /* MutableData */]._mutablePropertyChange;
+}))();
+
+const MutableDataBehavior = {
+
+  /**
+   * Overrides `Polymer.PropertyEffects` to provide option for skipping
+   * strict equality checking for Objects and Arrays.
+   *
+   * This method pulls the value to dirty check against from the `__dataTemp`
+   * cache (rather than the normal `__data` cache) for Objects.  Since the temp
+   * cache is cleared at the end of a turn, this implementation allows
+   * side-effects of deep object changes to be processed by re-setting the
+   * same object (using the temp cache as an in-turn backstop to prevent
+   * cycles due to 2-way notification).
+   *
+   * @param {string} property Property name
+   * @param {*} value New property value
+   * @param {*} old Previous property value
+   * @return {boolean} Whether the property should be considered a change
+   * @protected
+   */
+  _shouldPropertyChange(property, value, old) {
+    return mutablePropertyChange(this, property, value, old, true);
+  }
+};
+/* unused harmony export MutableDataBehavior */
+
+
+const OptionalMutableDataBehavior = {
+
+  properties: {
+    /**
+     * Instance-level flag for configuring the dirty-checking strategy
+     * for this element.  When true, Objects and Arrays will skip dirty
+     * checking, otherwise strict equality checking will be used.
+     */
+    mutableData: Boolean
+  },
+
+  /**
+   * Overrides `Polymer.PropertyEffects` to skip strict equality checking
+   * for Objects and Arrays.
+   *
+   * Pulls the value to dirty check against from the `__dataTemp` cache
+   * (rather than the normal `__data` cache) for Objects.  Since the temp
+   * cache is cleared at the end of a turn, this implementation allows
+   * side-effects of deep object changes to be processed by re-setting the
+   * same object (using the temp cache as an in-turn backstop to prevent
+   * cycles due to 2-way notification).
+   *
+   * @param {string} property Property name
+   * @param {*} value New property value
+   * @param {*} old Previous property value
+   * @return {boolean} Whether the property should be considered a change
+   * @this {this}
+   * @protected
+   */
+  _shouldPropertyChange(property, value, old) {
+    return mutablePropertyChange(this, property, value, old, this.mutableData);
+  }
+};
+/* unused harmony export OptionalMutableDataBehavior */
+
+
+
+/***/ }),
+/* 89 */
+/***/ (function(module, exports) {
+
+const $_documentContainer = document.createElement('div');
+$_documentContainer.setAttribute('style', 'display: none;');
+
+$_documentContainer.innerHTML = `
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,700|Roboto:400,300,300italic,400italic,500,500italic,700,700italic" crossorigin="anonymous">
+`;
+document.head.appendChild($_documentContainer);
+
+
+/***/ }),
+/* 90 */
+/***/ (function(module, exports) {
+
+module.exports = "<custom-style>\n  <style is=\"custom-style\">\n    html {\n      --default-primary-color : #00867d;\n      --primary-color         : var(--default-primary-color); /* alt name */\n      --light-primary-color   : #4db6ac;\n\n      --default-secondary-color : #2286c3;\n      --light-secondary-color   : #64b5f6;\n\n      --default-background-color : #F5F5F6;\n      --dark-background-color    : #E1E2E1;\n      --extra-dark-background-color : #616161;\n      \n      --text-primary-color      : #313534;\n      --primary-text-color      : var(--text-primary-color);\n      --secondary-text-color    : #8c9794;\n      --disabled-text-color     : var(--input-border-color);\n      --inverse-text-color      : var(--default-background-color);\n      --max-width               : 1200px;\n      --max-text-width          : 650px;\n      --font-size               : 16px;\n      --font-weight             : 400;\n\n      /**\n       * Global Element Styles\n       */\n      /* paper-input */\n      --paper-input-container-color: var(--secondary-text-color);\n    }\n\n    body, html {\n      @apply --paper-font-common-base;\n      font-size        : var(--font-size);\n      font-weight      : var(--font-weight);\n      margin           : 0;\n      padding          : 0;\n      height           : 100%;\n      background-color : var(--default-background-color);\n      color            : var(--text-primary-color);\n    }\n  </style>\n</custom-style>";
+
+/***/ }),
+/* 91 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_lib_elements_custom_style__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__shared_styles_html__ = __webpack_require__(92);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__shared_styles_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__shared_styles_html__);
+
+
+
+let styleWrapper = document.createElement('div');
+styleWrapper.style.display = 'none';
+styleWrapper.innerHTML = __WEBPACK_IMPORTED_MODULE_1__shared_styles_html___default.a;
+document.head.appendChild(styleWrapper);
+
+/***/ }),
+/* 92 */
+/***/ (function(module, exports) {
+
+module.exports = "<dom-module id=\"shared-styles\">\n  <template>\n    <style>\n      paper-material {\n        background: white;\n        display: block;\n      }\n\n      [hidden] {\n        display: none !important;\n      }\n\n      input, select, button {\n        font-size        : var(--font-size);\n        font-weight      : var(--font-weight);\n        color            : var(--text-primary-color);\n      }\n\n      .help {\n        color: var(--secondary-text-color);\n        font-size: 14px;\n      }\n\n      .narrow-container {\n        display: flex;\n        justify-content: center;\n        flex-direction: column;\n        align-items: center;\n      }\n      \n      .narrow-container > * {\n        max-width: var(--max-text-width);\n        width: 100%;\n      }\n\n      .container {\n        display: flex;\n        justify-content: center;\n        flex-direction: column;\n        align-items: center;\n      }\n\n      .container > * {\n        max-width: var(--max-width);\n        width: 100%;\n      }\n\n      a, a:visited {\n        color: var(--text-primary-color);\n      }\n\n      a[inverse], a[inverse]:visited {\n        color: var(--inverse-text-color);\n      }\n\n      h2.uheader {\n        border-bottom-width: 2px;\n        border-bottom-style: solid;\n        margin: 0 20px 10px 0;\n        padding-bottom: 5px;\n      }\n\n      h2.uheader.blue {\n        border-bottom-color: var(--default-secondary-color);\n      }\n      h2.uheader.green {\n        border-bottom-color: var(--default-primary-color);\n      }\n      h2.uheader.lightblue {\n        border-bottom-color: var(--light-secondary-color);\n      }\n      h2.uheader.dark {\n        border-bottom-color: var(--text-primary-color);\n      }\n    </style>\n  </template>\n</dom-module>";
+
+/***/ }),
+/* 93 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var MasterController = __webpack_require__(33);
+
+/**
+ * @class BaseModel
+ * 
+ * @description This class should be extended by all app models.  This will allow models to
+ * be registered with the global MasterController.  Once registered; models can access other
+ * models w/o worry of cyclical dependency issues, interface mixins can add models via model name
+ * and automatically bind to events of interest.
+ * 
+ * If a model has a store, it should be set to the models this.store in the contructor.  This
+ * allows teh EventInterface to automatically bind to both model and store events (most events
+ * will be fired from the store on state update).
+ * 
+ * The other common pattern is to set this.service to the model service if one exists.
+ * 
+ * Example:
+ * 
+ * const MyStore = require('../stores/MyStore');
+ * const MyService = require('../service/MyService');
+ * 
+ * class MyModel extends BaseModel {
+ *  
+ *   constructor() {
+ *     super();
+ *     this.store = MyStore;
+ *     this.service = MyService;
+ *   }
+ * 
+ *   async doCoolThings(args) {
+ *     // some buisness logic here    
+ *  
+ *     // most services should return a promise so caller can handle success/promise
+ *     // without having to watch for store state update events.
+ *     return this.service.getCoolThing(args);
+ *   }
+ * }
+ */
+class BaseModel {
+
+  /**
+   * @property MasterController
+   * @description get the MasterController object
+   */
+  get MasterController() {
+    return MasterController;
+  }
+
+  /**
+   * @method register
+   * 
+   * @description Register a Model by name with the MasterController.  Note, the name is required
+   * to be compatible with IE.
+   * @param {String} name Model name.  This name will be used by interfaces wishing to inject the model
+   */
+  register(name) {
+    if( !name ) {
+      console.warn('Name not passed to register().  This will fail in IE, cause, you know, IE.')
+    }
+
+    var className = name || this.__proto__.constructor.name;
+    MasterController.registerModel(className, this);
+  }
+
+  /**
+   * @method emit
+   * @description Send a event on the MasterController event bus.
+   * 
+   * @param {String} event event name
+   * @param {Object} payload event payload
+   */
+  emit(event, payload) {
+    // make events async
+    setTimeout(() => {
+      MasterController.emit(event, payload);
+    }, 0);
+  }
+}
+
+module.exports = BaseModel;
+
+/***/ }),
+/* 94 */
+/***/ (function(module, exports) {
+
+// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+function EventEmitter() {
+  this._events = this._events || {};
+  this._maxListeners = this._maxListeners || undefined;
+}
+module.exports = EventEmitter;
+
+// Backwards-compat with node 0.10.x
+EventEmitter.EventEmitter = EventEmitter;
+
+EventEmitter.prototype._events = undefined;
+EventEmitter.prototype._maxListeners = undefined;
+
+// By default EventEmitters will print a warning if more than 10 listeners are
+// added to it. This is a useful default which helps finding memory leaks.
+EventEmitter.defaultMaxListeners = 10;
+
+// Obviously not all Emitters should be limited to 10. This function allows
+// that to be increased. Set to zero for unlimited.
+EventEmitter.prototype.setMaxListeners = function(n) {
+  if (!isNumber(n) || n < 0 || isNaN(n))
+    throw TypeError('n must be a positive number');
+  this._maxListeners = n;
+  return this;
+};
+
+EventEmitter.prototype.emit = function(type) {
+  var er, handler, len, args, i, listeners;
+
+  if (!this._events)
+    this._events = {};
+
+  // If there is no 'error' event listener then throw.
+  if (type === 'error') {
+    if (!this._events.error ||
+        (isObject(this._events.error) && !this._events.error.length)) {
+      er = arguments[1];
+      if (er instanceof Error) {
+        throw er; // Unhandled 'error' event
+      } else {
+        // At least give some kind of context to the user
+        var err = new Error('Uncaught, unspecified "error" event. (' + er + ')');
+        err.context = er;
+        throw err;
+      }
+    }
+  }
+
+  handler = this._events[type];
+
+  if (isUndefined(handler))
+    return false;
+
+  if (isFunction(handler)) {
+    switch (arguments.length) {
+      // fast cases
+      case 1:
+        handler.call(this);
+        break;
+      case 2:
+        handler.call(this, arguments[1]);
+        break;
+      case 3:
+        handler.call(this, arguments[1], arguments[2]);
+        break;
+      // slower
+      default:
+        args = Array.prototype.slice.call(arguments, 1);
+        handler.apply(this, args);
+    }
+  } else if (isObject(handler)) {
+    args = Array.prototype.slice.call(arguments, 1);
+    listeners = handler.slice();
+    len = listeners.length;
+    for (i = 0; i < len; i++)
+      listeners[i].apply(this, args);
+  }
+
+  return true;
+};
+
+EventEmitter.prototype.addListener = function(type, listener) {
+  var m;
+
+  if (!isFunction(listener))
+    throw TypeError('listener must be a function');
+
+  if (!this._events)
+    this._events = {};
+
+  // To avoid recursion in the case that type === "newListener"! Before
+  // adding it to the listeners, first emit "newListener".
+  if (this._events.newListener)
+    this.emit('newListener', type,
+              isFunction(listener.listener) ?
+              listener.listener : listener);
+
+  if (!this._events[type])
+    // Optimize the case of one listener. Don't need the extra array object.
+    this._events[type] = listener;
+  else if (isObject(this._events[type]))
+    // If we've already got an array, just append.
+    this._events[type].push(listener);
+  else
+    // Adding the second element, need to change to array.
+    this._events[type] = [this._events[type], listener];
+
+  // Check for listener leak
+  if (isObject(this._events[type]) && !this._events[type].warned) {
+    if (!isUndefined(this._maxListeners)) {
+      m = this._maxListeners;
+    } else {
+      m = EventEmitter.defaultMaxListeners;
+    }
+
+    if (m && m > 0 && this._events[type].length > m) {
+      this._events[type].warned = true;
+      console.error('(node) warning: possible EventEmitter memory ' +
+                    'leak detected. %d listeners added. ' +
+                    'Use emitter.setMaxListeners() to increase limit.',
+                    this._events[type].length);
+      if (typeof console.trace === 'function') {
+        // not supported in IE 10
+        console.trace();
+      }
+    }
+  }
+
+  return this;
+};
+
+EventEmitter.prototype.on = EventEmitter.prototype.addListener;
+
+EventEmitter.prototype.once = function(type, listener) {
+  if (!isFunction(listener))
+    throw TypeError('listener must be a function');
+
+  var fired = false;
+
+  function g() {
+    this.removeListener(type, g);
+
+    if (!fired) {
+      fired = true;
+      listener.apply(this, arguments);
+    }
+  }
+
+  g.listener = listener;
+  this.on(type, g);
+
+  return this;
+};
+
+// emits a 'removeListener' event iff the listener was removed
+EventEmitter.prototype.removeListener = function(type, listener) {
+  var list, position, length, i;
+
+  if (!isFunction(listener))
+    throw TypeError('listener must be a function');
+
+  if (!this._events || !this._events[type])
+    return this;
+
+  list = this._events[type];
+  length = list.length;
+  position = -1;
+
+  if (list === listener ||
+      (isFunction(list.listener) && list.listener === listener)) {
+    delete this._events[type];
+    if (this._events.removeListener)
+      this.emit('removeListener', type, listener);
+
+  } else if (isObject(list)) {
+    for (i = length; i-- > 0;) {
+      if (list[i] === listener ||
+          (list[i].listener && list[i].listener === listener)) {
+        position = i;
+        break;
+      }
+    }
+
+    if (position < 0)
+      return this;
+
+    if (list.length === 1) {
+      list.length = 0;
+      delete this._events[type];
+    } else {
+      list.splice(position, 1);
+    }
+
+    if (this._events.removeListener)
+      this.emit('removeListener', type, listener);
+  }
+
+  return this;
+};
+
+EventEmitter.prototype.removeAllListeners = function(type) {
+  var key, listeners;
+
+  if (!this._events)
+    return this;
+
+  // not listening for removeListener, no need to emit
+  if (!this._events.removeListener) {
+    if (arguments.length === 0)
+      this._events = {};
+    else if (this._events[type])
+      delete this._events[type];
+    return this;
+  }
+
+  // emit removeListener for all listeners on all events
+  if (arguments.length === 0) {
+    for (key in this._events) {
+      if (key === 'removeListener') continue;
+      this.removeAllListeners(key);
+    }
+    this.removeAllListeners('removeListener');
+    this._events = {};
+    return this;
+  }
+
+  listeners = this._events[type];
+
+  if (isFunction(listeners)) {
+    this.removeListener(type, listeners);
+  } else if (listeners) {
+    // LIFO order
+    while (listeners.length)
+      this.removeListener(type, listeners[listeners.length - 1]);
+  }
+  delete this._events[type];
+
+  return this;
+};
+
+EventEmitter.prototype.listeners = function(type) {
+  var ret;
+  if (!this._events || !this._events[type])
+    ret = [];
+  else if (isFunction(this._events[type]))
+    ret = [this._events[type]];
+  else
+    ret = this._events[type].slice();
+  return ret;
+};
+
+EventEmitter.prototype.listenerCount = function(type) {
+  if (this._events) {
+    var evlistener = this._events[type];
+
+    if (isFunction(evlistener))
+      return 1;
+    else if (evlistener)
+      return evlistener.length;
+  }
+  return 0;
+};
+
+EventEmitter.listenerCount = function(emitter, type) {
+  return emitter.listenerCount(type);
+};
+
+function isFunction(arg) {
+  return typeof arg === 'function';
+}
+
+function isNumber(arg) {
+  return typeof arg === 'number';
+}
+
+function isObject(arg) {
+  return typeof arg === 'object' && arg !== null;
+}
+
+function isUndefined(arg) {
+  return arg === void 0;
+}
+
+
+/***/ }),
+/* 95 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var MasterController = __webpack_require__(33);
+
+/**
+ * @class BaseStore
+ * @description All stores should extend this class.  It really provides two simple 
+ * things.  First a emit() method for firing events that are async.  Second, it
+ * provides standard STATE names for data payload wrappers.  Store data in similar way
+ * really helps the reactive side of the app.
+ * 
+ * Example
+ * 
+ * class MyStore extends BaseStore {
+ * 
+ *   constructor() {
+ *     super();
+ *     
+ *     this.data = {
+ *       aSingleThing : {
+ *         state : this.STATE.INIT
+ *       }
+ *     }
+ *     
+ *     // these events will be automatically bound to elements
+ *     this.events = {
+ *       THING_UPDATED : 'thing-updated'
+ *     }
+ *   }
+ *   
+ *   // promise is the request promise
+ *   setThingLoading(promise) {
+ *      this.updateThing({state: this.STATE.LOADING, request: promise});
+ *   }
+ * 
+ *   setThingLoaded(newData) {
+ *      this.updateThing({state: this.STATE.LOADED, payload: newData});
+ *   }
+ * 
+ *   setThingError(err) {
+ *      this.updateThing({state: this.STATE.ERROR, error: err});
+ *   }
+ *   
+ *   // actually set data state and fire event
+ *   updateThing(data) {
+ *     this.data.aSingleThing = data;
+ *     this.emit(this.events.THING_UPDATED, this.data.aSingleThing);
+ *   }
+ * 
+ * }
+ * 
+ */
+class BaseStore {
+
+  constructor() {
+    // general states that should be used if possible
+    this.STATE = {
+      INIT         : 'init',
+      LOADING      : 'loading',
+      LOADED       : 'loaded',
+      ERROR        : 'error',
+      SAVING       : 'saving',
+      SAVE_ERROR   : 'save-error',
+      DELETING     : 'deleting',
+      DELETE_ERROR : 'delete-error',
+      DELETED      : 'deleted'
+    }
+  }
+
+  get MasterController() {
+    return MasterController;
+  }
+
+  /**
+   * @method emit
+   * @description Fire a async event on MasterController event bus.
+   * 
+   * @param {String} event event name
+   * @param {Object} payload event payload
+   */
+  emit(event, payload) {
+    // make events async
+    setTimeout(() => {
+      MasterController.emit(event, payload);
+    }, 0);
+  }
+}
+
+module.exports = BaseStore;
+
+/***/ }),
+/* 96 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// help: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+const fetch = __webpack_require__(48);
+
+/**
+ * @class BaseService
+ * @description Base class for services.  Adds promise based request with helpers for
+ * checking the store to see if a object is already loaded.  Also has wrapper for checking
+ * response for errors, rejecting promise if error condition is tripped.
+ * 
+ * Most methods making a request should return the promise so other Models/Elements can bind
+ * to the handling of the promise
+ * 
+ * Example:
+ * 
+ * const MyStore = require('../stores/MyStore');
+ * 
+ * class MyService extends BaseService {
+ *  
+ *   constructor() {
+ *     super();
+ *     this.store = MyStore;
+ *   }
+ * 
+ *   async doCoolThing(id) {     
+ *     return await this.request({
+ *       request : {
+ *         method : 'GET',
+ *         uri    : '/some/api/get?id='+id
+ *       },
+ *       checkCached : () => this.store.data.byId[id],
+ *       onLoading : (promise) => this.store.setCoolThingLoading(promise),
+ *       onLoad : ({response, body}) => this.store.setCoolThingLoaded(body),
+ *       onError : (err) => this.store.setCoolThingError(err)
+ *     });
+ *   }
+ * 
+ * }
+ * 
+ */
+class BaseService {
+
+  constructor() {
+    this.rootUrl = '';
+    if( typeof window !== 'undefined' ) {
+      this.rootUrl = window.location.protocol+'//'+window.location.host;
+    }
+
+    this.ERROR_MESSAGES = {
+      REQUEST : 'Request Error',
+      STATUS_CODE : 'Invalid status code',
+      JSON : 'Invalid JSON response',
+      APPLICATION_ERROR : 'Application Error'
+    }
+  }
+
+  /**
+   * @method request
+   * @description Help make service calls updating store w/ result.  All parameters are optional
+   * but the request parameter.
+   * 
+   * @param {Object} options
+   * @param {Object} options.url - request url
+   * @param {Object} options.fetchOptions - fetch api options
+   * @param {Object} options.qs - query string object to append to url
+   * @param {Boolean} options.json - if posting json set true, will automatically stringify body and set correct content type
+   * @param {Function} options.checkCached - return object to see if in loaded or loading (see BaseStore States)
+   * @param {Function} options.store - Store class (options, will default to this.store)
+   * @param {Function} options.onLoading - Store class method to call onLoad start
+   * @param {Function} options.onError - Store class method to call onError
+   * @param {Function} options.onLoad - Store class method to call onLoad
+   * 
+   * @returns {Promise}
+   */
+  async request(options) {
+    // inject class store if none provided
+    if( !options.store ) {
+      if( this.store ) options.store = this.store;
+      else return console.error(new Error('No store provided'));
+    }
+
+    // default to include all cookies
+    if( !options.fetchOptions ) options.fetchOptions = {};
+    if( !options.fetchOptions.credentials ) {
+      options.fetchOptions.credentials = 'include';
+    }
+
+    // if json flag, stringify body, set content type
+    if( options.json && 
+        options.fetchOptions &&
+        options.fetchOptions.body &&
+        typeof options.fetchOptions.body === 'object') {
+  
+      options.fetchOptions.body = JSON.stringify(options.fetchOptions.body);
+      if( !options.fetchOptions.headers ) options.fetchOptions.headers = {};
+      options.fetchOptions.headers['Content-Type'] = 'application/json'
+    }
+
+    // append query string url
+    if( options.qs ) {
+      let qs = [];
+      for( var key in options.qs) {
+        qs.push(`${key}=${options.qs[key]}`);
+      }
+      options.url += '?'+qs.join('&');
+    }
+
+    if( options.checkCached  ) {
+      // return object if loaded
+      var cachedObject = options.checkCached();
+
+      if( this.isLoaded(cachedObject) ) {
+        return cachedObject;
+      
+      // return stored promise if loading
+      } else if( this.isLoading(cachedObject) ) {
+        if( !cachedObject.request ) {
+          throw new Error('checkCached set but no request object found', cachedObject)
+        }
+        return cachedObject.request;
+      }
+    }
+
+    let promise = this._request(options);
+    if( options.onLoading ) options.onLoading(promise);
+
+    return await promise;
+  }
+
+  _request(options) {
+    if( !options.fetchOptions ) {
+      options.fetchOptions
+    }
+
+    return new Promise(async (resolve, reject) => {
+      var response = null;
+
+      try {
+        response = await fetch(options.url, options.fetchOptions)
+      } catch(e) {
+        return this._handleError(
+          options, reject,
+          { 
+            error: true, 
+            details: e, 
+            message: this.ERROR_MESSAGES.REQUEST
+          }
+        );
+      }
+
+      if( response.status < 200 || response.status > 299 ) {
+        return this._handleError(
+          options, reject,
+          { 
+            error: true, 
+            details: response, 
+            message: this.ERROR_MESSAGES.STATUS_CODE
+          }
+        );
+      }
+
+      if( response.headers.has('Content-Type') && 
+        response.headers.get('Content-Type').match(/application\/json/i) ) {
+        
+        var body = null;
+        try {
+          body = await response.json();
+        } catch(e) {
+          return this._handleError(
+            options, reject,
+            { 
+              error: true, 
+              details: e, 
+              message: this.ERROR_MESSAGES.JSON
+            }
+          );
+        }
+
+        if( body.error ) {
+          return this._handleError(
+            options, reject,
+            { 
+              error: true, 
+              details: body, 
+              message: this.ERROR_MESSAGES.APPLICATION_ERROR
+            }
+          );
+        }
+      } else {
+        body = await response.text();
+      }
+
+      if( options.onLoad ) options.onLoad({response, body});
+      resolve({response, body});
+    });
+  }
+
+  _handleError(options, reject, error) {
+    if( options.onError ) options.onError(error);
+    reject(error);
+  }
+
+  /**
+   * Checks if object exists and has state equal to the stores
+   * loaded state
+   */
+  isLoaded(object) {
+    if( !this.store ) {
+      return console.warn('Checking LOADED state but no store set for service');
+    }
+
+    if( object && object.state === this.store.STATE.LOADED ) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Checks if object exists and has state equal to the stores
+   * loading state
+   */
+  isLoading(object) {
+    if( !this.store ) {
+      return console.warn('Checking LOADED state but no store set for service');
+    }
+    
+    if( object && object.state === this.store.STATE.LOADING ) {
+      return true;
+    }
+    return false;
+  }
+
+}
+
+module.exports = BaseService;
+
+/***/ }),
+/* 97 */
+/***/ (function(module, exports) {
+
+(function(self) {
+  'use strict';
+
+  if (self.fetch) {
+    return
+  }
+
+  var support = {
+    searchParams: 'URLSearchParams' in self,
+    iterable: 'Symbol' in self && 'iterator' in Symbol,
+    blob: 'FileReader' in self && 'Blob' in self && (function() {
+      try {
+        new Blob()
+        return true
+      } catch(e) {
+        return false
+      }
+    })(),
+    formData: 'FormData' in self,
+    arrayBuffer: 'ArrayBuffer' in self
+  }
+
+  if (support.arrayBuffer) {
+    var viewClasses = [
+      '[object Int8Array]',
+      '[object Uint8Array]',
+      '[object Uint8ClampedArray]',
+      '[object Int16Array]',
+      '[object Uint16Array]',
+      '[object Int32Array]',
+      '[object Uint32Array]',
+      '[object Float32Array]',
+      '[object Float64Array]'
+    ]
+
+    var isDataView = function(obj) {
+      return obj && DataView.prototype.isPrototypeOf(obj)
+    }
+
+    var isArrayBufferView = ArrayBuffer.isView || function(obj) {
+      return obj && viewClasses.indexOf(Object.prototype.toString.call(obj)) > -1
+    }
+  }
+
+  function normalizeName(name) {
+    if (typeof name !== 'string') {
+      name = String(name)
+    }
+    if (/[^a-z0-9\-#$%&'*+.\^_`|~]/i.test(name)) {
+      throw new TypeError('Invalid character in header field name')
+    }
+    return name.toLowerCase()
+  }
+
+  function normalizeValue(value) {
+    if (typeof value !== 'string') {
+      value = String(value)
+    }
+    return value
+  }
+
+  // Build a destructive iterator for the value list
+  function iteratorFor(items) {
+    var iterator = {
+      next: function() {
+        var value = items.shift()
+        return {done: value === undefined, value: value}
+      }
+    }
+
+    if (support.iterable) {
+      iterator[Symbol.iterator] = function() {
+        return iterator
+      }
+    }
+
+    return iterator
+  }
+
+  function Headers(headers) {
+    this.map = {}
+
+    if (headers instanceof Headers) {
+      headers.forEach(function(value, name) {
+        this.append(name, value)
+      }, this)
+    } else if (Array.isArray(headers)) {
+      headers.forEach(function(header) {
+        this.append(header[0], header[1])
+      }, this)
+    } else if (headers) {
+      Object.getOwnPropertyNames(headers).forEach(function(name) {
+        this.append(name, headers[name])
+      }, this)
+    }
+  }
+
+  Headers.prototype.append = function(name, value) {
+    name = normalizeName(name)
+    value = normalizeValue(value)
+    var oldValue = this.map[name]
+    this.map[name] = oldValue ? oldValue+','+value : value
+  }
+
+  Headers.prototype['delete'] = function(name) {
+    delete this.map[normalizeName(name)]
+  }
+
+  Headers.prototype.get = function(name) {
+    name = normalizeName(name)
+    return this.has(name) ? this.map[name] : null
+  }
+
+  Headers.prototype.has = function(name) {
+    return this.map.hasOwnProperty(normalizeName(name))
+  }
+
+  Headers.prototype.set = function(name, value) {
+    this.map[normalizeName(name)] = normalizeValue(value)
+  }
+
+  Headers.prototype.forEach = function(callback, thisArg) {
+    for (var name in this.map) {
+      if (this.map.hasOwnProperty(name)) {
+        callback.call(thisArg, this.map[name], name, this)
+      }
+    }
+  }
+
+  Headers.prototype.keys = function() {
+    var items = []
+    this.forEach(function(value, name) { items.push(name) })
+    return iteratorFor(items)
+  }
+
+  Headers.prototype.values = function() {
+    var items = []
+    this.forEach(function(value) { items.push(value) })
+    return iteratorFor(items)
+  }
+
+  Headers.prototype.entries = function() {
+    var items = []
+    this.forEach(function(value, name) { items.push([name, value]) })
+    return iteratorFor(items)
+  }
+
+  if (support.iterable) {
+    Headers.prototype[Symbol.iterator] = Headers.prototype.entries
+  }
+
+  function consumed(body) {
+    if (body.bodyUsed) {
+      return Promise.reject(new TypeError('Already read'))
+    }
+    body.bodyUsed = true
+  }
+
+  function fileReaderReady(reader) {
+    return new Promise(function(resolve, reject) {
+      reader.onload = function() {
+        resolve(reader.result)
+      }
+      reader.onerror = function() {
+        reject(reader.error)
+      }
+    })
+  }
+
+  function readBlobAsArrayBuffer(blob) {
+    var reader = new FileReader()
+    var promise = fileReaderReady(reader)
+    reader.readAsArrayBuffer(blob)
+    return promise
+  }
+
+  function readBlobAsText(blob) {
+    var reader = new FileReader()
+    var promise = fileReaderReady(reader)
+    reader.readAsText(blob)
+    return promise
+  }
+
+  function readArrayBufferAsText(buf) {
+    var view = new Uint8Array(buf)
+    var chars = new Array(view.length)
+
+    for (var i = 0; i < view.length; i++) {
+      chars[i] = String.fromCharCode(view[i])
+    }
+    return chars.join('')
+  }
+
+  function bufferClone(buf) {
+    if (buf.slice) {
+      return buf.slice(0)
+    } else {
+      var view = new Uint8Array(buf.byteLength)
+      view.set(new Uint8Array(buf))
+      return view.buffer
+    }
+  }
+
+  function Body() {
+    this.bodyUsed = false
+
+    this._initBody = function(body) {
+      this._bodyInit = body
+      if (!body) {
+        this._bodyText = ''
+      } else if (typeof body === 'string') {
+        this._bodyText = body
+      } else if (support.blob && Blob.prototype.isPrototypeOf(body)) {
+        this._bodyBlob = body
+      } else if (support.formData && FormData.prototype.isPrototypeOf(body)) {
+        this._bodyFormData = body
+      } else if (support.searchParams && URLSearchParams.prototype.isPrototypeOf(body)) {
+        this._bodyText = body.toString()
+      } else if (support.arrayBuffer && support.blob && isDataView(body)) {
+        this._bodyArrayBuffer = bufferClone(body.buffer)
+        // IE 10-11 can't handle a DataView body.
+        this._bodyInit = new Blob([this._bodyArrayBuffer])
+      } else if (support.arrayBuffer && (ArrayBuffer.prototype.isPrototypeOf(body) || isArrayBufferView(body))) {
+        this._bodyArrayBuffer = bufferClone(body)
+      } else {
+        throw new Error('unsupported BodyInit type')
+      }
+
+      if (!this.headers.get('content-type')) {
+        if (typeof body === 'string') {
+          this.headers.set('content-type', 'text/plain;charset=UTF-8')
+        } else if (this._bodyBlob && this._bodyBlob.type) {
+          this.headers.set('content-type', this._bodyBlob.type)
+        } else if (support.searchParams && URLSearchParams.prototype.isPrototypeOf(body)) {
+          this.headers.set('content-type', 'application/x-www-form-urlencoded;charset=UTF-8')
+        }
+      }
+    }
+
+    if (support.blob) {
+      this.blob = function() {
+        var rejected = consumed(this)
+        if (rejected) {
+          return rejected
+        }
+
+        if (this._bodyBlob) {
+          return Promise.resolve(this._bodyBlob)
+        } else if (this._bodyArrayBuffer) {
+          return Promise.resolve(new Blob([this._bodyArrayBuffer]))
+        } else if (this._bodyFormData) {
+          throw new Error('could not read FormData body as blob')
+        } else {
+          return Promise.resolve(new Blob([this._bodyText]))
+        }
+      }
+
+      this.arrayBuffer = function() {
+        if (this._bodyArrayBuffer) {
+          return consumed(this) || Promise.resolve(this._bodyArrayBuffer)
+        } else {
+          return this.blob().then(readBlobAsArrayBuffer)
+        }
+      }
+    }
+
+    this.text = function() {
+      var rejected = consumed(this)
+      if (rejected) {
+        return rejected
+      }
+
+      if (this._bodyBlob) {
+        return readBlobAsText(this._bodyBlob)
+      } else if (this._bodyArrayBuffer) {
+        return Promise.resolve(readArrayBufferAsText(this._bodyArrayBuffer))
+      } else if (this._bodyFormData) {
+        throw new Error('could not read FormData body as text')
+      } else {
+        return Promise.resolve(this._bodyText)
+      }
+    }
+
+    if (support.formData) {
+      this.formData = function() {
+        return this.text().then(decode)
+      }
+    }
+
+    this.json = function() {
+      return this.text().then(JSON.parse)
+    }
+
+    return this
+  }
+
+  // HTTP methods whose capitalization should be normalized
+  var methods = ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT']
+
+  function normalizeMethod(method) {
+    var upcased = method.toUpperCase()
+    return (methods.indexOf(upcased) > -1) ? upcased : method
+  }
+
+  function Request(input, options) {
+    options = options || {}
+    var body = options.body
+
+    if (input instanceof Request) {
+      if (input.bodyUsed) {
+        throw new TypeError('Already read')
+      }
+      this.url = input.url
+      this.credentials = input.credentials
+      if (!options.headers) {
+        this.headers = new Headers(input.headers)
+      }
+      this.method = input.method
+      this.mode = input.mode
+      if (!body && input._bodyInit != null) {
+        body = input._bodyInit
+        input.bodyUsed = true
+      }
+    } else {
+      this.url = String(input)
+    }
+
+    this.credentials = options.credentials || this.credentials || 'omit'
+    if (options.headers || !this.headers) {
+      this.headers = new Headers(options.headers)
+    }
+    this.method = normalizeMethod(options.method || this.method || 'GET')
+    this.mode = options.mode || this.mode || null
+    this.referrer = null
+
+    if ((this.method === 'GET' || this.method === 'HEAD') && body) {
+      throw new TypeError('Body not allowed for GET or HEAD requests')
+    }
+    this._initBody(body)
+  }
+
+  Request.prototype.clone = function() {
+    return new Request(this, { body: this._bodyInit })
+  }
+
+  function decode(body) {
+    var form = new FormData()
+    body.trim().split('&').forEach(function(bytes) {
+      if (bytes) {
+        var split = bytes.split('=')
+        var name = split.shift().replace(/\+/g, ' ')
+        var value = split.join('=').replace(/\+/g, ' ')
+        form.append(decodeURIComponent(name), decodeURIComponent(value))
+      }
+    })
+    return form
+  }
+
+  function parseHeaders(rawHeaders) {
+    var headers = new Headers()
+    rawHeaders.split(/\r?\n/).forEach(function(line) {
+      var parts = line.split(':')
+      var key = parts.shift().trim()
+      if (key) {
+        var value = parts.join(':').trim()
+        headers.append(key, value)
+      }
+    })
+    return headers
+  }
+
+  Body.call(Request.prototype)
+
+  function Response(bodyInit, options) {
+    if (!options) {
+      options = {}
+    }
+
+    this.type = 'default'
+    this.status = 'status' in options ? options.status : 200
+    this.ok = this.status >= 200 && this.status < 300
+    this.statusText = 'statusText' in options ? options.statusText : 'OK'
+    this.headers = new Headers(options.headers)
+    this.url = options.url || ''
+    this._initBody(bodyInit)
+  }
+
+  Body.call(Response.prototype)
+
+  Response.prototype.clone = function() {
+    return new Response(this._bodyInit, {
+      status: this.status,
+      statusText: this.statusText,
+      headers: new Headers(this.headers),
+      url: this.url
+    })
+  }
+
+  Response.error = function() {
+    var response = new Response(null, {status: 0, statusText: ''})
+    response.type = 'error'
+    return response
+  }
+
+  var redirectStatuses = [301, 302, 303, 307, 308]
+
+  Response.redirect = function(url, status) {
+    if (redirectStatuses.indexOf(status) === -1) {
+      throw new RangeError('Invalid status code')
+    }
+
+    return new Response(null, {status: status, headers: {location: url}})
+  }
+
+  self.Headers = Headers
+  self.Request = Request
+  self.Response = Response
+
+  self.fetch = function(input, init) {
+    return new Promise(function(resolve, reject) {
+      var request = new Request(input, init)
+      var xhr = new XMLHttpRequest()
+
+      xhr.onload = function() {
+        var options = {
+          status: xhr.status,
+          statusText: xhr.statusText,
+          headers: parseHeaders(xhr.getAllResponseHeaders() || '')
+        }
+        options.url = 'responseURL' in xhr ? xhr.responseURL : options.headers.get('X-Request-URL')
+        var body = 'response' in xhr ? xhr.response : xhr.responseText
+        resolve(new Response(body, options))
+      }
+
+      xhr.onerror = function() {
+        reject(new TypeError('Network request failed'))
+      }
+
+      xhr.ontimeout = function() {
+        reject(new TypeError('Network request failed'))
+      }
+
+      xhr.open(request.method, request.url, true)
+
+      if (request.credentials === 'include') {
+        xhr.withCredentials = true
+      }
+
+      if ('responseType' in xhr && support.blob) {
+        xhr.responseType = 'blob'
+      }
+
+      request.headers.forEach(function(value, name) {
+        xhr.setRequestHeader(name, value)
+      })
+
+      xhr.send(typeof request._bodyInit === 'undefined' ? null : request._bodyInit)
+    })
+  }
+  self.fetch.polyfill = true
+})(typeof self !== 'undefined' ? self : this);
+
+
+/***/ }),
+/* 98 */
+/***/ (function(module, exports) {
+
+ /**
+  * From:
+  * https://stackoverflow.com/questions/41839198/applying-behaviors-with-js-mixins-in-polymer-2
+  * */
+class MixinBuilder {  
+  constructor(superclass) {
+    this.superclass = superclass;
+  }
+  with(...mixins) { 
+    return mixins.reduce((c, mixin) => mixin(c), this.superclass);
+  }
+}
+const Mixin = (superclass) => new MixinBuilder(superclass);
+
+// Set global if available
+if( typeof window !== 'undefined' ) { 
+  window.Mixin = Mixin;
+}
+  
+module.exports = Mixin;
+
+/***/ }),
+/* 99 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const {Debouncer} = __webpack_require__(11);
+const Async = __webpack_require__(5);
+const MasterController = __webpack_require__(33);
+
+/**
+ * @mixin EventInterface
+ * @description This is the base mixin to use for any element that wants to 
+ * bind to a model, it's events and the models store events.  All interface
+ * mixins that wrap models will assume this class has been mixed into the 
+ * element class using:
+ * 
+ * class MyElement extends Mixin(PolyerElement)
+ *                 .with(EventInterface, MyModelInterface) {
+ *  // do stuff
+ * }
+ * 
+ * If you need to debug the a element, set the following getter to 
+ * see a full log of a elements auto event bindings
+ * 
+ * get _debugEventInterface() {
+ *  return true;
+ * }
+ * 
+ */
+const EventInterface = subclass =>
+  class EventMixin extends subclass {
+
+    static get properties() {
+      return {
+        /**
+         * @property active
+         * @description The active flag toggles if this element to fire
+         * off event listeners.  When false, no event handling methods 
+         * will fire.  Set to true when you want his element to react 
+         * to events
+         * 
+         * This flag wires in really well with iron-pages.  Allowing you
+         * to toggle the attribute.  Just set selected-attribute="active".
+         */
+        active : {
+          type : Boolean,
+          value : false,
+          observer : '_onActive'
+        }
+      }
+    }
+    
+    /**
+     * @property bind
+     * @description Merge value with current bind object.  The bind
+     * object is a set of key/value pairs where the key is the event
+     * to listen for and the value is the element method name to call
+     * when the event is triggered.
+     */
+    set bind(value) {
+      this._bind = Object.assign(this.bind, value)
+    }
+
+    get bind() {
+      if( !this._bind ) this._bind = {};
+      return this._bind;
+    }
+    
+    constructor() {
+      super();
+
+      // initialize handlers
+      this.bind = {};
+      
+      // have we initialized the handlers?
+      this._eb_handlersSet = false;
+      
+      // do we want to detach listeners when element is detached
+      // (prevent memory leaks)
+      this._eb_unregisterOnDetach = true;
+    }
+    
+    ready() {
+      super.ready();
+      this._eb_init();
+    }
+    
+    connectedCallback() {
+      super.connectedCallback();
+      this._eb_init();
+    }
+    
+    /**
+     * @method _eb_init
+     * @private
+     * 
+     * @description loops they key/value pairs in this.bind and sets
+     * the event listener and method to fire using this._eb_init_fn().
+     * If a method does not exist on this element and console warning 
+     * is fired.
+     */
+    _eb_init() {
+      if( this._eb_handlersSet ) return;
+      this._eb_handlersSet = true;
+
+      if( this._debugEventInterface ) {
+        console.log(this.nodeName, 'ready and connected to DOM, attaching event listeners', this.bind);
+      }
+      
+      for( var key in this.bind ) {
+        if( !this[this.bind[key]] ) {
+          console.warn(`${this.nodeName} could not bind event ${key} to ${this.bind[key]}`);
+          continue;
+        }
+        this._eb_init_fn(key);
+      }
+    }
+    
+    /**
+     * @method _eb_init_fn
+     * @private
+     * @description Given a this.bind key (event name), bind to 
+     * the event bus this elements method.
+     * 
+     * @param {String} eventName event name 
+     */
+    _eb_init_fn(eventName) {
+      this[this.bind[eventName]] = this[this.bind[eventName]].bind(this);
+
+      // actually wire up event 
+      MasterController.on(eventName, (...args) => {
+        // if we are not active, quit
+        if( !this.active ) {
+          if( this._debugEventInterface ) {
+            console.warn(this.nodeName, 'ignoring', eventName, 'event, element not active');
+          }
+          return;
+        }
+
+        if( this._debugEventInterface ) {
+          console.log(this.nodeName, 'received event', eventName, ', triggering function:', this.bind[eventName]);
+        }
+        this[this.bind[eventName]].apply(this, args);
+      });
+    }
+    
+    /**
+     * @method
+     * @description when this element is disconnected from the DOM,
+     * remove the event listener to prevent memory leaks.
+     */
+    disconnectedCallback() {
+      super.disconnectedCallback();
+
+      if( this._debugEventInterface ) {
+        console.log(this.nodeName, 'disconnected from DOM, removing event listeners');
+      }
+      
+      if( !this._eb_unregisterOnDetach ) return;
+      if( !this._eb_handlersSet ) return;
+
+      this._eb_handlersSet = false;
+      
+      for( var key in this.bind ) {
+        if( !this[this.bind[key]] ) continue;
+        MasterController.removeListener(key, this[this.bind[key]]);
+
+        if( this._debugEventInterface ) {
+          console.log(this.nodeName, 'removing event listener for:', key);
+        }
+      }
+    }
+    
+    /**
+     * @property MasterController
+     * @description return reference to the global master controller.
+     * Proly shouldn't really need to access this, but here just in case.
+     */
+    MasterController() {
+      return MasterController;
+    }
+    
+    /**
+     * @method _injectModel
+     * @description Add model reference to this element and register the
+     * Models and Model Stores events for any method that matches the event name.
+     * 
+     * This should be called by mixin interface classes to inject their parent Model
+     * into the element for access to model methods.  The model name should be the
+     * same name the model used to register itself with the MasterController.  This name 
+     * will also be used to set a reference on the element.
+     * 
+     * Example: this._injectModel('MyModel') will set this.MyModel.
+     * 
+     * Events will be automatically wired up that have associated method handers.  The
+     * method name should be called as follows:
+     * 
+     * Assuming a event name of: my-cool-event
+     * 
+     * To listen to my-cool-event you should define a method on this element called:
+     * _onMyCoolEvent(e) {
+     *   // do stuff
+     * }
+     * 
+     * Note, the above method will only fire when this.active = true.
+     * 
+     * @param {String} name Model name to inject and bind to events 
+     */
+    _injectModel(name) {
+      this[name] = MasterController.getModel(name);
+
+      // wire up any events from injected model
+      if( this[name].events ) {
+        this._registerModelEvents(this[name].events);
+      }
+
+      // wire up any events from injected models store
+      if( this[name].store && this[name].store.events ) {
+        this._registerModelEvents(this[name].store.events);
+      }
+    }
+    
+    /**
+     * @method _registerModelEvents
+     * @private
+     * @description called by _injectModel.  Adds event names to this.bind for any
+     * event that has a associated method defined in the class.
+     * 
+     * @param {Object} events the key/value hash of events defined by a Model 
+     * or a store
+     */
+    _registerModelEvents(events) {
+      for( var key in events ) {
+        var methodName = this._getMethodNameFromEvent(events[key]);
+        
+        // class did not define and event handler
+        if( !this[methodName] ) {
+          if( this._debugEventInterface ) {
+            console.log(this.nodeName, 'auto-bind:', methodName+' -> '+events[key], false);
+          }
+          continue;
+        }
+
+        if( this._debugEventInterface ) {
+          console.log(this.nodeName, 'auto-bind:', methodName+' -> '+events[key], true);
+        }
+        this.bind[events[key]] = methodName;
+      }
+    }
+    
+    /**
+     * @method _getMethodNameFromEvent
+     * @private
+     * @description given a event name, ex: 'my-cool-event' return the method
+     * name that needs to exist to register the event handler, ex: _onMyCoolEvent.
+     * 
+     * @param {String} eventName event name
+     */
+    _getMethodNameFromEvent(eventName) {
+      return '_on' + eventName
+                      .split('-')
+                      .map((part) => {
+                        return part.charAt(0).toUpperCase() + part.slice(1)
+                      })
+                      .join('');
+    
+    }
+    
+    /**
+     * @method emit
+     * @description Fire a custom event on the MasterController event bus.
+     * 
+     * @param {String} event name of event to fire
+     * @param {Object} payload payload of event
+     */
+    emit(event, payload) {
+      MasterController.emit(event, payload);
+    }
+    
+    /**
+     * @method fire
+     * @description Adding polymer 1.0 helper back in.  Fire a custom 
+     * dom event.
+     * 
+     * @param {String} event name of event to fire
+     * @param {Object} payload payload of event
+     */
+    fire(event, payload = {}) {
+      this.dispatchEvent(
+        new CustomEvent(
+          event, 
+          {
+            detail: payload,
+            bubbles: true, 
+            composed: true
+          }
+        )
+      );
+    }
+
+    /**
+     * @method debounce
+     * @description Adding polymer 1.0 helper back in. Debounce a method call.
+     * 
+     * @param {String} name name of debouncer
+     * @param {Function} callback function to call after method is debounced
+     * @param {Number} timeout amount of time to debounce method
+     */
+    debounce(name, callback, timeout) {
+      name = `_${name}Debouncer`;
+      this[name] = Debouncer.debounce(
+        this[name],
+        Async.timeOut.after(timeout),
+        callback.bind(this)
+      );
+    }
+    
+    /**
+     * @method _onActive
+     * @description fires when element is either activated and listening to events or
+     * deactivated and no longer listening to events.
+     * 
+     * Default functionality is to do nothing.
+     */
+    _onActive() {
+      // implement me
+    }
+    
+  }
+
+if( typeof window !== 'undefined' ) {
+  window.EventInterface = EventInterface;
+}
+
+module.exports = EventInterface;
+
+/***/ }),
+/* 100 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_location_iron_location_js__ = __webpack_require__(101);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_location_iron_query_params_js__ = __webpack_require__(102);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_route_converter_behavior_js__ = __webpack_require__(103);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
+
+
+
+
+
+
+Object(__WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__["a" /* Polymer */])({
+  _template: `
+    <iron-query-params params-string="{{__query}}" params-object="{{queryParams}}">
+    </iron-query-params>
+    <iron-location path="{{__path}}" query="{{__query}}" hash="{{__hash}}" url-space-regex="{{urlSpaceRegex}}">
+    </iron-location>
+`,
+
+  is: 'app-location',
+
+  properties: {
+    /**
+     * A model representing the deserialized path through the route tree, as
+     * well as the current queryParams.
+     */
+    route: {
+      type: Object,
+      notify: true
+    },
+
+    /**
+     * In many scenarios, it is convenient to treat the `hash` as a stand-in
+     * alternative to the `path`. For example, if deploying an app to a static
+     * web server (e.g., Github Pages) - where one does not have control over
+     * server-side routing - it is usually a better experience to use the hash
+     * to represent paths through one's app.
+     *
+     * When this property is set to true, the `hash` will be used in place of
+
+     * the `path` for generating a `route`.
+     */
+    useHashAsPath: {
+      type: Boolean,
+      value: false
+    },
+
+    /**
+     * A regexp that defines the set of URLs that should be considered part
+     * of this web app.
+     *
+     * Clicking on a link that matches this regex won't result in a full page
+     * navigation, but will instead just update the URL state in place.
+     *
+     * This regexp is given everything after the origin in an absolute
+     * URL. So to match just URLs that start with /search/ do:
+     *     url-space-regex="^/search/"
+     *
+     * @type {string|RegExp}
+     */
+    urlSpaceRegex: {
+      type: String,
+      notify: true
+    },
+
+    /**
+     * A set of key/value pairs that are universally accessible to branches
+     * of the route tree.
+     */
+    __queryParams: {
+      type: Object
+    },
+
+    /**
+     * The pathname component of the current URL.
+     */
+    __path: {
+      type: String
+    },
+
+    /**
+     * The query string portion of the current URL.
+     */
+    __query: {
+      type: String
+    },
+
+    /**
+     * The hash portion of the current URL.
+     */
+    __hash: {
+      type: String
+    },
+
+    /**
+     * The route path, which will be either the hash or the path, depending
+     * on useHashAsPath.
+     */
+    path: {
+      type: String,
+      observer: '__onPathChanged'
+    },
+
+    /**
+     * Whether or not the ready function has been called.
+     */
+    _isReady: {
+      type: Boolean
+    }
+  },
+
+  behaviors: [__WEBPACK_IMPORTED_MODULE_3__app_route_converter_behavior_js__["a" /* AppRouteConverterBehavior */]],
+
+  observers: [
+    '__computeRoutePath(useHashAsPath, __hash, __path)'
+  ],
+
+  ready: function() {
+    this._isReady = true;
+  },
+
+  __computeRoutePath: function() {
+    this.path = this.useHashAsPath ? this.__hash : this.__path;
+  },
+
+  __onPathChanged: function() {
+    if (!this._isReady) {
+      return;
+    }
+
+    if (this.useHashAsPath) {
+      this.__hash = this.path;
+    } else {
+      this.__path = this.path;
+    }
+  }
+});
+
+
+/***/ }),
+/* 101 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
+
+
+
+
+var workingURL;
+
+var urlDoc, urlBase, anchor;
+
+/**
+ * @param {string} path
+ * @param {string=} base
+ * @return {!URL|!HTMLAnchorElement}
+ */
+function resolveURL(path, base) {
+  if (workingURL === undefined) {
+    workingURL = false;
+    try {
+      var u = new URL('b', 'http://a');
+      u.pathname = 'c%20d';
+      workingURL = (u.href === 'http://a/c%20d');
+      workingURL = workingURL && (new URL('http://www.google.com/?foo bar').href === 'http://www.google.com/?foo%20bar');
+    } catch (e) {}
+  }
+  if (workingURL) {
+    return new URL(path, base);
+  }
+  if (!urlDoc) {
+    urlDoc = document.implementation.createHTMLDocument('url');
+    urlBase = urlDoc.createElement('base');
+    urlDoc.head.appendChild(urlBase);
+    anchor = /** @type {HTMLAnchorElement}*/(urlDoc.createElement('a'));
+  }
+  urlBase.href = base;
+  anchor.href = path.replace(/ /g, '%20');
+  return anchor;
+}
+
+Object(__WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_fn_js__["a" /* Polymer */])({
+  is: 'iron-location',
+
+  properties: {
+    /**
+     * The pathname component of the URL.
+     */
+    path: {
+      type: String,
+      notify: true,
+      value: function() {
+        return window.decodeURIComponent(window.location.pathname);
+      }
+    },
+
+    /**
+     * The query string portion of the URL.
+     */
+    query: {
+      type: String,
+      notify: true,
+      value: function() {
+        return window.location.search.slice(1);
+      }
+    },
+
+    /**
+     * The hash component of the URL.
+     */
+    hash: {
+      type: String,
+      notify: true,
+      value: function() {
+        return window.decodeURIComponent(window.location.hash.slice(1));
+      }
+    },
+
+    /**
+     * If the user was on a URL for less than `dwellTime` milliseconds, it
+     * won't be added to the browser's history, but instead will be replaced
+     * by the next entry.
+     *
+     * This is to prevent large numbers of entries from clogging up the user's
+     * browser history. Disable by setting to a negative number.
+     */
+    dwellTime: {
+      type: Number,
+      value: 2000
+    },
+
+    /**
+     * A regexp that defines the set of URLs that should be considered part
+     * of this web app.
+     *
+     * Clicking on a link that matches this regex won't result in a full page
+     * navigation, but will instead just update the URL state in place.
+     *
+     * This regexp is given everything after the origin in an absolute
+     * URL. So to match just URLs that start with /search/ do:
+     *     url-space-regex="^/search/"
+     *
+     * @type {string|RegExp}
+     */
+    urlSpaceRegex: {
+      type: String,
+      value: ''
+    },
+
+    /**
+     * urlSpaceRegex, but coerced into a regexp.
+     *
+     * @type {RegExp}
+     */
+    _urlSpaceRegExp: {
+      computed: '_makeRegExp(urlSpaceRegex)'
+    },
+
+    _lastChangedAt: {
+      type: Number
+    },
+
+    _initialized: {
+      type: Boolean,
+      value: false
+    }
+  },
+
+  hostAttributes: {
+    hidden: true
+  },
+
+  observers: [
+    '_updateUrl(path, query, hash)'
+  ],
+
+  attached: function() {
+    this.listen(window, 'hashchange', '_hashChanged');
+    this.listen(window, 'location-changed', '_urlChanged');
+    this.listen(window, 'popstate', '_urlChanged');
+    this.listen(/** @type {!HTMLBodyElement} */(document.body), 'click', '_globalOnClick');
+    // Give a 200ms grace period to make initial redirects without any
+    // additions to the user's history.
+    this._lastChangedAt = window.performance.now() - (this.dwellTime - 200);
+    this._initialized = true;
+
+    this._urlChanged();
+  },
+
+  detached: function() {
+    this.unlisten(window, 'hashchange', '_hashChanged');
+    this.unlisten(window, 'location-changed', '_urlChanged');
+    this.unlisten(window, 'popstate', '_urlChanged');
+    this.unlisten(/** @type {!HTMLBodyElement} */(document.body), 'click', '_globalOnClick');
+    this._initialized = false;
+  },
+
+  _hashChanged: function() {
+    this.hash = window.decodeURIComponent(window.location.hash.substring(1));
+  },
+
+  _urlChanged: function() {
+    // We want to extract all info out of the updated URL before we
+    // try to write anything back into it.
+    //
+    // i.e. without _dontUpdateUrl we'd overwrite the new path with the old
+    // one when we set this.hash. Likewise for query.
+    this._dontUpdateUrl = true;
+    this._hashChanged();
+    this.path = window.decodeURIComponent(window.location.pathname);
+    this.query = window.location.search.substring(1);
+    this._dontUpdateUrl = false;
+    this._updateUrl();
+  },
+
+  _getUrl: function() {
+    var partiallyEncodedPath = window.encodeURI(
+        this.path).replace(/\#/g, '%23').replace(/\?/g, '%3F');
+    var partiallyEncodedQuery = '';
+    if (this.query) {
+      partiallyEncodedQuery = '?' + this.query.replace(/\#/g, '%23');
+    }
+    var partiallyEncodedHash = '';
+    if (this.hash) {
+      partiallyEncodedHash = '#' + window.encodeURI(this.hash);
+    }
+    return (
+        partiallyEncodedPath + partiallyEncodedQuery + partiallyEncodedHash);
+  },
+
+  _updateUrl: function() {
+    if (this._dontUpdateUrl || !this._initialized) {
+      return;
+    }
+
+    if (this.path === window.decodeURIComponent(window.location.pathname) &&
+        this.query === window.location.search.substring(1) &&
+        this.hash === window.decodeURIComponent(
+            window.location.hash.substring(1))) {
+      // Nothing to do, the current URL is a representation of our properties.
+      return;
+    }
+
+    var newUrl = this._getUrl();
+    // Need to use a full URL in case the containing page has a base URI.
+    var fullNewUrl = resolveURL(newUrl, window.location.protocol + '//' + window.location.host).href;
+    var now = window.performance.now();
+    var shouldReplace = this._lastChangedAt + this.dwellTime > now;
+    this._lastChangedAt = now;
+
+    if (shouldReplace) {
+      window.history.replaceState({}, '', fullNewUrl);
+    } else {
+      window.history.pushState({}, '', fullNewUrl);
+    }
+
+    this.fire('location-changed', {}, {node: window});
+  },
+
+  /**
+   * A necessary evil so that links work as expected. Does its best to
+   * bail out early if possible.
+   *
+   * @param {MouseEvent} event .
+   */
+  _globalOnClick: function(event) {
+    // If another event handler has stopped this event then there's nothing
+    // for us to do. This can happen e.g. when there are multiple
+    // iron-location elements in a page.
+    if (event.defaultPrevented) {
+      return;
+    }
+
+    var href = this._getSameOriginLinkHref(event);
+
+    if (!href) {
+      return;
+    }
+
+    event.preventDefault();
+
+    // If the navigation is to the current page we shouldn't add a history
+    // entry or fire a change event.
+    if (href === window.location.href) {
+      return;
+    }
+
+    window.history.pushState({}, '', href);
+    this.fire('location-changed', {}, {node: window});
+  },
+
+  /**
+   * Returns the absolute URL of the link (if any) that this click event
+   * is clicking on, if we can and should override the resulting full
+   * page navigation. Returns null otherwise.
+   *
+   * @param {MouseEvent} event .
+   * @return {string?} .
+   */
+  _getSameOriginLinkHref: function(event) {
+    // We only care about left-clicks.
+    if (event.button !== 0) {
+      return null;
+    }
+
+    // We don't want modified clicks, where the intent is to open the page
+    // in a new tab.
+    if (event.metaKey || event.ctrlKey) {
+      return null;
+    }
+
+    var eventPath = Object(__WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(event).path;
+    var anchor = null;
+
+    for (var i = 0; i < eventPath.length; i++) {
+      var element = eventPath[i];
+
+      if (element.tagName === 'A' && element.href) {
+        anchor = element;
+        break;
+      }
+    }
+
+    // If there's no link there's nothing to do.
+    if (!anchor) {
+      return null;
+    }
+
+    // Target blank is a new tab, don't intercept.
+    if (anchor.target === '_blank') {
+      return null;
+    }
+
+    // If the link is for an existing parent frame, don't intercept.
+    if ((anchor.target === '_top' ||
+        anchor.target === '_parent') &&
+        window.top !== window) {
+      return null;
+    }
+
+    var href = anchor.href;
+
+    // It only makes sense for us to intercept same-origin navigations.
+    // pushState/replaceState don't work with cross-origin links.
+    var url;
+
+    if (document.baseURI != null) {
+      url = resolveURL(href, /** @type {string} */(document.baseURI));
+    } else {
+      url = resolveURL(href);
+    }
+
+    var origin;
+
+    // IE Polyfill
+    if (window.location.origin) {
+      origin = window.location.origin;
+    } else {
+      origin = window.location.protocol + '//' + window.location.host;
+    }
+
+    var urlOrigin;
+
+    if (url.origin) {
+      urlOrigin = url.origin;
+    } else {
+      urlOrigin = url.protocol + '//' + url.host;
+    }
+
+    if (urlOrigin !== origin) {
+      return null;
+    }
+
+    var normalizedHref = url.pathname + url.search + url.hash;
+
+    // pathname should start with '/', but may not if `new URL` is not supported
+    if (normalizedHref[0] !== '/') {
+      normalizedHref = '/' + normalizedHref;
+    }
+
+    // If we've been configured not to handle this url... don't handle it!
+    if (this._urlSpaceRegExp &&
+        !this._urlSpaceRegExp.test(normalizedHref)) {
+      return null;
+    }
+
+    // Need to use a full URL in case the containing page has a base URI.
+    var fullNormalizedHref = resolveURL(
+        normalizedHref, window.location.href).href;
+    return fullNormalizedHref;
+  },
+
+  _makeRegExp: function(urlSpaceRegex) {
+    return RegExp(urlSpaceRegex);
+  }
+});
+
+
+/***/ }),
+/* 102 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
+
+
+'use strict';
+
+Object(__WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_fn_js__["a" /* Polymer */])({
+  is: 'iron-query-params',
+
+  properties: {
+    paramsString: {
+      type: String,
+      notify: true,
+      observer: 'paramsStringChanged',
+    },
+
+    paramsObject: {
+      type: Object,
+      notify: true,
+      value: function() {
+        return {};
+      }
+    },
+
+    _dontReact: {
+      type: Boolean,
+      value: false
+    }
+  },
+
+  hostAttributes: {
+    hidden: true
+  },
+
+  observers: [
+    'paramsObjectChanged(paramsObject.*)'
+  ],
+
+  paramsStringChanged: function() {
+    this._dontReact = true;
+    this.paramsObject = this._decodeParams(this.paramsString);
+    this._dontReact = false;
+  },
+
+  paramsObjectChanged: function() {
+    if (this._dontReact) {
+      return;
+    }
+    this.paramsString = this._encodeParams(this.paramsObject)
+        .replace(/%3F/g, '?').replace(/%2F/g, '/').replace(/'/g, '%27');
+  },
+
+  _encodeParams: function(params) {
+    var encodedParams = [];
+
+    for (var key in params) {
+      var value = params[key];
+
+      if (value === '') {
+        encodedParams.push(encodeURIComponent(key));
+
+      } else if (value) {
+        encodedParams.push(
+            encodeURIComponent(key) +
+            '=' +
+            encodeURIComponent(value.toString())
+        );
+      }
+    }
+    return encodedParams.join('&');
+  },
+
+  _decodeParams: function(paramString) {
+    var params = {};
+    // Work around a bug in decodeURIComponent where + is not
+    // converted to spaces:
+    paramString = (paramString || '').replace(/\+/g, '%20');
+    var paramList = paramString.split('&');
+    for (var i = 0; i < paramList.length; i++) {
+      var param = paramList[i].split('=');
+      if (param[0]) {
+        params[decodeURIComponent(param[0])] =
+            decodeURIComponent(param[1] || '');
+      }
+    }
+    return params;
+  }
+});
+
+
+/***/ }),
+/* 103 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+const AppRouteConverterBehavior = {
+  properties: {
+    /**
+     * A model representing the deserialized path through the route tree, as
+     * well as the current queryParams.
+     *
+     * A route object is the kernel of the routing system. It is intended to
+     * be fed into consuming elements such as `app-route`.
+     *
+     * @type {?Object}
+     */
+    route: {
+      type: Object,
+      notify: true
+    },
+
+    /**
+     * A set of key/value pairs that are universally accessible to branches of
+     * the route tree.
+     *
+     * @type {?Object}
+     */
+    queryParams: {
+      type: Object,
+      notify: true
+    },
+
+    /**
+     * The serialized path through the route tree. This corresponds to the
+     * `window.location.pathname` value, and will update to reflect changes
+     * to that value.
+     */
+    path: {
+      type: String,
+      notify: true,
+    }
+  },
+
+  observers: [
+    '_locationChanged(path, queryParams)',
+    '_routeChanged(route.prefix, route.path)',
+    '_routeQueryParamsChanged(route.__queryParams)'
+  ],
+
+  created: function() {
+    this.linkPaths('route.__queryParams', 'queryParams');
+    this.linkPaths('queryParams', 'route.__queryParams');
+  },
+
+  /**
+   * Handler called when the path or queryParams change.
+   */
+  _locationChanged: function() {
+    if (this.route &&
+        this.route.path === this.path &&
+        this.queryParams === this.route.__queryParams) {
+      return;
+    }
+    this.route = {
+      prefix: '',
+      path: this.path,
+      __queryParams: this.queryParams
+    };
+  },
+
+  /**
+   * Handler called when the route prefix and route path change.
+   */
+  _routeChanged: function() {
+    if (!this.route) {
+      return;
+    }
+
+    this.path = this.route.prefix + this.route.path;
+  },
+
+  /**
+   * Handler called when the route queryParams change.
+   *
+   * @param  {Object} queryParams A set of key/value pairs that are
+   * universally accessible to branches of the route tree.
+   */
+  _routeQueryParamsChanged: function(queryParams) {
+    if (!this.route) {
+      return;
+    }
+    this.queryParams = queryParams;
+  }
+};
+/* harmony export (immutable) */ __webpack_exports__["a"] = AppRouteConverterBehavior;
+
+
+
+/***/ }),
+/* 104 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var strictUriEncode = __webpack_require__(105);
+var objectAssign = __webpack_require__(106);
+var decodeComponent = __webpack_require__(107);
+
+function encoderForArrayFormat(opts) {
+	switch (opts.arrayFormat) {
+		case 'index':
+			return function (key, value, index) {
+				return value === null ? [
+					encode(key, opts),
+					'[',
+					index,
+					']'
+				].join('') : [
+					encode(key, opts),
+					'[',
+					encode(index, opts),
+					']=',
+					encode(value, opts)
+				].join('');
+			};
+
+		case 'bracket':
+			return function (key, value) {
+				return value === null ? encode(key, opts) : [
+					encode(key, opts),
+					'[]=',
+					encode(value, opts)
+				].join('');
+			};
+
+		default:
+			return function (key, value) {
+				return value === null ? encode(key, opts) : [
+					encode(key, opts),
+					'=',
+					encode(value, opts)
+				].join('');
+			};
+	}
+}
+
+function parserForArrayFormat(opts) {
+	var result;
+
+	switch (opts.arrayFormat) {
+		case 'index':
+			return function (key, value, accumulator) {
+				result = /\[(\d*)\]$/.exec(key);
+
+				key = key.replace(/\[\d*\]$/, '');
+
+				if (!result) {
+					accumulator[key] = value;
+					return;
+				}
+
+				if (accumulator[key] === undefined) {
+					accumulator[key] = {};
+				}
+
+				accumulator[key][result[1]] = value;
+			};
+
+		case 'bracket':
+			return function (key, value, accumulator) {
+				result = /(\[\])$/.exec(key);
+				key = key.replace(/\[\]$/, '');
+
+				if (!result) {
+					accumulator[key] = value;
+					return;
+				} else if (accumulator[key] === undefined) {
+					accumulator[key] = [value];
+					return;
+				}
+
+				accumulator[key] = [].concat(accumulator[key], value);
+			};
+
+		default:
+			return function (key, value, accumulator) {
+				if (accumulator[key] === undefined) {
+					accumulator[key] = value;
+					return;
+				}
+
+				accumulator[key] = [].concat(accumulator[key], value);
+			};
+	}
+}
+
+function encode(value, opts) {
+	if (opts.encode) {
+		return opts.strict ? strictUriEncode(value) : encodeURIComponent(value);
+	}
+
+	return value;
+}
+
+function keysSorter(input) {
+	if (Array.isArray(input)) {
+		return input.sort();
+	} else if (typeof input === 'object') {
+		return keysSorter(Object.keys(input)).sort(function (a, b) {
+			return Number(a) - Number(b);
+		}).map(function (key) {
+			return input[key];
+		});
+	}
+
+	return input;
+}
+
+exports.extract = function (str) {
+	var queryStart = str.indexOf('?');
+	if (queryStart === -1) {
+		return '';
+	}
+	return str.slice(queryStart + 1);
+};
+
+exports.parse = function (str, opts) {
+	opts = objectAssign({arrayFormat: 'none'}, opts);
+
+	var formatter = parserForArrayFormat(opts);
+
+	// Create an object with no prototype
+	// https://github.com/sindresorhus/query-string/issues/47
+	var ret = Object.create(null);
+
+	if (typeof str !== 'string') {
+		return ret;
+	}
+
+	str = str.trim().replace(/^[?#&]/, '');
+
+	if (!str) {
+		return ret;
+	}
+
+	str.split('&').forEach(function (param) {
+		var parts = param.replace(/\+/g, ' ').split('=');
+		// Firefox (pre 40) decodes `%3D` to `=`
+		// https://github.com/sindresorhus/query-string/pull/37
+		var key = parts.shift();
+		var val = parts.length > 0 ? parts.join('=') : undefined;
+
+		// missing `=` should be `null`:
+		// http://w3.org/TR/2012/WD-url-20120524/#collect-url-parameters
+		val = val === undefined ? null : decodeComponent(val);
+
+		formatter(decodeComponent(key), val, ret);
+	});
+
+	return Object.keys(ret).sort().reduce(function (result, key) {
+		var val = ret[key];
+		if (Boolean(val) && typeof val === 'object' && !Array.isArray(val)) {
+			// Sort object keys, not values
+			result[key] = keysSorter(val);
+		} else {
+			result[key] = val;
+		}
+
+		return result;
+	}, Object.create(null));
+};
+
+exports.stringify = function (obj, opts) {
+	var defaults = {
+		encode: true,
+		strict: true,
+		arrayFormat: 'none'
+	};
+
+	opts = objectAssign(defaults, opts);
+
+	var formatter = encoderForArrayFormat(opts);
+
+	return obj ? Object.keys(obj).sort().map(function (key) {
+		var val = obj[key];
+
+		if (val === undefined) {
+			return '';
+		}
+
+		if (val === null) {
+			return encode(key, opts);
+		}
+
+		if (Array.isArray(val)) {
+			var result = [];
+
+			val.slice().forEach(function (val2) {
+				if (val2 === undefined) {
+					return;
+				}
+
+				result.push(formatter(key, val2, result.length));
+			});
+
+			return result.join('&');
+		}
+
+		return encode(key, opts) + '=' + encode(val, opts);
+	}).filter(function (x) {
+		return x.length > 0;
+	}).join('&') : '';
+};
+
+
+/***/ }),
+/* 105 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+module.exports = function (str) {
+	return encodeURIComponent(str).replace(/[!'()*]/g, function (c) {
+		return '%' + c.charCodeAt(0).toString(16).toUpperCase();
+	});
+};
+
+
+/***/ }),
+/* 106 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/*
+object-assign
+(c) Sindre Sorhus
+@license MIT
+*/
+
+
+/* eslint-disable no-unused-vars */
+var getOwnPropertySymbols = Object.getOwnPropertySymbols;
+var hasOwnProperty = Object.prototype.hasOwnProperty;
+var propIsEnumerable = Object.prototype.propertyIsEnumerable;
+
+function toObject(val) {
+	if (val === null || val === undefined) {
+		throw new TypeError('Object.assign cannot be called with null or undefined');
+	}
+
+	return Object(val);
+}
+
+function shouldUseNative() {
+	try {
+		if (!Object.assign) {
+			return false;
+		}
+
+		// Detect buggy property enumeration order in older V8 versions.
+
+		// https://bugs.chromium.org/p/v8/issues/detail?id=4118
+		var test1 = new String('abc');  // eslint-disable-line no-new-wrappers
+		test1[5] = 'de';
+		if (Object.getOwnPropertyNames(test1)[0] === '5') {
+			return false;
+		}
+
+		// https://bugs.chromium.org/p/v8/issues/detail?id=3056
+		var test2 = {};
+		for (var i = 0; i < 10; i++) {
+			test2['_' + String.fromCharCode(i)] = i;
+		}
+		var order2 = Object.getOwnPropertyNames(test2).map(function (n) {
+			return test2[n];
+		});
+		if (order2.join('') !== '0123456789') {
+			return false;
+		}
+
+		// https://bugs.chromium.org/p/v8/issues/detail?id=3056
+		var test3 = {};
+		'abcdefghijklmnopqrst'.split('').forEach(function (letter) {
+			test3[letter] = letter;
+		});
+		if (Object.keys(Object.assign({}, test3)).join('') !==
+				'abcdefghijklmnopqrst') {
+			return false;
+		}
+
+		return true;
+	} catch (err) {
+		// We don't expect any of the above to throw, but better to be safe.
+		return false;
+	}
+}
+
+module.exports = shouldUseNative() ? Object.assign : function (target, source) {
+	var from;
+	var to = toObject(target);
+	var symbols;
+
+	for (var s = 1; s < arguments.length; s++) {
+		from = Object(arguments[s]);
+
+		for (var key in from) {
+			if (hasOwnProperty.call(from, key)) {
+				to[key] = from[key];
+			}
+		}
+
+		if (getOwnPropertySymbols) {
+			symbols = getOwnPropertySymbols(from);
+			for (var i = 0; i < symbols.length; i++) {
+				if (propIsEnumerable.call(from, symbols[i])) {
+					to[symbols[i]] = from[symbols[i]];
+				}
+			}
+		}
+	}
+
+	return to;
+};
+
+
+/***/ }),
+/* 107 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var token = '%[a-f0-9]{2}';
+var singleMatcher = new RegExp(token, 'gi');
+var multiMatcher = new RegExp('(' + token + ')+', 'gi');
+
+function decodeComponents(components, split) {
+	try {
+		// Try to decode the entire string first
+		return decodeURIComponent(components.join(''));
+	} catch (err) {
+		// Do nothing
+	}
+
+	if (components.length === 1) {
+		return components;
+	}
+
+	split = split || 1;
+
+	// Split the array in 2 parts
+	var left = components.slice(0, split);
+	var right = components.slice(split);
+
+	return Array.prototype.concat.call([], decodeComponents(left), decodeComponents(right));
+}
+
+function decode(input) {
+	try {
+		return decodeURIComponent(input);
+	} catch (err) {
+		var tokens = input.match(singleMatcher);
+
+		for (var i = 1; i < tokens.length; i++) {
+			input = decodeComponents(tokens, i).join('');
+
+			tokens = input.match(singleMatcher);
+		}
+
+		return input;
+	}
+}
+
+function customDecodeURIComponent(input) {
+	// Keep track of all the replacements and prefill the map with the `BOM`
+	var replaceMap = {
+		'%FE%FF': '\uFFFD\uFFFD',
+		'%FF%FE': '\uFFFD\uFFFD'
+	};
+
+	var match = multiMatcher.exec(input);
+	while (match) {
+		try {
+			// Decode as big chunks as possible
+			replaceMap[match[0]] = decodeURIComponent(match[0]);
+		} catch (err) {
+			var result = decode(match[0]);
+
+			if (result !== match[0]) {
+				replaceMap[match[0]] = result;
+			}
+		}
+
+		match = multiMatcher.exec(input);
+	}
+
+	// Add `%C2` at the end of the map to make sure it does not replace the combinator before everything else
+	replaceMap['%C2'] = '\uFFFD';
+
+	var entries = Object.keys(replaceMap);
+
+	for (var i = 0; i < entries.length; i++) {
+		// Replace all decoded components
+		var key = entries[i];
+		input = input.replace(new RegExp(key, 'g'), replaceMap[key]);
+	}
+
+	return input;
+}
+
+module.exports = function (encodedURI) {
+	if (typeof encodedURI !== 'string') {
+		throw new TypeError('Expected `encodedURI` to be of type `string`, got `' + typeof encodedURI + '`');
+	}
+
+	try {
+		encodedURI = encodedURI.replace(/\+/g, ' ');
+
+		// Try the built in decoder first
+		return decodeURIComponent(encodedURI);
+	} catch (err) {
+		// Fallback to a more advanced decoder
+		return customDecodeURIComponent(encodedURI);
+	}
+};
+
+
+/***/ }),
+/* 108 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony default export */ var _unused_webpack_default_export = ({
+  AppStateModel : __webpack_require__(109),
+  PackageModel : __webpack_require__(113),
+  SearchModel : __webpack_require__(119),
+  vocabulary : __webpack_require__(56)
+});
+
+/***/ }),
+/* 109 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const {AppStateModel} = __webpack_require__(34);
+var AppStateStore = __webpack_require__(112);
+
+
+class AppStateModelImpl extends AppStateModel {
+
+  constructor() {
+    super();
+    this.store = AppStateStore;
+  }
+
+}
+
+module.exports = new AppStateModelImpl();
+
+/***/ }),
+/* 110 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var {BaseModel} = __webpack_require__(6);
+
+
+/**
+ * Controller for handling various states of the application.
+ * This includes current catalog and page and if we are editing a mark.
+ */
+class AppStateModel extends BaseModel {
+
+  constructor() {
+    super();
+    this.register('AppStateModel');
+  }
+
+  /**
+   * @method setLocationElement
+   * @description Called from app-route element
+   * 
+   * @param {Element} ele app-route element
+   */
+  setLocationElement(ele) {
+    this.locationElement = ele;
+  }
+
+  /**
+   * @method setLocation
+   * @description manually set the url location.  This should be used instead of 
+   * window.location.href = '/foo'.  This method passes location to the global
+   * app-route element which handles updating the window.history state and fires
+   * the AppStateStore state-update event.
+   * 
+   * @param {String} location new url location
+   */
+  setLocation(location) {
+    if( !this.locationElement ) {
+      return console.warn('Call to setWindowLocation but no locationElement set');
+    }
+    this.locationElement.setWindowLocation(location);
+  }
+
+  /**
+   * Get the current redux appState
+   * @returns {Object} appState
+   */
+  async get() {
+    return this.store.data;
+  }
+
+  /**
+   * Update the app state
+   * @returns {Object} update - keys to be updated
+   */
+  set(update) {
+    this.store.set(update);
+    return this.get();
+  }
+}
+
+module.exports = AppStateModel;
+
+/***/ }),
+/* 111 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const {BaseStore} = __webpack_require__(6);
+
+class AppStateStore extends BaseStore {
+
+  constructor() {
+    super();
+
+    this.data = {
+      location : {}
+    }
+
+    this.events = {
+      APP_STATE_UPDATE : 'app-state-update'
+    }
+  }
+
+  set(state) {
+    this.data = Object.assign({}, this.data, state);
+    this.emit(this.events.APP_STATE_UPDATE, this.data);
+  }
+
+  get() {
+    return this.data;
+  }
+
+}
+
+module.exports = AppStateStore;
+
+/***/ }),
+/* 112 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var {AppStateStore} = __webpack_require__(34);
+
+class AppStateStoreImpl extends AppStateStore {}
+
+module.exports = new AppStateStoreImpl();
+
+/***/ }),
+/* 113 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const {BaseModel} = __webpack_require__(6);
+const PackageService = __webpack_require__(114);
+const PackageStore = __webpack_require__(51);
+const PackageSchema = __webpack_require__(118).package;
+
+class PackageModel extends BaseModel {
+
+  constructor() {
+    super();
+
+    this.schema = PackageSchema;
+
+    this.store = PackageStore;
+    this.service = PackageService;
+      
+    this.register('PackageModel');
+  }
+
+  /**
+   * @method create
+   * @description create package
+   * 
+   * @param {String} name name of new package
+   * @param {String} description short description of package 
+   * @returns {Promise} fetch promise
+   */
+  async create(name, description) {
+    return this.service.create(name, description);
+  }
+
+  /**
+   * @method get
+   * @description get package by id
+   * 
+   * @param {String} id ecosml id 
+   * @returns {Promise} fetch promise
+   */
+  async get(id) {
+    this.service.get(id);
+
+    if( this.store.data.byId[id].state === 'loading' ) {
+      await this.store.data.byId[id].request;
+    }
+    
+    return this.store.data.byId[id];
+  }
+
+  /**
+   * @method update
+   * @description update package
+   * 
+   * @param {Object} data data to update package with
+   * @returns {Promise} fetch promise
+   */
+  async update(data) {
+    await this.service.update(data);
+    return this.store.data.update;
+  }
+
+  /**
+   * @method delete
+   * @description delete package
+   * 
+   * @param {String} name name of package to delete
+   * @returns {Promise} fetch promise
+   */
+  async delete(name) {
+    return this.service.delete(name);
+  }
+
+  /**
+   * @method createRelease
+   * @description create a package release
+   * 
+   * @param {String} id id of package to create release for
+   * @param {Object} releaseInfo
+   * @param {String} releaseInfo.name tag name for release
+   * @param {String} releaseInfo.description
+   * 
+   * @returns {Promise} fetch promise
+   */
+  async createRelease(id, releaseInfo) {
+    this.service.createRelease(id, releaseInfo);
+
+  }
+
+}
+
+module.exports = new PackageModel();
+
+/***/ }),
+/* 114 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const {BaseService} = __webpack_require__(6);
+const PackageStore = __webpack_require__(51);
+const uuid = __webpack_require__(115);
+
+class PackageService extends BaseService {
+
+  constructor() {
+    super();
+    this.store = PackageStore;
+    this.baseUrl = '/api/package'
+  }
+
+  /**
+   * @method create
+   * @description create a new package
+   * 
+   * @param {String} name name of package 
+   * @param {String} description one sentence overview description
+   */
+  async create(name, description) {
+    let payload = {name, description};
+
+    return this.request({
+      url : this.baseUrl,
+      fetchOptions : {
+        method : 'POST',
+        body  : payload
+      },
+      json : true,
+      onLoading : request => this.store.setCreatePackageLoading(request, payload),
+      onLoad : result => this.store.setCreatePackageSuccess(result.body),
+      onError : error => this.store.setCreatePackageError(error)
+    })
+  }
+
+  async update(pkg) {
+    let payload = pkg;
+
+    return this.request({
+      url : this.baseUrl,
+      fetchOptions : {
+        method : 'PATCH',
+        body  : payload
+      },
+      json : true,
+      onLoading : request => this.store.setUpdatePackageLoading(request, payload),
+      onLoad : result => this.store.setUpdatePackageSuccess(result.body),
+      onError : error => this.store.setUpdatePackageError(error)
+    })
+  }
+
+  /**
+   * @method createRelease
+   * @description create a new package release
+   */
+  async createRelease(id, payload) {
+    return this.request({
+      url : `${this.baseUrl}/${id}/createRelease`,
+      fetchOptions : {
+        method : 'POST',
+        body  : payload
+      },
+      json : true,
+      onLoading : request => this.store.setCreateReleaseLoading(request, payload),
+      onLoad : result => this.store.setCreateReleaseSuccess(result.body),
+      onError : error => this.store.setCreateReleaseError(error)
+    });
+  }
+
+  /**
+   * @method get
+   * @description get a package by id.  the /package/:id request also 
+   * accepts /package/:name
+   * 
+   * @param {String} id package ecosml id 
+   */
+  async get(id) {
+    return this.request({
+      url : `${this.baseUrl}/${id}`,
+      onLoading : request => this.store.setGetPackageLoading(id, request),
+      onLoad : result => this.store.setGetPackageSuccess(id, result.body),
+      onError : error => this.store.setGetPackageError(id, error)
+    });
+  }
+
+  async delete(name) {
+    return this.request({
+      url : `${this.baseUrl}/${name}`,
+      fetchOptions : {
+        method : 'DELETE'
+      },
+      onLoading : request => this.store.setDeletingPackage(request, payload),
+      onLoad : result => this.store.setDeletePackageSuccess(result.body),
+      onError : error => this.store.setDeletePackageError(error)
+    });
+  }
+
+  async addFile(formData) {
+    let id = uuid.v4();
+    let filename = formData.get('filename'); 
+    let payload = {filename};
+
+    return this.request({
+      url : `${this.baseUrl}/addFile`,
+      fetchOptions : {
+        method : 'POST',
+        body : formData
+      },
+      onLoading : request => this.store.setFileSaving(request, fileId, payload),
+      onLoad : result => this.store.setFileSaved(fileId, payload),
+      onError : error => this.store.setFileSaveError(fileId, error)
+    });
+  }
+}
+
+module.exports = new PackageService();
+
+/***/ }),
+/* 115 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var v1 = __webpack_require__(116);
+var v4 = __webpack_require__(117);
+
+var uuid = v4;
+uuid.v1 = v1;
+uuid.v4 = v4;
+
+module.exports = uuid;
+
+
+/***/ }),
+/* 116 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var rng = __webpack_require__(52);
+var bytesToUuid = __webpack_require__(54);
+
+// **`v1()` - Generate time-based UUID**
+//
+// Inspired by https://github.com/LiosK/UUID.js
+// and http://docs.python.org/library/uuid.html
+
+// random #'s we need to init node and clockseq
+var _seedBytes = rng();
+
+// Per 4.5, create and 48-bit node id, (47 random bits + multicast bit = 1)
+var _nodeId = [
+  _seedBytes[0] | 0x01,
+  _seedBytes[1], _seedBytes[2], _seedBytes[3], _seedBytes[4], _seedBytes[5]
+];
+
+// Per 4.2.2, randomize (14 bit) clockseq
+var _clockseq = (_seedBytes[6] << 8 | _seedBytes[7]) & 0x3fff;
+
+// Previous uuid creation time
+var _lastMSecs = 0, _lastNSecs = 0;
+
+// See https://github.com/broofa/node-uuid for API details
+function v1(options, buf, offset) {
+  var i = buf && offset || 0;
+  var b = buf || [];
+
+  options = options || {};
+
+  var clockseq = options.clockseq !== undefined ? options.clockseq : _clockseq;
+
+  // UUID timestamps are 100 nano-second units since the Gregorian epoch,
+  // (1582-10-15 00:00).  JSNumbers aren't precise enough for this, so
+  // time is handled internally as 'msecs' (integer milliseconds) and 'nsecs'
+  // (100-nanoseconds offset from msecs) since unix epoch, 1970-01-01 00:00.
+  var msecs = options.msecs !== undefined ? options.msecs : new Date().getTime();
+
+  // Per 4.2.1.2, use count of uuid's generated during the current clock
+  // cycle to simulate higher resolution clock
+  var nsecs = options.nsecs !== undefined ? options.nsecs : _lastNSecs + 1;
+
+  // Time since last uuid creation (in msecs)
+  var dt = (msecs - _lastMSecs) + (nsecs - _lastNSecs)/10000;
+
+  // Per 4.2.1.2, Bump clockseq on clock regression
+  if (dt < 0 && options.clockseq === undefined) {
+    clockseq = clockseq + 1 & 0x3fff;
+  }
+
+  // Reset nsecs if clock regresses (new clockseq) or we've moved onto a new
+  // time interval
+  if ((dt < 0 || msecs > _lastMSecs) && options.nsecs === undefined) {
+    nsecs = 0;
+  }
+
+  // Per 4.2.1.2 Throw error if too many uuids are requested
+  if (nsecs >= 10000) {
+    throw new Error('uuid.v1(): Can\'t create more than 10M uuids/sec');
+  }
+
+  _lastMSecs = msecs;
+  _lastNSecs = nsecs;
+  _clockseq = clockseq;
+
+  // Per 4.1.4 - Convert from unix epoch to Gregorian epoch
+  msecs += 12219292800000;
+
+  // `time_low`
+  var tl = ((msecs & 0xfffffff) * 10000 + nsecs) % 0x100000000;
+  b[i++] = tl >>> 24 & 0xff;
+  b[i++] = tl >>> 16 & 0xff;
+  b[i++] = tl >>> 8 & 0xff;
+  b[i++] = tl & 0xff;
+
+  // `time_mid`
+  var tmh = (msecs / 0x100000000 * 10000) & 0xfffffff;
+  b[i++] = tmh >>> 8 & 0xff;
+  b[i++] = tmh & 0xff;
+
+  // `time_high_and_version`
+  b[i++] = tmh >>> 24 & 0xf | 0x10; // include version
+  b[i++] = tmh >>> 16 & 0xff;
+
+  // `clock_seq_hi_and_reserved` (Per 4.2.2 - include variant)
+  b[i++] = clockseq >>> 8 | 0x80;
+
+  // `clock_seq_low`
+  b[i++] = clockseq & 0xff;
+
+  // `node`
+  var node = options.node || _nodeId;
+  for (var n = 0; n < 6; ++n) {
+    b[i + n] = node[n];
+  }
+
+  return buf ? buf : bytesToUuid(b);
+}
+
+module.exports = v1;
+
+
+/***/ }),
+/* 117 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var rng = __webpack_require__(52);
+var bytesToUuid = __webpack_require__(54);
+
+function v4(options, buf, offset) {
+  var i = buf && offset || 0;
+
+  if (typeof(options) == 'string') {
+    buf = options == 'binary' ? new Array(16) : null;
+    options = null;
+  }
+  options = options || {};
+
+  var rnds = options.random || (options.rng || rng)();
+
+  // Per 4.4, set bits for version and `clock_seq_hi_and_reserved`
+  rnds[6] = (rnds[6] & 0x0f) | 0x40;
+  rnds[8] = (rnds[8] & 0x3f) | 0x80;
+
+  // Copy bytes to buffer, if provided
+  if (buf) {
+    for (var ii = 0; ii < 16; ++ii) {
+      buf[i + ii] = rnds[ii];
+    }
+  }
+
+  return buf || bytesToUuid(rnds);
+}
+
+module.exports = v4;
+
+
+/***/ }),
+/* 118 */
+/***/ (function(module, exports) {
+
+module.exports = {
+  package : {
+    name : {
+      type : String,
+      label : 'Name'
+    },
+    overview : {
+      type : String,
+      label : 'Overview (Short Description)',
+      description : 'One sentance summary of package'
+    },
+    description : {
+      type : String,
+      label : 'Description',
+      description : 'Long package description.  Markdown supported.'
+    },
+    keywords : {
+      type : Array,
+      label : 'Keywords',
+      description : 'Faceted keywords for package discovery'
+    }
+  }
+}
+
+/***/ }),
+/* 119 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const {BaseModel} = __webpack_require__(6);
+const SearchService = __webpack_require__(120);
+const SearchStore = __webpack_require__(55);
+
+// NodeJS compatability
+let decode;
+if( typeof decodeURIComponent !== 'undefined' ) {
+  decode = decodeURIComponent
+} else {
+  decode = text => text;
+}
+let encode;
+if( typeof encodeURIComponent !== 'undefined' ) {
+  encode = encodeURIComponent
+} else {
+  encode = text => text;
+}
+
+
+class SearchModel extends BaseModel {
+
+  constructor() {
+    super();
+
+    this.store = SearchStore;
+    this.service = SearchService;
+      
+    this.register('SearchModel');
+  }
+
+  getEmptyQuery() {
+    return {
+      text : '',
+      filters : [],
+      sort : null,
+      limit : 10,
+      offset : 0
+    }
+  }
+
+  /**
+   * @method toUrl
+   * @description convert a query object to a url slug
+   * 
+   * @returns {String} url slug for query
+   */
+  toUrl(query) {
+    return '/search/'+[
+      encode(query.text || ''),
+      encode(query.filters ? JSON.stringify(query.filters) : ''),
+      encode(query.sort || ''),
+      query.limit || '',
+      query.offset || '', 
+    ].join('/')
+  }
+
+  /**
+   * @method fromUrl
+   * @description convert url slug to query
+   * 
+   * @param {String} url  
+   */
+  fromUrl(url) {
+    if( typeof url === 'string' ) {
+      url = url.split('/');
+    }
+
+    let urlParts = url.slice(0);
+    let query = this.getEmptyQuery();
+
+    let i = 0;
+    while( urlParts.length > 0 ) {
+      let part = decode(urlParts.splice(0, 1)[0]);
+      
+      switch(i) {
+        case 0:
+          query.text = part;
+          break;
+        case 1:
+          query.filters = part ? JSON.parse(part) : [];
+          break;
+        case 2:
+          query.sort = part || null;
+          break;
+        case 3:
+          query.limit = part ? parseInt(part) : 10;
+          break;
+        case 4:
+          query.offset = part ? parseInt(part) : 0;
+          break;
+      }
+
+      i++;
+    }
+    
+    return query;
+  }
+
+  getQuery() {
+    if( !this.store.getSearchQuery() ) {
+      this.store.setSearchQuery(this.getEmptyQuery());
+    }
+    return  this.store.getSearchQuery();
+  }
+
+  setOffset(offset) {
+    let query = this.getQuery();
+    query.offset = offset;
+    return query;
+  }
+
+  setLimit(limit) {
+    let query = this.getQuery();
+    query.limit = limit;
+    return query;
+  }
+
+  setText(text) {
+    let query = this.getQuery();
+    query.text = text;
+    return query;
+  }
+
+  appendFilter(key, value) {
+    let query = this.getQuery();
+    if( this._hasFilter(query.filters, key, value) ) return;
+    query.filters.push({[key] : value});
+    return query;
+  }
+
+  removeFilter(key, value) {
+    let query = this.getQuery();
+    let filters = query.filters;
+
+    for( var i = filters.length-1; i >= 0; i-- ) {
+      if( filters[i][key] ) {
+        if( value ) {
+          if( filters[i][key] === value ) {
+            filters.splice(i, 1);
+            return;
+          }
+        } else {
+          filters.splice(i, 1);
+        }
+      }
+    }
+
+    return query;
+  }
+
+  _hasFilter(filters, key, value) {
+    for( var i = 0; i < filters.length; i++ ) {
+      if( filters[i][key] === value ) return true;
+    }
+    return false;
+  }
+
+  search(query) {
+    return this.service.search(query || this.getQuery());
+  }
+}
+
+module.exports = new SearchModel();
+
+/***/ }),
+/* 120 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const {BaseService} = __webpack_require__(6);
+const SearchStore = __webpack_require__(55);
+
+class SearchService extends BaseService {
+
+  constructor() {
+    super();
+    this.store = SearchStore;
+    this.baseUrl = '/api/search'
+    this.currentSearchId = 0;
+  }
+
+  /**
+   * @method search
+   * @description search for packages
+   * 
+   * @param {Object} query mongo query object
+   * @param {Object} options query options
+   */
+  async search(query) {    
+    this.currentSearchId++;
+    let searchId = this.currentSearchId;
+
+    return this.request({
+      url : this.baseUrl,
+      fetchOptions : {
+        method : 'POST',
+        body  : query
+      },
+      json : true,
+      onLoading : request => {
+        if( !this._isCurrentSearch(searchId) ) return;
+        this.store.setSearchLoading(request, query)
+      },
+      onLoad : result => {
+        if( !this._isCurrentSearch(searchId) ) return;
+        this.store.setSearchSuccess(result.body, query)
+      },
+      onError : error => {
+        if( !this._isCurrentSearch(searchId) ) return;
+        this.store.setSearchError(error, query)
+      }
+    })
+  }
+
+  _isCurrentSearch(id) {
+    return (id === this.currentSearchId);
+  }
+}
+
+module.exports = new SearchService();
+
+/***/ }),
+/* 121 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_behaviors_iron_button_state_js__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__paper_ripple_behavior_js__ = __webpack_require__(58);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__iron_behaviors_iron_control_state_js__ = __webpack_require__(12);
+
+
+
+
+
+const PaperButtonBehaviorImpl = {
+  properties: {
+    /**
+     * The z-depth of this element, from 0-5. Setting to 0 will remove the
+     * shadow, and each increasing number greater than 0 will be "deeper"
+     * than the last.
+     *
+     * @attribute elevation
+     * @type number
+     * @default 1
+     */
+    elevation: {
+      type: Number,
+      reflectToAttribute: true,
+      readOnly: true
+    }
+  },
+
+  observers: [
+    '_calculateElevation(focused, disabled, active, pressed, receivedFocusFromKeyboard)',
+    '_computeKeyboardClass(receivedFocusFromKeyboard)'
+  ],
+
+  hostAttributes: {
+    role: 'button',
+    tabindex: '0',
+    animated: true
+  },
+
+  _calculateElevation: function() {
+    var e = 1;
+    if (this.disabled) {
+      e = 0;
+    } else if (this.active || this.pressed) {
+      e = 4;
+    } else if (this.receivedFocusFromKeyboard) {
+      e = 3;
+    }
+    this._setElevation(e);
+  },
+
+  _computeKeyboardClass: function(receivedFocusFromKeyboard) {
+    this.toggleClass('keyboard-focus', receivedFocusFromKeyboard);
+  },
+
+  /**
+   * In addition to `IronButtonState` behavior, when space key goes down,
+   * create a ripple down effect.
+   *
+   * @param {!KeyboardEvent} event .
+   */
+  _spaceKeyDownHandler: function(event) {
+    __WEBPACK_IMPORTED_MODULE_1__iron_behaviors_iron_button_state_js__["b" /* IronButtonStateImpl */]._spaceKeyDownHandler.call(this, event);
+    // Ensure that there is at most one ripple when the space key is held down.
+    if (this.hasRipple() && this.getRipple().ripples.length < 1) {
+      this._ripple.uiDownAction();
+    }
+  },
+
+  /**
+   * In addition to `IronButtonState` behavior, when space key goes up,
+   * create a ripple up effect.
+   *
+   * @param {!KeyboardEvent} event .
+   */
+  _spaceKeyUpHandler: function(event) {
+    __WEBPACK_IMPORTED_MODULE_1__iron_behaviors_iron_button_state_js__["b" /* IronButtonStateImpl */]._spaceKeyUpHandler.call(this, event);
+    if (this.hasRipple()) {
+      this._ripple.uiUpAction();
+    }
+  }
+};
+/* harmony export (immutable) */ __webpack_exports__["b"] = PaperButtonBehaviorImpl;
+
+
+const PaperButtonBehavior = [
+  __WEBPACK_IMPORTED_MODULE_1__iron_behaviors_iron_button_state_js__["a" /* IronButtonState */],
+  __WEBPACK_IMPORTED_MODULE_3__iron_behaviors_iron_control_state_js__["a" /* IronControlState */],
+  __WEBPACK_IMPORTED_MODULE_2__paper_ripple_behavior_js__["a" /* PaperRippleBehavior */],
+  PaperButtonBehaviorImpl
+];
+/* harmony export (immutable) */ __webpack_exports__["a"] = PaperButtonBehavior;
+
+
+
+/***/ }),
+/* 122 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_a11y_keys_behavior_iron_a11y_keys_behavior_js__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
+
+
+
+
+
+var Utility = {
+  distance: function(x1, y1, x2, y2) {
+    var xDelta = (x1 - x2);
+    var yDelta = (y1 - y2);
+
+    return Math.sqrt(xDelta * xDelta + yDelta * yDelta);
+  },
+
+  now: window.performance && window.performance.now ?
+      window.performance.now.bind(window.performance) : Date.now
+};
+
+/**
+ * @param {HTMLElement} element
+ * @constructor
+ */
+function ElementMetrics(element) {
+  this.element = element;
+  this.width = this.boundingRect.width;
+  this.height = this.boundingRect.height;
+
+  this.size = Math.max(this.width, this.height);
+}
+
+ElementMetrics.prototype = {
+  get boundingRect () {
+    return this.element.getBoundingClientRect();
+  },
+
+  furthestCornerDistanceFrom: function(x, y) {
+    var topLeft = Utility.distance(x, y, 0, 0);
+    var topRight = Utility.distance(x, y, this.width, 0);
+    var bottomLeft = Utility.distance(x, y, 0, this.height);
+    var bottomRight = Utility.distance(x, y, this.width, this.height);
+
+    return Math.max(topLeft, topRight, bottomLeft, bottomRight);
+  }
+};
+
+/**
+ * @param {HTMLElement} element
+ * @constructor
+ */
+function Ripple(element) {
+  this.element = element;
+  this.color = window.getComputedStyle(element).color;
+
+  this.wave = document.createElement('div');
+  this.waveContainer = document.createElement('div');
+  this.wave.style.backgroundColor = this.color;
+  this.wave.classList.add('wave');
+  this.waveContainer.classList.add('wave-container');
+  Object(__WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(this.waveContainer).appendChild(this.wave);
+
+  this.resetInteractionState();
+}
+
+Ripple.MAX_RADIUS = 300;
+
+Ripple.prototype = {
+  get recenters() {
+    return this.element.recenters;
+  },
+
+  get center() {
+    return this.element.center;
+  },
+
+  get mouseDownElapsed() {
+    var elapsed;
+
+    if (!this.mouseDownStart) {
+      return 0;
+    }
+
+    elapsed = Utility.now() - this.mouseDownStart;
+
+    if (this.mouseUpStart) {
+      elapsed -= this.mouseUpElapsed;
+    }
+
+    return elapsed;
+  },
+
+  get mouseUpElapsed() {
+    return this.mouseUpStart ?
+      Utility.now () - this.mouseUpStart : 0;
+  },
+
+  get mouseDownElapsedSeconds() {
+    return this.mouseDownElapsed / 1000;
+  },
+
+  get mouseUpElapsedSeconds() {
+    return this.mouseUpElapsed / 1000;
+  },
+
+  get mouseInteractionSeconds() {
+    return this.mouseDownElapsedSeconds + this.mouseUpElapsedSeconds;
+  },
+
+  get initialOpacity() {
+    return this.element.initialOpacity;
+  },
+
+  get opacityDecayVelocity() {
+    return this.element.opacityDecayVelocity;
+  },
+
+  get radius() {
+    var width2 = this.containerMetrics.width * this.containerMetrics.width;
+    var height2 = this.containerMetrics.height * this.containerMetrics.height;
+    var waveRadius = Math.min(
+      Math.sqrt(width2 + height2),
+      Ripple.MAX_RADIUS
+    ) * 1.1 + 5;
+
+    var duration = 1.1 - 0.2 * (waveRadius / Ripple.MAX_RADIUS);
+    var timeNow = this.mouseInteractionSeconds / duration;
+    var size = waveRadius * (1 - Math.pow(80, -timeNow));
+
+    return Math.abs(size);
+  },
+
+  get opacity() {
+    if (!this.mouseUpStart) {
+      return this.initialOpacity;
+    }
+
+    return Math.max(
+      0,
+      this.initialOpacity - this.mouseUpElapsedSeconds * this.opacityDecayVelocity
+    );
+  },
+
+  get outerOpacity() {
+    // Linear increase in background opacity, capped at the opacity
+    // of the wavefront (waveOpacity).
+    var outerOpacity = this.mouseUpElapsedSeconds * 0.3;
+    var waveOpacity = this.opacity;
+
+    return Math.max(
+      0,
+      Math.min(outerOpacity, waveOpacity)
+    );
+  },
+
+  get isOpacityFullyDecayed() {
+    return this.opacity < 0.01 &&
+      this.radius >= Math.min(this.maxRadius, Ripple.MAX_RADIUS);
+  },
+
+  get isRestingAtMaxRadius() {
+    return this.opacity >= this.initialOpacity &&
+      this.radius >= Math.min(this.maxRadius, Ripple.MAX_RADIUS);
+  },
+
+  get isAnimationComplete() {
+    return this.mouseUpStart ?
+      this.isOpacityFullyDecayed : this.isRestingAtMaxRadius;
+  },
+
+  get translationFraction() {
+    return Math.min(
+      1,
+      this.radius / this.containerMetrics.size * 2 / Math.sqrt(2)
+    );
+  },
+
+  get xNow() {
+    if (this.xEnd) {
+      return this.xStart + this.translationFraction * (this.xEnd - this.xStart);
+    }
+
+    return this.xStart;
+  },
+
+  get yNow() {
+    if (this.yEnd) {
+      return this.yStart + this.translationFraction * (this.yEnd - this.yStart);
+    }
+
+    return this.yStart;
+  },
+
+  get isMouseDown() {
+    return this.mouseDownStart && !this.mouseUpStart;
+  },
+
+  resetInteractionState: function() {
+    this.maxRadius = 0;
+    this.mouseDownStart = 0;
+    this.mouseUpStart = 0;
+
+    this.xStart = 0;
+    this.yStart = 0;
+    this.xEnd = 0;
+    this.yEnd = 0;
+    this.slideDistance = 0;
+
+    this.containerMetrics = new ElementMetrics(this.element);
+  },
+
+  draw: function() {
+    var scale;
+    var translateString;
+    var dx;
+    var dy;
+
+    this.wave.style.opacity = this.opacity;
+
+    scale = this.radius / (this.containerMetrics.size / 2);
+    dx = this.xNow - (this.containerMetrics.width / 2);
+    dy = this.yNow - (this.containerMetrics.height / 2);
+
+
+    // 2d transform for safari because of border-radius and overflow:hidden clipping bug.
+    // https://bugs.webkit.org/show_bug.cgi?id=98538
+    this.waveContainer.style.webkitTransform = 'translate(' + dx + 'px, ' + dy + 'px)';
+    this.waveContainer.style.transform = 'translate3d(' + dx + 'px, ' + dy + 'px, 0)';
+    this.wave.style.webkitTransform = 'scale(' + scale + ',' + scale + ')';
+    this.wave.style.transform = 'scale3d(' + scale + ',' + scale + ',1)';
+  },
+
+  /** @param {Event=} event */
+  downAction: function(event) {
+    var xCenter = this.containerMetrics.width / 2;
+    var yCenter = this.containerMetrics.height / 2;
+
+    this.resetInteractionState();
+    this.mouseDownStart = Utility.now();
+
+    if (this.center) {
+      this.xStart = xCenter;
+      this.yStart = yCenter;
+      this.slideDistance = Utility.distance(
+        this.xStart, this.yStart, this.xEnd, this.yEnd
+      );
+    } else {
+      this.xStart = event ?
+          event.detail.x - this.containerMetrics.boundingRect.left :
+          this.containerMetrics.width / 2;
+      this.yStart = event ?
+          event.detail.y - this.containerMetrics.boundingRect.top :
+          this.containerMetrics.height / 2;
+    }
+
+    if (this.recenters) {
+      this.xEnd = xCenter;
+      this.yEnd = yCenter;
+      this.slideDistance = Utility.distance(
+        this.xStart, this.yStart, this.xEnd, this.yEnd
+      );
+    }
+
+    this.maxRadius = this.containerMetrics.furthestCornerDistanceFrom(
+      this.xStart,
+      this.yStart
+    );
+
+    this.waveContainer.style.top =
+      (this.containerMetrics.height - this.containerMetrics.size) / 2 + 'px';
+    this.waveContainer.style.left =
+      (this.containerMetrics.width - this.containerMetrics.size) / 2 + 'px';
+
+    this.waveContainer.style.width = this.containerMetrics.size + 'px';
+    this.waveContainer.style.height = this.containerMetrics.size + 'px';
+  },
+
+  /** @param {Event=} event */
+  upAction: function(event) {
+    if (!this.isMouseDown) {
+      return;
+    }
+
+    this.mouseUpStart = Utility.now();
+  },
+
+  remove: function() {
+    Object(__WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(this.waveContainer.parentNode).removeChild(
+      this.waveContainer
+    );
+  }
+};
+
+Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_fn_js__["a" /* Polymer */])({
+  _template: `
+    <style>
+      :host {
+        display: block;
+        position: absolute;
+        border-radius: inherit;
+        overflow: hidden;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+
+        /* See PolymerElements/paper-behaviors/issues/34. On non-Chrome browsers,
+         * creating a node (with a position:absolute) in the middle of an event
+         * handler "interrupts" that event handler (which happens when the
+         * ripple is created on demand) */
+        pointer-events: none;
+      }
+
+      :host([animating]) {
+        /* This resolves a rendering issue in Chrome (as of 40) where the
+           ripple is not properly clipped by its parent (which may have
+           rounded corners). See: http://jsbin.com/temexa/4
+
+           Note: We only apply this style conditionally. Otherwise, the browser
+           will create a new compositing layer for every ripple element on the
+           page, and that would be bad. */
+        -webkit-transform: translate(0, 0);
+        transform: translate3d(0, 0, 0);
+      }
+
+      #background,
+      #waves,
+      .wave-container,
+      .wave {
+        pointer-events: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      #background,
+      .wave {
+        opacity: 0;
+      }
+
+      #waves,
+      .wave {
+        overflow: hidden;
+      }
+
+      .wave-container,
+      .wave {
+        border-radius: 50%;
+      }
+
+      :host(.circle) #background,
+      :host(.circle) #waves {
+        border-radius: 50%;
+      }
+
+      :host(.circle) .wave-container {
+        overflow: hidden;
+      }
+    </style>
+
+    <div id="background"></div>
+    <div id="waves"></div>
+`,
+
+  is: 'paper-ripple',
+
+  behaviors: [
+    __WEBPACK_IMPORTED_MODULE_1__iron_a11y_keys_behavior_iron_a11y_keys_behavior_js__["a" /* IronA11yKeysBehavior */]
+  ],
+
+  properties: {
+    /**
+     * The initial opacity set on the wave.
+     *
+     * @attribute initialOpacity
+     * @type number
+     * @default 0.25
+     */
+    initialOpacity: {
+      type: Number,
+      value: 0.25
+    },
+
+    /**
+     * How fast (opacity per second) the wave fades out.
+     *
+     * @attribute opacityDecayVelocity
+     * @type number
+     * @default 0.8
+     */
+    opacityDecayVelocity: {
+      type: Number,
+      value: 0.8
+    },
+
+    /**
+     * If true, ripples will exhibit a gravitational pull towards
+     * the center of their container as they fade away.
+     *
+     * @attribute recenters
+     * @type boolean
+     * @default false
+     */
+    recenters: {
+      type: Boolean,
+      value: false
+    },
+
+    /**
+     * If true, ripples will center inside its container
+     *
+     * @attribute recenters
+     * @type boolean
+     * @default false
+     */
+    center: {
+      type: Boolean,
+      value: false
+    },
+
+    /**
+     * A list of the visual ripples.
+     *
+     * @attribute ripples
+     * @type Array
+     * @default []
+     */
+    ripples: {
+      type: Array,
+      value: function() {
+        return [];
+      }
+    },
+
+    /**
+     * True when there are visible ripples animating within the
+     * element.
+     */
+    animating: {
+      type: Boolean,
+      readOnly: true,
+      reflectToAttribute: true,
+      value: false
+    },
+
+    /**
+     * If true, the ripple will remain in the "down" state until `holdDown`
+     * is set to false again.
+     */
+    holdDown: {
+      type: Boolean,
+      value: false,
+      observer: '_holdDownChanged'
+    },
+
+    /**
+     * If true, the ripple will not generate a ripple effect
+     * via pointer interaction.
+     * Calling ripple's imperative api like `simulatedRipple` will
+     * still generate the ripple effect.
+     */
+    noink: {
+      type: Boolean,
+      value: false
+    },
+
+    _animating: {
+      type: Boolean
+    },
+
+    _boundAnimate: {
+      type: Function,
+      value: function() {
+        return this.animate.bind(this);
+      }
+    }
+  },
+
+  get target () {
+    return this.keyEventTarget;
+  },
+
+  keyBindings: {
+    'enter:keydown': '_onEnterKeydown',
+    'space:keydown': '_onSpaceKeydown',
+    'space:keyup': '_onSpaceKeyup'
+  },
+
+  attached: function() {
+    // Set up a11yKeysBehavior to listen to key events on the target,
+    // so that space and enter activate the ripple even if the target doesn't
+    // handle key events. The key handlers deal with `noink` themselves.
+    if (this.parentNode.nodeType == 11) { // DOCUMENT_FRAGMENT_NODE
+      this.keyEventTarget = Object(__WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(this).getOwnerRoot().host;
+    } else {
+      this.keyEventTarget = this.parentNode;
+    }
+    var keyEventTarget = /** @type {!EventTarget} */ (this.keyEventTarget);
+    this.listen(keyEventTarget, 'up', 'uiUpAction');
+    this.listen(keyEventTarget, 'down', 'uiDownAction');
+  },
+
+  detached: function() {
+    this.unlisten(this.keyEventTarget, 'up', 'uiUpAction');
+    this.unlisten(this.keyEventTarget, 'down', 'uiDownAction');
+    this.keyEventTarget = null;
+  },
+
+  get shouldKeepAnimating () {
+    for (var index = 0; index < this.ripples.length; ++index) {
+      if (!this.ripples[index].isAnimationComplete) {
+        return true;
+      }
+    }
+
+    return false;
+  },
+
+  simulatedRipple: function() {
+    this.downAction(null);
+
+    // Please see polymer/polymer#1305
+    this.async(function() {
+      this.upAction();
+    }, 1);
+  },
+
+  /**
+   * Provokes a ripple down effect via a UI event,
+   * respecting the `noink` property.
+   * @param {Event=} event
+   */
+  uiDownAction: function(event) {
+    if (!this.noink) {
+      this.downAction(event);
+    }
+  },
+
+  /**
+   * Provokes a ripple down effect via a UI event,
+   * *not* respecting the `noink` property.
+   * @param {Event=} event
+   */
+  downAction: function(event) {
+    if (this.holdDown && this.ripples.length > 0) {
+      return;
+    }
+
+    var ripple = this.addRipple();
+
+    ripple.downAction(event);
+
+    if (!this._animating) {
+      this._animating = true;
+      this.animate();
+    }
+  },
+
+  /**
+   * Provokes a ripple up effect via a UI event,
+   * respecting the `noink` property.
+   * @param {Event=} event
+   */
+  uiUpAction: function(event) {
+    if (!this.noink) {
+      this.upAction(event);
+    }
+  },
+
+  /**
+   * Provokes a ripple up effect via a UI event,
+   * *not* respecting the `noink` property.
+   * @param {Event=} event
+   */
+  upAction: function(event) {
+    if (this.holdDown) {
+      return;
+    }
+
+    this.ripples.forEach(function(ripple) {
+      ripple.upAction(event);
+    });
+
+    this._animating = true;
+    this.animate();
+  },
+
+  onAnimationComplete: function() {
+    this._animating = false;
+    this.$.background.style.backgroundColor = null;
+    this.fire('transitionend');
+  },
+
+  addRipple: function() {
+    var ripple = new Ripple(this);
+
+    Object(__WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(this.$.waves).appendChild(ripple.waveContainer);
+    this.$.background.style.backgroundColor = ripple.color;
+    this.ripples.push(ripple);
+
+    this._setAnimating(true);
+
+    return ripple;
+  },
+
+  removeRipple: function(ripple) {
+    var rippleIndex = this.ripples.indexOf(ripple);
+
+    if (rippleIndex < 0) {
+      return;
+    }
+
+    this.ripples.splice(rippleIndex, 1);
+
+    ripple.remove();
+
+    if (!this.ripples.length) {
+      this._setAnimating(false);
+    }
+  },
+
+  /**
+   * This conflicts with Element#antimate().
+   * https://developer.mozilla.org/en-US/docs/Web/API/Element/animate
+   * @suppress {checkTypes}
+   */
+  animate: function() {
+    if (!this._animating) {
+      return;
+    }
+    var index;
+    var ripple;
+
+    for (index = 0; index < this.ripples.length; ++index) {
+      ripple = this.ripples[index];
+
+      ripple.draw();
+
+      this.$.background.style.opacity = ripple.outerOpacity;
+
+      if (ripple.isOpacityFullyDecayed && !ripple.isRestingAtMaxRadius) {
+        this.removeRipple(ripple);
+      }
+    }
+
+    if (!this.shouldKeepAnimating && this.ripples.length === 0) {
+      this.onAnimationComplete();
+    } else {
+      window.requestAnimationFrame(this._boundAnimate);
+    }
+  },
+
+  _onEnterKeydown: function() {
+    this.uiDownAction();
+    this.async(this.uiUpAction, 1);
+  },
+
+  _onSpaceKeydown: function() {
+    this.uiDownAction();
+  },
+
+  _onSpaceKeyup: function() {
+    this.uiUpAction();
+  },
+
+  // note: holdDown does not respect noink since it can be a focus based
+  // effect.
+  _holdDownChanged: function(newVal, oldVal) {
+    if (oldVal === undefined) {
+      return;
+    }
+    if (newVal) {
+      this.downAction();
+    } else {
+      this.upAction();
+    }
+  }
+
+  /**
+  Fired when the animation finishes.
+  This is useful if you want to wait until
+  the ripple animation finishes to perform some action.
+
+  @event transitionend
+  @param {{node: Object}} detail Contains the animated node.
+  */
+});
+
+
+/***/ }),
+/* 123 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__shadow_js__ = __webpack_require__(21);
+
+
+const $_documentContainer = document.createElement('div');
+$_documentContainer.setAttribute('style', 'display: none;');
+
+$_documentContainer.innerHTML = `<dom-module id="paper-material-styles">
+  <template>
+    <style>
+      :host, html {
+        --paper-material: {
+          display: block;
+          position: relative;
+        };
+        --paper-material-elevation-1: {
+          @apply --shadow-elevation-2dp;
+        };
+        --paper-material-elevation-2: {
+          @apply --shadow-elevation-4dp;
+        };
+        --paper-material-elevation-3: {
+          @apply --shadow-elevation-6dp;
+        };
+        --paper-material-elevation-4: {
+          @apply --shadow-elevation-8dp;
+        };
+        --paper-material-elevation-5: {
+          @apply --shadow-elevation-16dp;
+        };
+      }
+      :host(.paper-material), .paper-material {
+        @apply --paper-material;
+      }
+      :host(.paper-material[elevation="1"]), .paper-material[elevation="1"] {
+        @apply --paper-material-elevation-1;
+      }
+      :host(.paper-material[elevation="2"]), .paper-material[elevation="2"] {
+        @apply --paper-material-elevation-2;
+      }
+      :host(.paper-material[elevation="3"]), .paper-material[elevation="3"] {
+        @apply --paper-material-elevation-3;
+      }
+      :host(.paper-material[elevation="4"]), .paper-material[elevation="4"] {
+        @apply --paper-material-elevation-4;
+      }
+      :host(.paper-material[elevation="5"]), .paper-material[elevation="5"] {
+        @apply --paper-material-elevation-5;
+      }
+    </style>
+  </template>
+</dom-module>`;
+
+document.head.appendChild($_documentContainer);
+
+
+/***/ }),
+/* 124 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_flex_layout_iron_flex_layout_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_scroll_effects_app_scroll_effects_behavior_js__ = __webpack_require__(125);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_layout_behavior_app_layout_behavior_js__ = __webpack_require__(128);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
+
+
+
+
+
+
+Object(__WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__["a" /* Polymer */])({
+  _template: `
+    <style>
+      :host {
+        position: relative;
+        display: block;
+        transition-timing-function: linear;
+        transition-property: -webkit-transform;
+        transition-property: transform;
+      }
+
+      :host::before {
+        position: absolute;
+        right: 0px;
+        bottom: -5px;
+        left: 0px;
+        width: 100%;
+        height: 5px;
+        content: "";
+        transition: opacity 0.4s;
+        pointer-events: none;
+        opacity: 0;
+        box-shadow: inset 0px 5px 6px -3px rgba(0, 0, 0, 0.4);
+        will-change: opacity;
+        @apply --app-header-shadow;
+      }
+
+      :host([shadow])::before {
+        opacity: 1;
+      }
+
+      #background {
+        @apply --layout-fit;
+        overflow: hidden;
+      }
+
+      #backgroundFrontLayer,
+      #backgroundRearLayer {
+        @apply --layout-fit;
+        height: 100%;
+        pointer-events: none;
+        background-size: cover;
+      }
+
+      #backgroundFrontLayer {
+        @apply --app-header-background-front-layer;
+      }
+
+      #backgroundRearLayer {
+        opacity: 0;
+        @apply --app-header-background-rear-layer;
+      }
+
+      #contentContainer {
+        position: relative;
+        width: 100%;
+        height: 100%;
+      }
+
+      :host([disabled]),
+      :host([disabled])::after,
+      :host([disabled]) #backgroundFrontLayer,
+      :host([disabled]) #backgroundRearLayer,
+      /* Silent scrolling should not run CSS transitions */
+      :host([silent-scroll]),
+      :host([silent-scroll])::after,
+      :host([silent-scroll]) #backgroundFrontLayer,
+      :host([silent-scroll]) #backgroundRearLayer {
+        transition: none !important;
+      }
+
+      :host([disabled]) ::slotted(app-toolbar:first-of-type),
+      :host([disabled]) ::slotted([sticky]),
+      /* Silent scrolling should not run CSS transitions */
+      :host([silent-scroll]) ::slotted(app-toolbar:first-of-type),
+      :host([silent-scroll]) ::slotted([sticky]) {
+        transition: none !important;
+      }
+
+    </style>
+    <div id="contentContainer">
+      <slot id="slot"></slot>
+    </div>
+`,
+
+  is: 'app-header',
+
+  behaviors: [
+    __WEBPACK_IMPORTED_MODULE_2__app_scroll_effects_app_scroll_effects_behavior_js__["a" /* AppScrollEffectsBehavior */],
+    __WEBPACK_IMPORTED_MODULE_3__app_layout_behavior_app_layout_behavior_js__["a" /* AppLayoutBehavior */]
+  ],
+
+  properties: {
+    /**
+     * If true, the header will automatically collapse when scrolling down.
+     * That is, the `sticky` element remains visible when the header is fully condensed
+     * whereas the rest of the elements will collapse below `sticky` element.
+     *
+     * By default, the `sticky` element is the first toolbar in the light DOM:
+     *
+     *```html
+     * <app-header condenses>
+     *   <app-toolbar>This toolbar remains on top</app-toolbar>
+     *   <app-toolbar></app-toolbar>
+     *   <app-toolbar></app-toolbar>
+     * </app-header>
+     * ```
+     *
+     * Additionally, you can specify which toolbar or element remains visible in condensed mode
+     * by adding the `sticky` attribute to that element. For example: if we want the last
+     * toolbar to remain visible, we can add the `sticky` attribute to it.
+     *
+     *```html
+     * <app-header condenses>
+     *   <app-toolbar></app-toolbar>
+     *   <app-toolbar></app-toolbar>
+     *   <app-toolbar sticky>This toolbar remains on top</app-toolbar>
+     * </app-header>
+     * ```
+     *
+     * Note the `sticky` element must be a direct child of `app-header`.
+     */
+    condenses: {
+      type: Boolean,
+      value: false
+    },
+
+    /**
+     * Mantains the header fixed at the top so it never moves away.
+     */
+    fixed: {
+      type: Boolean,
+      value: false
+    },
+
+    /**
+     * Slides back the header when scrolling back up.
+     */
+    reveals: {
+      type: Boolean,
+      value: false
+    },
+
+    /**
+     * Displays a shadow below the header.
+     */
+    shadow: {
+      type: Boolean,
+      reflectToAttribute: true,
+      value: false
+    }
+  },
+
+  observers: [
+    '_configChanged(isAttached, condenses, fixed)'
+  ],
+
+  /**
+   * A cached offsetHeight of the current element.
+   *
+   * @type {number}
+   */
+  _height: 0,
+
+  /**
+   * The distance in pixels the header will be translated to when scrolling.
+   *
+   * @type {number}
+   */
+  _dHeight: 0,
+
+  /**
+   * The offsetTop of `_stickyEl`
+   *
+   * @type {number}
+   */
+  _stickyElTop: 0,
+
+  /**
+   * A reference to the element that remains visible when the header condenses.
+   *
+   * @type {HTMLElement}
+   */
+  _stickyElRef: null,
+
+  /**
+   * The header's top value used for the `transformY`
+   *
+   * @type {number}
+   */
+  _top: 0,
+
+  /**
+   * The current scroll progress.
+   *
+   * @type {number}
+   */
+  _progress: 0,
+
+  _wasScrollingDown: false,
+  _initScrollTop: 0,
+  _initTimestamp: 0,
+  _lastTimestamp: 0,
+  _lastScrollTop: 0,
+
+  /**
+   * The distance the header is allowed to move away.
+   *
+   * @type {number}
+   */
+  get _maxHeaderTop() {
+    return this.fixed ? this._dHeight : this._height + 5;
+  },
+
+  /**
+   * Returns a reference to the sticky element.
+   *
+   * @return {HTMLElement}?
+   */
+  get _stickyEl() {
+    if (this._stickyElRef) {
+      return this._stickyElRef;
+    }
+    var nodes = Object(__WEBPACK_IMPORTED_MODULE_5__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(this.$.slot).getDistributedNodes();
+    // Get the element with the sticky attribute on it or the first element in the light DOM.
+    for (var i = 0, node; node = nodes[i]; i++) {
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        if (node.hasAttribute('sticky')) {
+          this._stickyElRef = node;
+          break;
+        } else if (!this._stickyElRef) {
+          this._stickyElRef = node;
+        }
+      }
+    }
+    return this._stickyElRef;
+  },
+
+  _configChanged: function() {
+    this.resetLayout();
+    this._notifyLayoutChanged();
+  },
+
+  _updateLayoutStates: function() {
+    if (this.offsetWidth === 0 && this.offsetHeight === 0) {
+      return;
+    }
+    var scrollTop = this._clampedScrollTop;
+    var firstSetup = this._height === 0 || scrollTop === 0;
+    var currentDisabled = this.disabled;
+    this._height = this.offsetHeight;
+    this._stickyElRef = null;
+    this.disabled = true;
+    // prepare for measurement
+    if  (!firstSetup) {
+      this._updateScrollState(0, true);
+    }
+    if (this._mayMove()) {
+      this._dHeight = this._stickyEl ? this._height - this._stickyEl.offsetHeight : 0;
+    } else {
+      this._dHeight = 0;
+    }
+    this._stickyElTop = this._stickyEl ? this._stickyEl.offsetTop : 0;
+    this._setUpEffect();
+    if (firstSetup) {
+      this._updateScrollState(scrollTop, true);
+    } else {
+      this._updateScrollState(this._lastScrollTop, true);
+      this._layoutIfDirty();
+    }
+    // restore no transition
+    this.disabled = currentDisabled;
+  },
+
+  /**
+   * Updates the scroll state.
+   *
+   * @param {number} scrollTop
+   * @param {boolean=} forceUpdate (default: false)
+   */
+  _updateScrollState: function(scrollTop, forceUpdate) {
+    if (this._height === 0) {
+      return;
+    }
+    var progress = 0;
+    var top = 0;
+    var lastTop = this._top;
+    var lastScrollTop = this._lastScrollTop;
+    var maxHeaderTop = this._maxHeaderTop;
+    var dScrollTop = scrollTop - this._lastScrollTop;
+    var absDScrollTop = Math.abs(dScrollTop);
+    var isScrollingDown = scrollTop > this._lastScrollTop;
+    var now = performance.now();
+
+    if (this._mayMove()) {
+      top = this._clamp(this.reveals ? lastTop + dScrollTop : scrollTop, 0, maxHeaderTop);
+    }
+    if (scrollTop >= this._dHeight) {
+      top = this.condenses && !this.fixed ? Math.max(this._dHeight, top) : top;
+      this.style.transitionDuration = '0ms';
+    }
+    if (this.reveals && !this.disabled && absDScrollTop < 100) {
+      // set the initial scroll position
+      if (now - this._initTimestamp > 300 || this._wasScrollingDown !== isScrollingDown) {
+        this._initScrollTop = scrollTop;
+        this._initTimestamp = now;
+      }
+      if (scrollTop >= maxHeaderTop) {
+        // check if the header is allowed to snap
+        if (Math.abs(this._initScrollTop - scrollTop) > 30 || absDScrollTop > 10) {
+          if (isScrollingDown && scrollTop >= maxHeaderTop) {
+            top = maxHeaderTop;
+          } else if (!isScrollingDown && scrollTop >= this._dHeight) {
+            top = this.condenses && !this.fixed ? this._dHeight : 0;
+          }
+          var scrollVelocity = dScrollTop / (now - this._lastTimestamp);
+          this.style.transitionDuration = this._clamp((top - lastTop) / scrollVelocity, 0, 300) + 'ms';
+        } else {
+          top = this._top;
+        }
+      }
+    }
+    if (this._dHeight === 0) {
+      progress = scrollTop > 0 ? 1 : 0;
+    } else {
+      progress = top / this._dHeight;
+    }
+    if (!forceUpdate) {
+      this._lastScrollTop = scrollTop;
+      this._top = top;
+      this._wasScrollingDown = isScrollingDown;
+      this._lastTimestamp = now;
+    }
+    if (forceUpdate || progress !== this._progress || lastTop !== top || scrollTop === 0) {
+      this._progress = progress;
+      this._runEffects(progress, top);
+      this._transformHeader(top);
+    }
+  },
+
+  /**
+   * Returns true if the current header is allowed to move as the user scrolls.
+   *
+   * @return {boolean}
+   */
+  _mayMove: function() {
+    return this.condenses || !this.fixed;
+  },
+
+  /**
+   * Returns true if the current header will condense based on the size of the header
+   * and the `consenses` property.
+   *
+   * @return {boolean}
+   */
+  willCondense: function() {
+    return this._dHeight > 0 && this.condenses;
+  },
+
+  /**
+   * Returns true if the current element is on the screen.
+   * That is, visible in the current viewport.
+   *
+   * @method isOnScreen
+   * @return {boolean}
+   */
+  isOnScreen: function() {
+    return this._height !== 0 && this._top < this._height;
+  },
+
+  /**
+   * Returns true if there's content below the current element.
+   *
+   * @method isContentBelow
+   * @return {boolean}
+   */
+  isContentBelow: function() {
+    return this._top === 0 ? this._clampedScrollTop > 0 :
+        this._clampedScrollTop - this._maxHeaderTop >= 0;
+  },
+
+  /**
+   * Transforms the header.
+   *
+   * @param {number} y
+   */
+  _transformHeader: function(y) {
+    this.translate3d(0, (-y) + 'px', 0);
+    if (this._stickyEl) {
+      this.translate3d(0, this.condenses && y >= this._stickyElTop ?
+          (Math.min(y, this._dHeight) - this._stickyElTop) + 'px' : 0,  0, this._stickyEl);
+    }
+  },
+
+  _clamp: function(v, min, max) {
+    return Math.min(max, Math.max(min, v));
+  },
+
+  _ensureBgContainers: function() {
+    if (!this._bgContainer) {
+      this._bgContainer = document.createElement('div');
+      this._bgContainer.id = 'background';
+      this._bgRear = document.createElement('div');
+      this._bgRear.id = 'backgroundRearLayer';
+      this._bgContainer.appendChild(this._bgRear);
+      this._bgFront = document.createElement('div');
+      this._bgFront.id = 'backgroundFrontLayer';
+      this._bgContainer.appendChild(this._bgFront);
+      Object(__WEBPACK_IMPORTED_MODULE_5__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(this.root).insertBefore(this._bgContainer, this.$.contentContainer);
+    }
+  },
+
+  _getDOMRef: function(id) {
+    switch (id) {
+      case 'backgroundFrontLayer':
+        this._ensureBgContainers();
+        return this._bgFront;
+      case 'backgroundRearLayer':
+        this._ensureBgContainers();
+        return this._bgRear;
+      case 'background':
+        this._ensureBgContainers();
+        return this._bgContainer;
+      case 'mainTitle':
+        return Object(__WEBPACK_IMPORTED_MODULE_5__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(this).querySelector('[main-title]');
+      case 'condensedTitle':
+        return Object(__WEBPACK_IMPORTED_MODULE_5__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(this).querySelector('[condensed-title]');
+    }
+    return null;
+  },
+
+  /**
+   * Returns an object containing the progress value of the scroll effects
+   * and the top position of the header.
+   *
+   * @method getScrollState
+   * @return {Object}
+   */
+  getScrollState: function() {
+    return { progress: this._progress, top: this._top };
+  }
+});
+
+
+/***/ }),
+/* 125 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_scroll_target_behavior_iron_scroll_target_behavior_js__ = __webpack_require__(126);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__helpers_helpers_js__ = __webpack_require__(127);
+
+
+
+
+const AppScrollEffectsBehavior = [
+  __WEBPACK_IMPORTED_MODULE_1__iron_scroll_target_behavior_iron_scroll_target_behavior_js__["a" /* IronScrollTargetBehavior */],
+ {
+
+  properties: {
+
+    /**
+     * A space-separated list of the effects names that will be triggered when the user scrolls.
+     * e.g. `waterfall parallax-background` installs the `waterfall` and `parallax-background`.
+     */
+    effects: {
+      type: String
+    },
+
+    /**
+     * An object that configurates the effects installed via the `effects` property. e.g.
+     * ```js
+     *  element.effectsConfig = {
+     *   "blend-background": {
+     *     "startsAt": 0.5
+     *   }
+     * };
+     * ```
+     * Every effect has at least two config properties: `startsAt` and `endsAt`.
+     * These properties indicate when the event should start and end respectively
+     * and relative to the overall element progress. So for example, if `blend-background`
+     * starts at `0.5`, the effect will only start once the current element reaches 0.5
+     * of its progress. In this context, the progress is a value in the range of `[0, 1]`
+     * that indicates where this element is on the screen relative to the viewport.
+     */
+    effectsConfig: {
+      type: Object,
+      value: function() {
+        return {};
+      }
+    },
+
+    /**
+     * Disables CSS transitions and scroll effects on the element.
+     */
+    disabled: {
+      type: Boolean,
+      reflectToAttribute: true,
+      value: false
+    },
+
+    /**
+     * Allows to set a `scrollTop` threshold. When greater than 0, `thresholdTriggered`
+     * is true only when the scroll target's `scrollTop` has reached this value.
+     *
+     * For example, if `threshold = 100`, `thresholdTriggered` is true when the `scrollTop`
+     * is at least `100`.
+     */
+    threshold: {
+      type: Number,
+      value: 0
+    },
+
+    /**
+     * True if the `scrollTop` threshold (set in `scrollTopThreshold`) has
+     * been reached.
+     */
+    thresholdTriggered: {
+      type: Boolean,
+      notify: true,
+      readOnly: true,
+      reflectToAttribute: true
+    }
+  },
+
+  observers: [
+    '_effectsChanged(effects, effectsConfig, isAttached)'
+  ],
+
+  /**
+   * Updates the scroll state. This method should be overridden
+   * by the consumer of this behavior.
+   *
+   * @method _updateScrollState
+   */
+  _updateScrollState: function() {},
+
+  /**
+   * Returns true if the current element is on the screen.
+   * That is, visible in the current viewport. This method should be
+   * overridden by the consumer of this behavior.
+   *
+   * @method isOnScreen
+   * @return {boolean}
+   */
+  isOnScreen: function() {
+    return false;
+  },
+
+  /**
+   * Returns true if there's content below the current element. This method
+   * should be overridden by the consumer of this behavior.
+   *
+   * @method isContentBelow
+   * @return {boolean}
+   */
+  isContentBelow: function() {
+    return false;
+  },
+
+  /**
+   * List of effects handlers that will take place during scroll.
+   *
+   * @type {Array<Function>}
+   */
+  _effectsRunFn: null,
+
+  /**
+   * List of the effects definitions installed via the `effects` property.
+   *
+   * @type {Array<Object>}
+   */
+  _effects: null,
+
+  /**
+   * The clamped value of `_scrollTop`.
+   * @type number
+   */
+  get _clampedScrollTop() {
+    return Math.max(0, this._scrollTop);
+  },
+
+  detached: function() {
+    this._tearDownEffects();
+  },
+
+  /**
+   * Creates an effect object from an effect's name that can be used to run
+   * effects programmatically.
+   *
+   * @method createEffect
+   * @param {string} effectName The effect's name registered via `Polymer.AppLayout.registerEffect`.
+   * @param {Object=} effectConfig The effect config object. (Optional)
+   * @return {Object} An effect object with the following functions:
+   *
+   *  * `effect.setUp()`, Sets up the requirements for the effect.
+   *       This function is called automatically before the `effect` function returns.
+   *  * `effect.run(progress, y)`, Runs the effect given a `progress`.
+   *  * `effect.tearDown()`, Cleans up any DOM nodes or element references used by the effect.
+   *
+   * Example:
+   * ```js
+   * var parallax = element.createEffect('parallax-background');
+   * // runs the effect
+   * parallax.run(0.5, 0);
+   * ```
+   */
+  createEffect: function(effectName, effectConfig) {
+    var effectDef = __WEBPACK_IMPORTED_MODULE_2__helpers_helpers_js__["a" /* _scrollEffects */][effectName];
+    if (!effectDef) {
+      throw new ReferenceError(this._getUndefinedMsg(effectName));
+    }
+    var prop = this._boundEffect(effectDef, effectConfig || {});
+    prop.setUp();
+    return prop;
+  },
+
+  /**
+   * Called when `effects` or `effectsConfig` changes.
+   */
+  _effectsChanged: function(effects, effectsConfig, isAttached) {
+    this._tearDownEffects();
+
+    if (!effects || !isAttached) {
+      return;
+    }
+    effects.split(' ').forEach(function(effectName) {
+      var effectDef;
+      if (effectName !== '') {
+        if ((effectDef = __WEBPACK_IMPORTED_MODULE_2__helpers_helpers_js__["a" /* _scrollEffects */][effectName])) {
+          this._effects.push(this._boundEffect(effectDef, effectsConfig[effectName]));
+        } else {
+          console.warn(this._getUndefinedMsg(effectName));
+        }
+      }
+    }, this);
+
+    this._setUpEffect();
+  },
+
+  /**
+   * Forces layout
+   */
+  _layoutIfDirty: function() {
+    return this.offsetWidth;
+  },
+
+  /**
+   * Returns an effect object bound to the current context.
+   *
+   * @param {Object} effectDef
+   * @param {Object=} effectsConfig The effect config object if the effect accepts config values. (Optional)
+   */
+  _boundEffect: function(effectDef, effectsConfig) {
+    effectsConfig = effectsConfig || {};
+    var startsAt = parseFloat(effectsConfig.startsAt || 0);
+    var endsAt = parseFloat(effectsConfig.endsAt || 1);
+    var deltaS = endsAt - startsAt;
+    var noop = function() {};
+    // fast path if possible
+    var runFn = (startsAt === 0 && endsAt === 1) ? effectDef.run :
+      function(progress, y) {
+        effectDef.run.call(this,
+            Math.max(0, (progress - startsAt) / deltaS), y);
+      };
+    return {
+      setUp: effectDef.setUp ? effectDef.setUp.bind(this, effectsConfig) : noop,
+      run: effectDef.run ? runFn.bind(this) : noop,
+      tearDown: effectDef.tearDown ? effectDef.tearDown.bind(this) : noop
+    };
+  },
+
+  /**
+   * Sets up the effects.
+   */
+  _setUpEffect: function() {
+    if (this.isAttached && this._effects) {
+      this._effectsRunFn = [];
+      this._effects.forEach(function(effectDef) {
+        // install the effect only if no error was reported
+        if (effectDef.setUp() !== false) {
+          this._effectsRunFn.push(effectDef.run);
+        }
+      }, this);
+    }
+  },
+
+  /**
+   * Tears down the effects.
+   */
+  _tearDownEffects: function() {
+    if (this._effects) {
+      this._effects.forEach(function(effectDef) {
+        effectDef.tearDown();
+      });
+    }
+    this._effectsRunFn = [];
+    this._effects = [];
+  },
+
+  /**
+   * Runs the effects.
+   *
+   * @param {number} p The progress
+   * @param {number} y The top position of the current element relative to the viewport.
+   */
+  _runEffects: function(p, y) {
+    if (this._effectsRunFn) {
+      this._effectsRunFn.forEach(function(run) {
+        run(p, y);
+      });
+    }
+  },
+
+  /**
+   * Overrides the `_scrollHandler`.
+   */
+  _scrollHandler: function() {
+    if (!this.disabled) {
+      var scrollTop = this._clampedScrollTop;
+      this._updateScrollState(scrollTop);
+      if (this.threshold > 0) {
+        this._setThresholdTriggered(scrollTop >= this.threshold);
+      }
+    }
+  },
+
+  /**
+   * Override this method to return a reference to a node in the local DOM.
+   * The node is consumed by a scroll effect.
+   *
+   * @param {string} id The id for the node.
+   */
+  _getDOMRef: function(id) {
+    console.warn('_getDOMRef', '`'+ id +'` is undefined');
+  },
+
+  _getUndefinedMsg: function(effectName) {
+    return 'Scroll effect `' + effectName + '` is undefined. ' +
+        'Did you forget to import app-layout/app-scroll-effects/effects/' + effectName + '.html ?';
+  }
+
+}];
+/* harmony export (immutable) */ __webpack_exports__["a"] = AppScrollEffectsBehavior;
+
+
+
+/***/ }),
+/* 126 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
+
+
+
+const IronScrollTargetBehavior = {
+
+  properties: {
+
+    /**
+     * Specifies the element that will handle the scroll event
+     * on the behalf of the current element. This is typically a reference to an element,
+     * but there are a few more posibilities:
+     *
+     * ### Elements id
+     *
+     *```html
+     * <div id="scrollable-element" style="overflow: auto;">
+     *  <x-element scroll-target="scrollable-element">
+     *    <!-- Content-->
+     *  </x-element>
+     * </div>
+     *```
+     * In this case, the `scrollTarget` will point to the outer div element.
+     *
+     * ### Document scrolling
+     *
+     * For document scrolling, you can use the reserved word `document`:
+     *
+     *```html
+     * <x-element scroll-target="document">
+     *   <!-- Content -->
+     * </x-element>
+     *```
+     *
+     * ### Elements reference
+     *
+     *```js
+     * appHeader.scrollTarget = document.querySelector('#scrollable-element');
+     *```
+     *
+     * @type {HTMLElement}
+     * @default document
+     */
+    scrollTarget: {
+      type: HTMLElement,
+      value: function() {
+        return this._defaultScrollTarget;
+      }
+    }
+  },
+
+  observers: [
+    '_scrollTargetChanged(scrollTarget, isAttached)'
+  ],
+
+  /**
+   * True if the event listener should be installed.
+   */
+  _shouldHaveListener: true,
+
+  _scrollTargetChanged: function(scrollTarget, isAttached) {
+    var eventTarget;
+
+    if (this._oldScrollTarget) {
+      this._toggleScrollListener(false, this._oldScrollTarget);
+      this._oldScrollTarget = null;
+    }
+    if (!isAttached) {
+      return;
+    }
+    // Support element id references
+    if (scrollTarget === 'document') {
+
+      this.scrollTarget = this._doc;
+
+    } else if (typeof scrollTarget === 'string') {
+
+      var domHost = this.domHost;
+
+      this.scrollTarget = domHost && domHost.$ ? domHost.$[scrollTarget] :
+          Object(__WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(this.ownerDocument).querySelector('#' + scrollTarget);
+
+    } else if (this._isValidScrollTarget()) {
+
+      this._oldScrollTarget = scrollTarget;
+      this._toggleScrollListener(this._shouldHaveListener, scrollTarget);
+
+    }
+  },
+
+  /**
+   * Runs on every scroll event. Consumer of this behavior may override this method.
+   *
+   * @protected
+   */
+  _scrollHandler: function scrollHandler() {},
+
+  /**
+   * The default scroll target. Consumers of this behavior may want to customize
+   * the default scroll target.
+   *
+   * @type {Element}
+   */
+  get _defaultScrollTarget() {
+    return this._doc;
+  },
+
+  /**
+   * Shortcut for the document element
+   *
+   * @type {Element}
+   */
+  get _doc() {
+    return this.ownerDocument.documentElement;
+  },
+
+  /**
+   * Gets the number of pixels that the content of an element is scrolled upward.
+   *
+   * @type {number}
+   */
+  get _scrollTop() {
+    if (this._isValidScrollTarget()) {
+      return this.scrollTarget === this._doc ? window.pageYOffset : this.scrollTarget.scrollTop;
+    }
+    return 0;
+  },
+
+  /**
+   * Gets the number of pixels that the content of an element is scrolled to the left.
+   *
+   * @type {number}
+   */
+  get _scrollLeft() {
+    if (this._isValidScrollTarget()) {
+      return this.scrollTarget === this._doc ? window.pageXOffset : this.scrollTarget.scrollLeft;
+    }
+    return 0;
+  },
+
+  /**
+   * Sets the number of pixels that the content of an element is scrolled upward.
+   *
+   * @type {number}
+   */
+  set _scrollTop(top) {
+    if (this.scrollTarget === this._doc) {
+      window.scrollTo(window.pageXOffset, top);
+    } else if (this._isValidScrollTarget()) {
+      this.scrollTarget.scrollTop = top;
+    }
+  },
+
+  /**
+   * Sets the number of pixels that the content of an element is scrolled to the left.
+   *
+   * @type {number}
+   */
+  set _scrollLeft(left) {
+    if (this.scrollTarget === this._doc) {
+      window.scrollTo(left, window.pageYOffset);
+    } else if (this._isValidScrollTarget()) {
+      this.scrollTarget.scrollLeft = left;
+    }
+  },
+
+  /**
+   * Scrolls the content to a particular place.
+   *
+   * @method scroll
+   * @param {number} left The left position
+   * @param {number} top The top position
+   */
+  scroll: function(left, top) {
+     if (this.scrollTarget === this._doc) {
+      window.scrollTo(left, top);
+    } else if (this._isValidScrollTarget()) {
+      this.scrollTarget.scrollLeft = left;
+      this.scrollTarget.scrollTop = top;
+    }
+  },
+
+  /**
+   * Gets the width of the scroll target.
+   *
+   * @type {number}
+   */
+  get _scrollTargetWidth() {
+    if (this._isValidScrollTarget()) {
+      return this.scrollTarget === this._doc ? window.innerWidth : this.scrollTarget.offsetWidth;
+    }
+    return 0;
+  },
+
+  /**
+   * Gets the height of the scroll target.
+   *
+   * @type {number}
+   */
+  get _scrollTargetHeight() {
+    if (this._isValidScrollTarget()) {
+      return this.scrollTarget === this._doc ? window.innerHeight : this.scrollTarget.offsetHeight;
+    }
+    return 0;
+  },
+
+  /**
+   * Returns true if the scroll target is a valid HTMLElement.
+   *
+   * @return {boolean}
+   */
+  _isValidScrollTarget: function() {
+    return this.scrollTarget instanceof HTMLElement;
+  },
+
+  _toggleScrollListener: function(yes, scrollTarget) {
+    var eventTarget = scrollTarget === this._doc ? window : scrollTarget;
+    if (yes) {
+      if (!this._boundScrollHandler) {
+        this._boundScrollHandler = this._scrollHandler.bind(this);
+        eventTarget.addEventListener('scroll', this._boundScrollHandler);
+      }
+    } else {
+      if (this._boundScrollHandler) {
+        eventTarget.removeEventListener('scroll', this._boundScrollHandler);
+        this._boundScrollHandler = null;
+      }
+    }
+  },
+
+  /**
+   * Enables or disables the scroll event listener.
+   *
+   * @param {boolean} yes True to add the event, False to remove it.
+   */
+  toggleScrollListener: function(yes) {
+    this._shouldHaveListener = yes;
+    this._toggleScrollListener(yes, this.scrollTarget);
+  }
+
+};
+/* harmony export (immutable) */ __webpack_exports__["a"] = IronScrollTargetBehavior;
+
+
+
+/***/ }),
+/* 127 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+
+const _scrollEffects = {};
+/* harmony export (immutable) */ __webpack_exports__["a"] = _scrollEffects;
+
+
+const scrollTimingFunction = function easeOutQuad(t, b, c, d) {
+  t /= d;
+  return -c * t*(t-2) + b;
+};
+/* unused harmony export scrollTimingFunction */
+
+
+const registerEffect = function registerEffect(effectName, effectDef) {
+  if (_scrollEffects[effectName] != null) {
+    throw new Error('effect `'+ effectName + '` is already registered.');
+  }
+  _scrollEffects[effectName] = effectDef;
+};
+/* unused harmony export registerEffect */
+
+
+const queryAllRoot = function(selector, root) {
+  var queue = [root];
+  var matches = [];
+
+  while (queue.length > 0) {
+    var node = queue.shift();
+    matches.push.apply(matches, node.querySelectorAll(selector));
+    for (i = 0; node.children[i]; i++) {
+      if (node.children[i].shadowRoot) {
+        queue.push(node.children[i].shadowRoot);
+      }
+    }
+  }
+  return matches;
+};
+/* unused harmony export queryAllRoot */
+
+
+const scroll = function scroll(options) {
+  options = options || {};
+
+  var docEl = document.documentElement;
+  var target = options.target || docEl;
+  var hasNativeScrollBehavior = 'scrollBehavior' in target.style && target.scroll;
+  var scrollClassName = 'app-layout-silent-scroll';
+  var scrollTop = options.top || 0;
+  var scrollLeft = options.left || 0;
+  var scrollTo = target === docEl ? window.scrollTo :
+    function scrollTo(scrollLeft, scrollTop) {
+      target.scrollLeft = scrollLeft;
+      target.scrollTop = scrollTop;
+    };
+
+  if (options.behavior === 'smooth') {
+
+    if (hasNativeScrollBehavior) {
+
+      target.scroll(options);
+
+    } else {
+
+      var timingFn = scrollTimingFunction;
+      var startTime = Date.now();
+      var currentScrollTop = target === docEl ? window.pageYOffset : target.scrollTop;
+      var currentScrollLeft = target === docEl ? window.pageXOffset : target.scrollLeft;
+      var deltaScrollTop = scrollTop - currentScrollTop;
+      var deltaScrollLeft = scrollLeft - currentScrollLeft;
+      var duration = 300;
+      var updateFrame = (function updateFrame() {
+        var now = Date.now();
+        var elapsedTime = now - startTime;
+
+        if (elapsedTime < duration) {
+          scrollTo(timingFn(elapsedTime, currentScrollLeft, deltaScrollLeft, duration),
+              timingFn(elapsedTime, currentScrollTop, deltaScrollTop, duration));
+          requestAnimationFrame(updateFrame);
+        } else {
+          scrollTo(scrollLeft, scrollTop);
+        }
+      }).bind(this);
+
+      updateFrame();
+    }
+
+  } else if (options.behavior === 'silent') {
+    var headers = queryAllRoot('app-header', document.body);
+
+    headers.forEach(function(header) {
+      header.setAttribute('silent-scroll', '');
+    });
+
+    // Browsers keep the scroll momentum even if the bottom of the scrolling content
+    // was reached. This means that calling scroll({top: 0, behavior: 'silent'}) when
+    // the momentum is still going will result in more scroll events and thus scroll effects.
+    // This seems to only apply when using document scrolling.
+    // Therefore, when should we remove the class from the document element?
+
+    window.cancelAnimationFrame(Polymer.AppLayout._scrollTimer);
+
+    Polymer.AppLayout._scrollTimer = window.requestAnimationFrame(function() {
+      headers.forEach(function(header) {
+        header.removeAttribute('silent-scroll');
+      });
+      Polymer.AppLayout._scrollTimer = null;
+    });
+
+    scrollTo(scrollLeft, scrollTop);
+
+  } else {
+
+    scrollTo(scrollLeft, scrollTop);
+
+  }
+};
+/* unused harmony export scroll */
+
+
+
+/***/ }),
+/* 128 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_resizable_behavior_iron_resizable_behavior_js__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_utils_async_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__polymer_lib_utils_debounce_js__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__polymer_lib_utils_flush_js__ = __webpack_require__(17);
+
+
+
+
+
+
+
+
+const AppLayoutBehavior = [
+  __WEBPACK_IMPORTED_MODULE_1__iron_resizable_behavior_iron_resizable_behavior_js__["a" /* IronResizableBehavior */], {
+
+  listeners: {
+    'app-reset-layout': '_appResetLayoutHandler',
+    'iron-resize': 'resetLayout'
+  },
+
+  attached: function() {
+    this.fire('app-reset-layout');
+  },
+
+  _appResetLayoutHandler: function(e) {
+    if (Object(__WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(e).path[0] === this) {
+      return;
+    }
+    this.resetLayout();
+    e.stopPropagation();
+  },
+
+  _updateLayoutStates: function() {
+    console.error('unimplemented');
+  },
+
+  /**
+   * Resets the layout. If you changed the size of this element via CSS
+   * you can notify the changes by either firing the `iron-resize` event
+   * or calling `resetLayout` directly.
+   *
+   * @method resetLayout
+   */
+  resetLayout: function() {
+    // Polymer v2.x
+    var self = this;
+    var cb = this._updateLayoutStates.bind(this);
+    if (__WEBPACK_IMPORTED_MODULE_3__polymer_lib_utils_async_js__ && __WEBPACK_IMPORTED_MODULE_3__polymer_lib_utils_async_js__["animationFrame"]) {
+      this._layoutDebouncer = __WEBPACK_IMPORTED_MODULE_4__polymer_lib_utils_debounce_js__["Debouncer"].debounce(
+          this._layoutDebouncer,
+          __WEBPACK_IMPORTED_MODULE_3__polymer_lib_utils_async_js__["animationFrame"],
+          cb);
+      Object(__WEBPACK_IMPORTED_MODULE_5__polymer_lib_utils_flush_js__["a" /* enqueueDebouncer */])(this._layoutDebouncer);
+    }
+    // Polymer v1.x
+    else {
+      this.debounce('resetLayout', cb);
+    }
+    this._notifyDescendantResize();
+  },
+
+  _notifyLayoutChanged: function() {
+    var self = this;
+    // TODO: the event `app-reset-layout` can be fired synchronously
+    // as long as `_updateLayoutStates` waits for all the microtasks after rAF.
+    // E.g. requestAnimationFrame(setTimeOut())
+    requestAnimationFrame(function() {
+      self.fire('app-reset-layout');
+    });
+  },
+
+  _notifyDescendantResize: function() {
+    if (!this.isAttached) {
+      return;
+    }
+    this._interestedResizables.forEach(function(resizable) {
+      if (this.resizerShouldNotify(resizable)) {
+        this._notifyDescendant(resizable);
+      }
+    }, this);
+  }
+}];
+/* harmony export (immutable) */ __webpack_exports__["a"] = AppLayoutBehavior;
+
+
+
+/***/ }),
+/* 129 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_flex_layout_iron_flex_layout_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
+
+
+
+Object(__WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_fn_js__["a" /* Polymer */])({
+  _template: `
+    <style>
+
+      :host {
+        @apply --layout-horizontal;
+        @apply --layout-center;
+        position: relative;
+        height: 64px;
+        padding: 0 16px;
+        pointer-events: none;
+        font-size: var(--app-toolbar-font-size, 20px);
+      }
+
+      :host ::slotted(*) {
+        pointer-events: auto;
+      }
+
+      :host ::slotted(paper-icon-button) {
+        /* paper-icon-button/issues/33 */
+        font-size: 0;
+      }
+
+      :host ::slotted([main-title]),
+      :host ::slotted([condensed-title]) {
+        pointer-events: none;
+        @apply --layout-flex;
+      }
+
+      :host ::slotted([bottom-item]) {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        left: 0;
+      }
+
+      :host ::slotted([top-item]) {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+      }
+
+      :host ::slotted([spacer]) {
+        margin-left: 64px;
+      }
+    </style>
+
+    <slot></slot>
+`,
+
+  is: 'app-toolbar'
+});
+
+
+/***/ }),
+/* 130 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_flex_layout_iron_flex_layout_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_utils_render_status_js__ = __webpack_require__(45);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
+
+
+
+
+
+
+Object(__WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_fn_js__["a" /* Polymer */])({
+  _template: `
+    <style>
+      :host {
+        position: fixed;
+        top: -120px;
+        right: 0;
+        bottom: -120px;
+        left: 0;
+
+        visibility: hidden;
+
+        transition-property: visibility;
+      }
+
+      :host([opened]) {
+        visibility: visible;
+      }
+
+      :host([persistent]) {
+        width: var(--app-drawer-width, 256px);
+      }
+
+      :host([persistent][position=left]) {
+        right: auto;
+      }
+
+      :host([persistent][position=right]) {
+        left: auto;
+      }
+
+      #contentContainer {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+
+        width: var(--app-drawer-width, 256px);
+        padding: 120px 0;
+
+        transition-property: -webkit-transform;
+        transition-property: transform;
+        -webkit-transform: translate3d(-100%, 0, 0);
+        transform: translate3d(-100%, 0, 0);
+
+        background-color: #FFF;
+
+        @apply --app-drawer-content-container;
+      }
+
+      #contentContainer[persistent] {
+        width: 100%;
+      }
+
+      #contentContainer[position=right] {
+        right: 0;
+        left: auto;
+
+        -webkit-transform: translate3d(100%, 0, 0);
+        transform: translate3d(100%, 0, 0);
+      }
+
+      #contentContainer[swipe-open]::after {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 100%;
+
+        visibility: visible;
+
+        width: 20px;
+
+        content: '';
+      }
+
+      #contentContainer[swipe-open][position=right]::after {
+        right: 100%;
+        left: auto;
+      }
+
+      #contentContainer[opened] {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+      }
+
+      #scrim {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+
+        transition-property: opacity;
+        -webkit-transform: translateZ(0);
+        transform:  translateZ(0);
+
+        opacity: 0;
+        background: var(--app-drawer-scrim-background, rgba(0, 0, 0, 0.5));
+      }
+
+      #scrim.visible {
+        opacity: 1;
+      }
+
+      :host([no-transition]) #contentContainer {
+        transition-property: none;
+      }
+    </style>
+
+    <div id="scrim" on-click="close"></div>
+
+    <!-- HACK(keanulee): Bind attributes here (in addition to :host) for styling to workaround Safari
+    bug. https://bugs.webkit.org/show_bug.cgi?id=170762 -->
+    <div id="contentContainer" opened\$="[[opened]]" persistent\$="[[persistent]]" position\$="[[position]]" swipe-open\$="[[swipeOpen]]">
+      <slot></slot>
+    </div>
+`,
+
+  is: 'app-drawer',
+
+  properties: {
+    /**
+     * The opened state of the drawer.
+     */
+    opened: {
+      type: Boolean,
+      value: false,
+      notify: true,
+      reflectToAttribute: true
+    },
+
+    /**
+     * The drawer does not have a scrim and cannot be swiped close.
+     */
+    persistent: {
+      type: Boolean,
+      value: false,
+      reflectToAttribute: true
+    },
+
+    /**
+     * The transition duration of the drawer in milliseconds.
+     */
+    transitionDuration: {
+      type: Number,
+      value: 200
+    },
+
+    /**
+     * The alignment of the drawer on the screen ('left', 'right', 'start' or 'end').
+     * 'start' computes to left and 'end' to right in LTR layout and vice versa in RTL
+     * layout.
+     */
+    align: {
+      type: String,
+      value: 'left'
+    },
+
+    /**
+     * The computed, read-only position of the drawer on the screen ('left' or 'right').
+     */
+    position: {
+      type: String,
+      readOnly: true,
+      reflectToAttribute: true
+    },
+
+    /**
+     * Create an area at the edge of the screen to swipe open the drawer.
+     */
+    swipeOpen: {
+      type: Boolean,
+      value: false,
+      reflectToAttribute: true
+    },
+
+    /**
+     * Trap keyboard focus when the drawer is opened and not persistent.
+     */
+    noFocusTrap: {
+      type: Boolean,
+      value: false
+    },
+
+    /**
+     * Disables swiping on the drawer.
+     */
+    disableSwipe: {
+      type: Boolean,
+      value: false
+    }
+  },
+
+  observers: [
+    'resetLayout(position, isAttached)',
+    '_resetPosition(align, isAttached)',
+    '_styleTransitionDuration(transitionDuration)',
+    '_openedPersistentChanged(opened, persistent)'
+  ],
+
+  _translateOffset: 0,
+  _trackDetails: null,
+  _drawerState: 0,
+  _boundEscKeydownHandler: null,
+  _firstTabStop: null,
+  _lastTabStop: null,
+
+  attached: function() {
+    Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_utils_render_status_js__["a" /* afterNextRender */])(this, function() {
+      this._boundEscKeydownHandler = this._escKeydownHandler.bind(this);
+      this.addEventListener('keydown', this._tabKeydownHandler.bind(this))
+
+      // Only listen for horizontal track so you can vertically scroll inside the drawer.
+      this.listen(this, 'track', '_track');
+      this.setScrollDirection('y');
+    });
+
+    this.fire('app-reset-layout');
+  },
+
+  detached: function() {
+    document.removeEventListener('keydown', this._boundEscKeydownHandler);
+  },
+
+  /**
+   * Opens the drawer.
+   */
+  open: function() {
+    this.opened = true;
+  },
+
+  /**
+   * Closes the drawer.
+   */
+  close: function() {
+    this.opened = false;
+  },
+
+  /**
+   * Toggles the drawer open and close.
+   */
+  toggle: function() {
+    this.opened = !this.opened;
+  },
+
+  /**
+   * Gets the width of the drawer.
+   *
+   * @return {number} The width of the drawer in pixels.
+   */
+  getWidth: function() {
+    return this._savedWidth || this.$.contentContainer.offsetWidth;
+  },
+
+  _isRTL: function() {
+    return window.getComputedStyle(this).direction === 'rtl';
+  },
+
+  _resetPosition: function() {
+    switch (this.align) {
+      case 'start':
+        this._setPosition(this._isRTL() ? 'right' : 'left');
+        return;
+      case 'end':
+        this._setPosition(this._isRTL() ? 'left' : 'right');
+        return;
+    }
+    this._setPosition(this.align);
+  },
+
+  _escKeydownHandler: function(event) {
+    var ESC_KEYCODE = 27;
+    if (event.keyCode === ESC_KEYCODE) {
+      // Prevent any side effects if app-drawer closes.
+      event.preventDefault();
+      this.close();
+    }
+  },
+
+  _track: function(event) {
+    if (this.persistent || this.disableSwipe) {
+      return;
+    }
+
+    // Disable user selection on desktop.
+    event.preventDefault();
+
+    switch (event.detail.state) {
+      case 'start':
+        this._trackStart(event);
+        break;
+      case 'track':
+        this._trackMove(event);
+        break;
+      case 'end':
+        this._trackEnd(event);
+        break;
+    }
+  },
+
+  _trackStart: function(event) {
+    this._drawerState = this._DRAWER_STATE.TRACKING;
+
+    var rect = this.$.contentContainer.getBoundingClientRect();
+    this._savedWidth = rect.width;
+    if (this.position === 'left') {
+      this._translateOffset = rect.left;
+    } else {
+      this._translateOffset = rect.right - window.innerWidth;
+    }
+
+    this._trackDetails = [];
+
+    // Disable transitions since style attributes will reflect user track events.
+    this._styleTransitionDuration(0);
+    this.style.visibility = 'visible';
+  },
+
+  _trackMove: function(event) {
+    this._translateDrawer(event.detail.dx + this._translateOffset);
+
+    // Use Date.now() since event.timeStamp is inconsistent across browsers (e.g. most
+    // browsers use milliseconds but FF 44 uses microseconds).
+    this._trackDetails.push({
+      dx: event.detail.dx,
+      timeStamp: Date.now()
+    });
+  },
+
+  _trackEnd: function(event) {
+    var x = event.detail.dx + this._translateOffset;
+    var drawerWidth = this.getWidth();
+    var isPositionLeft = this.position === 'left';
+    var isInEndState = isPositionLeft ? (x >= 0 || x <= -drawerWidth) :
+      (x <= 0 || x >= drawerWidth);
+
+    if (!isInEndState) {
+      // No longer need the track events after this method returns - allow them to be GC'd.
+      var trackDetails = this._trackDetails;
+      this._trackDetails = null;
+
+      this._flingDrawer(event, trackDetails);
+      if (this._drawerState === this._DRAWER_STATE.FLINGING) {
+        return;
+      }
+    }
+
+    // If the drawer is not flinging, toggle the opened state based on the position of
+    // the drawer.
+    var halfWidth = drawerWidth / 2;
+    if (event.detail.dx < -halfWidth) {
+      this.opened = this.position === 'right';
+    } else if (event.detail.dx > halfWidth) {
+      this.opened = this.position === 'left';
+    }
+
+    if (isInEndState) {
+      this.debounce('_resetDrawerState', this._resetDrawerState);
+    } else {
+      this.debounce('_resetDrawerState', this._resetDrawerState, this.transitionDuration);
+    }
+
+    this._styleTransitionDuration(this.transitionDuration);
+    this._resetDrawerTranslate();
+    this.style.visibility = '';
+  },
+
+  _calculateVelocity: function(event, trackDetails) {
+    // Find the oldest track event that is within 100ms using binary search.
+    var now = Date.now();
+    var timeLowerBound = now - 100;
+    var trackDetail;
+    var min = 0;
+    var max = trackDetails.length - 1;
+
+    while (min <= max) {
+      // Floor of average of min and max.
+      var mid = (min + max) >> 1;
+      var d = trackDetails[mid];
+      if (d.timeStamp >= timeLowerBound) {
+        trackDetail = d;
+        max = mid - 1;
+      } else {
+        min = mid + 1;
+      }
+    }
+
+    if (trackDetail) {
+      var dx = event.detail.dx - trackDetail.dx;
+      var dt = (now - trackDetail.timeStamp) || 1;
+      return dx / dt;
+    }
+    return 0;
+  },
+
+  _flingDrawer: function(event, trackDetails) {
+    var velocity = this._calculateVelocity(event, trackDetails);
+
+    // Do not fling if velocity is not above a threshold.
+    if (Math.abs(velocity) < this._MIN_FLING_THRESHOLD) {
+      return;
+    }
+
+    this._drawerState = this._DRAWER_STATE.FLINGING;
+
+    var x = event.detail.dx + this._translateOffset;
+    var drawerWidth = this.getWidth();
+    var isPositionLeft = this.position === 'left';
+    var isVelocityPositive = velocity > 0;
+    var isClosingLeft = !isVelocityPositive && isPositionLeft;
+    var isClosingRight = isVelocityPositive && !isPositionLeft;
+    var dx;
+    if (isClosingLeft) {
+      dx = -(x + drawerWidth);
+    } else if (isClosingRight) {
+      dx = (drawerWidth - x);
+    } else {
+      dx = -x;
+    }
+
+    // Enforce a minimum transition velocity to make the drawer feel snappy.
+    if (isVelocityPositive) {
+      velocity = Math.max(velocity, this._MIN_TRANSITION_VELOCITY);
+      this.opened = this.position === 'left';
+    } else {
+      velocity = Math.min(velocity, -this._MIN_TRANSITION_VELOCITY);
+      this.opened = this.position === 'right';
+    }
+
+    // Calculate the amount of time needed to finish the transition based on the
+    // initial slope of the timing function.
+    var t = this._FLING_INITIAL_SLOPE * dx / velocity
+    this._styleTransitionDuration(t);
+    this._styleTransitionTimingFunction(this._FLING_TIMING_FUNCTION);
+
+    this._resetDrawerTranslate();
+    this.debounce('_resetDrawerState', this._resetDrawerState, t);
+  },
+
+  _styleTransitionDuration: function(duration) {
+    this.style.transitionDuration = duration + 'ms';
+    this.$.contentContainer.style.transitionDuration = duration + 'ms';
+    this.$.scrim.style.transitionDuration = duration + 'ms';
+  },
+
+  _styleTransitionTimingFunction: function(timingFunction) {
+    this.$.contentContainer.style.transitionTimingFunction = timingFunction;
+    this.$.scrim.style.transitionTimingFunction = timingFunction;
+  },
+
+  _translateDrawer: function(x) {
+    var drawerWidth = this.getWidth();
+
+    if (this.position === 'left') {
+      x = Math.max(-drawerWidth, Math.min(x, 0));
+      this.$.scrim.style.opacity = 1 + x / drawerWidth;
+    } else {
+      x = Math.max(0, Math.min(x, drawerWidth));
+      this.$.scrim.style.opacity = 1 - x / drawerWidth;
+    }
+
+    this.translate3d(x + 'px', '0', '0', this.$.contentContainer);
+  },
+
+  _resetDrawerTranslate: function() {
+    this.$.scrim.style.opacity = '';
+    this.transform('', this.$.contentContainer);
+  },
+
+  _resetDrawerState: function() {
+    var oldState = this._drawerState;
+
+    // If the drawer was flinging, we need to reset the style attributes.
+    if (oldState === this._DRAWER_STATE.FLINGING) {
+      this._styleTransitionDuration(this.transitionDuration);
+      this._styleTransitionTimingFunction('');
+      this.style.visibility = '';
+    }
+
+    this._savedWidth = null;
+
+    if (this.opened) {
+      this._drawerState = this.persistent ?
+        this._DRAWER_STATE.OPENED_PERSISTENT : this._DRAWER_STATE.OPENED;
+    } else {
+      this._drawerState = this._DRAWER_STATE.CLOSED;
+    }
+
+    if (oldState !== this._drawerState) {
+      if (this._drawerState === this._DRAWER_STATE.OPENED) {
+        this._setKeyboardFocusTrap();
+        document.addEventListener('keydown', this._boundEscKeydownHandler);
+        document.body.style.overflow = 'hidden';
+      } else {
+        document.removeEventListener('keydown', this._boundEscKeydownHandler);
+        document.body.style.overflow = '';
+      }
+
+      // Don't fire the event on initial load.
+      if (oldState !== this._DRAWER_STATE.INIT) {
+        this.fire('app-drawer-transitioned');
+      }
+    }
+  },
+
+  /**
+   * Resets the layout.
+   *
+   * @method resetLayout
+   */
+  resetLayout: function() {
+    this.fire('app-reset-layout');
+  },
+
+  _setKeyboardFocusTrap: function() {
+    if (this.noFocusTrap) {
+      return;
+    }
+
+    // NOTE: Unless we use /deep/ (which we shouldn't since it's deprecated), this will
+    // not select focusable elements inside shadow roots.
+    var focusableElementsSelector = [
+        'a[href]:not([tabindex="-1"])',
+        'area[href]:not([tabindex="-1"])',
+        'input:not([disabled]):not([tabindex="-1"])',
+        'select:not([disabled]):not([tabindex="-1"])',
+        'textarea:not([disabled]):not([tabindex="-1"])',
+        'button:not([disabled]):not([tabindex="-1"])',
+        'iframe:not([tabindex="-1"])',
+        '[tabindex]:not([tabindex="-1"])',
+        '[contentEditable=true]:not([tabindex="-1"])'
+      ].join(',');
+    var focusableElements = Object(__WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(this).querySelectorAll(focusableElementsSelector);
+
+    if (focusableElements.length > 0) {
+      this._firstTabStop = focusableElements[0];
+      this._lastTabStop = focusableElements[focusableElements.length - 1];
+    } else {
+      // Reset saved tab stops when there are no focusable elements in the drawer.
+      this._firstTabStop = null;
+      this._lastTabStop = null;
+    }
+
+    // Focus on app-drawer if it has non-zero tabindex. Otherwise, focus the first focusable
+    // element in the drawer, if it exists. Use the tabindex attribute since the this.tabIndex
+    // property in IE/Edge returns 0 (instead of -1) when the attribute is not set.
+    var tabindex = this.getAttribute('tabindex');
+    if (tabindex && parseInt(tabindex, 10) > -1) {
+      this.focus();
+    } else if (this._firstTabStop) {
+      this._firstTabStop.focus();
+    }
+  },
+
+  _tabKeydownHandler: function(event) {
+    if (this.noFocusTrap) {
+      return;
+    }
+
+    var TAB_KEYCODE = 9;
+    if (this._drawerState === this._DRAWER_STATE.OPENED && event.keyCode === TAB_KEYCODE) {
+      if (event.shiftKey) {
+        if (this._firstTabStop && Object(__WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(event).localTarget === this._firstTabStop) {
+          event.preventDefault();
+          this._lastTabStop.focus();
+        }
+      } else {
+        if (this._lastTabStop && Object(__WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(event).localTarget === this._lastTabStop) {
+          event.preventDefault();
+          this._firstTabStop.focus();
+        }
+      }
+    }
+  },
+
+  _openedPersistentChanged: function(opened, persistent) {
+    this.toggleClass('visible', opened && !persistent, this.$.scrim);
+
+    // Use a debounce timer instead of transitionend since transitionend won't fire when
+    // app-drawer is display: none.
+    this.debounce('_resetDrawerState', this._resetDrawerState, this.transitionDuration);
+  },
+
+  _MIN_FLING_THRESHOLD: 0.2,
+  _MIN_TRANSITION_VELOCITY: 1.2,
+  _FLING_TIMING_FUNCTION: 'cubic-bezier(0.667, 1, 0.667, 1)',
+  _FLING_INITIAL_SLOPE: 1.5,
+
+  _DRAWER_STATE: {
+    INIT: 0,
+    OPENED: 1,
+    OPENED_PERSISTENT: 2,
+    CLOSED: 3,
+    TRACKING: 4,
+    FLINGING: 5
+  }
+
+  /**
+   * Fired when the layout of app-drawer has changed.
+   *
+   * @event app-reset-layout
+   */
+
+  /**
+   * Fired when app-drawer has finished transitioning.
+   *
+   * @event app-drawer-transitioned
+   */
+});
+
+
+/***/ }),
+/* 131 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_icon_iron_icon_js__ = __webpack_require__(59);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__paper_behaviors_paper_inky_focus_behavior_js__ = __webpack_require__(132);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__paper_styles_default_theme_js__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
+
+
+
+
+
+const $_documentContainer = document.createElement('div');
+$_documentContainer.setAttribute('style', 'display: none;');
+
+$_documentContainer.innerHTML = `<dom-module id="paper-icon-button">
+  <template strip-whitespace="">
+    <style>
+      :host {
+        display: inline-block;
+        position: relative;
+        padding: 8px;
+        outline: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        cursor: pointer;
+        z-index: 0;
+        line-height: 1;
+
+        width: 40px;
+        height: 40px;
+
+        /* NOTE: Both values are needed, since some phones require the value to be \`transparent\`. */
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        -webkit-tap-highlight-color: transparent;
+
+        /* Because of polymer/2558, this style has lower specificity than * */
+        box-sizing: border-box !important;
+
+        @apply --paper-icon-button;
+      }
+
+      :host #ink {
+        color: var(--paper-icon-button-ink-color, var(--primary-text-color));
+        opacity: 0.6;
+      }
+
+      :host([disabled]) {
+        color: var(--paper-icon-button-disabled-text, var(--disabled-text-color));
+        pointer-events: none;
+        cursor: auto;
+
+        @apply --paper-icon-button-disabled;
+      }
+
+      :host([hidden]) {
+        display: none !important;
+      }
+
+      :host(:hover) {
+        @apply --paper-icon-button-hover;
+      }
+
+      iron-icon {
+        --iron-icon-width: 100%;
+        --iron-icon-height: 100%;
+      }
+    </style>
+
+    <iron-icon id="icon" src="[[src]]" icon="[[icon]]" alt\$="[[alt]]"></iron-icon>
+  </template>
+
+  
+</dom-module>`;
+
+document.head.appendChild($_documentContainer);
+Object(__WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__["a" /* Polymer */])({
+  is: 'paper-icon-button',
+
+  hostAttributes: {
+    role: 'button',
+    tabindex: '0'
+  },
+
+  behaviors: [
+    __WEBPACK_IMPORTED_MODULE_2__paper_behaviors_paper_inky_focus_behavior_js__["a" /* PaperInkyFocusBehavior */]
+  ],
+
+  properties: {
+    /**
+     * The URL of an image for the icon. If the src property is specified,
+     * the icon property should not be.
+     */
+    src: {
+      type: String
+    },
+
+    /**
+     * Specifies the icon name or index in the set of icons available in
+     * the icon's icon set. If the icon property is specified,
+     * the src property should not be.
+     */
+    icon: {
+      type: String
+    },
+
+    /**
+     * Specifies the alternate text for the button, for accessibility.
+     */
+    alt: {
+      type: String,
+      observer: "_altChanged"
+    }
+  },
+
+  _altChanged: function(newValue, oldValue) {
+    var label = this.getAttribute('aria-label');
+
+    // Don't stomp over a user-set aria-label.
+    if (!label || oldValue == label) {
+      this.setAttribute('aria-label', newValue);
+    }
+  }
+});
+
+
+/***/ }),
+/* 132 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_behaviors_iron_button_state_js__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__paper_ripple_behavior_js__ = __webpack_require__(58);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__iron_behaviors_iron_control_state_js__ = __webpack_require__(12);
+
+
+
+
+
+const PaperInkyFocusBehaviorImpl = {
+  observers: [
+    '_focusedChanged(receivedFocusFromKeyboard)'
+  ],
+
+  _focusedChanged: function(receivedFocusFromKeyboard) {
+    if (receivedFocusFromKeyboard) {
+      this.ensureRipple();
+    }
+    if (this.hasRipple()) {
+      this._ripple.holdDown = receivedFocusFromKeyboard;
+    }
+  },
+
+  _createRipple: function() {
+    var ripple = __WEBPACK_IMPORTED_MODULE_2__paper_ripple_behavior_js__["a" /* PaperRippleBehavior */]._createRipple();
+    ripple.id = 'ink';
+    ripple.setAttribute('center', '');
+    ripple.classList.add('circle');
+    return ripple;
+  }
+};
+/* unused harmony export PaperInkyFocusBehaviorImpl */
+
+
+const PaperInkyFocusBehavior = [
+  __WEBPACK_IMPORTED_MODULE_1__iron_behaviors_iron_button_state_js__["a" /* IronButtonState */],
+  __WEBPACK_IMPORTED_MODULE_3__iron_behaviors_iron_control_state_js__["a" /* IronControlState */],
+  __WEBPACK_IMPORTED_MODULE_2__paper_ripple_behavior_js__["a" /* PaperRippleBehavior */],
+  PaperInkyFocusBehaviorImpl
+];
+/* harmony export (immutable) */ __webpack_exports__["a"] = PaperInkyFocusBehavior;
+
+
+
+/***/ }),
+/* 133 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__iron_icon_iron_icon_js__ = __webpack_require__(59);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_iconset_svg_iron_iconset_svg_js__ = __webpack_require__(134);
+
+
+const $_documentContainer = document.createElement('div');
+$_documentContainer.setAttribute('style', 'display: none;');
+
+$_documentContainer.innerHTML = `<iron-iconset-svg name="icons" size="24">
+<svg><defs>
+<g id="3d-rotation"><path d="M7.52 21.48C4.25 19.94 1.91 16.76 1.55 13H.05C.56 19.16 5.71 24 12 24l.66-.03-3.81-3.81-1.33 1.32zm.89-6.52c-.19 0-.37-.03-.52-.08-.16-.06-.29-.13-.4-.24-.11-.1-.2-.22-.26-.37-.06-.14-.09-.3-.09-.47h-1.3c0 .36.07.68.21.95.14.27.33.5.56.69.24.18.51.32.82.41.3.1.62.15.96.15.37 0 .72-.05 1.03-.15.32-.1.6-.25.83-.44s.42-.43.55-.72c.13-.29.2-.61.2-.97 0-.19-.02-.38-.07-.56-.05-.18-.12-.35-.23-.51-.1-.16-.24-.3-.4-.43-.17-.13-.37-.23-.61-.31.2-.09.37-.2.52-.33.15-.13.27-.27.37-.42.1-.15.17-.3.22-.46.05-.16.07-.32.07-.48 0-.36-.06-.68-.18-.96-.12-.28-.29-.51-.51-.69-.2-.19-.47-.33-.77-.43C9.1 8.05 8.76 8 8.39 8c-.36 0-.69.05-1 .16-.3.11-.57.26-.79.45-.21.19-.38.41-.51.67-.12.26-.18.54-.18.85h1.3c0-.17.03-.32.09-.45s.14-.25.25-.34c.11-.09.23-.17.38-.22.15-.05.3-.08.48-.08.4 0 .7.1.89.31.19.2.29.49.29.86 0 .18-.03.34-.08.49-.05.15-.14.27-.25.37-.11.1-.25.18-.41.24-.16.06-.36.09-.58.09H7.5v1.03h.77c.22 0 .42.02.6.07s.33.13.45.23c.12.11.22.24.29.4.07.16.1.35.1.57 0 .41-.12.72-.35.93-.23.23-.55.33-.95.33zm8.55-5.92c-.32-.33-.7-.59-1.14-.77-.43-.18-.92-.27-1.46-.27H12v8h2.3c.55 0 1.06-.09 1.51-.27.45-.18.84-.43 1.16-.76.32-.33.57-.73.74-1.19.17-.47.26-.99.26-1.57v-.4c0-.58-.09-1.1-.26-1.57-.18-.47-.43-.87-.75-1.2zm-.39 3.16c0 .42-.05.79-.14 1.13-.1.33-.24.62-.43.85-.19.23-.43.41-.71.53-.29.12-.62.18-.99.18h-.91V9.12h.97c.72 0 1.27.23 1.64.69.38.46.57 1.12.57 1.99v.4zM12 0l-.66.03 3.81 3.81 1.33-1.33c3.27 1.55 5.61 4.72 5.96 8.48h1.5C23.44 4.84 18.29 0 12 0z"></path></g>
+<g id="accessibility"><path d="M12 2c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm9 7h-6v13h-2v-6h-2v6H9V9H3V7h18v2z"></path></g>
+<g id="accessible"><circle cx="12" cy="4" r="2"></circle><path d="M19 13v-2c-1.54.02-3.09-.75-4.07-1.83l-1.29-1.43c-.17-.19-.38-.34-.61-.45-.01 0-.01-.01-.02-.01H13c-.35-.2-.75-.3-1.19-.26C10.76 7.11 10 8.04 10 9.09V15c0 1.1.9 2 2 2h5v5h2v-5.5c0-1.1-.9-2-2-2h-3v-3.45c1.29 1.07 3.25 1.94 5 1.95zm-6.17 5c-.41 1.16-1.52 2-2.83 2-1.66 0-3-1.34-3-3 0-1.31.84-2.41 2-2.83V12.1c-2.28.46-4 2.48-4 4.9 0 2.76 2.24 5 5 5 2.42 0 4.44-1.72 4.9-4h-2.07z"></path></g>
+<g id="account-balance"><path d="M4 10v7h3v-7H4zm6 0v7h3v-7h-3zM2 22h19v-3H2v3zm14-12v7h3v-7h-3zm-4.5-9L2 6v2h19V6l-9.5-5z"></path></g>
+<g id="account-balance-wallet"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"></path></g>
+<g id="account-box"><path d="M3 5v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5c-1.11 0-2 .9-2 2zm12 4c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3zm-9 8c0-2 4-3.1 6-3.1s6 1.1 6 3.1v1H6v-1z"></path></g>
+<g id="account-circle"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"></path></g>
+<g id="add"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path></g>
+<g id="add-alert"><path d="M10.01 21.01c0 1.1.89 1.99 1.99 1.99s1.99-.89 1.99-1.99h-3.98zm8.87-4.19V11c0-3.25-2.25-5.97-5.29-6.69v-.72C13.59 2.71 12.88 2 12 2s-1.59.71-1.59 1.59v.72C7.37 5.03 5.12 7.75 5.12 11v5.82L3 18.94V20h18v-1.06l-2.12-2.12zM16 13.01h-3v3h-2v-3H8V11h3V8h2v3h3v2.01z"></path></g>
+<g id="add-box"><path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"></path></g>
+<g id="add-circle"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"></path></g>
+<g id="add-circle-outline"><path d="M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4V7zm-1-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"></path></g>
+<g id="add-shopping-cart"><path d="M11 9h2V6h3V4h-3V1h-2v3H8v2h3v3zm-4 9c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zm-9.83-3.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01L19.42 4h-.01l-1.1 2-2.76 5H8.53l-.13-.27L6.16 6l-.95-2-.94-2H1v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.13 0-.25-.11-.25-.25z"></path></g>
+<g id="alarm"><path d="M22 5.72l-4.6-3.86-1.29 1.53 4.6 3.86L22 5.72zM7.88 3.39L6.6 1.86 2 5.71l1.29 1.53 4.59-3.85zM12.5 8H11v6l4.75 2.85.75-1.23-4-2.37V8zM12 4c-4.97 0-9 4.03-9 9s4.02 9 9 9c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 16c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"></path></g>
+<g id="alarm-add"><path d="M7.88 3.39L6.6 1.86 2 5.71l1.29 1.53 4.59-3.85zM22 5.72l-4.6-3.86-1.29 1.53 4.6 3.86L22 5.72zM12 4c-4.97 0-9 4.03-9 9s4.02 9 9 9c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 16c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7zm1-11h-2v3H8v2h3v3h2v-3h3v-2h-3V9z"></path></g>
+<g id="alarm-off"><path d="M12 6c3.87 0 7 3.13 7 7 0 .84-.16 1.65-.43 2.4l1.52 1.52c.58-1.19.91-2.51.91-3.92 0-4.97-4.03-9-9-9-1.41 0-2.73.33-3.92.91L9.6 6.43C10.35 6.16 11.16 6 12 6zm10-.28l-4.6-3.86-1.29 1.53 4.6 3.86L22 5.72zM2.92 2.29L1.65 3.57 2.98 4.9l-1.11.93 1.42 1.42 1.11-.94.8.8C3.83 8.69 3 10.75 3 13c0 4.97 4.02 9 9 9 2.25 0 4.31-.83 5.89-2.2l2.2 2.2 1.27-1.27L3.89 3.27l-.97-.98zm13.55 16.1C15.26 19.39 13.7 20 12 20c-3.87 0-7-3.13-7-7 0-1.7.61-3.26 1.61-4.47l9.86 9.86zM8.02 3.28L6.6 1.86l-.86.71 1.42 1.42.86-.71z"></path></g>
+<g id="alarm-on"><path d="M22 5.72l-4.6-3.86-1.29 1.53 4.6 3.86L22 5.72zM7.88 3.39L6.6 1.86 2 5.71l1.29 1.53 4.59-3.85zM12 4c-4.97 0-9 4.03-9 9s4.02 9 9 9c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 16c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7zm-1.46-5.47L8.41 12.4l-1.06 1.06 3.18 3.18 6-6-1.06-1.06-4.93 4.95z"></path></g>
+<g id="all-out"><path d="M16.21 4.16l4 4v-4zm4 12l-4 4h4zm-12 4l-4-4v4zm-4-12l4-4h-4zm12.95-.95c-2.73-2.73-7.17-2.73-9.9 0s-2.73 7.17 0 9.9 7.17 2.73 9.9 0 2.73-7.16 0-9.9zm-1.1 8.8c-2.13 2.13-5.57 2.13-7.7 0s-2.13-5.57 0-7.7 5.57-2.13 7.7 0 2.13 5.57 0 7.7z"></path></g>
+<g id="android"><path d="M6 18c0 .55.45 1 1 1h1v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h2v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h1c.55 0 1-.45 1-1V8H6v10zM3.5 8C2.67 8 2 8.67 2 9.5v7c0 .83.67 1.5 1.5 1.5S5 17.33 5 16.5v-7C5 8.67 4.33 8 3.5 8zm17 0c-.83 0-1.5.67-1.5 1.5v7c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-7c0-.83-.67-1.5-1.5-1.5zm-4.97-5.84l1.3-1.3c.2-.2.2-.51 0-.71-.2-.2-.51-.2-.71 0l-1.48 1.48C13.85 1.23 12.95 1 12 1c-.96 0-1.86.23-2.66.63L7.85.15c-.2-.2-.51-.2-.71 0-.2.2-.2.51 0 .71l1.31 1.31C6.97 3.26 6 5.01 6 7h12c0-1.99-.97-3.75-2.47-4.84zM10 5H9V4h1v1zm5 0h-1V4h1v1z"></path></g>
+<g id="announcement"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 9h-2V5h2v6zm0 4h-2v-2h2v2z"></path></g>
+<g id="apps"><path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"></path></g>
+<g id="archive"><path d="M20.54 5.23l-1.39-1.68C18.88 3.21 18.47 3 18 3H6c-.47 0-.88.21-1.16.55L3.46 5.23C3.17 5.57 3 6.02 3 6.5V19c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6.5c0-.48-.17-.93-.46-1.27zM12 17.5L6.5 12H10v-2h4v2h3.5L12 17.5zM5.12 5l.81-1h12l.94 1H5.12z"></path></g>
+<g id="arrow-back"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"></path></g>
+<g id="arrow-downward"><path d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"></path></g>
+<g id="arrow-drop-down"><path d="M7 10l5 5 5-5z"></path></g>
+<g id="arrow-drop-down-circle"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 12l-4-4h8l-4 4z"></path></g>
+<g id="arrow-drop-up"><path d="M7 14l5-5 5 5z"></path></g>
+<g id="arrow-forward"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"></path></g>
+<g id="arrow-upward"><path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"></path></g>
+<g id="aspect-ratio"><path d="M19 12h-2v3h-3v2h5v-5zM7 9h3V7H5v5h2V9zm14-6H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16.01H3V4.99h18v14.02z"></path></g>
+<g id="assessment"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"></path></g>
+<g id="assignment"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"></path></g>
+<g id="assignment-ind"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm0 4c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm6 12H6v-1.4c0-2 4-3.1 6-3.1s6 1.1 6 3.1V19z"></path></g>
+<g id="assignment-late"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-6 15h-2v-2h2v2zm0-4h-2V8h2v6zm-1-9c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"></path></g>
+<g id="assignment-return"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm4 12h-4v3l-5-5 5-5v3h4v4z"></path></g>
+<g id="assignment-returned"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm0 15l-5-5h3V9h4v4h3l-5 5z"></path></g>
+<g id="assignment-turned-in"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm-2 14l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"></path></g>
+<g id="attachment"><path d="M2 12.5C2 9.46 4.46 7 7.5 7H18c2.21 0 4 1.79 4 4s-1.79 4-4 4H9.5C8.12 15 7 13.88 7 12.5S8.12 10 9.5 10H17v2H9.41c-.55 0-.55 1 0 1H18c1.1 0 2-.9 2-2s-.9-2-2-2H7.5C5.57 9 4 10.57 4 12.5S5.57 16 7.5 16H17v2H7.5C4.46 18 2 15.54 2 12.5z"></path></g>
+<g id="autorenew"><path d="M12 6v3l4-4-4-4v3c-4.42 0-8 3.58-8 8 0 1.57.46 3.03 1.24 4.26L6.7 14.8c-.45-.83-.7-1.79-.7-2.8 0-3.31 2.69-6 6-6zm6.76 1.74L17.3 9.2c.44.84.7 1.79.7 2.8 0 3.31-2.69 6-6 6v-3l-4 4 4 4v-3c4.42 0 8-3.58 8-8 0-1.57-.46-3.03-1.24-4.26z"></path></g>
+<g id="backspace"><path d="M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-3 12.59L17.59 17 14 13.41 10.41 17 9 15.59 12.59 12 9 8.41 10.41 7 14 10.59 17.59 7 19 8.41 15.41 12 19 15.59z"></path></g>
+<g id="backup"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"></path></g>
+<g id="block"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM4 12c0-4.42 3.58-8 8-8 1.85 0 3.55.63 4.9 1.69L5.69 16.9C4.63 15.55 4 13.85 4 12zm8 8c-1.85 0-3.55-.63-4.9-1.69L18.31 7.1C19.37 8.45 20 10.15 20 12c0 4.42-3.58 8-8 8z"></path></g>
+<g id="book"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"></path></g>
+<g id="bookmark"><path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z"></path></g>
+<g id="bookmark-border"><path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2zm0 15l-5-2.18L7 18V5h10v13z"></path></g>
+<g id="bug-report"><path d="M20 8h-2.81c-.45-.78-1.07-1.45-1.82-1.96L17 4.41 15.59 3l-2.17 2.17C12.96 5.06 12.49 5 12 5c-.49 0-.96.06-1.41.17L8.41 3 7 4.41l1.62 1.63C7.88 6.55 7.26 7.22 6.81 8H4v2h2.09c-.05.33-.09.66-.09 1v1H4v2h2v1c0 .34.04.67.09 1H4v2h2.81c1.04 1.79 2.97 3 5.19 3s4.15-1.21 5.19-3H20v-2h-2.09c.05-.33.09-.66.09-1v-1h2v-2h-2v-1c0-.34-.04-.67-.09-1H20V8zm-6 8h-4v-2h4v2zm0-4h-4v-2h4v2z"></path></g>
+<g id="build"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"></path></g>
+<g id="cached"><path d="M19 8l-4 4h3c0 3.31-2.69 6-6 6-1.01 0-1.97-.25-2.8-.7l-1.46 1.46C8.97 19.54 10.43 20 12 20c4.42 0 8-3.58 8-8h3l-4-4zM6 12c0-3.31 2.69-6 6-6 1.01 0 1.97.25 2.8.7l1.46-1.46C15.03 4.46 13.57 4 12 4c-4.42 0-8 3.58-8 8H1l4 4 4-4H6z"></path></g>
+<g id="camera-enhance"><path d="M9 3L7.17 5H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2h-3.17L15 3H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-1l1.25-2.75L16 13l-2.75-1.25L12 9l-1.25 2.75L8 13l2.75 1.25z"></path></g>
+<g id="cancel"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"></path></g>
+<g id="card-giftcard"><path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.83 8.62 12 11 8.76l1-1.36 1 1.36L15.38 12 17 10.83 14.92 8H20v6z"></path></g>
+<g id="card-membership"><path d="M20 2H4c-1.11 0-2 .89-2 2v11c0 1.11.89 2 2 2h4v5l4-2 4 2v-5h4c1.11 0 2-.89 2-2V4c0-1.11-.89-2-2-2zm0 13H4v-2h16v2zm0-5H4V4h16v6z"></path></g>
+<g id="card-travel"><path d="M20 6h-3V4c0-1.11-.89-2-2-2H9c-1.11 0-2 .89-2 2v2H4c-1.11 0-2 .89-2 2v11c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zM9 4h6v2H9V4zm11 15H4v-2h16v2zm0-5H4V8h3v2h2V8h6v2h2V8h3v6z"></path></g>
+<g id="change-history"><path d="M12 7.77L18.39 18H5.61L12 7.77M12 4L2 20h20L12 4z"></path></g>
+<g id="check"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path></g>
+<g id="check-box"><path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"></path></g>
+<g id="check-box-outline-blank"><path d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"></path></g>
+<g id="check-circle"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"></path></g>
+<g id="chevron-left"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path></g>
+<g id="chevron-right"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></g>
+<g id="chrome-reader-mode"><path d="M13 12h7v1.5h-7zm0-2.5h7V11h-7zm0 5h7V16h-7zM21 4H3c-1.1 0-2 .9-2 2v13c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 15h-9V6h9v13z"></path></g>
+<g id="class"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"></path></g>
+<g id="clear"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></g>
+<g id="close"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></g>
+<g id="cloud"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"></path></g>
+<g id="cloud-circle"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.5 14H8c-1.66 0-3-1.34-3-3s1.34-3 3-3l.14.01C8.58 8.28 10.13 7 12 7c2.21 0 4 1.79 4 4h.5c1.38 0 2.5 1.12 2.5 2.5S17.88 16 16.5 16z"></path></g>
+<g id="cloud-done"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM10 17l-3.5-3.5 1.41-1.41L10 14.17 15.18 9l1.41 1.41L10 17z"></path></g>
+<g id="cloud-download"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"></path></g>
+<g id="cloud-off"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4c-1.48 0-2.85.43-4.01 1.17l1.46 1.46C10.21 6.23 11.08 6 12 6c3.04 0 5.5 2.46 5.5 5.5v.5H19c1.66 0 3 1.34 3 3 0 1.13-.64 2.11-1.56 2.62l1.45 1.45C23.16 18.16 24 16.68 24 15c0-2.64-2.05-4.78-4.65-4.96zM3 5.27l2.75 2.74C2.56 8.15 0 10.77 0 14c0 3.31 2.69 6 6 6h11.73l2 2L21 20.73 4.27 4 3 5.27zM7.73 10l8 8H6c-2.21 0-4-1.79-4-4s1.79-4 4-4h1.73z"></path></g>
+<g id="cloud-queue"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM19 18H6c-2.21 0-4-1.79-4-4s1.79-4 4-4h.71C7.37 7.69 9.48 6 12 6c3.04 0 5.5 2.46 5.5 5.5v.5H19c1.66 0 3 1.34 3 3s-1.34 3-3 3z"></path></g>
+<g id="cloud-upload"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"></path></g>
+<g id="code"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"></path></g>
+<g id="compare-arrows"><path d="M9.01 14H2v2h7.01v3L13 15l-3.99-4v3zm5.98-1v-3H22V8h-7.01V5L11 9l3.99 4z"></path></g>
+<g id="content-copy"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path></g>
+<g id="content-cut"><path d="M9.64 7.64c.23-.5.36-1.05.36-1.64 0-2.21-1.79-4-4-4S2 3.79 2 6s1.79 4 4 4c.59 0 1.14-.13 1.64-.36L10 12l-2.36 2.36C7.14 14.13 6.59 14 6 14c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4c0-.59-.13-1.14-.36-1.64L12 14l7 7h3v-1L9.64 7.64zM6 8c-1.1 0-2-.89-2-2s.9-2 2-2 2 .89 2 2-.9 2-2 2zm0 12c-1.1 0-2-.89-2-2s.9-2 2-2 2 .89 2 2-.9 2-2 2zm6-7.5c-.28 0-.5-.22-.5-.5s.22-.5.5-.5.5.22.5.5-.22.5-.5.5zM19 3l-6 6 2 2 7-7V3z"></path></g>
+<g id="content-paste"><path d="M19 2h-4.18C14.4.84 13.3 0 12 0c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm7 18H5V4h2v3h10V4h2v16z"></path></g>
+<g id="copyright"><path d="M10.08 10.86c.05-.33.16-.62.3-.87s.34-.46.59-.62c.24-.15.54-.22.91-.23.23.01.44.05.63.13.2.09.38.21.52.36s.25.33.34.53.13.42.14.64h1.79c-.02-.47-.11-.9-.28-1.29s-.4-.73-.7-1.01-.66-.5-1.08-.66-.88-.23-1.39-.23c-.65 0-1.22.11-1.7.34s-.88.53-1.2.92-.56.84-.71 1.36S8 11.29 8 11.87v.27c0 .58.08 1.12.23 1.64s.39.97.71 1.35.72.69 1.2.91 1.05.34 1.7.34c.47 0 .91-.08 1.32-.23s.77-.36 1.08-.63.56-.58.74-.94.29-.74.3-1.15h-1.79c-.01.21-.06.4-.15.58s-.21.33-.36.46-.32.23-.52.3c-.19.07-.39.09-.6.1-.36-.01-.66-.08-.89-.23-.25-.16-.45-.37-.59-.62s-.25-.55-.3-.88-.08-.67-.08-1v-.27c0-.35.03-.68.08-1.01zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"></path></g>
+<g id="create"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"></path></g>
+<g id="create-new-folder"><path d="M20 6h-8l-2-2H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-1 8h-3v3h-2v-3h-3v-2h3V9h2v3h3v2z"></path></g>
+<g id="credit-card"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"></path></g>
+<g id="dashboard"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"></path></g>
+<g id="date-range"><path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"></path></g>
+<g id="delete"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"></path></g>
+<g id="delete-forever"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zm2.46-7.12l1.41-1.41L12 12.59l2.12-2.12 1.41 1.41L13.41 14l2.12 2.12-1.41 1.41L12 15.41l-2.12 2.12-1.41-1.41L10.59 14l-2.13-2.12zM15.5 4l-1-1h-5l-1 1H5v2h14V4z"></path></g>
+<g id="delete-sweep"><path d="M15 16h4v2h-4zm0-8h7v2h-7zm0 4h6v2h-6zM3 18c0 1.1.9 2 2 2h6c1.1 0 2-.9 2-2V8H3v10zM14 5h-3l-1-1H6L5 5H2v2h12z"></path></g>
+<g id="description"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"></path></g>
+<g id="dns"><path d="M20 13H4c-.55 0-1 .45-1 1v6c0 .55.45 1 1 1h16c.55 0 1-.45 1-1v-6c0-.55-.45-1-1-1zM7 19c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zM20 3H4c-.55 0-1 .45-1 1v6c0 .55.45 1 1 1h16c.55 0 1-.45 1-1V4c0-.55-.45-1-1-1zM7 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"></path></g>
+<g id="done"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"></path></g>
+<g id="done-all"><path d="M18 7l-1.41-1.41-6.34 6.34 1.41 1.41L18 7zm4.24-1.41L11.66 16.17 7.48 12l-1.41 1.41L11.66 19l12-12-1.42-1.41zM.41 13.41L6 19l1.41-1.41L1.83 12 .41 13.41z"></path></g>
+<g id="donut-large"><path d="M11 5.08V2c-5 .5-9 4.81-9 10s4 9.5 9 10v-3.08c-3-.48-6-3.4-6-6.92s3-6.44 6-6.92zM18.97 11H22c-.47-5-4-8.53-9-9v3.08C16 5.51 18.54 8 18.97 11zM13 18.92V22c5-.47 8.53-4 9-9h-3.03c-.43 3-2.97 5.49-5.97 5.92z"></path></g>
+<g id="donut-small"><path d="M11 9.16V2c-5 .5-9 4.79-9 10s4 9.5 9 10v-7.16c-1-.41-2-1.52-2-2.84s1-2.43 2-2.84zM14.86 11H22c-.48-4.75-4-8.53-9-9v7.16c1 .3 1.52.98 1.86 1.84zM13 14.84V22c5-.47 8.52-4.25 9-9h-7.14c-.34.86-.86 1.54-1.86 1.84z"></path></g>
+<g id="drafts"><path d="M21.99 8c0-.72-.37-1.35-.94-1.7L12 1 2.95 6.3C2.38 6.65 2 7.28 2 8v10c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2l-.01-10zM12 13L3.74 7.84 12 3l8.26 4.84L12 13z"></path></g>
+<g id="eject"><path d="M5 17h14v2H5zm7-12L5.33 15h13.34z"></path></g>
+<g id="error"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"></path></g>
+<g id="error-outline"><path d="M11 15h2v2h-2zm0-8h2v6h-2zm.99-5C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"></path></g>
+<g id="euro-symbol"><path d="M15 18.5c-2.51 0-4.68-1.42-5.76-3.5H15v-2H8.58c-.05-.33-.08-.66-.08-1s.03-.67.08-1H15V9H9.24C10.32 6.92 12.5 5.5 15 5.5c1.61 0 3.09.59 4.23 1.57L21 5.3C19.41 3.87 17.3 3 15 3c-3.92 0-7.24 2.51-8.48 6H3v2h3.06c-.04.33-.06.66-.06 1 0 .34.02.67.06 1H3v2h3.52c1.24 3.49 4.56 6 8.48 6 2.31 0 4.41-.87 6-2.3l-1.78-1.77c-1.13.98-2.6 1.57-4.22 1.57z"></path></g>
+<g id="event"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"></path></g>
+<g id="event-seat"><path d="M4 18v3h3v-3h10v3h3v-6H4zm15-8h3v3h-3zM2 10h3v3H2zm15 3H7V5c0-1.1.9-2 2-2h6c1.1 0 2 .9 2 2v8z"></path></g>
+<g id="exit-to-app"><path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"></path></g>
+<g id="expand-less"><path d="M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z"></path></g>
+<g id="expand-more"><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"></path></g>
+<g id="explore"><path d="M12 10.9c-.61 0-1.1.49-1.1 1.1s.49 1.1 1.1 1.1c.61 0 1.1-.49 1.1-1.1s-.49-1.1-1.1-1.1zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm2.19 12.19L6 18l3.81-8.19L18 6l-3.81 8.19z"></path></g>
+<g id="extension"><path d="M20.5 11H19V7c0-1.1-.9-2-2-2h-4V3.5C13 2.12 11.88 1 10.5 1S8 2.12 8 3.5V5H4c-1.1 0-1.99.9-1.99 2v3.8H3.5c1.49 0 2.7 1.21 2.7 2.7s-1.21 2.7-2.7 2.7H2V20c0 1.1.9 2 2 2h3.8v-1.5c0-1.49 1.21-2.7 2.7-2.7 1.49 0 2.7 1.21 2.7 2.7V22H17c1.1 0 2-.9 2-2v-4h1.5c1.38 0 2.5-1.12 2.5-2.5S21.88 11 20.5 11z"></path></g>
+<g id="face"><path d="M9 11.75c-.69 0-1.25.56-1.25 1.25s.56 1.25 1.25 1.25 1.25-.56 1.25-1.25-.56-1.25-1.25-1.25zm6 0c-.69 0-1.25.56-1.25 1.25s.56 1.25 1.25 1.25 1.25-.56 1.25-1.25-.56-1.25-1.25-1.25zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8 0-.29.02-.58.05-.86 2.36-1.05 4.23-2.98 5.21-5.37C11.07 8.33 14.05 10 17.42 10c.78 0 1.53-.09 2.25-.26.21.71.33 1.47.33 2.26 0 4.41-3.59 8-8 8z"></path></g>
+<g id="favorite"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path></g>
+<g id="favorite-border"><path d="M16.5 3c-1.74 0-3.41.81-4.5 2.09C10.91 3.81 9.24 3 7.5 3 4.42 3 2 5.42 2 8.5c0 3.78 3.4 6.86 8.55 11.54L12 21.35l1.45-1.32C18.6 15.36 22 12.28 22 8.5 22 5.42 19.58 3 16.5 3zm-4.4 15.55l-.1.1-.1-.1C7.14 14.24 4 11.39 4 8.5 4 6.5 5.5 5 7.5 5c1.54 0 3.04.99 3.57 2.36h1.87C13.46 5.99 14.96 5 16.5 5c2 0 3.5 1.5 3.5 3.5 0 2.89-3.14 5.74-7.9 10.05z"></path></g>
+<g id="feedback"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 12h-2v-2h2v2zm0-4h-2V6h2v4z"></path></g>
+<g id="file-download"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"></path></g>
+<g id="file-upload"><path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"></path></g>
+<g id="filter-list"><path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"></path></g>
+<g id="find-in-page"><path d="M20 19.59V8l-6-6H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c.45 0 .85-.15 1.19-.4l-4.43-4.43c-.8.52-1.74.83-2.76.83-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5c0 1.02-.31 1.96-.83 2.75L20 19.59zM9 13c0 1.66 1.34 3 3 3s3-1.34 3-3-1.34-3-3-3-3 1.34-3 3z"></path></g>
+<g id="find-replace"><path d="M11 6c1.38 0 2.63.56 3.54 1.46L12 10h6V4l-2.05 2.05C14.68 4.78 12.93 4 11 4c-3.53 0-6.43 2.61-6.92 6H6.1c.46-2.28 2.48-4 4.9-4zm5.64 9.14c.66-.9 1.12-1.97 1.28-3.14H15.9c-.46 2.28-2.48 4-4.9 4-1.38 0-2.63-.56-3.54-1.46L10 12H4v6l2.05-2.05C7.32 17.22 9.07 18 11 18c1.55 0 2.98-.51 4.14-1.36L20 21.49 21.49 20l-4.85-4.86z"></path></g>
+<g id="fingerprint"><path d="M17.81 4.47c-.08 0-.16-.02-.23-.06C15.66 3.42 14 3 12.01 3c-1.98 0-3.86.47-5.57 1.41-.24.13-.54.04-.68-.2-.13-.24-.04-.55.2-.68C7.82 2.52 9.86 2 12.01 2c2.13 0 3.99.47 6.03 1.52.25.13.34.43.21.67-.09.18-.26.28-.44.28zM3.5 9.72c-.1 0-.2-.03-.29-.09-.23-.16-.28-.47-.12-.7.99-1.4 2.25-2.5 3.75-3.27C9.98 4.04 14 4.03 17.15 5.65c1.5.77 2.76 1.86 3.75 3.25.16.22.11.54-.12.7-.23.16-.54.11-.7-.12-.9-1.26-2.04-2.25-3.39-2.94-2.87-1.47-6.54-1.47-9.4.01-1.36.7-2.5 1.7-3.4 2.96-.08.14-.23.21-.39.21zm6.25 12.07c-.13 0-.26-.05-.35-.15-.87-.87-1.34-1.43-2.01-2.64-.69-1.23-1.05-2.73-1.05-4.34 0-2.97 2.54-5.39 5.66-5.39s5.66 2.42 5.66 5.39c0 .28-.22.5-.5.5s-.5-.22-.5-.5c0-2.42-2.09-4.39-4.66-4.39-2.57 0-4.66 1.97-4.66 4.39 0 1.44.32 2.77.93 3.85.64 1.15 1.08 1.64 1.85 2.42.19.2.19.51 0 .71-.11.1-.24.15-.37.15zm7.17-1.85c-1.19 0-2.24-.3-3.1-.89-1.49-1.01-2.38-2.65-2.38-4.39 0-.28.22-.5.5-.5s.5.22.5.5c0 1.41.72 2.74 1.94 3.56.71.48 1.54.71 2.54.71.24 0 .64-.03 1.04-.1.27-.05.53.13.58.41.05.27-.13.53-.41.58-.57.11-1.07.12-1.21.12zM14.91 22c-.04 0-.09-.01-.13-.02-1.59-.44-2.63-1.03-3.72-2.1-1.4-1.39-2.17-3.24-2.17-5.22 0-1.62 1.38-2.94 3.08-2.94 1.7 0 3.08 1.32 3.08 2.94 0 1.07.93 1.94 2.08 1.94s2.08-.87 2.08-1.94c0-3.77-3.25-6.83-7.25-6.83-2.84 0-5.44 1.58-6.61 4.03-.39.81-.59 1.76-.59 2.8 0 .78.07 2.01.67 3.61.1.26-.03.55-.29.64-.26.1-.55-.04-.64-.29-.49-1.31-.73-2.61-.73-3.96 0-1.2.23-2.29.68-3.24 1.33-2.79 4.28-4.6 7.51-4.6 4.55 0 8.25 3.51 8.25 7.83 0 1.62-1.38 2.94-3.08 2.94s-3.08-1.32-3.08-2.94c0-1.07-.93-1.94-2.08-1.94s-2.08.87-2.08 1.94c0 1.71.66 3.31 1.87 4.51.95.94 1.86 1.46 3.27 1.85.27.07.42.35.35.61-.05.23-.26.38-.47.38z"></path></g>
+<g id="first-page"><path d="M18.41 16.59L13.82 12l4.59-4.59L17 6l-6 6 6 6zM6 6h2v12H6z"></path></g>
+<g id="flag"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"></path></g>
+<g id="flight-land"><path d="M2.5 19h19v2h-19zm7.18-5.73l4.35 1.16 5.31 1.42c.8.21 1.62-.26 1.84-1.06.21-.8-.26-1.62-1.06-1.84l-5.31-1.42-2.76-9.02L10.12 2v8.28L5.15 8.95l-.93-2.32-1.45-.39v5.17l1.6.43 5.31 1.43z"></path></g>
+<g id="flight-takeoff"><path d="M2.5 19h19v2h-19zm19.57-9.36c-.21-.8-1.04-1.28-1.84-1.06L14.92 10l-6.9-6.43-1.93.51 4.14 7.17-4.97 1.33-1.97-1.54-1.45.39 1.82 3.16.77 1.33 1.6-.43 5.31-1.42 4.35-1.16L21 11.49c.81-.23 1.28-1.05 1.07-1.85z"></path></g>
+<g id="flip-to-back"><path d="M9 7H7v2h2V7zm0 4H7v2h2v-2zm0-8c-1.11 0-2 .9-2 2h2V3zm4 12h-2v2h2v-2zm6-12v2h2c0-1.1-.9-2-2-2zm-6 0h-2v2h2V3zM9 17v-2H7c0 1.1.89 2 2 2zm10-4h2v-2h-2v2zm0-4h2V7h-2v2zm0 8c1.1 0 2-.9 2-2h-2v2zM5 7H3v12c0 1.1.89 2 2 2h12v-2H5V7zm10-2h2V3h-2v2zm0 12h2v-2h-2v2z"></path></g>
+<g id="flip-to-front"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm2 4v-2H3c0 1.1.89 2 2 2zM3 9h2V7H3v2zm12 12h2v-2h-2v2zm4-18H9c-1.11 0-2 .9-2 2v10c0 1.1.89 2 2 2h10c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 12H9V5h10v10zm-8 6h2v-2h-2v2zm-4 0h2v-2H7v2z"></path></g>
+<g id="folder"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"></path></g>
+<g id="folder-open"><path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z"></path></g>
+<g id="folder-shared"><path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-5 3c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm4 8h-8v-1c0-1.33 2.67-2 4-2s4 .67 4 2v1z"></path></g>
+<g id="font-download"><path d="M9.93 13.5h4.14L12 7.98zM20 2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-4.05 16.5l-1.14-3H9.17l-1.12 3H5.96l5.11-13h1.86l5.11 13h-2.09z"></path></g>
+<g id="forward"><path d="M12 8V4l8 8-8 8v-4H4V8z"></path></g>
+<g id="fullscreen"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"></path></g>
+<g id="fullscreen-exit"><path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"></path></g>
+<g id="g-translate"><path d="M20 5h-9.12L10 2H4c-1.1 0-2 .9-2 2v13c0 1.1.9 2 2 2h7l1 3h8c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zM7.17 14.59c-2.25 0-4.09-1.83-4.09-4.09s1.83-4.09 4.09-4.09c1.04 0 1.99.37 2.74 1.07l.07.06-1.23 1.18-.06-.05c-.29-.27-.78-.59-1.52-.59-1.31 0-2.38 1.09-2.38 2.42s1.07 2.42 2.38 2.42c1.37 0 1.96-.87 2.12-1.46H7.08V9.91h3.95l.01.07c.04.21.05.4.05.61 0 2.35-1.61 4-3.92 4zm6.03-1.71c.33.6.74 1.18 1.19 1.7l-.54.53-.65-2.23zm.77-.76h-.99l-.31-1.04h3.99s-.34 1.31-1.56 2.74c-.52-.62-.89-1.23-1.13-1.7zM21 20c0 .55-.45 1-1 1h-7l2-2-.81-2.77.92-.92L17.79 18l.73-.73-2.71-2.68c.9-1.03 1.6-2.25 1.92-3.51H19v-1.04h-3.64V9h-1.04v1.04h-1.96L11.18 6H20c.55 0 1 .45 1 1v13z"></path></g>
+<g id="gavel"><path d="M1 21h12v2H1zM5.245 8.07l2.83-2.827 14.14 14.142-2.828 2.828zM12.317 1l5.657 5.656-2.83 2.83-5.654-5.66zM3.825 9.485l5.657 5.657-2.828 2.828-5.657-5.657z"></path></g>
+<g id="gesture"><path d="M4.59 6.89c.7-.71 1.4-1.35 1.71-1.22.5.2 0 1.03-.3 1.52-.25.42-2.86 3.89-2.86 6.31 0 1.28.48 2.34 1.34 2.98.75.56 1.74.73 2.64.46 1.07-.31 1.95-1.4 3.06-2.77 1.21-1.49 2.83-3.44 4.08-3.44 1.63 0 1.65 1.01 1.76 1.79-3.78.64-5.38 3.67-5.38 5.37 0 1.7 1.44 3.09 3.21 3.09 1.63 0 4.29-1.33 4.69-6.1H21v-2.5h-2.47c-.15-1.65-1.09-4.2-4.03-4.2-2.25 0-4.18 1.91-4.94 2.84-.58.73-2.06 2.48-2.29 2.72-.25.3-.68.84-1.11.84-.45 0-.72-.83-.36-1.92.35-1.09 1.4-2.86 1.85-3.52.78-1.14 1.3-1.92 1.3-3.28C8.95 3.69 7.31 3 6.44 3 5.12 3 3.97 4 3.72 4.25c-.36.36-.66.66-.88.93l1.75 1.71zm9.29 11.66c-.31 0-.74-.26-.74-.72 0-.6.73-2.2 2.87-2.76-.3 2.69-1.43 3.48-2.13 3.48z"></path></g>
+<g id="get-app"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"></path></g>
+<g id="gif"><path d="M11.5 9H13v6h-1.5zM9 9H6c-.6 0-1 .5-1 1v4c0 .5.4 1 1 1h3c.6 0 1-.5 1-1v-2H8.5v1.5h-2v-3H10V10c0-.5-.4-1-1-1zm10 1.5V9h-4.5v6H16v-2h2v-1.5h-2v-1z"></path></g>
+<g id="grade"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path></g>
+<g id="group-work"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM8 17.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5zM9.5 8c0-1.38 1.12-2.5 2.5-2.5s2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5S9.5 9.38 9.5 8zm6.5 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"></path></g>
+<g id="help"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"></path></g>
+<g id="help-outline"><path d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z"></path></g>
+<g id="highlight-off"><path d="M14.59 8L12 10.59 9.41 8 8 9.41 10.59 12 8 14.59 9.41 16 12 13.41 14.59 16 16 14.59 13.41 12 16 9.41 14.59 8zM12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"></path></g>
+<g id="history"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"></path></g>
+<g id="home"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"></path></g>
+<g id="hourglass-empty"><path d="M6 2v6h.01L6 8.01 10 12l-4 4 .01.01H6V22h12v-5.99h-.01L18 16l-4-4 4-3.99-.01-.01H18V2H6zm10 14.5V20H8v-3.5l4-4 4 4zm-4-5l-4-4V4h8v3.5l-4 4z"></path></g>
+<g id="hourglass-full"><path d="M6 2v6h.01L6 8.01 10 12l-4 4 .01.01H6V22h12v-5.99h-.01L18 16l-4-4 4-3.99-.01-.01H18V2H6z"></path></g>
+<g id="http"><path d="M4.5 11h-2V9H1v6h1.5v-2.5h2V15H6V9H4.5v2zm2.5-.5h1.5V15H10v-4.5h1.5V9H7v1.5zm5.5 0H14V15h1.5v-4.5H17V9h-4.5v1.5zm9-1.5H18v6h1.5v-2h2c.8 0 1.5-.7 1.5-1.5v-1c0-.8-.7-1.5-1.5-1.5zm0 2.5h-2v-1h2v1z"></path></g>
+<g id="https"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"></path></g>
+<g id="important-devices"><path d="M23 11.01L18 11c-.55 0-1 .45-1 1v9c0 .55.45 1 1 1h5c.55 0 1-.45 1-1v-9c0-.55-.45-.99-1-.99zM23 20h-5v-7h5v7zM20 2H2C.89 2 0 2.89 0 4v12c0 1.1.89 2 2 2h7v2H7v2h8v-2h-2v-2h2v-2H2V4h18v5h2V4c0-1.11-.9-2-2-2zm-8.03 7L11 6l-.97 3H7l2.47 1.76-.94 2.91 2.47-1.8 2.47 1.8-.94-2.91L15 9h-3.03z"></path></g>
+<g id="inbox"><path d="M19 3H4.99c-1.11 0-1.98.89-1.98 2L3 19c0 1.1.88 2 1.99 2H19c1.1 0 2-.9 2-2V5c0-1.11-.9-2-2-2zm0 12h-4c0 1.66-1.35 3-3 3s-3-1.34-3-3H4.99V5H19v10z"></path></g>
+<g id="indeterminate-check-box"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10H7v-2h10v2z"></path></g>
+<g id="info"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"></path></g>
+<g id="info-outline"><path d="M11 17h2v-6h-2v6zm1-15C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zM11 9h2V7h-2v2z"></path></g>
+<g id="input"><path d="M21 3.01H3c-1.1 0-2 .9-2 2V9h2V4.99h18v14.03H3V15H1v4.01c0 1.1.9 1.98 2 1.98h18c1.1 0 2-.88 2-1.98v-14c0-1.11-.9-2-2-2zM11 16l4-4-4-4v3H1v2h10v3z"></path></g>
+<g id="invert-colors"><path d="M17.66 7.93L12 2.27 6.34 7.93c-3.12 3.12-3.12 8.19 0 11.31C7.9 20.8 9.95 21.58 12 21.58c2.05 0 4.1-.78 5.66-2.34 3.12-3.12 3.12-8.19 0-11.31zM12 19.59c-1.6 0-3.11-.62-4.24-1.76C6.62 16.69 6 15.19 6 13.59s.62-3.11 1.76-4.24L12 5.1v14.49z"></path></g>
+<g id="label"><path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"></path></g>
+<g id="label-outline"><path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16zM16 17H5V7h11l3.55 5L16 17z"></path></g>
+<g id="language"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm6.93 6h-2.95c-.32-1.25-.78-2.45-1.38-3.56 1.84.63 3.37 1.91 4.33 3.56zM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96zM4.26 14C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.32-.14 2 0 .68.06 1.34.14 2H4.26zm.82 2h2.95c.32 1.25.78 2.45 1.38 3.56-1.84-.63-3.37-1.9-4.33-3.56zm2.95-8H5.08c.96-1.66 2.49-2.93 4.33-3.56C8.81 5.55 8.35 6.75 8.03 8zM12 19.96c-.83-1.2-1.48-2.53-1.91-3.96h3.82c-.43 1.43-1.08 2.76-1.91 3.96zM14.34 14H9.66c-.09-.66-.16-1.32-.16-2 0-.68.07-1.35.16-2h4.68c.09.65.16 1.32.16 2 0 .68-.07 1.34-.16 2zm.25 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95c-.96 1.65-2.49 2.93-4.33 3.56zM16.36 14c.08-.66.14-1.32.14-2 0-.68-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2h-3.38z"></path></g>
+<g id="last-page"><path d="M5.59 7.41L10.18 12l-4.59 4.59L7 18l6-6-6-6zM16 6h2v12h-2z"></path></g>
+<g id="launch"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"></path></g>
+<g id="lightbulb-outline"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1l-.85.6V16h-4v-2.3l-.85-.6C7.8 12.16 7 10.63 7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.16-2.15 4.1z"></path></g>
+<g id="line-style"><path d="M3 16h5v-2H3v2zm6.5 0h5v-2h-5v2zm6.5 0h5v-2h-5v2zM3 20h2v-2H3v2zm4 0h2v-2H7v2zm4 0h2v-2h-2v2zm4 0h2v-2h-2v2zm4 0h2v-2h-2v2zM3 12h8v-2H3v2zm10 0h8v-2h-8v2zM3 4v4h18V4H3z"></path></g>
+<g id="line-weight"><path d="M3 17h18v-2H3v2zm0 3h18v-1H3v1zm0-7h18v-3H3v3zm0-9v4h18V4H3z"></path></g>
+<g id="link"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></g>
+<g id="list"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"></path></g>
+<g id="lock"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"></path></g>
+<g id="lock-open"><path d="M12 17c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm6-9h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6h1.9c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm0 12H6V10h12v10z"></path></g>
+<g id="lock-outline"><path d="M12 17c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm6-9h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM8.9 6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1v2H8.9V6zM18 20H6V10h12v10z"></path></g>
+<g id="low-priority"><path d="M14 5h8v2h-8zm0 5.5h8v2h-8zm0 5.5h8v2h-8zM2 11.5C2 15.08 4.92 18 8.5 18H9v2l3-3-3-3v2h-.5C6.02 16 4 13.98 4 11.5S6.02 7 8.5 7H12V5H8.5C4.92 5 2 7.92 2 11.5z"></path></g>
+<g id="loyalty"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7zm11.77 8.27L13 19.54l-4.27-4.27C8.28 14.81 8 14.19 8 13.5c0-1.38 1.12-2.5 2.5-2.5.69 0 1.32.28 1.77.74l.73.72.73-.73c.45-.45 1.08-.73 1.77-.73 1.38 0 2.5 1.12 2.5 2.5 0 .69-.28 1.32-.73 1.77z"></path></g>
+<g id="mail"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"></path></g>
+<g id="markunread"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"></path></g>
+<g id="markunread-mailbox"><path d="M20 6H10v6H8V4h6V0H6v6H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2z"></path></g>
+<g id="menu"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path></g>
+<g id="more-horiz"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path></g>
+<g id="more-vert"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path></g>
+<g id="motorcycle"><path d="M19.44 9.03L15.41 5H11v2h3.59l2 2H5c-2.8 0-5 2.2-5 5s2.2 5 5 5c2.46 0 4.45-1.69 4.9-4h1.65l2.77-2.77c-.21.54-.32 1.14-.32 1.77 0 2.8 2.2 5 5 5s5-2.2 5-5c0-2.65-1.97-4.77-4.56-4.97zM7.82 15C7.4 16.15 6.28 17 5 17c-1.63 0-3-1.37-3-3s1.37-3 3-3c1.28 0 2.4.85 2.82 2H5v2h2.82zM19 17c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"></path></g>
+<g id="move-to-inbox"><path d="M19 3H4.99c-1.11 0-1.98.9-1.98 2L3 19c0 1.1.88 2 1.99 2H19c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 12h-4c0 1.66-1.35 3-3 3s-3-1.34-3-3H4.99V5H19v10zm-3-5h-2V7h-4v3H8l4 4 4-4z"></path></g>
+<g id="next-week"><path d="M20 7h-4V5c0-.55-.22-1.05-.59-1.41C15.05 3.22 14.55 3 14 3h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM10 5h4v2h-4V5zm1 13.5l-1-1 3-3-3-3 1-1 4 4-4 4z"></path></g>
+<g id="note-add"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 14h-3v3h-2v-3H8v-2h3v-3h2v3h3v2zm-3-7V3.5L18.5 9H13z"></path></g>
+<g id="offline-pin"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm5 16H7v-2h10v2zm-6.7-4L7 10.7l1.4-1.4 1.9 1.9 5.3-5.3L17 7.3 10.3 14z"></path></g>
+<g id="opacity"><path d="M17.66 8L12 2.35 6.34 8C4.78 9.56 4 11.64 4 13.64s.78 4.11 2.34 5.67 3.61 2.35 5.66 2.35 4.1-.79 5.66-2.35S20 15.64 20 13.64 19.22 9.56 17.66 8zM6 14c.01-2 .62-3.27 1.76-4.4L12 5.27l4.24 4.38C17.38 10.77 17.99 12 18 14H6z"></path></g>
+<g id="open-in-browser"><path d="M19 4H5c-1.11 0-2 .9-2 2v12c0 1.1.89 2 2 2h4v-2H5V8h14v10h-4v2h4c1.1 0 2-.9 2-2V6c0-1.1-.89-2-2-2zm-7 6l-4 4h3v6h2v-6h3l-4-4z"></path></g>
+<g id="open-in-new"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"></path></g>
+<g id="open-with"><path d="M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5zm-9 3h-4v3H7l5 5 5-5h-3v-3z"></path></g>
+<g id="pageview"><path d="M11.5 9C10.12 9 9 10.12 9 11.5s1.12 2.5 2.5 2.5 2.5-1.12 2.5-2.5S12.88 9 11.5 9zM20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-3.21 14.21l-2.91-2.91c-.69.44-1.51.7-2.39.7C9.01 16 7 13.99 7 11.5S9.01 7 11.5 7 16 9.01 16 11.5c0 .88-.26 1.69-.7 2.39l2.91 2.9-1.42 1.42z"></path></g>
+<g id="pan-tool"><path d="M23 5.5V20c0 2.2-1.8 4-4 4h-7.3c-1.08 0-2.1-.43-2.85-1.19L1 14.83s1.26-1.23 1.3-1.25c.22-.19.49-.29.79-.29.22 0 .42.06.6.16.04.01 4.31 2.46 4.31 2.46V4c0-.83.67-1.5 1.5-1.5S11 3.17 11 4v7h1V1.5c0-.83.67-1.5 1.5-1.5S15 .67 15 1.5V11h1V2.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5V11h1V5.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5z"></path></g>
+<g id="payment"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"></path></g>
+<g id="perm-camera-mic"><path d="M20 5h-3.17L15 3H9L7.17 5H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7v-2.09c-2.83-.48-5-2.94-5-5.91h2c0 2.21 1.79 4 4 4s4-1.79 4-4h2c0 2.97-2.17 5.43-5 5.91V21h7c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-6 8c0 1.1-.9 2-2 2s-2-.9-2-2V9c0-1.1.9-2 2-2s2 .9 2 2v4z"></path></g>
+<g id="perm-contact-calendar"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm6 12H6v-1c0-2 4-3.1 6-3.1s6 1.1 6 3.1v1z"></path></g>
+<g id="perm-data-setting"><path d="M18.99 11.5c.34 0 .67.03 1 .07L20 0 0 20h11.56c-.04-.33-.07-.66-.07-1 0-4.14 3.36-7.5 7.5-7.5zm3.71 7.99c.02-.16.04-.32.04-.49 0-.17-.01-.33-.04-.49l1.06-.83c.09-.08.12-.21.06-.32l-1-1.73c-.06-.11-.19-.15-.31-.11l-1.24.5c-.26-.2-.54-.37-.85-.49l-.19-1.32c-.01-.12-.12-.21-.24-.21h-2c-.12 0-.23.09-.25.21l-.19 1.32c-.3.13-.59.29-.85.49l-1.24-.5c-.11-.04-.24 0-.31.11l-1 1.73c-.06.11-.04.24.06.32l1.06.83c-.02.16-.03.32-.03.49 0 .17.01.33.03.49l-1.06.83c-.09.08-.12.21-.06.32l1 1.73c.06.11.19.15.31.11l1.24-.5c.26.2.54.37.85.49l.19 1.32c.02.12.12.21.25.21h2c.12 0 .23-.09.25-.21l.19-1.32c.3-.13.59-.29.84-.49l1.25.5c.11.04.24 0 .31-.11l1-1.73c.06-.11.03-.24-.06-.32l-1.07-.83zm-3.71 1.01c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"></path></g>
+<g id="perm-device-information"><path d="M13 7h-2v2h2V7zm0 4h-2v6h2v-6zm4-9.99L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"></path></g>
+<g id="perm-identity"><path d="M12 5.9c1.16 0 2.1.94 2.1 2.1s-.94 2.1-2.1 2.1S9.9 9.16 9.9 8s.94-2.1 2.1-2.1m0 9c2.97 0 6.1 1.46 6.1 2.1v1.1H5.9V17c0-.64 3.13-2.1 6.1-2.1M12 4C9.79 4 8 5.79 8 8s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 9c-2.67 0-8 1.34-8 4v3h16v-3c0-2.66-5.33-4-8-4z"></path></g>
+<g id="perm-media"><path d="M2 6H0v5h.01L0 20c0 1.1.9 2 2 2h18v-2H2V6zm20-2h-8l-2-2H6c-1.1 0-1.99.9-1.99 2L4 16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zM7 15l4.5-6 3.5 4.51 2.5-3.01L21 15H7z"></path></g>
+<g id="perm-phone-msg"><path d="M20 15.5c-1.25 0-2.45-.2-3.57-.57-.35-.11-.74-.03-1.02.24l-2.2 2.2c-2.83-1.44-5.15-3.75-6.59-6.58l2.2-2.21c.28-.27.36-.66.25-1.01C8.7 6.45 8.5 5.25 8.5 4c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17 .55 0 1-.45 1-1v-3.5c0-.55-.45-1-1-1zM12 3v10l3-3h6V3h-9z"></path></g>
+<g id="perm-scan-wifi"><path d="M12 3C6.95 3 3.15 4.85 0 7.23L12 22 24 7.25C20.85 4.87 17.05 3 12 3zm1 13h-2v-6h2v6zm-2-8V6h2v2h-2z"></path></g>
+<g id="pets"><circle cx="4.5" cy="9.5" r="2.5"></circle><circle cx="9" cy="5.5" r="2.5"></circle><circle cx="15" cy="5.5" r="2.5"></circle><circle cx="19.5" cy="9.5" r="2.5"></circle><path d="M17.34 14.86c-.87-1.02-1.6-1.89-2.48-2.91-.46-.54-1.05-1.08-1.75-1.32-.11-.04-.22-.07-.33-.09-.25-.04-.52-.04-.78-.04s-.53 0-.79.05c-.11.02-.22.05-.33.09-.7.24-1.28.78-1.75 1.32-.87 1.02-1.6 1.89-2.48 2.91-1.31 1.31-2.92 2.76-2.62 4.79.29 1.02 1.02 2.03 2.33 2.32.73.15 3.06-.44 5.54-.44h.18c2.48 0 4.81.58 5.54.44 1.31-.29 2.04-1.31 2.33-2.32.31-2.04-1.3-3.49-2.61-4.8z"></path></g>
+<g id="picture-in-picture"><path d="M19 7h-8v6h8V7zm2-4H3c-1.1 0-2 .9-2 2v14c0 1.1.9 1.98 2 1.98h18c1.1 0 2-.88 2-1.98V5c0-1.1-.9-2-2-2zm0 16.01H3V4.98h18v14.03z"></path></g>
+<g id="picture-in-picture-alt"><path d="M19 11h-8v6h8v-6zm4 8V4.98C23 3.88 22.1 3 21 3H3c-1.1 0-2 .88-2 1.98V19c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2zm-2 .02H3V4.97h18v14.05z"></path></g>
+<g id="play-for-work"><path d="M11 5v5.59H7.5l4.5 4.5 4.5-4.5H13V5h-2zm-5 9c0 3.31 2.69 6 6 6s6-2.69 6-6h-2c0 2.21-1.79 4-4 4s-4-1.79-4-4H6z"></path></g>
+<g id="polymer"><path d="M19 4h-4L7.11 16.63 4.5 12 9 4H5L.5 12 5 20h4l7.89-12.63L19.5 12 15 20h4l4.5-8z"></path></g>
+<g id="power-settings-new"><path d="M13 3h-2v10h2V3zm4.83 2.17l-1.42 1.42C17.99 7.86 19 9.81 19 12c0 3.87-3.13 7-7 7s-7-3.13-7-7c0-2.19 1.01-4.14 2.58-5.42L6.17 5.17C4.23 6.82 3 9.26 3 12c0 4.97 4.03 9 9 9s9-4.03 9-9c0-2.74-1.23-5.18-3.17-6.83z"></path></g>
+<g id="pregnant-woman"><path d="M9 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zm7 9c-.01-1.34-.83-2.51-2-3 0-1.66-1.34-3-3-3s-3 1.34-3 3v7h2v5h3v-5h3v-4z"></path></g>
+<g id="print"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"></path></g>
+<g id="query-builder"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"></path></g>
+<g id="question-answer"><path d="M21 6h-2v9H6v2c0 .55.45 1 1 1h11l4 4V7c0-.55-.45-1-1-1zm-4 6V3c0-.55-.45-1-1-1H3c-.55 0-1 .45-1 1v14l4-4h10c.55 0 1-.45 1-1z"></path></g>
+<g id="radio-button-checked"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"></path></g>
+<g id="radio-button-unchecked"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"></path></g>
+<g id="receipt"><path d="M18 17H6v-2h12v2zm0-4H6v-2h12v2zm0-4H6V7h12v2zM3 22l1.5-1.5L6 22l1.5-1.5L9 22l1.5-1.5L12 22l1.5-1.5L15 22l1.5-1.5L18 22l1.5-1.5L21 22V2l-1.5 1.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2 4.5 3.5 3 2v20z"></path></g>
+<g id="record-voice-over"><circle cx="9" cy="9" r="4"></circle><path d="M9 15c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4zm7.76-9.64l-1.68 1.69c.84 1.18.84 2.71 0 3.89l1.68 1.69c2.02-2.02 2.02-5.07 0-7.27zM20.07 2l-1.63 1.63c2.77 3.02 2.77 7.56 0 10.74L20.07 16c3.9-3.89 3.91-9.95 0-14z"></path></g>
+<g id="redeem"><path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.83 8.62 12 11 8.76l1-1.36 1 1.36L15.38 12 17 10.83 14.92 8H20v6z"></path></g>
+<g id="redo"><path d="M18.4 10.6C16.55 8.99 14.15 8 11.5 8c-4.65 0-8.58 3.03-9.96 7.22L3.9 16c1.05-3.19 4.05-5.5 7.6-5.5 1.95 0 3.73.72 5.12 1.88L13 16h9V7l-3.6 3.6z"></path></g>
+<g id="refresh"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"></path></g>
+<g id="remove"><path d="M19 13H5v-2h14v2z"></path></g>
+<g id="remove-circle"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11H7v-2h10v2z"></path></g>
+<g id="remove-circle-outline"><path d="M7 11v2h10v-2H7zm5-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"></path></g>
+<g id="remove-shopping-cart"><path d="M22.73 22.73L2.77 2.77 2 2l-.73-.73L0 2.54l4.39 4.39 2.21 4.66-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h7.46l1.38 1.38c-.5.36-.83.95-.83 1.62 0 1.1.89 2 1.99 2 .67 0 1.26-.33 1.62-.84L21.46 24l1.27-1.27zM7.42 15c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h2.36l2 2H7.42zm8.13-2c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H6.54l9.01 9zM7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2z"></path></g>
+<g id="reorder"><path d="M3 15h18v-2H3v2zm0 4h18v-2H3v2zm0-8h18V9H3v2zm0-6v2h18V5H3z"></path></g>
+<g id="reply"><path d="M10 9V5l-7 7 7 7v-4.1c5 0 8.5 1.6 11 5.1-1-5-4-10-11-11z"></path></g>
+<g id="reply-all"><path d="M7 8V5l-7 7 7 7v-3l-4-4 4-4zm6 1V5l-7 7 7 7v-4.1c5 0 8.5 1.6 11 5.1-1-5-4-10-11-11z"></path></g>
+<g id="report"><path d="M15.73 3H8.27L3 8.27v7.46L8.27 21h7.46L21 15.73V8.27L15.73 3zM12 17.3c-.72 0-1.3-.58-1.3-1.3 0-.72.58-1.3 1.3-1.3.72 0 1.3.58 1.3 1.3 0 .72-.58 1.3-1.3 1.3zm1-4.3h-2V7h2v6z"></path></g>
+<g id="report-problem"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"></path></g>
+<g id="restore"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"></path></g>
+<g id="restore-page"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm-2 16c-2.05 0-3.81-1.24-4.58-3h1.71c.63.9 1.68 1.5 2.87 1.5 1.93 0 3.5-1.57 3.5-3.5S13.93 9.5 12 9.5c-1.35 0-2.52.78-3.1 1.9l1.6 1.6h-4V9l1.3 1.3C8.69 8.92 10.23 8 12 8c2.76 0 5 2.24 5 5s-2.24 5-5 5z"></path></g>
+<g id="room"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"></path></g>
+<g id="rounded-corner"><path d="M19 19h2v2h-2v-2zm0-2h2v-2h-2v2zM3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm0-4h2V3H3v2zm4 0h2V3H7v2zm8 16h2v-2h-2v2zm-4 0h2v-2h-2v2zm4 0h2v-2h-2v2zm-8 0h2v-2H7v2zm-4 0h2v-2H3v2zM21 8c0-2.76-2.24-5-5-5h-5v2h5c1.65 0 3 1.35 3 3v5h2V8z"></path></g>
+<g id="rowing"><path d="M8.5 14.5L4 19l1.5 1.5L9 17h2l-2.5-2.5zM15 1c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 20.01L18 24l-2.99-3.01V19.5l-7.1-7.09c-.31.05-.61.07-.91.07v-2.16c1.66.03 3.61-.87 4.67-2.04l1.4-1.55c.19-.21.43-.38.69-.5.29-.14.62-.23.96-.23h.03C15.99 6.01 17 7.02 17 8.26v5.75c0 .84-.35 1.61-.92 2.16l-3.58-3.58v-2.27c-.63.52-1.43 1.02-2.29 1.39L16.5 18H18l3 3.01z"></path></g>
+<g id="save"><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"></path></g>
+<g id="schedule"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"></path></g>
+<g id="search"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path></g>
+<g id="select-all"><path d="M3 5h2V3c-1.1 0-2 .9-2 2zm0 8h2v-2H3v2zm4 8h2v-2H7v2zM3 9h2V7H3v2zm10-6h-2v2h2V3zm6 0v2h2c0-1.1-.9-2-2-2zM5 21v-2H3c0 1.1.9 2 2 2zm-2-4h2v-2H3v2zM9 3H7v2h2V3zm2 18h2v-2h-2v2zm8-8h2v-2h-2v2zm0 8c1.1 0 2-.9 2-2h-2v2zm0-12h2V7h-2v2zm0 8h2v-2h-2v2zm-4 4h2v-2h-2v2zm0-16h2V3h-2v2zM7 17h10V7H7v10zm2-8h6v6H9V9z"></path></g>
+<g id="send"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></g>
+<g id="settings"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"></path></g>
+<g id="settings-applications"><path d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm7-7H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-1.75 9c0 .23-.02.46-.05.68l1.48 1.16c.13.11.17.3.08.45l-1.4 2.42c-.09.15-.27.21-.43.15l-1.74-.7c-.36.28-.76.51-1.18.69l-.26 1.85c-.03.17-.18.3-.35.3h-2.8c-.17 0-.32-.13-.35-.29l-.26-1.85c-.43-.18-.82-.41-1.18-.69l-1.74.7c-.16.06-.34 0-.43-.15l-1.4-2.42c-.09-.15-.05-.34.08-.45l1.48-1.16c-.03-.23-.05-.46-.05-.69 0-.23.02-.46.05-.68l-1.48-1.16c-.13-.11-.17-.3-.08-.45l1.4-2.42c.09-.15.27-.21.43-.15l1.74.7c.36-.28.76-.51 1.18-.69l.26-1.85c.03-.17.18-.3.35-.3h2.8c.17 0 .32.13.35.29l.26 1.85c.43.18.82.41 1.18.69l1.74-.7c.16-.06.34 0 .43.15l1.4 2.42c.09.15.05.34-.08.45l-1.48 1.16c.03.23.05.46.05.69z"></path></g>
+<g id="settings-backup-restore"><path d="M14 12c0-1.1-.9-2-2-2s-2 .9-2 2 .9 2 2 2 2-.9 2-2zm-2-9c-4.97 0-9 4.03-9 9H0l4 4 4-4H5c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.51 0-2.91-.49-4.06-1.3l-1.42 1.44C8.04 20.3 9.94 21 12 21c4.97 0 9-4.03 9-9s-4.03-9-9-9z"></path></g>
+<g id="settings-bluetooth"><path d="M11 24h2v-2h-2v2zm-4 0h2v-2H7v2zm8 0h2v-2h-2v2zm2.71-18.29L12 0h-1v7.59L6.41 3 5 4.41 10.59 10 5 15.59 6.41 17 11 12.41V20h1l5.71-5.71-4.3-4.29 4.3-4.29zM13 3.83l1.88 1.88L13 7.59V3.83zm1.88 10.46L13 16.17v-3.76l1.88 1.88z"></path></g>
+<g id="settings-brightness"><path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16.01H3V4.99h18v14.02zM8 16h2.5l1.5 1.5 1.5-1.5H16v-2.5l1.5-1.5-1.5-1.5V8h-2.5L12 6.5 10.5 8H8v2.5L6.5 12 8 13.5V16zm4-7c1.66 0 3 1.34 3 3s-1.34 3-3 3V9z"></path></g>
+<g id="settings-cell"><path d="M7 24h2v-2H7v2zm4 0h2v-2h-2v2zm4 0h2v-2h-2v2zM16 .01L8 0C6.9 0 6 .9 6 2v16c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V2c0-1.1-.9-1.99-2-1.99zM16 16H8V4h8v12z"></path></g>
+<g id="settings-ethernet"><path d="M7.77 6.76L6.23 5.48.82 12l5.41 6.52 1.54-1.28L3.42 12l4.35-5.24zM7 13h2v-2H7v2zm10-2h-2v2h2v-2zm-6 2h2v-2h-2v2zm6.77-7.52l-1.54 1.28L20.58 12l-4.35 5.24 1.54 1.28L23.18 12l-5.41-6.52z"></path></g>
+<g id="settings-input-antenna"><path d="M12 5c-3.87 0-7 3.13-7 7h2c0-2.76 2.24-5 5-5s5 2.24 5 5h2c0-3.87-3.13-7-7-7zm1 9.29c.88-.39 1.5-1.26 1.5-2.29 0-1.38-1.12-2.5-2.5-2.5S9.5 10.62 9.5 12c0 1.02.62 1.9 1.5 2.29v3.3L7.59 21 9 22.41l3-3 3 3L16.41 21 13 17.59v-3.3zM12 1C5.93 1 1 5.93 1 12h2c0-4.97 4.03-9 9-9s9 4.03 9 9h2c0-6.07-4.93-11-11-11z"></path></g>
+<g id="settings-input-component"><path d="M5 2c0-.55-.45-1-1-1s-1 .45-1 1v4H1v6h6V6H5V2zm4 14c0 1.3.84 2.4 2 2.82V23h2v-4.18c1.16-.41 2-1.51 2-2.82v-2H9v2zm-8 0c0 1.3.84 2.4 2 2.82V23h2v-4.18C6.16 18.4 7 17.3 7 16v-2H1v2zM21 6V2c0-.55-.45-1-1-1s-1 .45-1 1v4h-2v6h6V6h-2zm-8-4c0-.55-.45-1-1-1s-1 .45-1 1v4H9v6h6V6h-2V2zm4 14c0 1.3.84 2.4 2 2.82V23h2v-4.18c1.16-.41 2-1.51 2-2.82v-2h-6v2z"></path></g>
+<g id="settings-input-composite"><path d="M5 2c0-.55-.45-1-1-1s-1 .45-1 1v4H1v6h6V6H5V2zm4 14c0 1.3.84 2.4 2 2.82V23h2v-4.18c1.16-.41 2-1.51 2-2.82v-2H9v2zm-8 0c0 1.3.84 2.4 2 2.82V23h2v-4.18C6.16 18.4 7 17.3 7 16v-2H1v2zM21 6V2c0-.55-.45-1-1-1s-1 .45-1 1v4h-2v6h6V6h-2zm-8-4c0-.55-.45-1-1-1s-1 .45-1 1v4H9v6h6V6h-2V2zm4 14c0 1.3.84 2.4 2 2.82V23h2v-4.18c1.16-.41 2-1.51 2-2.82v-2h-6v2z"></path></g>
+<g id="settings-input-hdmi"><path d="M18 7V4c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v3H5v6l3 6v3h8v-3l3-6V7h-1zM8 4h8v3h-2V5h-1v2h-2V5h-1v2H8V4z"></path></g>
+<g id="settings-input-svideo"><path d="M8 11.5c0-.83-.67-1.5-1.5-1.5S5 10.67 5 11.5 5.67 13 6.5 13 8 12.33 8 11.5zm7-5c0-.83-.67-1.5-1.5-1.5h-3C9.67 5 9 5.67 9 6.5S9.67 8 10.5 8h3c.83 0 1.5-.67 1.5-1.5zM8.5 15c-.83 0-1.5.67-1.5 1.5S7.67 18 8.5 18s1.5-.67 1.5-1.5S9.33 15 8.5 15zM12 1C5.93 1 1 5.93 1 12s4.93 11 11 11 11-4.93 11-11S18.07 1 12 1zm0 20c-4.96 0-9-4.04-9-9s4.04-9 9-9 9 4.04 9 9-4.04 9-9 9zm5.5-11c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm-2 5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z"></path></g>
+<g id="settings-overscan"><path d="M12.01 5.5L10 8h4l-1.99-2.5zM18 10v4l2.5-1.99L18 10zM6 10l-2.5 2.01L6 14v-4zm8 6h-4l2.01 2.5L14 16zm7-13H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16.01H3V4.99h18v14.02z"></path></g>
+<g id="settings-phone"><path d="M13 9h-2v2h2V9zm4 0h-2v2h2V9zm3 6.5c-1.25 0-2.45-.2-3.57-.57-.35-.11-.74-.03-1.02.24l-2.2 2.2c-2.83-1.44-5.15-3.75-6.59-6.58l2.2-2.21c.28-.27.36-.66.25-1.01C8.7 6.45 8.5 5.25 8.5 4c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17 .55 0 1-.45 1-1v-3.5c0-.55-.45-1-1-1zM19 9v2h2V9h-2z"></path></g>
+<g id="settings-power"><path d="M7 24h2v-2H7v2zm4 0h2v-2h-2v2zm2-22h-2v10h2V2zm3.56 2.44l-1.45 1.45C16.84 6.94 18 8.83 18 11c0 3.31-2.69 6-6 6s-6-2.69-6-6c0-2.17 1.16-4.06 2.88-5.12L7.44 4.44C5.36 5.88 4 8.28 4 11c0 4.42 3.58 8 8 8s8-3.58 8-8c0-2.72-1.36-5.12-3.44-6.56zM15 24h2v-2h-2v2z"></path></g>
+<g id="settings-remote"><path d="M15 9H9c-.55 0-1 .45-1 1v12c0 .55.45 1 1 1h6c.55 0 1-.45 1-1V10c0-.55-.45-1-1-1zm-3 6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zM7.05 6.05l1.41 1.41C9.37 6.56 10.62 6 12 6s2.63.56 3.54 1.46l1.41-1.41C15.68 4.78 13.93 4 12 4s-3.68.78-4.95 2.05zM12 0C8.96 0 6.21 1.23 4.22 3.22l1.41 1.41C7.26 3.01 9.51 2 12 2s4.74 1.01 6.36 2.64l1.41-1.41C17.79 1.23 15.04 0 12 0z"></path></g>
+<g id="settings-voice"><path d="M7 24h2v-2H7v2zm5-11c1.66 0 2.99-1.34 2.99-3L15 4c0-1.66-1.34-3-3-3S9 2.34 9 4v6c0 1.66 1.34 3 3 3zm-1 11h2v-2h-2v2zm4 0h2v-2h-2v2zm4-14h-1.7c0 3-2.54 5.1-5.3 5.1S6.7 13 6.7 10H5c0 3.41 2.72 6.23 6 6.72V20h2v-3.28c3.28-.49 6-3.31 6-6.72z"></path></g>
+<g id="shop"><path d="M16 6V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H2v13c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6h-6zm-6-2h4v2h-4V4zM9 18V9l7.5 4L9 18z"></path></g>
+<g id="shop-two"><path d="M3 9H1v11c0 1.11.89 2 2 2h14c1.11 0 2-.89 2-2H3V9zm15-4V3c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H5v11c0 1.11.89 2 2 2h14c1.11 0 2-.89 2-2V5h-5zm-6-2h4v2h-4V3zm0 12V8l5.5 3-5.5 4z"></path></g>
+<g id="shopping-basket"><path d="M17.21 9l-4.38-6.56c-.19-.28-.51-.42-.83-.42-.32 0-.64.14-.83.43L6.79 9H2c-.55 0-1 .45-1 1 0 .09.01.18.04.27l2.54 9.27c.23.84 1 1.46 1.92 1.46h13c.92 0 1.69-.62 1.93-1.46l2.54-9.27L23 10c0-.55-.45-1-1-1h-4.79zM9 9l3-4.4L15 9H9zm3 8c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"></path></g>
+<g id="shopping-cart"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"></path></g>
+<g id="sort"><path d="M3 18h6v-2H3v2zM3 6v2h18V6H3zm0 7h12v-2H3v2z"></path></g>
+<g id="speaker-notes"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM8 14H6v-2h2v2zm0-3H6V9h2v2zm0-3H6V6h2v2zm7 6h-5v-2h5v2zm3-3h-8V9h8v2zm0-3h-8V6h8v2z"></path></g>
+<g id="speaker-notes-off"><path d="M10.54 11l-.54-.54L7.54 8 6 6.46 2.38 2.84 1.27 1.73 0 3l2.01 2.01L2 22l4-4h9l5.73 5.73L22 22.46 17.54 18l-7-7zM8 14H6v-2h2v2zm-2-3V9l2 2H6zm14-9H4.08L10 7.92V6h8v2h-7.92l1 1H18v2h-4.92l6.99 6.99C21.14 17.95 22 17.08 22 16V4c0-1.1-.9-2-2-2z"></path></g>
+<g id="spellcheck"><path d="M12.45 16h2.09L9.43 3H7.57L2.46 16h2.09l1.12-3h5.64l1.14 3zm-6.02-5L8.5 5.48 10.57 11H6.43zm15.16.59l-8.09 8.09L9.83 16l-1.41 1.41 5.09 5.09L23 13l-1.41-1.41z"></path></g>
+<g id="star"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path></g>
+<g id="star-border"><path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"></path></g>
+<g id="star-half"><path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4V6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"></path></g>
+<g id="stars"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm4.24 16L12 15.45 7.77 18l1.12-4.81-3.73-3.23 4.92-.42L12 5l1.92 4.53 4.92.42-3.73 3.23L16.23 18z"></path></g>
+<g id="store"><path d="M20 4H4v2h16V4zm1 10v-2l-1-5H4l-1 5v2h1v6h10v-6h4v6h2v-6h1zm-9 4H6v-4h6v4z"></path></g>
+<g id="subdirectory-arrow-left"><path d="M11 9l1.42 1.42L8.83 14H18V4h2v12H8.83l3.59 3.58L11 21l-6-6 6-6z"></path></g>
+<g id="subdirectory-arrow-right"><path d="M19 15l-6 6-1.42-1.42L15.17 16H4V4h2v10h9.17l-3.59-3.58L13 9l6 6z"></path></g>
+<g id="subject"><path d="M14 17H4v2h10v-2zm6-8H4v2h16V9zM4 15h16v-2H4v2zM4 5v2h16V5H4z"></path></g>
+<g id="supervisor-account"><path d="M16.5 12c1.38 0 2.49-1.12 2.49-2.5S17.88 7 16.5 7C15.12 7 14 8.12 14 9.5s1.12 2.5 2.5 2.5zM9 11c1.66 0 2.99-1.34 2.99-3S10.66 5 9 5C7.34 5 6 6.34 6 8s1.34 3 3 3zm7.5 3c-1.83 0-5.5.92-5.5 2.75V19h11v-2.25c0-1.83-3.67-2.75-5.5-2.75zM9 13c-2.33 0-7 1.17-7 3.5V19h7v-2.25c0-.85.33-2.34 2.37-3.47C10.5 13.1 9.66 13 9 13z"></path></g>
+<g id="swap-horiz"><path d="M6.99 11L3 15l3.99 4v-3H14v-2H6.99v-3zM21 9l-3.99-4v3H10v2h7.01v3L21 9z"></path></g>
+<g id="swap-vert"><path d="M16 17.01V10h-2v7.01h-3L15 21l4-3.99h-3zM9 3L5 6.99h3V14h2V6.99h3L9 3z"></path></g>
+<g id="swap-vertical-circle"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM6.5 9L10 5.5 13.5 9H11v4H9V9H6.5zm11 6L14 18.5 10.5 15H13v-4h2v4h2.5z"></path></g>
+<g id="system-update-alt"><path d="M12 16.5l4-4h-3v-9h-2v9H8l4 4zm9-13h-6v1.99h6v14.03H3V5.49h6V3.5H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2v-14c0-1.1-.9-2-2-2z"></path></g>
+<g id="tab"><path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h10v4h8v10z"></path></g>
+<g id="tab-unselected"><path d="M1 9h2V7H1v2zm0 4h2v-2H1v2zm0-8h2V3c-1.1 0-2 .9-2 2zm8 16h2v-2H9v2zm-8-4h2v-2H1v2zm2 4v-2H1c0 1.1.9 2 2 2zM21 3h-8v6h10V5c0-1.1-.9-2-2-2zm0 14h2v-2h-2v2zM9 5h2V3H9v2zM5 21h2v-2H5v2zM5 5h2V3H5v2zm16 16c1.1 0 2-.9 2-2h-2v2zm0-8h2v-2h-2v2zm-8 8h2v-2h-2v2zm4 0h2v-2h-2v2z"></path></g>
+<g id="text-format"><path d="M5 17v2h14v-2H5zm4.5-4.2h5l.9 2.2h2.1L12.75 4h-1.5L6.5 15h2.1l.9-2.2zM12 5.98L13.87 11h-3.74L12 5.98z"></path></g>
+<g id="theaters"><path d="M18 3v2h-2V3H8v2H6V3H4v18h2v-2h2v2h8v-2h2v2h2V3h-2zM8 17H6v-2h2v2zm0-4H6v-2h2v2zm0-4H6V7h2v2zm10 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2z"></path></g>
+<g id="thumb-down"><path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v1.91l.01.01L1 14c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"></path></g>
+<g id="thumb-up"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-1.91l-.01-.01L23 10z"></path></g>
+<g id="thumbs-up-down"><path d="M12 6c0-.55-.45-1-1-1H5.82l.66-3.18.02-.23c0-.31-.13-.59-.33-.8L5.38 0 .44 4.94C.17 5.21 0 5.59 0 6v6.5c0 .83.67 1.5 1.5 1.5h6.75c.62 0 1.15-.38 1.38-.91l2.26-5.29c.07-.17.11-.36.11-.55V6zm10.5 4h-6.75c-.62 0-1.15.38-1.38.91l-2.26 5.29c-.07.17-.11.36-.11.55V18c0 .55.45 1 1 1h5.18l-.66 3.18-.02.24c0 .31.13.59.33.8l.79.78 4.94-4.94c.27-.27.44-.65.44-1.06v-6.5c0-.83-.67-1.5-1.5-1.5z"></path></g>
+<g id="timeline"><path d="M23 8c0 1.1-.9 2-2 2-.18 0-.35-.02-.51-.07l-3.56 3.55c.05.16.07.34.07.52 0 1.1-.9 2-2 2s-2-.9-2-2c0-.18.02-.36.07-.52l-2.55-2.55c-.16.05-.34.07-.52.07s-.36-.02-.52-.07l-4.55 4.56c.05.16.07.33.07.51 0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2c.18 0 .35.02.51.07l4.56-4.55C8.02 9.36 8 9.18 8 9c0-1.1.9-2 2-2s2 .9 2 2c0 .18-.02.36-.07.52l2.55 2.55c.16-.05.34-.07.52-.07s.36.02.52.07l3.55-3.56C19.02 8.35 19 8.18 19 8c0-1.1.9-2 2-2s2 .9 2 2z"></path></g>
+<g id="toc"><path d="M3 9h14V7H3v2zm0 4h14v-2H3v2zm0 4h14v-2H3v2zm16 0h2v-2h-2v2zm0-10v2h2V7h-2zm0 6h2v-2h-2v2z"></path></g>
+<g id="today"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"></path></g>
+<g id="toll"><path d="M15 4c-4.42 0-8 3.58-8 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zM3 12c0-2.61 1.67-4.83 4-5.65V4.26C3.55 5.15 1 8.27 1 12s2.55 6.85 6 7.74v-2.09c-2.33-.82-4-3.04-4-5.65z"></path></g>
+<g id="touch-app"><path d="M9 11.24V7.5C9 6.12 10.12 5 11.5 5S14 6.12 14 7.5v3.74c1.21-.81 2-2.18 2-3.74C16 5.01 13.99 3 11.5 3S7 5.01 7 7.5c0 1.56.79 2.93 2 3.74zm9.84 4.63l-4.54-2.26c-.17-.07-.35-.11-.54-.11H13v-6c0-.83-.67-1.5-1.5-1.5S10 6.67 10 7.5v10.74l-3.43-.72c-.08-.01-.15-.03-.24-.03-.31 0-.59.13-.79.33l-.79.8 4.94 4.94c.27.27.65.44 1.06.44h6.79c.75 0 1.33-.55 1.44-1.28l.75-5.27c.01-.07.02-.14.02-.2 0-.62-.38-1.16-.91-1.38z"></path></g>
+<g id="track-changes"><path d="M19.07 4.93l-1.41 1.41C19.1 7.79 20 9.79 20 12c0 4.42-3.58 8-8 8s-8-3.58-8-8c0-4.08 3.05-7.44 7-7.93v2.02C8.16 6.57 6 9.03 6 12c0 3.31 2.69 6 6 6s6-2.69 6-6c0-1.66-.67-3.16-1.76-4.24l-1.41 1.41C15.55 9.9 16 10.9 16 12c0 2.21-1.79 4-4 4s-4-1.79-4-4c0-1.86 1.28-3.41 3-3.86v2.14c-.6.35-1 .98-1 1.72 0 1.1.9 2 2 2s2-.9 2-2c0-.74-.4-1.38-1-1.72V2h-1C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10c0-2.76-1.12-5.26-2.93-7.07z"></path></g>
+<g id="translate"><path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"></path></g>
+<g id="trending-down"><path d="M16 18l2.29-2.29-4.88-4.88-4 4L2 7.41 3.41 6l6 6 4-4 6.3 6.29L22 12v6z"></path></g>
+<g id="trending-flat"><path d="M22 12l-4-4v3H3v2h15v3z"></path></g>
+<g id="trending-up"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"></path></g>
+<g id="turned-in"><path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z"></path></g>
+<g id="turned-in-not"><path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2zm0 15l-5-2.18L7 18V5h10v13z"></path></g>
+<g id="unarchive"><path d="M20.55 5.22l-1.39-1.68C18.88 3.21 18.47 3 18 3H6c-.47 0-.88.21-1.15.55L3.46 5.22C3.17 5.57 3 6.01 3 6.5V19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6.5c0-.49-.17-.93-.45-1.28zM12 9.5l5.5 5.5H14v2h-4v-2H6.5L12 9.5zM5.12 5l.82-1h12l.93 1H5.12z"></path></g>
+<g id="undo"><path d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z"></path></g>
+<g id="unfold-less"><path d="M7.41 18.59L8.83 20 12 16.83 15.17 20l1.41-1.41L12 14l-4.59 4.59zm9.18-13.18L15.17 4 12 7.17 8.83 4 7.41 5.41 12 10l4.59-4.59z"></path></g>
+<g id="unfold-more"><path d="M12 5.83L15.17 9l1.41-1.41L12 3 7.41 7.59 8.83 9 12 5.83zm0 12.34L8.83 15l-1.41 1.41L12 21l4.59-4.59L15.17 15 12 18.17z"></path></g>
+<g id="update"><path d="M21 10.12h-6.78l2.74-2.82c-2.73-2.7-7.15-2.8-9.88-.1-2.73 2.71-2.73 7.08 0 9.79 2.73 2.71 7.15 2.71 9.88 0C18.32 15.65 19 14.08 19 12.1h2c0 1.98-.88 4.55-2.64 6.29-3.51 3.48-9.21 3.48-12.72 0-3.5-3.47-3.53-9.11-.02-12.58 3.51-3.47 9.14-3.47 12.65 0L21 3v7.12zM12.5 8v4.25l3.5 2.08-.72 1.21L11 13V8h1.5z"></path></g>
+<g id="verified-user"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"></path></g>
+<g id="view-agenda"><path d="M20 13H3c-.55 0-1 .45-1 1v6c0 .55.45 1 1 1h17c.55 0 1-.45 1-1v-6c0-.55-.45-1-1-1zm0-10H3c-.55 0-1 .45-1 1v6c0 .55.45 1 1 1h17c.55 0 1-.45 1-1V4c0-.55-.45-1-1-1z"></path></g>
+<g id="view-array"><path d="M4 18h3V5H4v13zM18 5v13h3V5h-3zM8 18h9V5H8v13z"></path></g>
+<g id="view-carousel"><path d="M7 19h10V4H7v15zm-5-2h4V6H2v11zM18 6v11h4V6h-4z"></path></g>
+<g id="view-column"><path d="M10 18h5V5h-5v13zm-6 0h5V5H4v13zM16 5v13h5V5h-5z"></path></g>
+<g id="view-day"><path d="M2 21h19v-3H2v3zM20 8H3c-.55 0-1 .45-1 1v6c0 .55.45 1 1 1h17c.55 0 1-.45 1-1V9c0-.55-.45-1-1-1zM2 3v3h19V3H2z"></path></g>
+<g id="view-headline"><path d="M4 15h16v-2H4v2zm0 4h16v-2H4v2zm0-8h16V9H4v2zm0-6v2h16V5H4z"></path></g>
+<g id="view-list"><path d="M4 14h4v-4H4v4zm0 5h4v-4H4v4zM4 9h4V5H4v4zm5 5h12v-4H9v4zm0 5h12v-4H9v4zM9 5v4h12V5H9z"></path></g>
+<g id="view-module"><path d="M4 11h5V5H4v6zm0 7h5v-6H4v6zm6 0h5v-6h-5v6zm6 0h5v-6h-5v6zm-6-7h5V5h-5v6zm6-6v6h5V5h-5z"></path></g>
+<g id="view-quilt"><path d="M10 18h5v-6h-5v6zm-6 0h5V5H4v13zm12 0h5v-6h-5v6zM10 5v6h11V5H10z"></path></g>
+<g id="view-stream"><path d="M4 18h17v-6H4v6zM4 5v6h17V5H4z"></path></g>
+<g id="view-week"><path d="M6 5H3c-.55 0-1 .45-1 1v12c0 .55.45 1 1 1h3c.55 0 1-.45 1-1V6c0-.55-.45-1-1-1zm14 0h-3c-.55 0-1 .45-1 1v12c0 .55.45 1 1 1h3c.55 0 1-.45 1-1V6c0-.55-.45-1-1-1zm-7 0h-3c-.55 0-1 .45-1 1v12c0 .55.45 1 1 1h3c.55 0 1-.45 1-1V6c0-.55-.45-1-1-1z"></path></g>
+<g id="visibility"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"></path></g>
+<g id="visibility-off"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"></path></g>
+<g id="warning"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"></path></g>
+<g id="watch-later"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm4.2 14.2L11 13V7h1.5v5.2l4.5 2.7-.8 1.3z"></path></g>
+<g id="weekend"><path d="M21 10c-1.1 0-2 .9-2 2v3H5v-3c0-1.1-.9-2-2-2s-2 .9-2 2v5c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2v-5c0-1.1-.9-2-2-2zm-3-5H6c-1.1 0-2 .9-2 2v2.15c1.16.41 2 1.51 2 2.82V14h12v-2.03c0-1.3.84-2.4 2-2.82V7c0-1.1-.9-2-2-2z"></path></g>
+<g id="work"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"></path></g>
+<g id="youtube-searched-for"><path d="M17.01 14h-.8l-.27-.27c.98-1.14 1.57-2.61 1.57-4.23 0-3.59-2.91-6.5-6.5-6.5s-6.5 3-6.5 6.5H2l3.84 4 4.16-4H6.51C6.51 7 8.53 5 11.01 5s4.5 2.01 4.5 4.5c0 2.48-2.02 4.5-4.5 4.5-.65 0-1.26-.14-1.82-.38L7.71 15.1c.97.57 2.09.9 3.3.9 1.61 0 3.08-.59 4.22-1.57l.27.27v.79l5.01 4.99L22 19l-4.99-5z"></path></g>
+<g id="zoom-in"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14zm2.5-4h-2v2H9v-2H7V9h2V7h1v2h2v1z"></path></g>
+<g id="zoom-out"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14zM7 9h5v1H7z"></path></g>
+</defs></svg>
+</iron-iconset-svg>`;
+
+document.head.appendChild($_documentContainer);
+
+
+/***/ }),
+/* 134 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_meta_iron_meta_js__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
+
+
+
+
+/**
+ * The `iron-iconset-svg` element allows users to define their own icon sets
+ * that contain svg icons. The svg icon elements should be children of the
+ * `iron-iconset-svg` element. Multiple icons should be given distinct id's.
+ *
+ * Using svg elements to create icons has a few advantages over traditional
+ * bitmap graphics like jpg or png. Icons that use svg are vector based so
+ * they are resolution independent and should look good on any device. They
+ * are stylable via css. Icons can be themed, colorized, and even animated.
+ *
+ * Example:
+ *
+ *     <iron-iconset-svg name="my-svg-icons" size="24">
+ *       <svg>
+ *         <defs>
+ *           <g id="shape">
+ *             <rect x="12" y="0" width="12" height="24" />
+ *             <circle cx="12" cy="12" r="12" />
+ *           </g>
+ *         </defs>
+ *       </svg>
+ *     </iron-iconset-svg>
+ *
+ * This will automatically register the icon set "my-svg-icons" to the iconset
+ * database.  To use these icons from within another element, make a
+ * `iron-iconset` element and call the `byId` method
+ * to retrieve a given iconset. To apply a particular icon inside an
+ * element use the `applyIcon` method. For example:
+ *
+ *     iconset.applyIcon(iconNode, 'car');
+ *
+ * @element iron-iconset-svg
+ * @demo demo/index.html
+ * @implements {Polymer.Iconset}
+ */
+Object(__WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_fn_js__["a" /* Polymer */])({
+  is: 'iron-iconset-svg',
+
+  properties: {
+
+    /**
+     * The name of the iconset.
+     */
+    name: {
+      type: String,
+      observer: '_nameChanged'
+    },
+
+    /**
+     * The size of an individual icon. Note that icons must be square.
+     */
+    size: {
+      type: Number,
+      value: 24
+    },
+
+    /**
+     * Set to true to enable mirroring of icons where specified when they are
+     * stamped. Icons that should be mirrored should be decorated with a
+     * `mirror-in-rtl` attribute.
+     *
+     * NOTE: For performance reasons, direction will be resolved once per
+     * document per iconset, so moving icons in and out of RTL subtrees will
+     * not cause their mirrored state to change.
+     */
+    rtlMirroring: {
+      type: Boolean,
+      value: false
+    }
+  },
+
+  created: function() {
+    this._meta = new __WEBPACK_IMPORTED_MODULE_1__iron_meta_iron_meta_js__["a" /* IronMeta */]({type: 'iconset', key: null, value: null});
+  },
+
+  attached: function() {
+    this.style.display = 'none';
+  },
+
+  /**
+   * Construct an array of all icon names in this iconset.
+   *
+   * @return {!Array} Array of icon names.
+   */
+  getIconNames: function() {
+    this._icons = this._createIconMap();
+    return Object.keys(this._icons).map(function(n) {
+      return this.name + ':' + n;
+    }, this);
+  },
+
+  /**
+   * Applies an icon to the given element.
+   *
+   * An svg icon is prepended to the element's shadowRoot if it exists,
+   * otherwise to the element itself.
+   *
+   * If RTL mirroring is enabled, and the icon is marked to be mirrored in
+   * RTL, the element will be tested (once and only once ever for each
+   * iconset) to determine the direction of the subtree the element is in.
+   * This direction will apply to all future icon applications, although only
+   * icons marked to be mirrored will be affected.
+   *
+   * @method applyIcon
+   * @param {Element} element Element to which the icon is applied.
+   * @param {string} iconName Name of the icon to apply.
+   * @return {?Element} The svg element which renders the icon.
+   */
+  applyIcon: function(element, iconName) {
+    // Remove old svg element
+    this.removeIcon(element);
+    // install new svg element
+    var svg = this._cloneIcon(iconName,
+        this.rtlMirroring && this._targetIsRTL(element));
+    if (svg) {
+      // insert svg element into shadow root, if it exists
+      var pde = Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(element.root || element);
+      pde.insertBefore(svg, pde.childNodes[0]);
+      return element._svgIcon = svg;
+    }
+    return null;
+  },
+
+  /**
+   * Remove an icon from the given element by undoing the changes effected
+   * by `applyIcon`.
+   *
+   * @param {Element} element The element from which the icon is removed.
+   */
+  removeIcon: function(element) {
+    // Remove old svg element
+    if (element._svgIcon) {
+      Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(element.root || element).removeChild(element._svgIcon);
+      element._svgIcon = null;
+    }
+  },
+
+  /**
+   * Measures and memoizes the direction of the element. Note that this
+   * measurement is only done once and the result is memoized for future
+   * invocations.
+   */
+  _targetIsRTL: function(target) {
+    if (this.__targetIsRTL == null) {
+      if (target && target.nodeType !== Node.ELEMENT_NODE) {
+        target = target.host;
+      }
+
+      this.__targetIsRTL = target &&
+          window.getComputedStyle(target)['direction'] === 'rtl';
+    }
+
+    return this.__targetIsRTL;
+  },
+
+  /**
+   *
+   * When name is changed, register iconset metadata
+   *
+   */
+  _nameChanged: function() {
+    this._meta.value = null;
+    this._meta.key = this.name;
+    this._meta.value = this;
+
+    this.async(function() {
+      this.fire('iron-iconset-added', this, {node: window});
+    });
+  },
+
+  /**
+   * Create a map of child SVG elements by id.
+   *
+   * @return {!Object} Map of id's to SVG elements.
+   */
+  _createIconMap: function() {
+    // Objects chained to Object.prototype (`{}`) have members. Specifically,
+    // on FF there is a `watch` method that confuses the icon map, so we
+    // need to use a null-based object here.
+    var icons = Object.create(null);
+    Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(this).querySelectorAll('[id]')
+      .forEach(function(icon) {
+        icons[icon.id] = icon;
+      });
+    return icons;
+  },
+
+  /**
+   * Produce installable clone of the SVG element matching `id` in this
+   * iconset, or `undefined` if there is no matching element.
+   *
+   * @return {Element} Returns an installable clone of the SVG element
+   * matching `id`.
+   */
+  _cloneIcon: function(id, mirrorAllowed) {
+    // create the icon map on-demand, since the iconset itself has no discrete
+    // signal to know when it's children are fully parsed
+    this._icons = this._icons || this._createIconMap();
+    return this._prepareSvgClone(this._icons[id], this.size, mirrorAllowed);
+  },
+
+  /**
+   * @param {Element} sourceSvg
+   * @param {number} size
+   * @param {Boolean} mirrorAllowed
+   * @return {Element}
+   */
+  _prepareSvgClone: function(sourceSvg, size, mirrorAllowed) {
+    if (sourceSvg) {
+      var content = sourceSvg.cloneNode(true),
+          svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg'),
+          viewBox = content.getAttribute('viewBox') || '0 0 ' + size + ' ' + size,
+          cssText = 'pointer-events: none; display: block; width: 100%; height: 100%;';
+
+      if (mirrorAllowed && content.hasAttribute('mirror-in-rtl')) {
+        cssText += '-webkit-transform:scale(-1,1);transform:scale(-1,1);';
+      }
+
+      svg.setAttribute('viewBox', viewBox);
+      svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+      svg.setAttribute('focusable', 'false');
+      // TODO(dfreedm): `pointer-events: none` works around https://crbug.com/370136
+      // TODO(sjmiles): inline style may not be ideal, but avoids requiring a shadow-root
+      svg.style.cssText = cssText;
+      svg.appendChild(content).removeAttribute('id');
+      return svg;
+    }
+    return null;
+  }
+
+});
+
+
+/***/ }),
+/* 135 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__paper_styles_shadow_js__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__paper_material_shared_styles_js__ = __webpack_require__(136);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
+
+
+
+
+Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_fn_js__["a" /* Polymer */])({
+  _template: `
+    <style include="paper-material-shared-styles"></style>
+    <style>
+      :host([animated]) {
+        @apply --shadow-transition;
+      }
+      :host {
+        @apply --paper-material;
+      }
+    </style>
+
+    <slot></slot>
+`,
+
+  is: 'paper-material',
+
+  properties: {
+    /**
+     * The z-depth of this element, from 0-5. Setting to 0 will remove the
+     * shadow, and each increasing number greater than 0 will be "deeper"
+     * than the last.
+     *
+     * @attribute elevation
+     * @type number
+     * @default 1
+     */
+    elevation: {
+      type: Number,
+      reflectToAttribute: true,
+      value: 1
+    },
+
+    /**
+     * Set this to true to animate the shadow when setting a new
+     * `elevation` value.
+     *
+     * @attribute animated
+     * @type boolean
+     * @default false
+     */
+    animated: {
+      type: Boolean,
+      reflectToAttribute: true,
+      value: false
+    }
+  }
+});
+
+
+/***/ }),
+/* 136 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__paper_styles_shadow_js__ = __webpack_require__(21);
+
+const $_documentContainer = document.createElement('div');
+$_documentContainer.setAttribute('style', 'display: none;');
+
+$_documentContainer.innerHTML = `<dom-module id="paper-material-shared-styles">
+  <template>
+    <style>
+      :host {
+        display: block;
+        position: relative;
+      }
+
+      :host([elevation="1"]) {
+        @apply --shadow-elevation-2dp;
+      }
+
+      :host([elevation="2"]) {
+        @apply --shadow-elevation-4dp;
+      }
+
+      :host([elevation="3"]) {
+        @apply --shadow-elevation-6dp;
+      }
+
+      :host([elevation="4"]) {
+        @apply --shadow-elevation-8dp;
+      }
+
+      :host([elevation="5"]) {
+        @apply --shadow-elevation-16dp;
+      }
+    </style>
+  </template>
+</dom-module>`;
+
+document.head.appendChild($_documentContainer);
+
+
+/***/ }),
+/* 137 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_resizable_behavior_iron_resizable_behavior_js__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_selector_iron_selectable_js__ = __webpack_require__(138);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
+
+
+
+
+Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_fn_js__["a" /* Polymer */])({
+  _template: `
+    <style>
+      :host {
+        display: block;
+      }
+
+      :host > ::slotted(:not(.iron-selected)) {
+        display: none !important;
+      }
+    </style>
+
+    <slot></slot>
+`,
+
+  is: 'iron-pages',
+
+  behaviors: [
+    __WEBPACK_IMPORTED_MODULE_1__iron_resizable_behavior_iron_resizable_behavior_js__["a" /* IronResizableBehavior */],
+    __WEBPACK_IMPORTED_MODULE_2__iron_selector_iron_selectable_js__["a" /* IronSelectableBehavior */]
+  ],
+
+  properties: {
+
+    // as the selected page is the only one visible, activateEvent
+    // is both non-sensical and problematic; e.g. in cases where a user
+    // handler attempts to change the page and the activateEvent
+    // handler immediately changes it back
+    activateEvent: {
+      type: String,
+      value: null
+    }
+
+  },
+
+  observers: [
+    '_selectedPageChanged(selected)'
+  ],
+
+  _selectedPageChanged: function(selected, old) {
+    this.async(this.notifyResize);
+  }
+});
+
+
+/***/ }),
+/* 138 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_selection_js__ = __webpack_require__(139);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_utils_case_map_js__ = __webpack_require__(9);
+
+
+
+
+
+const IronSelectableBehavior = {
+
+    /**
+     * Fired when iron-selector is activated (selected or deselected).
+     * It is fired before the selected items are changed.
+     * Cancel the event to abort selection.
+     *
+     * @event iron-activate
+     */
+
+    /**
+     * Fired when an item is selected
+     *
+     * @event iron-select
+     */
+
+    /**
+     * Fired when an item is deselected
+     *
+     * @event iron-deselect
+     */
+
+    /**
+     * Fired when the list of selectable items changes (e.g., items are
+     * added or removed). The detail of the event is a mutation record that
+     * describes what changed.
+     *
+     * @event iron-items-changed
+     */
+
+  properties: {
+
+    /**
+     * If you want to use an attribute value or property of an element for
+     * `selected` instead of the index, set this to the name of the attribute
+     * or property. Hyphenated values are converted to camel case when used to
+     * look up the property of a selectable element. Camel cased values are
+     * *not* converted to hyphenated values for attribute lookup. It's
+     * recommended that you provide the hyphenated form of the name so that
+     * selection works in both cases. (Use `attr-or-property-name` instead of
+     * `attrOrPropertyName`.)
+     */
+    attrForSelected: {
+      type: String,
+      value: null
+    },
+
+    /**
+     * Gets or sets the selected element. The default is to use the index of the item.
+     * @type {string|number}
+     */
+    selected: {
+      type: String,
+      notify: true
+    },
+
+    /**
+     * Returns the currently selected item.
+     *
+     * @type {?Object}
+     */
+    selectedItem: {
+      type: Object,
+      readOnly: true,
+      notify: true
+    },
+
+    /**
+     * The event that fires from items when they are selected. Selectable
+     * will listen for this event from items and update the selection state.
+     * Set to empty string to listen to no events.
+     */
+    activateEvent: {
+      type: String,
+      value: 'tap',
+      observer: '_activateEventChanged'
+    },
+
+    /**
+     * This is a CSS selector string.  If this is set, only items that match the CSS selector
+     * are selectable.
+     */
+    selectable: String,
+
+    /**
+     * The class to set on elements when selected.
+     */
+    selectedClass: {
+      type: String,
+      value: 'iron-selected'
+    },
+
+    /**
+     * The attribute to set on elements when selected.
+     */
+    selectedAttribute: {
+      type: String,
+      value: null
+    },
+
+    /**
+     * Default fallback if the selection based on selected with `attrForSelected`
+     * is not found.
+     */
+    fallbackSelection: {
+      type: String,
+      value: null
+    },
+
+    /**
+     * The list of items from which a selection can be made.
+     */
+    items: {
+      type: Array,
+      readOnly: true,
+      notify: true,
+      value: function() {
+        return [];
+      }
+    },
+
+    /**
+     * The set of excluded elements where the key is the `localName`
+     * of the element that will be ignored from the item list.
+     *
+     * @default {template: 1}
+     */
+    _excludedLocalNames: {
+      type: Object,
+      value: function() {
+        return {
+          'template': 1,
+          'dom-bind': 1,
+          'dom-if': 1,
+          'dom-repeat': 1,
+        };
+      }
+    }
+  },
+
+  observers: [
+    '_updateAttrForSelected(attrForSelected)',
+    '_updateSelected(selected)',
+    '_checkFallback(fallbackSelection)'
+  ],
+
+  created: function() {
+    this._bindFilterItem = this._filterItem.bind(this);
+    this._selection = new __WEBPACK_IMPORTED_MODULE_1__iron_selection_js__["a" /* IronSelection */](this._applySelection.bind(this));
+  },
+
+  attached: function() {
+    this._observer = this._observeItems(this);
+    this._addListener(this.activateEvent);
+  },
+
+  detached: function() {
+    if (this._observer) {
+      Object(__WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(this).unobserveNodes(this._observer);
+    }
+    this._removeListener(this.activateEvent);
+  },
+
+  /**
+   * Returns the index of the given item.
+   *
+   * @method indexOf
+   * @param {Object} item
+   * @returns Returns the index of the item
+   */
+  indexOf: function(item) {
+    return this.items.indexOf(item);
+  },
+
+  /**
+   * Selects the given value.
+   *
+   * @method select
+   * @param {string|number} value the value to select.
+   */
+  select: function(value) {
+    this.selected = value;
+  },
+
+  /**
+   * Selects the previous item.
+   *
+   * @method selectPrevious
+   */
+  selectPrevious: function() {
+    var length = this.items.length;
+    var index = (Number(this._valueToIndex(this.selected)) - 1 + length) % length;
+    this.selected = this._indexToValue(index);
+  },
+
+  /**
+   * Selects the next item.
+   *
+   * @method selectNext
+   */
+  selectNext: function() {
+    var index = (Number(this._valueToIndex(this.selected)) + 1) % this.items.length;
+    this.selected = this._indexToValue(index);
+  },
+
+  /**
+   * Selects the item at the given index.
+   *
+   * @method selectIndex
+   */
+  selectIndex: function(index) {
+    this.select(this._indexToValue(index));
+  },
+
+  /**
+   * Force a synchronous update of the `items` property.
+   *
+   * NOTE: Consider listening for the `iron-items-changed` event to respond to
+   * updates to the set of selectable items after updates to the DOM list and
+   * selection state have been made.
+   *
+   * WARNING: If you are using this method, you should probably consider an
+   * alternate approach. Synchronously querying for items is potentially
+   * slow for many use cases. The `items` property will update asynchronously
+   * on its own to reflect selectable items in the DOM.
+   */
+  forceSynchronousItemUpdate: function() {
+    if (this._observer && typeof this._observer.flush === "function") {
+      // NOTE(bicknellr): `Polymer.dom.flush` above is no longer sufficient to
+      // trigger `observeNodes` callbacks. Polymer 2.x returns an object from
+      // `observeNodes` with a `flush` that synchronously gives the callback
+      // any pending MutationRecords (retrieved with `takeRecords`). Any case
+      // where ShadyDOM flushes were expected to synchronously trigger item
+      // updates will now require calling `forceSynchronousItemUpdate`.
+      this._observer.flush();
+    } else {
+      this._updateItems();
+    }
+  },
+
+  // UNUSED, FOR API COMPATIBILITY
+  get _shouldUpdateSelection() {
+    return this.selected != null;
+  },
+
+  _checkFallback: function() {
+    this._updateSelected();
+  },
+
+  _addListener: function(eventName) {
+    this.listen(this, eventName, '_activateHandler');
+  },
+
+  _removeListener: function(eventName) {
+    this.unlisten(this, eventName, '_activateHandler');
+  },
+
+  _activateEventChanged: function(eventName, old) {
+    this._removeListener(old);
+    this._addListener(eventName);
+  },
+
+  _updateItems: function() {
+    var nodes = Object(__WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(this).queryDistributedElements(this.selectable || '*');
+    nodes = Array.prototype.filter.call(nodes, this._bindFilterItem);
+    this._setItems(nodes);
+  },
+
+  _updateAttrForSelected: function() {
+    if (this.selectedItem) {
+      this.selected = this._valueForItem(this.selectedItem);
+    }
+  },
+
+  _updateSelected: function() {
+    this._selectSelected(this.selected);
+  },
+
+  _selectSelected: function(selected) {
+    if (!this.items) {
+      return;
+    }
+
+    var item = this._valueToItem(this.selected);
+    if (item) {
+      this._selection.select(item);
+    } else {
+      this._selection.clear();
+    }
+    // Check for items, since this array is populated only when attached
+    // Since Number(0) is falsy, explicitly check for undefined
+    if (this.fallbackSelection && this.items.length && (this._selection.get() === undefined)) {
+      this.selected = this.fallbackSelection;
+    }
+  },
+
+  _filterItem: function(node) {
+    return !this._excludedLocalNames[node.localName];
+  },
+
+  _valueToItem: function(value) {
+    return (value == null) ? null : this.items[this._valueToIndex(value)];
+  },
+
+  _valueToIndex: function(value) {
+    if (this.attrForSelected) {
+      for (var i = 0, item; item = this.items[i]; i++) {
+        if (this._valueForItem(item) == value) {
+          return i;
+        }
+      }
+    } else {
+      return Number(value);
+    }
+  },
+
+  _indexToValue: function(index) {
+    if (this.attrForSelected) {
+      var item = this.items[index];
+      if (item) {
+        return this._valueForItem(item);
+      }
+    } else {
+      return index;
+    }
+  },
+
+  _valueForItem: function(item) {
+    if (!item) {
+      return null;
+    }
+
+    var propValue = item[Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_utils_case_map_js__["dashToCamelCase"])(this.attrForSelected)];
+    return propValue != undefined ? propValue : item.getAttribute(this.attrForSelected);
+  },
+
+  _applySelection: function(item, isSelected) {
+    if (this.selectedClass) {
+      this.toggleClass(this.selectedClass, isSelected, item);
+    }
+    if (this.selectedAttribute) {
+      this.toggleAttribute(this.selectedAttribute, isSelected, item);
+    }
+    this._selectionChange();
+    this.fire('iron-' + (isSelected ? 'select' : 'deselect'), {item: item});
+  },
+
+  _selectionChange: function() {
+    this._setSelectedItem(this._selection.get());
+  },
+
+  // observe items change under the given node.
+  _observeItems: function(node) {
+    return Object(__WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(node).observeNodes(function(mutation) {
+      this._updateItems();
+      this._updateSelected();
+
+      // Let other interested parties know about the change so that
+      // we don't have to recreate mutation observers everywhere.
+      this.fire('iron-items-changed', mutation, {
+        bubbles: false,
+        cancelable: false
+      });
+    });
+  },
+
+  _activateHandler: function(e) {
+    var t = e.target;
+    var items = this.items;
+    while (t && t != this) {
+      var i = items.indexOf(t);
+      if (i >= 0) {
+        var value = this._indexToValue(i);
+        this._itemActivate(value, t);
+        return;
+      }
+      t = t.parentNode;
+    }
+  },
+
+  _itemActivate: function(value, item) {
+    if (!this.fire('iron-activate',
+        {selected: value, item: item}, {cancelable: true}).defaultPrevented) {
+      this.select(value);
+    }
+  }
+
+};
+/* harmony export (immutable) */ __webpack_exports__["a"] = IronSelectableBehavior;
+
+
+
+/***/ }),
+/* 139 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+
+
+const IronSelection = function(selectCallback) {
+  this.selection = [];
+  this.selectCallback = selectCallback;
+};
+/* harmony export (immutable) */ __webpack_exports__["a"] = IronSelection;
+
+
+IronSelection.prototype = {
+
+  /**
+   * Retrieves the selected item(s).
+   *
+   * @method get
+   * @returns Returns the selected item(s). If the multi property is true,
+   * `get` will return an array, otherwise it will return
+   * the selected item or undefined if there is no selection.
+   */
+  get: function() {
+    return this.multi ? this.selection.slice() : this.selection[0];
+  },
+
+  /**
+   * Clears all the selection except the ones indicated.
+   *
+   * @method clear
+   * @param {Array} excludes items to be excluded.
+   */
+  clear: function(excludes) {
+    this.selection.slice().forEach(function(item) {
+      if (!excludes || excludes.indexOf(item) < 0) {
+        this.setItemSelected(item, false);
+      }
+    }, this);
+  },
+
+  /**
+   * Indicates if a given item is selected.
+   *
+   * @method isSelected
+   * @param {*} item The item whose selection state should be checked.
+   * @returns Returns true if `item` is selected.
+   */
+  isSelected: function(item) {
+    return this.selection.indexOf(item) >= 0;
+  },
+
+  /**
+   * Sets the selection state for a given item to either selected or deselected.
+   *
+   * @method setItemSelected
+   * @param {*} item The item to select.
+   * @param {boolean} isSelected True for selected, false for deselected.
+   */
+  setItemSelected: function(item, isSelected) {
+    if (item != null) {
+      if (isSelected !== this.isSelected(item)) {
+        // proceed to update selection only if requested state differs from current
+        if (isSelected) {
+          this.selection.push(item);
+        } else {
+          var i = this.selection.indexOf(item);
+          if (i >= 0) {
+            this.selection.splice(i, 1);
+          }
+        }
+        if (this.selectCallback) {
+          this.selectCallback(item, isSelected);
+        }
+      }
+    }
+  },
+
+  /**
+   * Sets the selection state for a given item. If the `multi` property
+   * is true, then the selected state of `item` will be toggled; otherwise
+   * the `item` will be selected.
+   *
+   * @method select
+   * @param {*} item The item to select.
+   */
+  select: function(item) {
+    if (this.multi) {
+      this.toggle(item);
+    } else if (this.get() !== item) {
+      this.setItemSelected(this.get(), false);
+      this.setItemSelected(item, true);
+    }
+  },
+
+  /**
+   * Toggles the selection state for `item`.
+   *
+   * @method toggle
+   * @param {*} item The item to toggle.
+   */
+  toggle: function(item) {
+    this.setItemSelected(item, !this.isSelected(item));
+  }
+
+};
+
+
+/***/ }),
+/* 140 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_title_card_html__ = __webpack_require__(141);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_title_card_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_title_card_html__);
+
+
+
+class AppTitleCard extends __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__["a" /* Element */] {
+  static get template() {
+    return __WEBPACK_IMPORTED_MODULE_1__app_title_card_html___default.a;
+  }
+}
+/* unused harmony export AppTitleCard */
+
+
+customElements.define('app-title-card', AppTitleCard);
+
+/***/ }),
+/* 141 */
+/***/ (function(module, exports) {
+
+module.exports = "<style>\n  :host {\n    display: block;\n  }\n  .header {\n    padding: 40px 40px 10px 40px;\n    background-color: white;\n  }\n  h2 {\n    font-size: 22px;\n    border-bottom: 2px solid var(--title-card-border-color, var(--default-primary-color));\n    margin : 0;\n    padding : 0 0 5px 0;\n  }\n  .content {\n    background-color: white;\n    padding: 10px 40px 40px 40px;\n  }\n</style>\n\n<div>\n  <div class=\"header\">\n    <h2>\n      <slot name=\"header\"></slot>\n    </h2>\n  </div>\n  <div class=\"content\">\n    <slot name=\"content\"></slot>\n  </div>\n</div>";
+
+/***/ }),
+/* 142 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__polymer_paper_input_paper_input__ = __webpack_require__(143);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__polymer_paper_input_paper_textarea__ = __webpack_require__(145);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_paper_toast_paper_toast__ = __webpack_require__(147);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_package_metadata_editor_html__ = __webpack_require__(153);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_package_metadata_editor_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__app_package_metadata_editor_html__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__interfaces_PackageInterface__ = __webpack_require__(68);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__interfaces_PackageInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__interfaces_PackageInterface__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__interfaces_AppStateInterface__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__interfaces_AppStateInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__interfaces_AppStateInterface__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__app_markdown_editor__ = __webpack_require__(154);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__app_keyword_input__ = __webpack_require__(161);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__app_theme_input__ = __webpack_require__(163);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__app_create_release__ = __webpack_require__(165);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class AppPackageMetadataEditor extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__["a" /* Element */])
+      .with(EventInterface, __WEBPACK_IMPORTED_MODULE_6__interfaces_AppStateInterface___default.a, __WEBPACK_IMPORTED_MODULE_5__interfaces_PackageInterface___default.a) {
+
+  static get template() {
+    return __WEBPACK_IMPORTED_MODULE_4__app_package_metadata_editor_html___default.a;
+  }
+
+  static get properties() {
+    return {
+      creating : {
+        type : Boolean,
+        value : true
+      },
+      currentAction : {
+        type : String,
+        value : 'Create'
+      },
+      sections : {
+        type : Array,
+        value : () => ['basicInformation', 'details']
+      },
+
+      // package schema object
+      schema : {
+        type : Object,
+        value : {}
+      },
+
+      // used for displaying package name
+      namePreview : {
+        type : String,
+        value : ''
+      }
+    }
+  }
+
+  constructor() {
+    super();
+    this.active = true;
+    this._autoUpdateTimer = -1;
+    this.schema = this._getPackageSchema();
+  }
+
+  _onAppStateUpdate(e) {
+    if( this.unsavedData ) {
+      if( confirm('You have unsaved changes, are you sure you want to leave?') ) {
+        this.unsavedData = null;
+        this.$.savingToast.close();
+      } else {
+        this._setWindowLocation('/edit/'+this.packageId);
+        return;
+      }
+    }
+    
+    let page = e.location.path[0];
+
+    if( page === 'edit' && e.location.path.length > 0 ) {
+      if( this.packageId === e.location.path[1] ) return;
+      this.packageId = e.location.path[1];
+      this.fetchAndUpdatePackage( e.location.path[1] );
+    } else if( page === 'create' ) {
+      this.createPackage();
+    }
+  }
+
+  get(attr) {
+    return this.$[attr].value;
+  }
+
+  set(attr, value) {
+    this.$[attr].value = value || '';
+  }
+
+  /**
+   * @method createPackage
+   * @description Reset UI to create a new package
+   */
+  createPackage() {
+    this.currentAction = 'Create';
+    this.creating = true;
+    this.namePreview = '';
+    for( var key in this.schema ) this.set(key);
+  }
+
+  /**
+   * @method _onCreateBtnClicked
+   * @description function fired when the create button is clicked
+   */
+  _onCreateBtnClicked() {
+    if( this.namePreview.length < 4 ) {
+      return alert('Name must be at least 4 characters');
+    }
+    if( this.get('overview').length < 15 ) {
+      return alert('Please provide a longer overview');
+    }
+
+    this._createPackage(this.namePreview, this.get('overview'));
+  }
+
+  /**
+   * @method _onDeleteBtnClicked
+   * @description function fired when the delete button is clicked
+   */
+  _onDeleteBtnClicked() {
+    if( !confirm('Are you sure you want to delete this package and all it\s contents?') ) return;
+    if( !confirm('Are you really sure?') ) return;
+    this._deletePackage(this.packageId); 
+  }
+
+  async fetchAndUpdatePackage(pkgId) {
+    let dataWrapper;
+    try {
+      dataWrapper = await this._getPackage(pkgId);
+    } catch(e) {
+      return alert('Failed to fetch package with id: '+pkgId);
+    }
+    this.updatePackage(dataWrapper.payload);
+  }
+
+  /**
+   * @method updatePackage
+   * @description update UI from package data
+   * 
+   * @param {Object} pkgData package to render
+   */
+  updatePackage(pkgData) {
+    this.currentAction = 'Update';
+    this.creating = false;
+
+    this.namePreview = pkgData.name;
+
+    let schema = this._getPackageSchema();
+    for( var key in schema ) {
+      if( pkgData[key] ) this.set(key, pkgData[key]);
+      else this.set(key);
+    }
+
+    if( pkgData.releases ) {
+      let cRelease = pkgData.releases[pkgData.releases.length-1].name;
+      this.$.release.release = cRelease;
+      this.$.release.currentRelease = cRelease;
+    }
+
+    this.$.theme.setValues(pkgData);
+  }
+
+  /**
+   * Fired from name input
+   */
+  _updateNamePreview() {
+    this.namePreview = this.get('name').toLowerCase().replace(/ /g, '-');
+  }
+
+  /**
+   * Fired when create package state updates
+   */
+  _onCreatePackageUpdate(e) {
+    if( e.state === 'loading' ) {
+      this.$.createBtn.setAttribute('disabled', 'disabled');
+      this.$.createBtn.innerHTML = 'Creating...';
+      return;
+    }
+
+    this.$.createBtn.removeAttribute('disabled', 'disabled');
+    this.$.createBtn.innerHTML = 'Create';
+    if( e.state === 'error' ) {
+      return alert('Failed to create package :( '+e.error.message);
+    }
+
+    this._setWindowLocation('/package/'+e.payload.id);
+  }
+
+  /**
+   * @method _onDataChange
+   * @description Fired when input elements update
+   */  
+  _onDataChange() {
+    if( this.creating ) return;
+
+    this.unsavedData = {
+      name : this.namePreview,
+      overview : this.get('overview'),
+      description : this.get('description'),
+      keywords : this.get('keywords')
+    }
+
+    this.$.unsavedMsg.style.display = 'block';
+    this.$.savingMsg.style.display = 'none';
+    this.$.savingToast.open();
+  }
+
+  /**
+   * @method _onThemeUpdate
+   * @description called from the app-theme-input when a value updates
+   */
+  _onThemeUpdate(e) {
+    this._onDataChange();
+    for( var key in e.detail ) {
+      this.unsavedData[key] = e.detail[key];
+    }
+  }
+
+  _onSaveChangesClicked() {
+    this._updatePackage(this.unsavedData);
+  }
+
+  _onEditPackageUpdate(e) {
+    if( e.state === 'loading' ) {
+      this.$.unsavedMsg.style.display = 'none';
+      this.$.savingMsg.style.display = 'block';
+    } else if( e.state === 'loaded' ) {
+      this.unsavedData = null;
+      this.$.savingToast.close();
+      this.$.savedToast.open();
+    } else if( e.state === 'error' ) {
+      this.$.unsavedMsg.style.display = 'block';
+      this.$.savingMsg.style.display = 'none';
+      alert('Failed to save package data :( '+e.error.message);
+    }
+  }
+
+  _valueToArray(value) {
+    return value.split(',').map(value => value.trim());
+  }
+
+
+}
+customElements.define('app-package-metadata-editor', AppPackageMetadataEditor);
+
+/***/ }),
+/* 143 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_form_element_behavior_iron_form_element_behavior_js__ = __webpack_require__(60);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_input_iron_input_js__ = __webpack_require__(144);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__paper_input_behavior_js__ = __webpack_require__(63);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__paper_input_char_counter_js__ = __webpack_require__(64);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__paper_input_container_js__ = __webpack_require__(66);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__paper_input_error_js__ = __webpack_require__(67);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__polymer_lib_elements_dom_module_js__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__polymer_polymer_element_js__ = __webpack_require__(3);
+
+
+
+
+
+
+
+
+
+
+const $_documentContainer = document.createElement('div');
+$_documentContainer.setAttribute('style', 'display: none;');
+
+$_documentContainer.innerHTML = `<dom-module id="paper-input">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+
+      :host([focused]) {
+        outline: none;
+      }
+
+      :host([hidden]) {
+        display: none !important;
+      }
+
+      input {
+        position: relative; /* to make a stacking context */
+        outline: none;
+        box-shadow: none;
+        padding: 0;
+        width: 100%;
+        max-width: 100%;
+        background: transparent;
+        border: none;
+        color: var(--paper-input-container-input-color, var(--primary-text-color));
+        -webkit-appearance: none;
+        text-align: inherit;
+        vertical-align: bottom;
+
+        /* Firefox sets a min-width on the input, which can cause layout issues */
+        min-width: 0;
+
+        @apply --paper-font-subhead;
+        @apply --paper-input-container-input;
+      }
+
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        @apply --paper-input-container-input-webkit-spinner;
+      }
+
+      input::-webkit-clear-button {
+        @apply --paper-input-container-input-webkit-clear;
+      }
+
+      input::-webkit-input-placeholder {
+        color: var(--paper-input-container-color, var(--secondary-text-color));
+      }
+
+      input:-moz-placeholder {
+        color: var(--paper-input-container-color, var(--secondary-text-color));
+      }
+
+      input::-moz-placeholder {
+        color: var(--paper-input-container-color, var(--secondary-text-color));
+      }
+
+      input::-ms-clear {
+        @apply --paper-input-container-ms-clear;
+      }
+
+      input:-ms-input-placeholder {
+        color: var(--paper-input-container-color, var(--secondary-text-color));
+      }
+
+      label {
+        pointer-events: none;
+      }
+    </style>
+
+    <paper-input-container id="container" no-label-float="[[noLabelFloat]]" always-float-label="[[_computeAlwaysFloatLabel(alwaysFloatLabel,placeholder)]]" auto-validate\$="[[autoValidate]]" disabled\$="[[disabled]]" invalid="[[invalid]]">
+
+      <slot name="prefix" slot="prefix"></slot>
+
+      <label hidden\$="[[!label]]" aria-hidden="true" for="input" slot="label">[[label]]</label>
+
+      <span id="template-placeholder"></span>
+
+      <slot name="suffix" slot="suffix"></slot>
+
+      <template is="dom-if" if="[[errorMessage]]">
+        <paper-input-error aria-live="assertive" slot="add-on">[[errorMessage]]</paper-input-error>
+      </template>
+
+      <template is="dom-if" if="[[charCounter]]">
+        <paper-input-char-counter slot="add-on"></paper-input-char-counter>
+      </template>
+
+    </paper-input-container>
+  </template>
+
+  <!-- This is a fresh new hell to make this element hybrid. Basically, in 2.0
+    we lost is=, so the example same template can't be used with iron-input 1.0 and 2.0.
+    Expect some conditional code (especially in the tests).
+   -->
+  <template id="v0">
+    <input is="iron-input" id="input" slot="input" aria-labelledby\$="[[_ariaLabelledBy]]" aria-describedby\$="[[_ariaDescribedBy]]" disabled\$="[[disabled]]" title\$="[[title]]" bind-value="{{value}}" invalid="{{invalid}}" prevent-invalid-input="[[preventInvalidInput]]" allowed-pattern="[[allowedPattern]]" validator="[[validator]]" type\$="[[type]]" pattern\$="[[pattern]]" required\$="[[required]]" autocomplete\$="[[autocomplete]]" autofocus\$="[[autofocus]]" inputmode\$="[[inputmode]]" minlength\$="[[minlength]]" maxlength\$="[[maxlength]]" min\$="[[min]]" max\$="[[max]]" step\$="[[step]]" name\$="[[name]]" placeholder\$="[[placeholder]]" readonly\$="[[readonly]]" list\$="[[list]]" size\$="[[size]]" autocapitalize\$="[[autocapitalize]]" autocorrect\$="[[autocorrect]]" on-change="_onChange" tabindex\$="[[tabIndex]]" autosave\$="[[autosave]]" results\$="[[results]]" accept\$="[[accept]]" multiple\$="[[multiple]]">
+  </template>
+
+  <template id="v1">
+    <!-- Need to bind maxlength so that the paper-input-char-counter works correctly -->
+    <iron-input bind-value="{{value}}" id="input" slot="input" maxlength\$="[[maxlength]]" allowed-pattern="[[allowedPattern]]" invalid="{{invalid}}" validator="[[validator]]">
+      <input id="nativeInput" aria-labelledby\$="[[_ariaLabelledBy]]" aria-describedby\$="[[_ariaDescribedBy]]" disabled\$="[[disabled]]" title\$="[[title]]" type\$="[[type]]" pattern\$="[[pattern]]" required\$="[[required]]" autocomplete\$="[[autocomplete]]" autofocus\$="[[autofocus]]" inputmode\$="[[inputmode]]" minlength\$="[[minlength]]" maxlength\$="[[maxlength]]" min\$="[[min]]" max\$="[[max]]" step\$="[[step]]" name\$="[[name]]" placeholder\$="[[placeholder]]" readonly\$="[[readonly]]" list\$="[[list]]" size\$="[[size]]" autocapitalize\$="[[autocapitalize]]" autocorrect\$="[[autocorrect]]" on-change="_onChange" tabindex\$="[[tabIndex]]" autosave\$="[[autosave]]" results\$="[[results]]" accept\$="[[accept]]" multiple\$="[[multiple]]">
+    </iron-input>
+  </template>
+
+</dom-module>`;
+
+document.head.appendChild($_documentContainer);
+Object(__WEBPACK_IMPORTED_MODULE_7__polymer_lib_legacy_polymer_fn_js__["a" /* Polymer */])({
+  is: 'paper-input',
+
+  behaviors: [
+    __WEBPACK_IMPORTED_MODULE_3__paper_input_behavior_js__["a" /* PaperInputBehavior */],
+    __WEBPACK_IMPORTED_MODULE_1__iron_form_element_behavior_iron_form_element_behavior_js__["a" /* IronFormElementBehavior */]
+  ],
+
+  beforeRegister: function() {
+    // We need to tell which kind of of template to stamp based on
+    // what kind of `iron-input` we got, but because of polyfills and
+    // custom elements differences between v0 and v1, the safest bet is
+    // to check a particular method we know the iron-input#2.x can have.
+    // If it doesn't have it, then it's an iron-input#1.x.
+    var ironInput = document.createElement('iron-input');
+    var version = typeof ironInput._initSlottedInput == 'function' ? 'v1' : 'v0';
+    var template = __WEBPACK_IMPORTED_MODULE_8__polymer_lib_elements_dom_module_js__["a" /* DomModule */].import('paper-input', 'template');
+    var inputTemplate = __WEBPACK_IMPORTED_MODULE_8__polymer_lib_elements_dom_module_js__["a" /* DomModule */].import('paper-input', 'template#' + version);
+    var inputPlaceholder = template.content.querySelector('#template-placeholder');
+    if (inputPlaceholder) {
+      inputPlaceholder.parentNode.replaceChild(inputTemplate.content, inputPlaceholder);
+    }
+    // else it's already been processed, probably in superclass
+  },
+
+  /**
+   * Returns a reference to the focusable element. Overridden from PaperInputBehavior
+   * to correctly focus the native input.
+   */
+  get _focusableElement() {
+    return __WEBPACK_IMPORTED_MODULE_9__polymer_polymer_element_js__["a" /* Element */] ? this.inputElement._inputElement : this.inputElement;
+  },
+
+  // Note: This event is only available in the 1.0 version of this element.
+  // In 2.0, the functionality of `_onIronInputReady` is done in
+  // PaperInputBehavior::attached.
+  listeners: {
+    'iron-input-ready': '_onIronInputReady'
+  },
+
+  _onIronInputReady: function() {
+    if (this.inputElement &&
+        this._typesThatHaveText.indexOf(this.$.nativeInput.type) !== -1) {
+      this.alwaysFloatLabel = true;
+    }
+
+    // Only validate when attached if the input already has a value.
+    if (!!this.inputElement.bindValue) {
+      this.$.container._handleValueAndAutoValidate(this.inputElement);
+    }
+  },
+});
+
+
+/***/ }),
+/* 144 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_a11y_announcer_iron_a11y_announcer_js__ = __webpack_require__(61);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_validatable_behavior_iron_validatable_behavior_js__ = __webpack_require__(62);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
+
+
+
+
+
+Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_fn_js__["a" /* Polymer */])({
+  _template: `
+    <style>
+      :host {
+        display: inline-block;
+      }
+    </style>
+    <slot id="content"></slot>
+`,
+
+  is: 'iron-input',
+
+  behaviors: [
+    __WEBPACK_IMPORTED_MODULE_2__iron_validatable_behavior_iron_validatable_behavior_js__["a" /* IronValidatableBehavior */]
+  ],
+
+  /**
+   * Fired whenever `validate()` is called.
+   *
+   * @event iron-input-validate
+   */
+
+  properties: {
+
+    /**
+     * Use this property instead of `value` for two-way data binding, or to
+     * set a default value for the input. **Do not** use the distributed
+     * input's `value` property to set a default value.
+     */
+    bindValue: {
+      type: String
+    },
+
+    /**
+     * Computed property that echoes `bindValue` (mostly used for Polymer 1.0
+     * backcompatibility, if you were one-way binding to the Polymer 1.0
+     * `input is="iron-input"` value attribute).
+     */
+    value: {
+      computed: '_computeValue(bindValue)'
+    },
+
+    /**
+     * Regex-like list of characters allowed as input; all characters not in the list
+     * will be rejected. The recommended format should be a list of allowed characters,
+     * for example, `[a-zA-Z0-9.+-!;:]`.
+     *
+     * This pattern represents the allowed characters for the field; as the user inputs text,
+     * each individual character will be checked against the pattern (rather than checking
+     * the entire value as a whole). If a character is not a match, it will be rejected.
+     *
+     * Pasted input will have each character checked individually; if any character
+     * doesn't match `allowedPattern`, the entire pasted string will be rejected.
+     *
+     * Note: if you were using `iron-input` in 1.0, you were also required to
+     * set `prevent-invalid-input`. This is no longer needed as of Polymer 2.0,
+     * and will be set automatically for you if an `allowedPattern` is provided.
+     *
+     */
+    allowedPattern: {
+      type: String
+    },
+
+    /**
+     * Set to true to auto-validate the input value as you type.
+     */
+    autoValidate: {
+      type: Boolean,
+      value: false
+    }
+  },
+
+  observers: [
+    '_bindValueChanged(bindValue, _inputElement)'
+  ],
+
+  listeners: {
+    'input': '_onInput',
+    'keypress': '_onKeypress'
+  },
+
+  created: function() {
+    __WEBPACK_IMPORTED_MODULE_1__iron_a11y_announcer_iron_a11y_announcer_js__["a" /* IronA11yAnnouncer */].requestAvailability();
+    this._previousValidInput = '';
+    this._patternAlreadyChecked = false;
+  },
+
+  attached: function() {
+    // If the input is added at a later time, update the internal reference.
+    this._observer = Object(__WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(this).observeNodes(function(info) {
+      this._initSlottedInput();
+    }.bind(this));
+  },
+
+  detached: function() {
+    if (this._observer) {
+      Object(__WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(this).unobserveNodes(this._observer);
+      this._observer = null;
+    }
+  },
+
+  /**
+   * Returns the distributed <input> element.
+   */
+  get inputElement () {
+    return this._inputElement;
+  },
+
+  _initSlottedInput: function() {
+    this._inputElement = this.getEffectiveChildren()[0];
+
+    if (this.inputElement && this.inputElement.value) {
+      this.bindValue = this.inputElement.value;
+    }
+
+    this.fire('iron-input-ready');
+  },
+
+  get _patternRegExp() {
+    var pattern;
+    if (this.allowedPattern) {
+      pattern = new RegExp(this.allowedPattern);
+    } else {
+      switch (this.type) {
+        case 'number':
+          pattern = /[0-9.,e-]/;
+          break;
+      }
+    }
+    return pattern;
+  },
+
+  /**
+   * @suppress {checkTypes}
+   */
+  _bindValueChanged: function(bindValue, inputElement) {
+    // The observer could have run before attached() when we have actually initialized
+    // this property.
+    if (!inputElement) {
+      return;
+    }
+
+    if (bindValue === undefined) {
+      inputElement.value = null;
+    } else if (bindValue !== inputElement.value){
+      this.inputElement.value = bindValue;
+    }
+
+    if (this.autoValidate) {
+      this.validate();
+    }
+
+    // manually notify because we don't want to notify until after setting value
+    this.fire('bind-value-changed', {value: bindValue});
+  },
+
+  _onInput: function() {
+    // Need to validate each of the characters pasted if they haven't
+    // been validated inside `_onKeypress` already.
+    if (this.allowedPattern && !this._patternAlreadyChecked) {
+      var valid = this._checkPatternValidity();
+      if (!valid) {
+        this._announceInvalidCharacter('Invalid string of characters not entered.');
+        this.inputElement.value = this._previousValidInput;
+      }
+    }
+    this.bindValue = this._previousValidInput = this.inputElement.value;
+    this._patternAlreadyChecked = false;
+  },
+
+  _isPrintable: function(event) {
+    // What a control/printable character is varies wildly based on the browser.
+    // - most control characters (arrows, backspace) do not send a `keypress` event
+    //   in Chrome, but the *do* on Firefox
+    // - in Firefox, when they do send a `keypress` event, control chars have
+    //   a charCode = 0, keyCode = xx (for ex. 40 for down arrow)
+    // - printable characters always send a keypress event.
+    // - in Firefox, printable chars always have a keyCode = 0. In Chrome, the keyCode
+    //   always matches the charCode.
+    // None of this makes any sense.
+
+    // For these keys, ASCII code == browser keycode.
+    var anyNonPrintable =
+      (event.keyCode == 8)   ||  // backspace
+      (event.keyCode == 9)   ||  // tab
+      (event.keyCode == 13)  ||  // enter
+      (event.keyCode == 27);     // escape
+
+    // For these keys, make sure it's a browser keycode and not an ASCII code.
+    var mozNonPrintable =
+      (event.keyCode == 19)  ||  // pause
+      (event.keyCode == 20)  ||  // caps lock
+      (event.keyCode == 45)  ||  // insert
+      (event.keyCode == 46)  ||  // delete
+      (event.keyCode == 144) ||  // num lock
+      (event.keyCode == 145) ||  // scroll lock
+      (event.keyCode > 32 && event.keyCode < 41)   || // page up/down, end, home, arrows
+      (event.keyCode > 111 && event.keyCode < 124); // fn keys
+
+    return !anyNonPrintable && !(event.charCode == 0 && mozNonPrintable);
+  },
+
+  _onKeypress: function(event) {
+    if (!this.allowedPattern && this.type !== 'number') {
+      return;
+    }
+    var regexp = this._patternRegExp;
+    if (!regexp) {
+      return;
+    }
+
+    // Handle special keys and backspace
+    if (event.metaKey || event.ctrlKey || event.altKey) {
+      return;
+    }
+
+    // Check the pattern either here or in `_onInput`, but not in both.
+    this._patternAlreadyChecked = true;
+
+    var thisChar = String.fromCharCode(event.charCode);
+    if (this._isPrintable(event) && !regexp.test(thisChar)) {
+      event.preventDefault();
+      this._announceInvalidCharacter('Invalid character ' + thisChar + ' not entered.');
+    }
+  },
+
+  _checkPatternValidity: function() {
+    var regexp = this._patternRegExp;
+    if (!regexp) {
+      return true;
+    }
+    for (var i = 0; i < this.inputElement.value.length; i++) {
+      if (!regexp.test(this.inputElement.value[i])) {
+        return false;
+      }
+    }
+    return true;
+  },
+
+  /**
+   * Returns true if `value` is valid. The validator provided in `validator` will be used first,
+   * then any constraints.
+   * @return {boolean} True if the value is valid.
+   */
+  validate: function() {
+    if (!this.inputElement) {
+      this.invalid = false;
+      return true;
+    }
+
+    // Use the nested input's native validity.
+    var valid =  this.inputElement.checkValidity();
+
+    // Only do extra checking if the browser thought this was valid.
+    if (valid) {
+      // Empty, required input is invalid
+      if (this.required && this.bindValue === '') {
+        valid = false;
+      } else if (this.hasValidator()) {
+        valid = __WEBPACK_IMPORTED_MODULE_2__iron_validatable_behavior_iron_validatable_behavior_js__["a" /* IronValidatableBehavior */].validate.call(this, this.bindValue);
+      }
+    }
+
+    this.invalid = !valid;
+    this.fire('iron-input-validate');
+    return valid;
+  },
+
+  _announceInvalidCharacter: function(message) {
+    this.fire('iron-announce', { text: message });
+  },
+
+  _computeValue: function(bindValue) {
+    return bindValue;
+  }
+});
+
+
+/***/ }),
+/* 145 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_autogrow_textarea_iron_autogrow_textarea_js__ = __webpack_require__(146);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_form_element_behavior_iron_form_element_behavior_js__ = __webpack_require__(60);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__paper_input_behavior_js__ = __webpack_require__(63);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__paper_input_char_counter_js__ = __webpack_require__(64);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__paper_input_container_js__ = __webpack_require__(66);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__paper_input_error_js__ = __webpack_require__(67);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
+
+
+
+
+
+
+
+
+Object(__WEBPACK_IMPORTED_MODULE_7__polymer_lib_legacy_polymer_fn_js__["a" /* Polymer */])({
+  _template: `
+    <style>
+      :host {
+        display: block;
+      }
+
+      :host([hidden]) {
+        display: none !important;
+      }
+
+      label {
+        pointer-events: none;
+      }
+    </style>
+
+    <paper-input-container no-label-float\$="[[noLabelFloat]]" always-float-label="[[_computeAlwaysFloatLabel(alwaysFloatLabel,placeholder)]]" auto-validate\$="[[autoValidate]]" disabled\$="[[disabled]]" invalid="[[invalid]]">
+
+      <label hidden\$="[[!label]]" aria-hidden="true" for="input" slot="label">[[label]]</label>
+
+      <iron-autogrow-textarea id="input" class="paper-input-input" slot="input" aria-labelledby\$="[[_ariaLabelledBy]]" aria-describedby\$="[[_ariaDescribedBy]]" bind-value="{{value}}" invalid="{{invalid}}" validator\$="[[validator]]" disabled\$="[[disabled]]" autocomplete\$="[[autocomplete]]" autofocus\$="[[autofocus]]" inputmode\$="[[inputmode]]" name\$="[[name]]" placeholder\$="[[placeholder]]" readonly\$="[[readonly]]" required\$="[[required]]" minlength\$="[[minlength]]" maxlength\$="[[maxlength]]" autocapitalize\$="[[autocapitalize]]" rows\$="[[rows]]" max-rows\$="[[maxRows]]" on-change="_onChange"></iron-autogrow-textarea>
+
+      <template is="dom-if" if="[[errorMessage]]">
+        <paper-input-error aria-live="assertive" slot="add-on">[[errorMessage]]</paper-input-error>
+      </template>
+
+      <template is="dom-if" if="[[charCounter]]">
+        <paper-input-char-counter slot="add-on"></paper-input-char-counter>
+      </template>
+
+    </paper-input-container>
+`,
+
+  is: 'paper-textarea',
+
+  behaviors: [
+    __WEBPACK_IMPORTED_MODULE_3__paper_input_behavior_js__["a" /* PaperInputBehavior */],
+    __WEBPACK_IMPORTED_MODULE_2__iron_form_element_behavior_iron_form_element_behavior_js__["a" /* IronFormElementBehavior */]
+  ],
+
+  properties: {
+    _ariaLabelledBy: {
+      observer: '_ariaLabelledByChanged',
+      type: String
+    },
+
+    _ariaDescribedBy: {
+      observer: '_ariaDescribedByChanged',
+      type: String
+    },
+
+    /**
+     * The initial number of rows.
+     *
+     * @attribute rows
+     * @type number
+     * @default 1
+     */
+    rows: {
+      type: Number,
+      value: 1
+    },
+
+    /**
+     * The maximum number of rows this element can grow to until it
+     * scrolls. 0 means no maximum.
+     *
+     * @attribute maxRows
+     * @type number
+     * @default 0
+     */
+    maxRows: {
+     type: Number,
+     value: 0
+    }
+  },
+
+  _ariaLabelledByChanged: function(ariaLabelledBy) {
+    this.$.input.textarea.setAttribute('aria-labelledby', ariaLabelledBy);
+  },
+
+  _ariaDescribedByChanged: function(ariaDescribedBy) {
+    this.$.input.textarea.setAttribute('aria-describedby', ariaDescribedBy);
+  },
+
+  get _focusableElement() {
+    return this.$.input.textarea;
+  }
+});
+
+
+/***/ }),
+/* 146 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_behaviors_iron_control_state_js__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_flex_layout_iron_flex_layout_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__iron_validatable_behavior_iron_validatable_behavior_js__ = __webpack_require__(62);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
+
+
+
+
+
+
+
+Object(__WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__["a" /* Polymer */])({
+  _template: `
+    <style>
+      :host {
+        display: inline-block;
+        position: relative;
+        width: 400px;
+        border: 1px solid;
+        padding: 2px;
+        -moz-appearance: textarea;
+        -webkit-appearance: textarea;
+        overflow: hidden;
+      }
+
+      .mirror-text {
+        visibility: hidden;
+        word-wrap: break-word;
+        @apply --iron-autogrow-textarea;
+      }
+
+      .fit {
+        @apply --layout-fit;
+      }
+
+      textarea {
+        position: relative;
+        outline: none;
+        border: none;
+        resize: none;
+        background: inherit;
+        color: inherit;
+        /* see comments in template */
+        width: 100%;
+        height: 100%;
+        font-size: inherit;
+        font-family: inherit;
+        line-height: inherit;
+        text-align: inherit;
+        @apply --iron-autogrow-textarea;
+      }
+
+      textarea::-webkit-input-placeholder {
+        @apply --iron-autogrow-textarea-placeholder;
+      }
+
+      textarea:-moz-placeholder {
+        @apply --iron-autogrow-textarea-placeholder;
+      }
+
+      textarea::-moz-placeholder {
+        @apply --iron-autogrow-textarea-placeholder;
+      }
+
+      textarea:-ms-input-placeholder {
+        @apply --iron-autogrow-textarea-placeholder;
+      }
+    </style>
+
+    <!-- the mirror sizes the input/textarea so it grows with typing -->
+    <!-- use &#160; instead &nbsp; of to allow this element to be used in XHTML -->
+    <div id="mirror" class="mirror-text" aria-hidden="true">&nbsp;</div>
+
+    <!-- size the input/textarea with a div, because the textarea has intrinsic size in ff -->
+    <div class="textarea-container fit">
+      <textarea id="textarea" name\$="[[name]]" aria-label\$="[[label]]" autocomplete\$="[[autocomplete]]" autofocus\$="[[autofocus]]" inputmode\$="[[inputmode]]" placeholder\$="[[placeholder]]" readonly\$="[[readonly]]" required\$="[[required]]" disabled\$="[[disabled]]" rows\$="[[rows]]" minlength\$="[[minlength]]" maxlength\$="[[maxlength]]"></textarea>
+    </div>
+`,
+
+  is: 'iron-autogrow-textarea',
+
+  behaviors: [
+    __WEBPACK_IMPORTED_MODULE_3__iron_validatable_behavior_iron_validatable_behavior_js__["a" /* IronValidatableBehavior */],
+    __WEBPACK_IMPORTED_MODULE_1__iron_behaviors_iron_control_state_js__["a" /* IronControlState */]
+  ],
+
+  properties: {
+    /**
+     * Use this property instead of `bind-value` for two-way data binding.
+     * @type {string|number}
+     */
+    value: {
+      observer: '_valueChanged',
+      type: String,
+      notify: true
+    },
+
+    /**
+     * This property is deprecated, and just mirrors `value`. Use `value` instead.
+     * @type {string|number}
+     */
+    bindValue: {
+      observer: '_bindValueChanged',
+      type: String,
+      notify: true
+    },
+
+    /**
+     * The initial number of rows.
+     *
+     * @attribute rows
+     * @type number
+     * @default 1
+     */
+    rows: {
+      type: Number,
+      value: 1,
+      observer: '_updateCached'
+    },
+
+    /**
+     * The maximum number of rows this element can grow to until it
+     * scrolls. 0 means no maximum.
+     *
+     * @attribute maxRows
+     * @type number
+     * @default 0
+     */
+    maxRows: {
+     type: Number,
+     value: 0,
+     observer: '_updateCached'
+    },
+
+    /**
+     * Bound to the textarea's `autocomplete` attribute.
+     */
+    autocomplete: {
+      type: String,
+      value: 'off'
+    },
+
+    /**
+     * Bound to the textarea's `autofocus` attribute.
+     */
+    autofocus: {
+      type: Boolean,
+      value: false
+    },
+
+    /**
+     * Bound to the textarea's `inputmode` attribute.
+     */
+    inputmode: {
+      type: String
+    },
+
+    /**
+     * Bound to the textarea's `placeholder` attribute.
+     */
+    placeholder: {
+      type: String
+    },
+
+    /**
+     * Bound to the textarea's `readonly` attribute.
+     */
+    readonly: {
+      type: String
+    },
+
+    /**
+     * Set to true to mark the textarea as required.
+     */
+    required: {
+      type: Boolean
+    },
+
+    /**
+     * The minimum length of the input value.
+     */
+    minlength: {
+      type: Number
+    },
+
+    /**
+     * The maximum length of the input value.
+     */
+    maxlength: {
+      type: Number
+    },
+
+    /**
+     * Bound to the textarea's `aria-label` attribute.
+     */
+    label: {
+      type: String
+    }
+
+  },
+
+  listeners: {
+    'input': '_onInput'
+  },
+
+  /**
+   * Returns the underlying textarea.
+   * @type HTMLTextAreaElement
+   */
+  get textarea() {
+    return this.$.textarea;
+  },
+
+  /**
+   * Returns textarea's selection start.
+   * @type Number
+   */
+  get selectionStart() {
+    return this.$.textarea.selectionStart;
+  },
+
+  /**
+   * Returns textarea's selection end.
+   * @type Number
+   */
+  get selectionEnd() {
+    return this.$.textarea.selectionEnd;
+  },
+
+  /**
+   * Sets the textarea's selection start.
+   */
+  set selectionStart(value) {
+    this.$.textarea.selectionStart = value;
+  },
+
+  /**
+   * Sets the textarea's selection end.
+   */
+  set selectionEnd(value) {
+    this.$.textarea.selectionEnd = value;
+  },
+
+  attached: function() {
+    /* iOS has an arbitrary left margin of 3px that isn't present
+     * in any other browser, and means that the paper-textarea's cursor
+     * overlaps the label.
+     * See https://github.com/PolymerElements/paper-input/issues/468.
+     */
+    var IS_IOS = navigator.userAgent.match(/iP(?:[oa]d|hone)/);
+    if (IS_IOS) {
+      this.$.textarea.style.marginLeft = '-3px';
+    }
+  },
+
+  /**
+   * Returns true if `value` is valid. The validator provided in `validator`
+   * will be used first, if it exists; otherwise, the `textarea`'s validity
+   * is used.
+   * @return {boolean} True if the value is valid.
+   */
+  validate: function() {
+    // Use the nested input's native validity.
+    var valid =  this.$.textarea.validity.valid;
+
+    // Only do extra checking if the browser thought this was valid.
+    if (valid) {
+      // Empty, required input is invalid
+      if (this.required && this.value === '') {
+        valid = false;
+      } else if (this.hasValidator()) {
+        valid = __WEBPACK_IMPORTED_MODULE_3__iron_validatable_behavior_iron_validatable_behavior_js__["a" /* IronValidatableBehavior */].validate.call(this, this.value);
+      }
+    }
+
+    this.invalid = !valid;
+    this.fire('iron-input-validate');
+    return valid;
+  },
+
+  _bindValueChanged: function(bindValue) {
+    this.value = bindValue;
+  },
+
+  _valueChanged: function(value) {
+    var textarea = this.textarea;
+    if (!textarea) {
+      return;
+    }
+
+    // If the bindValue changed manually, then we need to also update
+    // the underlying textarea's value. Otherwise this change was probably
+    // generated from the _onInput handler, and the two values are already
+    // the same.
+    if (textarea.value !== value) {
+      textarea.value = !(value || value === 0) ? '' : value;
+    }
+
+    this.bindValue = value;
+    this.$.mirror.innerHTML = this._valueForMirror();
+
+    // This code is from early 1.0, when this element was a type extension.
+    // It's unclear if it's still needed, but leaving in in case it is.
+    // manually notify because we don't want to notify until after setting value.
+    // this.fire('bind-value-changed', {value: this.bindValue});
+  },
+
+  _onInput: function(event) {
+    var eventPath = Object(__WEBPACK_IMPORTED_MODULE_5__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(event).path;
+    this.value = eventPath ? eventPath[0].value : event.target.value;
+  },
+
+  _constrain: function(tokens) {
+    var _tokens;
+    tokens = tokens || [''];
+    // Enforce the min and max heights for a multiline input to avoid measurement
+    if (this.maxRows > 0 && tokens.length > this.maxRows) {
+      _tokens = tokens.slice(0, this.maxRows);
+    } else {
+      _tokens = tokens.slice(0);
+    }
+    while (this.rows > 0 && _tokens.length < this.rows) {
+      _tokens.push('');
+    }
+    // Use &#160; instead &nbsp; of to allow this element to be used in XHTML.
+    return _tokens.join('<br/>') + '&#160;';
+  },
+
+  _valueForMirror: function() {
+    var input = this.textarea;
+    if (!input) {
+      return;
+    }
+    this.tokens = (input && input.value) ? input.value.replace(/&/gm, '&amp;').replace(/"/gm, '&quot;').replace(/'/gm, '&#39;').replace(/</gm, '&lt;').replace(/>/gm, '&gt;').split('\n') : [''];
+    return this._constrain(this.tokens);
+  },
+
+  _updateCached: function() {
+    this.$.mirror.innerHTML = this._constrain(this.tokens);
+  }
+});
+
+
+/***/ }),
+/* 147 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_a11y_announcer_iron_a11y_announcer_js__ = __webpack_require__(61);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_overlay_behavior_iron_overlay_behavior_js__ = __webpack_require__(148);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
+
+
+
+
+
+// Keeps track of the toast currently opened.
+var currentToast = null;
+
+Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_fn_js__["a" /* Polymer */])({
+  _template: `
+    <style>
+      :host {
+        display: block;
+        position: fixed;
+        background-color: var(--paper-toast-background-color, #323232);
+        color: var(--paper-toast-color, #f1f1f1);
+        min-height: 48px;
+        min-width: 288px;
+        padding: 16px 24px;
+        box-sizing: border-box;
+        box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+        border-radius: 2px;
+        margin: 12px;
+        font-size: 14px;
+        cursor: default;
+        -webkit-transition: -webkit-transform 0.3s, opacity 0.3s;
+        transition: transform 0.3s, opacity 0.3s;
+        opacity: 0;
+        -webkit-transform: translateY(100px);
+        transform: translateY(100px);
+        @apply --paper-font-common-base;
+      }
+
+      :host(.capsule) {
+        border-radius: 24px;
+      }
+
+      :host(.fit-bottom) {
+        width: 100%;
+        min-width: 0;
+        border-radius: 0;
+        margin: 0;
+      }
+
+      :host(.paper-toast-open) {
+        opacity: 1;
+        -webkit-transform: translateY(0px);
+        transform: translateY(0px);
+      }
+    </style>
+
+    <span id="label">{{text}}</span>
+    <slot></slot>
+`,
+
+  is: 'paper-toast',
+
+  behaviors: [
+    __WEBPACK_IMPORTED_MODULE_2__iron_overlay_behavior_iron_overlay_behavior_js__["a" /* IronOverlayBehavior */]
+  ],
+
+  properties: {
+    /**
+     * The element to fit `this` into.
+     * Overridden from `Polymer.IronFitBehavior`.
+     */
+    fitInto: {
+      type: Object,
+      value: window,
+      observer: '_onFitIntoChanged'
+    },
+
+    /**
+     * The orientation against which to align the dropdown content
+     * horizontally relative to `positionTarget`.
+     * Overridden from `Polymer.IronFitBehavior`.
+     */
+    horizontalAlign: {
+      type: String,
+      value: 'left'
+    },
+
+    /**
+     * The orientation against which to align the dropdown content
+     * vertically relative to `positionTarget`.
+     * Overridden from `Polymer.IronFitBehavior`.
+     */
+    verticalAlign: {
+      type: String,
+      value: 'bottom'
+    },
+
+    /**
+     * The duration in milliseconds to show the toast.
+     * Set to `0`, a negative number, or `Infinity`, to disable the
+     * toast auto-closing.
+     */
+    duration: {
+      type: Number,
+      value: 3000
+    },
+
+    /**
+     * The text to display in the toast.
+     */
+    text: {
+      type: String,
+      value: ''
+    },
+
+    /**
+     * Overridden from `IronOverlayBehavior`.
+     * Set to false to enable closing of the toast by clicking outside it.
+     */
+    noCancelOnOutsideClick: {
+      type: Boolean,
+      value: true
+    },
+
+    /**
+     * Overridden from `IronOverlayBehavior`.
+     * Set to true to disable auto-focusing the toast or child nodes with
+     * the `autofocus` attribute` when the overlay is opened.
+     */
+    noAutoFocus: {
+      type: Boolean,
+      value: true
+    }
+  },
+
+  listeners: {
+    'transitionend': '__onTransitionEnd'
+  },
+
+  /**
+   * Read-only. Deprecated. Use `opened` from `IronOverlayBehavior`.
+   * @property visible
+   * @deprecated
+   */
+  get visible() {
+    __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__["a" /* Base */]._warn('`visible` is deprecated, use `opened` instead');
+    return this.opened;
+  },
+
+  /**
+   * Read-only. Can auto-close if duration is a positive finite number.
+   * @property _canAutoClose
+   */
+  get _canAutoClose() {
+    return this.duration > 0 && this.duration !== Infinity;
+  },
+
+  created: function() {
+    this._autoClose = null;
+    __WEBPACK_IMPORTED_MODULE_1__iron_a11y_announcer_iron_a11y_announcer_js__["a" /* IronA11yAnnouncer */].requestAvailability();
+  },
+
+  /**
+   * Show the toast. Without arguments, this is the same as `open()` from `IronOverlayBehavior`.
+   * @param {(Object|string)=} properties Properties to be set before opening the toast.
+   * e.g. `toast.show('hello')` or `toast.show({text: 'hello', duration: 3000})`
+   */
+  show: function(properties) {
+    if (typeof properties == 'string') {
+      properties = { text: properties };
+    }
+    for (var property in properties) {
+      if (property.indexOf('_') === 0) {
+        __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__["a" /* Base */]._warn('The property "' + property + '" is private and was not set.');
+      } else if (property in this) {
+        this[property] = properties[property];
+      } else {
+        __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__["a" /* Base */]._warn('The property "' + property + '" is not valid.');
+      }
+    }
+    this.open();
+  },
+
+  /**
+   * Hide the toast. Same as `close()` from `IronOverlayBehavior`.
+   */
+  hide: function() {
+    this.close();
+  },
+
+  /**
+   * Called on transitions of the toast, indicating a finished animation
+   * @private
+   */
+  __onTransitionEnd: function(e) {
+    // there are different transitions that are happening when opening and
+    // closing the toast. The last one so far is for `opacity`.
+    // This marks the end of the transition, so we check for this to determine if this
+    // is the correct event.
+    if (e && e.target === this && e.propertyName === 'opacity') {
+      if (this.opened) {
+        this._finishRenderOpened();
+      } else {
+        this._finishRenderClosed();
+      }
+    }
+  },
+
+  /**
+   * Overridden from `IronOverlayBehavior`.
+   * Called when the value of `opened` changes.
+   */
+  _openedChanged: function() {
+    if (this._autoClose !== null) {
+      this.cancelAsync(this._autoClose);
+      this._autoClose = null;
+    }
+    if (this.opened) {
+      if (currentToast && currentToast !== this) {
+        currentToast.close();
+      }
+      currentToast = this;
+      this.fire('iron-announce', {
+        text: this.text
+      });
+      if (this._canAutoClose) {
+        this._autoClose = this.async(this.close, this.duration);
+      }
+    } else if (currentToast === this) {
+      currentToast = null;
+    }
+    __WEBPACK_IMPORTED_MODULE_2__iron_overlay_behavior_iron_overlay_behavior_js__["b" /* IronOverlayBehaviorImpl */]._openedChanged.apply(this, arguments);
+  },
+
+  /**
+   * Overridden from `IronOverlayBehavior`.
+   */
+  _renderOpened: function() {
+    this.classList.add('paper-toast-open');
+  },
+
+  /**
+   * Overridden from `IronOverlayBehavior`.
+   */
+  _renderClosed: function() {
+    this.classList.remove('paper-toast-open');
+  },
+
+  /**
+   * @private
+   */
+  _onFitIntoChanged: function(fitInto) {
+    this.positionTarget = fitInto;
+  }
+
+  /**
+   * Fired when `paper-toast` is opened.
+   *
+   * @event 'iron-announce'
+   * @param {{text: string}} detail Contains text that will be announced.
+   */
+});
+
+
+/***/ }),
+/* 148 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_fit_behavior_iron_fit_behavior_js__ = __webpack_require__(149);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_resizable_behavior_iron_resizable_behavior_js__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__iron_overlay_manager_js__ = __webpack_require__(150);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__iron_focusables_helper_js__ = __webpack_require__(152);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
+
+
+
+
+
+
+
+const IronOverlayBehaviorImpl = {
+
+  properties: {
+
+    /**
+     * True if the overlay is currently displayed.
+     */
+    opened: {
+      observer: '_openedChanged',
+      type: Boolean,
+      value: false,
+      notify: true
+    },
+
+    /**
+     * True if the overlay was canceled when it was last closed.
+     */
+    canceled: {
+      observer: '_canceledChanged',
+      readOnly: true,
+      type: Boolean,
+      value: false
+    },
+
+    /**
+     * Set to true to display a backdrop behind the overlay. It traps the focus
+     * within the light DOM of the overlay.
+     */
+    withBackdrop: {
+      observer: '_withBackdropChanged',
+      type: Boolean
+    },
+
+    /**
+     * Set to true to disable auto-focusing the overlay or child nodes with
+     * the `autofocus` attribute` when the overlay is opened.
+     */
+    noAutoFocus: {
+      type: Boolean,
+      value: false
+    },
+
+    /**
+     * Set to true to disable canceling the overlay with the ESC key.
+     */
+    noCancelOnEscKey: {
+      type: Boolean,
+      value: false
+    },
+
+    /**
+     * Set to true to disable canceling the overlay by clicking outside it.
+     */
+    noCancelOnOutsideClick: {
+      type: Boolean,
+      value: false
+    },
+
+    /**
+     * Contains the reason(s) this overlay was last closed (see `iron-overlay-closed`).
+     * `IronOverlayBehavior` provides the `canceled` reason; implementers of the
+     * behavior can provide other reasons in addition to `canceled`.
+     */
+    closingReason: {
+      // was a getter before, but needs to be a property so other
+      // behaviors can override this.
+      type: Object
+    },
+
+    /**
+     * Set to true to enable restoring of focus when overlay is closed.
+     */
+    restoreFocusOnClose: {
+      type: Boolean,
+      value: false
+    },
+
+    /**
+     * Set to true to keep overlay always on top.
+     */
+    alwaysOnTop: {
+      type: Boolean
+    },
+
+    /**
+     * Shortcut to access to the overlay manager.
+     * @private
+     * @type {Polymer.IronOverlayManagerClass}
+     */
+    _manager: {
+      type: Object,
+      value: __WEBPACK_IMPORTED_MODULE_3__iron_overlay_manager_js__["a" /* IronOverlayManager */]
+    },
+
+    /**
+     * The node being focused.
+     * @type {?Node}
+     */
+    _focusedChild: {
+      type: Object
+    }
+
+  },
+
+  listeners: {
+    'iron-resize': '_onIronResize'
+  },
+
+  /**
+   * The backdrop element.
+   * @type {Element}
+   */
+  get backdropElement() {
+    return this._manager.backdropElement;
+  },
+
+  /**
+   * Returns the node to give focus to.
+   * @type {Node}
+   */
+  get _focusNode() {
+    return this._focusedChild || Object(__WEBPACK_IMPORTED_MODULE_5__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(this).querySelector('[autofocus]') || this;
+  },
+
+  /**
+   * Array of nodes that can receive focus (overlay included), ordered by `tabindex`.
+   * This is used to retrieve which is the first and last focusable nodes in order
+   * to wrap the focus for overlays `with-backdrop`.
+   *
+   * If you know what is your content (specifically the first and last focusable children),
+   * you can override this method to return only `[firstFocusable, lastFocusable];`
+   * @type {Array<Node>}
+   * @protected
+   */
+  get _focusableNodes() {
+    return __WEBPACK_IMPORTED_MODULE_4__iron_focusables_helper_js__["a" /* IronFocusablesHelper */].getTabbableNodes(this);
+  },
+
+  ready: function() {
+    // Used to skip calls to notifyResize and refit while the overlay is animating.
+    this.__isAnimating = false;
+    // with-backdrop needs tabindex to be set in order to trap the focus.
+    // If it is not set, IronOverlayBehavior will set it, and remove it if with-backdrop = false.
+    this.__shouldRemoveTabIndex = false;
+    // Used for wrapping the focus on TAB / Shift+TAB.
+    this.__firstFocusableNode = this.__lastFocusableNode = null;
+    // Used by __onNextAnimationFrame to cancel any previous callback.
+    this.__raf = null;
+    // Focused node before overlay gets opened. Can be restored on close.
+    this.__restoreFocusNode = null;
+    this._ensureSetup();
+  },
+
+  attached: function() {
+    // Call _openedChanged here so that position can be computed correctly.
+    if (this.opened) {
+      this._openedChanged(this.opened);
+    }
+    this._observer = Object(__WEBPACK_IMPORTED_MODULE_5__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(this).observeNodes(this._onNodesChange);
+  },
+
+  detached: function() {
+    Object(__WEBPACK_IMPORTED_MODULE_5__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(this).unobserveNodes(this._observer);
+    this._observer = null;
+    if (this.__raf) {
+      window.cancelAnimationFrame(this.__raf);
+      this.__raf = null;
+    }
+    this._manager.removeOverlay(this);
+  },
+
+  /**
+   * Toggle the opened state of the overlay.
+   */
+  toggle: function() {
+    this._setCanceled(false);
+    this.opened = !this.opened;
+  },
+
+  /**
+   * Open the overlay.
+   */
+  open: function() {
+    this._setCanceled(false);
+    this.opened = true;
+  },
+
+  /**
+   * Close the overlay.
+   */
+  close: function() {
+    this._setCanceled(false);
+    this.opened = false;
+  },
+
+  /**
+   * Cancels the overlay.
+   * @param {Event=} event The original event
+   */
+  cancel: function(event) {
+    var cancelEvent = this.fire('iron-overlay-canceled', event, {cancelable: true});
+    if (cancelEvent.defaultPrevented) {
+      return;
+    }
+
+    this._setCanceled(true);
+    this.opened = false;
+  },
+
+  /**
+   * Invalidates the cached tabbable nodes. To be called when any of the focusable
+   * content changes (e.g. a button is disabled).
+   */
+  invalidateTabbables: function() {
+    this.__firstFocusableNode = this.__lastFocusableNode = null;
+  },
+
+  _ensureSetup: function() {
+    if (this._overlaySetup) {
+      return;
+    }
+    this._overlaySetup = true;
+    this.style.outline = 'none';
+    this.style.display = 'none';
+  },
+
+  /**
+   * Called when `opened` changes.
+   * @param {boolean=} opened
+   * @protected
+   */
+  _openedChanged: function(opened) {
+    if (opened) {
+      this.removeAttribute('aria-hidden');
+    } else {
+      this.setAttribute('aria-hidden', 'true');
+    }
+
+    // Defer any animation-related code on attached
+    // (_openedChanged gets called again on attached).
+    if (!this.isAttached) {
+      return;
+    }
+
+    this.__isAnimating = true;
+
+    // Use requestAnimationFrame for non-blocking rendering.
+    this.__onNextAnimationFrame(this.__openedChanged);
+  },
+
+  _canceledChanged: function() {
+    this.closingReason = this.closingReason || {};
+    this.closingReason.canceled = this.canceled;
+  },
+
+  _withBackdropChanged: function() {
+    // If tabindex is already set, no need to override it.
+    if (this.withBackdrop && !this.hasAttribute('tabindex')) {
+      this.setAttribute('tabindex', '-1');
+      this.__shouldRemoveTabIndex = true;
+    } else if (this.__shouldRemoveTabIndex) {
+      this.removeAttribute('tabindex');
+      this.__shouldRemoveTabIndex = false;
+    }
+    if (this.opened && this.isAttached) {
+      this._manager.trackBackdrop();
+    }
+  },
+
+  /**
+   * tasks which must occur before opening; e.g. making the element visible.
+   * @protected
+   */
+  _prepareRenderOpened: function() {
+    // Store focused node.
+    this.__restoreFocusNode = this._manager.deepActiveElement;
+
+    // Needed to calculate the size of the overlay so that transitions on its size
+    // will have the correct starting points.
+    this._preparePositioning();
+    this.refit();
+    this._finishPositioning();
+
+    // Safari will apply the focus to the autofocus element when displayed
+    // for the first time, so we make sure to return the focus where it was.
+    if (this.noAutoFocus && document.activeElement === this._focusNode) {
+      this._focusNode.blur();
+      this.__restoreFocusNode.focus();
+    }
+  },
+
+  /**
+   * Tasks which cause the overlay to actually open; typically play an animation.
+   * @protected
+   */
+  _renderOpened: function() {
+    this._finishRenderOpened();
+  },
+
+  /**
+   * Tasks which cause the overlay to actually close; typically play an animation.
+   * @protected
+   */
+  _renderClosed: function() {
+    this._finishRenderClosed();
+  },
+
+  /**
+   * Tasks to be performed at the end of open action. Will fire `iron-overlay-opened`.
+   * @protected
+   */
+  _finishRenderOpened: function() {
+    this.notifyResize();
+    this.__isAnimating = false;
+
+    this.fire('iron-overlay-opened');
+  },
+
+  /**
+   * Tasks to be performed at the end of close action. Will fire `iron-overlay-closed`.
+   * @protected
+   */
+  _finishRenderClosed: function() {
+    // Hide the overlay.
+    this.style.display = 'none';
+    // Reset z-index only at the end of the animation.
+    this.style.zIndex = '';
+    this.notifyResize();
+    this.__isAnimating = false;
+    this.fire('iron-overlay-closed', this.closingReason);
+  },
+
+  _preparePositioning: function() {
+    this.style.transition = this.style.webkitTransition = 'none';
+    this.style.transform = this.style.webkitTransform = 'none';
+    this.style.display = '';
+  },
+
+  _finishPositioning: function() {
+    // First, make it invisible & reactivate animations.
+    this.style.display = 'none';
+    // Force reflow before re-enabling animations so that they don't start.
+    // Set scrollTop to itself so that Closure Compiler doesn't remove this.
+    this.scrollTop = this.scrollTop;
+    this.style.transition = this.style.webkitTransition = '';
+    this.style.transform = this.style.webkitTransform = '';
+    // Now that animations are enabled, make it visible again
+    this.style.display = '';
+    // Force reflow, so that following animations are properly started.
+    // Set scrollTop to itself so that Closure Compiler doesn't remove this.
+    this.scrollTop = this.scrollTop;
+  },
+
+  /**
+   * Applies focus according to the opened state.
+   * @protected
+   */
+  _applyFocus: function() {
+    if (this.opened) {
+      if (!this.noAutoFocus) {
+        this._focusNode.focus();
+      }
+    }
+    else {
+      this._focusNode.blur();
+      this._focusedChild = null;
+      // Restore focus.
+      if (this.restoreFocusOnClose && this.__restoreFocusNode) {
+        this.__restoreFocusNode.focus();
+      }
+      this.__restoreFocusNode = null;
+      // If many overlays get closed at the same time, one of them would still
+      // be the currentOverlay even if already closed, and would call _applyFocus
+      // infinitely, so we check for this not to be the current overlay.
+      var currentOverlay = this._manager.currentOverlay();
+      if (currentOverlay && this !== currentOverlay) {
+        currentOverlay._applyFocus();
+      }
+    }
+  },
+
+  /**
+   * Cancels (closes) the overlay. Call when click happens outside the overlay.
+   * @param {!Event} event
+   * @protected
+   */
+  _onCaptureClick: function(event) {
+    if (!this.noCancelOnOutsideClick) {
+      this.cancel(event);
+    }
+  },
+
+  /**
+   * Keeps track of the focused child. If withBackdrop, traps focus within overlay.
+   * @param {!Event} event
+   * @protected
+   */
+  _onCaptureFocus: function (event) {
+    if (!this.withBackdrop) {
+      return;
+    }
+    var path = Object(__WEBPACK_IMPORTED_MODULE_5__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(event).path;
+    if (path.indexOf(this) === -1) {
+      event.stopPropagation();
+      this._applyFocus();
+    } else {
+      this._focusedChild = path[0];
+    }
+  },
+
+  /**
+   * Handles the ESC key event and cancels (closes) the overlay.
+   * @param {!Event} event
+   * @protected
+   */
+  _onCaptureEsc: function(event) {
+    if (!this.noCancelOnEscKey) {
+      this.cancel(event);
+    }
+  },
+
+  /**
+   * Handles TAB key events to track focus changes.
+   * Will wrap focus for overlays withBackdrop.
+   * @param {!Event} event
+   * @protected
+   */
+  _onCaptureTab: function(event) {
+    if (!this.withBackdrop) {
+      return;
+    }
+    this.__ensureFirstLastFocusables();
+    // TAB wraps from last to first focusable.
+    // Shift + TAB wraps from first to last focusable.
+    var shift = event.shiftKey;
+    var nodeToCheck = shift ? this.__firstFocusableNode : this.__lastFocusableNode;
+    var nodeToSet = shift ? this.__lastFocusableNode : this.__firstFocusableNode;
+    var shouldWrap = false;
+    if (nodeToCheck === nodeToSet) {
+      // If nodeToCheck is the same as nodeToSet, it means we have an overlay
+      // with 0 or 1 focusables; in either case we still need to trap the
+      // focus within the overlay.
+      shouldWrap = true;
+    } else {
+      // In dom=shadow, the manager will receive focus changes on the main
+      // root but not the ones within other shadow roots, so we can't rely on
+      // _focusedChild, but we should check the deepest active element.
+      var focusedNode = this._manager.deepActiveElement;
+      // If the active element is not the nodeToCheck but the overlay itself,
+      // it means the focus is about to go outside the overlay, hence we
+      // should prevent that (e.g. user opens the overlay and hit Shift+TAB).
+      shouldWrap = (focusedNode === nodeToCheck || focusedNode === this);
+    }
+
+    if (shouldWrap) {
+      // When the overlay contains the last focusable element of the document
+      // and it's already focused, pressing TAB would move the focus outside
+      // the document (e.g. to the browser search bar). Similarly, when the
+      // overlay contains the first focusable element of the document and it's
+      // already focused, pressing Shift+TAB would move the focus outside the
+      // document (e.g. to the browser search bar).
+      // In both cases, we would not receive a focus event, but only a blur.
+      // In order to achieve focus wrapping, we prevent this TAB event and
+      // force the focus. This will also prevent the focus to temporarily move
+      // outside the overlay, which might cause scrolling.
+      event.preventDefault();
+      this._focusedChild = nodeToSet;
+      this._applyFocus();
+    }
+  },
+
+  /**
+   * Refits if the overlay is opened and not animating.
+   * @protected
+   */
+  _onIronResize: function() {
+    if (this.opened && !this.__isAnimating) {
+      this.__onNextAnimationFrame(this.refit);
+    }
+  },
+
+  /**
+   * Will call notifyResize if overlay is opened.
+   * Can be overridden in order to avoid multiple observers on the same node.
+   * @protected
+   */
+  _onNodesChange: function() {
+    if (this.opened && !this.__isAnimating) {
+      // It might have added focusable nodes, so invalidate cached values.
+      this.invalidateTabbables();
+      this.notifyResize();
+    }
+  },
+
+  /**
+   * Will set first and last focusable nodes if any of them is not set.
+   * @private
+   */
+  __ensureFirstLastFocusables: function() {
+    if (!this.__firstFocusableNode || !this.__lastFocusableNode) {
+      var focusableNodes = this._focusableNodes;
+      this.__firstFocusableNode = focusableNodes[0];
+      this.__lastFocusableNode = focusableNodes[focusableNodes.length - 1];
+    }
+  },
+
+  /**
+   * Tasks executed when opened changes: prepare for the opening, move the
+   * focus, update the manager, render opened/closed.
+   * @private
+   */
+  __openedChanged: function() {
+    if (this.opened) {
+      // Make overlay visible, then add it to the manager.
+      this._prepareRenderOpened();
+      this._manager.addOverlay(this);
+      // Move the focus to the child node with [autofocus].
+      this._applyFocus();
+
+      this._renderOpened();
+    } else {
+      // Remove overlay, then restore the focus before actually closing.
+      this._manager.removeOverlay(this);
+      this._applyFocus();
+
+      this._renderClosed();
+    }
+  },
+
+  /**
+   * Executes a callback on the next animation frame, overriding any previous
+   * callback awaiting for the next animation frame. e.g.
+   * `__onNextAnimationFrame(callback1) && __onNextAnimationFrame(callback2)`;
+   * `callback1` will never be invoked.
+   * @param {!Function} callback Its `this` parameter is the overlay itself.
+   * @private
+   */
+  __onNextAnimationFrame: function(callback) {
+    if (this.__raf) {
+      window.cancelAnimationFrame(this.__raf);
+    }
+    var self = this;
+    this.__raf = window.requestAnimationFrame(function nextAnimationFrame() {
+      self.__raf = null;
+      callback.call(self);
+    });
+  }
+
+};
+/* harmony export (immutable) */ __webpack_exports__["b"] = IronOverlayBehaviorImpl;
+
+
+const IronOverlayBehavior = [__WEBPACK_IMPORTED_MODULE_1__iron_fit_behavior_iron_fit_behavior_js__["a" /* IronFitBehavior */], __WEBPACK_IMPORTED_MODULE_2__iron_resizable_behavior_iron_resizable_behavior_js__["a" /* IronResizableBehavior */], IronOverlayBehaviorImpl];
+/* harmony export (immutable) */ __webpack_exports__["a"] = IronOverlayBehavior;
+
+
+
+/***/ }),
+/* 149 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
+
+
+
+const IronFitBehavior = {
+
+  properties: {
+
+    /**
+     * The element that will receive a `max-height`/`width`. By default it is the same as `this`,
+     * but it can be set to a child element. This is useful, for example, for implementing a
+     * scrolling region inside the element.
+     * @type {!Element}
+     */
+    sizingTarget: {
+      type: Object,
+      value: function() {
+        return this;
+      }
+    },
+
+    /**
+     * The element to fit `this` into.
+     */
+    fitInto: {
+      type: Object,
+      value: window
+    },
+
+    /**
+     * Will position the element around the positionTarget without overlapping it.
+     */
+    noOverlap: {
+      type: Boolean
+    },
+
+    /**
+     * The element that should be used to position the element. If not set, it will
+     * default to the parent node.
+     * @type {!Element}
+     */
+    positionTarget: {
+      type: Element
+    },
+
+    /**
+     * The orientation against which to align the element horizontally
+     * relative to the `positionTarget`. Possible values are "left", "right", "auto".
+     */
+    horizontalAlign: {
+      type: String
+    },
+
+    /**
+     * The orientation against which to align the element vertically
+     * relative to the `positionTarget`. Possible values are "top", "bottom", "auto".
+     */
+    verticalAlign: {
+      type: String
+    },
+
+    /**
+     * If true, it will use `horizontalAlign` and `verticalAlign` values as preferred alignment
+     * and if there's not enough space, it will pick the values which minimize the cropping.
+     */
+    dynamicAlign: {
+      type: Boolean
+    },
+
+    /**
+     * A pixel value that will be added to the position calculated for the
+     * given `horizontalAlign`, in the direction of alignment. You can think
+     * of it as increasing or decreasing the distance to the side of the
+     * screen given by `horizontalAlign`.
+     *
+     * If `horizontalAlign` is "left", this offset will increase or decrease
+     * the distance to the left side of the screen: a negative offset will
+     * move the dropdown to the left; a positive one, to the right.
+     *
+     * Conversely if `horizontalAlign` is "right", this offset will increase
+     * or decrease the distance to the right side of the screen: a negative
+     * offset will move the dropdown to the right; a positive one, to the left.
+     */
+    horizontalOffset: {
+      type: Number,
+      value: 0,
+      notify: true
+    },
+
+    /**
+     * A pixel value that will be added to the position calculated for the
+     * given `verticalAlign`, in the direction of alignment. You can think
+     * of it as increasing or decreasing the distance to the side of the
+     * screen given by `verticalAlign`.
+     *
+     * If `verticalAlign` is "top", this offset will increase or decrease
+     * the distance to the top side of the screen: a negative offset will
+     * move the dropdown upwards; a positive one, downwards.
+     *
+     * Conversely if `verticalAlign` is "bottom", this offset will increase
+     * or decrease the distance to the bottom side of the screen: a negative
+     * offset will move the dropdown downwards; a positive one, upwards.
+     */
+    verticalOffset: {
+      type: Number,
+      value: 0,
+      notify: true
+    },
+
+    /**
+     * Set to true to auto-fit on attach.
+     */
+    autoFitOnAttach: {
+      type: Boolean,
+      value: false
+    },
+
+    /** @type {?Object} */
+    _fitInfo: {
+      type: Object
+    }
+  },
+
+  get _fitWidth() {
+    var fitWidth;
+    if (this.fitInto === window) {
+      fitWidth = this.fitInto.innerWidth;
+    } else {
+      fitWidth = this.fitInto.getBoundingClientRect().width;
+    }
+    return fitWidth;
+  },
+
+  get _fitHeight() {
+    var fitHeight;
+    if (this.fitInto === window) {
+      fitHeight = this.fitInto.innerHeight;
+    } else {
+      fitHeight = this.fitInto.getBoundingClientRect().height;
+    }
+    return fitHeight;
+  },
+
+  get _fitLeft() {
+    var fitLeft;
+    if (this.fitInto === window) {
+      fitLeft = 0;
+    } else {
+      fitLeft = this.fitInto.getBoundingClientRect().left;
+    }
+    return fitLeft;
+  },
+
+  get _fitTop() {
+    var fitTop;
+    if (this.fitInto === window) {
+      fitTop = 0;
+    } else {
+      fitTop = this.fitInto.getBoundingClientRect().top;
+    }
+    return fitTop;
+  },
+
+  /**
+   * The element that should be used to position the element,
+   * if no position target is configured.
+   */
+  get _defaultPositionTarget() {
+    var parent = Object(__WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(this).parentNode;
+
+    if (parent && parent.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
+      parent = parent.host;
+    }
+
+    return parent;
+  },
+
+  /**
+   * The horizontal align value, accounting for the RTL/LTR text direction.
+   */
+  get _localeHorizontalAlign() {
+    if (this._isRTL) {
+      // In RTL, "left" becomes "right".
+      if (this.horizontalAlign === 'right') {
+        return 'left';
+      }
+      if (this.horizontalAlign === 'left') {
+        return 'right';
+      }
+    }
+    return this.horizontalAlign;
+  },
+
+  attached: function() {
+    // Memoize this to avoid expensive calculations & relayouts.
+    // Make sure we do it only once
+    if (typeof this._isRTL === 'undefined') {
+      this._isRTL = window.getComputedStyle(this).direction == 'rtl';
+    }
+    this.positionTarget = this.positionTarget || this._defaultPositionTarget;
+    if (this.autoFitOnAttach) {
+      if (window.getComputedStyle(this).display === 'none') {
+        setTimeout(function() {
+          this.fit();
+        }.bind(this));
+      } else {
+        // NOTE: shadydom applies distribution asynchronously
+        // for performance reasons webcomponents/shadydom#120
+        // Flush to get correct layout info.
+        window.ShadyDOM && ShadyDOM.flush();
+        this.fit();
+      }
+    }
+  },
+
+  detached: function() {
+    if (this.__deferredFit) {
+      clearTimeout(this.__deferredFit);
+      this.__deferredFit = null;
+    }
+  },
+
+  /**
+   * Positions and fits the element into the `fitInto` element.
+   */
+  fit: function() {
+    this.position();
+    this.constrain();
+    this.center();
+  },
+
+  /**
+   * Memoize information needed to position and size the target element.
+   * @suppress {deprecated}
+   */
+  _discoverInfo: function() {
+    if (this._fitInfo) {
+      return;
+    }
+    var target = window.getComputedStyle(this);
+    var sizer = window.getComputedStyle(this.sizingTarget);
+
+    this._fitInfo = {
+      inlineStyle: {
+        top: this.style.top || '',
+        left: this.style.left || '',
+        position: this.style.position || ''
+      },
+      sizerInlineStyle: {
+        maxWidth: this.sizingTarget.style.maxWidth || '',
+        maxHeight: this.sizingTarget.style.maxHeight || '',
+        boxSizing: this.sizingTarget.style.boxSizing || ''
+      },
+      positionedBy: {
+        vertically: target.top !== 'auto' ? 'top' : (target.bottom !== 'auto' ?
+          'bottom' : null),
+        horizontally: target.left !== 'auto' ? 'left' : (target.right !== 'auto' ?
+          'right' : null)
+      },
+      sizedBy: {
+        height: sizer.maxHeight !== 'none',
+        width: sizer.maxWidth !== 'none',
+        minWidth: parseInt(sizer.minWidth, 10) || 0,
+        minHeight: parseInt(sizer.minHeight, 10) || 0
+      },
+      margin: {
+        top: parseInt(target.marginTop, 10) || 0,
+        right: parseInt(target.marginRight, 10) || 0,
+        bottom: parseInt(target.marginBottom, 10) || 0,
+        left: parseInt(target.marginLeft, 10) || 0
+      }
+    };
+  },
+
+  /**
+   * Resets the target element's position and size constraints, and clear
+   * the memoized data.
+   */
+  resetFit: function() {
+    var info = this._fitInfo || {};
+    for (var property in info.sizerInlineStyle) {
+      this.sizingTarget.style[property] = info.sizerInlineStyle[property];
+    }
+    for (var property in info.inlineStyle) {
+      this.style[property] = info.inlineStyle[property];
+    }
+
+    this._fitInfo = null;
+  },
+
+  /**
+   * Equivalent to calling `resetFit()` and `fit()`. Useful to call this after
+   * the element or the `fitInto` element has been resized, or if any of the
+   * positioning properties (e.g. `horizontalAlign, verticalAlign`) is updated.
+   * It preserves the scroll position of the sizingTarget.
+   */
+  refit: function() {
+    var scrollLeft = this.sizingTarget.scrollLeft;
+    var scrollTop = this.sizingTarget.scrollTop;
+    this.resetFit();
+    this.fit();
+    this.sizingTarget.scrollLeft = scrollLeft;
+    this.sizingTarget.scrollTop = scrollTop;
+  },
+
+  /**
+   * Positions the element according to `horizontalAlign, verticalAlign`.
+   */
+  position: function() {
+    if (!this.horizontalAlign && !this.verticalAlign) {
+      // needs to be centered, and it is done after constrain.
+      return;
+    }
+    this._discoverInfo();
+
+    this.style.position = 'fixed';
+    // Need border-box for margin/padding.
+    this.sizingTarget.style.boxSizing = 'border-box';
+    // Set to 0, 0 in order to discover any offset caused by parent stacking contexts.
+    this.style.left = '0px';
+    this.style.top = '0px';
+
+    var rect = this.getBoundingClientRect();
+    var positionRect = this.__getNormalizedRect(this.positionTarget);
+    var fitRect = this.__getNormalizedRect(this.fitInto);
+
+    var margin = this._fitInfo.margin;
+
+    // Consider the margin as part of the size for position calculations.
+    var size = {
+      width: rect.width + margin.left + margin.right,
+      height: rect.height + margin.top + margin.bottom
+    };
+
+    var position = this.__getPosition(this._localeHorizontalAlign, this.verticalAlign, size, positionRect,
+      fitRect);
+
+    var left = position.left + margin.left;
+    var top = position.top + margin.top;
+
+    // We first limit right/bottom within fitInto respecting the margin,
+    // then use those values to limit top/left.
+    var right = Math.min(fitRect.right - margin.right, left + rect.width);
+    var bottom = Math.min(fitRect.bottom - margin.bottom, top + rect.height);
+
+    // Keep left/top within fitInto respecting the margin.
+    left = Math.max(fitRect.left + margin.left,
+      Math.min(left, right - this._fitInfo.sizedBy.minWidth));
+    top = Math.max(fitRect.top + margin.top,
+      Math.min(top, bottom - this._fitInfo.sizedBy.minHeight));
+
+    // Use right/bottom to set maxWidth/maxHeight, and respect minWidth/minHeight.
+    this.sizingTarget.style.maxWidth = Math.max(right - left, this._fitInfo.sizedBy.minWidth) + 'px';
+    this.sizingTarget.style.maxHeight = Math.max(bottom - top, this._fitInfo.sizedBy.minHeight) + 'px';
+
+    // Remove the offset caused by any stacking context.
+    this.style.left = (left - rect.left) + 'px';
+    this.style.top = (top - rect.top) + 'px';
+  },
+
+  /**
+   * Constrains the size of the element to `fitInto` by setting `max-height`
+   * and/or `max-width`.
+   */
+  constrain: function() {
+    if (this.horizontalAlign || this.verticalAlign) {
+      return;
+    }
+    this._discoverInfo();
+
+    var info = this._fitInfo;
+    // position at (0px, 0px) if not already positioned, so we can measure the natural size.
+    if (!info.positionedBy.vertically) {
+      this.style.position = 'fixed';
+      this.style.top = '0px';
+    }
+    if (!info.positionedBy.horizontally) {
+      this.style.position = 'fixed';
+      this.style.left = '0px';
+    }
+
+    // need border-box for margin/padding
+    this.sizingTarget.style.boxSizing = 'border-box';
+    // constrain the width and height if not already set
+    var rect = this.getBoundingClientRect();
+    if (!info.sizedBy.height) {
+      this.__sizeDimension(rect, info.positionedBy.vertically, 'top', 'bottom', 'Height');
+    }
+    if (!info.sizedBy.width) {
+      this.__sizeDimension(rect, info.positionedBy.horizontally, 'left', 'right', 'Width');
+    }
+  },
+
+  /**
+   * @protected
+   * @deprecated
+   */
+  _sizeDimension: function(rect, positionedBy, start, end, extent) {
+    this.__sizeDimension(rect, positionedBy, start, end, extent);
+  },
+
+  /**
+   * @private
+   */
+  __sizeDimension: function(rect, positionedBy, start, end, extent) {
+    var info = this._fitInfo;
+    var fitRect = this.__getNormalizedRect(this.fitInto);
+    var max = extent === 'Width' ? fitRect.width : fitRect.height;
+    var flip = (positionedBy === end);
+    var offset = flip ? max - rect[end] : rect[start];
+    var margin = info.margin[flip ? start : end];
+    var offsetExtent = 'offset' + extent;
+    var sizingOffset = this[offsetExtent] - this.sizingTarget[offsetExtent];
+    this.sizingTarget.style['max' + extent] = (max - margin - offset - sizingOffset) + 'px';
+  },
+
+  /**
+   * Centers horizontally and vertically if not already positioned. This also sets
+   * `position:fixed`.
+   */
+  center: function() {
+    if (this.horizontalAlign || this.verticalAlign) {
+      return;
+    }
+    this._discoverInfo();
+
+    var positionedBy = this._fitInfo.positionedBy;
+    if (positionedBy.vertically && positionedBy.horizontally) {
+      // Already positioned.
+      return;
+    }
+    // Need position:fixed to center
+    this.style.position = 'fixed';
+    // Take into account the offset caused by parents that create stacking
+    // contexts (e.g. with transform: translate3d). Translate to 0,0 and
+    // measure the bounding rect.
+    if (!positionedBy.vertically) {
+      this.style.top = '0px';
+    }
+    if (!positionedBy.horizontally) {
+      this.style.left = '0px';
+    }
+    // It will take in consideration margins and transforms
+    var rect = this.getBoundingClientRect();
+    var fitRect = this.__getNormalizedRect(this.fitInto);
+    if (!positionedBy.vertically) {
+      var top = fitRect.top - rect.top + (fitRect.height - rect.height) / 2;
+      this.style.top = top + 'px';
+    }
+    if (!positionedBy.horizontally) {
+      var left = fitRect.left - rect.left + (fitRect.width - rect.width) / 2;
+      this.style.left = left + 'px';
+    }
+  },
+
+  __getNormalizedRect: function(target) {
+    if (target === document.documentElement || target === window) {
+      return {
+        top: 0,
+        left: 0,
+        width: window.innerWidth,
+        height: window.innerHeight,
+        right: window.innerWidth,
+        bottom: window.innerHeight
+      };
+    }
+    return target.getBoundingClientRect();
+  },
+
+  __getCroppedArea: function(position, size, fitRect) {
+    var verticalCrop = Math.min(0, position.top) + Math.min(0, fitRect.bottom - (position.top + size.height));
+    var horizontalCrop = Math.min(0, position.left) + Math.min(0, fitRect.right - (position.left + size.width));
+    return Math.abs(verticalCrop) * size.width + Math.abs(horizontalCrop) * size.height;
+  },
+
+
+  __getPosition: function(hAlign, vAlign, size, positionRect, fitRect) {
+    // All the possible configurations.
+    // Ordered as top-left, top-right, bottom-left, bottom-right.
+    var positions = [{
+      verticalAlign: 'top',
+      horizontalAlign: 'left',
+      top: positionRect.top + this.verticalOffset,
+      left: positionRect.left + this.horizontalOffset
+    }, {
+      verticalAlign: 'top',
+      horizontalAlign: 'right',
+      top: positionRect.top + this.verticalOffset,
+      left: positionRect.right - size.width - this.horizontalOffset
+    }, {
+      verticalAlign: 'bottom',
+      horizontalAlign: 'left',
+      top: positionRect.bottom - size.height - this.verticalOffset,
+      left: positionRect.left + this.horizontalOffset
+    }, {
+      verticalAlign: 'bottom',
+      horizontalAlign: 'right',
+      top: positionRect.bottom - size.height - this.verticalOffset,
+      left: positionRect.right - size.width - this.horizontalOffset
+    }];
+
+    if (this.noOverlap) {
+      // Duplicate.
+      for (var i = 0, l = positions.length; i < l; i++) {
+        var copy = {};
+        for (var key in positions[i]) {
+          copy[key] = positions[i][key];
+        }
+        positions.push(copy);
+      }
+      // Horizontal overlap only.
+      positions[0].top = positions[1].top += positionRect.height;
+      positions[2].top = positions[3].top -= positionRect.height;
+      // Vertical overlap only.
+      positions[4].left = positions[6].left += positionRect.width;
+      positions[5].left = positions[7].left -= positionRect.width;
+    }
+
+    // Consider auto as null for coding convenience.
+    vAlign = vAlign === 'auto' ? null : vAlign;
+    hAlign = hAlign === 'auto' ? null : hAlign;
+
+    var position;
+    for (var i = 0; i < positions.length; i++) {
+      var pos = positions[i];
+
+      // If both vAlign and hAlign are defined, return exact match.
+      // For dynamicAlign and noOverlap we'll have more than one candidate, so
+      // we'll have to check the croppedArea to make the best choice.
+      if (!this.dynamicAlign && !this.noOverlap &&
+        pos.verticalAlign === vAlign && pos.horizontalAlign === hAlign) {
+        position = pos;
+        break;
+      }
+
+      // Align is ok if alignment preferences are respected. If no preferences,
+      // it is considered ok.
+      var alignOk = (!vAlign || pos.verticalAlign === vAlign) &&
+        (!hAlign || pos.horizontalAlign === hAlign);
+
+      // Filter out elements that don't match the alignment (if defined).
+      // With dynamicAlign, we need to consider all the positions to find the
+      // one that minimizes the cropped area.
+      if (!this.dynamicAlign && !alignOk) {
+        continue;
+      }
+
+      position = position || pos;
+      pos.croppedArea = this.__getCroppedArea(pos, size, fitRect);
+      var diff = pos.croppedArea - position.croppedArea;
+      // Check which crops less. If it crops equally, check if align is ok.
+      if (diff < 0 || (diff === 0 && alignOk)) {
+        position = pos;
+      }
+      // If not cropped and respects the align requirements, keep it.
+      // This allows to prefer positions overlapping horizontally over the
+      // ones overlapping vertically.
+      if (position.croppedArea === 0 && alignOk) {
+        break;
+      }
+    }
+
+    return position;
+  }
+
+};
+/* harmony export (immutable) */ __webpack_exports__["a"] = IronFitBehavior;
+
+
+
+/***/ }),
+/* 150 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_a11y_keys_behavior_iron_a11y_keys_behavior_js__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_overlay_backdrop_js__ = __webpack_require__(151);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_utils_gestures_js__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
+
+
+
+
+
+
+const IronOverlayManagerClass = function() {
+  /**
+   * Used to keep track of the opened overlays.
+   * @private {Array<Element>}
+   */
+  this._overlays = [];
+
+  /**
+   * iframes have a default z-index of 100,
+   * so this default should be at least that.
+   * @private {number}
+   */
+  this._minimumZ = 101;
+
+  /**
+   * Memoized backdrop element.
+   * @private {Element|null}
+   */
+  this._backdropElement = null;
+
+  // Enable document-wide tap recognizer.
+  // NOTE: Use useCapture=true to avoid accidentally prevention of the closing
+  // of an overlay via event.stopPropagation(). The only way to prevent
+  // closing of an overlay should be through its APIs.
+  // NOTE: enable tap on <html> to workaround Polymer/polymer#4459
+  __WEBPACK_IMPORTED_MODULE_3__polymer_lib_utils_gestures_js__["add"](document.documentElement, 'tap', null);
+  document.addEventListener('tap', this._onCaptureClick.bind(this), true);
+  document.addEventListener('focus', this._onCaptureFocus.bind(this), true);
+  document.addEventListener('keydown', this._onCaptureKeyDown.bind(this), true);
+};
+/* unused harmony export IronOverlayManagerClass */
+
+
+IronOverlayManagerClass.prototype = {
+
+  constructor: IronOverlayManagerClass,
+
+  /**
+   * The shared backdrop element.
+   * @type {!Element} backdropElement
+   */
+  get backdropElement() {
+    if (!this._backdropElement) {
+      this._backdropElement = document.createElement('iron-overlay-backdrop');
+    }
+    return this._backdropElement;
+  },
+
+  /**
+   * The deepest active element.
+   * @type {!Element} activeElement the active element
+   */
+  get deepActiveElement() {
+    // document.activeElement can be null
+    // https://developer.mozilla.org/en-US/docs/Web/API/Document/activeElement
+    // In case of null, default it to document.body.
+    var active = document.activeElement || document.body;
+    while (active.root && Object(__WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(active.root).activeElement) {
+      active = Object(__WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(active.root).activeElement;
+    }
+    return active;
+  },
+
+  /**
+   * Brings the overlay at the specified index to the front.
+   * @param {number} i
+   * @private
+   */
+  _bringOverlayAtIndexToFront: function(i) {
+    var overlay = this._overlays[i];
+    if (!overlay) {
+      return;
+    }
+    var lastI = this._overlays.length - 1;
+    var currentOverlay = this._overlays[lastI];
+    // Ensure always-on-top overlay stays on top.
+    if (currentOverlay && this._shouldBeBehindOverlay(overlay, currentOverlay)) {
+      lastI--;
+    }
+    // If already the top element, return.
+    if (i >= lastI) {
+      return;
+    }
+    // Update z-index to be on top.
+    var minimumZ = Math.max(this.currentOverlayZ(), this._minimumZ);
+    if (this._getZ(overlay) <= minimumZ) {
+      this._applyOverlayZ(overlay, minimumZ);
+    }
+
+    // Shift other overlays behind the new on top.
+    while (i < lastI) {
+      this._overlays[i] = this._overlays[i + 1];
+      i++;
+    }
+    this._overlays[lastI] = overlay;
+  },
+
+  /**
+   * Adds the overlay and updates its z-index if it's opened, or removes it if it's closed.
+   * Also updates the backdrop z-index.
+   * @param {!Element} overlay
+   */
+  addOrRemoveOverlay: function(overlay) {
+    if (overlay.opened) {
+      this.addOverlay(overlay);
+    } else {
+      this.removeOverlay(overlay);
+    }
+  },
+
+  /**
+   * Tracks overlays for z-index and focus management.
+   * Ensures the last added overlay with always-on-top remains on top.
+   * @param {!Element} overlay
+   */
+  addOverlay: function(overlay) {
+    var i = this._overlays.indexOf(overlay);
+    if (i >= 0) {
+      this._bringOverlayAtIndexToFront(i);
+      this.trackBackdrop();
+      return;
+    }
+    var insertionIndex = this._overlays.length;
+    var currentOverlay = this._overlays[insertionIndex - 1];
+    var minimumZ = Math.max(this._getZ(currentOverlay), this._minimumZ);
+    var newZ = this._getZ(overlay);
+
+    // Ensure always-on-top overlay stays on top.
+    if (currentOverlay && this._shouldBeBehindOverlay(overlay, currentOverlay)) {
+      // This bumps the z-index of +2.
+      this._applyOverlayZ(currentOverlay, minimumZ);
+      insertionIndex--;
+      // Update minimumZ to match previous overlay's z-index.
+      var previousOverlay = this._overlays[insertionIndex - 1];
+      minimumZ = Math.max(this._getZ(previousOverlay), this._minimumZ);
+    }
+
+    // Update z-index and insert overlay.
+    if (newZ <= minimumZ) {
+      this._applyOverlayZ(overlay, minimumZ);
+    }
+    this._overlays.splice(insertionIndex, 0, overlay);
+
+    this.trackBackdrop();
+  },
+
+  /**
+   * @param {!Element} overlay
+   */
+  removeOverlay: function(overlay) {
+    var i = this._overlays.indexOf(overlay);
+    if (i === -1) {
+      return;
+    }
+    this._overlays.splice(i, 1);
+
+    this.trackBackdrop();
+  },
+
+  /**
+   * Returns the current overlay.
+   * @return {Element|undefined}
+   */
+  currentOverlay: function() {
+    var i = this._overlays.length - 1;
+    return this._overlays[i];
+  },
+
+  /**
+   * Returns the current overlay z-index.
+   * @return {number}
+   */
+  currentOverlayZ: function() {
+    return this._getZ(this.currentOverlay());
+  },
+
+  /**
+   * Ensures that the minimum z-index of new overlays is at least `minimumZ`.
+   * This does not effect the z-index of any existing overlays.
+   * @param {number} minimumZ
+   */
+  ensureMinimumZ: function(minimumZ) {
+    this._minimumZ = Math.max(this._minimumZ, minimumZ);
+  },
+
+  focusOverlay: function() {
+    var current = /** @type {?} */ (this.currentOverlay());
+    if (current) {
+      current._applyFocus();
+    }
+  },
+
+  /**
+   * Updates the backdrop z-index.
+   */
+  trackBackdrop: function() {
+    var overlay = this._overlayWithBackdrop();
+    // Avoid creating the backdrop if there is no overlay with backdrop.
+    if (!overlay && !this._backdropElement) {
+      return;
+    }
+    this.backdropElement.style.zIndex = this._getZ(overlay) - 1;
+    this.backdropElement.opened = !!overlay;
+    // Property observers are not fired until element is attached
+    // in Polymer 2.x, so we ensure element is attached if needed.
+    // https://github.com/Polymer/polymer/issues/4526
+    this.backdropElement.prepare();
+  },
+
+  /**
+   * @return {Array<Element>}
+   */
+  getBackdrops: function() {
+    var backdrops = [];
+    for (var i = 0; i < this._overlays.length; i++) {
+      if (this._overlays[i].withBackdrop) {
+        backdrops.push(this._overlays[i]);
+      }
+    }
+    return backdrops;
+  },
+
+  /**
+   * Returns the z-index for the backdrop.
+   * @return {number}
+   */
+  backdropZ: function() {
+    return this._getZ(this._overlayWithBackdrop()) - 1;
+  },
+
+  /**
+   * Returns the first opened overlay that has a backdrop.
+   * @return {Element|undefined}
+   * @private
+   */
+  _overlayWithBackdrop: function() {
+    for (var i = 0; i < this._overlays.length; i++) {
+      if (this._overlays[i].withBackdrop) {
+        return this._overlays[i];
+      }
+    }
+  },
+
+  /**
+   * Calculates the minimum z-index for the overlay.
+   * @param {Element=} overlay
+   * @private
+   */
+  _getZ: function(overlay) {
+    var z = this._minimumZ;
+    if (overlay) {
+      var z1 = Number(overlay.style.zIndex || window.getComputedStyle(overlay).zIndex);
+      // Check if is a number
+      // Number.isNaN not supported in IE 10+
+      if (z1 === z1) {
+        z = z1;
+      }
+    }
+    return z;
+  },
+
+  /**
+   * @param {!Element} element
+   * @param {number|string} z
+   * @private
+   */
+  _setZ: function(element, z) {
+    element.style.zIndex = z;
+  },
+
+  /**
+   * @param {!Element} overlay
+   * @param {number} aboveZ
+   * @private
+   */
+  _applyOverlayZ: function(overlay, aboveZ) {
+    this._setZ(overlay, aboveZ + 2);
+  },
+
+  /**
+   * Returns the deepest overlay in the path.
+   * @param {Array<Element>=} path
+   * @return {Element|undefined}
+   * @suppress {missingProperties}
+   * @private
+   */
+  _overlayInPath: function(path) {
+    path = path || [];
+    for (var i = 0; i < path.length; i++) {
+      if (path[i]._manager === this) {
+        return path[i];
+      }
+    }
+  },
+
+  /**
+   * Ensures the click event is delegated to the right overlay.
+   * @param {!Event} event
+   * @private
+   */
+  _onCaptureClick: function(event) {
+    var overlay = /** @type {?} */ (this.currentOverlay());
+    // Check if clicked outside of top overlay.
+    if (overlay && this._overlayInPath(Object(__WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(event).path) !== overlay) {
+      overlay._onCaptureClick(event);
+    }
+  },
+
+  /**
+   * Ensures the focus event is delegated to the right overlay.
+   * @param {!Event} event
+   * @private
+   */
+  _onCaptureFocus: function(event) {
+    var overlay = /** @type {?} */ (this.currentOverlay());
+    if (overlay) {
+      overlay._onCaptureFocus(event);
+    }
+  },
+
+  /**
+   * Ensures TAB and ESC keyboard events are delegated to the right overlay.
+   * @param {!Event} event
+   * @private
+   */
+  _onCaptureKeyDown: function(event) {
+    var overlay = /** @type {?} */ (this.currentOverlay());
+    if (overlay) {
+      if (__WEBPACK_IMPORTED_MODULE_1__iron_a11y_keys_behavior_iron_a11y_keys_behavior_js__["a" /* IronA11yKeysBehavior */].keyboardEventMatchesKeys(event, 'esc')) {
+        overlay._onCaptureEsc(event);
+      } else if (__WEBPACK_IMPORTED_MODULE_1__iron_a11y_keys_behavior_iron_a11y_keys_behavior_js__["a" /* IronA11yKeysBehavior */].keyboardEventMatchesKeys(event, 'tab')) {
+        overlay._onCaptureTab(event);
+      }
+    }
+  },
+
+  /**
+   * Returns if the overlay1 should be behind overlay2.
+   * @param {!Element} overlay1
+   * @param {!Element} overlay2
+   * @return {boolean}
+   * @suppress {missingProperties}
+   * @private
+   */
+  _shouldBeBehindOverlay: function(overlay1, overlay2) {
+    return !overlay1.alwaysOnTop && overlay2.alwaysOnTop;
+  }
+};
+
+const IronOverlayManager = new IronOverlayManagerClass();
+/* harmony export (immutable) */ __webpack_exports__["a"] = IronOverlayManager;
+
+
+
+/***/ }),
+/* 151 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
+
+
+
+
+Object(__WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_fn_js__["a" /* Polymer */])({
+  _template: `
+    <style>
+      :host {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: var(--iron-overlay-backdrop-background-color, #000);
+        opacity: 0;
+        transition: opacity 0.2s;
+        pointer-events: none;
+        @apply --iron-overlay-backdrop;
+      }
+
+      :host(.opened) {
+        opacity: var(--iron-overlay-backdrop-opacity, 0.6);
+        pointer-events: auto;
+        @apply --iron-overlay-backdrop-opened;
+      }
+    </style>
+
+    <slot></slot>
+`,
+
+  is: 'iron-overlay-backdrop',
+
+  properties: {
+
+    /**
+     * Returns true if the backdrop is opened.
+     */
+    opened: {
+      reflectToAttribute: true,
+      type: Boolean,
+      value: false,
+      observer: '_openedChanged'
+    }
+
+  },
+
+  listeners: {
+    'transitionend': '_onTransitionend'
+  },
+
+  created: function() {
+    // Used to cancel previous requestAnimationFrame calls when opened changes.
+    this.__openedRaf = null;
+  },
+
+  attached: function() {
+    this.opened && this._openedChanged(this.opened);
+  },
+
+  /**
+   * Appends the backdrop to document body if needed.
+   */
+  prepare: function() {
+    if (this.opened && !this.parentNode) {
+      Object(__WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(document.body).appendChild(this);
+    }
+  },
+
+  /**
+   * Shows the backdrop.
+   */
+  open: function() {
+    this.opened = true;
+  },
+
+  /**
+   * Hides the backdrop.
+   */
+  close: function() {
+    this.opened = false;
+  },
+
+  /**
+   * Removes the backdrop from document body if needed.
+   */
+  complete: function() {
+    if (!this.opened && this.parentNode === document.body) {
+      Object(__WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(this.parentNode).removeChild(this);
+    }
+  },
+
+  _onTransitionend: function(event) {
+    if (event && event.target === this) {
+      this.complete();
+    }
+  },
+
+  /**
+   * @param {boolean} opened
+   * @private
+   */
+  _openedChanged: function(opened) {
+    if (opened) {
+      // Auto-attach.
+      this.prepare();
+    } else {
+      // Animation might be disabled via the mixin or opacity custom property.
+      // If it is disabled in other ways, it's up to the user to call complete.
+      var cs = window.getComputedStyle(this);
+      if (cs.transitionDuration === '0s' || cs.opacity == 0) {
+        this.complete();
+      }
+    }
+
+    if (!this.isAttached) {
+      return;
+    }
+
+    // Always cancel previous requestAnimationFrame.
+    if (this.__openedRaf) {
+      window.cancelAnimationFrame(this.__openedRaf);
+      this.__openedRaf = null;
+    }
+    // Force relayout to ensure proper transitions.
+    this.scrollTop = this.scrollTop;
+    this.__openedRaf = window.requestAnimationFrame(function() {
+      this.__openedRaf = null;
+      this.toggleClass('opened', this.opened);
+    }.bind(this));
+  }
+});
+
+
+/***/ }),
+/* 152 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
+
+
+
+var p = Element.prototype;
+var matches = p.matches || p.matchesSelector || p.mozMatchesSelector ||
+  p.msMatchesSelector || p.oMatchesSelector || p.webkitMatchesSelector;
+
+const IronFocusablesHelper = {
+
+  /**
+   * Returns a sorted array of tabbable nodes, including the root node.
+   * It searches the tabbable nodes in the light and shadow dom of the chidren,
+   * sorting the result by tabindex.
+   * @param {!Node} node
+   * @return {Array<HTMLElement>}
+   */
+  getTabbableNodes: function(node) {
+    var result = [];
+    // If there is at least one element with tabindex > 0, we need to sort
+    // the final array by tabindex.
+    var needsSortByTabIndex = this._collectTabbableNodes(node, result);
+    if (needsSortByTabIndex) {
+      return this._sortByTabIndex(result);
+    }
+    return result;
+  },
+
+  /**
+   * Returns if a element is focusable.
+   * @param {!HTMLElement} element
+   * @return {boolean}
+   */
+  isFocusable: function(element) {
+    // From http://stackoverflow.com/a/1600194/4228703:
+    // There isn't a definite list, it's up to the browser. The only
+    // standard we have is DOM Level 2 HTML https://www.w3.org/TR/DOM-Level-2-HTML/html.html,
+    // according to which the only elements that have a focus() method are
+    // HTMLInputElement,  HTMLSelectElement, HTMLTextAreaElement and
+    // HTMLAnchorElement. This notably omits HTMLButtonElement and
+    // HTMLAreaElement.
+    // Referring to these tests with tabbables in different browsers
+    // http://allyjs.io/data-tables/focusable.html
+
+    // Elements that cannot be focused if they have [disabled] attribute.
+    if (matches.call(element, 'input, select, textarea, button, object')) {
+      return matches.call(element, ':not([disabled])');
+    }
+    // Elements that can be focused even if they have [disabled] attribute.
+    return matches.call(element,
+      'a[href], area[href], iframe, [tabindex], [contentEditable]');
+  },
+
+  /**
+   * Returns if a element is tabbable. To be tabbable, a element must be
+   * focusable, visible, and with a tabindex !== -1.
+   * @param {!HTMLElement} element
+   * @return {boolean}
+   */
+  isTabbable: function(element) {
+    return this.isFocusable(element) &&
+      matches.call(element, ':not([tabindex="-1"])') &&
+      this._isVisible(element);
+  },
+
+  /**
+   * Returns the normalized element tabindex. If not focusable, returns -1.
+   * It checks for the attribute "tabindex" instead of the element property
+   * `tabIndex` since browsers assign different values to it.
+   * e.g. in Firefox `<div contenteditable>` has `tabIndex = -1`
+   * @param {!HTMLElement} element
+   * @return {!number}
+   * @private
+   */
+  _normalizedTabIndex: function(element) {
+    if (this.isFocusable(element)) {
+      var tabIndex = element.getAttribute('tabindex') || 0;
+      return Number(tabIndex);
+    }
+    return -1;
+  },
+
+  /**
+   * Searches for nodes that are tabbable and adds them to the `result` array.
+   * Returns if the `result` array needs to be sorted by tabindex.
+   * @param {!Node} node The starting point for the search; added to `result`
+   * if tabbable.
+   * @param {!Array<HTMLElement>} result
+   * @return {boolean}
+   * @private
+   */
+  _collectTabbableNodes: function(node, result) {
+    // If not an element or not visible, no need to explore children.
+    if (node.nodeType !== Node.ELEMENT_NODE || !this._isVisible(node)) {
+      return false;
+    }
+    var element = /** @type {HTMLElement} */ (node);
+    var tabIndex = this._normalizedTabIndex(element);
+    var needsSort = tabIndex > 0;
+    if (tabIndex >= 0) {
+      result.push(element);
+    }
+
+    // In ShadowDOM v1, tab order is affected by the order of distrubution.
+    // E.g. getTabbableNodes(#root) in ShadowDOM v1 should return [#A, #B];
+    // in ShadowDOM v0 tab order is not affected by the distrubution order,
+    // in fact getTabbableNodes(#root) returns [#B, #A].
+    //  <div id="root">
+    //   <!-- shadow -->
+    //     <slot name="a">
+    //     <slot name="b">
+    //   <!-- /shadow -->
+    //   <input id="A" slot="a">
+    //   <input id="B" slot="b" tabindex="1">
+    //  </div>
+    // TODO(valdrin) support ShadowDOM v1 when upgrading to Polymer v2.0.
+    var children;
+    if (element.localName === 'content' || element.localName === 'slot') {
+      children = Object(__WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(element).getDistributedNodes();
+    } else {
+      // Use shadow root if possible, will check for distributed nodes.
+      children = Object(__WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(element.root || element).children;
+    }
+    for (var i = 0; i < children.length; i++) {
+      // Ensure method is always invoked to collect tabbable children.
+      needsSort = this._collectTabbableNodes(children[i], result) || needsSort;
+    }
+    return needsSort;
+  },
+
+  /**
+   * Returns false if the element has `visibility: hidden` or `display: none`
+   * @param {!HTMLElement} element
+   * @return {boolean}
+   * @private
+   */
+  _isVisible: function(element) {
+    // Check inline style first to save a re-flow. If looks good, check also
+    // computed style.
+    var style = element.style;
+    if (style.visibility !== 'hidden' && style.display !== 'none') {
+      style = window.getComputedStyle(element);
+      return (style.visibility !== 'hidden' && style.display !== 'none');
+    }
+    return false;
+  },
+
+  /**
+   * Sorts an array of tabbable elements by tabindex. Returns a new array.
+   * @param {!Array<HTMLElement>} tabbables
+   * @return {Array<HTMLElement>}
+   * @private
+   */
+  _sortByTabIndex: function(tabbables) {
+    // Implement a merge sort as Array.prototype.sort does a non-stable sort
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
+    var len = tabbables.length;
+    if (len < 2) {
+      return tabbables;
+    }
+    var pivot = Math.ceil(len / 2);
+    var left = this._sortByTabIndex(tabbables.slice(0, pivot));
+    var right = this._sortByTabIndex(tabbables.slice(pivot));
+    return this._mergeSortByTabIndex(left, right);
+  },
+
+  /**
+   * Merge sort iterator, merges the two arrays into one, sorted by tab index.
+   * @param {!Array<HTMLElement>} left
+   * @param {!Array<HTMLElement>} right
+   * @return {Array<HTMLElement>}
+   * @private
+   */
+  _mergeSortByTabIndex: function(left, right) {
+    var result = [];
+    while ((left.length > 0) && (right.length > 0)) {
+      if (this._hasLowerTabOrder(left[0], right[0])) {
+        result.push(right.shift());
+      } else {
+        result.push(left.shift());
+      }
+    }
+
+    return result.concat(left, right);
+  },
+
+  /**
+   * Returns if element `a` has lower tab order compared to element `b`
+   * (both elements are assumed to be focusable and tabbable).
+   * Elements with tabindex = 0 have lower tab order compared to elements
+   * with tabindex > 0.
+   * If both have same tabindex, it returns false.
+   * @param {!HTMLElement} a
+   * @param {!HTMLElement} b
+   * @return {boolean}
+   * @private
+   */
+  _hasLowerTabOrder: function(a, b) {
+    // Normalize tabIndexes
+    // e.g. in Firefox `<div contenteditable>` has `tabIndex = -1`
+    var ati = Math.max(a.tabIndex, 0);
+    var bti = Math.max(b.tabIndex, 0);
+    return (ati === 0 || bti === 0) ? bti > ati : ati > bti;
+  }
+};
+/* harmony export (immutable) */ __webpack_exports__["a"] = IronFocusablesHelper;
+
+
+
+/***/ }),
+/* 153 */
+/***/ (function(module, exports) {
+
+module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n  app-title-card {\n    margin-bottom: 25px;\n  }\n  paper-button {\n    color: var(--default-primary-color);\n  }\n  paper-button:hover {\n    background: var(--default-background-color);\n  }\n  h2 {\n    margin : 0 0 5px 0;\n  }\n  #unsavedMsg paper-button {\n    color: var(--inverse-text-color);\n    border: 1px solid var(--inverse-text-color);\n  }\n  #unsavedMsg paper-button:hover {\n    color: var(--default-primary-color);\n    border: 1px solid var(--default-primary-color);\n  }\n  #savedToast {\n    --paper-toast-background-color: var(--default-primary-color);\n    --paper-toast-color: var(--inverse-text-color);\n  }\n</style>\n\n<paper-toast id=\"savingToast\" duration=\"0\">\n  <div id=\"unsavedMsg\">\n    You have unsaved changes\n    <paper-button on-click=\"_onSaveChangesClicked\">Save</paper-button>  \n  </div>\n  <div id=\"savingMsg\">\n    Saving...\n  </div>\n</paper-toast>\n<paper-toast id=\"savedToast\">\n  Package Data Saved!\n</paper-toast>\n\n<div class=\"container\">\n  <div class=\"narrow-container\">\n    <h1>[[currentAction]] Package</h1>\n\n    <app-title-card id=\"basicInformation\">\n      <div slot=\"header\">\n        Basic Information\n      </div>\n      <div slot=\"content\">\n        <paper-input \n          id=\"name\" \n          label=\"Name\" \n          on-keyup=\"_updateNamePreview\" \n          on-change=\"_updateNamePreview\" \n          hidden$=\"[[!creating]]\">\n        </paper-input>\n        <div hidden$=\"[[!creating]]\">[[namePreview]]</div>\n        <div hidden$=\"[[creating]]\" class=\"help\">Package Name</div>\n        <h2 hidden$=\"[[creating]]\">[[namePreview]]</h2>\n\n        <paper-input id=\"overview\" label=\"[[schema.overview.label]]\" on-change=\"_onDataChange\"></paper-input>\n        <div class=\"help\">[[schema.overview.description]]</div>\n\n        <div style=\"text-align: right\">\n          <paper-button \n            hidden$=\"[[!creating]]\" \n            id=\"createBtn\"\n            on-click=\"_onCreateBtnClicked\">Create\n          </paper-button>\n        </div>\n      </div>\n    </app-title-card>\n\n    <app-title-card id=\"details\" hidden$=\"[[creating]]\">\n      <div slot=\"header\">\n        Package Details\n      </div>\n      <div slot=\"content\">\n        <app-markdown-editor label=\"Description\" id=\"description\" on-markdown-change=\"_onDataChange\"></app-markdown-editor>\n        <div class=\"help\">[[schema.description.description]]</div>\n\n        <app-keyword-input id=\"keywords\" label=\"Keywords.  Comma Separate\" on-keyword-change=\"_onDataChange\"></app-keyword-input>\n        <div class=\"help\">[[schema.keywords.description]]</div>\n\n        <app-theme-input id=\"theme\" on-update=\"_onThemeUpdate\"></app-theme-input>\n      </div>\n    </app-title-card>\n\n    <app-title-card hidden$=\"[[creating]]\">\n        <div slot=\"header\">\n          Package Releases\n        </div>\n        <div slot=\"content\">\n          <app-create-release id=\"release\"></app-create-release>\n        </div>\n      </app-title-card>\n\n    <div hidden$=\"[[creating]]\">\n      <paper-button on-click=\"_onDeleteBtnClicked\">Delete Package</paper-button>\n    </div>\n  </div>\n</div>";
+
+/***/ }),
+/* 154 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_markdown_editor_html__ = __webpack_require__(155);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_markdown_editor_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_markdown_editor_html__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_markdown__ = __webpack_require__(69);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_markdown___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_markdown__);
+
+
+// import "markdown"
+
+
+class AppMarkdownEditor extends __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__["a" /* Element */] {
+
+  static get template() {
+    return __WEBPACK_IMPORTED_MODULE_1__app_markdown_editor_html___default.a;
+  }
+
+  static get properties() {
+    return {
+      selected : {
+        type : String,
+        value : 'input',
+        observer : '_onSelectedChange'
+      },
+      previewMode : {
+        type : Boolean,
+        value : false
+      },
+      label : {
+        type : String,
+        value : ''
+      }
+    }
+  }
+
+  get value() {
+    return this.$.input.value;
+  }
+
+  set value(value) {
+    this.$.input.value = value;
+    if( this.previewMode ) this._updatePreview();
+  }
+
+  _triggerChangeEvent() {
+    this.dispatchEvent(new CustomEvent('markdown-change', {detail: this.value}));
+  }
+
+  /**
+   * Called by observer
+   */
+  _onSelectedChange() {
+    if( this.selected === 'input' ) {
+      this.previewMode = false;
+    } else {
+      this.previewMode = true;
+    }
+  }
+
+  /**
+   * Called by paper-icon-button toggles
+   */
+  _toggle(e) {
+    if( e.currentTarget.icon === 'code' ) {
+      this.selected = 'input';
+    } else {
+      this.$.preview.style.height = this.$.input.offsetHeight+'px';
+      this.selected = 'preview';
+      this._updatePreview();
+    }
+  }
+
+  /**
+   * update markdown previeew
+   */
+  _updatePreview() {
+    this.$.preview.innerHTML = __WEBPACK_IMPORTED_MODULE_2_markdown__["markdown"].toHTML(this.value);
+  }
+
+}
+/* unused harmony export default */
+
+
+customElements.define('app-markdown-editor', AppMarkdownEditor);
+
+/***/ }),
+/* 155 */
+/***/ (function(module, exports) {
+
+module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n  .btns {\n    display: flex;\n    align-items: center;\n  }\n\n  textarea {\n    width: 100%;\n    min-height: 200px;\n  }\n\n  #preview {\n    min-height: 200px;\n    border: 1px solid #aaa;\n    overflow: auto;\n  }\n\n  paper-icon-button[disabled] {\n    color: #aaa;\n  }\n</style>\n\n\n<div class=\"btns\">\n  <div style=\"flex:1\">\n    <span hidden$=\"[[previewMode]]\">Edit</span>\n    <span hidden$=\"[[!previewMode]]\">Preview</span> \n    [[label]]\n  </div>\n  <paper-icon-button icon=\"code\" disabled$=\"[[!previewMode]]\" on-click=\"_toggle\"></paper-icon-button>\n  <paper-icon-button icon=\"visibility\" disabled$=\"[[previewMode]]\" on-click=\"_toggle\"></paper-icon-button>\n</div>\n\n<iron-pages selected=\"[[selected]]\" attr-for-selected=\"id\">\n  <textarea id=\"input\" on-change=\"_triggerChangeEvent\"></textarea>\n  <div id=\"preview\"></div>\n</iron-pages>\n";
+
+/***/ }),
+/* 156 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// Released under MIT license
+// Copyright (c) 2009-2010 Dominic Baggott
+// Copyright (c) 2009-2010 Ash Berlin
+// Copyright (c) 2011 Christoph Dorn <christoph@christophdorn.com> (http://www.christophdorn.com)
+
+/*jshint browser:true, devel:true */
+
+(function( expose ) {
+
+/**
+ *  class Markdown
+ *
+ *  Markdown processing in Javascript done right. We have very particular views
+ *  on what constitutes 'right' which include:
+ *
+ *  - produces well-formed HTML (this means that em and strong nesting is
+ *    important)
+ *
+ *  - has an intermediate representation to allow processing of parsed data (We
+ *    in fact have two, both as [JsonML]: a markdown tree and an HTML tree).
+ *
+ *  - is easily extensible to add new dialects without having to rewrite the
+ *    entire parsing mechanics
+ *
+ *  - has a good test suite
+ *
+ *  This implementation fulfills all of these (except that the test suite could
+ *  do with expanding to automatically run all the fixtures from other Markdown
+ *  implementations.)
+ *
+ *  ##### Intermediate Representation
+ *
+ *  *TODO* Talk about this :) Its JsonML, but document the node names we use.
+ *
+ *  [JsonML]: http://jsonml.org/ "JSON Markup Language"
+ **/
+var Markdown = expose.Markdown = function(dialect) {
+  switch (typeof dialect) {
+    case "undefined":
+      this.dialect = Markdown.dialects.Gruber;
+      break;
+    case "object":
+      this.dialect = dialect;
+      break;
+    default:
+      if ( dialect in Markdown.dialects ) {
+        this.dialect = Markdown.dialects[dialect];
+      }
+      else {
+        throw new Error("Unknown Markdown dialect '" + String(dialect) + "'");
+      }
+      break;
+  }
+  this.em_state = [];
+  this.strong_state = [];
+  this.debug_indent = "";
+};
+
+/**
+ *  parse( markdown, [dialect] ) -> JsonML
+ *  - markdown (String): markdown string to parse
+ *  - dialect (String | Dialect): the dialect to use, defaults to gruber
+ *
+ *  Parse `markdown` and return a markdown document as a Markdown.JsonML tree.
+ **/
+expose.parse = function( source, dialect ) {
+  // dialect will default if undefined
+  var md = new Markdown( dialect );
+  return md.toTree( source );
+};
+
+/**
+ *  toHTML( markdown, [dialect]  ) -> String
+ *  toHTML( md_tree ) -> String
+ *  - markdown (String): markdown string to parse
+ *  - md_tree (Markdown.JsonML): parsed markdown tree
+ *
+ *  Take markdown (either as a string or as a JsonML tree) and run it through
+ *  [[toHTMLTree]] then turn it into a well-formated HTML fragment.
+ **/
+expose.toHTML = function toHTML( source , dialect , options ) {
+  var input = expose.toHTMLTree( source , dialect , options );
+
+  return expose.renderJsonML( input );
+};
+
+/**
+ *  toHTMLTree( markdown, [dialect] ) -> JsonML
+ *  toHTMLTree( md_tree ) -> JsonML
+ *  - markdown (String): markdown string to parse
+ *  - dialect (String | Dialect): the dialect to use, defaults to gruber
+ *  - md_tree (Markdown.JsonML): parsed markdown tree
+ *
+ *  Turn markdown into HTML, represented as a JsonML tree. If a string is given
+ *  to this function, it is first parsed into a markdown tree by calling
+ *  [[parse]].
+ **/
+expose.toHTMLTree = function toHTMLTree( input, dialect , options ) {
+  // convert string input to an MD tree
+  if ( typeof input ==="string" ) input = this.parse( input, dialect );
+
+  // Now convert the MD tree to an HTML tree
+
+  // remove references from the tree
+  var attrs = extract_attr( input ),
+      refs = {};
+
+  if ( attrs && attrs.references ) {
+    refs = attrs.references;
+  }
+
+  var html = convert_tree_to_html( input, refs , options );
+  merge_text_nodes( html );
+  return html;
+};
+
+// For Spidermonkey based engines
+function mk_block_toSource() {
+  return "Markdown.mk_block( " +
+          uneval(this.toString()) +
+          ", " +
+          uneval(this.trailing) +
+          ", " +
+          uneval(this.lineNumber) +
+          " )";
+}
+
+// node
+function mk_block_inspect() {
+  var util = __webpack_require__(157);
+  return "Markdown.mk_block( " +
+          util.inspect(this.toString()) +
+          ", " +
+          util.inspect(this.trailing) +
+          ", " +
+          util.inspect(this.lineNumber) +
+          " )";
+
+}
+
+var mk_block = Markdown.mk_block = function(block, trail, line) {
+  // Be helpful for default case in tests.
+  if ( arguments.length == 1 ) trail = "\n\n";
+
+  var s = new String(block);
+  s.trailing = trail;
+  // To make it clear its not just a string
+  s.inspect = mk_block_inspect;
+  s.toSource = mk_block_toSource;
+
+  if ( line != undefined )
+    s.lineNumber = line;
+
+  return s;
+};
+
+function count_lines( str ) {
+  var n = 0, i = -1;
+  while ( ( i = str.indexOf("\n", i + 1) ) !== -1 ) n++;
+  return n;
+}
+
+// Internal - split source into rough blocks
+Markdown.prototype.split_blocks = function splitBlocks( input, startLine ) {
+  input = input.replace(/(\r\n|\n|\r)/g, "\n");
+  // [\s\S] matches _anything_ (newline or space)
+  // [^] is equivalent but doesn't work in IEs.
+  var re = /([\s\S]+?)($|\n#|\n(?:\s*\n|$)+)/g,
+      blocks = [],
+      m;
+
+  var line_no = 1;
+
+  if ( ( m = /^(\s*\n)/.exec(input) ) != null ) {
+    // skip (but count) leading blank lines
+    line_no += count_lines( m[0] );
+    re.lastIndex = m[0].length;
+  }
+
+  while ( ( m = re.exec(input) ) !== null ) {
+    if (m[2] == "\n#") {
+      m[2] = "\n";
+      re.lastIndex--;
+    }
+    blocks.push( mk_block( m[1], m[2], line_no ) );
+    line_no += count_lines( m[0] );
+  }
+
+  return blocks;
+};
+
+/**
+ *  Markdown#processBlock( block, next ) -> undefined | [ JsonML, ... ]
+ *  - block (String): the block to process
+ *  - next (Array): the following blocks
+ *
+ * Process `block` and return an array of JsonML nodes representing `block`.
+ *
+ * It does this by asking each block level function in the dialect to process
+ * the block until one can. Succesful handling is indicated by returning an
+ * array (with zero or more JsonML nodes), failure by a false value.
+ *
+ * Blocks handlers are responsible for calling [[Markdown#processInline]]
+ * themselves as appropriate.
+ *
+ * If the blocks were split incorrectly or adjacent blocks need collapsing you
+ * can adjust `next` in place using shift/splice etc.
+ *
+ * If any of this default behaviour is not right for the dialect, you can
+ * define a `__call__` method on the dialect that will get invoked to handle
+ * the block processing.
+ */
+Markdown.prototype.processBlock = function processBlock( block, next ) {
+  var cbs = this.dialect.block,
+      ord = cbs.__order__;
+
+  if ( "__call__" in cbs ) {
+    return cbs.__call__.call(this, block, next);
+  }
+
+  for ( var i = 0; i < ord.length; i++ ) {
+    //D:this.debug( "Testing", ord[i] );
+    var res = cbs[ ord[i] ].call( this, block, next );
+    if ( res ) {
+      //D:this.debug("  matched");
+      if ( !isArray(res) || ( res.length > 0 && !( isArray(res[0]) ) ) )
+        this.debug(ord[i], "didn't return a proper array");
+      //D:this.debug( "" );
+      return res;
+    }
+  }
+
+  // Uhoh! no match! Should we throw an error?
+  return [];
+};
+
+Markdown.prototype.processInline = function processInline( block ) {
+  return this.dialect.inline.__call__.call( this, String( block ) );
+};
+
+/**
+ *  Markdown#toTree( source ) -> JsonML
+ *  - source (String): markdown source to parse
+ *
+ *  Parse `source` into a JsonML tree representing the markdown document.
+ **/
+// custom_tree means set this.tree to `custom_tree` and restore old value on return
+Markdown.prototype.toTree = function toTree( source, custom_root ) {
+  var blocks = source instanceof Array ? source : this.split_blocks( source );
+
+  // Make tree a member variable so its easier to mess with in extensions
+  var old_tree = this.tree;
+  try {
+    this.tree = custom_root || this.tree || [ "markdown" ];
+
+    blocks:
+    while ( blocks.length ) {
+      var b = this.processBlock( blocks.shift(), blocks );
+
+      // Reference blocks and the like won't return any content
+      if ( !b.length ) continue blocks;
+
+      this.tree.push.apply( this.tree, b );
+    }
+    return this.tree;
+  }
+  finally {
+    if ( custom_root ) {
+      this.tree = old_tree;
+    }
+  }
+};
+
+// Noop by default
+Markdown.prototype.debug = function () {
+  var args = Array.prototype.slice.call( arguments);
+  args.unshift(this.debug_indent);
+  if ( typeof print !== "undefined" )
+      print.apply( print, args );
+  if ( typeof console !== "undefined" && typeof console.log !== "undefined" )
+      console.log.apply( null, args );
+}
+
+Markdown.prototype.loop_re_over_block = function( re, block, cb ) {
+  // Dont use /g regexps with this
+  var m,
+      b = block.valueOf();
+
+  while ( b.length && (m = re.exec(b) ) != null ) {
+    b = b.substr( m[0].length );
+    cb.call(this, m);
+  }
+  return b;
+};
+
+/**
+ * Markdown.dialects
+ *
+ * Namespace of built-in dialects.
+ **/
+Markdown.dialects = {};
+
+/**
+ * Markdown.dialects.Gruber
+ *
+ * The default dialect that follows the rules set out by John Gruber's
+ * markdown.pl as closely as possible. Well actually we follow the behaviour of
+ * that script which in some places is not exactly what the syntax web page
+ * says.
+ **/
+Markdown.dialects.Gruber = {
+  block: {
+    atxHeader: function atxHeader( block, next ) {
+      var m = block.match( /^(#{1,6})\s*(.*?)\s*#*\s*(?:\n|$)/ );
+
+      if ( !m ) return undefined;
+
+      var header = [ "header", { level: m[ 1 ].length } ];
+      Array.prototype.push.apply(header, this.processInline(m[ 2 ]));
+
+      if ( m[0].length < block.length )
+        next.unshift( mk_block( block.substr( m[0].length ), block.trailing, block.lineNumber + 2 ) );
+
+      return [ header ];
+    },
+
+    setextHeader: function setextHeader( block, next ) {
+      var m = block.match( /^(.*)\n([-=])\2\2+(?:\n|$)/ );
+
+      if ( !m ) return undefined;
+
+      var level = ( m[ 2 ] === "=" ) ? 1 : 2;
+      var header = [ "header", { level : level }, m[ 1 ] ];
+
+      if ( m[0].length < block.length )
+        next.unshift( mk_block( block.substr( m[0].length ), block.trailing, block.lineNumber + 2 ) );
+
+      return [ header ];
+    },
+
+    code: function code( block, next ) {
+      // |    Foo
+      // |bar
+      // should be a code block followed by a paragraph. Fun
+      //
+      // There might also be adjacent code block to merge.
+
+      var ret = [],
+          re = /^(?: {0,3}\t| {4})(.*)\n?/,
+          lines;
+
+      // 4 spaces + content
+      if ( !block.match( re ) ) return undefined;
+
+      block_search:
+      do {
+        // Now pull out the rest of the lines
+        var b = this.loop_re_over_block(
+                  re, block.valueOf(), function( m ) { ret.push( m[1] ); } );
+
+        if ( b.length ) {
+          // Case alluded to in first comment. push it back on as a new block
+          next.unshift( mk_block(b, block.trailing) );
+          break block_search;
+        }
+        else if ( next.length ) {
+          // Check the next block - it might be code too
+          if ( !next[0].match( re ) ) break block_search;
+
+          // Pull how how many blanks lines follow - minus two to account for .join
+          ret.push ( block.trailing.replace(/[^\n]/g, "").substring(2) );
+
+          block = next.shift();
+        }
+        else {
+          break block_search;
+        }
+      } while ( true );
+
+      return [ [ "code_block", ret.join("\n") ] ];
+    },
+
+    horizRule: function horizRule( block, next ) {
+      // this needs to find any hr in the block to handle abutting blocks
+      var m = block.match( /^(?:([\s\S]*?)\n)?[ \t]*([-_*])(?:[ \t]*\2){2,}[ \t]*(?:\n([\s\S]*))?$/ );
+
+      if ( !m ) {
+        return undefined;
+      }
+
+      var jsonml = [ [ "hr" ] ];
+
+      // if there's a leading abutting block, process it
+      if ( m[ 1 ] ) {
+        jsonml.unshift.apply( jsonml, this.processBlock( m[ 1 ], [] ) );
+      }
+
+      // if there's a trailing abutting block, stick it into next
+      if ( m[ 3 ] ) {
+        next.unshift( mk_block( m[ 3 ] ) );
+      }
+
+      return jsonml;
+    },
+
+    // There are two types of lists. Tight and loose. Tight lists have no whitespace
+    // between the items (and result in text just in the <li>) and loose lists,
+    // which have an empty line between list items, resulting in (one or more)
+    // paragraphs inside the <li>.
+    //
+    // There are all sorts weird edge cases about the original markdown.pl's
+    // handling of lists:
+    //
+    // * Nested lists are supposed to be indented by four chars per level. But
+    //   if they aren't, you can get a nested list by indenting by less than
+    //   four so long as the indent doesn't match an indent of an existing list
+    //   item in the 'nest stack'.
+    //
+    // * The type of the list (bullet or number) is controlled just by the
+    //    first item at the indent. Subsequent changes are ignored unless they
+    //    are for nested lists
+    //
+    lists: (function( ) {
+      // Use a closure to hide a few variables.
+      var any_list = "[*+-]|\\d+\\.",
+          bullet_list = /[*+-]/,
+          number_list = /\d+\./,
+          // Capture leading indent as it matters for determining nested lists.
+          is_list_re = new RegExp( "^( {0,3})(" + any_list + ")[ \t]+" ),
+          indent_re = "(?: {0,3}\\t| {4})";
+
+      // TODO: Cache this regexp for certain depths.
+      // Create a regexp suitable for matching an li for a given stack depth
+      function regex_for_depth( depth ) {
+
+        return new RegExp(
+          // m[1] = indent, m[2] = list_type
+          "(?:^(" + indent_re + "{0," + depth + "} {0,3})(" + any_list + ")\\s+)|" +
+          // m[3] = cont
+          "(^" + indent_re + "{0," + (depth-1) + "}[ ]{0,4})"
+        );
+      }
+      function expand_tab( input ) {
+        return input.replace( / {0,3}\t/g, "    " );
+      }
+
+      // Add inline content `inline` to `li`. inline comes from processInline
+      // so is an array of content
+      function add(li, loose, inline, nl) {
+        if ( loose ) {
+          li.push( [ "para" ].concat(inline) );
+          return;
+        }
+        // Hmmm, should this be any block level element or just paras?
+        var add_to = li[li.length -1] instanceof Array && li[li.length - 1][0] == "para"
+                   ? li[li.length -1]
+                   : li;
+
+        // If there is already some content in this list, add the new line in
+        if ( nl && li.length > 1 ) inline.unshift(nl);
+
+        for ( var i = 0; i < inline.length; i++ ) {
+          var what = inline[i],
+              is_str = typeof what == "string";
+          if ( is_str && add_to.length > 1 && typeof add_to[add_to.length-1] == "string" ) {
+            add_to[ add_to.length-1 ] += what;
+          }
+          else {
+            add_to.push( what );
+          }
+        }
+      }
+
+      // contained means have an indent greater than the current one. On
+      // *every* line in the block
+      function get_contained_blocks( depth, blocks ) {
+
+        var re = new RegExp( "^(" + indent_re + "{" + depth + "}.*?\\n?)*$" ),
+            replace = new RegExp("^" + indent_re + "{" + depth + "}", "gm"),
+            ret = [];
+
+        while ( blocks.length > 0 ) {
+          if ( re.exec( blocks[0] ) ) {
+            var b = blocks.shift(),
+                // Now remove that indent
+                x = b.replace( replace, "");
+
+            ret.push( mk_block( x, b.trailing, b.lineNumber ) );
+          }
+          else {
+            break;
+          }
+        }
+        return ret;
+      }
+
+      // passed to stack.forEach to turn list items up the stack into paras
+      function paragraphify(s, i, stack) {
+        var list = s.list;
+        var last_li = list[list.length-1];
+
+        if ( last_li[1] instanceof Array && last_li[1][0] == "para" ) {
+          return;
+        }
+        if ( i + 1 == stack.length ) {
+          // Last stack frame
+          // Keep the same array, but replace the contents
+          last_li.push( ["para"].concat( last_li.splice(1, last_li.length - 1) ) );
+        }
+        else {
+          var sublist = last_li.pop();
+          last_li.push( ["para"].concat( last_li.splice(1, last_li.length - 1) ), sublist );
+        }
+      }
+
+      // The matcher function
+      return function( block, next ) {
+        var m = block.match( is_list_re );
+        if ( !m ) return undefined;
+
+        function make_list( m ) {
+          var list = bullet_list.exec( m[2] )
+                   ? ["bulletlist"]
+                   : ["numberlist"];
+
+          stack.push( { list: list, indent: m[1] } );
+          return list;
+        }
+
+
+        var stack = [], // Stack of lists for nesting.
+            list = make_list( m ),
+            last_li,
+            loose = false,
+            ret = [ stack[0].list ],
+            i;
+
+        // Loop to search over block looking for inner block elements and loose lists
+        loose_search:
+        while ( true ) {
+          // Split into lines preserving new lines at end of line
+          var lines = block.split( /(?=\n)/ );
+
+          // We have to grab all lines for a li and call processInline on them
+          // once as there are some inline things that can span lines.
+          var li_accumulate = "";
+
+          // Loop over the lines in this block looking for tight lists.
+          tight_search:
+          for ( var line_no = 0; line_no < lines.length; line_no++ ) {
+            var nl = "",
+                l = lines[line_no].replace(/^\n/, function(n) { nl = n; return ""; });
+
+            // TODO: really should cache this
+            var line_re = regex_for_depth( stack.length );
+
+            m = l.match( line_re );
+            //print( "line:", uneval(l), "\nline match:", uneval(m) );
+
+            // We have a list item
+            if ( m[1] !== undefined ) {
+              // Process the previous list item, if any
+              if ( li_accumulate.length ) {
+                add( last_li, loose, this.processInline( li_accumulate ), nl );
+                // Loose mode will have been dealt with. Reset it
+                loose = false;
+                li_accumulate = "";
+              }
+
+              m[1] = expand_tab( m[1] );
+              var wanted_depth = Math.floor(m[1].length/4)+1;
+              //print( "want:", wanted_depth, "stack:", stack.length);
+              if ( wanted_depth > stack.length ) {
+                // Deep enough for a nested list outright
+                //print ( "new nested list" );
+                list = make_list( m );
+                last_li.push( list );
+                last_li = list[1] = [ "listitem" ];
+              }
+              else {
+                // We aren't deep enough to be strictly a new level. This is
+                // where Md.pl goes nuts. If the indent matches a level in the
+                // stack, put it there, else put it one deeper then the
+                // wanted_depth deserves.
+                var found = false;
+                for ( i = 0; i < stack.length; i++ ) {
+                  if ( stack[ i ].indent != m[1] ) continue;
+                  list = stack[ i ].list;
+                  stack.splice( i+1, stack.length - (i+1) );
+                  found = true;
+                  break;
+                }
+
+                if (!found) {
+                  //print("not found. l:", uneval(l));
+                  wanted_depth++;
+                  if ( wanted_depth <= stack.length ) {
+                    stack.splice(wanted_depth, stack.length - wanted_depth);
+                    //print("Desired depth now", wanted_depth, "stack:", stack.length);
+                    list = stack[wanted_depth-1].list;
+                    //print("list:", uneval(list) );
+                  }
+                  else {
+                    //print ("made new stack for messy indent");
+                    list = make_list(m);
+                    last_li.push(list);
+                  }
+                }
+
+                //print( uneval(list), "last", list === stack[stack.length-1].list );
+                last_li = [ "listitem" ];
+                list.push(last_li);
+              } // end depth of shenegains
+              nl = "";
+            }
+
+            // Add content
+            if ( l.length > m[0].length ) {
+              li_accumulate += nl + l.substr( m[0].length );
+            }
+          } // tight_search
+
+          if ( li_accumulate.length ) {
+            add( last_li, loose, this.processInline( li_accumulate ), nl );
+            // Loose mode will have been dealt with. Reset it
+            loose = false;
+            li_accumulate = "";
+          }
+
+          // Look at the next block - we might have a loose list. Or an extra
+          // paragraph for the current li
+          var contained = get_contained_blocks( stack.length, next );
+
+          // Deal with code blocks or properly nested lists
+          if ( contained.length > 0 ) {
+            // Make sure all listitems up the stack are paragraphs
+            forEach( stack, paragraphify, this);
+
+            last_li.push.apply( last_li, this.toTree( contained, [] ) );
+          }
+
+          var next_block = next[0] && next[0].valueOf() || "";
+
+          if ( next_block.match(is_list_re) || next_block.match( /^ / ) ) {
+            block = next.shift();
+
+            // Check for an HR following a list: features/lists/hr_abutting
+            var hr = this.dialect.block.horizRule( block, next );
+
+            if ( hr ) {
+              ret.push.apply(ret, hr);
+              break;
+            }
+
+            // Make sure all listitems up the stack are paragraphs
+            forEach( stack, paragraphify, this);
+
+            loose = true;
+            continue loose_search;
+          }
+          break;
+        } // loose_search
+
+        return ret;
+      };
+    })(),
+
+    blockquote: function blockquote( block, next ) {
+      if ( !block.match( /^>/m ) )
+        return undefined;
+
+      var jsonml = [];
+
+      // separate out the leading abutting block, if any. I.e. in this case:
+      //
+      //  a
+      //  > b
+      //
+      if ( block[ 0 ] != ">" ) {
+        var lines = block.split( /\n/ ),
+            prev = [],
+            line_no = block.lineNumber;
+
+        // keep shifting lines until you find a crotchet
+        while ( lines.length && lines[ 0 ][ 0 ] != ">" ) {
+            prev.push( lines.shift() );
+            line_no++;
+        }
+
+        var abutting = mk_block( prev.join( "\n" ), "\n", block.lineNumber );
+        jsonml.push.apply( jsonml, this.processBlock( abutting, [] ) );
+        // reassemble new block of just block quotes!
+        block = mk_block( lines.join( "\n" ), block.trailing, line_no );
+      }
+
+
+      // if the next block is also a blockquote merge it in
+      while ( next.length && next[ 0 ][ 0 ] == ">" ) {
+        var b = next.shift();
+        block = mk_block( block + block.trailing + b, b.trailing, block.lineNumber );
+      }
+
+      // Strip off the leading "> " and re-process as a block.
+      var input = block.replace( /^> ?/gm, "" ),
+          old_tree = this.tree,
+          processedBlock = this.toTree( input, [ "blockquote" ] ),
+          attr = extract_attr( processedBlock );
+
+      // If any link references were found get rid of them
+      if ( attr && attr.references ) {
+        delete attr.references;
+        // And then remove the attribute object if it's empty
+        if ( isEmpty( attr ) ) {
+          processedBlock.splice( 1, 1 );
+        }
+      }
+
+      jsonml.push( processedBlock );
+      return jsonml;
+    },
+
+    referenceDefn: function referenceDefn( block, next) {
+      var re = /^\s*\[(.*?)\]:\s*(\S+)(?:\s+(?:(['"])(.*?)\3|\((.*?)\)))?\n?/;
+      // interesting matches are [ , ref_id, url, , title, title ]
+
+      if ( !block.match(re) )
+        return undefined;
+
+      // make an attribute node if it doesn't exist
+      if ( !extract_attr( this.tree ) ) {
+        this.tree.splice( 1, 0, {} );
+      }
+
+      var attrs = extract_attr( this.tree );
+
+      // make a references hash if it doesn't exist
+      if ( attrs.references === undefined ) {
+        attrs.references = {};
+      }
+
+      var b = this.loop_re_over_block(re, block, function( m ) {
+
+        if ( m[2] && m[2][0] == "<" && m[2][m[2].length-1] == ">" )
+          m[2] = m[2].substring( 1, m[2].length - 1 );
+
+        var ref = attrs.references[ m[1].toLowerCase() ] = {
+          href: m[2]
+        };
+
+        if ( m[4] !== undefined )
+          ref.title = m[4];
+        else if ( m[5] !== undefined )
+          ref.title = m[5];
+
+      } );
+
+      if ( b.length )
+        next.unshift( mk_block( b, block.trailing ) );
+
+      return [];
+    },
+
+    para: function para( block, next ) {
+      // everything's a para!
+      return [ ["para"].concat( this.processInline( block ) ) ];
+    }
+  }
+};
+
+Markdown.dialects.Gruber.inline = {
+
+    __oneElement__: function oneElement( text, patterns_or_re, previous_nodes ) {
+      var m,
+          res,
+          lastIndex = 0;
+
+      patterns_or_re = patterns_or_re || this.dialect.inline.__patterns__;
+      var re = new RegExp( "([\\s\\S]*?)(" + (patterns_or_re.source || patterns_or_re) + ")" );
+
+      m = re.exec( text );
+      if (!m) {
+        // Just boring text
+        return [ text.length, text ];
+      }
+      else if ( m[1] ) {
+        // Some un-interesting text matched. Return that first
+        return [ m[1].length, m[1] ];
+      }
+
+      var res;
+      if ( m[2] in this.dialect.inline ) {
+        res = this.dialect.inline[ m[2] ].call(
+                  this,
+                  text.substr( m.index ), m, previous_nodes || [] );
+      }
+      // Default for now to make dev easier. just slurp special and output it.
+      res = res || [ m[2].length, m[2] ];
+      return res;
+    },
+
+    __call__: function inline( text, patterns ) {
+
+      var out = [],
+          res;
+
+      function add(x) {
+        //D:self.debug("  adding output", uneval(x));
+        if ( typeof x == "string" && typeof out[out.length-1] == "string" )
+          out[ out.length-1 ] += x;
+        else
+          out.push(x);
+      }
+
+      while ( text.length > 0 ) {
+        res = this.dialect.inline.__oneElement__.call(this, text, patterns, out );
+        text = text.substr( res.shift() );
+        forEach(res, add )
+      }
+
+      return out;
+    },
+
+    // These characters are intersting elsewhere, so have rules for them so that
+    // chunks of plain text blocks don't include them
+    "]": function () {},
+    "}": function () {},
+
+    __escape__ : /^\\[\\`\*_{}\[\]()#\+.!\-]/,
+
+    "\\": function escaped( text ) {
+      // [ length of input processed, node/children to add... ]
+      // Only esacape: \ ` * _ { } [ ] ( ) # * + - . !
+      if ( this.dialect.inline.__escape__.exec( text ) )
+        return [ 2, text.charAt( 1 ) ];
+      else
+        // Not an esacpe
+        return [ 1, "\\" ];
+    },
+
+    "![": function image( text ) {
+
+      // Unlike images, alt text is plain text only. no other elements are
+      // allowed in there
+
+      // ![Alt text](/path/to/img.jpg "Optional title")
+      //      1          2            3       4         <--- captures
+      var m = text.match( /^!\[(.*?)\][ \t]*\([ \t]*([^")]*?)(?:[ \t]+(["'])(.*?)\3)?[ \t]*\)/ );
+
+      if ( m ) {
+        if ( m[2] && m[2][0] == "<" && m[2][m[2].length-1] == ">" )
+          m[2] = m[2].substring( 1, m[2].length - 1 );
+
+        m[2] = this.dialect.inline.__call__.call( this, m[2], /\\/ )[0];
+
+        var attrs = { alt: m[1], href: m[2] || "" };
+        if ( m[4] !== undefined)
+          attrs.title = m[4];
+
+        return [ m[0].length, [ "img", attrs ] ];
+      }
+
+      // ![Alt text][id]
+      m = text.match( /^!\[(.*?)\][ \t]*\[(.*?)\]/ );
+
+      if ( m ) {
+        // We can't check if the reference is known here as it likely wont be
+        // found till after. Check it in md tree->hmtl tree conversion
+        return [ m[0].length, [ "img_ref", { alt: m[1], ref: m[2].toLowerCase(), original: m[0] } ] ];
+      }
+
+      // Just consume the '!['
+      return [ 2, "![" ];
+    },
+
+    "[": function link( text ) {
+
+      var orig = String(text);
+      // Inline content is possible inside `link text`
+      var res = Markdown.DialectHelpers.inline_until_char.call( this, text.substr(1), "]" );
+
+      // No closing ']' found. Just consume the [
+      if ( !res ) return [ 1, "[" ];
+
+      var consumed = 1 + res[ 0 ],
+          children = res[ 1 ],
+          link,
+          attrs;
+
+      // At this point the first [...] has been parsed. See what follows to find
+      // out which kind of link we are (reference or direct url)
+      text = text.substr( consumed );
+
+      // [link text](/path/to/img.jpg "Optional title")
+      //                 1            2       3         <--- captures
+      // This will capture up to the last paren in the block. We then pull
+      // back based on if there a matching ones in the url
+      //    ([here](/url/(test))
+      // The parens have to be balanced
+      var m = text.match( /^\s*\([ \t]*([^"']*)(?:[ \t]+(["'])(.*?)\2)?[ \t]*\)/ );
+      if ( m ) {
+        var url = m[1];
+        consumed += m[0].length;
+
+        if ( url && url[0] == "<" && url[url.length-1] == ">" )
+          url = url.substring( 1, url.length - 1 );
+
+        // If there is a title we don't have to worry about parens in the url
+        if ( !m[3] ) {
+          var open_parens = 1; // One open that isn't in the capture
+          for ( var len = 0; len < url.length; len++ ) {
+            switch ( url[len] ) {
+            case "(":
+              open_parens++;
+              break;
+            case ")":
+              if ( --open_parens == 0) {
+                consumed -= url.length - len;
+                url = url.substring(0, len);
+              }
+              break;
+            }
+          }
+        }
+
+        // Process escapes only
+        url = this.dialect.inline.__call__.call( this, url, /\\/ )[0];
+
+        attrs = { href: url || "" };
+        if ( m[3] !== undefined)
+          attrs.title = m[3];
+
+        link = [ "link", attrs ].concat( children );
+        return [ consumed, link ];
+      }
+
+      // [Alt text][id]
+      // [Alt text] [id]
+      m = text.match( /^\s*\[(.*?)\]/ );
+
+      if ( m ) {
+
+        consumed += m[ 0 ].length;
+
+        // [links][] uses links as its reference
+        attrs = { ref: ( m[ 1 ] || String(children) ).toLowerCase(),  original: orig.substr( 0, consumed ) };
+
+        link = [ "link_ref", attrs ].concat( children );
+
+        // We can't check if the reference is known here as it likely wont be
+        // found till after. Check it in md tree->hmtl tree conversion.
+        // Store the original so that conversion can revert if the ref isn't found.
+        return [ consumed, link ];
+      }
+
+      // [id]
+      // Only if id is plain (no formatting.)
+      if ( children.length == 1 && typeof children[0] == "string" ) {
+
+        attrs = { ref: children[0].toLowerCase(),  original: orig.substr( 0, consumed ) };
+        link = [ "link_ref", attrs, children[0] ];
+        return [ consumed, link ];
+      }
+
+      // Just consume the "["
+      return [ 1, "[" ];
+    },
+
+
+    "<": function autoLink( text ) {
+      var m;
+
+      if ( ( m = text.match( /^<(?:((https?|ftp|mailto):[^>]+)|(.*?@.*?\.[a-zA-Z]+))>/ ) ) != null ) {
+        if ( m[3] ) {
+          return [ m[0].length, [ "link", { href: "mailto:" + m[3] }, m[3] ] ];
+
+        }
+        else if ( m[2] == "mailto" ) {
+          return [ m[0].length, [ "link", { href: m[1] }, m[1].substr("mailto:".length ) ] ];
+        }
+        else
+          return [ m[0].length, [ "link", { href: m[1] }, m[1] ] ];
+      }
+
+      return [ 1, "<" ];
+    },
+
+    "`": function inlineCode( text ) {
+      // Inline code block. as many backticks as you like to start it
+      // Always skip over the opening ticks.
+      var m = text.match( /(`+)(([\s\S]*?)\1)/ );
+
+      if ( m && m[2] )
+        return [ m[1].length + m[2].length, [ "inlinecode", m[3] ] ];
+      else {
+        // TODO: No matching end code found - warn!
+        return [ 1, "`" ];
+      }
+    },
+
+    "  \n": function lineBreak( text ) {
+      return [ 3, [ "linebreak" ] ];
+    }
+
+};
+
+// Meta Helper/generator method for em and strong handling
+function strong_em( tag, md ) {
+
+  var state_slot = tag + "_state",
+      other_slot = tag == "strong" ? "em_state" : "strong_state";
+
+  function CloseTag(len) {
+    this.len_after = len;
+    this.name = "close_" + md;
+  }
+
+  return function ( text, orig_match ) {
+
+    if ( this[state_slot][0] == md ) {
+      // Most recent em is of this type
+      //D:this.debug("closing", md);
+      this[state_slot].shift();
+
+      // "Consume" everything to go back to the recrusion in the else-block below
+      return[ text.length, new CloseTag(text.length-md.length) ];
+    }
+    else {
+      // Store a clone of the em/strong states
+      var other = this[other_slot].slice(),
+          state = this[state_slot].slice();
+
+      this[state_slot].unshift(md);
+
+      //D:this.debug_indent += "  ";
+
+      // Recurse
+      var res = this.processInline( text.substr( md.length ) );
+      //D:this.debug_indent = this.debug_indent.substr(2);
+
+      var last = res[res.length - 1];
+
+      //D:this.debug("processInline from", tag + ": ", uneval( res ) );
+
+      var check = this[state_slot].shift();
+      if ( last instanceof CloseTag ) {
+        res.pop();
+        // We matched! Huzzah.
+        var consumed = text.length - last.len_after;
+        return [ consumed, [ tag ].concat(res) ];
+      }
+      else {
+        // Restore the state of the other kind. We might have mistakenly closed it.
+        this[other_slot] = other;
+        this[state_slot] = state;
+
+        // We can't reuse the processed result as it could have wrong parsing contexts in it.
+        return [ md.length, md ];
+      }
+    }
+  }; // End returned function
+}
+
+Markdown.dialects.Gruber.inline["**"] = strong_em("strong", "**");
+Markdown.dialects.Gruber.inline["__"] = strong_em("strong", "__");
+Markdown.dialects.Gruber.inline["*"]  = strong_em("em", "*");
+Markdown.dialects.Gruber.inline["_"]  = strong_em("em", "_");
+
+
+// Build default order from insertion order.
+Markdown.buildBlockOrder = function(d) {
+  var ord = [];
+  for ( var i in d ) {
+    if ( i == "__order__" || i == "__call__" ) continue;
+    ord.push( i );
+  }
+  d.__order__ = ord;
+};
+
+// Build patterns for inline matcher
+Markdown.buildInlinePatterns = function(d) {
+  var patterns = [];
+
+  for ( var i in d ) {
+    // __foo__ is reserved and not a pattern
+    if ( i.match( /^__.*__$/) ) continue;
+    var l = i.replace( /([\\.*+?|()\[\]{}])/g, "\\$1" )
+             .replace( /\n/, "\\n" );
+    patterns.push( i.length == 1 ? l : "(?:" + l + ")" );
+  }
+
+  patterns = patterns.join("|");
+  d.__patterns__ = patterns;
+  //print("patterns:", uneval( patterns ) );
+
+  var fn = d.__call__;
+  d.__call__ = function(text, pattern) {
+    if ( pattern != undefined ) {
+      return fn.call(this, text, pattern);
+    }
+    else
+    {
+      return fn.call(this, text, patterns);
+    }
+  };
+};
+
+Markdown.DialectHelpers = {};
+Markdown.DialectHelpers.inline_until_char = function( text, want ) {
+  var consumed = 0,
+      nodes = [];
+
+  while ( true ) {
+    if ( text.charAt( consumed ) == want ) {
+      // Found the character we were looking for
+      consumed++;
+      return [ consumed, nodes ];
+    }
+
+    if ( consumed >= text.length ) {
+      // No closing char found. Abort.
+      return null;
+    }
+
+    var res = this.dialect.inline.__oneElement__.call(this, text.substr( consumed ) );
+    consumed += res[ 0 ];
+    // Add any returned nodes.
+    nodes.push.apply( nodes, res.slice( 1 ) );
+  }
+}
+
+// Helper function to make sub-classing a dialect easier
+Markdown.subclassDialect = function( d ) {
+  function Block() {}
+  Block.prototype = d.block;
+  function Inline() {}
+  Inline.prototype = d.inline;
+
+  return { block: new Block(), inline: new Inline() };
+};
+
+Markdown.buildBlockOrder ( Markdown.dialects.Gruber.block );
+Markdown.buildInlinePatterns( Markdown.dialects.Gruber.inline );
+
+Markdown.dialects.Maruku = Markdown.subclassDialect( Markdown.dialects.Gruber );
+
+Markdown.dialects.Maruku.processMetaHash = function processMetaHash( meta_string ) {
+  var meta = split_meta_hash( meta_string ),
+      attr = {};
+
+  for ( var i = 0; i < meta.length; ++i ) {
+    // id: #foo
+    if ( /^#/.test( meta[ i ] ) ) {
+      attr.id = meta[ i ].substring( 1 );
+    }
+    // class: .foo
+    else if ( /^\./.test( meta[ i ] ) ) {
+      // if class already exists, append the new one
+      if ( attr["class"] ) {
+        attr["class"] = attr["class"] + meta[ i ].replace( /./, " " );
+      }
+      else {
+        attr["class"] = meta[ i ].substring( 1 );
+      }
+    }
+    // attribute: foo=bar
+    else if ( /\=/.test( meta[ i ] ) ) {
+      var s = meta[ i ].split( /\=/ );
+      attr[ s[ 0 ] ] = s[ 1 ];
+    }
+  }
+
+  return attr;
+}
+
+function split_meta_hash( meta_string ) {
+  var meta = meta_string.split( "" ),
+      parts = [ "" ],
+      in_quotes = false;
+
+  while ( meta.length ) {
+    var letter = meta.shift();
+    switch ( letter ) {
+      case " " :
+        // if we're in a quoted section, keep it
+        if ( in_quotes ) {
+          parts[ parts.length - 1 ] += letter;
+        }
+        // otherwise make a new part
+        else {
+          parts.push( "" );
+        }
+        break;
+      case "'" :
+      case '"' :
+        // reverse the quotes and move straight on
+        in_quotes = !in_quotes;
+        break;
+      case "\\" :
+        // shift off the next letter to be used straight away.
+        // it was escaped so we'll keep it whatever it is
+        letter = meta.shift();
+      default :
+        parts[ parts.length - 1 ] += letter;
+        break;
+    }
+  }
+
+  return parts;
+}
+
+Markdown.dialects.Maruku.block.document_meta = function document_meta( block, next ) {
+  // we're only interested in the first block
+  if ( block.lineNumber > 1 ) return undefined;
+
+  // document_meta blocks consist of one or more lines of `Key: Value\n`
+  if ( ! block.match( /^(?:\w+:.*\n)*\w+:.*$/ ) ) return undefined;
+
+  // make an attribute node if it doesn't exist
+  if ( !extract_attr( this.tree ) ) {
+    this.tree.splice( 1, 0, {} );
+  }
+
+  var pairs = block.split( /\n/ );
+  for ( p in pairs ) {
+    var m = pairs[ p ].match( /(\w+):\s*(.*)$/ ),
+        key = m[ 1 ].toLowerCase(),
+        value = m[ 2 ];
+
+    this.tree[ 1 ][ key ] = value;
+  }
+
+  // document_meta produces no content!
+  return [];
+};
+
+Markdown.dialects.Maruku.block.block_meta = function block_meta( block, next ) {
+  // check if the last line of the block is an meta hash
+  var m = block.match( /(^|\n) {0,3}\{:\s*((?:\\\}|[^\}])*)\s*\}$/ );
+  if ( !m ) return undefined;
+
+  // process the meta hash
+  var attr = this.dialect.processMetaHash( m[ 2 ] );
+
+  var hash;
+
+  // if we matched ^ then we need to apply meta to the previous block
+  if ( m[ 1 ] === "" ) {
+    var node = this.tree[ this.tree.length - 1 ];
+    hash = extract_attr( node );
+
+    // if the node is a string (rather than JsonML), bail
+    if ( typeof node === "string" ) return undefined;
+
+    // create the attribute hash if it doesn't exist
+    if ( !hash ) {
+      hash = {};
+      node.splice( 1, 0, hash );
+    }
+
+    // add the attributes in
+    for ( a in attr ) {
+      hash[ a ] = attr[ a ];
+    }
+
+    // return nothing so the meta hash is removed
+    return [];
+  }
+
+  // pull the meta hash off the block and process what's left
+  var b = block.replace( /\n.*$/, "" ),
+      result = this.processBlock( b, [] );
+
+  // get or make the attributes hash
+  hash = extract_attr( result[ 0 ] );
+  if ( !hash ) {
+    hash = {};
+    result[ 0 ].splice( 1, 0, hash );
+  }
+
+  // attach the attributes to the block
+  for ( a in attr ) {
+    hash[ a ] = attr[ a ];
+  }
+
+  return result;
+};
+
+Markdown.dialects.Maruku.block.definition_list = function definition_list( block, next ) {
+  // one or more terms followed by one or more definitions, in a single block
+  var tight = /^((?:[^\s:].*\n)+):\s+([\s\S]+)$/,
+      list = [ "dl" ],
+      i, m;
+
+  // see if we're dealing with a tight or loose block
+  if ( ( m = block.match( tight ) ) ) {
+    // pull subsequent tight DL blocks out of `next`
+    var blocks = [ block ];
+    while ( next.length && tight.exec( next[ 0 ] ) ) {
+      blocks.push( next.shift() );
+    }
+
+    for ( var b = 0; b < blocks.length; ++b ) {
+      var m = blocks[ b ].match( tight ),
+          terms = m[ 1 ].replace( /\n$/, "" ).split( /\n/ ),
+          defns = m[ 2 ].split( /\n:\s+/ );
+
+      // print( uneval( m ) );
+
+      for ( i = 0; i < terms.length; ++i ) {
+        list.push( [ "dt", terms[ i ] ] );
+      }
+
+      for ( i = 0; i < defns.length; ++i ) {
+        // run inline processing over the definition
+        list.push( [ "dd" ].concat( this.processInline( defns[ i ].replace( /(\n)\s+/, "$1" ) ) ) );
+      }
+    }
+  }
+  else {
+    return undefined;
+  }
+
+  return [ list ];
+};
+
+// splits on unescaped instances of @ch. If @ch is not a character the result
+// can be unpredictable
+
+Markdown.dialects.Maruku.block.table = function table (block, next) {
+
+    var _split_on_unescaped = function(s, ch) {
+        ch = ch || '\\s';
+        if (ch.match(/^[\\|\[\]{}?*.+^$]$/)) { ch = '\\' + ch; }
+        var res = [ ],
+            r = new RegExp('^((?:\\\\.|[^\\\\' + ch + '])*)' + ch + '(.*)'),
+            m;
+        while(m = s.match(r)) {
+            res.push(m[1]);
+            s = m[2];
+        }
+        res.push(s);
+        return res;
+    }
+
+    var leading_pipe = /^ {0,3}\|(.+)\n {0,3}\|\s*([\-:]+[\-| :]*)\n((?:\s*\|.*(?:\n|$))*)(?=\n|$)/,
+        // find at least an unescaped pipe in each line
+        no_leading_pipe = /^ {0,3}(\S(?:\\.|[^\\|])*\|.*)\n {0,3}([\-:]+\s*\|[\-| :]*)\n((?:(?:\\.|[^\\|])*\|.*(?:\n|$))*)(?=\n|$)/,
+        i, m;
+    if (m = block.match(leading_pipe)) {
+        // remove leading pipes in contents
+        // (header and horizontal rule already have the leading pipe left out)
+        m[3] = m[3].replace(/^\s*\|/gm, '');
+    } else if (! ( m = block.match(no_leading_pipe))) {
+        return undefined;
+    }
+
+    var table = [ "table", [ "thead", [ "tr" ] ], [ "tbody" ] ];
+
+    // remove trailing pipes, then split on pipes
+    // (no escaped pipes are allowed in horizontal rule)
+    m[2] = m[2].replace(/\|\s*$/, '').split('|');
+
+    // process alignment
+    var html_attrs = [ ];
+    forEach (m[2], function (s) {
+        if (s.match(/^\s*-+:\s*$/))       html_attrs.push({align: "right"});
+        else if (s.match(/^\s*:-+\s*$/))  html_attrs.push({align: "left"});
+        else if (s.match(/^\s*:-+:\s*$/)) html_attrs.push({align: "center"});
+        else                              html_attrs.push({});
+    });
+
+    // now for the header, avoid escaped pipes
+    m[1] = _split_on_unescaped(m[1].replace(/\|\s*$/, ''), '|');
+    for (i = 0; i < m[1].length; i++) {
+        table[1][1].push(['th', html_attrs[i] || {}].concat(
+            this.processInline(m[1][i].trim())));
+    }
+
+    // now for body contents
+    forEach (m[3].replace(/\|\s*$/mg, '').split('\n'), function (row) {
+        var html_row = ['tr'];
+        row = _split_on_unescaped(row, '|');
+        for (i = 0; i < row.length; i++) {
+            html_row.push(['td', html_attrs[i] || {}].concat(this.processInline(row[i].trim())));
+        }
+        table[2].push(html_row);
+    }, this);
+
+    return [table];
+}
+
+Markdown.dialects.Maruku.inline[ "{:" ] = function inline_meta( text, matches, out ) {
+  if ( !out.length ) {
+    return [ 2, "{:" ];
+  }
+
+  // get the preceeding element
+  var before = out[ out.length - 1 ];
+
+  if ( typeof before === "string" ) {
+    return [ 2, "{:" ];
+  }
+
+  // match a meta hash
+  var m = text.match( /^\{:\s*((?:\\\}|[^\}])*)\s*\}/ );
+
+  // no match, false alarm
+  if ( !m ) {
+    return [ 2, "{:" ];
+  }
+
+  // attach the attributes to the preceeding element
+  var meta = this.dialect.processMetaHash( m[ 1 ] ),
+      attr = extract_attr( before );
+
+  if ( !attr ) {
+    attr = {};
+    before.splice( 1, 0, attr );
+  }
+
+  for ( var k in meta ) {
+    attr[ k ] = meta[ k ];
+  }
+
+  // cut out the string and replace it with nothing
+  return [ m[ 0 ].length, "" ];
+};
+
+Markdown.dialects.Maruku.inline.__escape__ = /^\\[\\`\*_{}\[\]()#\+.!\-|:]/;
+
+Markdown.buildBlockOrder ( Markdown.dialects.Maruku.block );
+Markdown.buildInlinePatterns( Markdown.dialects.Maruku.inline );
+
+var isArray = Array.isArray || function(obj) {
+  return Object.prototype.toString.call(obj) == "[object Array]";
+};
+
+var forEach;
+// Don't mess with Array.prototype. Its not friendly
+if ( Array.prototype.forEach ) {
+  forEach = function( arr, cb, thisp ) {
+    return arr.forEach( cb, thisp );
+  };
+}
+else {
+  forEach = function(arr, cb, thisp) {
+    for (var i = 0; i < arr.length; i++) {
+      cb.call(thisp || arr, arr[i], i, arr);
+    }
+  }
+}
+
+var isEmpty = function( obj ) {
+  for ( var key in obj ) {
+    if ( hasOwnProperty.call( obj, key ) ) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function extract_attr( jsonml ) {
+  return isArray(jsonml)
+      && jsonml.length > 1
+      && typeof jsonml[ 1 ] === "object"
+      && !( isArray(jsonml[ 1 ]) )
+      ? jsonml[ 1 ]
+      : undefined;
+}
+
+
+
+/**
+ *  renderJsonML( jsonml[, options] ) -> String
+ *  - jsonml (Array): JsonML array to render to XML
+ *  - options (Object): options
+ *
+ *  Converts the given JsonML into well-formed XML.
+ *
+ *  The options currently understood are:
+ *
+ *  - root (Boolean): wether or not the root node should be included in the
+ *    output, or just its children. The default `false` is to not include the
+ *    root itself.
+ */
+expose.renderJsonML = function( jsonml, options ) {
+  options = options || {};
+  // include the root element in the rendered output?
+  options.root = options.root || false;
+
+  var content = [];
+
+  if ( options.root ) {
+    content.push( render_tree( jsonml ) );
+  }
+  else {
+    jsonml.shift(); // get rid of the tag
+    if ( jsonml.length && typeof jsonml[ 0 ] === "object" && !( jsonml[ 0 ] instanceof Array ) ) {
+      jsonml.shift(); // get rid of the attributes
+    }
+
+    while ( jsonml.length ) {
+      content.push( render_tree( jsonml.shift() ) );
+    }
+  }
+
+  return content.join( "\n\n" );
+};
+
+function escapeHTML( text ) {
+  return text.replace( /&/g, "&amp;" )
+             .replace( /</g, "&lt;" )
+             .replace( />/g, "&gt;" )
+             .replace( /"/g, "&quot;" )
+             .replace( /'/g, "&#39;" );
+}
+
+function render_tree( jsonml ) {
+  // basic case
+  if ( typeof jsonml === "string" ) {
+    return escapeHTML( jsonml );
+  }
+
+  var tag = jsonml.shift(),
+      attributes = {},
+      content = [];
+
+  if ( jsonml.length && typeof jsonml[ 0 ] === "object" && !( jsonml[ 0 ] instanceof Array ) ) {
+    attributes = jsonml.shift();
+  }
+
+  while ( jsonml.length ) {
+    content.push( render_tree( jsonml.shift() ) );
+  }
+
+  var tag_attrs = "";
+  for ( var a in attributes ) {
+    tag_attrs += " " + a + '="' + escapeHTML( attributes[ a ] ) + '"';
+  }
+
+  // be careful about adding whitespace here for inline elements
+  if ( tag == "img" || tag == "br" || tag == "hr" ) {
+    return "<"+ tag + tag_attrs + "/>";
+  }
+  else {
+    return "<"+ tag + tag_attrs + ">" + content.join( "" ) + "</" + tag + ">";
+  }
+}
+
+function convert_tree_to_html( tree, references, options ) {
+  var i;
+  options = options || {};
+
+  // shallow clone
+  var jsonml = tree.slice( 0 );
+
+  if ( typeof options.preprocessTreeNode === "function" ) {
+      jsonml = options.preprocessTreeNode(jsonml, references);
+  }
+
+  // Clone attributes if they exist
+  var attrs = extract_attr( jsonml );
+  if ( attrs ) {
+    jsonml[ 1 ] = {};
+    for ( i in attrs ) {
+      jsonml[ 1 ][ i ] = attrs[ i ];
+    }
+    attrs = jsonml[ 1 ];
+  }
+
+  // basic case
+  if ( typeof jsonml === "string" ) {
+    return jsonml;
+  }
+
+  // convert this node
+  switch ( jsonml[ 0 ] ) {
+    case "header":
+      jsonml[ 0 ] = "h" + jsonml[ 1 ].level;
+      delete jsonml[ 1 ].level;
+      break;
+    case "bulletlist":
+      jsonml[ 0 ] = "ul";
+      break;
+    case "numberlist":
+      jsonml[ 0 ] = "ol";
+      break;
+    case "listitem":
+      jsonml[ 0 ] = "li";
+      break;
+    case "para":
+      jsonml[ 0 ] = "p";
+      break;
+    case "markdown":
+      jsonml[ 0 ] = "html";
+      if ( attrs ) delete attrs.references;
+      break;
+    case "code_block":
+      jsonml[ 0 ] = "pre";
+      i = attrs ? 2 : 1;
+      var code = [ "code" ];
+      code.push.apply( code, jsonml.splice( i, jsonml.length - i ) );
+      jsonml[ i ] = code;
+      break;
+    case "inlinecode":
+      jsonml[ 0 ] = "code";
+      break;
+    case "img":
+      jsonml[ 1 ].src = jsonml[ 1 ].href;
+      delete jsonml[ 1 ].href;
+      break;
+    case "linebreak":
+      jsonml[ 0 ] = "br";
+    break;
+    case "link":
+      jsonml[ 0 ] = "a";
+      break;
+    case "link_ref":
+      jsonml[ 0 ] = "a";
+
+      // grab this ref and clean up the attribute node
+      var ref = references[ attrs.ref ];
+
+      // if the reference exists, make the link
+      if ( ref ) {
+        delete attrs.ref;
+
+        // add in the href and title, if present
+        attrs.href = ref.href;
+        if ( ref.title ) {
+          attrs.title = ref.title;
+        }
+
+        // get rid of the unneeded original text
+        delete attrs.original;
+      }
+      // the reference doesn't exist, so revert to plain text
+      else {
+        return attrs.original;
+      }
+      break;
+    case "img_ref":
+      jsonml[ 0 ] = "img";
+
+      // grab this ref and clean up the attribute node
+      var ref = references[ attrs.ref ];
+
+      // if the reference exists, make the link
+      if ( ref ) {
+        delete attrs.ref;
+
+        // add in the href and title, if present
+        attrs.src = ref.href;
+        if ( ref.title ) {
+          attrs.title = ref.title;
+        }
+
+        // get rid of the unneeded original text
+        delete attrs.original;
+      }
+      // the reference doesn't exist, so revert to plain text
+      else {
+        return attrs.original;
+      }
+      break;
+  }
+
+  // convert all the children
+  i = 1;
+
+  // deal with the attribute node, if it exists
+  if ( attrs ) {
+    // if there are keys, skip over it
+    for ( var key in jsonml[ 1 ] ) {
+        i = 2;
+        break;
+    }
+    // if there aren't, remove it
+    if ( i === 1 ) {
+      jsonml.splice( i, 1 );
+    }
+  }
+
+  for ( ; i < jsonml.length; ++i ) {
+    jsonml[ i ] = convert_tree_to_html( jsonml[ i ], references, options );
+  }
+
+  return jsonml;
+}
+
+
+// merges adjacent text nodes into a single node
+function merge_text_nodes( jsonml ) {
+  // skip the tag name and attribute hash
+  var i = extract_attr( jsonml ) ? 2 : 1;
+
+  while ( i < jsonml.length ) {
+    // if it's a string check the next item too
+    if ( typeof jsonml[ i ] === "string" ) {
+      if ( i + 1 < jsonml.length && typeof jsonml[ i + 1 ] === "string" ) {
+        // merge the second string into the first and remove it
+        jsonml[ i ] += jsonml.splice( i + 1, 1 )[ 0 ];
+      }
+      else {
+        ++i;
+      }
+    }
+    // if it's not a string recurse
+    else {
+      merge_text_nodes( jsonml[ i ] );
+      ++i;
+    }
+  }
+}
+
+} )( (function() {
+  if ( false ) {
+    window.markdown = {};
+    return window.markdown;
+  }
+  else {
+    return exports;
+  }
+} )() );
+
+
+/***/ }),
+/* 157 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(global, process) {// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+var formatRegExp = /%[sdj%]/g;
+exports.format = function(f) {
+  if (!isString(f)) {
+    var objects = [];
+    for (var i = 0; i < arguments.length; i++) {
+      objects.push(inspect(arguments[i]));
+    }
+    return objects.join(' ');
+  }
+
+  var i = 1;
+  var args = arguments;
+  var len = args.length;
+  var str = String(f).replace(formatRegExp, function(x) {
+    if (x === '%%') return '%';
+    if (i >= len) return x;
+    switch (x) {
+      case '%s': return String(args[i++]);
+      case '%d': return Number(args[i++]);
+      case '%j':
+        try {
+          return JSON.stringify(args[i++]);
+        } catch (_) {
+          return '[Circular]';
+        }
+      default:
+        return x;
+    }
+  });
+  for (var x = args[i]; i < len; x = args[++i]) {
+    if (isNull(x) || !isObject(x)) {
+      str += ' ' + x;
+    } else {
+      str += ' ' + inspect(x);
+    }
+  }
+  return str;
+};
+
+
+// Mark that a method should not be used.
+// Returns a modified function which warns once by default.
+// If --no-deprecation is set, then it is a no-op.
+exports.deprecate = function(fn, msg) {
+  // Allow for deprecating things in the process of starting up.
+  if (isUndefined(global.process)) {
+    return function() {
+      return exports.deprecate(fn, msg).apply(this, arguments);
+    };
+  }
+
+  if (process.noDeprecation === true) {
+    return fn;
+  }
+
+  var warned = false;
+  function deprecated() {
+    if (!warned) {
+      if (process.throwDeprecation) {
+        throw new Error(msg);
+      } else if (process.traceDeprecation) {
+        console.trace(msg);
+      } else {
+        console.error(msg);
+      }
+      warned = true;
+    }
+    return fn.apply(this, arguments);
+  }
+
+  return deprecated;
+};
+
+
+var debugs = {};
+var debugEnviron;
+exports.debuglog = function(set) {
+  if (isUndefined(debugEnviron))
+    debugEnviron = process.env.NODE_DEBUG || '';
+  set = set.toUpperCase();
+  if (!debugs[set]) {
+    if (new RegExp('\\b' + set + '\\b', 'i').test(debugEnviron)) {
+      var pid = process.pid;
+      debugs[set] = function() {
+        var msg = exports.format.apply(exports, arguments);
+        console.error('%s %d: %s', set, pid, msg);
+      };
+    } else {
+      debugs[set] = function() {};
+    }
+  }
+  return debugs[set];
+};
+
+
+/**
+ * Echos the value of a value. Trys to print the value out
+ * in the best way possible given the different types.
+ *
+ * @param {Object} obj The object to print out.
+ * @param {Object} opts Optional options object that alters the output.
+ */
+/* legacy: obj, showHidden, depth, colors*/
+function inspect(obj, opts) {
+  // default options
+  var ctx = {
+    seen: [],
+    stylize: stylizeNoColor
+  };
+  // legacy...
+  if (arguments.length >= 3) ctx.depth = arguments[2];
+  if (arguments.length >= 4) ctx.colors = arguments[3];
+  if (isBoolean(opts)) {
+    // legacy...
+    ctx.showHidden = opts;
+  } else if (opts) {
+    // got an "options" object
+    exports._extend(ctx, opts);
+  }
+  // set default options
+  if (isUndefined(ctx.showHidden)) ctx.showHidden = false;
+  if (isUndefined(ctx.depth)) ctx.depth = 2;
+  if (isUndefined(ctx.colors)) ctx.colors = false;
+  if (isUndefined(ctx.customInspect)) ctx.customInspect = true;
+  if (ctx.colors) ctx.stylize = stylizeWithColor;
+  return formatValue(ctx, obj, ctx.depth);
+}
+exports.inspect = inspect;
+
+
+// http://en.wikipedia.org/wiki/ANSI_escape_code#graphics
+inspect.colors = {
+  'bold' : [1, 22],
+  'italic' : [3, 23],
+  'underline' : [4, 24],
+  'inverse' : [7, 27],
+  'white' : [37, 39],
+  'grey' : [90, 39],
+  'black' : [30, 39],
+  'blue' : [34, 39],
+  'cyan' : [36, 39],
+  'green' : [32, 39],
+  'magenta' : [35, 39],
+  'red' : [31, 39],
+  'yellow' : [33, 39]
+};
+
+// Don't use 'blue' not visible on cmd.exe
+inspect.styles = {
+  'special': 'cyan',
+  'number': 'yellow',
+  'boolean': 'yellow',
+  'undefined': 'grey',
+  'null': 'bold',
+  'string': 'green',
+  'date': 'magenta',
+  // "name": intentionally not styling
+  'regexp': 'red'
+};
+
+
+function stylizeWithColor(str, styleType) {
+  var style = inspect.styles[styleType];
+
+  if (style) {
+    return '\u001b[' + inspect.colors[style][0] + 'm' + str +
+           '\u001b[' + inspect.colors[style][1] + 'm';
+  } else {
+    return str;
+  }
+}
+
+
+function stylizeNoColor(str, styleType) {
+  return str;
+}
+
+
+function arrayToHash(array) {
+  var hash = {};
+
+  array.forEach(function(val, idx) {
+    hash[val] = true;
+  });
+
+  return hash;
+}
+
+
+function formatValue(ctx, value, recurseTimes) {
+  // Provide a hook for user-specified inspect functions.
+  // Check that value is an object with an inspect function on it
+  if (ctx.customInspect &&
+      value &&
+      isFunction(value.inspect) &&
+      // Filter out the util module, it's inspect function is special
+      value.inspect !== exports.inspect &&
+      // Also filter out any prototype objects using the circular check.
+      !(value.constructor && value.constructor.prototype === value)) {
+    var ret = value.inspect(recurseTimes, ctx);
+    if (!isString(ret)) {
+      ret = formatValue(ctx, ret, recurseTimes);
+    }
+    return ret;
+  }
+
+  // Primitive types cannot have properties
+  var primitive = formatPrimitive(ctx, value);
+  if (primitive) {
+    return primitive;
+  }
+
+  // Look up the keys of the object.
+  var keys = Object.keys(value);
+  var visibleKeys = arrayToHash(keys);
+
+  if (ctx.showHidden) {
+    keys = Object.getOwnPropertyNames(value);
+  }
+
+  // IE doesn't make error fields non-enumerable
+  // http://msdn.microsoft.com/en-us/library/ie/dww52sbt(v=vs.94).aspx
+  if (isError(value)
+      && (keys.indexOf('message') >= 0 || keys.indexOf('description') >= 0)) {
+    return formatError(value);
+  }
+
+  // Some type of object without properties can be shortcutted.
+  if (keys.length === 0) {
+    if (isFunction(value)) {
+      var name = value.name ? ': ' + value.name : '';
+      return ctx.stylize('[Function' + name + ']', 'special');
+    }
+    if (isRegExp(value)) {
+      return ctx.stylize(RegExp.prototype.toString.call(value), 'regexp');
+    }
+    if (isDate(value)) {
+      return ctx.stylize(Date.prototype.toString.call(value), 'date');
+    }
+    if (isError(value)) {
+      return formatError(value);
+    }
+  }
+
+  var base = '', array = false, braces = ['{', '}'];
+
+  // Make Array say that they are Array
+  if (isArray(value)) {
+    array = true;
+    braces = ['[', ']'];
+  }
+
+  // Make functions say that they are functions
+  if (isFunction(value)) {
+    var n = value.name ? ': ' + value.name : '';
+    base = ' [Function' + n + ']';
+  }
+
+  // Make RegExps say that they are RegExps
+  if (isRegExp(value)) {
+    base = ' ' + RegExp.prototype.toString.call(value);
+  }
+
+  // Make dates with properties first say the date
+  if (isDate(value)) {
+    base = ' ' + Date.prototype.toUTCString.call(value);
+  }
+
+  // Make error with message first say the error
+  if (isError(value)) {
+    base = ' ' + formatError(value);
+  }
+
+  if (keys.length === 0 && (!array || value.length == 0)) {
+    return braces[0] + base + braces[1];
+  }
+
+  if (recurseTimes < 0) {
+    if (isRegExp(value)) {
+      return ctx.stylize(RegExp.prototype.toString.call(value), 'regexp');
+    } else {
+      return ctx.stylize('[Object]', 'special');
+    }
+  }
+
+  ctx.seen.push(value);
+
+  var output;
+  if (array) {
+    output = formatArray(ctx, value, recurseTimes, visibleKeys, keys);
+  } else {
+    output = keys.map(function(key) {
+      return formatProperty(ctx, value, recurseTimes, visibleKeys, key, array);
+    });
+  }
+
+  ctx.seen.pop();
+
+  return reduceToSingleString(output, base, braces);
+}
+
+
+function formatPrimitive(ctx, value) {
+  if (isUndefined(value))
+    return ctx.stylize('undefined', 'undefined');
+  if (isString(value)) {
+    var simple = '\'' + JSON.stringify(value).replace(/^"|"$/g, '')
+                                             .replace(/'/g, "\\'")
+                                             .replace(/\\"/g, '"') + '\'';
+    return ctx.stylize(simple, 'string');
+  }
+  if (isNumber(value))
+    return ctx.stylize('' + value, 'number');
+  if (isBoolean(value))
+    return ctx.stylize('' + value, 'boolean');
+  // For some reason typeof null is "object", so special case here.
+  if (isNull(value))
+    return ctx.stylize('null', 'null');
+}
+
+
+function formatError(value) {
+  return '[' + Error.prototype.toString.call(value) + ']';
+}
+
+
+function formatArray(ctx, value, recurseTimes, visibleKeys, keys) {
+  var output = [];
+  for (var i = 0, l = value.length; i < l; ++i) {
+    if (hasOwnProperty(value, String(i))) {
+      output.push(formatProperty(ctx, value, recurseTimes, visibleKeys,
+          String(i), true));
+    } else {
+      output.push('');
+    }
+  }
+  keys.forEach(function(key) {
+    if (!key.match(/^\d+$/)) {
+      output.push(formatProperty(ctx, value, recurseTimes, visibleKeys,
+          key, true));
+    }
+  });
+  return output;
+}
+
+
+function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
+  var name, str, desc;
+  desc = Object.getOwnPropertyDescriptor(value, key) || { value: value[key] };
+  if (desc.get) {
+    if (desc.set) {
+      str = ctx.stylize('[Getter/Setter]', 'special');
+    } else {
+      str = ctx.stylize('[Getter]', 'special');
+    }
+  } else {
+    if (desc.set) {
+      str = ctx.stylize('[Setter]', 'special');
+    }
+  }
+  if (!hasOwnProperty(visibleKeys, key)) {
+    name = '[' + key + ']';
+  }
+  if (!str) {
+    if (ctx.seen.indexOf(desc.value) < 0) {
+      if (isNull(recurseTimes)) {
+        str = formatValue(ctx, desc.value, null);
+      } else {
+        str = formatValue(ctx, desc.value, recurseTimes - 1);
+      }
+      if (str.indexOf('\n') > -1) {
+        if (array) {
+          str = str.split('\n').map(function(line) {
+            return '  ' + line;
+          }).join('\n').substr(2);
+        } else {
+          str = '\n' + str.split('\n').map(function(line) {
+            return '   ' + line;
+          }).join('\n');
+        }
+      }
+    } else {
+      str = ctx.stylize('[Circular]', 'special');
+    }
+  }
+  if (isUndefined(name)) {
+    if (array && key.match(/^\d+$/)) {
+      return str;
+    }
+    name = JSON.stringify('' + key);
+    if (name.match(/^"([a-zA-Z_][a-zA-Z_0-9]*)"$/)) {
+      name = name.substr(1, name.length - 2);
+      name = ctx.stylize(name, 'name');
+    } else {
+      name = name.replace(/'/g, "\\'")
+                 .replace(/\\"/g, '"')
+                 .replace(/(^"|"$)/g, "'");
+      name = ctx.stylize(name, 'string');
+    }
+  }
+
+  return name + ': ' + str;
+}
+
+
+function reduceToSingleString(output, base, braces) {
+  var numLinesEst = 0;
+  var length = output.reduce(function(prev, cur) {
+    numLinesEst++;
+    if (cur.indexOf('\n') >= 0) numLinesEst++;
+    return prev + cur.replace(/\u001b\[\d\d?m/g, '').length + 1;
+  }, 0);
+
+  if (length > 60) {
+    return braces[0] +
+           (base === '' ? '' : base + '\n ') +
+           ' ' +
+           output.join(',\n  ') +
+           ' ' +
+           braces[1];
+  }
+
+  return braces[0] + base + ' ' + output.join(', ') + ' ' + braces[1];
+}
+
+
+// NOTE: These type checking functions intentionally don't use `instanceof`
+// because it is fragile and can be easily faked with `Object.create()`.
+function isArray(ar) {
+  return Array.isArray(ar);
+}
+exports.isArray = isArray;
+
+function isBoolean(arg) {
+  return typeof arg === 'boolean';
+}
+exports.isBoolean = isBoolean;
+
+function isNull(arg) {
+  return arg === null;
+}
+exports.isNull = isNull;
+
+function isNullOrUndefined(arg) {
+  return arg == null;
+}
+exports.isNullOrUndefined = isNullOrUndefined;
+
+function isNumber(arg) {
+  return typeof arg === 'number';
+}
+exports.isNumber = isNumber;
+
+function isString(arg) {
+  return typeof arg === 'string';
+}
+exports.isString = isString;
+
+function isSymbol(arg) {
+  return typeof arg === 'symbol';
+}
+exports.isSymbol = isSymbol;
+
+function isUndefined(arg) {
+  return arg === void 0;
+}
+exports.isUndefined = isUndefined;
+
+function isRegExp(re) {
+  return isObject(re) && objectToString(re) === '[object RegExp]';
+}
+exports.isRegExp = isRegExp;
+
+function isObject(arg) {
+  return typeof arg === 'object' && arg !== null;
+}
+exports.isObject = isObject;
+
+function isDate(d) {
+  return isObject(d) && objectToString(d) === '[object Date]';
+}
+exports.isDate = isDate;
+
+function isError(e) {
+  return isObject(e) &&
+      (objectToString(e) === '[object Error]' || e instanceof Error);
+}
+exports.isError = isError;
+
+function isFunction(arg) {
+  return typeof arg === 'function';
+}
+exports.isFunction = isFunction;
+
+function isPrimitive(arg) {
+  return arg === null ||
+         typeof arg === 'boolean' ||
+         typeof arg === 'number' ||
+         typeof arg === 'string' ||
+         typeof arg === 'symbol' ||  // ES6 symbol
+         typeof arg === 'undefined';
+}
+exports.isPrimitive = isPrimitive;
+
+exports.isBuffer = __webpack_require__(159);
+
+function objectToString(o) {
+  return Object.prototype.toString.call(o);
+}
+
+
+function pad(n) {
+  return n < 10 ? '0' + n.toString(10) : n.toString(10);
+}
+
+
+var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep',
+              'Oct', 'Nov', 'Dec'];
+
+// 26 Feb 16:19:34
+function timestamp() {
+  var d = new Date();
+  var time = [pad(d.getHours()),
+              pad(d.getMinutes()),
+              pad(d.getSeconds())].join(':');
+  return [d.getDate(), months[d.getMonth()], time].join(' ');
+}
+
+
+// log is just a thin wrapper to console.log that prepends a timestamp
+exports.log = function() {
+  console.log('%s - %s', timestamp(), exports.format.apply(exports, arguments));
+};
+
+
+/**
+ * Inherit the prototype methods from one constructor into another.
+ *
+ * The Function.prototype.inherits from lang.js rewritten as a standalone
+ * function (not on Function.prototype). NOTE: If this file is to be loaded
+ * during bootstrapping this function needs to be rewritten using some native
+ * functions as prototype setup using normal JavaScript does not work as
+ * expected during bootstrapping (see mirror.js in r114903).
+ *
+ * @param {function} ctor Constructor function which needs to inherit the
+ *     prototype.
+ * @param {function} superCtor Constructor function to inherit prototype from.
+ */
+exports.inherits = __webpack_require__(160);
+
+exports._extend = function(origin, add) {
+  // Don't do anything if add isn't an object
+  if (!add || !isObject(add)) return origin;
+
+  var keys = Object.keys(add);
+  var i = keys.length;
+  while (i--) {
+    origin[keys[i]] = add[keys[i]];
+  }
+  return origin;
+};
+
+function hasOwnProperty(obj, prop) {
+  return Object.prototype.hasOwnProperty.call(obj, prop);
+}
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(53), __webpack_require__(158)))
+
+/***/ }),
+/* 158 */
+/***/ (function(module, exports) {
+
+// shim for using process in browser
+var process = module.exports = {};
+
+// cached from whatever global is present so that test runners that stub it
+// don't break things.  But we need to wrap it in a try catch in case it is
+// wrapped in strict mode code which doesn't define any globals.  It's inside a
+// function because try/catches deoptimize in certain engines.
+
+var cachedSetTimeout;
+var cachedClearTimeout;
+
+function defaultSetTimout() {
+    throw new Error('setTimeout has not been defined');
+}
+function defaultClearTimeout () {
+    throw new Error('clearTimeout has not been defined');
+}
+(function () {
+    try {
+        if (typeof setTimeout === 'function') {
+            cachedSetTimeout = setTimeout;
+        } else {
+            cachedSetTimeout = defaultSetTimout;
+        }
+    } catch (e) {
+        cachedSetTimeout = defaultSetTimout;
+    }
+    try {
+        if (typeof clearTimeout === 'function') {
+            cachedClearTimeout = clearTimeout;
+        } else {
+            cachedClearTimeout = defaultClearTimeout;
+        }
+    } catch (e) {
+        cachedClearTimeout = defaultClearTimeout;
+    }
+} ())
+function runTimeout(fun) {
+    if (cachedSetTimeout === setTimeout) {
+        //normal enviroments in sane situations
+        return setTimeout(fun, 0);
+    }
+    // if setTimeout wasn't available but was latter defined
+    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+        cachedSetTimeout = setTimeout;
+        return setTimeout(fun, 0);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedSetTimeout(fun, 0);
+    } catch(e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+            return cachedSetTimeout.call(null, fun, 0);
+        } catch(e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+            return cachedSetTimeout.call(this, fun, 0);
+        }
+    }
+
+
+}
+function runClearTimeout(marker) {
+    if (cachedClearTimeout === clearTimeout) {
+        //normal enviroments in sane situations
+        return clearTimeout(marker);
+    }
+    // if clearTimeout wasn't available but was latter defined
+    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+        cachedClearTimeout = clearTimeout;
+        return clearTimeout(marker);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedClearTimeout(marker);
+    } catch (e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+            return cachedClearTimeout.call(null, marker);
+        } catch (e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+            return cachedClearTimeout.call(this, marker);
+        }
+    }
+
+
+
+}
+var queue = [];
+var draining = false;
+var currentQueue;
+var queueIndex = -1;
+
+function cleanUpNextTick() {
+    if (!draining || !currentQueue) {
+        return;
+    }
+    draining = false;
+    if (currentQueue.length) {
+        queue = currentQueue.concat(queue);
+    } else {
+        queueIndex = -1;
+    }
+    if (queue.length) {
+        drainQueue();
+    }
+}
+
+function drainQueue() {
+    if (draining) {
+        return;
+    }
+    var timeout = runTimeout(cleanUpNextTick);
+    draining = true;
+
+    var len = queue.length;
+    while(len) {
+        currentQueue = queue;
+        queue = [];
+        while (++queueIndex < len) {
+            if (currentQueue) {
+                currentQueue[queueIndex].run();
+            }
+        }
+        queueIndex = -1;
+        len = queue.length;
+    }
+    currentQueue = null;
+    draining = false;
+    runClearTimeout(timeout);
+}
+
+process.nextTick = function (fun) {
+    var args = new Array(arguments.length - 1);
+    if (arguments.length > 1) {
+        for (var i = 1; i < arguments.length; i++) {
+            args[i - 1] = arguments[i];
+        }
+    }
+    queue.push(new Item(fun, args));
+    if (queue.length === 1 && !draining) {
+        runTimeout(drainQueue);
+    }
+};
+
+// v8 likes predictible objects
+function Item(fun, array) {
+    this.fun = fun;
+    this.array = array;
+}
+Item.prototype.run = function () {
+    this.fun.apply(null, this.array);
+};
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+process.versions = {};
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+process.prependListener = noop;
+process.prependOnceListener = noop;
+
+process.listeners = function (name) { return [] }
+
+process.binding = function (name) {
+    throw new Error('process.binding is not supported');
+};
+
+process.cwd = function () { return '/' };
+process.chdir = function (dir) {
+    throw new Error('process.chdir is not supported');
+};
+process.umask = function() { return 0; };
+
+
+/***/ }),
+/* 159 */
+/***/ (function(module, exports) {
+
+module.exports = function isBuffer(arg) {
+  return arg && typeof arg === 'object'
+    && typeof arg.copy === 'function'
+    && typeof arg.fill === 'function'
+    && typeof arg.readUInt8 === 'function';
+}
+
+/***/ }),
+/* 160 */
+/***/ (function(module, exports) {
+
+if (typeof Object.create === 'function') {
+  // implementation from standard node.js 'util' module
+  module.exports = function inherits(ctor, superCtor) {
+    ctor.super_ = superCtor
+    ctor.prototype = Object.create(superCtor.prototype, {
+      constructor: {
+        value: ctor,
+        enumerable: false,
+        writable: true,
+        configurable: true
+      }
+    });
+  };
+} else {
+  // old school shim for old browsers
+  module.exports = function inherits(ctor, superCtor) {
+    ctor.super_ = superCtor
+    var TempCtor = function () {}
+    TempCtor.prototype = superCtor.prototype
+    ctor.prototype = new TempCtor()
+    ctor.prototype.constructor = ctor
+  }
+}
+
+
+/***/ }),
+/* 161 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_keyword_input_html__ = __webpack_require__(162);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_keyword_input_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_keyword_input_html__);
+
+
+
+class AppKeywordInput extends __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__["a" /* Element */] {
+
+  static get template() {
+    return __WEBPACK_IMPORTED_MODULE_1__app_keyword_input_html___default.a;
+  }
+
+  static get properties() {
+    return {
+      keywords : {
+        type : Array,
+        value : () => []
+      },
+      label : {
+        type : String,
+        value : ''
+      }
+    }
+  }
+
+  get value() {
+    return this.keywords;
+  }
+
+  set value(value) {
+    this.keywords = this._clean(value);
+  }
+
+  /**
+   * Cleanup input values
+   */
+  _clean(value) {
+    if( typeof value === 'string' ) {
+      value = value.split(',');
+    }
+    value = value.map(val => val.trim().toLowerCase());
+    for( let i = value.length-1; i >= 0; i-- ) {
+      if( !value[i] ) value.splice(i, 1);
+    }
+    return value;
+  }
+
+  /**
+   * called from paper-input
+   */
+  _onKeyPress(e) {
+    if( e.which === 13 ) this._onChange();
+  }
+
+  /**
+   * Called from paper-input
+   */
+  _onChange(e) {
+    this.appendKeywords(this.$.input.value);
+    this.$.input.value = '';
+    this.dispatchEvent(new CustomEvent('keyword-change', {detail: this.keywords}));
+  }
+
+  /**
+   * Fired from remove btn 
+   */
+  _onRemoveClicked(e) {
+    let val = e.currentTarget.getAttribute('value');
+    let index = this.keywords.indexOf(val);
+    this.keywords.splice(index, 1);
+    
+    this.value = this.keywords.slice(0);
+    this.dispatchEvent(new CustomEvent('keyword-change', {detail: this.keywords}));
+  }
+
+  appendKeywords(value) {
+    value = this._clean(value);
+    value.forEach(val => {
+      if( this.keywords.indexOf(val) === -1 ) {
+        this.keywords.push(val);
+      }
+    });
+
+    this.value = this.keywords.slice(0);
+  }
+
+
+}
+/* unused harmony export default */
+
+
+customElements.define('app-keyword-input', AppKeywordInput);
+
+/***/ }),
+/* 162 */
+/***/ (function(module, exports) {
+
+module.exports = "\n<style>\n  div {\n    display: flex;\n    align-items: center;\n  }\n\n  span {\n    padding-left: 10px;\n    display: inline-block;\n  }\n\n  paper-button {\n    background: var(--dark-background-color)\n  }\n\n  paper-button:hover {\n    color: var(--inverse-text-color);\n    background: var(--default-primary-color);\n  }\n</style>\n\n<paper-input \n  id=\"input\" \n  label=\"[[label]]\"\n  on-change=\"_onChange\" \n  on-keypress=\"_onKeyPress\">\n</paper-input>\n\n<div>\n  <template is=\"dom-repeat\" items=\"[[keywords]]\">\n    <paper-button value$=\"[[item]]\" on-click=\"_onRemoveClicked\">\n      <iron-icon icon=\"clear\"></iron-icon>\n      <span>[[item]]</span>\n    </paper-button>\n  </template>\n</div>";
+
+/***/ }),
+/* 163 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_theme_input_html__ = __webpack_require__(164);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_theme_input_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_theme_input_html__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lib_controlled_vocabulary__ = __webpack_require__(56);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lib_controlled_vocabulary___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__lib_controlled_vocabulary__);
+
+
+
+
+
+const THEMES = [];
+for( let theme in __WEBPACK_IMPORTED_MODULE_2__lib_controlled_vocabulary___default.a ) {
+  THEMES.push(theme);
+}
+
+class AppThemeInput extends __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__["a" /* Element */] {
+
+  static get template() {
+    return __WEBPACK_IMPORTED_MODULE_1__app_theme_input_html___default.a;
+  }
+
+  static get properties() {
+    return {
+      themeOptions : {
+        type : Array,
+        value : () => THEMES
+      },
+      familyOptions : {
+        type : Array,
+        value : () => []
+      },
+      specificOptions : {
+        type : Array, 
+        value : () => []
+      },
+      selectedTheme : {
+        type : String,
+        value : ''
+      },
+      selectedFamily : {
+        type : String,
+        value : ''
+      },
+      selectedSpecific : {
+        type : String,
+        value : ''
+      }
+    }
+  }
+
+  setValues(pkg) {
+    this.selectedTheme = pkg.theme || '';
+    this.$.theme.value = this.selectedTheme;
+
+    if( this.selectedTheme ) {
+      let familyOptions = [];
+      for( let family in __WEBPACK_IMPORTED_MODULE_2__lib_controlled_vocabulary___default.a[this.selectedTheme] ) {
+        familyOptions.push(family);
+      }
+      this.familyOptions = familyOptions;
+    }
+
+    this.selectedFamily = pkg.family || '';
+
+    if( this.selectedFamily ) {
+      this.specificOptions = __WEBPACK_IMPORTED_MODULE_2__lib_controlled_vocabulary___default.a[this.selectedTheme][this.selectedFamily];
+    }
+    this.selectedSpecific = pkg.specific || '';
+
+    // have to give dom repeat time to render :(
+    requestAnimationFrame(() => {
+      this.$.family.value = this.selectedFamily;
+      this.$.specific.value = this.selectedSpecific;
+    });
+    
+  }
+
+  /**
+   * @method _onThemeSelect
+   * @description called when theme select box is changed
+   */
+  _onThemeSelect(e) {
+    let theme = e.currentTarget.value;
+    if( this.selectedTheme === theme ) return;
+
+    this.selectedTheme = theme;
+    this.selectedFamily = '';
+    this.$.family.value = '';
+    this.selectedSpecific = '';
+    this.$.specific.value = '';
+
+    if( !theme ) {
+      this._fireUpdateEvent();
+      return;
+    }
+
+    let familyOptions = [];
+    for( let family in __WEBPACK_IMPORTED_MODULE_2__lib_controlled_vocabulary___default.a[this.selectedTheme] ) {
+      familyOptions.push(family);
+    }
+
+    this.familyOptions = familyOptions;
+    this._fireUpdateEvent();
+  }
+
+  /**
+   * @method _onFamilySelect
+   * @description called when family select box is changed
+   */
+  _onFamilySelect(e) {
+    let family = e.currentTarget.value;
+    if( this.selectedFamily === family ) return;
+
+    this.selectedFamily = family;
+    this.selectedSpecific = '';
+    this.$.specific.value = '';
+
+    if( !family ) return;
+
+    this.specificOptions = __WEBPACK_IMPORTED_MODULE_2__lib_controlled_vocabulary___default.a[this.selectedTheme][this.selectedFamily];
+    this._fireUpdateEvent();
+  }
+
+  /**
+   * @method _onSpecificSelect
+   * @description called when family select box is changed
+   */
+  _onSpecificSelect(e) {
+    this.selectedSpecific = e.currentTarget.value;
+    this._fireUpdateEvent();
+  }
+
+  /**
+   * @method _fireUpdateEvent
+   * @description called whenever a value changes
+   */
+  _fireUpdateEvent() {
+    let e = {
+      theme : this.selectedTheme,
+      family : this.selectedFamily,
+      specific : this.selectedSpecific
+    }
+    this.dispatchEvent(new CustomEvent('update', {detail: e}));
+  }
+
+
+}
+/* unused harmony export default */
+
+
+customElements.define('app-theme-input', AppThemeInput);
+
+/***/ }),
+/* 164 */
+/***/ (function(module, exports) {
+
+module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n  .layout {\n    display: flex;\n    flex-wrap: wrap;\n  }\n  .layout > * {\n    flex: .333;\n  }\n</style>\n\n<div class=\"layout\">\n  <div>\n    <h2>Theme</h2>\n    <select id=\"theme\" on-change=\"_onThemeSelect\">\n      <option></option>\n      <template is=\"dom-repeat\" items=\"[[themeOptions]]\">\n        <option value$=\"[[item]]\">[[item]]</option>\n      </template>\n    </select>\n  </div>\n\n  <div hidden$=\"[[!selectedTheme]]\">\n    <h2>Family</h2>\n    <select on-change=\"_onFamilySelect\" id=\"family\">\n      <option></option>\n      <template is=\"dom-repeat\" items=\"[[familyOptions]]\">\n        <option value$=\"[[item]]\">[[item]]</option>\n      </template>\n    </select>\n  </div>\n\n  <div hidden$=\"[[!selectedFamily]]\">\n    <h2>Specific</h2>\n    <select on-change=\"_onSpecificSelect\" id=\"specific\">\n      <option></option>\n      <template is=\"dom-repeat\" items=\"[[specificOptions]]\">\n        <option value$=\"[[item]]\">[[item]]</option>\n      </template>\n    </select>\n  </div>\n</div>\n\n<div>\n  Values: [[selectedTheme]] [[selectedFamily]] [[selectedSpecific]]\n</div>";
+
+/***/ }),
+/* 165 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_create_release_html__ = __webpack_require__(166);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_create_release_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_create_release_html__);
+
+
+
+class AppCreateRelease extends __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__["a" /* Element */] {
+
+  static get template() {
+    return __WEBPACK_IMPORTED_MODULE_1__app_create_release_html___default.a;
+  }
+
+  static get properties() {
+    return {
+      release : {
+        type : String,
+        value : '',
+        observer : '_render'
+      },
+      currentRelease : {
+        type : String,
+        value : ''
+      }
+    }
+  }
+
+  get major() {
+    return parseInt(this.$.major.value) || 0;
+  }
+
+  set major(val) {
+    this.$.major.value = val+'';
+  }
+
+  get minor() {
+    return parseInt(this.$.minor.value) || 0;
+  }
+
+  set minor(val) {
+    this.$.minor.value = val+'';
+  }
+
+  get patch() {
+    return parseInt(this.$.patch.value) || 0;
+  }
+
+  set patch(val) {
+    this.$.patch.value = val+'';
+  }
+
+  /**
+   * @method _render
+   * @description called whenever the release string updates, set the input fields
+   */
+  _render() {
+    if( !this.release ) {
+      this.major = 0;
+      this.minor = 0;
+      this.patch = 0;
+      return;
+    }
+
+    let parts = this.release.replace(/^v/, '').split('.');
+    if( parts.length < 3 ) return;
+
+    this.major = parts[0];
+    this.manor = parts[1];
+    this.patch = parts[2];
+  }
+
+  /**
+   * @method _onInputChange
+   * @description called whenever a input field changes due to user input, set
+   * the release string.
+   */
+  _onInputChange() {
+    this.release = `${this.major}.${this.minor}.${this.patch}`;
+  }
+
+}
+/* unused harmony export default */
+
+
+customElements.define('app-create-release', AppCreateRelease);
+
+/***/ }),
+/* 166 */
+/***/ (function(module, exports) {
+
+module.exports = "<style>\n  :host {\n    display: block;\n  }\n\n  .layout {\n    display: flex;\n    align-items: flex-end;\n  }\n</style>\n\n<div>Current Release: [[currentRelease]]</div>\n<div>See all releases</div>\n<div class=\"layout\">\n  <div>\n    <div>Major</div>\n    <input type=\"number\" id=\"major\" placeholder=\"1\" on-change=\"_onInputChange\" />\n  </div>\n  <div>.</div>\n  <div>\n    <div>Minor</div>\n    <input type=\"number\" id=\"minor\" placeholder=\"0\" on-change=\"_onInputChange\" />\n  </div>\n  <div>.</div>\n  <div>\n    <div>Patch</div>\n    <input type=\"number\" id=\"patch\" placeholder=\"0\" on-change=\"_onInputChange\" />\n  </div>\n</div>\n\n<div><a href=\"https://semver.org/\" target=\"_blank\">Help</a></div>\n<div><paper-button>Create Release</paper-button></div>\n";
+
+/***/ }),
+/* 167 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_package_search_html__ = __webpack_require__(168);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_package_search_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_package_search_html__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_search_header__ = __webpack_require__(169);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__filters_app_filters_panel__ = __webpack_require__(173);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__results_app_search_results_panel__ = __webpack_require__(177);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__interfaces_SearchInterface__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__interfaces_SearchInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__interfaces_SearchInterface__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__interfaces_AppStateInterface__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__interfaces_AppStateInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__interfaces_AppStateInterface__);
+
+
+
+
+
+
+
+
+
+
+class AppPackageSearch extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__["a" /* Element */])
+      .with(EventInterface, __WEBPACK_IMPORTED_MODULE_6__interfaces_AppStateInterface___default.a, __WEBPACK_IMPORTED_MODULE_5__interfaces_SearchInterface___default.a) {
+
+  static get template() {
+    return __WEBPACK_IMPORTED_MODULE_1__app_package_search_html___default.a;
+  }
+
+  static get properties() {
+    return {
+      appState : {
+        type : Object,
+        value : {}
+      }
+    }
+  }
+
+  constructor() {
+    super();
+    this.active = true;
+  }
+
+  /**
+   * @description AppStateInterface, fired when state updates
+   * @param {*} e 
+   */
+  _onAppStateUpdate(e) {
+    this.appState = e;
+
+    if( e.location.path[0] !== 'search' ) return;
+    this._searchFromAppState();
+  }
+
+  /**
+   * @method _searchFromAppState
+   * @description use current app state to preform a search, should be called on first load
+   * or if state update event is from popup state (forward, back button hit)
+   */
+  _searchFromAppState() {
+    let searchUrlParts = this.appState.location.path;
+    let query;
+    if( searchUrlParts.length > 1 ) {
+      query = this._urlToSearchQuery(searchUrlParts.slice(1, searchUrlParts.length));
+    } else {
+      query = this._getEmptySearchQuery();
+    }
+
+    // flag queries that came from the url hash updating
+    query.fromUrl = true;
+
+    this._searchPackages(query);
+  }
+
+  /**
+   * @method _onSearchPackagesUpdate
+   * @description SearchInterface, fired when search query updates.
+   * used to set the window url
+   * 
+   */
+  _onSearchPackagesUpdate(e) {
+    if( !e.query || e.state !== 'loading' ) return;
+    if( e.query.fromUrl ) return console.log('Ignoring query from url');
+
+    this._setWindowLocation(this._searchQueryToUrl(e.query));
+  }
+
+}
+
+customElements.define('app-package-search', AppPackageSearch);
+
+/***/ }),
+/* 168 */
+/***/ (function(module, exports) {
+
+module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n\n  .layout {\n    display: flex;\n    justify-content: center;\n  }\n\n  .inner-layout {\n    background-color: white;\n    display: flex;\n    width: 100%;\n    max-width: 1200px;\n    padding: 20px;\n    margin-top: 20px;\n  }\n\n  app-filters-panel {\n    width: 100%;\n    max-width: 300px;\n  }\n</style>\n\n<app-search-header></app-search-header>\n\n<div class=\"layout\">\n  <div class=\"inner-layout\">\n    <app-filters-panel></app-filters-panel>\n    <app-search-results-panel style=\"flex:1\"></app-search-results-panel>\n  </div>\n</div>\n\n";
+
+/***/ }),
+/* 169 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_search_header_html__ = __webpack_require__(170);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_search_header_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_search_header_html__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_AppStateInterface__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_AppStateInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__interfaces_AppStateInterface__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__interfaces_SearchInterface__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__interfaces_SearchInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__interfaces_SearchInterface__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__filters_app_active_filters_panel__ = __webpack_require__(171);
+
+
+
+
+
+
+class AppSearchHeader extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__["a" /* Element */])
+  .with(EventInterface, __WEBPACK_IMPORTED_MODULE_2__interfaces_AppStateInterface___default.a, __WEBPACK_IMPORTED_MODULE_3__interfaces_SearchInterface___default.a) {
+
+  static get template() {
+    return __WEBPACK_IMPORTED_MODULE_1__app_search_header_html___default.a;
+  }
+
+  static get properties() {
+    return {
+      
+    }
+  }
+
+  constructor() {
+    super();
+    this.active = true;
+  }
+
+  /**
+   * @method _onButtonClick
+   * @description called from search button
+   */
+  _onButtonClick() {
+    this._search();
+  }
+
+  /**
+   * @method _onKeyPress
+   * @description called from text input
+   */
+  _onKeyPress(e) {
+    if( e.which !== 13 ) return;
+    this._search();
+  }
+
+  /**
+   * @method _search
+   * @description run a new search with text from text input.
+   * make sure url is pointed at /search
+   */
+  _search() {
+    this._setSearchText(this.$.input.value);
+    this._searchPackages();
+    this._setWindowLocation('/search');
+  }
+
+  /**
+   * @method _onSearchPackagesUpdate
+   * @description from SearchInterface, called when search state updates
+   */
+  _onSearchPackagesUpdate(e) {
+    if( !e.query || e.state !== 'loading' ) return;
+    this.$.input.value = e.query.text;
+  }
+
+}
+/* unused harmony export default */
+
+
+customElements.define('app-search-header', AppSearchHeader);
+
+/***/ }),
+/* 170 */
+/***/ (function(module, exports) {
+
+module.exports = "<style>\n  :host {\n    display: block;\n    background-color: var(--text-primary-color);\n  }\n  .root {\n    display: flex;\n    justify-content: center;\n  }\n  input {\n    display: block;\n    width: 100%;\n    padding: 5px;\n    font-size: 26px;\n    margin: 15px 0;\n    height: 42px;\n    background: transparent;\n    color: var(--inverse-text-color);\n    border: 1px solid var(--inverse-text-color);\n    box-sizing: border-box;\n  }\n  button {\n    margin: 15px 0;\n    color : var(--inverse-text-color);\n    background: transparent;\n    height: 42px;\n    padding: 0 15px;\n    border-right: 1px solid var(--inverse-text-color);\n    border-top: 1px solid var(--inverse-text-color);\n    border-bottom: 1px solid var(--inverse-text-color);\n    border-left: none;\n    border-radius: 0;\n  }\n</style>\n\n<div class=\"root\">\n  <div style=\"flex:.66\">\n    <input type=\"text\" id=\"input\" on-keypress=\"_onKeyPress\"/>\n  </div>\n  <div>\n    <button on-click=\"_onButtonClick\">\n      <iron-icon icon=\"search\"></iron-icon>\n    </button>\n  </div>\n</div>\n\n<div class=\"root\">\n<app-active-filters-panel style=\"flex:.66\"></app-active-filters-panel>\n</div>";
+
+/***/ }),
+/* 171 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_active_filters_panel_html__ = __webpack_require__(172);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_active_filters_panel_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_active_filters_panel_html__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_SearchInterface__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_SearchInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__interfaces_SearchInterface__);
+
+
+
+
+class AppActiveFiltersPanel extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__["a" /* Element */])
+  .with(EventInterface, __WEBPACK_IMPORTED_MODULE_2__interfaces_SearchInterface___default.a) {
+
+  static get template() {
+    return __WEBPACK_IMPORTED_MODULE_1__app_active_filters_panel_html___default.a;
+  }
+
+  static get properties() {
+    return {
+      filters : {
+        type : Array,
+        value : () => []
+      },
+      hasFilters : {
+        type : Boolean,
+        value : false
+      }
+    }
+  }
+
+  constructor() {
+    super();
+    this.active = true;
+  }
+
+  _onSearchPackagesUpdate(e) {
+    if( e.state !== 'loaded' ) return;
+    this.filters = e.query.filters.map(filter => {
+      let key = Object.keys(filter)[0];
+      return {
+        key, value : filter[key]
+      }
+    });
+
+    this.hasFilters = (this.filters.length > 0);
+  }
+
+  _onRemoveFilterClicked(e) {
+    let index = parseInt(e.currentTarget.getAttribute('index'));
+    let filter = this.filters[index];
+    this._removeSearchFilter(filter.key, filter.value);
+    this._searchPackages();
+  }
+
+
+}
+/* unused harmony export default */
+
+
+customElements.define('app-active-filters-panel', AppActiveFiltersPanel);
+
+/***/ }),
+/* 172 */
+/***/ (function(module, exports) {
+
+module.exports = "<style>\n  :host {\n    display: block;\n  }\n\n  @keyframes show-button {\n    0%   { opacity: 0; transform: scale(0) }\n    100% { opacity: 1; transform: scale(1) }\n  }\n  paper-button {\n    color: var(--inverse-text-color);\n    border: 1px solid var(--inverse-text-color);\n    border-radius: 0;\n    padding: 4px;\n    font-size: 14px;\n\n    animation: show-button 300ms ease-out;\n  }\n\n  [has-filters] {\n    margin-bottom: 15px;\n  }\n\n  .btn-layout {\n    display: flex;\n    align-items: center;\n  }\n</style>\n\n<div has-filters$=\"[[hasFilters]]\"> \n  <template is=\"dom-repeat\" items=\"[[filters]]\">\n    <paper-button index$=\"[[index]]\" on-click=\"_onRemoveFilterClicked\">\n      <div class=\"btn-layout\">\n        <iron-icon icon=\"close\"></iron-icon>\n        <span>[[item.key]]: [[item.value]]</span>\n      </div>\n    </paper-button>\n  </template>\n</div>";
+
+/***/ }),
+/* 173 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_filters_panel_html__ = __webpack_require__(174);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_filters_panel_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_filters_panel_html__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_SearchInterface__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_SearchInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__interfaces_SearchInterface__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_filter_panel__ = __webpack_require__(175);
+
+
+
+
+
+class AppFiltersPanel extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__["a" /* Element */])
+  .with(EventInterface, __WEBPACK_IMPORTED_MODULE_2__interfaces_SearchInterface___default.a) {
+
+  static get template() {
+    return __WEBPACK_IMPORTED_MODULE_1__app_filters_panel_html___default.a;
+  }
+
+  static get properties() {
+    return {
+      filters : {
+        type : Array,
+        value : () => []
+      },
+      hasFilters : {
+        type : Boolean,
+        value : true
+      }
+    }
+  }
+
+  constructor() {
+    super();
+    this.active = true;
+  }
+
+  /**
+   * @method _onSearchPackagesUpdate
+   * @description from SearchInterface, called when search state updates
+   */
+  _onSearchPackagesUpdate(e) {
+    if( e.state !== 'loaded' ) return;
+    let filters = e.payload.filters || {};
+
+    let arr = [];
+    for( var key in filters ) {
+      arr.push({
+        key : key,
+        values : filters[key]
+      });
+    }
+
+    this.filters = arr;
+    this.hasFilters = (this.filters.length > 0);
+  }
+}
+/* unused harmony export default */
+
+
+customElements.define('app-filters-panel', AppFiltersPanel);
+
+/***/ }),
+/* 174 */
+/***/ (function(module, exports) {
+
+module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n  .title {\n    display: flex;\n    align-items: center;\n  }\n  .title h2 {\n    flex: 1;\n  }\n  .clear-filters {\n    display: none;\n  }\n  .clear-filters[active] {\n    display: inline-block;\n  }\n</style>\n\n<div class=\"title\">\n  <h2>Filters</h2>\n  <button class=\"clear-filters\">Clear Filters</button>\n</div>\n\n<div hidden$=\"[[hasFilters]]\">\n  No additional filters for current search\n</div>\n\n<template is=\"dom-repeat\" items=\"[[filters]]\">\n  <app-filter-panel filter=\"[[item]]\"></app-filter-panel>\n</template>";
+
+/***/ }),
+/* 175 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_filter_panel_html__ = __webpack_require__(176);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_filter_panel_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_filter_panel_html__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_SearchInterface__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_SearchInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__interfaces_SearchInterface__);
+
+
+
+
+class AppFilterPanel extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__["a" /* Element */])
+  .with(EventInterface, __WEBPACK_IMPORTED_MODULE_2__interfaces_SearchInterface___default.a) {
+
+  static get template() {
+    return __WEBPACK_IMPORTED_MODULE_1__app_filter_panel_html___default.a;
+  }
+
+  static get properties() {
+    return {
+      filter : {
+        type : Object,
+        value : () => {},
+        observer : '_onFilterUpdate'
+      }
+    }
+  }
+
+  constructor() {
+    super();
+    this.active = true;
+  }
+
+  _onFilterUpdate() {
+    // console.log(this.filter);
+  }
+
+  /**
+   * @method _onFilterClicked
+   * @private
+   * @description fired when app-filter-checkbox is clicked by user
+   */
+  _onFilterClicked(e) {
+    this._appendSearchFilter(this.filter.key, e.currentTarget.getAttribute('filter'));
+    this._searchPackages();
+  }
+
+
+}
+/* unused harmony export default */
+
+
+customElements.define('app-filter-panel', AppFilterPanel);
+
+/***/ }),
+/* 176 */
+/***/ (function(module, exports) {
+
+module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n  a {\n    cursor: pointer;\n    color: var(--default-primary-color);\n  }\n</style>\n\n\n<div><b>[[filter.key]]</b></div>\n\n<template is=\"dom-repeat\" items=\"[[filter.values]]\">\n  <div><a on-click=\"_onFilterClicked\" filter$=\"[[item.filter]]\">[[item.filter]] ([[item.count]])</a></div>\n</template>\n";
+
+/***/ }),
+/* 177 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_search_results_panel_html__ = __webpack_require__(178);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_search_results_panel_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_search_results_panel_html__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_SearchInterface__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_SearchInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__interfaces_SearchInterface__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_search_result__ = __webpack_require__(179);
+
+
+
+
+
+class AppSearchResultsPanel extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__["a" /* Element */])
+  .with(EventInterface, __WEBPACK_IMPORTED_MODULE_2__interfaces_SearchInterface___default.a) {
+
+  static get template() {
+    return __WEBPACK_IMPORTED_MODULE_1__app_search_results_panel_html___default.a;
+  }
+
+  static get properties() {
+    return {
+      loading : {
+        type : Boolean,
+        value : false
+      },
+      hasError : {
+        type : Boolean,
+        value : false
+      },
+      results : {
+        type : Array,
+        value : () => []
+      },
+      hasResults : {
+        type : Boolean,
+        value : true
+      }
+    }
+  }
+
+  constructor() {
+    super();
+    this.active = true;
+  }
+
+  _onSearchPackagesUpdate(e) {
+    this.hasError = false;
+    this.loading = false;
+    
+    if( e.state === 'loading' ) {
+      this.loading = true;
+      return;
+    } else if( e.state === 'error' ) {
+      this.hasError = true;
+      return;
+    }
+
+    this.results = e.payload.results;
+    this.hasResults = (this.results.length > 0);
+  }
+
+}
+/* unused harmony export default */
+
+
+customElements.define('app-search-results-panel', AppSearchResultsPanel);
+
+/***/ }),
+/* 178 */
+/***/ (function(module, exports) {
+
+module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n    padding: 10px;\n    min-height: 500px;\n  }\n\n  .no-match {\n    text-align: center;\n    padding-top: 50px;\n  }\n</style>\n\n<div class=\"no-match\" hidden$=\"[[hasResults]]\">\n  No packages match your current search.\n</div>\n\n<div>\n  <template is=\"dom-repeat\" items=\"[[results]]\">\n    <app-search-result item=\"[[item]]\"></app-search-result>\n  </template>\n</div>";
+
+/***/ }),
+/* 179 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_search_result_html__ = __webpack_require__(180);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_search_result_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_search_result_html__);
+
+
+
+class AppSearchResult extends __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__["a" /* Element */] {
+
+  static get template() {
+    return __WEBPACK_IMPORTED_MODULE_1__app_search_result_html___default.a;
+  }
+
+  static get properties() {
+    return {
+      item : {
+        type : Object,
+        value : () => {}
+      }
+    }
+  }
+
+}
+/* unused harmony export default */
+
+
+customElements.define('app-search-result', AppSearchResult);
+
+/***/ }),
+/* 180 */
+/***/ (function(module, exports) {
+
+module.exports = "<style>\n  :host {\n    display: block;\n    border-bottom: 1px solid var(--default-background-color);\n  }\n\n  a {\n    color: var(--default-primary-color);\n    text-decoration: none;\n  }\n</style>\n\n<h2><a href$=\"/package/[[item.id]]\">[[item.name]]</a></h2>\n<div>[[item.overview]]</div>";
+
+/***/ }),
+/* 181 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_home_html__ = __webpack_require__(182);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_home_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_home_html__);
+
+
+
+class AppHome extends __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__["a" /* Element */] {
+
+  static get template() {
+    return __WEBPACK_IMPORTED_MODULE_1__app_home_html___default.a;
+  }
+
+  static get properties() {
+    return {
+      
+    }
+  }
+
+}
+/* unused harmony export default */
+
+
+customElements.define('app-home', AppHome);
+
+/***/ }),
+/* 182 */
+/***/ (function(module, exports) {
+
+module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n \n  .root {\n    display: flex;\n    justify-content: center;\n  }\n  .root > div {\n    margin-top: 20px;\n    padding: 40px;\n    background-color: white;\n    width: 100%;\n    max-width: 1200px;\n    min-height: 600px;\n  }\n\n  .row {\n    display: flex;\n  }\n  .row > * {\n    flex : 1;\n  }\n</style>\n\n<app-search-header></app-search-header>\n\n\n<div class=\"root\">\n  <h1>Ecological Spectral Model Library</h1>\n</div>\n\n<div class=\"root\">\n  <div>\n\n    <div class=\"row\" style=\"margin-bottom: 35px\">\n      <div>\n        <h2 class=\"uheader blue\">Top Organizations</h2>\n        <div>UW EnSpec </div>\n        <div>University of Utah</div>\n        <div>Foundational Datasets</div>\n        <div>The Remote Sensing Laboratory</div>\n        <div>University of California Santa Barbara</div>\n      </div>\n      <div>\n        <h2 class=\"uheader green\">Top Keywords</h2>\n        <div>nitrogen </div>\n        <div>lma</div>\n        <div>carbon</div>\n        <div>lignin</div>\n        <div>reflectance</div>\n      </div>\n      <div>\n        <h2 class=\"uheader lightblue\">Top Themes</h2>\n        <div>ecology</div>\n        <div>biochemistry</div>\n        <div>agriculture</div>\n        <div>forest</div>\n        <div>physiology</div>\n      </div>\n    </div>\n    \n    \n\n    <h2 class=\"dark\">Package Management</h2>\n    <div><a href=\"/create\">Create Package</a></div>\n  </div>\n</div>";
+
+/***/ }),
+/* 183 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_landing_page_html__ = __webpack_require__(184);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_landing_page_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_landing_page_html__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_markdown__ = __webpack_require__(69);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_markdown___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_markdown__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__interfaces_AppStateInterface__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__interfaces_AppStateInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__interfaces_AppStateInterface__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__interfaces_PackageInterface__ = __webpack_require__(68);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__interfaces_PackageInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__interfaces_PackageInterface__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__interfaces_SearchInterface__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__interfaces_SearchInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__interfaces_SearchInterface__);
+
+
+
+
+
+
+
+
+class AppLandingPage extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__["a" /* Element */])
+  .with(EventInterface, __WEBPACK_IMPORTED_MODULE_3__interfaces_AppStateInterface___default.a, __WEBPACK_IMPORTED_MODULE_4__interfaces_PackageInterface___default.a, __WEBPACK_IMPORTED_MODULE_5__interfaces_SearchInterface___default.a) {
+
+  static get template() {
+    return __WEBPACK_IMPORTED_MODULE_1__app_landing_page_html___default.a;
+  }
+
+  static get properties() {
+    return {
+      package : {
+        type : Object,
+        value : null,
+        observer : 'render'
+      },
+      release : {
+        type : Object,
+        value : null
+      },
+      themeLink :  {
+        type : String,
+        value : ''
+      },
+      familyLink :  {
+        type : String,
+        value : ''
+      },
+      specificLink :  {
+        type : String,
+        value : ''
+      }
+    }
+  }
+
+  constructor() {
+    super();
+    this.active = true;
+  }
+
+  /**
+   * @method _onAppStateUpdate
+   * @description from AppStateInterface, called when app state updates
+   */
+  async _onAppStateUpdate(e) {
+    if( e.location.path[0] !== 'package' ) return;
+    let pkgWrapper = await this._getPackage(e.location.path[1]);
+    this.package = pkgWrapper.payload;
+
+    if( this.package.keywords ) {
+      this.$.keywords.innerHTML = this.package.keywords.map(keyword => {
+        return `<div><a href="${this._getLink('keywords', keyword)}">${keyword}</a></div>`;
+      }).join('');
+    }
+
+    if( this.package.releases ) {
+      let r = this.package.releases[this.package.releases.length - 1];
+      this.release = {
+        name : r.name,
+        description : r.body,
+        downloadUrl : r.zipballUrl
+      }
+    } else {
+      this.releases = null;
+    }
+
+    this.themeLink = this._getLink('theme');
+    this.familyLink = this._getLink('family');
+    this.specificLink = this._getLink('specific');
+  }
+
+  /**
+   * @method _getLink
+   * @description create a query url for given attr/value pair.  if no
+   * value is passed, the this.package will be used.
+   * 
+   * @param {String} attr attribute to filter in query
+   * @param {*} value value to filter on
+   * 
+   * @returns {String} url for query
+   */
+  _getLink(attr, value) {
+    let query = this._getEmptySearchQuery();
+
+    if( !value ) {
+      value = this.package[attr];
+    }
+    
+    if( value ) {
+      query.filters.push({[attr]: value});
+    }
+
+    return this._searchQueryToUrl(query);
+  }
+
+  render() {
+    if( !this.package ) return;
+    this.$.readme.innerHTML = __WEBPACK_IMPORTED_MODULE_2_markdown__["markdown"].toHTML(this.package.description || '');
+  }
+
+}
+/* unused harmony export default */
+
+
+customElements.define('app-landing-page', AppLandingPage);
+
+/***/ }),
+/* 184 */
+/***/ (function(module, exports) {
+
+module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n\n  .container > * {\n    background-color: white;\n    padding: 40px;\n  }\n\n  .overview {\n    color: var(--secondary-text-color);\n  }\n\n  .install {\n    color: var(--secondary-text-color);\n    font-family: monospace;\n    font-size: 14px;\n  }\n\n  .layout {\n    display: flex;\n  }\n  \n  h2.padded {\n    padding-top: 40px;\n  }\n\n</style>\n\n\n<h2 style=\"text-align: center\">[[package.name]]</h2>\n\n<div class=\"container\">\n\n  <div class=\"layout\">\n    <div style=\"flex: 1\">\n      <div class=\"overview\">[[package.overview]]</div>\n      <div id=\"readme\"></div>\n    </div>\n    \n    <div style=\"width: 300px\">\n      <div class=\"install\">\n        <iron-icon icon=\"chevron-right\"></iron-icon>ecosml download [[package.name]]\n      </div>\n      <div style=\"padding-bottom: 20px\"><a>Help</a></div>\n      \n      <h2 class=\"uheader dark\">Current Release</h2>\n      <div style=\"padding-bottom: 20px\" hidden$=\"[[!release]]\">\n        <div><a href$=\"[[release.downloadUrl]]\">[[release.name]]</a></div>\n        <div>[[release.description]]</div>\n      </div>\n      <div style=\"padding-bottom: 20px\" hidden$=\"[[release]]\">\n        No releases available\n      </div>\n\n      <h2 class=\"uheader blue\">Access</h2>\n      <div hidden$=\"[[!release]]\"><a href$=\"[[release.downloadUrl]]\">Download Current Release</a></div>\n      <div hidden$=\"[[!release]]\"><a href$=\"[[package.htmlUrl]]/releases\" target=\"_blank\">All Releases</a></div>\n      <div><a href$=\"[[package.htmlUrl]]\" target=\"_blank\">GitHub</a></div>\n\n      <div hidden$=\"[[!package.theme]]\">\n        <h2 class=\"uheader green padded\">Theme</h2>\n        <div hidden$=\"[[!package.theme]]\">Theme: <a href$=\"[[themeLink]]\">[[package.theme]]</a></div>\n        <div hidden$=\"[[!package.family]]\">Family: <a href$=\"[[familyLink]]\">[[package.family]]</a></div>\n        <div hidden$=\"[[!package.specific]]\">Specific: <a href$=\"[[specificLink]]\">[[package.specific]]</a></div>\n      </div>\n\n      <div hidden$=\"[[!package.keywords]]\">\n        <h2 class=\"uheader lightblue padded\">Keywords</h2>\n        <div id=\"keywords\"></div>\n      </div>\n\n      <h2 class=\"uheader dark padded\">Admin (if accesss)</h2>\n      <div><a href$=\"/edit/[[package.id]]\">Edit Package</a></div>\n    </div>\n  </div>\n\n</div>";
+
+/***/ }),
+/* 185 */
+/***/ (function(module, exports) {
+
+module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n\n  .header {\n    display: flex;\n    align-items: center;\n    background: var(--default-primary-color);\n    padding: 10px;\n  }\n  .header [main-title] {\n    flex: 1;\n    font-size: 22px;\n  }\n  .header [main-title] small {\n    font-size: 14px;\n  }\n\n  paper-material {\n    background: white;\n    display: block;\n    padding: 10px;\n    margin: 10px;\n  }\n\n  [icon=\"menu\"], [main-title] {\n    color: var(--inverse-text-color);\n  }\n</style>\n\n<div class=\"header\">\n  <!-- <paper-icon-button icon=\"menu\" on-click=\"toggleDrawer\"></paper-icon-button> -->\n  <div main-title>EcoSML <small>Ecological Spectral Model Library</small></div>\n  <a href=\"/\" inverse><paper-icon-button icon=\"home\"></paper-icon-button></a>\n</div>\n<!-- <app-drawer id=\"drawer\" swipe-open></app-drawer> -->\n\n<app-route app-routes=\"[[appRoutes]]\"></app-route>\n\n<iron-pages selected=\"[[page]]\" attr-for-selected=\"id\">\n  <app-home id=\"home\"></app-home>\n  <app-package-metadata-editor id=\"edit\"></app-package-metadata-editor>\n  <app-package-search id=\"search\"></app-package-search>\n  <app-landing-page id=\"package\"></app-landing-page>\n</iron-pages>\n\n\n";
 
 /***/ })
 /******/ ]);

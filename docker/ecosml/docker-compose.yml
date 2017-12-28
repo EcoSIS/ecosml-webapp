@@ -1,0 +1,27 @@
+version: '2'
+
+services:
+
+  server:
+    build: ../../server
+    volumes:
+      - git-data:/app/gitdata
+      - ./secrets.json:/app/secrets.json
+    ports:
+      - 3000:3000
+    environment:
+      - JWT_SECRET=${JWT_SECRET}
+      - MONGO_HOST=mongo
+      - SERVER_ASSET_DIR=dist
+
+  redis:
+    image: redis:3.2
+
+  mongo:
+    image: mongo:3.5
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
+  git-data:

@@ -1,3 +1,4 @@
+
 const {BaseModel} = require('@ucd-lib/cork-app-utils');
 const SearchService = require('../services/SearchService');
 const SearchStore = require('../stores/SearchStore');
@@ -100,7 +101,9 @@ class SearchModel extends BaseModel {
     if( !this.store.getSearchQuery() ) {
       this.store.setSearchQuery(this.getEmptyQuery());
     }
-    return  this.store.getSearchQuery();
+    let q = this.store.getSearchQuery();
+    if( q.fromUrl ) delete q.fromUrl;
+    return q;
   }
 
   setOffset(offset) {

@@ -23,7 +23,7 @@ var modern =  {
 };
 
 var ie =  {
-    entry: './public/elements/ecosml-app.js',
+    entry: ['babel-polyfill','./public/elements/ecosml-app.js'],
     output: {
         filename: 'ie-bundle.js',
         path: path.resolve(__dirname, 'dist')
@@ -35,7 +35,7 @@ var ie =  {
           use: {
             loader: 'babel-loader',
             options: {
-              presets: ['env']
+              presets: ["es2015", "stage-0"]
             }
           }
         },

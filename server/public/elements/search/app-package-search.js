@@ -56,7 +56,6 @@ class AppPackageSearch extends Mixin(PolymerElement)
 
     // flag queries that came from the url hash updating
     query.fromUrl = true;
-
     this._searchPackages(query);
   }
 
@@ -68,7 +67,7 @@ class AppPackageSearch extends Mixin(PolymerElement)
    */
   _onSearchPackagesUpdate(e) {
     if( !e.query || e.state !== 'loading' ) return;
-    if( e.query.fromUrl ) return console.log('Ignoring query from url');
+    if( e.query.fromUrl ) return;
 
     this._setWindowLocation(this._searchQueryToUrl(e.query));
   }

@@ -10,6 +10,8 @@ const uuid = require('uuid');
 const utils = require('../lib/utils')
 
 
+const METADATA_FILENAME = 'ecosml-metadata.json';
+
 class PackageModel {
 
   constructor() {
@@ -76,11 +78,16 @@ class PackageModel {
     let {response, body} = await github.createRepository(githubRepo);
     this.checkStatus(response, 201);
 
-    pkg = this.transformGithubRepoResponse(body);
+    pkg = utils.githubRepoToEcosml(body);
     pkg.id = ecosmlId;
 
     await mongo.insertPackage(pkg);
     await git.clone(pkg.name);
+
+    // write and commit ecosis-metadata.json file
+    await this.writeMetadataFile(pkg);
+    await this.commitMetadataChanges(pkg.name);
+
     return pkg;
   }
 
@@ -108,13 +115,6 @@ class PackageModel {
     if( pkg.description !== cpkg.description ) {
       let README = path.join(git.getRepoPath(pkg.name), 'README.md');
       await fs.writeFile(README, pkg.description || '');
-
-      let changes = await git.currentChangesCount(pkg.name);
-      if( changes > 0 ) {
-        await git.addAll(pkg.name);
-        await git.commit(pkg.name, 'Updating readme');
-        await git.push(pkg.name);
-      }
     }
     
     // update package overview in github
@@ -136,7 +136,7 @@ class PackageModel {
         let response = await github.getRepository(pkg.name);
         body = response.body;
       }
-      gpkg = this.transformGithubRepoResponse(body);
+      gpkg = utils.githubRepoToEcosml(body);
     }
 
     this.UPDATE_ATTRIBUTES.forEach(attr => {
@@ -147,8 +147,13 @@ class PackageModel {
 
     // now save changes in mongo
     await mongo.updatePackage(pkg.name, gpkg);
+    pkg = await mongo.getPackage(pkg.name);
 
-    return mongo.getPackage(pkg.name);
+    // write and commit ecosis-metadata.json file or other changes
+    await this.writeMetadataFile(pkg);
+    await this.commitMetadataChanges(pkg.name);
+
+    return pkg;
   }
 
   /**
@@ -268,25 +273,47 @@ class PackageModel {
     return pkg;
   }
 
-  transformGithubRepoResponse(repo) {
-    if( typeof repo === 'string' ) {
-      repo = JSON.parse(repo);
-    }
+  /**
+   * @method writeMetadataFile
+   * @description given a ecosml repo object, write the git repo metadata file
+   * 
+   * @param {Object} repo ecosml repo object
+   * @returns {Promise}
+   */
+  async writeMetadataFile(repo) {
+    let metadata = utils.ecosmlToMetadataFile(repo);
+    let filepath = path.join(git.getRepoPath(repo.name), METADATA_FILENAME);
+    await fs.writeFile(filepath, JSON.stringify(metadata, '  ', '  '));
+  }
 
-    return {
-      githubId : repo.id,
-      cloneUrl : repo.clone_url,
-      createdAt : new Date(repo.created_at),
-      overview : repo.description,
-      downloadsUrl : repo.downloads_url,
-      fullName : repo.full_name,
-      gitUrl : repo.git_url,
-      htmlUrl : repo.html_url,
-      name : repo.name,
-      private : repo.private,
-      sshUrl : repo.ssh_url,
-      updatedAt : new Date(repo.updated_at),
-      pushedAt : new Date(repo.pushed_at)
+  /**
+   * @method readMetadataFile
+   * @description given a ecosml repo object, write the git repo metadata file
+   * 
+   * @param {String} repoName repo to read. must be already pulled to disk
+   * @returns {Promise}
+   */
+  async readMetadataFile(repoName) {
+    let filepath = path.join(git.getRepoPath(repoName), METADATA_FILENAME);
+    let metadata = await fs.readFile(filepath, 'utf-8');
+    return JSON.parse(metadata || {});
+  }
+
+  /**
+   * @method commitMetadataChanges
+   * @description see if changes were made, if so, commit them
+   * 
+   * @param {String} repoName repo to commit
+   * @param {String} msg option message
+   * 
+   * @returns {Promise}
+   */
+  async commitMetadataChanges(repoName, msg) {
+    let changes = await git.currentChangesCount(repoName);
+    if( changes > 0 ) {
+      await git.addAll(repoName);
+      await git.commit(repoName, msg || 'Updating package metadata');
+      await git.push(repoName);
     }
   }
 }

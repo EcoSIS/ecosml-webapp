@@ -5,11 +5,11 @@ These files expect this repo checkout out to /opt/ecosml-webapp.  Then symlink t
 Next, tell systemd to start on boot
 
 ```
-> sudo systemctl enable ecosml.service
+> sudo systemctl enable /opt/ecosml-webapp/docker/systemd/ecosml.service
 ```
 
 Then
 
 ```bash
-> sudo service [start|stop] ecosml
+> sudo systemctl [start|stop] ecosml
 ```

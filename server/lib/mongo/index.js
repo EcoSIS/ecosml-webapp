@@ -31,6 +31,20 @@ class MongoDB {
     return this.db.collection(config.mongodb.collections.package);
   }
 
+  async createPackageIndexes() {
+    let collection = await this.packagesCollection();
+    let indexes = config.mongodb.indexes.package;
+
+    let results = [];
+    for( var i = 0; i < indexes.length; i++ ) {
+      let index = indexes[i];
+      let result = await collection.createIndex(index.index, index.options);
+      results.push(result);
+    }
+
+    return results;
+  }
+
   async recreatePackageIndexes() {
     let collection = await this.packagesCollection();
     let indexes = config.mongodb.indexes.package;

@@ -8,11 +8,10 @@ services:
       - git-data:/app/gitdata
       - ../secrets.json:/app/secrets.json
     ports:
-      - 3000:3000
+      - 3001:3000
     environment:
       - JWT_SECRET=${JWT_SECRET}
       - SERVER_ASSET_DIR=dist
-      - GITHUB_ORG=ecosml
 
   redis:
     image: redis:3.2

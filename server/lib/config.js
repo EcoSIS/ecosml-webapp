@@ -2,7 +2,7 @@ const env = process.env;
 const path = require('path');
 const secrets = require('../secrets');
 
-const mongoHost = env.MONGO_HOST || '127.0.0.1';
+const mongoHost = env.MONGO_HOST || 'mongo';
 
 module.exports = {
 
@@ -75,7 +75,7 @@ module.exports = {
 
   github : {
     access : secrets.github,
-    org : 'ecosml',
+    org : env.GITHUB_ORG || 'ecosml-dev',
     fsRoot : env.GITHUB_FS_ROOT || path.join(__dirname, '..', 'gitdata'),
     default_license : 'mit'
   },

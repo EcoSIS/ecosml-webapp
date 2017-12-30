@@ -22,7 +22,7 @@ class AppUtils {
     return str.replace(/_([a-z])/g, (g) => { return g[1].toUpperCase(); });
   }
 
-  ecosmlToMetadataFile() {
+  ecosmlToMetadataFile(repo) {
     return {
       name : repo.name,
       overview : repo.overview,

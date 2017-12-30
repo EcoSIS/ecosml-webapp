@@ -1,8 +1,10 @@
 const config = require('./config');
 const request = require('request');
 const Logger = require('./logger');
+const parseLinkHeader = require('parse-link-header');
 
 const ORG = config.github.org;
+const RAW_ROOT = 'https://raw.githubusercontent.com';
 const API_ROOT = 'https://api.github.com';
 const ACCEPT_MIME_TYPE = 'application/vnd.github.v3+json'
 const GITHUB_ACCESS = config.github.access;
@@ -10,12 +12,35 @@ const GITHUB_ACCESS = config.github.access;
 class GithubApi {
   
   /**
-   * Can use app account here
+   * @method listRepositories
+   * @description get list of all repositories for org
+   * https://developer.github.com/v3/repos/#list-organization-repositories
+   * 
+   * @returns {Promise}
    */
-  async listRepositories() {
-    return await this.request({
-      uri : `/orgs/${ORG}/repos`
-    });
+  async listRepositories(org) {
+    if( !org ) org = ORG;
+    let last = false;
+    let page = 1;
+    let repos = [];
+
+    while( !last ) {
+      let {response} = await this.request({
+        uri : `/orgs/${org}/repos`,
+        qs : {page}
+      });
+
+      let link = parseLinkHeader(response.headers.link) || {};
+      if( !link.last ) last = true;
+
+      let results = JSON.parse(response.body);
+      if( !results.length ) last = true;
+      else repos = repos.concat(results);
+
+      page++;
+    }
+
+    return repos;
   }
 
   /**
@@ -100,6 +125,23 @@ class GithubApi {
     return await request({
       method : 'DELETE',
       uri : `/repos/${ORG}/${repoName}/releases/${releaseName}`
+    });
+  }
+
+  getRawFile(repoName, filePath, branch = 'master') {
+    let options = {
+      uri : `${RAW_ROOT}/${ORG}/${repoName}/${branch}/${filePath}`,
+      headers : {
+        'User-Agent' : 'EcoSML Webapp'
+      }
+    }
+
+    return new Promise((resolve, reject) => {
+      request(options, (error, response, body) => {
+        if( error ) return reject(error);
+        Logger.info(`GitHub API request: ${options.method || 'GET'} ${options.uri}, request remaining: ${response.headers['x-ratelimit-remaining']}`);
+        resolve({response, body});
+      });
     });
   }
 

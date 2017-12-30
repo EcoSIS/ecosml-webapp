@@ -1,5 +1,7 @@
 const mongo = require('../lib/mongo');
+const github = require('../lib/github');
 const logger = require('../lib/logger');
+const utils = require('../lib/utils');
 
 class SearchModel {
 
@@ -51,6 +53,35 @@ class SearchModel {
     }
 
     return result;
+  }
+
+  /**
+   * @method reindexRepositories
+   * @description
+   */
+  async reindexRepositories() {
+    let repos = await github.listRepositories();
+    let inserted = [repos[i].name];
+
+    for( var i = 0; i < repos.length; i++ ) {
+      // have to access api for release info
+      let repo = await github.getRepository(repos[i].name);
+      repo = utils.githubRepoToEcosml(repo);
+
+      // assign any additional metadata fields
+      let {response} = await github.getRawFile(repo.name, 'ecosml-metadata.json');
+      if( response.body ) {
+        let metadata = JSON.parse(response.body);
+        for( var key in metadata ) {
+          if( !repo[key] ) repo[key] = metadata[key];
+        }
+      }
+
+      await mongo.insertPackage(repo);
+      inserted.push(repo.name);
+    }
+
+    return inserted;
   }
 
   async recreateIndex() {

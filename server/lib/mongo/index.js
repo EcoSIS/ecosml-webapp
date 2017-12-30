@@ -95,9 +95,13 @@ class MongoDB {
     return await collection.find({}, {name: 1, id: 1}).toArray();
   }
 
+  /**
+   * @method insertPackage
+   * @description insert or update a package
+   */
   async insertPackage(pkg) {
     let collection = await this.packagesCollection();
-    return await collection.insert(pkg);
+    return await collection.update({id: pkg.id}, pkg, {upsert: true});
   }
 
   /**

@@ -2,6 +2,7 @@ import {Element as PolymerElement} from "@polymer/polymer/polymer-element"
 import "@polymer/paper-input/paper-input"
 import "@polymer/paper-input/paper-textarea"
 import "@polymer/paper-toast/paper-toast"
+import "@polymer/paper-tabs/paper-tabs"
 
 import template from "./app-package-metadata-editor.html"
 import PackageInterface from "../interfaces/PackageInterface"
@@ -10,6 +11,7 @@ import "./app-markdown-editor"
 import "./app-keyword-input"
 import "./app-theme-input"
 import "./app-create-release"
+import "./app-text-input"
 
 
 class AppPackageMetadataEditor extends Mixin(PolymerElement)

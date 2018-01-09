@@ -1,0 +1,27 @@
+<style include="shared-styles">
+  :host {
+    display: inline-block;
+  }
+
+  input {
+    box-sizing: border-box;
+    width: 100%;
+    display: block;
+  }
+
+  .label {
+    font-weight: var(--font-weight-heavy);
+  }
+</style>
+
+<div class="label">
+  <slot name="label"></slot>
+  <span>[[label]]</span>
+</div>
+
+<input type$="[[type]]" id="input" on-change="_onChange" on-keyup="_onKeyUp" />
+
+<div class="help">
+  <slot name="help"></slot>
+  <span>[[help]]</span>
+</div>

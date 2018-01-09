@@ -1,1 +1,2 @@
 require('./package');
+require('./search');

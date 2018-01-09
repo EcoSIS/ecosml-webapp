@@ -26,6 +26,17 @@
     --paper-toast-background-color: var(--default-primary-color);
     --paper-toast-color: var(--inverse-text-color);
   }
+
+  app-text-input {
+    display: block;
+  }
+
+  paper-tabs {
+    --paper-tabs-selection-bar-color: var(--default-primary-color);
+  }
+  paper-tab {
+    --paper-tab-ink: var(--default-primary-color);
+  }
 </style>
 
 <paper-toast id="savingToast" duration="0">
@@ -45,24 +56,33 @@
   <div class="narrow-container">
     <h1>[[currentAction]] Package</h1>
 
+    <paper-tabs>
+      <paper-tab>Basic Information</paper-tab>
+      <paper-tab disabled$="[[creating]]">Details</paper-tab>
+      <paper-tab disabled$="[[creating]]">Releases</paper-tab>
+    </paper-tabs>
+
     <app-title-card id="basicInformation">
-      <div slot="header">
-        Basic Information
-      </div>
       <div slot="content">
-        <paper-input 
+
+        <app-text-input  
           id="name" 
           label="Name" 
           on-keyup="_updateNamePreview" 
           on-change="_updateNamePreview" 
+          help="[[namePreview]]"
           hidden$="[[!creating]]">
-        </paper-input>
-        <div hidden$="[[!creating]]">[[namePreview]]</div>
+        </app-text-input>
+
         <div hidden$="[[creating]]" class="help">Package Name</div>
         <h2 hidden$="[[creating]]">[[namePreview]]</h2>
 
-        <paper-input id="overview" label="[[schema.overview.label]]" on-change="_onDataChange"></paper-input>
-        <div class="help">[[schema.overview.description]]</div>
+        <app-text-input 
+          id="overview" 
+          label="[[schema.overview.label]]" 
+          on-change="_onDataChange"
+          help="[[schema.overview.description]]">
+        </app-text-input>
 
         <div style="text-align: right">
           <paper-button 

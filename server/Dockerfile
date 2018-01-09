@@ -1,13 +1,14 @@
 FROM node:8.7
 
-RUN mkdir app
-COPY ./dist /app/dist
-COPY ./package* /app/
-COPY ./index.js /app/
-COPY ./controllers /app/controllers
-COPY ./lib /app/lib
-COPY ./models /app/models
+RUN mkdir server
+COPY ./dist /server/dist
+COPY ./package* /server/
+COPY ./index.js /server/
+COPY ./controllers /server/controllers
+COPY ./lib /server/lib
+COPY ./models /server/models
 
-RUN cd app && npm install
+RUN cd server && npm install
+RUN npm install -g mocha
 
-CMD node app
+CMD node server

@@ -3,10 +3,11 @@ version: '2'
 services:
 
   server:
-    image: node:8.7
+    build: ../../server
     volumes:
-      - ../../server:/app
-      - ../secrets.json:/app/secrets.json
+      - ../../server:/server
+      - ../../tests:/server-tests
+      - ../secrets.json:/server/secrets.json
     ports:
       - 3000:3000
     environment:

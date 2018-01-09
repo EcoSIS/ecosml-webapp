@@ -5,8 +5,8 @@ services:
   server:
     build: ../../server
     volumes:
-      - git-data:/app/gitdata
-      - ../secrets.json:/app/secrets.json
+      - git-data:/server/gitdata
+      - ../secrets.json:/server/secrets.json
     ports:
       - 3000:3000
     environment:

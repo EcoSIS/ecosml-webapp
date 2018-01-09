@@ -10,11 +10,12 @@ class SearchModel {
    * @description Search for packages
    * 
    * @param {Object} query standard mongodb query 
-   * @param {Object} options options for query 
-   * @param {Number} options.offset query offset 
-   * @param {Number} options.limit query limit 
-   * @param {Object} options.sort standard mongodb sort object 
-   * @param {Object} projection standard mongodb projection object
+   * @param {String} query.text text search
+   * @param {Array} query.filters mongodb filters array
+   * @param {Number} query.offset query offset 
+   * @param {Number} query.limit query limit 
+   * @param {Object} query.sort standard mongodb sort object 
+   * @param {Object} query.projection standard mongodb projection object
    * 
    * @returns {Promise} mongodb query promise, resolves to array
    */
@@ -35,7 +36,7 @@ class SearchModel {
     }
 
     logger.info('package search', mongoQuery, mongoOptions);
-    let result = await mongo.search(mongoQuery, mongoOptions, {});
+    let result = await mongo.search(mongoQuery, mongoOptions, query.projection || {});
 
     // strip out any active filters
     if( query.filters && query.filters.length > 0 ) {
@@ -71,10 +72,16 @@ class SearchModel {
     return inserted;
   }
 
+  /**
+   * @method reindexRepository
+   * @description repository to reindex from Github
+   * 
+   * @param {String} repoName 
+   */
   async reindexRepository(repoName) {
     // have to access api for release info
     let repo = await github.getRepository(repoName);
-    repo = utils.githubRepoToEcosml(repo);
+    repo = utils.githubRepoToEcosml(JSON.parse(repo.body));
 
     // assign any additional metadata fields
     let {response} = await github.getRawFile(repo.name, 'ecosml-metadata.json');
@@ -84,10 +91,13 @@ class SearchModel {
     }
 
     await mongo.insertPackage(repo);
-
     return repo;
   }
 
+  /**
+   * @method recreateIndex
+   * @description recreate MongoDB search indexes
+   */
   async recreateIndex() {
     // TODO, check auth
     return await mongo.recreatePackageIndexes();

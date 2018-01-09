@@ -10,10 +10,23 @@
         display: none !important;
       }
 
-      input, select, button {
+      input, select, button, textarea {
         font-size        : var(--font-size);
         font-weight      : var(--font-weight);
         color            : var(--text-primary-color);
+      }
+
+      input, textarea {
+        border-radius: 4px;
+        background-color: white;
+        border: 1px solid var(--dark-background-color);
+        padding: 9px;
+        margin: 3px 1px;
+      }
+
+      input:focus {
+        border: 1px solid var(--default-primary-color);
+        outline: none;
       }
 
       .help {

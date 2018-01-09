@@ -17,6 +17,13 @@ describe('Github API Request Methods', function() {
     repo = JSON.parse(body);
   });
 
+  it(`should get a raw README file from ${repo.name}`, async () => {
+    let {response, body} = await github.getRawFile(repo.name, 'README.md');
+
+    assert.equal(response.statusCode, 200);
+    assert.equal(response.body.indexOf(repo.description) > -1, true);
+  });
+
   it(`should delete a repo ${repo.name}`, async () => {
     let {response, body} = await github.deleteRepository(repo.name);
     assert.equal(response.statusCode, 204);

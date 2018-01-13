@@ -173,7 +173,10 @@ class GithubApi {
   
     return new Promise((resolve, reject) => {
       request(options, (error, response, body) => {
-        if( error ) return reject(error);
+        if( error ) {
+          Logger.error(`GitHub API request error: ${options.method || 'GET'} ${options.uri}`, error);
+          return reject(error);
+        }
         Logger.info(`GitHub API request: ${options.method || 'GET'} ${options.uri}, request remaining: ${response.headers['x-ratelimit-remaining']}`);
         resolve({response, body});
       });

@@ -29,6 +29,10 @@ module.exports = {
     appRoutes : ['package', 'search', 'edit', 'create']
   },
 
+  ecosis : {
+    host : env.ECOSIS_HOST || 'http://localhost:5000'
+  },
+
   mongodb : {
     host : mongoHost,
     url : `mongodb://${mongoHost}:27017/ecosml`,

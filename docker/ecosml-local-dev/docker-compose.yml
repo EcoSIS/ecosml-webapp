@@ -12,18 +12,22 @@ services:
       - 3000:3000
     environment:
       - JWT_SECRET=${JWT_SECRET}
-      - MONGO_HOST=mongo
+      - ECOSIS_HOST=${ECOSIS_HOST}
+      - GITHUB_ORG=ecosml-dev
     command: tail -f /dev/null
 
   redis:
     image: redis:3.2
+    volumes:
+        - redis-data:/data
 
   mongo:
     image: mongo:3.5
-    ports:
-      - 27017:27017
+    # ports:
+    #   - 27017:27017
     volumes:
       - mongo-data:/data/db
 
 volumes:
   mongo-data:
+  redis-data:

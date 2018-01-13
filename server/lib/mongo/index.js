@@ -125,19 +125,36 @@ class MongoDB {
     });
   }
 
-  async getPackage(packageNameOrId) {
+  /**
+   * @method getPackage
+   * @description get a package by name or id
+   * 
+   * @param {String} packageNameOrId
+   * @param {Object} project
+   * 
+   * @returns {Promise} resolves to mongo response
+   */
+  async getPackage(packageNameOrId, projection = {}) {
     let collection = await this.packagesCollection();
-    return await collection.findOne({
+    return collection.findOne({
       $or : [
         {name: packageNameOrId},
         {id : packageNameOrId}
       ]
-    });
+    }, projection);
   }
 
+  /**
+   * @method removePackage
+   * @description remove a package by name or id
+   * 
+   * @param {String} packageNameOrId
+   * 
+   * @returns {Promise} resolves to mongo response
+   */
   async removePackage(packageNameOrId) {
     let collection = await this.packagesCollection();
-    return await collection.remove({
+    return collection.remove({
       $or : [
         {name: packageNameOrId},
         {id : packageNameOrId}

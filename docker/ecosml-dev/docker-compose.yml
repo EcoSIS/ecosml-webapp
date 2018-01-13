@@ -11,7 +11,11 @@ services:
       - 3001:3000
     environment:
       - JWT_SECRET=${JWT_SECRET}
+      - ECOSIS_HOST=${ECOSIS_HOST}
       - SERVER_ASSET_DIR=dist
+      - GITHUB_ORG=ecosml-dev
+    volumes:
+      - redis-data:/data
 
   redis:
     image: redis:3.2
@@ -24,3 +28,4 @@ services:
 volumes:
   mongo-data:
   git-data:
+  redis-data:

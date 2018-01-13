@@ -24,7 +24,8 @@ process.on('uncaughtException', e => {
 const RedisStore = require('connect-redis')(session); 
 app.use(session({
     store: new RedisStore({
-      host : 'redis'
+      host : 'redis',
+      prefix : 'session-'
     }),
     resave : false,
     saveUninitialized : false,

@@ -2,6 +2,7 @@ const router = require('express').Router();
 const config = require('../lib/config');
 const jwt = require('jsonwebtoken');
 const {URL} = require('url'); 
+const model = require('../models/AuthModel');
 
 router.get('/login', (req, res) => {
   let hash = req.query.hash || '';
@@ -40,5 +41,8 @@ router.get('/jwtLogin', (req, res) => {
 
   res.redirect(`${config.server.url}/#${hash}`);
 });
+
+model.reload()
+     .catch(e => Logger.error('Falied to reload orgs from ', config.ecosis.host, e));
 
 module.exports = router;

@@ -1,6 +1,7 @@
 const request = require('request');
 const Logger = require('./logger');
 const config = require('./config');
+const jwt = require('jsonwebtoken');
 
 const HOST = config.ecosis.host;
 
@@ -47,6 +48,22 @@ class CkanApi {
   async getOrganizationUsers(orgName) {
     let org = await this.getOrganization(orgName);
     return org.users.map(user => { return {username: user.name, role: user.capacity} });
+  }
+
+  async login(username, password) {
+    let token = jwt.sign(
+      {username, password}, 
+      config.server.jwt.secret, 
+      { expiresIn: 60 * 60 }
+    );
+
+    let {body} = await this._request({
+      method : 'POST',
+      uri : HOST+'/ecosis/user/remoteLogin',
+      form: {token}
+    });
+
+    return JSON.parse(body);
   }
 
   _request(options) {

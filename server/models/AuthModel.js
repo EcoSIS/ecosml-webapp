@@ -2,10 +2,11 @@ const ckan = require('../lib/ckan');
 const config = require('../lib/config');
 const Logger = require('../lib/logger');
 const redis = require('redis');
+const request = require('request');
 const mongo = require('../lib/mongo');
 const {promisify} = require('util');
 
-const redisMethods = ['get', 'keys', 'set', 'exists', 'flushdb'];
+const redisMethods = ['get', 'del', 'keys', 'set', 'exists', 'flushdb'];
 
 class AuthModel {
 
@@ -31,6 +32,19 @@ class AuthModel {
   }
 
   /**
+   * @method login
+   * @description login via EcoSIS
+   * 
+   * @param {String} username
+   * @param {String} password
+   * 
+   * @returns {Promise}
+   */
+  login(username, password) {
+    return ckan.login(username, password);
+  }
+
+  /**
    * @method reload
    * @description reload redis.  this clears sessions as well.
    * 
@@ -42,7 +56,11 @@ class AuthModel {
     let orgs = [];
 
     // now flush
-    await this.client.flushdb();
+    let keys = await this.client.keys(`${this.REDIS_ORG_PREFIX}-*`);
+    keys = keys.concat(await this.client.keys(`${this.REDIS_AUTH_PREFIX}-*`));
+    for( var i = 0; i < keys.length; i++ ) {
+      await this.client.del(keys[i]);
+    }
 
     for( let i = 0; i < orgNames.length; i++ ) {
       let org = await ckan.getOrganization(orgNames[i]);
@@ -62,11 +80,56 @@ class AuthModel {
 
       for( let j = 0; j < users.length; j++ ) {
         let key = this._createRedisKey(org.name, users[j].username, users[j].role);
-        await this.client.set(key, true);
+        let data = {
+          org : org.name, 
+          user : users[j].username,
+          role : users[j].role
+        }
+        await this.client.set(key, JSON.stringify(data));
       }
     }
   }
   
+  async reloadOrg(orgName) {
+    // grab org from ecosis
+    let org = await ckan.getOrganization(orgName);
+    if( !org ) return;
+
+    // remove org keys
+    await this.client.del(this._createOrgRedisKey(orgName));
+    // find role keys to remove
+    let searchKey = this._createRedisKey(org, '*', '*');
+    let keys = await this.client.keys(searchKey);
+    for( let i = 0; i < keys.length; i++ ) {
+      await this.client.del(keys[i]);
+    }
+
+    // if org is not active, we are done
+    if( org.state !== 'active' ) return;
+
+    // create org object
+    let users = org.users;
+    org = {
+      id : org.id,
+      name : org.name,
+      displayName : org.display_name,
+      description : org.description,
+      logo : org.image_display_url
+    };
+    await this.client.set(this._createOrgRedisKey(org.name), JSON.stringify(org));
+
+    // add user roles
+    for( let j = 0; j < users.length; j++ ) {
+      let key = this._createRedisKey(org.name, users[j].name, users[j].capacity);
+      let data = {
+        org : org.name, 
+        user : users[j].username,
+        role : users[j].capacity
+      }
+      await this.client.set(key, JSON.stringify(data));
+    }
+  }
+
   /**
    * @method hasAccess
    * @description check if user has access to package
@@ -157,6 +220,64 @@ class AuthModel {
   }
 
   /**
+   * @method getUserOrgs
+   * @description get orgs for a user
+   * 
+   * @param {String} username name of user to get groups for
+   * @param {Boolean} details include org details?
+   * 
+   * @return {Promise} resolves to Array
+   */
+  async getUserOrgs(username) {
+    let orgs = {};
+    let keys;
+
+    let isAdmin = await this.isAdmin(username);
+    if( isAdmin ) {
+      let searchKey = this._createOrgRedisKey('*');
+      keys = await this.client.keys(searchKey);
+
+      for( var i = 0; i < keys.length; i++ ) {
+        let org = JSON.parse(await this.client.get(keys[i]));
+        resp.push({
+          roles : ['admin', 'site-admin'],
+          name : org.name,
+          id : org.id,
+          displayName : org.displayName
+        });
+      }
+
+      return orgs;
+    }
+
+    let searchKey = this._createRedisKey('*', username, '*');
+    keys = await this.client.keys(searchKey);
+
+    for( var i = 0; i < keys.length; i++ ) {
+      let key = JSON.parse(await this.client.get(keys[i]));
+      if( orgs[key.org] ) orgs[key.org].push(key.role);
+      else orgs[key.org] = [key.role];
+    }
+
+    let resp = [];
+    keys = Object.keys(orgs);
+
+    for( var i = 0; i < keys.length; i++ ) {
+      let key = this._createOrgRedisKey(keys[i]);
+      let org = JSON.parse(await this.client.get(key));
+
+      resp.push({
+        roles : orgs[org.name],
+        name : org.name,
+        id : org.id,
+        displayName : org.displayName
+      });
+    }
+
+    return resp;
+  }
+
+  /**
    * @method _createRedisKey
    * @description create a key for org, user and role
    * 
@@ -172,6 +293,19 @@ class AuthModel {
 
   _createOrgRedisKey(orgName) {
     return `${this.REDIS_ORG_PREFIX}-${orgName}`;
+  }
+
+  _request(options) {
+    return new Promise((resolve, reject) => {
+      request(options, (error, response, body) => {
+        if( error ) {
+          Logger.error(`AuthModel request error: ${options.method || 'GET'} ${options.uri}`, error);
+          return reject(error);
+        }
+        Logger.info(`AuthModel request: ${options.method || 'GET'} ${options.uri}`);
+        resolve({response, body});
+      });
+    });
   }
 
 }

@@ -38,7 +38,8 @@ app.use(session({
  */
 
 // parse application/json
-app.use(bodyParser.json())
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded())
 
 /**
  * Setup static routes for webapp

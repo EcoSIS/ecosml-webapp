@@ -3,17 +3,7 @@ const config = require('../lib/config');
 const jwt = require('jsonwebtoken');
 const {URL} = require('url'); 
 const model = require('../models/AuthModel');
-
-router.get('/login', (req, res) => {
-  let hash = req.query.hash || '';
-  let returnToUrl = `${config.server.url}/auth/jwtLogin?hash=${hash}`;
-
-  let redirectUrl = new URL(config.server.auth.redirect);
-  redirectUrl.searchParams.set('returnTo', returnToUrl);
-  redirectUrl.searchParams.set('label', config.server.label);
-  
-  res.redirect(redirectUrl.href);
-});
+const Logger = require('../lib/logger');
 
 router.get('/user', (req, res) => {
   res.json({
@@ -21,25 +11,59 @@ router.get('/user', (req, res) => {
   });
 });
 
-router.get('/jwtLogin', (req, res) => {
-  let token = req.query.jwt;
-  let hash = req.query.hash || '';
+router.post('/login', (req, res) => {
+  let username = req.body.username;
+  let password = req.body.password;
+  login(username, password, req, res);
+});
 
-  try {
-    token = jwt.verify(token, config.server.jwt.secret);
-    // var issuer = token.iss;
-    // if( issuer !== config.jwt.issuer ) {
-    //   console.log('Invalid JWT Token:', `Invalid issuer: ${issuer}/${config.jwt.issuer}`);
-    //   return false;
-    // }
-  } catch(e) {
-    console.log('Invalid JWT Token:', e.message);
-    return res.redirect(`${config.server.url}/#login-failed`);
+router.get('/login', (req, res) => {
+  let username = req.query.username;
+  let password = req.query.password;
+  login(username, password, req, res);
+});
+
+async function login(username, password, req, res) {
+  let result = await model.login(username, password);
+
+  if( !result.loggedIn ) {
+    Logger.info(`Failed login attempt: ${username}`);
+    return res.json({
+      error: true,
+      message:  result.message
+    });
   }
   
-  req.session.user = token;
+  req.session.username = result.username;
+  let orgs = await model.getUserOrgs(result.username);
 
-  res.redirect(`${config.server.url}/#${hash}`);
+  Logger.info(`Successful login: ${username}`);
+  res.json({
+    success: true,
+    username : result.username,
+    organizations : orgs
+  });
+}
+
+router.get('/organizations', async (req, res) => {
+  let username = req.session.user;
+  let orgs = await model.getUserOrgs(result.user);
+  res.json(orgs);
+});
+
+router.post('/webhook/organization-update', async (req, res) =>{
+  let token = req.body.token;
+  res.json({success: true});
+
+  let payload = jwt.verify(token, config.server.jwt.secret);
+
+  try {
+    await model.reloadOrg(payload.organizationId);
+    Logger.info(`Updated org from webhook notification: ${payload.organizationId}`);
+  } catch(e) {
+    Logger.error(`Error Updating org from webhook notification: ${payload.organizationId}`, e);
+  }
+  
 });
 
 model.reload()

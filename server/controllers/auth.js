@@ -11,6 +11,11 @@ router.get('/user', (req, res) => {
   });
 });
 
+router.get('/logout', (req, res) => {
+  req.session.destroy();
+  res.json({success: true});
+});
+
 router.post('/login', (req, res) => {
   let username = req.body.username;
   let password = req.body.password;

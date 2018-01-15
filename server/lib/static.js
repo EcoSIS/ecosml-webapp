@@ -13,7 +13,7 @@ module.exports = function(app) {
     appRoutes : config.server.appRoutes,
     getConfig : (req, res) => {
       return {
-        user : null,
+        user : req.session.username || null,
         appRoutes : config.server.appRoutes
       }
     }

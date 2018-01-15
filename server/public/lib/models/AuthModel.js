@@ -11,6 +11,15 @@ class AuthModel extends BaseModel {
     this.service = AuthService;
       
     this.register('AuthModel');
+
+    if( typeof APP_CONFIG !== 'undefined' && APP_CONFIG.user) {
+      this.store.setAuthLoaded({username: APP_CONFIG.user});
+      this.getUserOrganizations();
+    }
+  }
+
+  get() {
+    return this.store.data.auth;
   }
 
   login(username, password) {
@@ -22,7 +31,7 @@ class AuthModel extends BaseModel {
   }
 
   async getUserOrganizations(reload=false) {
-    if( reload ) {
+    if( reload || this.store.data.organizations.state !== 'loaded' ) {
       this.service.getUserOrgs();
     }
     

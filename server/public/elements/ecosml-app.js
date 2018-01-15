@@ -29,6 +29,7 @@ import "./management/app-package-metadata-editor"
 import "./search/app-package-search"
 import "./app-home"
 import "./landing/app-landing-page"
+import "./account/app-user-account"
 
 // element imports
 import AppStateInterface from "./interfaces/AppStateInterface"

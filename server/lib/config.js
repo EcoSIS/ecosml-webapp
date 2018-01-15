@@ -26,7 +26,8 @@ module.exports = {
       secret : env.SESSION_SECRET || 'not set'
     },
 
-    appRoutes : ['package', 'search', 'edit', 'create']
+    appRoutes : ['package', 'search', 'edit', 
+    'create', 'account']
   },
 
   ecosis : {

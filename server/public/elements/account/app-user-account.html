@@ -1,0 +1,12 @@
+<style include="shared-styles">
+  :host {
+    display : block
+  }
+</style>
+
+<iron-pages selected="[[view]]" attr-for-selected="id">
+  <app-login id="login"></app-login>
+  <div id="account">
+    <h2>Hello [[username]]</h2>
+  </div>
+</iron-pages>

@@ -32,7 +32,7 @@ export default class AppUserAccount extends Mixin(PolymerElement)
 
   constructor() {
     super();
-
+    this.active = true;
     this._onAuthUpdate(this._getAuthState());
   }
 

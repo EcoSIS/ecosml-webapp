@@ -47,6 +47,7 @@ class AuthStore extends BaseStore {
       state : this.AUTH_STATES.LOGGED_IN
     });
 
+    if( !payload.organizations ) return;
     this._setOrgState({
       payload : payload.organizations,
       state : this.STATE.LOADED

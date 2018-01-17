@@ -7,7 +7,7 @@ module.exports = subclass =>
     }
 
     _login(username, password) {
-      return this.AuthModel.login();
+      return this.AuthModel.login(username, password);
     }
 
     _logout() {

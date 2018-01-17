@@ -14,11 +14,23 @@ class AuthService extends BaseService {
       url : `${this.baseUrl}/login`,
       fetchOptions : {
         method : 'POST',
-        body : {username, password}
+        headers : {
+          'Content-Type': 'application/json'
+        },
+        body : JSON.stringify({username, password})
       },
       onLoading : request => this.store.setAuthLoading(request, username),
       onLoad : result => this.store.setAuthLoaded(result.body),
       onError : error => this.store.setAuthError(error)
+    });
+  }
+
+  async logout() {
+    return this.request({
+      url : `${this.baseUrl}/logout`,
+      onLoading : request => {},
+      onLoad : result => this.store.logout(),
+      onError : error => console.error(error)
     });
   }
 

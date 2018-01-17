@@ -27,7 +27,7 @@ class AuthModel extends BaseModel {
   }
 
   logout() {
-    this.store.logout();
+    return this.service.logout();
   }
 
   async getUserOrganizations(reload=false) {

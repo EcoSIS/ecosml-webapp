@@ -3,11 +3,12 @@ import template from "./app-landing-page.html"
 import { markdown } from "markdown";
 
 import AppStateInterface from "../interfaces/AppStateInterface"
+import AuthInterface from "../interfaces/AuthInterface"
 import PackageInterface from "../interfaces/PackageInterface"
 import SearchInterface from "../interfaces/SearchInterface"
 
 export default class AppLandingPage extends Mixin(PolymerElement)
-  .with(EventInterface, AppStateInterface, PackageInterface, SearchInterface) {
+  .with(EventInterface, AppStateInterface, PackageInterface, SearchInterface, AuthInterface) {
 
   static get template() {
     return template;
@@ -35,6 +36,14 @@ export default class AppLandingPage extends Mixin(PolymerElement)
       specificLink :  {
         type : String,
         value : ''
+      },
+      username : {
+        type : String,
+        value : ''
+      },
+      userHasWriteAccess : {
+        type : Boolean,
+        value : false
       }
     }
   }
@@ -42,6 +51,7 @@ export default class AppLandingPage extends Mixin(PolymerElement)
   constructor() {
     super();
     this.active = true;
+    this._onAuthUpdate(this._getAuthState());
   }
 
   /**
@@ -73,6 +83,23 @@ export default class AppLandingPage extends Mixin(PolymerElement)
     this.themeLink = this._getLink('theme');
     this.familyLink = this._getLink('family');
     this.specificLink = this._getLink('specific');
+
+    this.userHasWriteAccess = false;
+    if( !this.username ) return;
+
+    let orgs = await this._getUserOrganizations();
+    console.log(orgs);
+  }
+
+  /**
+   * @method _onAuthUpdate
+   * @description from AuthInterface, called when auth updates
+   * 
+   * @param {Object} e event payload
+   */
+  _onAuthUpdate(e){
+    console.log(1, e)
+    this.username = e.username || '';
   }
 
   /**

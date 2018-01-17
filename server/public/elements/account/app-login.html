@@ -8,11 +8,11 @@
   <h4>Login</h4>
 
   <div>
-    <app-text-input label="Username"></app-text-input>
-    <app-text-input label="Password" type="password"></app-text-input>
+    <app-text-input id="username" label="Username"></app-text-input>
+    <app-text-input id="password" label="Password" type="password"></app-text-input>
   </div>
 
   <div>
-    <paper-button>Login</paper-button>
+    <paper-button on-click="_onLoginClicked">Login</paper-button>
   </div>
 </div>

@@ -87,8 +87,16 @@ export default class AppLandingPage extends Mixin(PolymerElement)
     this.userHasWriteAccess = false;
     if( !this.username ) return;
 
+    if( this.package.owner === this.username ) {
+      return this.userHasWriteAccess = true;
+    }
+
     let orgs = await this._getUserOrganizations();
-    console.log(orgs);
+    let inOrg = orgs.payload.find(org => org.name === this.package.organization);
+
+    if( inOrg ) {
+      this.userHasWriteAccess = true;
+    }
   }
 
   /**
@@ -97,8 +105,7 @@ export default class AppLandingPage extends Mixin(PolymerElement)
    * 
    * @param {Object} e event payload
    */
-  _onAuthUpdate(e){
-    console.log(1, e)
+  _onAuthUpdate(e) {
     this.username = e.username || '';
   }
 

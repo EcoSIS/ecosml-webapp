@@ -64,6 +64,7 @@
     
 
     <h2 class="dark">Package Management</h2>
-    <div><a href="/create">Create Package</a></div>
+    <div hidden$="[[!loggedIn]]"><a href="/create">Create Package</a></div>
+    <div hidden$="[[loggedIn]]"><a href="/account">Login to Create Package</a></div>
   </div>
 </div>

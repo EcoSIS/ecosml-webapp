@@ -38,7 +38,7 @@ class PackageModel extends BaseModel {
   async get(id) {
     this.service.get(id);
 
-    if( this.store.data.byId[id].state === 'loading' ) {
+    if( this.store.data.byId[id].state === this.store.STATE.LOADING ) {
       await this.store.data.byId[id].request;
     }
     

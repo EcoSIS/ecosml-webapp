@@ -30,6 +30,7 @@ import "./search/app-package-search"
 import "./app-home"
 import "./landing/app-landing-page"
 import "./account/app-user-account"
+import "./utils/app-auth-icon"
 
 // element imports
 import AppStateInterface from "./interfaces/AppStateInterface"

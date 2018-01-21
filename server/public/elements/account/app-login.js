@@ -21,12 +21,20 @@ export default class AppLogin extends Mixin(PolymerElement)
     this.active = true;
   }
 
-  async _onLoginClicked() {
+  async _attemptLogin() {
     let username = this.$.username.value;
     let password = this.$.password.value;
 
-    let response = await this._login(username, password);
-    console.log(response);
+    try {
+      await this._login(username, password);
+    } catch(e) {
+      alert(e.details.message);
+    }
+  }
+
+  async _onPassKeyUp(e) {
+    if( e.which !== 13 ) return;
+    this._attemptLogin();
   }
 
 }

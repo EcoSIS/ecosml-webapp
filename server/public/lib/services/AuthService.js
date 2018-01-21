@@ -38,8 +38,8 @@ class AuthService extends BaseService {
     return this.request({
       url : `${this.baseUrl}/organizations`,
       onLoading : request => this.store.setOrgsLoading(request),
-      onLoad : result => this.store.setAuthLoaded(result.body),
-      onError : error => this.store.setAuthError(error)
+      onLoad : result => this.store.setOrgsLoaded(result.body),
+      onError : error => this.store.setOrgsError(error)
     });
   }
 

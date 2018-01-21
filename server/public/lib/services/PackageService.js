@@ -77,6 +77,7 @@ class PackageService extends BaseService {
   async get(id) {
     return this.request({
       url : `${this.baseUrl}/${id}`,
+      checkCached : () => this.store.data.byId[id],
       onLoading : request => this.store.setGetPackageLoading(id, request),
       onLoad : result => this.store.setGetPackageSuccess(id, result.body),
       onError : error => this.store.setGetPackageError(id, error)

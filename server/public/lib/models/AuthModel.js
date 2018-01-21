@@ -31,7 +31,7 @@ class AuthModel extends BaseModel {
   }
 
   async getUserOrganizations(reload=false) {
-    if( reload || this.store.data.organizations.state !== 'loaded' ) {
+    if( reload || this.store.data.organizations.state === this.store.STATE.INIT ) {
       this.service.getUserOrgs();
     }
     

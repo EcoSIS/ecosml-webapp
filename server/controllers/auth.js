@@ -51,8 +51,8 @@ async function login(username, password, req, res) {
 }
 
 router.get('/organizations', async (req, res) => {
-  let username = req.session.user;
-  let orgs = await model.getUserOrgs(result.user);
+  let username = req.session.username;
+  let orgs = await model.getUserOrgs(username);
   res.json(orgs);
 });
 

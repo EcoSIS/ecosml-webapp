@@ -85,6 +85,7 @@ class AuthStore extends BaseStore {
   }
 
   _setOrgState(state) {
+    if( !state.state ) console.warn('Setting orgs with no state');
     this.data.organizations = state;
     this.emit(this.events.ORGS_UPDATE, state);
   }

@@ -2,17 +2,33 @@
   :host {
     display: block;
   }
+  .root {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+  }
+  .root > div {
+    margin-top: 20px;
+    padding: 40px;
+    background-color: white;
+  }
+  paper-button {
+    color: var(--default-primary-color);
+  }
 </style>
 
-<div>
-  <h4>Login</h4>
-
+<div class="root">
   <div>
-    <app-text-input id="username" label="Username"></app-text-input>
-    <app-text-input id="password" label="Password" type="password"></app-text-input>
-  </div>
+    <h2 class="uheader green">Login</h2>
 
-  <div>
-    <paper-button on-click="_onLoginClicked">Login</paper-button>
+    <div style="margin-top:30px">
+      <app-text-input id="username" label="Username"></app-text-input>
+      <app-text-input id="password" label="Password" type="password" on-keyup="_onPassKeyUp"></app-text-input>
+    </div>
+
+    <div style="margin-top:20px">
+      <paper-button on-click="_attemptLogin">Login</paper-button>
+    </div>
   </div>
 </div>

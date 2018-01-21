@@ -1,9 +1,9 @@
 import {Element as PolymerElement} from "@polymer/polymer/polymer-element"
-import template from "./app-home.html"
+import template from "./app-auth-icon.html"
 
-import AuthInterface from "./interfaces/AuthInterface"
+import AuthInterface from "../interfaces/AuthInterface"
 
-export default class AppHome extends Mixin(PolymerElement)
+export default class AppAuthIcon extends Mixin(PolymerElement)
   .with(EventInterface, AuthInterface) {
 
   static get template() {
@@ -14,6 +14,10 @@ export default class AppHome extends Mixin(PolymerElement)
     return {
       loggedIn : {
         type : Boolean,
+        value : false
+      },
+      username : {
+        type : String,
         value : false
       }
     }
@@ -33,11 +37,13 @@ export default class AppHome extends Mixin(PolymerElement)
   _onAuthUpdate(e) {
     if( e.state === 'loggedIn' ) {
       this.loggedIn = true;
+      this.username = e.username;
     } else {
       this.loggedIn = false;
+      this.username = '';
     }
   }
 
 }
 
-customElements.define('app-home', AppHome);
+customElements.define('app-auth-icon', AppAuthIcon);

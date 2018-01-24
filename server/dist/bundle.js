@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 70);
+/******/ 	return __webpack_require__(__webpack_require__.s = 78);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -68,15 +68,15 @@
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_legacy_legacy_element_mixin_js__ = __webpack_require__(38);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_legacy_polymer_fn_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lib_legacy_templatizer_behavior_js__ = __webpack_require__(82);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lib_elements_dom_bind_js__ = __webpack_require__(83);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lib_elements_dom_repeat_js__ = __webpack_require__(84);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__lib_elements_dom_if_js__ = __webpack_require__(85);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__lib_elements_array_selector_js__ = __webpack_require__(86);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__lib_elements_custom_style_js__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__lib_legacy_mutable_data_behavior_js__ = __webpack_require__(88);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_legacy_legacy_element_mixin_js__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_legacy_polymer_fn_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lib_legacy_templatizer_behavior_js__ = __webpack_require__(91);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lib_elements_dom_bind_js__ = __webpack_require__(92);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lib_elements_dom_repeat_js__ = __webpack_require__(93);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__lib_elements_dom_if_js__ = __webpack_require__(94);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__lib_elements_array_selector_js__ = __webpack_require__(95);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__lib_elements_custom_style_js__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__lib_legacy_mutable_data_behavior_js__ = __webpack_require__(97);
 
 
 
@@ -96,22 +96,27 @@ const Base = Object(__WEBPACK_IMPORTED_MODULE_0__lib_legacy_legacy_element_mixin
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__class_js__ = __webpack_require__(81);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Element; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_mixins_element_mixin_js__ = __webpack_require__(31);
 
 
-const Polymer = function(info) {
-  // if input is a `class` (aka a function with a prototype), use the prototype
-  // remember that the `constructor` will never be called
-  let klass;
-  if (typeof info === 'function') {
-    klass = info;
-  } else {
-    klass = Object(__WEBPACK_IMPORTED_MODULE_0__class_js__["a" /* Class */])(info);
-  }
-  customElements.define(klass.is, /** @type {!HTMLElement} */(klass));
-  return klass;
-};
-/* harmony export (immutable) */ __webpack_exports__["a"] = Polymer;
+/**
+ * Base class that provides the core API for Polymer's meta-programming
+ * features including template stamping, data-binding, attribute deserialization,
+ * and property change observation.
+ *
+ * @customElement
+ * @polymer
+ * @memberof Polymer
+ * @constructor
+ * @implements {Polymer_ElementMixin}
+ * @extends HTMLElement
+ * @appliesMixin Polymer.ElementMixin
+ * @summary Custom element base class that provides the core API for Polymer's
+ *   key meta-programming features including template stamping, data-binding,
+ *   attribute deserialization, and property change observation
+ */
+const Element = Object(__WEBPACK_IMPORTED_MODULE_0__lib_mixins_element_mixin_js__["a" /* ElementMixin */])(HTMLElement);
 
 
 
@@ -124,9 +129,9 @@ const Polymer = function(info) {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return matchesSelector; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_boot_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__utils_boot_js__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_settings_js__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_flattened_nodes_observer_js__ = __webpack_require__(80);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_flush_js__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_settings_js__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_flattened_nodes_observer_js__ = __webpack_require__(89);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_flush_js__ = __webpack_require__(19);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_3__utils_flush_js__["b"]; });
 /* unused harmony reexport addDebouncer */
 
@@ -427,27 +432,22 @@ const dom = function(obj) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Element; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_mixins_element_mixin_js__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__class_js__ = __webpack_require__(90);
 
 
-/**
- * Base class that provides the core API for Polymer's meta-programming
- * features including template stamping, data-binding, attribute deserialization,
- * and property change observation.
- *
- * @customElement
- * @polymer
- * @memberof Polymer
- * @constructor
- * @implements {Polymer_ElementMixin}
- * @extends HTMLElement
- * @appliesMixin Polymer.ElementMixin
- * @summary Custom element base class that provides the core API for Polymer's
- *   key meta-programming features including template stamping, data-binding,
- *   attribute deserialization, and property change observation
- */
-const Element = Object(__WEBPACK_IMPORTED_MODULE_0__lib_mixins_element_mixin_js__["a" /* ElementMixin */])(HTMLElement);
+const Polymer = function(info) {
+  // if input is a `class` (aka a function with a prototype), use the prototype
+  // remember that the `constructor` will never be called
+  let klass;
+  if (typeof info === 'function') {
+    klass = info;
+  } else {
+    klass = Object(__WEBPACK_IMPORTED_MODULE_0__class_js__["a" /* Class */])(info);
+  }
+  customElements.define(klass.is, /** @type {!HTMLElement} */(klass));
+  return klass;
+};
+/* harmony export (immutable) */ __webpack_exports__["a"] = Polymer;
 
 
 
@@ -463,230 +463,19 @@ let Polymer;
 
 /***/ }),
 /* 5 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__boot_js__);
-
-
-/** @typedef {{run: function(function(), number=):number, cancel: function(number)}} */
-let AsyncInterface; // eslint-disable-line no-unused-vars
-
-// Microtask implemented using Mutation Observer
-let microtaskCurrHandle = 0;
-let microtaskLastHandle = 0;
-let microtaskCallbacks = [];
-let microtaskNodeContent = 0;
-let microtaskNode = document.createTextNode('');
-new window.MutationObserver(microtaskFlush).observe(microtaskNode, {characterData: true});
-
-function microtaskFlush() {
-  const len = microtaskCallbacks.length;
-  for (let i = 0; i < len; i++) {
-    let cb = microtaskCallbacks[i];
-    if (cb) {
-      try {
-        cb();
-      } catch (e) {
-        setTimeout(() => { throw e; });
-      }
-    }
-  }
-  microtaskCallbacks.splice(0, len);
-  microtaskLastHandle += len;
-}
-
-const timeOut = {
-  /**
-   * Returns a sub-module with the async interface providing the provided
-   * delay.
-   *
-   * @memberof Polymer.Async.timeOut
-   * @param {number} delay Time to wait before calling callbacks in ms
-   * @return {AsyncInterface} An async timeout interface
-   */
-  after(delay) {
-    return  {
-      run(fn) { return setTimeout(fn, delay); },
-      cancel: window.clearTimeout.bind(window)
-    };
-  },
-  /**
-   * Enqueues a function called in the next task.
-   *
-   * @memberof Polymer.Async.timeOut
-   * @param {Function} fn Callback to run
-   * @return {number} Handle used for canceling task
-   */
-  run: window.setTimeout.bind(window),
-  /**
-   * Cancels a previously enqueued `timeOut` callback.
-   *
-   * @memberof Polymer.Async.timeOut
-   * @param {number} handle Handle returned from `run` of callback to cancel
-   */
-  cancel: window.clearTimeout.bind(window)
-};
-/* harmony export (immutable) */ __webpack_exports__["timeOut"] = timeOut;
-
-
-const animationFrame = {
-  /**
-   * Enqueues a function called at `requestAnimationFrame` timing.
-   *
-   * @memberof Polymer.Async.animationFrame
-   * @param {Function} fn Callback to run
-   * @return {number} Handle used for canceling task
-   */
-  run: window.requestAnimationFrame.bind(window),
-  /**
-   * Cancels a previously enqueued `animationFrame` callback.
-   *
-   * @memberof Polymer.Async.timeOut
-   * @param {number} handle Handle returned from `run` of callback to cancel
-   */
-  cancel: window.cancelAnimationFrame.bind(window)
-};
-/* harmony export (immutable) */ __webpack_exports__["animationFrame"] = animationFrame;
-
-
-const idlePeriod = {
-  /**
-   * Enqueues a function called at `requestIdleCallback` timing.
-   *
-   * @memberof Polymer.Async.idlePeriod
-   * @param {function(IdleDeadline)} fn Callback to run
-   * @return {number} Handle used for canceling task
-   */
-  run(fn) {
-    return window.requestIdleCallback ?
-      window.requestIdleCallback(fn) :
-      window.setTimeout(fn, 16);
-  },
-  /**
-   * Cancels a previously enqueued `idlePeriod` callback.
-   *
-   * @memberof Polymer.Async.idlePeriod
-   * @param {number} handle Handle returned from `run` of callback to cancel
-   */
-  cancel(handle) {
-    window.cancelIdleCallback ?
-      window.cancelIdleCallback(handle) :
-      window.clearTimeout(handle);
-  }
-};
-/* harmony export (immutable) */ __webpack_exports__["idlePeriod"] = idlePeriod;
-
-
-const microTask = {
-
-  /**
-   * Enqueues a function called at microtask timing.
-   *
-   * @memberof Polymer.Async.microTask
-   * @param {Function} callback Callback to run
-   * @return {number} Handle used for canceling task
-   */
-  run(callback) {
-    microtaskNode.textContent = microtaskNodeContent++;
-    microtaskCallbacks.push(callback);
-    return microtaskCurrHandle++;
-  },
-
-  /**
-   * Cancels a previously enqueued `microTask` callback.
-   *
-   * @memberof Polymer.Async.microTask
-   * @param {number} handle Handle returned from `run` of callback to cancel
-   */
-  cancel(handle) {
-    const idx = handle - microtaskLastHandle;
-    if (idx >= 0) {
-      if (!microtaskCallbacks[idx]) {
-        throw new Error('invalid async handle: ' + handle);
-      }
-      microtaskCallbacks[idx] = null;
-    }
-  }
-
-};
-/* harmony export (immutable) */ __webpack_exports__["microTask"] = microTask;
-
-
-
-/***/ }),
-/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = {
-  BaseModel : __webpack_require__(93),
-  BaseStore : __webpack_require__(95),
-  BaseService : __webpack_require__(96),
-  Mixin : __webpack_require__(98),
-  EventInterface : __webpack_require__(99),
-  fetch : __webpack_require__(48)
+  BaseModel : __webpack_require__(102),
+  BaseStore : __webpack_require__(104),
+  BaseService : __webpack_require__(105),
+  Mixin : __webpack_require__(107),
+  EventInterface : __webpack_require__(108),
+  fetch : __webpack_require__(52)
 }
 
 /***/ }),
-/* 7 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__boot_js__);
-
-
-// unique global id for deduping mixins.
-let dedupeId = 0;
-
-/**
- * @constructor
- * @extends {Function}
- */
-function MixinFunction(){}
-/** @type {(WeakMap | undefined)} */
-MixinFunction.prototype.__mixinApplications;
-/** @type {(Object | undefined)} */
-MixinFunction.prototype.__mixinSet;
-
-const dedupingMixin = function(mixin) {
-  let mixinApplications = /** @type {!MixinFunction} */(mixin).__mixinApplications;
-  if (!mixinApplications) {
-    mixinApplications = new WeakMap();
-    /** @type {!MixinFunction} */(mixin).__mixinApplications = mixinApplications;
-  }
-  // maintain a unique id for each mixin
-  let mixinDedupeId = dedupeId++;
-  function dedupingMixin(base) {
-    let baseSet = /** @type {!MixinFunction} */(base).__mixinSet;
-    if (baseSet && baseSet[mixinDedupeId]) {
-      return base;
-    }
-    let map = mixinApplications;
-    let extended = map.get(base);
-    if (!extended) {
-      extended = /** @type {!Function} */(mixin)(base);
-      map.set(base, extended);
-    }
-    // copy inherited mixin set from the extended class, or the base class
-    // NOTE: we avoid use of Set here because some browser (IE11)
-    // cannot extend a base Set via the constructor.
-    let mixinSet = Object.create(/** @type {!MixinFunction} */(extended).__mixinSet || baseSet || null);
-    mixinSet[mixinDedupeId] = true;
-    /** @type {!MixinFunction} */(extended).__mixinSet = mixinSet;
-    return extended;
-  }
-
-  return dedupingMixin;
-};
-/* harmony export (immutable) */ __webpack_exports__["a"] = dedupingMixin;
-
-
-
-/***/ }),
-/* 8 */
+/* 6 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -695,7 +484,12 @@ const dedupingMixin = function(mixin) {
 const $_documentContainer = document.createElement('div');
 $_documentContainer.setAttribute('style', 'display: none;');
 
-$_documentContainer.innerHTML = `<custom-style>
+$_documentContainer.innerHTML = `<style>
+  /* IE 10 support for HTML5 hidden attr */
+  [hidden] {
+    display: none !important;
+  }
+</style><custom-style>
   <style is="custom-style">
     html {
 
@@ -1043,6 +837,276 @@ $_documentContainer.innerHTML = `<custom-style>
 
 document.head.appendChild($_documentContainer);
 
+/**
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+*/
+/**
+The `<iron-flex-layout>` component provides simple ways to use
+[CSS flexible box layout](https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Flexible_boxes),
+also known as flexbox. This component provides two different ways to use flexbox:
+
+1. [Layout classes](https://github.com/PolymerElements/iron-flex-layout/tree/master/iron-flex-layout-classes.html).
+The layout class stylesheet provides a simple set of class-based flexbox rules, that
+let you specify layout properties directly in markup. You must include this file
+in every element that needs to use them.
+
+    Sample use:
+
+    ```
+    <custom-element-demo>
+      <template>
+        <script src="../webcomponentsjs/webcomponents-lite.js"></script>
+        <next-code-block></next-code-block>
+      </template>
+    </custom-element-demo>
+    ```
+
+    ```html
+    <link rel="import" href="iron-flex-layout-classes.html">
+    <style is="custom-style" include="iron-flex iron-flex-alignment"></style>
+    <style>
+      .test { width: 100px; }
+    </style>
+    <div class="layout horizontal center-center">
+      <div class="test">horizontal layout center alignment</div>
+    </div>
+    ```
+
+2. [Custom CSS mixins](https://github.com/PolymerElements/iron-flex-layout/blob/master/iron-flex-layout.html).
+The mixin stylesheet includes custom CSS mixins that can be applied inside a CSS rule using the `@apply` function.
+
+Please note that the old [/deep/ layout classes](https://github.com/PolymerElements/iron-flex-layout/tree/master/classes)
+are deprecated, and should not be used. To continue using layout properties
+directly in markup, please switch to using the new `dom-module`-based
+[layout classes](https://github.com/PolymerElements/iron-flex-layout/tree/master/iron-flex-layout-classes.html).
+Please note that the new version does not use `/deep/`, and therefore requires you
+to import the `dom-modules` in every element that needs to use them.
+
+A complete [guide](https://elements.polymer-project.org/guides/flex-layout) to `<iron-flex-layout>` is available.
+
+@group Iron Elements
+@pseudoElement iron-flex-layout
+@demo demo/index.html
+*/
+;
+
+
+/***/ }),
+/* 7 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__boot_js__);
+
+
+/** @typedef {{run: function(function(), number=):number, cancel: function(number)}} */
+let AsyncInterface; // eslint-disable-line no-unused-vars
+
+// Microtask implemented using Mutation Observer
+let microtaskCurrHandle = 0;
+let microtaskLastHandle = 0;
+let microtaskCallbacks = [];
+let microtaskNodeContent = 0;
+let microtaskNode = document.createTextNode('');
+new window.MutationObserver(microtaskFlush).observe(microtaskNode, {characterData: true});
+
+function microtaskFlush() {
+  const len = microtaskCallbacks.length;
+  for (let i = 0; i < len; i++) {
+    let cb = microtaskCallbacks[i];
+    if (cb) {
+      try {
+        cb();
+      } catch (e) {
+        setTimeout(() => { throw e; });
+      }
+    }
+  }
+  microtaskCallbacks.splice(0, len);
+  microtaskLastHandle += len;
+}
+
+const timeOut = {
+  /**
+   * Returns a sub-module with the async interface providing the provided
+   * delay.
+   *
+   * @memberof Polymer.Async.timeOut
+   * @param {number} delay Time to wait before calling callbacks in ms
+   * @return {AsyncInterface} An async timeout interface
+   */
+  after(delay) {
+    return  {
+      run(fn) { return setTimeout(fn, delay); },
+      cancel: window.clearTimeout.bind(window)
+    };
+  },
+  /**
+   * Enqueues a function called in the next task.
+   *
+   * @memberof Polymer.Async.timeOut
+   * @param {Function} fn Callback to run
+   * @return {number} Handle used for canceling task
+   */
+  run: window.setTimeout.bind(window),
+  /**
+   * Cancels a previously enqueued `timeOut` callback.
+   *
+   * @memberof Polymer.Async.timeOut
+   * @param {number} handle Handle returned from `run` of callback to cancel
+   */
+  cancel: window.clearTimeout.bind(window)
+};
+/* harmony export (immutable) */ __webpack_exports__["timeOut"] = timeOut;
+
+
+const animationFrame = {
+  /**
+   * Enqueues a function called at `requestAnimationFrame` timing.
+   *
+   * @memberof Polymer.Async.animationFrame
+   * @param {Function} fn Callback to run
+   * @return {number} Handle used for canceling task
+   */
+  run: window.requestAnimationFrame.bind(window),
+  /**
+   * Cancels a previously enqueued `animationFrame` callback.
+   *
+   * @memberof Polymer.Async.timeOut
+   * @param {number} handle Handle returned from `run` of callback to cancel
+   */
+  cancel: window.cancelAnimationFrame.bind(window)
+};
+/* harmony export (immutable) */ __webpack_exports__["animationFrame"] = animationFrame;
+
+
+const idlePeriod = {
+  /**
+   * Enqueues a function called at `requestIdleCallback` timing.
+   *
+   * @memberof Polymer.Async.idlePeriod
+   * @param {function(IdleDeadline)} fn Callback to run
+   * @return {number} Handle used for canceling task
+   */
+  run(fn) {
+    return window.requestIdleCallback ?
+      window.requestIdleCallback(fn) :
+      window.setTimeout(fn, 16);
+  },
+  /**
+   * Cancels a previously enqueued `idlePeriod` callback.
+   *
+   * @memberof Polymer.Async.idlePeriod
+   * @param {number} handle Handle returned from `run` of callback to cancel
+   */
+  cancel(handle) {
+    window.cancelIdleCallback ?
+      window.cancelIdleCallback(handle) :
+      window.clearTimeout(handle);
+  }
+};
+/* harmony export (immutable) */ __webpack_exports__["idlePeriod"] = idlePeriod;
+
+
+const microTask = {
+
+  /**
+   * Enqueues a function called at microtask timing.
+   *
+   * @memberof Polymer.Async.microTask
+   * @param {Function} callback Callback to run
+   * @return {number} Handle used for canceling task
+   */
+  run(callback) {
+    microtaskNode.textContent = microtaskNodeContent++;
+    microtaskCallbacks.push(callback);
+    return microtaskCurrHandle++;
+  },
+
+  /**
+   * Cancels a previously enqueued `microTask` callback.
+   *
+   * @memberof Polymer.Async.microTask
+   * @param {number} handle Handle returned from `run` of callback to cancel
+   */
+  cancel(handle) {
+    const idx = handle - microtaskLastHandle;
+    if (idx >= 0) {
+      if (!microtaskCallbacks[idx]) {
+        throw new Error('invalid async handle: ' + handle);
+      }
+      microtaskCallbacks[idx] = null;
+    }
+  }
+
+};
+/* harmony export (immutable) */ __webpack_exports__["microTask"] = microTask;
+
+
+
+/***/ }),
+/* 8 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__boot_js__);
+
+
+// unique global id for deduping mixins.
+let dedupeId = 0;
+
+/**
+ * @constructor
+ * @extends {Function}
+ */
+function MixinFunction(){}
+/** @type {(WeakMap | undefined)} */
+MixinFunction.prototype.__mixinApplications;
+/** @type {(Object | undefined)} */
+MixinFunction.prototype.__mixinSet;
+
+const dedupingMixin = function(mixin) {
+  let mixinApplications = /** @type {!MixinFunction} */(mixin).__mixinApplications;
+  if (!mixinApplications) {
+    mixinApplications = new WeakMap();
+    /** @type {!MixinFunction} */(mixin).__mixinApplications = mixinApplications;
+  }
+  // maintain a unique id for each mixin
+  let mixinDedupeId = dedupeId++;
+  function dedupingMixin(base) {
+    let baseSet = /** @type {!MixinFunction} */(base).__mixinSet;
+    if (baseSet && baseSet[mixinDedupeId]) {
+      return base;
+    }
+    let map = mixinApplications;
+    let extended = map.get(base);
+    if (!extended) {
+      extended = /** @type {!Function} */(mixin)(base);
+      map.set(base, extended);
+    }
+    // copy inherited mixin set from the extended class, or the base class
+    // NOTE: we avoid use of Set here because some browser (IE11)
+    // cannot extend a base Set via the constructor.
+    let mixinSet = Object.create(/** @type {!MixinFunction} */(extended).__mixinSet || baseSet || null);
+    mixinSet[mixinDedupeId] = true;
+    /** @type {!MixinFunction} */(extended).__mixinSet = mixinSet;
+    return extended;
+  }
+
+  return dedupingMixin;
+};
+/* harmony export (immutable) */ __webpack_exports__["a"] = dedupingMixin;
+
+
 
 /***/ }),
 /* 9 */
@@ -1134,8 +1198,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Debouncer", function() { return Debouncer; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__boot_js__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mixin_js__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__async_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mixin_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__async_js__ = __webpack_require__(7);
 
 
 
@@ -1245,7 +1309,7 @@ class Debouncer {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__polymer_polymer_element_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__polymer_polymer_element_js__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
 
 
@@ -1358,891 +1422,36 @@ const IronControlState = {
 
 /***/ }),
 /* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const {AppStateInterface} = __webpack_require__(34);
+/***/ (function(module, exports) {
 
 module.exports = subclass => 
-  class AppStateInterfaceImpl extends Mixin(subclass).with(AppStateInterface) {}
+  class AuthInterface extends subclass {
+
+    constructor() {
+      super();
+      this._injectModel('AuthModel');
+    }
+
+    _login(username, password) {
+      return this.AuthModel.login(username, password);
+    }
+
+    _logout() {
+      return this.AuthModel.logout();
+    }
+
+    _getUserOrganizations() {
+      return this.AuthModel.getUserOrganizations();
+    }
+
+    _getAuthState() {
+      return this.AuthModel.get();
+    }
+
+  }
 
 /***/ }),
 /* 14 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return settings; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return rootPath; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return sanitizeDOMValue; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__boot_js__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__resolve_url_js__ = __webpack_require__(15);
-
-
-
-/**
- * Legacy settings.
- * @namespace
- * @memberof Polymer
- */
-const settings = undefined || {};
-const useShadow = !(window.ShadyDOM);
-/* unused harmony export useShadow */
-
-const useNativeCSSProperties = Boolean(!window.ShadyCSS || window.ShadyCSS.nativeCss);
-/* unused harmony export useNativeCSSProperties */
-
-const useNativeCustomElements = !(window.customElements.polyfillWrapFlushCallback);
-/* unused harmony export useNativeCustomElements */
-
-
-
-/**
- * Globally settable property that is automatically assigned to
- * `Polymer.ElementMixin` instances, useful for binding in templates to
- * make URL's relative to an application's root.  Defaults to the main
- * document URL, but can be overridden by users.  It may be useful to set
- * `Polymer.rootPath` to provide a stable application mount path when
- * using client side routing.
- *
- * @memberof Polymer
- */
-let rootPath = undefined ||
-  Object(__WEBPACK_IMPORTED_MODULE_1__resolve_url_js__["a" /* pathFromUrl */])(document.baseURI || window.location.href);
-
-
-
-const setRootPath = function(path) {
-  rootPath = path;
-};
-/* unused harmony export setRootPath */
-
-
-/**
- * A global callback used to sanitize any value before inserting it into the DOM. The callback signature is:
- *
- *     Polymer = {
- *       sanitizeDOMValue: function(value, name, type, node) { ... }
- *     }
- *
- * Where:
- *
- * `value` is the value to sanitize.
- * `name` is the name of an attribute or property (for example, href).
- * `type` indicates where the value is being inserted: one of property, attribute, or text.
- * `node` is the node where the value is being inserted.
- *
- * @type {(function(*,string,string,Node):*)|undefined}
- * @memberof Polymer
- */
-let sanitizeDOMValue = undefined;
-
-
-
-const setSanitizeDOMValue = function(newSanitizeDOMValue) {
-  sanitizeDOMValue = newSanitizeDOMValue;
-};
-/* unused harmony export setSanitizeDOMValue */
-
-
-
-/***/ }),
-/* 15 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return resolveCss; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return resolveUrl; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return pathFromUrl; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__boot_js__);
-
-
-let CSS_URL_RX = /(url\()([^)]*)(\))/g;
-let ABS_URL = /(^\/)|(^#)|(^[\w-\d]*:)/;
-let workingURL;
-let resolveDoc;
-/**
- * Resolves the given URL against the provided `baseUri'.
- *
- * @memberof Polymer.ResolveUrl
- * @param {string} url Input URL to resolve
- * @param {?string=} baseURI Base URI to resolve the URL against
- * @return {string} resolved URL
- */
-function resolveUrl(url, baseURI) {
-  if (url && ABS_URL.test(url)) {
-    return url;
-  }
-  // Lazy feature detection.
-  if (workingURL === undefined) {
-    workingURL = false;
-    try {
-      const u = new URL('b', 'http://a');
-      u.pathname = 'c%20d';
-      workingURL = (u.href === 'http://a/c%20d');
-    } catch (e) {
-      // silently fail
-    }
-  }
-  if (!baseURI) {
-    baseURI = document.baseURI || window.location.href;
-  }
-  if (workingURL) {
-    return (new URL(url, baseURI)).href;
-  }
-  // Fallback to creating an anchor into a disconnected document.
-  if (!resolveDoc) {
-    resolveDoc = document.implementation.createHTMLDocument('temp');
-    resolveDoc.base = resolveDoc.createElement('base');
-    resolveDoc.head.appendChild(resolveDoc.base);
-    resolveDoc.anchor = resolveDoc.createElement('a');
-    resolveDoc.body.appendChild(resolveDoc.anchor);
-  }
-  resolveDoc.base.href = baseURI;
-  resolveDoc.anchor.href = url;
-  return resolveDoc.anchor.href || url;
-
-}
-
-/**
- * Resolves any relative URL's in the given CSS text against the provided
- * `ownerDocument`'s `baseURI`.
- *
- * @memberof Polymer.ResolveUrl
- * @param {string} cssText CSS text to process
- * @param {string} baseURI Base URI to resolve the URL against
- * @return {string} Processed CSS text with resolved URL's
- */
-function resolveCss(cssText, baseURI) {
-  return cssText.replace(CSS_URL_RX, function(m, pre, url, post) {
-    return pre + '\'' +
-      resolveUrl(url.replace(/["']/g, ''), baseURI) +
-      '\'' + post;
-  });
-}
-
-/**
- * Returns a path from a given `url`. The path includes the trailing
- * `/` from the url.
- *
- * @memberof Polymer.ResolveUrl
- * @param {string} url Input URL to transform
- * @return {string} resolved path
- */
-function pathFromUrl(url) {
-  return url.substring(0, url.lastIndexOf('/') + 1);
-}
-
-
-
-
-
-
-/***/ }),
-/* 16 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["d"] = isPath;
-/* harmony export (immutable) */ __webpack_exports__["g"] = root;
-/* harmony export (immutable) */ __webpack_exports__["b"] = isAncestor;
-/* harmony export (immutable) */ __webpack_exports__["c"] = isDescendant;
-/* harmony export (immutable) */ __webpack_exports__["i"] = translate;
-/* harmony export (immutable) */ __webpack_exports__["e"] = matches;
-/* harmony export (immutable) */ __webpack_exports__["f"] = normalize;
-/* unused harmony export split */
-/* harmony export (immutable) */ __webpack_exports__["a"] = get;
-/* harmony export (immutable) */ __webpack_exports__["h"] = set;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__boot_js__);
-
-
-function isPath(path) {
-  return path.indexOf('.') >= 0;
-}
-
-function root(path) {
-  let dotIndex = path.indexOf('.');
-  if (dotIndex === -1) {
-    return path;
-  }
-  return path.slice(0, dotIndex);
-}
-
-function isAncestor(base, path) {
-  //     base.startsWith(path + '.');
-  return base.indexOf(path + '.') === 0;
-}
-
-function isDescendant(base, path) {
-  //     path.startsWith(base + '.');
-  return path.indexOf(base + '.') === 0;
-}
-
-function translate(base, newBase, path) {
-  return newBase + path.slice(base.length);
-}
-
-function matches(base, path) {
-  return (base === path) ||
-         isAncestor(base, path) ||
-         isDescendant(base, path);
-}
-
-function normalize(path) {
-  if (Array.isArray(path)) {
-    let parts = [];
-    for (let i=0; i<path.length; i++) {
-      let args = path[i].toString().split('.');
-      for (let j=0; j<args.length; j++) {
-        parts.push(args[j]);
-      }
-    }
-    return parts.join('.');
-  } else {
-    return path;
-  }
-}
-
-function split(path) {
-  if (Array.isArray(path)) {
-    return normalize(path).split('.');
-  }
-  return path.toString().split('.');
-}
-
-function get(root, path, info) {
-  let prop = root;
-  let parts = split(path);
-  // Loop over path parts[0..n-1] and dereference
-  for (let i=0; i<parts.length; i++) {
-    if (!prop) {
-      return;
-    }
-    let part = parts[i];
-    prop = prop[part];
-  }
-  if (info) {
-    info.path = parts.join('.');
-  }
-  return prop;
-}
-
-function set(root, path, value) {
-  let prop = root;
-  let parts = split(path);
-  let last = parts[parts.length-1];
-  if (parts.length > 1) {
-    // Loop over path parts[0..n-2] and dereference
-    for (let i=0; i<parts.length-1; i++) {
-      let part = parts[i];
-      prop = prop[part];
-      if (!prop) {
-        return;
-      }
-    }
-    // Set value to object at end of path
-    prop[last] = value;
-  } else {
-    // Simple property set
-    prop[path] = value;
-  }
-  return parts.join('.');
-}
-
-const isDeep = isPath;
-/* unused harmony export isDeep */
-
-
-
-/***/ }),
-/* 17 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__boot_js__);
-
-
-let debouncerQueue = [];
-
-const enqueueDebouncer = function(debouncer) {
-  debouncerQueue.push(debouncer);
-};
-/* harmony export (immutable) */ __webpack_exports__["a"] = enqueueDebouncer;
-
-
-function flushDebouncers() {
-  const didFlush = Boolean(debouncerQueue.length);
-  while (debouncerQueue.length) {
-    try {
-      debouncerQueue.shift().flush();
-    } catch(e) {
-      setTimeout(() => {
-        throw e;
-      });
-    }
-  }
-  return didFlush;
-}
-
-const flush = function() {
-  let shadyDOM, debouncers;
-  do {
-    shadyDOM = window.ShadyDOM && ShadyDOM.flush();
-    if (window.ShadyCSS && window.ShadyCSS.ScopingShim) {
-      window.ShadyCSS.ScopingShim.flush();
-    }
-    debouncers = flushDebouncers();
-  } while (shadyDOM || debouncers);
-};
-/* harmony export (immutable) */ __webpack_exports__["b"] = flush;
-
-
-
-/***/ }),
-/* 18 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_mixin_js__ = __webpack_require__(7);
-
-
-// Common implementation for mixin & behavior
-function mutablePropertyChange(inst, property, value, old, mutableData) {
-  let isObject;
-  if (mutableData) {
-    isObject = (typeof value === 'object' && value !== null);
-    // Pull `old` for Objects from temp cache, but treat `null` as a primitive
-    if (isObject) {
-      old = inst.__dataTemp[property];
-    }
-  }
-  // Strict equality check, but return false for NaN===NaN
-  let shouldChange = (old !== value && (old === old || value === value));
-  // Objects are stored in temporary cache (cleared at end of
-  // turn), which is used for dirty-checking
-  if (isObject && shouldChange) {
-    inst.__dataTemp[property] = value;
-  }
-  return shouldChange;
-}
-
-const MutableData = Object(__WEBPACK_IMPORTED_MODULE_0__utils_mixin_js__["a" /* dedupingMixin */])(superClass => {
-
-  /**
-   * @polymer
-   * @mixinClass
-   * @implements {Polymer_MutableData}
-   */
-  class MutableData extends superClass {
-    /**
-     * Overrides `Polymer.PropertyEffects` to provide option for skipping
-     * strict equality checking for Objects and Arrays.
-     *
-     * This method pulls the value to dirty check against from the `__dataTemp`
-     * cache (rather than the normal `__data` cache) for Objects.  Since the temp
-     * cache is cleared at the end of a turn, this implementation allows
-     * side-effects of deep object changes to be processed by re-setting the
-     * same object (using the temp cache as an in-turn backstop to prevent
-     * cycles due to 2-way notification).
-     *
-     * @param {string} property Property name
-     * @param {*} value New property value
-     * @param {*} old Previous property value
-     * @return {boolean} Whether the property should be considered a change
-     * @protected
-     */
-    _shouldPropertyChange(property, value, old) {
-      return mutablePropertyChange(this, property, value, old, true);
-    }
-
-  }
-  /** @type {boolean} */
-  MutableData.prototype.mutableData = false;
-
-  return MutableData;
-
-});
-/* harmony export (immutable) */ __webpack_exports__["a"] = MutableData;
-
-
-const OptionalMutableData = Object(__WEBPACK_IMPORTED_MODULE_0__utils_mixin_js__["a" /* dedupingMixin */])(superClass => {
-
-  /**
-   * @mixinClass
-   * @polymer
-   * @implements {Polymer_OptionalMutableData}
-   */
-  class OptionalMutableData extends superClass {
-
-    static get properties() {
-      return {
-        /**
-         * Instance-level flag for configuring the dirty-checking strategy
-         * for this element.  When true, Objects and Arrays will skip dirty
-         * checking, otherwise strict equality checking will be used.
-         */
-        mutableData: Boolean
-      };
-    }
-
-    /**
-     * Overrides `Polymer.PropertyEffects` to provide option for skipping
-     * strict equality checking for Objects and Arrays.
-     *
-     * When `this.mutableData` is true on this instance, this method
-     * pulls the value to dirty check against from the `__dataTemp` cache
-     * (rather than the normal `__data` cache) for Objects.  Since the temp
-     * cache is cleared at the end of a turn, this implementation allows
-     * side-effects of deep object changes to be processed by re-setting the
-     * same object (using the temp cache as an in-turn backstop to prevent
-     * cycles due to 2-way notification).
-     *
-     * @param {string} property Property name
-     * @param {*} value New property value
-     * @param {*} old Previous property value
-     * @return {boolean} Whether the property should be considered a change
-     * @protected
-     */
-    _shouldPropertyChange(property, value, old) {
-      return mutablePropertyChange(this, property, value, old, this.mutableData);
-    }
-  }
-
-  return OptionalMutableData;
-
-});
-/* harmony export (immutable) */ __webpack_exports__["b"] = OptionalMutableData;
-
-
-// Export for use by legacy behavior
-MutableData._mutablePropertyChange = mutablePropertyChange;
-
-
-/***/ }),
-/* 19 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* unused harmony export CustomStyle */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__webcomponents_shadycss_entrypoints_custom_style_interface_js__ = __webpack_require__(87);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_style_gather_js__ = __webpack_require__(43);
-
-
-
-const attr = 'include';
-
-const CustomStyleInterface = window.ShadyCSS.CustomStyleInterface;
-
-/**
- * Custom element for defining styles in the main document that can take
- * advantage of [shady DOM](https://github.com/webcomponents/shadycss) shims
- * for style encapsulation, custom properties, and custom mixins.
- *
- * - Document styles defined in a `<custom-style>` are shimmed to ensure they
- *   do not leak into local DOM when running on browsers without native
- *   Shadow DOM.
- * - Custom properties can be defined in a `<custom-style>`. Use the `html` selector
- *   to define custom properties that apply to all custom elements.
- * - Custom mixins can be defined in a `<custom-style>`, if you import the optional
- *   [apply shim](https://github.com/webcomponents/shadycss#about-applyshim)
- *   (`shadycss/apply-shim.html`).
- *
- * To use:
- *
- * - Import `custom-style.html`.
- * - Place a `<custom-style>` element in the main document, wrapping an inline `<style>` tag that
- *   contains the CSS rules you want to shim.
- *
- * For example:
- *
- * ```
- * <!-- import apply shim--only required if using mixins -->
- * <link rel="import href="bower_components/shadycss/apply-shim.html">
- * <!-- import custom-style element -->
- * <link rel="import" href="bower_components/polymer/lib/elements/custom-style.html">
- * ...
- * <custom-style>
- *   <style>
- *     html {
- *       --custom-color: blue;
- *       --custom-mixin: {
- *         font-weight: bold;
- *         color: red;
- *       };
- *     }
- *   </style>
- * </custom-style>
- * ```
- *
- * @customElement
- * @extends HTMLElement
- * @memberof Polymer
- * @summary Custom element for defining styles in the main document that can
- *   take advantage of Polymer's style scoping and custom properties shims.
- */
-class CustomStyle extends HTMLElement {
-  constructor() {
-    super();
-    this._style = null;
-    CustomStyleInterface.addCustomStyle(this);
-  }
-  /**
-   * Returns the light-DOM `<style>` child this element wraps.  Upon first
-   * call any style modules referenced via the `include` attribute will be
-   * concatenated to this element's `<style>`.
-   *
-   * @return {HTMLStyleElement} This element's light-DOM `<style>`
-   */
-  getStyle() {
-    if (this._style) {
-      return this._style;
-    }
-    const style = /** @type {HTMLStyleElement} */(this.querySelector('style'));
-    if (!style) {
-      return null;
-    }
-    this._style = style;
-    const include = style.getAttribute(attr);
-    if (include) {
-      style.removeAttribute(attr);
-      style.textContent = Object(__WEBPACK_IMPORTED_MODULE_1__utils_style_gather_js__["b" /* cssFromModules */])(include) + style.textContent;
-    }
-    return this._style;
-  }
-}
-
-window.customElements.define('custom-style', CustomStyle);
-
-
-
-/***/ }),
-/* 20 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__color_js__ = __webpack_require__(47);
-
-
-const $_documentContainer = document.createElement('div');
-$_documentContainer.setAttribute('style', 'display: none;');
-
-$_documentContainer.innerHTML = `<custom-style>
-  <style is="custom-style">
-    html {
-      /*
-       * You can use these generic variables in your elements for easy theming.
-       * For example, if all your elements use \`--primary-text-color\` as its main
-       * color, then switching from a light to a dark theme is just a matter of
-       * changing the value of \`--primary-text-color\` in your application.
-       */
-      --primary-text-color: var(--light-theme-text-color);
-      --primary-background-color: var(--light-theme-background-color);
-      --secondary-text-color: var(--light-theme-secondary-color);
-      --disabled-text-color: var(--light-theme-disabled-color);
-      --divider-color: var(--light-theme-divider-color);
-      --error-color: var(--paper-deep-orange-a700);
-
-      /*
-       * Primary and accent colors. Also see color.html for more colors.
-       */
-      --primary-color: var(--paper-indigo-500);
-      --light-primary-color: var(--paper-indigo-100);
-      --dark-primary-color: var(--paper-indigo-700);
-
-      --accent-color: var(--paper-pink-a200);
-      --light-accent-color: var(--paper-pink-a100);
-      --dark-accent-color: var(--paper-pink-a400);
-
-
-      /*
-       * Material Design Light background theme
-       */
-      --light-theme-background-color: #ffffff;
-      --light-theme-base-color: #000000;
-      --light-theme-text-color: var(--paper-grey-900);
-      --light-theme-secondary-color: #737373;  /* for secondary text and icons */
-      --light-theme-disabled-color: #9b9b9b;  /* disabled/hint text */
-      --light-theme-divider-color: #dbdbdb;
-
-      /*
-       * Material Design Dark background theme
-       */
-      --dark-theme-background-color: var(--paper-grey-900);
-      --dark-theme-base-color: #ffffff;
-      --dark-theme-text-color: #ffffff;
-      --dark-theme-secondary-color: #bcbcbc;  /* for secondary text and icons */
-      --dark-theme-disabled-color: #646464;  /* disabled/hint text */
-      --dark-theme-divider-color: #3c3c3c;
-
-      /*
-       * Deprecated values because of their confusing names.
-       */
-      --text-primary-color: var(--dark-theme-text-color);
-      --default-primary-color: var(--primary-color);
-    }
-  </style>
-</custom-style>`;
-
-document.head.appendChild($_documentContainer);
-
-
-/***/ }),
-/* 21 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-
-const $_documentContainer = document.createElement('div');
-$_documentContainer.setAttribute('style', 'display: none;');
-
-$_documentContainer.innerHTML = `<custom-style>
-  <style is="custom-style">
-    html {
-
-      --shadow-transition: {
-        transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-      };
-
-      --shadow-none: {
-        box-shadow: none;
-      };
-
-      /* from http://codepen.io/shyndman/pen/c5394ddf2e8b2a5c9185904b57421cdb */
-
-      --shadow-elevation-2dp: {
-        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
-                    0 1px 5px 0 rgba(0, 0, 0, 0.12),
-                    0 3px 1px -2px rgba(0, 0, 0, 0.2);
-      };
-
-      --shadow-elevation-3dp: {
-        box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.14),
-                    0 1px 8px 0 rgba(0, 0, 0, 0.12),
-                    0 3px 3px -2px rgba(0, 0, 0, 0.4);
-      };
-
-      --shadow-elevation-4dp: {
-        box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14),
-                    0 1px 10px 0 rgba(0, 0, 0, 0.12),
-                    0 2px 4px -1px rgba(0, 0, 0, 0.4);
-      };
-
-      --shadow-elevation-6dp: {
-        box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.14),
-                    0 1px 18px 0 rgba(0, 0, 0, 0.12),
-                    0 3px 5px -1px rgba(0, 0, 0, 0.4);
-      };
-
-      --shadow-elevation-8dp: {
-        box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14),
-                    0 3px 14px 2px rgba(0, 0, 0, 0.12),
-                    0 5px 5px -3px rgba(0, 0, 0, 0.4);
-      };
-
-      --shadow-elevation-12dp: {
-        box-shadow: 0 12px 16px 1px rgba(0, 0, 0, 0.14),
-                    0 4px 22px 3px rgba(0, 0, 0, 0.12),
-                    0 6px 7px -4px rgba(0, 0, 0, 0.4);
-      };
-
-      --shadow-elevation-16dp: {
-        box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14),
-                    0  6px 30px 5px rgba(0, 0, 0, 0.12),
-                    0  8px 10px -5px rgba(0, 0, 0, 0.4);
-      };
-
-      --shadow-elevation-24dp: {
-        box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.14),
-                    0 9px 46px 8px rgba(0, 0, 0, 0.12),
-                    0 11px 15px -7px rgba(0, 0, 0, 0.4);
-      };
-    }
-  </style>
-</custom-style>`;
-
-document.head.appendChild($_documentContainer);
-
-
-/***/ }),
-/* 22 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__font_roboto_roboto_js__ = __webpack_require__(89);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__font_roboto_roboto_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__font_roboto_roboto_js__);
-
-
-const $_documentContainer = document.createElement('div');
-$_documentContainer.setAttribute('style', 'display: none;');
-
-$_documentContainer.innerHTML = `<custom-style>
-  <style is="custom-style">
-    html {
-
-      /* Shared Styles */
-      --paper-font-common-base: {
-        font-family: 'Roboto', 'Noto', sans-serif;
-        -webkit-font-smoothing: antialiased;
-      };
-
-      --paper-font-common-code: {
-        font-family: 'Roboto Mono', 'Consolas', 'Menlo', monospace;
-        -webkit-font-smoothing: antialiased;
-      };
-
-      --paper-font-common-expensive-kerning: {
-        text-rendering: optimizeLegibility;
-      };
-
-      --paper-font-common-nowrap: {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      };
-
-      /* Material Font Styles */
-
-      --paper-font-display4: {
-        @apply --paper-font-common-base;
-        @apply --paper-font-common-nowrap;
-
-        font-size: 112px;
-        font-weight: 300;
-        letter-spacing: -.044em;
-        line-height: 120px;
-      };
-
-      --paper-font-display3: {
-        @apply --paper-font-common-base;
-        @apply --paper-font-common-nowrap;
-
-        font-size: 56px;
-        font-weight: 400;
-        letter-spacing: -.026em;
-        line-height: 60px;
-      };
-
-      --paper-font-display2: {
-        @apply --paper-font-common-base;
-
-        font-size: 45px;
-        font-weight: 400;
-        letter-spacing: -.018em;
-        line-height: 48px;
-      };
-
-      --paper-font-display1: {
-        @apply --paper-font-common-base;
-
-        font-size: 34px;
-        font-weight: 400;
-        letter-spacing: -.01em;
-        line-height: 40px;
-      };
-
-      --paper-font-headline: {
-        @apply --paper-font-common-base;
-
-        font-size: 24px;
-        font-weight: 400;
-        letter-spacing: -.012em;
-        line-height: 32px;
-      };
-
-      --paper-font-title: {
-        @apply --paper-font-common-base;
-        @apply --paper-font-common-nowrap;
-
-        font-size: 20px;
-        font-weight: 500;
-        line-height: 28px;
-      };
-
-      --paper-font-subhead: {
-        @apply --paper-font-common-base;
-
-        font-size: 16px;
-        font-weight: 400;
-        line-height: 24px;
-      };
-
-      --paper-font-body2: {
-        @apply --paper-font-common-base;
-
-        font-size: 14px;
-        font-weight: 500;
-        line-height: 24px;
-      };
-
-      --paper-font-body1: {
-        @apply --paper-font-common-base;
-
-        font-size: 14px;
-        font-weight: 400;
-        line-height: 20px;
-      };
-
-      --paper-font-caption: {
-        @apply --paper-font-common-base;
-        @apply --paper-font-common-nowrap;
-
-        font-size: 12px;
-        font-weight: 400;
-        letter-spacing: 0.011em;
-        line-height: 20px;
-      };
-
-      --paper-font-menu: {
-        @apply --paper-font-common-base;
-        @apply --paper-font-common-nowrap;
-
-        font-size: 13px;
-        font-weight: 500;
-        line-height: 24px;
-      };
-
-      --paper-font-button: {
-        @apply --paper-font-common-base;
-        @apply --paper-font-common-nowrap;
-
-        font-size: 14px;
-        font-weight: 500;
-        letter-spacing: 0.018em;
-        line-height: 24px;
-        text-transform: uppercase;
-      };
-
-      --paper-font-code2: {
-        @apply --paper-font-common-code;
-
-        font-size: 14px;
-        font-weight: 700;
-        line-height: 20px;
-      };
-
-      --paper-font-code1: {
-        @apply --paper-font-common-code;
-
-        font-size: 14px;
-        font-weight: 500;
-        line-height: 20px;
-      };
-
-    }
-
-  </style>
-</custom-style>`;
-
-document.head.appendChild($_documentContainer);
-
-
-/***/ }),
-/* 23 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2699,7 +1908,1323 @@ const IronA11yKeysBehavior = {
 
 
 /***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const {AppStateInterface} = __webpack_require__(38);
+
+module.exports = subclass => 
+  class AppStateInterfaceImpl extends Mixin(subclass).with(AppStateInterface) {}
+
+/***/ }),
+/* 16 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export Settings */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return rootPath; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return sanitizeDOMValue; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__boot_js__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__resolve_url_js__ = __webpack_require__(17);
+
+
+
+/**
+ * Legacy settings.
+ * @namespace
+ * @memberof Polymer
+ */
+const settings = undefined || {};
+const useShadow = !(window.ShadyDOM);
+/* harmony export (immutable) */ __webpack_exports__["c"] = useShadow;
+
+const useNativeCSSProperties = Boolean(!window.ShadyCSS || window.ShadyCSS.nativeCss);
+/* unused harmony export useNativeCSSProperties */
+
+const useNativeCustomElements = !(window.customElements.polyfillWrapFlushCallback);
+/* unused harmony export useNativeCustomElements */
+
+
+
+/**
+ * Globally settable property that is automatically assigned to
+ * `Polymer.ElementMixin` instances, useful for binding in templates to
+ * make URL's relative to an application's root.  Defaults to the main
+ * document URL, but can be overridden by users.  It may be useful to set
+ * `Polymer.rootPath` to provide a stable application mount path when
+ * using client side routing.
+ *
+ * @memberof Polymer
+ */
+let rootPath = undefined ||
+  Object(__WEBPACK_IMPORTED_MODULE_1__resolve_url_js__["a" /* pathFromUrl */])(document.baseURI || window.location.href);
+
+
+
+const setRootPath = function(path) {
+  rootPath = path;
+};
+/* unused harmony export setRootPath */
+
+
+/**
+ * A global callback used to sanitize any value before inserting it into the DOM. The callback signature is:
+ *
+ *     Polymer = {
+ *       sanitizeDOMValue: function(value, name, type, node) { ... }
+ *     }
+ *
+ * Where:
+ *
+ * `value` is the value to sanitize.
+ * `name` is the name of an attribute or property (for example, href).
+ * `type` indicates where the value is being inserted: one of property, attribute, or text.
+ * `node` is the node where the value is being inserted.
+ *
+ * @type {(function(*,string,string,Node):*)|undefined}
+ * @memberof Polymer
+ */
+let sanitizeDOMValue = undefined;
+
+
+
+const setSanitizeDOMValue = function(newSanitizeDOMValue) {
+  sanitizeDOMValue = newSanitizeDOMValue;
+};
+/* unused harmony export setSanitizeDOMValue */
+
+
+
+/***/ }),
+/* 17 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return resolveCss; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return resolveUrl; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return pathFromUrl; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__boot_js__);
+
+
+let CSS_URL_RX = /(url\()([^)]*)(\))/g;
+let ABS_URL = /(^\/)|(^#)|(^[\w-\d]*:)/;
+let workingURL;
+let resolveDoc;
+/**
+ * Resolves the given URL against the provided `baseUri'.
+ *
+ * @memberof Polymer.ResolveUrl
+ * @param {string} url Input URL to resolve
+ * @param {?string=} baseURI Base URI to resolve the URL against
+ * @return {string} resolved URL
+ */
+function resolveUrl(url, baseURI) {
+  if (url && ABS_URL.test(url)) {
+    return url;
+  }
+  // Lazy feature detection.
+  if (workingURL === undefined) {
+    workingURL = false;
+    try {
+      const u = new URL('b', 'http://a');
+      u.pathname = 'c%20d';
+      workingURL = (u.href === 'http://a/c%20d');
+    } catch (e) {
+      // silently fail
+    }
+  }
+  if (!baseURI) {
+    baseURI = document.baseURI || window.location.href;
+  }
+  if (workingURL) {
+    return (new URL(url, baseURI)).href;
+  }
+  // Fallback to creating an anchor into a disconnected document.
+  if (!resolveDoc) {
+    resolveDoc = document.implementation.createHTMLDocument('temp');
+    resolveDoc.base = resolveDoc.createElement('base');
+    resolveDoc.head.appendChild(resolveDoc.base);
+    resolveDoc.anchor = resolveDoc.createElement('a');
+    resolveDoc.body.appendChild(resolveDoc.anchor);
+  }
+  resolveDoc.base.href = baseURI;
+  resolveDoc.anchor.href = url;
+  return resolveDoc.anchor.href || url;
+
+}
+
+/**
+ * Resolves any relative URL's in the given CSS text against the provided
+ * `ownerDocument`'s `baseURI`.
+ *
+ * @memberof Polymer.ResolveUrl
+ * @param {string} cssText CSS text to process
+ * @param {string} baseURI Base URI to resolve the URL against
+ * @return {string} Processed CSS text with resolved URL's
+ */
+function resolveCss(cssText, baseURI) {
+  return cssText.replace(CSS_URL_RX, function(m, pre, url, post) {
+    return pre + '\'' +
+      resolveUrl(url.replace(/["']/g, ''), baseURI) +
+      '\'' + post;
+  });
+}
+
+/**
+ * Returns a path from a given `url`. The path includes the trailing
+ * `/` from the url.
+ *
+ * @memberof Polymer.ResolveUrl
+ * @param {string} url Input URL to transform
+ * @return {string} resolved path
+ */
+function pathFromUrl(url) {
+  return url.substring(0, url.lastIndexOf('/') + 1);
+}
+
+
+
+
+
+
+/***/ }),
+/* 18 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["d"] = isPath;
+/* harmony export (immutable) */ __webpack_exports__["g"] = root;
+/* harmony export (immutable) */ __webpack_exports__["b"] = isAncestor;
+/* harmony export (immutable) */ __webpack_exports__["c"] = isDescendant;
+/* harmony export (immutable) */ __webpack_exports__["i"] = translate;
+/* harmony export (immutable) */ __webpack_exports__["e"] = matches;
+/* harmony export (immutable) */ __webpack_exports__["f"] = normalize;
+/* unused harmony export split */
+/* harmony export (immutable) */ __webpack_exports__["a"] = get;
+/* harmony export (immutable) */ __webpack_exports__["h"] = set;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__boot_js__);
+
+
+function isPath(path) {
+  return path.indexOf('.') >= 0;
+}
+
+function root(path) {
+  let dotIndex = path.indexOf('.');
+  if (dotIndex === -1) {
+    return path;
+  }
+  return path.slice(0, dotIndex);
+}
+
+function isAncestor(base, path) {
+  //     base.startsWith(path + '.');
+  return base.indexOf(path + '.') === 0;
+}
+
+function isDescendant(base, path) {
+  //     path.startsWith(base + '.');
+  return path.indexOf(base + '.') === 0;
+}
+
+function translate(base, newBase, path) {
+  return newBase + path.slice(base.length);
+}
+
+function matches(base, path) {
+  return (base === path) ||
+         isAncestor(base, path) ||
+         isDescendant(base, path);
+}
+
+function normalize(path) {
+  if (Array.isArray(path)) {
+    let parts = [];
+    for (let i=0; i<path.length; i++) {
+      let args = path[i].toString().split('.');
+      for (let j=0; j<args.length; j++) {
+        parts.push(args[j]);
+      }
+    }
+    return parts.join('.');
+  } else {
+    return path;
+  }
+}
+
+function split(path) {
+  if (Array.isArray(path)) {
+    return normalize(path).split('.');
+  }
+  return path.toString().split('.');
+}
+
+function get(root, path, info) {
+  let prop = root;
+  let parts = split(path);
+  // Loop over path parts[0..n-1] and dereference
+  for (let i=0; i<parts.length; i++) {
+    if (!prop) {
+      return;
+    }
+    let part = parts[i];
+    prop = prop[part];
+  }
+  if (info) {
+    info.path = parts.join('.');
+  }
+  return prop;
+}
+
+function set(root, path, value) {
+  let prop = root;
+  let parts = split(path);
+  let last = parts[parts.length-1];
+  if (parts.length > 1) {
+    // Loop over path parts[0..n-2] and dereference
+    for (let i=0; i<parts.length-1; i++) {
+      let part = parts[i];
+      prop = prop[part];
+      if (!prop) {
+        return;
+      }
+    }
+    // Set value to object at end of path
+    prop[last] = value;
+  } else {
+    // Simple property set
+    prop[path] = value;
+  }
+  return parts.join('.');
+}
+
+const isDeep = isPath;
+/* unused harmony export isDeep */
+
+
+
+/***/ }),
+/* 19 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__boot_js__);
+
+
+let debouncerQueue = [];
+
+const enqueueDebouncer = function(debouncer) {
+  debouncerQueue.push(debouncer);
+};
+/* harmony export (immutable) */ __webpack_exports__["a"] = enqueueDebouncer;
+
+
+function flushDebouncers() {
+  const didFlush = Boolean(debouncerQueue.length);
+  while (debouncerQueue.length) {
+    try {
+      debouncerQueue.shift().flush();
+    } catch(e) {
+      setTimeout(() => {
+        throw e;
+      });
+    }
+  }
+  return didFlush;
+}
+
+const flush = function() {
+  let shadyDOM, debouncers;
+  do {
+    shadyDOM = window.ShadyDOM && ShadyDOM.flush();
+    if (window.ShadyCSS && window.ShadyCSS.ScopingShim) {
+      window.ShadyCSS.ScopingShim.flush();
+    }
+    debouncers = flushDebouncers();
+  } while (shadyDOM || debouncers);
+};
+/* harmony export (immutable) */ __webpack_exports__["b"] = flush;
+
+
+
+/***/ }),
+/* 20 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_mixin_js__ = __webpack_require__(8);
+
+
+// Common implementation for mixin & behavior
+function mutablePropertyChange(inst, property, value, old, mutableData) {
+  let isObject;
+  if (mutableData) {
+    isObject = (typeof value === 'object' && value !== null);
+    // Pull `old` for Objects from temp cache, but treat `null` as a primitive
+    if (isObject) {
+      old = inst.__dataTemp[property];
+    }
+  }
+  // Strict equality check, but return false for NaN===NaN
+  let shouldChange = (old !== value && (old === old || value === value));
+  // Objects are stored in temporary cache (cleared at end of
+  // turn), which is used for dirty-checking
+  if (isObject && shouldChange) {
+    inst.__dataTemp[property] = value;
+  }
+  return shouldChange;
+}
+
+const MutableData = Object(__WEBPACK_IMPORTED_MODULE_0__utils_mixin_js__["a" /* dedupingMixin */])(superClass => {
+
+  /**
+   * @polymer
+   * @mixinClass
+   * @implements {Polymer_MutableData}
+   */
+  class MutableData extends superClass {
+    /**
+     * Overrides `Polymer.PropertyEffects` to provide option for skipping
+     * strict equality checking for Objects and Arrays.
+     *
+     * This method pulls the value to dirty check against from the `__dataTemp`
+     * cache (rather than the normal `__data` cache) for Objects.  Since the temp
+     * cache is cleared at the end of a turn, this implementation allows
+     * side-effects of deep object changes to be processed by re-setting the
+     * same object (using the temp cache as an in-turn backstop to prevent
+     * cycles due to 2-way notification).
+     *
+     * @param {string} property Property name
+     * @param {*} value New property value
+     * @param {*} old Previous property value
+     * @return {boolean} Whether the property should be considered a change
+     * @protected
+     */
+    _shouldPropertyChange(property, value, old) {
+      return mutablePropertyChange(this, property, value, old, true);
+    }
+
+  }
+  /** @type {boolean} */
+  MutableData.prototype.mutableData = false;
+
+  return MutableData;
+
+});
+/* harmony export (immutable) */ __webpack_exports__["a"] = MutableData;
+
+
+const OptionalMutableData = Object(__WEBPACK_IMPORTED_MODULE_0__utils_mixin_js__["a" /* dedupingMixin */])(superClass => {
+
+  /**
+   * @mixinClass
+   * @polymer
+   * @implements {Polymer_OptionalMutableData}
+   */
+  class OptionalMutableData extends superClass {
+
+    static get properties() {
+      return {
+        /**
+         * Instance-level flag for configuring the dirty-checking strategy
+         * for this element.  When true, Objects and Arrays will skip dirty
+         * checking, otherwise strict equality checking will be used.
+         */
+        mutableData: Boolean
+      };
+    }
+
+    /**
+     * Overrides `Polymer.PropertyEffects` to provide option for skipping
+     * strict equality checking for Objects and Arrays.
+     *
+     * When `this.mutableData` is true on this instance, this method
+     * pulls the value to dirty check against from the `__dataTemp` cache
+     * (rather than the normal `__data` cache) for Objects.  Since the temp
+     * cache is cleared at the end of a turn, this implementation allows
+     * side-effects of deep object changes to be processed by re-setting the
+     * same object (using the temp cache as an in-turn backstop to prevent
+     * cycles due to 2-way notification).
+     *
+     * @param {string} property Property name
+     * @param {*} value New property value
+     * @param {*} old Previous property value
+     * @return {boolean} Whether the property should be considered a change
+     * @protected
+     */
+    _shouldPropertyChange(property, value, old) {
+      return mutablePropertyChange(this, property, value, old, this.mutableData);
+    }
+  }
+
+  return OptionalMutableData;
+
+});
+/* harmony export (immutable) */ __webpack_exports__["b"] = OptionalMutableData;
+
+
+// Export for use by legacy behavior
+MutableData._mutablePropertyChange = mutablePropertyChange;
+
+
+/***/ }),
+/* 21 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export CustomStyle */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__webcomponents_shadycss_entrypoints_custom_style_interface_js__ = __webpack_require__(96);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_style_gather_js__ = __webpack_require__(48);
+
+
+
+const attr = 'include';
+
+const CustomStyleInterface = window.ShadyCSS.CustomStyleInterface;
+
+/**
+ * Custom element for defining styles in the main document that can take
+ * advantage of [shady DOM](https://github.com/webcomponents/shadycss) shims
+ * for style encapsulation, custom properties, and custom mixins.
+ *
+ * - Document styles defined in a `<custom-style>` are shimmed to ensure they
+ *   do not leak into local DOM when running on browsers without native
+ *   Shadow DOM.
+ * - Custom properties can be defined in a `<custom-style>`. Use the `html` selector
+ *   to define custom properties that apply to all custom elements.
+ * - Custom mixins can be defined in a `<custom-style>`, if you import the optional
+ *   [apply shim](https://github.com/webcomponents/shadycss#about-applyshim)
+ *   (`shadycss/apply-shim.html`).
+ *
+ * To use:
+ *
+ * - Import `custom-style.html`.
+ * - Place a `<custom-style>` element in the main document, wrapping an inline `<style>` tag that
+ *   contains the CSS rules you want to shim.
+ *
+ * For example:
+ *
+ * ```
+ * <!-- import apply shim--only required if using mixins -->
+ * <link rel="import href="bower_components/shadycss/apply-shim.html">
+ * <!-- import custom-style element -->
+ * <link rel="import" href="bower_components/polymer/lib/elements/custom-style.html">
+ * ...
+ * <custom-style>
+ *   <style>
+ *     html {
+ *       --custom-color: blue;
+ *       --custom-mixin: {
+ *         font-weight: bold;
+ *         color: red;
+ *       };
+ *     }
+ *   </style>
+ * </custom-style>
+ * ```
+ *
+ * @customElement
+ * @extends HTMLElement
+ * @memberof Polymer
+ * @summary Custom element for defining styles in the main document that can
+ *   take advantage of Polymer's style scoping and custom properties shims.
+ */
+class CustomStyle extends HTMLElement {
+  constructor() {
+    super();
+    this._style = null;
+    CustomStyleInterface.addCustomStyle(this);
+  }
+  /**
+   * Returns the light-DOM `<style>` child this element wraps.  Upon first
+   * call any style modules referenced via the `include` attribute will be
+   * concatenated to this element's `<style>`.
+   *
+   * @return {HTMLStyleElement} This element's light-DOM `<style>`
+   */
+  getStyle() {
+    if (this._style) {
+      return this._style;
+    }
+    const style = /** @type {HTMLStyleElement} */(this.querySelector('style'));
+    if (!style) {
+      return null;
+    }
+    this._style = style;
+    const include = style.getAttribute(attr);
+    if (include) {
+      style.removeAttribute(attr);
+      style.textContent = Object(__WEBPACK_IMPORTED_MODULE_1__utils_style_gather_js__["b" /* cssFromModules */])(include) + style.textContent;
+    }
+    return this._style;
+  }
+}
+
+window.customElements.define('custom-style', CustomStyle);
+
+
+
+/***/ }),
+/* 22 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__color_js__ = __webpack_require__(36);
+
+
+const $_documentContainer = document.createElement('div');
+$_documentContainer.setAttribute('style', 'display: none;');
+
+$_documentContainer.innerHTML = `<custom-style>
+  <style is="custom-style">
+    html {
+      /*
+       * You can use these generic variables in your elements for easy theming.
+       * For example, if all your elements use \`--primary-text-color\` as its main
+       * color, then switching from a light to a dark theme is just a matter of
+       * changing the value of \`--primary-text-color\` in your application.
+       */
+      --primary-text-color: var(--light-theme-text-color);
+      --primary-background-color: var(--light-theme-background-color);
+      --secondary-text-color: var(--light-theme-secondary-color);
+      --disabled-text-color: var(--light-theme-disabled-color);
+      --divider-color: var(--light-theme-divider-color);
+      --error-color: var(--paper-deep-orange-a700);
+
+      /*
+       * Primary and accent colors. Also see color.html for more colors.
+       */
+      --primary-color: var(--paper-indigo-500);
+      --light-primary-color: var(--paper-indigo-100);
+      --dark-primary-color: var(--paper-indigo-700);
+
+      --accent-color: var(--paper-pink-a200);
+      --light-accent-color: var(--paper-pink-a100);
+      --dark-accent-color: var(--paper-pink-a400);
+
+
+      /*
+       * Material Design Light background theme
+       */
+      --light-theme-background-color: #ffffff;
+      --light-theme-base-color: #000000;
+      --light-theme-text-color: var(--paper-grey-900);
+      --light-theme-secondary-color: #737373;  /* for secondary text and icons */
+      --light-theme-disabled-color: #9b9b9b;  /* disabled/hint text */
+      --light-theme-divider-color: #dbdbdb;
+
+      /*
+       * Material Design Dark background theme
+       */
+      --dark-theme-background-color: var(--paper-grey-900);
+      --dark-theme-base-color: #ffffff;
+      --dark-theme-text-color: #ffffff;
+      --dark-theme-secondary-color: #bcbcbc;  /* for secondary text and icons */
+      --dark-theme-disabled-color: #646464;  /* disabled/hint text */
+      --dark-theme-divider-color: #3c3c3c;
+
+      /*
+       * Deprecated values because of their confusing names.
+       */
+      --text-primary-color: var(--dark-theme-text-color);
+      --default-primary-color: var(--primary-color);
+    }
+  </style>
+</custom-style>`;
+
+document.head.appendChild($_documentContainer);
+
+
+/***/ }),
+/* 23 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+
+const $_documentContainer = document.createElement('div');
+$_documentContainer.setAttribute('style', 'display: none;');
+
+$_documentContainer.innerHTML = `<custom-style>
+  <style is="custom-style">
+    html {
+
+      --shadow-transition: {
+        transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+      };
+
+      --shadow-none: {
+        box-shadow: none;
+      };
+
+      /* from http://codepen.io/shyndman/pen/c5394ddf2e8b2a5c9185904b57421cdb */
+
+      --shadow-elevation-2dp: {
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+                    0 1px 5px 0 rgba(0, 0, 0, 0.12),
+                    0 3px 1px -2px rgba(0, 0, 0, 0.2);
+      };
+
+      --shadow-elevation-3dp: {
+        box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.14),
+                    0 1px 8px 0 rgba(0, 0, 0, 0.12),
+                    0 3px 3px -2px rgba(0, 0, 0, 0.4);
+      };
+
+      --shadow-elevation-4dp: {
+        box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14),
+                    0 1px 10px 0 rgba(0, 0, 0, 0.12),
+                    0 2px 4px -1px rgba(0, 0, 0, 0.4);
+      };
+
+      --shadow-elevation-6dp: {
+        box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.14),
+                    0 1px 18px 0 rgba(0, 0, 0, 0.12),
+                    0 3px 5px -1px rgba(0, 0, 0, 0.4);
+      };
+
+      --shadow-elevation-8dp: {
+        box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14),
+                    0 3px 14px 2px rgba(0, 0, 0, 0.12),
+                    0 5px 5px -3px rgba(0, 0, 0, 0.4);
+      };
+
+      --shadow-elevation-12dp: {
+        box-shadow: 0 12px 16px 1px rgba(0, 0, 0, 0.14),
+                    0 4px 22px 3px rgba(0, 0, 0, 0.12),
+                    0 6px 7px -4px rgba(0, 0, 0, 0.4);
+      };
+
+      --shadow-elevation-16dp: {
+        box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14),
+                    0  6px 30px 5px rgba(0, 0, 0, 0.12),
+                    0  8px 10px -5px rgba(0, 0, 0, 0.4);
+      };
+
+      --shadow-elevation-24dp: {
+        box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.14),
+                    0 9px 46px 8px rgba(0, 0, 0, 0.12),
+                    0 11px 15px -7px rgba(0, 0, 0, 0.4);
+      };
+    }
+  </style>
+</custom-style>`;
+
+document.head.appendChild($_documentContainer);
+
+
+/***/ }),
 /* 24 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__font_roboto_roboto_js__ = __webpack_require__(98);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__font_roboto_roboto_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__font_roboto_roboto_js__);
+
+
+const $_documentContainer = document.createElement('div');
+$_documentContainer.setAttribute('style', 'display: none;');
+
+$_documentContainer.innerHTML = `<custom-style>
+  <style is="custom-style">
+    html {
+
+      /* Shared Styles */
+      --paper-font-common-base: {
+        font-family: 'Roboto', 'Noto', sans-serif;
+        -webkit-font-smoothing: antialiased;
+      };
+
+      --paper-font-common-code: {
+        font-family: 'Roboto Mono', 'Consolas', 'Menlo', monospace;
+        -webkit-font-smoothing: antialiased;
+      };
+
+      --paper-font-common-expensive-kerning: {
+        text-rendering: optimizeLegibility;
+      };
+
+      --paper-font-common-nowrap: {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      };
+
+      /* Material Font Styles */
+
+      --paper-font-display4: {
+        @apply --paper-font-common-base;
+        @apply --paper-font-common-nowrap;
+
+        font-size: 112px;
+        font-weight: 300;
+        letter-spacing: -.044em;
+        line-height: 120px;
+      };
+
+      --paper-font-display3: {
+        @apply --paper-font-common-base;
+        @apply --paper-font-common-nowrap;
+
+        font-size: 56px;
+        font-weight: 400;
+        letter-spacing: -.026em;
+        line-height: 60px;
+      };
+
+      --paper-font-display2: {
+        @apply --paper-font-common-base;
+
+        font-size: 45px;
+        font-weight: 400;
+        letter-spacing: -.018em;
+        line-height: 48px;
+      };
+
+      --paper-font-display1: {
+        @apply --paper-font-common-base;
+
+        font-size: 34px;
+        font-weight: 400;
+        letter-spacing: -.01em;
+        line-height: 40px;
+      };
+
+      --paper-font-headline: {
+        @apply --paper-font-common-base;
+
+        font-size: 24px;
+        font-weight: 400;
+        letter-spacing: -.012em;
+        line-height: 32px;
+      };
+
+      --paper-font-title: {
+        @apply --paper-font-common-base;
+        @apply --paper-font-common-nowrap;
+
+        font-size: 20px;
+        font-weight: 500;
+        line-height: 28px;
+      };
+
+      --paper-font-subhead: {
+        @apply --paper-font-common-base;
+
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 24px;
+      };
+
+      --paper-font-body2: {
+        @apply --paper-font-common-base;
+
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 24px;
+      };
+
+      --paper-font-body1: {
+        @apply --paper-font-common-base;
+
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 20px;
+      };
+
+      --paper-font-caption: {
+        @apply --paper-font-common-base;
+        @apply --paper-font-common-nowrap;
+
+        font-size: 12px;
+        font-weight: 400;
+        letter-spacing: 0.011em;
+        line-height: 20px;
+      };
+
+      --paper-font-menu: {
+        @apply --paper-font-common-base;
+        @apply --paper-font-common-nowrap;
+
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 24px;
+      };
+
+      --paper-font-button: {
+        @apply --paper-font-common-base;
+        @apply --paper-font-common-nowrap;
+
+        font-size: 14px;
+        font-weight: 500;
+        letter-spacing: 0.018em;
+        line-height: 24px;
+        text-transform: uppercase;
+      };
+
+      --paper-font-code2: {
+        @apply --paper-font-common-code;
+
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 20px;
+      };
+
+      --paper-font-code1: {
+        @apply --paper-font-common-code;
+
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 20px;
+      };
+
+    }
+
+  </style>
+</custom-style>`;
+
+document.head.appendChild($_documentContainer);
+
+
+/***/ }),
+/* 25 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_a11y_keys_behavior_iron_a11y_keys_behavior_js__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_control_state_js__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
+
+
+
+
+
+const IronButtonStateImpl = {
+
+  properties: {
+
+    /**
+     * If true, the user is currently holding down the button.
+     */
+    pressed: {
+      type: Boolean,
+      readOnly: true,
+      value: false,
+      reflectToAttribute: true,
+      observer: '_pressedChanged'
+    },
+
+    /**
+     * If true, the button toggles the active state with each tap or press
+     * of the spacebar.
+     */
+    toggles: {
+      type: Boolean,
+      value: false,
+      reflectToAttribute: true
+    },
+
+    /**
+     * If true, the button is a toggle and is currently in the active state.
+     */
+    active: {
+      type: Boolean,
+      value: false,
+      notify: true,
+      reflectToAttribute: true
+    },
+
+    /**
+     * True if the element is currently being pressed by a "pointer," which
+     * is loosely defined as mouse or touch input (but specifically excluding
+     * keyboard input).
+     */
+    pointerDown: {
+      type: Boolean,
+      readOnly: true,
+      value: false
+    },
+
+    /**
+     * True if the input device that caused the element to receive focus
+     * was a keyboard.
+     */
+    receivedFocusFromKeyboard: {
+      type: Boolean,
+      readOnly: true
+    },
+
+    /**
+     * The aria attribute to be set if the button is a toggle and in the
+     * active state.
+     */
+    ariaActiveAttribute: {
+      type: String,
+      value: 'aria-pressed',
+      observer: '_ariaActiveAttributeChanged'
+    }
+  },
+
+  listeners: {
+    down: '_downHandler',
+    up: '_upHandler',
+    tap: '_tapHandler'
+  },
+
+  observers: [
+    '_focusChanged(focused)',
+    '_activeChanged(active, ariaActiveAttribute)'
+  ],
+
+  keyBindings: {
+    'enter:keydown': '_asyncClick',
+    'space:keydown': '_spaceKeyDownHandler',
+    'space:keyup': '_spaceKeyUpHandler',
+  },
+
+  _mouseEventRe: /^mouse/,
+
+  _tapHandler: function() {
+    if (this.toggles) {
+     // a tap is needed to toggle the active state
+      this._userActivate(!this.active);
+    } else {
+      this.active = false;
+    }
+  },
+
+  _focusChanged: function(focused) {
+    this._detectKeyboardFocus(focused);
+
+    if (!focused) {
+      this._setPressed(false);
+    }
+  },
+
+  _detectKeyboardFocus: function(focused) {
+    this._setReceivedFocusFromKeyboard(!this.pointerDown && focused);
+  },
+
+  // to emulate native checkbox, (de-)activations from a user interaction fire
+  // 'change' events
+  _userActivate: function(active) {
+    if (this.active !== active) {
+      this.active = active;
+      this.fire('change');
+    }
+  },
+
+  _downHandler: function(event) {
+    this._setPointerDown(true);
+    this._setPressed(true);
+    this._setReceivedFocusFromKeyboard(false);
+  },
+
+  _upHandler: function() {
+    this._setPointerDown(false);
+    this._setPressed(false);
+  },
+
+  /**
+   * @param {!KeyboardEvent} event .
+   */
+  _spaceKeyDownHandler: function(event) {
+    var keyboardEvent = event.detail.keyboardEvent;
+    var target = Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(keyboardEvent).localTarget;
+
+    // Ignore the event if this is coming from a focused light child, since that
+    // element will deal with it.
+    if (this.isLightDescendant(/** @type {Node} */(target)))
+      return;
+
+    keyboardEvent.preventDefault();
+    keyboardEvent.stopImmediatePropagation();
+    this._setPressed(true);
+  },
+
+  /**
+   * @param {!KeyboardEvent} event .
+   */
+  _spaceKeyUpHandler: function(event) {
+    var keyboardEvent = event.detail.keyboardEvent;
+    var target = Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(keyboardEvent).localTarget;
+
+    // Ignore the event if this is coming from a focused light child, since that
+    // element will deal with it.
+    if (this.isLightDescendant(/** @type {Node} */(target)))
+      return;
+
+    if (this.pressed) {
+      this._asyncClick();
+    }
+    this._setPressed(false);
+  },
+
+  // trigger click asynchronously, the asynchrony is useful to allow one
+  // event handler to unwind before triggering another event
+  _asyncClick: function() {
+    this.async(function() {
+      this.click();
+    }, 1);
+  },
+
+  // any of these changes are considered a change to button state
+
+  _pressedChanged: function(pressed) {
+    this._changedButtonState();
+  },
+
+  _ariaActiveAttributeChanged: function(value, oldValue) {
+    if (oldValue && oldValue != value && this.hasAttribute(oldValue)) {
+      this.removeAttribute(oldValue);
+    }
+  },
+
+  _activeChanged: function(active, ariaActiveAttribute) {
+    if (this.toggles) {
+      this.setAttribute(this.ariaActiveAttribute,
+                        active ? 'true' : 'false');
+    } else {
+      this.removeAttribute(this.ariaActiveAttribute);
+    }
+    this._changedButtonState();
+  },
+
+  _controlStateChanged: function() {
+    if (this.disabled) {
+      this._setPressed(false);
+    } else {
+      this._changedButtonState();
+    }
+  },
+
+  // provide hook for follow-on behaviors to react to button-state
+
+  _changedButtonState: function() {
+    if (this._buttonStateChanged) {
+      this._buttonStateChanged(); // abstract
+    }
+  }
+
+};
+/* harmony export (immutable) */ __webpack_exports__["b"] = IronButtonStateImpl;
+
+
+const IronButtonState = [
+  __WEBPACK_IMPORTED_MODULE_1__iron_a11y_keys_behavior_iron_a11y_keys_behavior_js__["a" /* IronA11yKeysBehavior */],
+  IronButtonStateImpl
+];
+/* harmony export (immutable) */ __webpack_exports__["a"] = IronButtonState;
+
+
+
+/***/ }),
+/* 26 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__polymer_lib_utils_settings_js__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
+
+
+
+
+const IronResizableBehavior = {
+  properties: {
+    /**
+     * The closest ancestor element that implements `IronResizableBehavior`.
+     */
+    _parentResizable: {
+      type: Object,
+      observer: '_parentResizableChanged'
+    },
+
+    /**
+     * True if this element is currently notifying its descendant elements of
+     * resize.
+     */
+    _notifyingDescendant: {
+      type: Boolean,
+      value: false
+    }
+  },
+
+  listeners: {
+    'iron-request-resize-notifications': '_onIronRequestResizeNotifications'
+  },
+
+  created: function() {
+    // We don't really need property effects on these, and also we want them
+    // to be created before the `_parentResizable` observer fires:
+    this._interestedResizables = [];
+    this._boundNotifyResize = this.notifyResize.bind(this);
+  },
+
+  attached: function() {
+    this._requestResizeNotifications();
+  },
+
+  detached: function() {
+    if (this._parentResizable) {
+      this._parentResizable.stopResizeNotificationsFor(this);
+    } else {
+      window.removeEventListener('resize', this._boundNotifyResize);
+    }
+
+    this._parentResizable = null;
+  },
+
+  /**
+   * Can be called to manually notify a resizable and its descendant
+   * resizables of a resize change.
+   */
+  notifyResize: function() {
+    if (!this.isAttached) {
+      return;
+    }
+
+    this._interestedResizables.forEach(function(resizable) {
+      if (this.resizerShouldNotify(resizable)) {
+        this._notifyDescendant(resizable);
+      }
+    }, this);
+
+    this._fireResize();
+  },
+
+  /**
+   * Used to assign the closest resizable ancestor to this resizable
+   * if the ancestor detects a request for notifications.
+   */
+  assignParentResizable: function(parentResizable) {
+    this._parentResizable = parentResizable;
+  },
+
+  /**
+   * Used to remove a resizable descendant from the list of descendants
+   * that should be notified of a resize change.
+   */
+  stopResizeNotificationsFor: function(target) {
+    var index = this._interestedResizables.indexOf(target);
+
+    if (index > -1) {
+      this._interestedResizables.splice(index, 1);
+      this.unlisten(target, 'iron-resize', '_onDescendantIronResize');
+    }
+  },
+
+  /**
+   * This method can be overridden to filter nested elements that should or
+   * should not be notified by the current element. Return true if an element
+   * should be notified, or false if it should not be notified.
+   *
+   * @param {HTMLElement} element A candidate descendant element that
+   * implements `IronResizableBehavior`.
+   * @return {boolean} True if the `element` should be notified of resize.
+   */
+  resizerShouldNotify: function(element) { return true; },
+
+  _onDescendantIronResize: function(event) {
+    if (this._notifyingDescendant) {
+      event.stopPropagation();
+      return;
+    }
+
+    // NOTE(cdata): In ShadowDOM, event retargeting makes echoing of the
+    // otherwise non-bubbling event "just work." We do it manually here for
+    // the case where Polymer is not using shadow roots for whatever reason:
+    if (!__WEBPACK_IMPORTED_MODULE_1__polymer_lib_utils_settings_js__["c" /* useShadow */]) {
+      this._fireResize();
+    }
+  },
+
+  _fireResize: function() {
+    this.fire('iron-resize', null, {
+      node: this,
+      bubbles: false
+    });
+  },
+
+  _onIronRequestResizeNotifications: function(event) {
+    var target = /** @type {!EventTarget} */ (Object(__WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(event).rootTarget);
+    if (target === this) {
+      return;
+    }
+
+    if (this._interestedResizables.indexOf(target) === -1) {
+      this._interestedResizables.push(target);
+      this.listen(target, 'iron-resize', '_onDescendantIronResize');
+    }
+
+    target.assignParentResizable(this);
+    this._notifyDescendant(target);
+
+    event.stopPropagation();
+  },
+
+  _parentResizableChanged: function(parentResizable) {
+    if (parentResizable) {
+      window.removeEventListener('resize', this._boundNotifyResize);
+    }
+  },
+
+  _notifyDescendant: function(descendant) {
+    // NOTE(cdata): In IE10, attached is fired on children first, so it's
+    // important not to notify them if the parent is not attached yet (or
+    // else they will get redundantly notified when the parent attaches).
+    if (!this.isAttached) {
+      return;
+    }
+
+    this._notifyingDescendant = true;
+    descendant.notifyResize();
+    this._notifyingDescendant = false;
+  },
+  
+  _requestResizeNotifications: function() {
+    if (!this.isAttached)
+      return;
+    
+    // NOTE(valdrin) In CustomElements v1 with native HTMLImports, the order
+    // of imports affects the order of `attached` callbacks (see webcomponents/custom-elements#15).
+    // This might cause a child to notify parents too early (as the parent
+    // still has to be upgraded), resulting in a parent not able to keep track
+    // of the `_interestedResizables`. To solve this, we wait for the document
+    // to be done loading before firing the event.
+    if (document.readyState === 'loading') {
+      var _requestResizeNotifications = this._requestResizeNotifications.bind(this);
+      document.addEventListener('readystatechange', function readystatechanged() {
+        document.removeEventListener('readystatechange', readystatechanged);
+        _requestResizeNotifications();
+      });
+    } else {
+      this.fire('iron-request-resize-notifications', null, {
+        node: this,
+        bubbles: true,
+        cancelable: true
+      });
+
+      if (!this._parentResizable) {
+        window.addEventListener('resize', this._boundNotifyResize);
+        this.notifyResize();
+      } 
+    }
+  }
+};
+/* harmony export (immutable) */ __webpack_exports__["a"] = IronResizableBehavior;
+
+
+
+/***/ }),
+/* 27 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2749,7 +3274,7 @@ if (window.ShadyCSS && window.ShadyCSS.nativeCss !== undefined) {
 }
 
 /***/ }),
-/* 25 */
+/* 28 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3026,7 +3551,7 @@ const AT_START = '@';
 
 
 /***/ }),
-/* 26 */
+/* 29 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3070,14 +3595,14 @@ const HOST_SUFFIX = '($|[.:[\\s>+~])';
 
 
 /***/ }),
-/* 27 */
+/* 30 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["c"] = updateNativeProperties;
 /* harmony export (immutable) */ __webpack_exports__["b"] = getComputedStyleValue;
 /* harmony export (immutable) */ __webpack_exports__["a"] = detectMixin;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__common_regex_js__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__common_regex_js__ = __webpack_require__(29);
 /**
 @license
 Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
@@ -3140,7 +3665,7 @@ function detectMixin(cssText) {
 
 
 /***/ }),
-/* 28 */
+/* 31 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3150,13 +3675,13 @@ function detectMixin(cssText) {
 /* unused harmony export dumpRegistrations */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_boot_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__utils_boot_js__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_settings_js__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_mixin_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_settings_js__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_mixin_js__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_case_map_js__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_style_gather_js__ = __webpack_require__(43);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_resolve_url_js__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__elements_dom_module_js__ = __webpack_require__(29);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__property_effects_js__ = __webpack_require__(30);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_style_gather_js__ = __webpack_require__(48);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_resolve_url_js__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__elements_dom_module_js__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__property_effects_js__ = __webpack_require__(33);
 
 
 
@@ -3663,7 +4188,7 @@ const ElementMixin = Object(__WEBPACK_IMPORTED_MODULE_2__utils_mixin_js__["a" /*
       }
       super._initializeProperties();
       // set path defaults
-      this.rootPath = __WEBPACK_IMPORTED_MODULE_1__utils_settings_js__["b" /* rootPath */];
+      this.rootPath = __WEBPACK_IMPORTED_MODULE_1__utils_settings_js__["a" /* rootPath */];
       this.importPath = importPath;
       // apply property defaults...
       let p$ = propertyDefaultsForClass(this.constructor);
@@ -3890,14 +4415,14 @@ const updateStyles = function(props) {
 
 
 /***/ }),
-/* 29 */
+/* 32 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DomModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_boot_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__utils_boot_js__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_resolve_url_js__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_resolve_url_js__ = __webpack_require__(17);
 
 
 
@@ -4021,18 +4546,18 @@ customElements.define('dom-module', DomModule);
 
 
 /***/ }),
-/* 30 */
+/* 33 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_boot_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__utils_boot_js__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_mixin_js__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_path_js__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_mixin_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_path_js__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_case_map_js__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__property_accessors_js__ = __webpack_require__(76);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__template_stamp_js__ = __webpack_require__(77);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__utils_settings_js__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__property_accessors_js__ = __webpack_require__(85);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__template_stamp_js__ = __webpack_require__(86);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__utils_settings_js__ = __webpack_require__(16);
 
 
 
@@ -4392,8 +4917,8 @@ function handleNotification(event, inst, fromProp, toPath, negate) {
  */
 function runReflectEffect(inst, property, props, oldProps, info) {
   let value = inst.__data[property];
-  if (__WEBPACK_IMPORTED_MODULE_6__utils_settings_js__["c" /* sanitizeDOMValue */]) {
-    value = Object(__WEBPACK_IMPORTED_MODULE_6__utils_settings_js__["c" /* sanitizeDOMValue */])(value, info.attrName, 'attribute', /** @type {Node} */(inst));
+  if (__WEBPACK_IMPORTED_MODULE_6__utils_settings_js__["b" /* sanitizeDOMValue */]) {
+    value = Object(__WEBPACK_IMPORTED_MODULE_6__utils_settings_js__["b" /* sanitizeDOMValue */])(value, info.attrName, 'attribute', /** @type {Node} */(inst));
   }
   inst._propertyToAttribute(property, info.attrName, value);
 }
@@ -4600,8 +5125,8 @@ function runBindingEffect(inst, path, props, oldProps, info, hasPaths, nodeList)
  */
 function applyBindingValue(inst, node, binding, part, value) {
   value = computeBindingValue(node, value, binding, part);
-  if (__WEBPACK_IMPORTED_MODULE_6__utils_settings_js__["c" /* sanitizeDOMValue */]) {
-    value = Object(__WEBPACK_IMPORTED_MODULE_6__utils_settings_js__["c" /* sanitizeDOMValue */])(value, binding.target, binding.kind, node);
+  if (__WEBPACK_IMPORTED_MODULE_6__utils_settings_js__["b" /* sanitizeDOMValue */]) {
+    value = Object(__WEBPACK_IMPORTED_MODULE_6__utils_settings_js__["b" /* sanitizeDOMValue */])(value, binding.target, binding.kind, node);
   }
   if (binding.kind == 'attribute') {
     // Attribute binding
@@ -6675,7 +7200,7 @@ let hostStack = {
 
 
 /***/ }),
-/* 31 */
+/* 34 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6696,7 +7221,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (immutable) */ __webpack_exports__["resetMouseCanceller"] = resetMouseCanceller;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__boot_js__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__async_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__async_js__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__debounce_js__ = __webpack_require__(11);
 
 
@@ -7510,7 +8035,7 @@ const remove = removeListener;
 
 
 /***/ }),
-/* 32 */
+/* 35 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7518,8 +8043,8 @@ const remove = removeListener;
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TemplateInstanceBase; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__boot_js__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mixins_property_effects_js__ = __webpack_require__(30);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__mixins_mutable_data_js__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mixins_property_effects_js__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__mixins_mutable_data_js__ = __webpack_require__(20);
 
 
 
@@ -8027,10 +8552,346 @@ const Templatize = {
 
 
 /***/ }),
-/* 33 */
+/* 36 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+
+const $_documentContainer = document.createElement('div');
+$_documentContainer.setAttribute('style', 'display: none;');
+
+$_documentContainer.innerHTML = `<custom-style>
+  <style is="custom-style">
+    html {
+
+      /* Material Design color palette for Google products */
+
+      --google-red-100: #f4c7c3;
+      --google-red-300: #e67c73;
+      --google-red-500: #db4437;
+      --google-red-700: #c53929;
+
+      --google-blue-100: #c6dafc;
+      --google-blue-300: #7baaf7;
+      --google-blue-500: #4285f4;
+      --google-blue-700: #3367d6;
+
+      --google-green-100: #b7e1cd;
+      --google-green-300: #57bb8a;
+      --google-green-500: #0f9d58;
+      --google-green-700: #0b8043;
+
+      --google-yellow-100: #fce8b2;
+      --google-yellow-300: #f7cb4d;
+      --google-yellow-500: #f4b400;
+      --google-yellow-700: #f09300;
+
+      --google-grey-100: #f5f5f5;
+      --google-grey-300: #e0e0e0;
+      --google-grey-500: #9e9e9e;
+      --google-grey-700: #616161;
+
+      /* Material Design color palette from online spec document */
+
+      --paper-red-50: #ffebee;
+      --paper-red-100: #ffcdd2;
+      --paper-red-200: #ef9a9a;
+      --paper-red-300: #e57373;
+      --paper-red-400: #ef5350;
+      --paper-red-500: #f44336;
+      --paper-red-600: #e53935;
+      --paper-red-700: #d32f2f;
+      --paper-red-800: #c62828;
+      --paper-red-900: #b71c1c;
+      --paper-red-a100: #ff8a80;
+      --paper-red-a200: #ff5252;
+      --paper-red-a400: #ff1744;
+      --paper-red-a700: #d50000;
+
+      --paper-pink-50: #fce4ec;
+      --paper-pink-100: #f8bbd0;
+      --paper-pink-200: #f48fb1;
+      --paper-pink-300: #f06292;
+      --paper-pink-400: #ec407a;
+      --paper-pink-500: #e91e63;
+      --paper-pink-600: #d81b60;
+      --paper-pink-700: #c2185b;
+      --paper-pink-800: #ad1457;
+      --paper-pink-900: #880e4f;
+      --paper-pink-a100: #ff80ab;
+      --paper-pink-a200: #ff4081;
+      --paper-pink-a400: #f50057;
+      --paper-pink-a700: #c51162;
+
+      --paper-purple-50: #f3e5f5;
+      --paper-purple-100: #e1bee7;
+      --paper-purple-200: #ce93d8;
+      --paper-purple-300: #ba68c8;
+      --paper-purple-400: #ab47bc;
+      --paper-purple-500: #9c27b0;
+      --paper-purple-600: #8e24aa;
+      --paper-purple-700: #7b1fa2;
+      --paper-purple-800: #6a1b9a;
+      --paper-purple-900: #4a148c;
+      --paper-purple-a100: #ea80fc;
+      --paper-purple-a200: #e040fb;
+      --paper-purple-a400: #d500f9;
+      --paper-purple-a700: #aa00ff;
+
+      --paper-deep-purple-50: #ede7f6;
+      --paper-deep-purple-100: #d1c4e9;
+      --paper-deep-purple-200: #b39ddb;
+      --paper-deep-purple-300: #9575cd;
+      --paper-deep-purple-400: #7e57c2;
+      --paper-deep-purple-500: #673ab7;
+      --paper-deep-purple-600: #5e35b1;
+      --paper-deep-purple-700: #512da8;
+      --paper-deep-purple-800: #4527a0;
+      --paper-deep-purple-900: #311b92;
+      --paper-deep-purple-a100: #b388ff;
+      --paper-deep-purple-a200: #7c4dff;
+      --paper-deep-purple-a400: #651fff;
+      --paper-deep-purple-a700: #6200ea;
+
+      --paper-indigo-50: #e8eaf6;
+      --paper-indigo-100: #c5cae9;
+      --paper-indigo-200: #9fa8da;
+      --paper-indigo-300: #7986cb;
+      --paper-indigo-400: #5c6bc0;
+      --paper-indigo-500: #3f51b5;
+      --paper-indigo-600: #3949ab;
+      --paper-indigo-700: #303f9f;
+      --paper-indigo-800: #283593;
+      --paper-indigo-900: #1a237e;
+      --paper-indigo-a100: #8c9eff;
+      --paper-indigo-a200: #536dfe;
+      --paper-indigo-a400: #3d5afe;
+      --paper-indigo-a700: #304ffe;
+
+      --paper-blue-50: #e3f2fd;
+      --paper-blue-100: #bbdefb;
+      --paper-blue-200: #90caf9;
+      --paper-blue-300: #64b5f6;
+      --paper-blue-400: #42a5f5;
+      --paper-blue-500: #2196f3;
+      --paper-blue-600: #1e88e5;
+      --paper-blue-700: #1976d2;
+      --paper-blue-800: #1565c0;
+      --paper-blue-900: #0d47a1;
+      --paper-blue-a100: #82b1ff;
+      --paper-blue-a200: #448aff;
+      --paper-blue-a400: #2979ff;
+      --paper-blue-a700: #2962ff;
+
+      --paper-light-blue-50: #e1f5fe;
+      --paper-light-blue-100: #b3e5fc;
+      --paper-light-blue-200: #81d4fa;
+      --paper-light-blue-300: #4fc3f7;
+      --paper-light-blue-400: #29b6f6;
+      --paper-light-blue-500: #03a9f4;
+      --paper-light-blue-600: #039be5;
+      --paper-light-blue-700: #0288d1;
+      --paper-light-blue-800: #0277bd;
+      --paper-light-blue-900: #01579b;
+      --paper-light-blue-a100: #80d8ff;
+      --paper-light-blue-a200: #40c4ff;
+      --paper-light-blue-a400: #00b0ff;
+      --paper-light-blue-a700: #0091ea;
+
+      --paper-cyan-50: #e0f7fa;
+      --paper-cyan-100: #b2ebf2;
+      --paper-cyan-200: #80deea;
+      --paper-cyan-300: #4dd0e1;
+      --paper-cyan-400: #26c6da;
+      --paper-cyan-500: #00bcd4;
+      --paper-cyan-600: #00acc1;
+      --paper-cyan-700: #0097a7;
+      --paper-cyan-800: #00838f;
+      --paper-cyan-900: #006064;
+      --paper-cyan-a100: #84ffff;
+      --paper-cyan-a200: #18ffff;
+      --paper-cyan-a400: #00e5ff;
+      --paper-cyan-a700: #00b8d4;
+
+      --paper-teal-50: #e0f2f1;
+      --paper-teal-100: #b2dfdb;
+      --paper-teal-200: #80cbc4;
+      --paper-teal-300: #4db6ac;
+      --paper-teal-400: #26a69a;
+      --paper-teal-500: #009688;
+      --paper-teal-600: #00897b;
+      --paper-teal-700: #00796b;
+      --paper-teal-800: #00695c;
+      --paper-teal-900: #004d40;
+      --paper-teal-a100: #a7ffeb;
+      --paper-teal-a200: #64ffda;
+      --paper-teal-a400: #1de9b6;
+      --paper-teal-a700: #00bfa5;
+
+      --paper-green-50: #e8f5e9;
+      --paper-green-100: #c8e6c9;
+      --paper-green-200: #a5d6a7;
+      --paper-green-300: #81c784;
+      --paper-green-400: #66bb6a;
+      --paper-green-500: #4caf50;
+      --paper-green-600: #43a047;
+      --paper-green-700: #388e3c;
+      --paper-green-800: #2e7d32;
+      --paper-green-900: #1b5e20;
+      --paper-green-a100: #b9f6ca;
+      --paper-green-a200: #69f0ae;
+      --paper-green-a400: #00e676;
+      --paper-green-a700: #00c853;
+
+      --paper-light-green-50: #f1f8e9;
+      --paper-light-green-100: #dcedc8;
+      --paper-light-green-200: #c5e1a5;
+      --paper-light-green-300: #aed581;
+      --paper-light-green-400: #9ccc65;
+      --paper-light-green-500: #8bc34a;
+      --paper-light-green-600: #7cb342;
+      --paper-light-green-700: #689f38;
+      --paper-light-green-800: #558b2f;
+      --paper-light-green-900: #33691e;
+      --paper-light-green-a100: #ccff90;
+      --paper-light-green-a200: #b2ff59;
+      --paper-light-green-a400: #76ff03;
+      --paper-light-green-a700: #64dd17;
+
+      --paper-lime-50: #f9fbe7;
+      --paper-lime-100: #f0f4c3;
+      --paper-lime-200: #e6ee9c;
+      --paper-lime-300: #dce775;
+      --paper-lime-400: #d4e157;
+      --paper-lime-500: #cddc39;
+      --paper-lime-600: #c0ca33;
+      --paper-lime-700: #afb42b;
+      --paper-lime-800: #9e9d24;
+      --paper-lime-900: #827717;
+      --paper-lime-a100: #f4ff81;
+      --paper-lime-a200: #eeff41;
+      --paper-lime-a400: #c6ff00;
+      --paper-lime-a700: #aeea00;
+
+      --paper-yellow-50: #fffde7;
+      --paper-yellow-100: #fff9c4;
+      --paper-yellow-200: #fff59d;
+      --paper-yellow-300: #fff176;
+      --paper-yellow-400: #ffee58;
+      --paper-yellow-500: #ffeb3b;
+      --paper-yellow-600: #fdd835;
+      --paper-yellow-700: #fbc02d;
+      --paper-yellow-800: #f9a825;
+      --paper-yellow-900: #f57f17;
+      --paper-yellow-a100: #ffff8d;
+      --paper-yellow-a200: #ffff00;
+      --paper-yellow-a400: #ffea00;
+      --paper-yellow-a700: #ffd600;
+
+      --paper-amber-50: #fff8e1;
+      --paper-amber-100: #ffecb3;
+      --paper-amber-200: #ffe082;
+      --paper-amber-300: #ffd54f;
+      --paper-amber-400: #ffca28;
+      --paper-amber-500: #ffc107;
+      --paper-amber-600: #ffb300;
+      --paper-amber-700: #ffa000;
+      --paper-amber-800: #ff8f00;
+      --paper-amber-900: #ff6f00;
+      --paper-amber-a100: #ffe57f;
+      --paper-amber-a200: #ffd740;
+      --paper-amber-a400: #ffc400;
+      --paper-amber-a700: #ffab00;
+
+      --paper-orange-50: #fff3e0;
+      --paper-orange-100: #ffe0b2;
+      --paper-orange-200: #ffcc80;
+      --paper-orange-300: #ffb74d;
+      --paper-orange-400: #ffa726;
+      --paper-orange-500: #ff9800;
+      --paper-orange-600: #fb8c00;
+      --paper-orange-700: #f57c00;
+      --paper-orange-800: #ef6c00;
+      --paper-orange-900: #e65100;
+      --paper-orange-a100: #ffd180;
+      --paper-orange-a200: #ffab40;
+      --paper-orange-a400: #ff9100;
+      --paper-orange-a700: #ff6500;
+
+      --paper-deep-orange-50: #fbe9e7;
+      --paper-deep-orange-100: #ffccbc;
+      --paper-deep-orange-200: #ffab91;
+      --paper-deep-orange-300: #ff8a65;
+      --paper-deep-orange-400: #ff7043;
+      --paper-deep-orange-500: #ff5722;
+      --paper-deep-orange-600: #f4511e;
+      --paper-deep-orange-700: #e64a19;
+      --paper-deep-orange-800: #d84315;
+      --paper-deep-orange-900: #bf360c;
+      --paper-deep-orange-a100: #ff9e80;
+      --paper-deep-orange-a200: #ff6e40;
+      --paper-deep-orange-a400: #ff3d00;
+      --paper-deep-orange-a700: #dd2c00;
+
+      --paper-brown-50: #efebe9;
+      --paper-brown-100: #d7ccc8;
+      --paper-brown-200: #bcaaa4;
+      --paper-brown-300: #a1887f;
+      --paper-brown-400: #8d6e63;
+      --paper-brown-500: #795548;
+      --paper-brown-600: #6d4c41;
+      --paper-brown-700: #5d4037;
+      --paper-brown-800: #4e342e;
+      --paper-brown-900: #3e2723;
+
+      --paper-grey-50: #fafafa;
+      --paper-grey-100: #f5f5f5;
+      --paper-grey-200: #eeeeee;
+      --paper-grey-300: #e0e0e0;
+      --paper-grey-400: #bdbdbd;
+      --paper-grey-500: #9e9e9e;
+      --paper-grey-600: #757575;
+      --paper-grey-700: #616161;
+      --paper-grey-800: #424242;
+      --paper-grey-900: #212121;
+
+      --paper-blue-grey-50: #eceff1;
+      --paper-blue-grey-100: #cfd8dc;
+      --paper-blue-grey-200: #b0bec5;
+      --paper-blue-grey-300: #90a4ae;
+      --paper-blue-grey-400: #78909c;
+      --paper-blue-grey-500: #607d8b;
+      --paper-blue-grey-600: #546e7a;
+      --paper-blue-grey-700: #455a64;
+      --paper-blue-grey-800: #37474f;
+      --paper-blue-grey-900: #263238;
+
+      /* opacity for dark text on a light background */
+      --dark-divider-opacity: 0.12;
+      --dark-disabled-opacity: 0.38; /* or hint text or icon */
+      --dark-secondary-opacity: 0.54;
+      --dark-primary-opacity: 0.87;
+
+      /* opacity for light text on a dark background */
+      --light-divider-opacity: 0.12;
+      --light-disabled-opacity: 0.3; /* or hint text or icon */
+      --light-secondary-opacity: 0.7;
+      --light-primary-opacity: 1.0;
+
+    }
+
+  </style>
+</custom-style>`;
+
+document.head.appendChild($_documentContainer);
+
+
+/***/ }),
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var EventEmitter = __webpack_require__(94).EventEmitter;
+var EventEmitter = __webpack_require__(103).EventEmitter;
 
 /**
  * @class MasterController
@@ -8091,466 +8952,299 @@ class MasterController extends EventEmitter {
 module.exports = new MasterController();
 
 /***/ }),
-/* 34 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = {
-  AppStateInterface : __webpack_require__(50),
-  AppStateModel : __webpack_require__(110),
-  AppStateStore : __webpack_require__(111),
-  'app-route' : __webpack_require__(49)
+  AppStateInterface : __webpack_require__(54),
+  AppStateModel : __webpack_require__(119),
+  AppStateStore : __webpack_require__(120),
+  'app-route' : __webpack_require__(53)
 }
 
 /***/ }),
-/* 35 */
+/* 39 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_a11y_keys_behavior_iron_a11y_keys_behavior_js__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_control_state_js__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_behaviors_iron_button_state_js__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__paper_ripple_paper_ripple_js__ = __webpack_require__(133);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
 
 
 
 
 
-const IronButtonStateImpl = {
-
+const PaperRippleBehavior = {
   properties: {
-
     /**
-     * If true, the user is currently holding down the button.
+     * If true, the element will not produce a ripple effect when interacted
+     * with via the pointer.
      */
-    pressed: {
+    noink: {
       type: Boolean,
-      readOnly: true,
-      value: false,
-      reflectToAttribute: true,
-      observer: '_pressedChanged'
+      observer: '_noinkChanged'
     },
 
     /**
-     * If true, the button toggles the active state with each tap or press
-     * of the spacebar.
+     * @type {Element|undefined}
      */
-    toggles: {
-      type: Boolean,
-      value: false,
-      reflectToAttribute: true
-    },
-
-    /**
-     * If true, the button is a toggle and is currently in the active state.
-     */
-    active: {
-      type: Boolean,
-      value: false,
-      notify: true,
-      reflectToAttribute: true
-    },
-
-    /**
-     * True if the element is currently being pressed by a "pointer," which
-     * is loosely defined as mouse or touch input (but specifically excluding
-     * keyboard input).
-     */
-    pointerDown: {
-      type: Boolean,
-      readOnly: true,
-      value: false
-    },
-
-    /**
-     * True if the input device that caused the element to receive focus
-     * was a keyboard.
-     */
-    receivedFocusFromKeyboard: {
-      type: Boolean,
-      readOnly: true
-    },
-
-    /**
-     * The aria attribute to be set if the button is a toggle and in the
-     * active state.
-     */
-    ariaActiveAttribute: {
-      type: String,
-      value: 'aria-pressed',
-      observer: '_ariaActiveAttributeChanged'
+    _rippleContainer: {
+      type: Object,
     }
   },
 
-  listeners: {
-    down: '_downHandler',
-    up: '_upHandler',
-    tap: '_tapHandler'
-  },
-
-  observers: [
-    '_focusChanged(focused)',
-    '_activeChanged(active, ariaActiveAttribute)'
-  ],
-
-  keyBindings: {
-    'enter:keydown': '_asyncClick',
-    'space:keydown': '_spaceKeyDownHandler',
-    'space:keyup': '_spaceKeyUpHandler',
-  },
-
-  _mouseEventRe: /^mouse/,
-
-  _tapHandler: function() {
-    if (this.toggles) {
-     // a tap is needed to toggle the active state
-      this._userActivate(!this.active);
-    } else {
-      this.active = false;
+  /**
+   * Ensures a `<paper-ripple>` element is available when the element is
+   * focused.
+   */
+  _buttonStateChanged: function() {
+    if (this.focused) {
+      this.ensureRipple();
     }
   },
 
-  _focusChanged: function(focused) {
-    this._detectKeyboardFocus(focused);
-
-    if (!focused) {
-      this._setPressed(false);
-    }
-  },
-
-  _detectKeyboardFocus: function(focused) {
-    this._setReceivedFocusFromKeyboard(!this.pointerDown && focused);
-  },
-
-  // to emulate native checkbox, (de-)activations from a user interaction fire
-  // 'change' events
-  _userActivate: function(active) {
-    if (this.active !== active) {
-      this.active = active;
-      this.fire('change');
-    }
-  },
-
+  /**
+   * In addition to the functionality provided in `IronButtonState`, ensures
+   * a ripple effect is created when the element is in a `pressed` state.
+   */
   _downHandler: function(event) {
-    this._setPointerDown(true);
-    this._setPressed(true);
-    this._setReceivedFocusFromKeyboard(false);
-  },
-
-  _upHandler: function() {
-    this._setPointerDown(false);
-    this._setPressed(false);
-  },
-
-  /**
-   * @param {!KeyboardEvent} event .
-   */
-  _spaceKeyDownHandler: function(event) {
-    var keyboardEvent = event.detail.keyboardEvent;
-    var target = Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(keyboardEvent).localTarget;
-
-    // Ignore the event if this is coming from a focused light child, since that
-    // element will deal with it.
-    if (this.isLightDescendant(/** @type {Node} */(target)))
-      return;
-
-    keyboardEvent.preventDefault();
-    keyboardEvent.stopImmediatePropagation();
-    this._setPressed(true);
-  },
-
-  /**
-   * @param {!KeyboardEvent} event .
-   */
-  _spaceKeyUpHandler: function(event) {
-    var keyboardEvent = event.detail.keyboardEvent;
-    var target = Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(keyboardEvent).localTarget;
-
-    // Ignore the event if this is coming from a focused light child, since that
-    // element will deal with it.
-    if (this.isLightDescendant(/** @type {Node} */(target)))
-      return;
-
+    __WEBPACK_IMPORTED_MODULE_1__iron_behaviors_iron_button_state_js__["b" /* IronButtonStateImpl */]._downHandler.call(this, event);
     if (this.pressed) {
-      this._asyncClick();
-    }
-    this._setPressed(false);
-  },
-
-  // trigger click asynchronously, the asynchrony is useful to allow one
-  // event handler to unwind before triggering another event
-  _asyncClick: function() {
-    this.async(function() {
-      this.click();
-    }, 1);
-  },
-
-  // any of these changes are considered a change to button state
-
-  _pressedChanged: function(pressed) {
-    this._changedButtonState();
-  },
-
-  _ariaActiveAttributeChanged: function(value, oldValue) {
-    if (oldValue && oldValue != value && this.hasAttribute(oldValue)) {
-      this.removeAttribute(oldValue);
+      this.ensureRipple(event);
     }
   },
 
-  _activeChanged: function(active, ariaActiveAttribute) {
-    if (this.toggles) {
-      this.setAttribute(this.ariaActiveAttribute,
-                        active ? 'true' : 'false');
-    } else {
-      this.removeAttribute(this.ariaActiveAttribute);
+  /**
+   * Ensures this element contains a ripple effect. For startup efficiency
+   * the ripple effect is dynamically on demand when needed.
+   * @param {!Event=} optTriggeringEvent (optional) event that triggered the
+   * ripple.
+   */
+  ensureRipple: function(optTriggeringEvent) {
+    if (!this.hasRipple()) {
+      this._ripple = this._createRipple();
+      this._ripple.noink = this.noink;
+      var rippleContainer = this._rippleContainer || this.root;
+      if (rippleContainer) {
+        Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(rippleContainer).appendChild(this._ripple);
+      }
+      if (optTriggeringEvent) {
+        // Check if the event happened inside of the ripple container
+        // Fall back to host instead of the root because distributed text
+        // nodes are not valid event targets
+        var domContainer = Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(this._rippleContainer || this);
+        var target = Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(optTriggeringEvent).rootTarget;
+        if (domContainer.deepContains( /** @type {Node} */(target))) {
+          this._ripple.uiDownAction(optTriggeringEvent);
+        }
+      }
     }
-    this._changedButtonState();
   },
 
-  _controlStateChanged: function() {
-    if (this.disabled) {
-      this._setPressed(false);
-    } else {
-      this._changedButtonState();
-    }
+  /**
+   * Returns the `<paper-ripple>` element used by this element to create
+   * ripple effects. The element's ripple is created on demand, when
+   * necessary, and calling this method will force the
+   * ripple to be created.
+   */
+  getRipple: function() {
+    this.ensureRipple();
+    return this._ripple;
   },
 
-  // provide hook for follow-on behaviors to react to button-state
+  /**
+   * Returns true if this element currently contains a ripple effect.
+   * @return {boolean}
+   */
+  hasRipple: function() {
+    return Boolean(this._ripple);
+  },
 
-  _changedButtonState: function() {
-    if (this._buttonStateChanged) {
-      this._buttonStateChanged(); // abstract
+  /**
+   * Create the element's ripple effect via creating a `<paper-ripple>`.
+   * Override this method to customize the ripple element.
+   * @return {!PaperRippleElement} Returns a `<paper-ripple>` element.
+   */
+  _createRipple: function() {
+    var element = /** @type {!PaperRippleElement} */ (
+        document.createElement('paper-ripple'));
+    return element;
+  },
+
+  _noinkChanged: function(noink) {
+    if (this.hasRipple()) {
+      this._ripple.noink = noink;
     }
   }
-
 };
-/* harmony export (immutable) */ __webpack_exports__["b"] = IronButtonStateImpl;
-
-
-const IronButtonState = [
-  __WEBPACK_IMPORTED_MODULE_1__iron_a11y_keys_behavior_iron_a11y_keys_behavior_js__["a" /* IronA11yKeysBehavior */],
-  IronButtonStateImpl
-];
-/* harmony export (immutable) */ __webpack_exports__["a"] = IronButtonState;
+/* harmony export (immutable) */ __webpack_exports__["a"] = PaperRippleBehavior;
 
 
 
 /***/ }),
-/* 36 */
+/* 40 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__polymer_lib_utils_settings_js__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_meta_iron_meta_js__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_flex_layout_iron_flex_layout_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
 
 
 
 
-const IronResizableBehavior = {
+
+
+Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_fn_js__["a" /* Polymer */])({
+  _template: `
+    <style>
+      :host {
+        @apply --layout-inline;
+        @apply --layout-center-center;
+        position: relative;
+
+        vertical-align: middle;
+
+        fill: var(--iron-icon-fill-color, currentcolor);
+        stroke: var(--iron-icon-stroke-color, none);
+
+        width: var(--iron-icon-width, 24px);
+        height: var(--iron-icon-height, 24px);
+        @apply --iron-icon;
+      }
+
+      :host([hidden]) {
+        display: none;
+      }
+    </style>
+`,
+
+  is: 'iron-icon',
+
   properties: {
+
     /**
-     * The closest ancestor element that implements `IronResizableBehavior`.
+     * The name of the icon to use. The name should be of the form:
+     * `iconset_name:icon_name`.
      */
-    _parentResizable: {
-      type: Object,
-      observer: '_parentResizableChanged'
+    icon: {
+      type: String
     },
 
     /**
-     * True if this element is currently notifying its descendant elements of
-     * resize.
+     * The name of the theme to used, if one is specified by the
+     * iconset.
      */
-    _notifyingDescendant: {
-      type: Boolean,
-      value: false
-    }
-  },
+    theme: {
+      type: String
+    },
 
-  listeners: {
-    'iron-request-resize-notifications': '_onIronRequestResizeNotifications'
-  },
+    /**
+     * If using iron-icon without an iconset, you can set the src to be
+     * the URL of an individual icon image file. Note that this will take
+     * precedence over a given icon attribute.
+     */
+    src: {
+      type: String
+    },
 
-  created: function() {
-    // We don't really need property effects on these, and also we want them
-    // to be created before the `_parentResizable` observer fires:
-    this._interestedResizables = [];
-    this._boundNotifyResize = this.notifyResize.bind(this);
-  },
-
-  attached: function() {
-    this._requestResizeNotifications();
-  },
-
-  detached: function() {
-    if (this._parentResizable) {
-      this._parentResizable.stopResizeNotificationsFor(this);
-    } else {
-      window.removeEventListener('resize', this._boundNotifyResize);
+    /**
+     * @type {!Polymer.IronMeta}
+     */
+    _meta: {
+      value: __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__["a" /* Base */].create('iron-meta', {type: 'iconset'})
     }
 
-    this._parentResizable = null;
   },
 
-  /**
-   * Can be called to manually notify a resizable and its descendant
-   * resizables of a resize change.
-   */
-  notifyResize: function() {
-    if (!this.isAttached) {
-      return;
-    }
+  observers: [
+    '_updateIcon(_meta, isAttached)',
+    '_updateIcon(theme, isAttached)',
+    '_srcChanged(src, isAttached)',
+    '_iconChanged(icon, isAttached)'
+  ],
 
-    this._interestedResizables.forEach(function(resizable) {
-      if (this.resizerShouldNotify(resizable)) {
-        this._notifyDescendant(resizable);
+  _DEFAULT_ICONSET: 'icons',
+
+  _iconChanged: function(icon) {
+    var parts = (icon || '').split(':');
+    this._iconName = parts.pop();
+    this._iconsetName = parts.pop() || this._DEFAULT_ICONSET;
+    this._updateIcon();
+  },
+
+  _srcChanged: function(src) {
+    this._updateIcon();
+  },
+
+  _usesIconset: function() {
+    return this.icon || !this.src;
+  },
+
+  /** @suppress {visibility} */
+  _updateIcon: function() {
+    if (this._usesIconset()) {
+      if (this._img && this._img.parentNode) {
+        Object(__WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(this.root).removeChild(this._img);
       }
-    }, this);
-
-    this._fireResize();
-  },
-
-  /**
-   * Used to assign the closest resizable ancestor to this resizable
-   * if the ancestor detects a request for notifications.
-   */
-  assignParentResizable: function(parentResizable) {
-    this._parentResizable = parentResizable;
-  },
-
-  /**
-   * Used to remove a resizable descendant from the list of descendants
-   * that should be notified of a resize change.
-   */
-  stopResizeNotificationsFor: function(target) {
-    var index = this._interestedResizables.indexOf(target);
-
-    if (index > -1) {
-      this._interestedResizables.splice(index, 1);
-      this.unlisten(target, 'iron-resize', '_onDescendantIronResize');
-    }
-  },
-
-  /**
-   * This method can be overridden to filter nested elements that should or
-   * should not be notified by the current element. Return true if an element
-   * should be notified, or false if it should not be notified.
-   *
-   * @param {HTMLElement} element A candidate descendant element that
-   * implements `IronResizableBehavior`.
-   * @return {boolean} True if the `element` should be notified of resize.
-   */
-  resizerShouldNotify: function(element) { return true; },
-
-  _onDescendantIronResize: function(event) {
-    if (this._notifyingDescendant) {
-      event.stopPropagation();
-      return;
-    }
-
-    // NOTE(cdata): In ShadowDOM, event retargeting makes echoing of the
-    // otherwise non-bubbling event "just work." We do it manually here for
-    // the case where Polymer is not using shadow roots for whatever reason:
-    if (!__WEBPACK_IMPORTED_MODULE_1__polymer_lib_utils_settings_js__["a" /* Settings */].useShadow) {
-      this._fireResize();
-    }
-  },
-
-  _fireResize: function() {
-    this.fire('iron-resize', null, {
-      node: this,
-      bubbles: false
-    });
-  },
-
-  _onIronRequestResizeNotifications: function(event) {
-    var target = /** @type {!EventTarget} */ (Object(__WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(event).rootTarget);
-    if (target === this) {
-      return;
-    }
-
-    if (this._interestedResizables.indexOf(target) === -1) {
-      this._interestedResizables.push(target);
-      this.listen(target, 'iron-resize', '_onDescendantIronResize');
-    }
-
-    target.assignParentResizable(this);
-    this._notifyDescendant(target);
-
-    event.stopPropagation();
-  },
-
-  _parentResizableChanged: function(parentResizable) {
-    if (parentResizable) {
-      window.removeEventListener('resize', this._boundNotifyResize);
-    }
-  },
-
-  _notifyDescendant: function(descendant) {
-    // NOTE(cdata): In IE10, attached is fired on children first, so it's
-    // important not to notify them if the parent is not attached yet (or
-    // else they will get redundantly notified when the parent attaches).
-    if (!this.isAttached) {
-      return;
-    }
-
-    this._notifyingDescendant = true;
-    descendant.notifyResize();
-    this._notifyingDescendant = false;
-  },
-  
-  _requestResizeNotifications: function() {
-    if (!this.isAttached)
-      return;
-    
-    // NOTE(valdrin) In CustomElements v1 with native HTMLImports, the order
-    // of imports affects the order of `attached` callbacks (see webcomponents/custom-elements#15).
-    // This might cause a child to notify parents too early (as the parent
-    // still has to be upgraded), resulting in a parent not able to keep track
-    // of the `_interestedResizables`. To solve this, we wait for the document
-    // to be done loading before firing the event.
-    if (document.readyState === 'loading') {
-      var _requestResizeNotifications = this._requestResizeNotifications.bind(this);
-      document.addEventListener('readystatechange', function readystatechanged() {
-        document.removeEventListener('readystatechange', readystatechanged);
-        _requestResizeNotifications();
-      });
+      if (this._iconName === "") {
+        if (this._iconset) {
+          this._iconset.removeIcon(this);
+        }
+      } else if (this._iconsetName && this._meta) {
+        this._iconset = /** @type {?Polymer.Iconset} */ (
+          this._meta.byKey(this._iconsetName));
+        if (this._iconset) {
+          this._iconset.applyIcon(this, this._iconName, this.theme);
+          this.unlisten(window, 'iron-iconset-added', '_updateIcon');
+        } else {
+          this.listen(window, 'iron-iconset-added', '_updateIcon');
+        }
+      }
     } else {
-      this.fire('iron-request-resize-notifications', null, {
-        node: this,
-        bubbles: true,
-        cancelable: true
-      });
-
-      if (!this._parentResizable) {
-        window.addEventListener('resize', this._boundNotifyResize);
-        this.notifyResize();
-      } 
+      if (this._iconset) {
+        this._iconset.removeIcon(this);
+      }
+      if (!this._img) {
+        this._img = document.createElement('img');
+        this._img.style.width = '100%';
+        this._img.style.height = '100%';
+        this._img.draggable = false;
+      }
+      this._img.src = this.src;
+      Object(__WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(this.root).appendChild(this._img);
     }
   }
-};
-/* harmony export (immutable) */ __webpack_exports__["a"] = IronResizableBehavior;
-
+});
 
 
 /***/ }),
-/* 37 */
+/* 41 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return IronMeta; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(3);
 
 
 
 /**
  * @constructor
- * @param {{type: (string|null), key: (string|null), value: *}} options
+ * @param {{
+ *   type: (string|null|undefined),
+ *   key: (string|null|undefined),
+ *   value: *,
+ * }=} options
  */
 function IronMeta(options) {
   this.type = (options && options.type) || 'default';
   this.key = options && options.key;
-  if ('value' in options) {
+  if (options && 'value' in options) {
     this.value = options.value;
   }
 }
@@ -8585,7 +9279,12 @@ IronMeta.prototype = {
     var type = this.type;
 
     if (type) {
-      return Object.keys(IronMeta.types[this.type]).map(function(key) {
+      const items = IronMeta.types[this.type];
+      if (!items) {
+        return [];
+      }
+
+      return Object.keys(items).map(function(key) {
         return metaDatas[this.type][key];
       }, this);
     }
@@ -8694,23 +9393,432 @@ Object(__WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_fn_js__["a" /* Po
 
 
 /***/ }),
-/* 38 */
+/* 42 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__webcomponents_shadycss_entrypoints_apply_shim_js__ = __webpack_require__(73);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mixins_element_mixin_js__ = __webpack_require__(28);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__mixins_gesture_event_listeners_js__ = __webpack_require__(44);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_mixin_js__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_import_href_js__ = __webpack_require__(78);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_render_status_js__ = __webpack_require__(45);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__utils_unresolved_js__ = __webpack_require__(79);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_selection_js__ = __webpack_require__(146);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_utils_case_map_js__ = __webpack_require__(9);
+
+
+
+
+
+const IronSelectableBehavior = {
+
+    /**
+     * Fired when iron-selector is activated (selected or deselected).
+     * It is fired before the selected items are changed.
+     * Cancel the event to abort selection.
+     *
+     * @event iron-activate
+     */
+
+    /**
+     * Fired when an item is selected
+     *
+     * @event iron-select
+     */
+
+    /**
+     * Fired when an item is deselected
+     *
+     * @event iron-deselect
+     */
+
+    /**
+     * Fired when the list of selectable items changes (e.g., items are
+     * added or removed). The detail of the event is a mutation record that
+     * describes what changed.
+     *
+     * @event iron-items-changed
+     */
+
+  properties: {
+
+    /**
+     * If you want to use an attribute value or property of an element for
+     * `selected` instead of the index, set this to the name of the attribute
+     * or property. Hyphenated values are converted to camel case when used to
+     * look up the property of a selectable element. Camel cased values are
+     * *not* converted to hyphenated values for attribute lookup. It's
+     * recommended that you provide the hyphenated form of the name so that
+     * selection works in both cases. (Use `attr-or-property-name` instead of
+     * `attrOrPropertyName`.)
+     */
+    attrForSelected: {
+      type: String,
+      value: null
+    },
+
+    /**
+     * Gets or sets the selected element. The default is to use the index of the item.
+     * @type {string|number}
+     */
+    selected: {
+      type: String,
+      notify: true
+    },
+
+    /**
+     * Returns the currently selected item.
+     *
+     * @type {?Object}
+     */
+    selectedItem: {
+      type: Object,
+      readOnly: true,
+      notify: true
+    },
+
+    /**
+     * The event that fires from items when they are selected. Selectable
+     * will listen for this event from items and update the selection state.
+     * Set to empty string to listen to no events.
+     */
+    activateEvent: {
+      type: String,
+      value: 'tap',
+      observer: '_activateEventChanged'
+    },
+
+    /**
+     * This is a CSS selector string.  If this is set, only items that match the CSS selector
+     * are selectable.
+     */
+    selectable: String,
+
+    /**
+     * The class to set on elements when selected.
+     */
+    selectedClass: {
+      type: String,
+      value: 'iron-selected'
+    },
+
+    /**
+     * The attribute to set on elements when selected.
+     */
+    selectedAttribute: {
+      type: String,
+      value: null
+    },
+
+    /**
+     * Default fallback if the selection based on selected with `attrForSelected`
+     * is not found.
+     */
+    fallbackSelection: {
+      type: String,
+      value: null
+    },
+
+    /**
+     * The list of items from which a selection can be made.
+     */
+    items: {
+      type: Array,
+      readOnly: true,
+      notify: true,
+      value: function() {
+        return [];
+      }
+    },
+
+    /**
+     * The set of excluded elements where the key is the `localName`
+     * of the element that will be ignored from the item list.
+     *
+     * @default {template: 1}
+     */
+    _excludedLocalNames: {
+      type: Object,
+      value: function() {
+        return {
+          'template': 1,
+          'dom-bind': 1,
+          'dom-if': 1,
+          'dom-repeat': 1,
+        };
+      }
+    }
+  },
+
+  observers: [
+    '_updateAttrForSelected(attrForSelected)',
+    '_updateSelected(selected)',
+    '_checkFallback(fallbackSelection)'
+  ],
+
+  created: function() {
+    this._bindFilterItem = this._filterItem.bind(this);
+    this._selection = new __WEBPACK_IMPORTED_MODULE_1__iron_selection_js__["a" /* IronSelection */](this._applySelection.bind(this));
+  },
+
+  attached: function() {
+    this._observer = this._observeItems(this);
+    this._addListener(this.activateEvent);
+  },
+
+  detached: function() {
+    if (this._observer) {
+      Object(__WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(this).unobserveNodes(this._observer);
+    }
+    this._removeListener(this.activateEvent);
+  },
+
+  /**
+   * Returns the index of the given item.
+   *
+   * @method indexOf
+   * @param {Object} item
+   * @returns Returns the index of the item
+   */
+  indexOf: function(item) {
+    return this.items ? this.items.indexOf(item) : -1;
+  },
+
+  /**
+   * Selects the given value.
+   *
+   * @method select
+   * @param {string|number} value the value to select.
+   */
+  select: function(value) {
+    this.selected = value;
+  },
+
+  /**
+   * Selects the previous item.
+   *
+   * @method selectPrevious
+   */
+  selectPrevious: function() {
+    var length = this.items.length;
+    var index = (Number(this._valueToIndex(this.selected)) - 1 + length) % length;
+    this.selected = this._indexToValue(index);
+  },
+
+  /**
+   * Selects the next item.
+   *
+   * @method selectNext
+   */
+  selectNext: function() {
+    var index = (Number(this._valueToIndex(this.selected)) + 1) % this.items.length;
+    this.selected = this._indexToValue(index);
+  },
+
+  /**
+   * Selects the item at the given index.
+   *
+   * @method selectIndex
+   */
+  selectIndex: function(index) {
+    this.select(this._indexToValue(index));
+  },
+
+  /**
+   * Force a synchronous update of the `items` property.
+   *
+   * NOTE: Consider listening for the `iron-items-changed` event to respond to
+   * updates to the set of selectable items after updates to the DOM list and
+   * selection state have been made.
+   *
+   * WARNING: If you are using this method, you should probably consider an
+   * alternate approach. Synchronously querying for items is potentially
+   * slow for many use cases. The `items` property will update asynchronously
+   * on its own to reflect selectable items in the DOM.
+   */
+  forceSynchronousItemUpdate: function() {
+    if (this._observer && typeof this._observer.flush === "function") {
+      // NOTE(bicknellr): `Polymer.dom.flush` above is no longer sufficient to
+      // trigger `observeNodes` callbacks. Polymer 2.x returns an object from
+      // `observeNodes` with a `flush` that synchronously gives the callback
+      // any pending MutationRecords (retrieved with `takeRecords`). Any case
+      // where ShadyDOM flushes were expected to synchronously trigger item
+      // updates will now require calling `forceSynchronousItemUpdate`.
+      this._observer.flush();
+    } else {
+      this._updateItems();
+    }
+  },
+
+  // UNUSED, FOR API COMPATIBILITY
+  get _shouldUpdateSelection() {
+    return this.selected != null;
+  },
+
+  _checkFallback: function() {
+    this._updateSelected();
+  },
+
+  _addListener: function(eventName) {
+    this.listen(this, eventName, '_activateHandler');
+  },
+
+  _removeListener: function(eventName) {
+    this.unlisten(this, eventName, '_activateHandler');
+  },
+
+  _activateEventChanged: function(eventName, old) {
+    this._removeListener(old);
+    this._addListener(eventName);
+  },
+
+  _updateItems: function() {
+    var nodes = Object(__WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(this).queryDistributedElements(this.selectable || '*');
+    nodes = Array.prototype.filter.call(nodes, this._bindFilterItem);
+    this._setItems(nodes);
+  },
+
+  _updateAttrForSelected: function() {
+    if (this.selectedItem) {
+      this.selected = this._valueForItem(this.selectedItem);
+    }
+  },
+
+  _updateSelected: function() {
+    this._selectSelected(this.selected);
+  },
+
+  _selectSelected: function(selected) {
+    if (!this.items) {
+      return;
+    }
+
+    var item = this._valueToItem(this.selected);
+    if (item) {
+      this._selection.select(item);
+    } else {
+      this._selection.clear();
+    }
+    // Check for items, since this array is populated only when attached
+    // Since Number(0) is falsy, explicitly check for undefined
+    if (this.fallbackSelection && this.items.length && (this._selection.get() === undefined)) {
+      this.selected = this.fallbackSelection;
+    }
+  },
+
+  _filterItem: function(node) {
+    return !this._excludedLocalNames[node.localName];
+  },
+
+  _valueToItem: function(value) {
+    return (value == null) ? null : this.items[this._valueToIndex(value)];
+  },
+
+  _valueToIndex: function(value) {
+    if (this.attrForSelected) {
+      for (var i = 0, item; item = this.items[i]; i++) {
+        if (this._valueForItem(item) == value) {
+          return i;
+        }
+      }
+    } else {
+      return Number(value);
+    }
+  },
+
+  _indexToValue: function(index) {
+    if (this.attrForSelected) {
+      var item = this.items[index];
+      if (item) {
+        return this._valueForItem(item);
+      }
+    } else {
+      return index;
+    }
+  },
+
+  _valueForItem: function(item) {
+    if (!item) {
+      return null;
+    }
+    if (!this.attrForSelected) {
+      var i = this.indexOf(item);
+      return i === -1 ? null : i;
+    }
+    var propValue = item[Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_utils_case_map_js__["dashToCamelCase"])(this.attrForSelected)];
+    return propValue != undefined ? propValue : item.getAttribute(this.attrForSelected);
+  },
+
+  _applySelection: function(item, isSelected) {
+    if (this.selectedClass) {
+      this.toggleClass(this.selectedClass, isSelected, item);
+    }
+    if (this.selectedAttribute) {
+      this.toggleAttribute(this.selectedAttribute, isSelected, item);
+    }
+    this._selectionChange();
+    this.fire('iron-' + (isSelected ? 'select' : 'deselect'), {item: item});
+  },
+
+  _selectionChange: function() {
+    this._setSelectedItem(this._selection.get());
+  },
+
+  // observe items change under the given node.
+  _observeItems: function(node) {
+    return Object(__WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(node).observeNodes(function(mutation) {
+      this._updateItems();
+      this._updateSelected();
+
+      // Let other interested parties know about the change so that
+      // we don't have to recreate mutation observers everywhere.
+      this.fire('iron-items-changed', mutation, {
+        bubbles: false,
+        cancelable: false
+      });
+    });
+  },
+
+  _activateHandler: function(e) {
+    var t = e.target;
+    var items = this.items;
+    while (t && t != this) {
+      var i = items.indexOf(t);
+      if (i >= 0) {
+        var value = this._indexToValue(i);
+        this._itemActivate(value, t);
+        return;
+      }
+      t = t.parentNode;
+    }
+  },
+
+  _itemActivate: function(value, item) {
+    if (!this.fire('iron-activate',
+        {selected: value, item: item}, {cancelable: true}).defaultPrevented) {
+      this.select(value);
+    }
+  }
+
+};
+/* harmony export (immutable) */ __webpack_exports__["a"] = IronSelectableBehavior;
+
+
+
+/***/ }),
+/* 43 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__webcomponents_shadycss_entrypoints_apply_shim_js__ = __webpack_require__(81);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mixins_element_mixin_js__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__mixins_gesture_event_listeners_js__ = __webpack_require__(49);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_mixin_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_import_href_js__ = __webpack_require__(87);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_render_status_js__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__utils_unresolved_js__ = __webpack_require__(88);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__utils_unresolved_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__utils_unresolved_js__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__polymer_dom_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__utils_gestures_js__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__utils_gestures_js__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__utils_debounce_js__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__utils_async_js__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__utils_path_js__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__utils_async_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__utils_path_js__ = __webpack_require__(18);
 
 
 
@@ -9645,12 +10753,12 @@ const LegacyElementMixin = Object(__WEBPACK_IMPORTED_MODULE_3__utils_mixin_js__[
 
 
 /***/ }),
-/* 39 */
+/* 44 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (immutable) */ __webpack_exports__["e"] = toCssText;
-/* harmony export (immutable) */ __webpack_exports__["d"] = rulesForStyle;
+/* harmony export (immutable) */ __webpack_exports__["f"] = toCssText;
+/* harmony export (immutable) */ __webpack_exports__["e"] = rulesForStyle;
 /* unused harmony export isKeyframesSelector */
 /* harmony export (immutable) */ __webpack_exports__["a"] = forEachRule;
 /* unused harmony export applyCss */
@@ -9659,12 +10767,14 @@ const LegacyElementMixin = Object(__WEBPACK_IMPORTED_MODULE_3__utils_mixin_js__[
 /* unused harmony export applyStyle */
 /* unused harmony export isTargetedBuild */
 /* unused harmony export getCssBuildType */
-/* harmony export (immutable) */ __webpack_exports__["c"] = processVariableAndFallback;
+/* harmony export (immutable) */ __webpack_exports__["d"] = processVariableAndFallback;
 /* unused harmony export setElementClassRaw */
-/* harmony export (immutable) */ __webpack_exports__["b"] = getIsExtends;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__style_settings_js__ = __webpack_require__(24);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__css_parse_js__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__common_regex_js__ = __webpack_require__(26);
+/* harmony export (immutable) */ __webpack_exports__["c"] = getIsExtends;
+/* harmony export (immutable) */ __webpack_exports__["b"] = gatherStyleText;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__style_settings_js__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__css_parse_js__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__common_regex_js__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__unscoped_style_handler_js__ = __webpack_require__(83);
 /**
 @license
 Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
@@ -9679,6 +10789,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
  // eslint-disable-line no-unused-vars
+
 
 
 /**
@@ -9936,9 +11047,31 @@ function getIsExtends(element) {
   return {is, typeExtension};
 }
 
+/**
+ * @param {Element|DocumentFragment} element
+ * @return {string}
+ */
+function gatherStyleText(element) {
+  /** @type {!Array<string>} */
+  const styleTextParts = [];
+  const styles = /** @type {!NodeList<!HTMLStyleElement>} */(element.querySelectorAll('style'));
+  for (let i = 0; i < styles.length; i++) {
+    const style = styles[i];
+    if (Object(__WEBPACK_IMPORTED_MODULE_3__unscoped_style_handler_js__["a" /* isUnscopedStyle */])(style)) {
+      if (!__WEBPACK_IMPORTED_MODULE_0__style_settings_js__["b" /* nativeShadow */]) {
+        Object(__WEBPACK_IMPORTED_MODULE_3__unscoped_style_handler_js__["b" /* processUnscopedStyle */])(style);
+        style.parentNode.removeChild(style);
+      }
+    } else {
+      styleTextParts.push(style.textContent);
+      style.parentNode.removeChild(style);
+    }
+  }
+  return styleTextParts.join('').trim();
+}
 
 /***/ }),
-/* 40 */
+/* 45 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -9962,7 +11095,7 @@ const templateMap = {};
 
 
 /***/ }),
-/* 41 */
+/* 46 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10015,13 +11148,13 @@ function documentWait(callback) {
 
 
 /***/ }),
-/* 42 */
+/* 47 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* unused harmony export CustomStyleProvider */
 /* unused harmony export CustomStyleInterfaceInterface */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__document_wait_js__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__document_wait_js__ = __webpack_require__(46);
 /**
 @license
 Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
@@ -10183,7 +11316,7 @@ let CustomStyleInterfaceInterface;
 
 
 /***/ }),
-/* 43 */
+/* 48 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10192,7 +11325,7 @@ let CustomStyleInterfaceInterface;
 /* harmony export (immutable) */ __webpack_exports__["c"] = cssFromTemplate;
 /* harmony export (immutable) */ __webpack_exports__["a"] = cssFromModuleImports;
 /* unused harmony export _cssFromModuleImports */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__resolve_url_js__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__resolve_url_js__ = __webpack_require__(17);
 
 
 const MODULE_STYLE_LINK_SELECTOR = 'link[rel=import][type~=css]';
@@ -10281,14 +11414,14 @@ function _cssFromModuleImports(module) {
 
 
 /***/ }),
-/* 44 */
+/* 49 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_boot_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__utils_boot_js__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_mixin_js__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_gestures_js__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_mixin_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_gestures_js__ = __webpack_require__(34);
 
 
 
@@ -10329,7 +11462,7 @@ const GestureEventListeners = Object(__WEBPACK_IMPORTED_MODULE_1__utils_mixin_js
 
 
 /***/ }),
-/* 45 */
+/* 50 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10408,7 +11541,7 @@ function afterNextRender(context, callback, args) {
 
 
 /***/ }),
-/* 46 */
+/* 51 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10679,366 +11812,30 @@ function equals(currentValue, previousValue) {
 
 
 /***/ }),
-/* 47 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-
-const $_documentContainer = document.createElement('div');
-$_documentContainer.setAttribute('style', 'display: none;');
-
-$_documentContainer.innerHTML = `<custom-style>
-  <style is="custom-style">
-    html {
-
-      /* Material Design color palette for Google products */
-
-      --google-red-100: #f4c7c3;
-      --google-red-300: #e67c73;
-      --google-red-500: #db4437;
-      --google-red-700: #c53929;
-
-      --google-blue-100: #c6dafc;
-      --google-blue-300: #7baaf7;
-      --google-blue-500: #4285f4;
-      --google-blue-700: #3367d6;
-
-      --google-green-100: #b7e1cd;
-      --google-green-300: #57bb8a;
-      --google-green-500: #0f9d58;
-      --google-green-700: #0b8043;
-
-      --google-yellow-100: #fce8b2;
-      --google-yellow-300: #f7cb4d;
-      --google-yellow-500: #f4b400;
-      --google-yellow-700: #f09300;
-
-      --google-grey-100: #f5f5f5;
-      --google-grey-300: #e0e0e0;
-      --google-grey-500: #9e9e9e;
-      --google-grey-700: #616161;
-
-      /* Material Design color palette from online spec document */
-
-      --paper-red-50: #ffebee;
-      --paper-red-100: #ffcdd2;
-      --paper-red-200: #ef9a9a;
-      --paper-red-300: #e57373;
-      --paper-red-400: #ef5350;
-      --paper-red-500: #f44336;
-      --paper-red-600: #e53935;
-      --paper-red-700: #d32f2f;
-      --paper-red-800: #c62828;
-      --paper-red-900: #b71c1c;
-      --paper-red-a100: #ff8a80;
-      --paper-red-a200: #ff5252;
-      --paper-red-a400: #ff1744;
-      --paper-red-a700: #d50000;
-
-      --paper-pink-50: #fce4ec;
-      --paper-pink-100: #f8bbd0;
-      --paper-pink-200: #f48fb1;
-      --paper-pink-300: #f06292;
-      --paper-pink-400: #ec407a;
-      --paper-pink-500: #e91e63;
-      --paper-pink-600: #d81b60;
-      --paper-pink-700: #c2185b;
-      --paper-pink-800: #ad1457;
-      --paper-pink-900: #880e4f;
-      --paper-pink-a100: #ff80ab;
-      --paper-pink-a200: #ff4081;
-      --paper-pink-a400: #f50057;
-      --paper-pink-a700: #c51162;
-
-      --paper-purple-50: #f3e5f5;
-      --paper-purple-100: #e1bee7;
-      --paper-purple-200: #ce93d8;
-      --paper-purple-300: #ba68c8;
-      --paper-purple-400: #ab47bc;
-      --paper-purple-500: #9c27b0;
-      --paper-purple-600: #8e24aa;
-      --paper-purple-700: #7b1fa2;
-      --paper-purple-800: #6a1b9a;
-      --paper-purple-900: #4a148c;
-      --paper-purple-a100: #ea80fc;
-      --paper-purple-a200: #e040fb;
-      --paper-purple-a400: #d500f9;
-      --paper-purple-a700: #aa00ff;
-
-      --paper-deep-purple-50: #ede7f6;
-      --paper-deep-purple-100: #d1c4e9;
-      --paper-deep-purple-200: #b39ddb;
-      --paper-deep-purple-300: #9575cd;
-      --paper-deep-purple-400: #7e57c2;
-      --paper-deep-purple-500: #673ab7;
-      --paper-deep-purple-600: #5e35b1;
-      --paper-deep-purple-700: #512da8;
-      --paper-deep-purple-800: #4527a0;
-      --paper-deep-purple-900: #311b92;
-      --paper-deep-purple-a100: #b388ff;
-      --paper-deep-purple-a200: #7c4dff;
-      --paper-deep-purple-a400: #651fff;
-      --paper-deep-purple-a700: #6200ea;
-
-      --paper-indigo-50: #e8eaf6;
-      --paper-indigo-100: #c5cae9;
-      --paper-indigo-200: #9fa8da;
-      --paper-indigo-300: #7986cb;
-      --paper-indigo-400: #5c6bc0;
-      --paper-indigo-500: #3f51b5;
-      --paper-indigo-600: #3949ab;
-      --paper-indigo-700: #303f9f;
-      --paper-indigo-800: #283593;
-      --paper-indigo-900: #1a237e;
-      --paper-indigo-a100: #8c9eff;
-      --paper-indigo-a200: #536dfe;
-      --paper-indigo-a400: #3d5afe;
-      --paper-indigo-a700: #304ffe;
-
-      --paper-blue-50: #e3f2fd;
-      --paper-blue-100: #bbdefb;
-      --paper-blue-200: #90caf9;
-      --paper-blue-300: #64b5f6;
-      --paper-blue-400: #42a5f5;
-      --paper-blue-500: #2196f3;
-      --paper-blue-600: #1e88e5;
-      --paper-blue-700: #1976d2;
-      --paper-blue-800: #1565c0;
-      --paper-blue-900: #0d47a1;
-      --paper-blue-a100: #82b1ff;
-      --paper-blue-a200: #448aff;
-      --paper-blue-a400: #2979ff;
-      --paper-blue-a700: #2962ff;
-
-      --paper-light-blue-50: #e1f5fe;
-      --paper-light-blue-100: #b3e5fc;
-      --paper-light-blue-200: #81d4fa;
-      --paper-light-blue-300: #4fc3f7;
-      --paper-light-blue-400: #29b6f6;
-      --paper-light-blue-500: #03a9f4;
-      --paper-light-blue-600: #039be5;
-      --paper-light-blue-700: #0288d1;
-      --paper-light-blue-800: #0277bd;
-      --paper-light-blue-900: #01579b;
-      --paper-light-blue-a100: #80d8ff;
-      --paper-light-blue-a200: #40c4ff;
-      --paper-light-blue-a400: #00b0ff;
-      --paper-light-blue-a700: #0091ea;
-
-      --paper-cyan-50: #e0f7fa;
-      --paper-cyan-100: #b2ebf2;
-      --paper-cyan-200: #80deea;
-      --paper-cyan-300: #4dd0e1;
-      --paper-cyan-400: #26c6da;
-      --paper-cyan-500: #00bcd4;
-      --paper-cyan-600: #00acc1;
-      --paper-cyan-700: #0097a7;
-      --paper-cyan-800: #00838f;
-      --paper-cyan-900: #006064;
-      --paper-cyan-a100: #84ffff;
-      --paper-cyan-a200: #18ffff;
-      --paper-cyan-a400: #00e5ff;
-      --paper-cyan-a700: #00b8d4;
-
-      --paper-teal-50: #e0f2f1;
-      --paper-teal-100: #b2dfdb;
-      --paper-teal-200: #80cbc4;
-      --paper-teal-300: #4db6ac;
-      --paper-teal-400: #26a69a;
-      --paper-teal-500: #009688;
-      --paper-teal-600: #00897b;
-      --paper-teal-700: #00796b;
-      --paper-teal-800: #00695c;
-      --paper-teal-900: #004d40;
-      --paper-teal-a100: #a7ffeb;
-      --paper-teal-a200: #64ffda;
-      --paper-teal-a400: #1de9b6;
-      --paper-teal-a700: #00bfa5;
-
-      --paper-green-50: #e8f5e9;
-      --paper-green-100: #c8e6c9;
-      --paper-green-200: #a5d6a7;
-      --paper-green-300: #81c784;
-      --paper-green-400: #66bb6a;
-      --paper-green-500: #4caf50;
-      --paper-green-600: #43a047;
-      --paper-green-700: #388e3c;
-      --paper-green-800: #2e7d32;
-      --paper-green-900: #1b5e20;
-      --paper-green-a100: #b9f6ca;
-      --paper-green-a200: #69f0ae;
-      --paper-green-a400: #00e676;
-      --paper-green-a700: #00c853;
-
-      --paper-light-green-50: #f1f8e9;
-      --paper-light-green-100: #dcedc8;
-      --paper-light-green-200: #c5e1a5;
-      --paper-light-green-300: #aed581;
-      --paper-light-green-400: #9ccc65;
-      --paper-light-green-500: #8bc34a;
-      --paper-light-green-600: #7cb342;
-      --paper-light-green-700: #689f38;
-      --paper-light-green-800: #558b2f;
-      --paper-light-green-900: #33691e;
-      --paper-light-green-a100: #ccff90;
-      --paper-light-green-a200: #b2ff59;
-      --paper-light-green-a400: #76ff03;
-      --paper-light-green-a700: #64dd17;
-
-      --paper-lime-50: #f9fbe7;
-      --paper-lime-100: #f0f4c3;
-      --paper-lime-200: #e6ee9c;
-      --paper-lime-300: #dce775;
-      --paper-lime-400: #d4e157;
-      --paper-lime-500: #cddc39;
-      --paper-lime-600: #c0ca33;
-      --paper-lime-700: #afb42b;
-      --paper-lime-800: #9e9d24;
-      --paper-lime-900: #827717;
-      --paper-lime-a100: #f4ff81;
-      --paper-lime-a200: #eeff41;
-      --paper-lime-a400: #c6ff00;
-      --paper-lime-a700: #aeea00;
-
-      --paper-yellow-50: #fffde7;
-      --paper-yellow-100: #fff9c4;
-      --paper-yellow-200: #fff59d;
-      --paper-yellow-300: #fff176;
-      --paper-yellow-400: #ffee58;
-      --paper-yellow-500: #ffeb3b;
-      --paper-yellow-600: #fdd835;
-      --paper-yellow-700: #fbc02d;
-      --paper-yellow-800: #f9a825;
-      --paper-yellow-900: #f57f17;
-      --paper-yellow-a100: #ffff8d;
-      --paper-yellow-a200: #ffff00;
-      --paper-yellow-a400: #ffea00;
-      --paper-yellow-a700: #ffd600;
-
-      --paper-amber-50: #fff8e1;
-      --paper-amber-100: #ffecb3;
-      --paper-amber-200: #ffe082;
-      --paper-amber-300: #ffd54f;
-      --paper-amber-400: #ffca28;
-      --paper-amber-500: #ffc107;
-      --paper-amber-600: #ffb300;
-      --paper-amber-700: #ffa000;
-      --paper-amber-800: #ff8f00;
-      --paper-amber-900: #ff6f00;
-      --paper-amber-a100: #ffe57f;
-      --paper-amber-a200: #ffd740;
-      --paper-amber-a400: #ffc400;
-      --paper-amber-a700: #ffab00;
-
-      --paper-orange-50: #fff3e0;
-      --paper-orange-100: #ffe0b2;
-      --paper-orange-200: #ffcc80;
-      --paper-orange-300: #ffb74d;
-      --paper-orange-400: #ffa726;
-      --paper-orange-500: #ff9800;
-      --paper-orange-600: #fb8c00;
-      --paper-orange-700: #f57c00;
-      --paper-orange-800: #ef6c00;
-      --paper-orange-900: #e65100;
-      --paper-orange-a100: #ffd180;
-      --paper-orange-a200: #ffab40;
-      --paper-orange-a400: #ff9100;
-      --paper-orange-a700: #ff6500;
-
-      --paper-deep-orange-50: #fbe9e7;
-      --paper-deep-orange-100: #ffccbc;
-      --paper-deep-orange-200: #ffab91;
-      --paper-deep-orange-300: #ff8a65;
-      --paper-deep-orange-400: #ff7043;
-      --paper-deep-orange-500: #ff5722;
-      --paper-deep-orange-600: #f4511e;
-      --paper-deep-orange-700: #e64a19;
-      --paper-deep-orange-800: #d84315;
-      --paper-deep-orange-900: #bf360c;
-      --paper-deep-orange-a100: #ff9e80;
-      --paper-deep-orange-a200: #ff6e40;
-      --paper-deep-orange-a400: #ff3d00;
-      --paper-deep-orange-a700: #dd2c00;
-
-      --paper-brown-50: #efebe9;
-      --paper-brown-100: #d7ccc8;
-      --paper-brown-200: #bcaaa4;
-      --paper-brown-300: #a1887f;
-      --paper-brown-400: #8d6e63;
-      --paper-brown-500: #795548;
-      --paper-brown-600: #6d4c41;
-      --paper-brown-700: #5d4037;
-      --paper-brown-800: #4e342e;
-      --paper-brown-900: #3e2723;
-
-      --paper-grey-50: #fafafa;
-      --paper-grey-100: #f5f5f5;
-      --paper-grey-200: #eeeeee;
-      --paper-grey-300: #e0e0e0;
-      --paper-grey-400: #bdbdbd;
-      --paper-grey-500: #9e9e9e;
-      --paper-grey-600: #757575;
-      --paper-grey-700: #616161;
-      --paper-grey-800: #424242;
-      --paper-grey-900: #212121;
-
-      --paper-blue-grey-50: #eceff1;
-      --paper-blue-grey-100: #cfd8dc;
-      --paper-blue-grey-200: #b0bec5;
-      --paper-blue-grey-300: #90a4ae;
-      --paper-blue-grey-400: #78909c;
-      --paper-blue-grey-500: #607d8b;
-      --paper-blue-grey-600: #546e7a;
-      --paper-blue-grey-700: #455a64;
-      --paper-blue-grey-800: #37474f;
-      --paper-blue-grey-900: #263238;
-
-      /* opacity for dark text on a light background */
-      --dark-divider-opacity: 0.12;
-      --dark-disabled-opacity: 0.38; /* or hint text or icon */
-      --dark-secondary-opacity: 0.54;
-      --dark-primary-opacity: 0.87;
-
-      /* opacity for light text on a dark background */
-      --light-divider-opacity: 0.12;
-      --light-disabled-opacity: 0.3; /* or hint text or icon */
-      --light-secondary-opacity: 0.7;
-      --light-primary-opacity: 1.0;
-
-    }
-
-  </style>
-</custom-style>`;
-
-document.head.appendChild($_documentContainer);
-
-
-/***/ }),
-/* 48 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // the whatwg-fetch polyfill installs the fetch() function
 // on the global object (window or self)
 //
 // Return that as the export for use in Webpack, Browserify etc.
-__webpack_require__(97);
+__webpack_require__(106);
 module.exports = self.fetch.bind(self);
 
 
 /***/ }),
-/* 49 */
+/* 53 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__polymer_app_route_app_location__ = __webpack_require__(100);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ucd_lib_cork_app_utils__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__polymer_app_route_app_location__ = __webpack_require__(109);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ucd_lib_cork_app_utils__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ucd_lib_cork_app_utils___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__ucd_lib_cork_app_utils__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_query_string__ = __webpack_require__(104);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_query_string__ = __webpack_require__(113);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_query_string___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_query_string__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lib_AppStateInterface__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lib_AppStateInterface__ = __webpack_require__(54);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lib_AppStateInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__lib_AppStateInterface__);
 
 
@@ -11120,7 +11917,7 @@ class AppRoute extends Object(__WEBPACK_IMPORTED_MODULE_2__ucd_lib_cork_app_util
 customElements.define('app-route', AppRoute);
 
 /***/ }),
-/* 50 */
+/* 54 */
 /***/ (function(module, exports) {
 
 module.exports = subclass => 
@@ -11152,10 +11949,10 @@ module.exports = subclass =>
   }
 
 /***/ }),
-/* 51 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const {BaseStore} = __webpack_require__(6);
+const {BaseStore} = __webpack_require__(5);
 
 class PackageStore extends BaseStore {
 
@@ -11308,32 +12105,33 @@ class PackageStore extends BaseStore {
 module.exports = new PackageStore();
 
 /***/ }),
-/* 52 */
-/***/ (function(module, exports, __webpack_require__) {
+/* 56 */
+/***/ (function(module, exports) {
 
-/* WEBPACK VAR INJECTION */(function(global) {// Unique ID creation requires a high quality random # generator.  In the
+// Unique ID creation requires a high quality random # generator.  In the
 // browser this is a little complicated due to unknown quality of Math.random()
 // and inconsistent support for the `crypto` API.  We do the best we can via
 // feature-detection
-var rng;
 
-var crypto = global.crypto || global.msCrypto; // for IE 11
-if (crypto && crypto.getRandomValues) {
+// getRandomValues needs to be invoked in a context where "this" is a Crypto implementation.
+var getRandomValues = (typeof(crypto) != 'undefined' && crypto.getRandomValues.bind(crypto)) ||
+                      (typeof(msCrypto) != 'undefined' && msCrypto.getRandomValues.bind(msCrypto));
+if (getRandomValues) {
   // WHATWG crypto RNG - http://wiki.whatwg.org/wiki/Crypto
   var rnds8 = new Uint8Array(16); // eslint-disable-line no-undef
-  rng = function whatwgRNG() {
-    crypto.getRandomValues(rnds8);
+
+  module.exports = function whatwgRNG() {
+    getRandomValues(rnds8);
     return rnds8;
   };
-}
-
-if (!rng) {
+} else {
   // Math.random()-based (RNG)
   //
   // If all else fails, use Math.random().  It's fast, but is of unspecified
   // quality.
   var rnds = new Array(16);
-  rng = function() {
+
+  module.exports = function mathRNG() {
     for (var i = 0, r; i < 16; i++) {
       if ((i & 0x03) === 0) r = Math.random() * 0x100000000;
       rnds[i] = r >>> ((i & 0x03) << 3) & 0xff;
@@ -11343,39 +12141,9 @@ if (!rng) {
   };
 }
 
-module.exports = rng;
-
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(53)))
 
 /***/ }),
-/* 53 */
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-/* 54 */
+/* 57 */
 /***/ (function(module, exports) {
 
 /**
@@ -11404,10 +12172,10 @@ module.exports = bytesToUuid;
 
 
 /***/ }),
-/* 55 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const {BaseStore} = __webpack_require__(6);
+const {BaseStore} = __webpack_require__(5);
 
 class SearchStore extends BaseStore {
 
@@ -11454,7 +12222,106 @@ class SearchStore extends BaseStore {
 module.exports = new SearchStore();
 
 /***/ }),
-/* 56 */
+/* 59 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const {BaseStore} = __webpack_require__(5);
+
+class AuthStore extends BaseStore {
+
+  constructor() {
+    super();
+
+    this.AUTH_STATES = {
+      LOGGED_IN : 'loggedIn',
+      NOT_LOGGED_IN : 'notLoggedIn'
+    }
+
+    this.data = {
+      auth : {
+        state : this.AUTH_STATES.NOT_LOGGED_IN
+      },
+      organizations : {
+        state : this.STATE.INIT
+      }
+    };
+
+    this.events = {
+      AUTH_UPDATE : 'auth-update',
+      ORGS_UPDATE : 'orgs-update'
+    }
+  }
+
+  logout() {
+    this._setAuthState({
+      state : this.AUTH_STATES.NOT_LOGGED_IN
+    });
+    
+    this._setOrgState({
+      payload : [],
+      state : this.STATE.INIT
+    });
+  }
+
+  setAuthLoading(request, username) {
+    this._setAuthState({request, username, state : this.STATE.LOADING});
+    this._setOrgState({request, state : this.STATE.LOADING});
+  }
+
+  setAuthLoaded(payload) {
+    this._setAuthState({
+      username: payload.username,
+      state : this.AUTH_STATES.LOGGED_IN
+    });
+
+    if( !payload.organizations ) return;
+    this._setOrgState({
+      payload : payload.organizations,
+      state : this.STATE.LOADED
+    });
+  }
+
+  setAuthError(error) {
+    this._setAuthState({
+      error,
+      state : this.AUTH_STATES.NOT_LOGGED_IN
+    });
+    
+    this._setOrgState({
+      error,
+      payload : [],
+      state : this.STATE.ERROR
+    });
+  }
+
+  _setAuthState(state) {
+    this.data.auth = state;
+    this.emit(this.events.AUTH_UPDATE, state);
+  }
+
+  setOrgsLoading(request) {
+    this._setOrgState({request, state : this.STATE.LOADING});
+  }
+
+  setOrgsLoaded(payload) {
+    this._setOrgState({payload, state : this.STATE.LOADED});
+  }
+
+  setOrgsError(error) {
+    this._setOrgState({error, state : this.STATE.ERROR});
+  }
+
+  _setOrgState(state) {
+    if( !state.state ) console.warn('Setting orgs with no state');
+    this.data.organizations = state;
+    this.emit(this.events.ORGS_UPDATE, state);
+  }
+}
+
+module.exports = new AuthStore();
+
+/***/ }),
+/* 60 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -11473,15 +12340,15 @@ module.exports = {
 }
 
 /***/ }),
-/* 57 */
+/* 61 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_flex_layout_iron_flex_layout_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__paper_behaviors_paper_button_behavior_js__ = __webpack_require__(121);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__paper_styles_element_styles_paper_material_styles_js__ = __webpack_require__(123);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_flex_layout_iron_flex_layout_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__paper_behaviors_paper_button_behavior_js__ = __webpack_require__(132);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__paper_styles_element_styles_paper_material_styles_js__ = __webpack_require__(134);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(3);
 
 
 
@@ -11618,137 +12485,419 @@ Object(__WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__["a" /* Po
 
 
 /***/ }),
-/* 58 */
+/* 62 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__paper_ripple_paper_ripple_js__ = __webpack_require__(122);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_behaviors_iron_button_state_js__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_icon_iron_icon_js__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__paper_behaviors_paper_inky_focus_behavior_js__ = __webpack_require__(142);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__paper_styles_default_theme_js__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(3);
+
+
+
+
+
+const $_documentContainer = document.createElement('div');
+$_documentContainer.setAttribute('style', 'display: none;');
+
+$_documentContainer.innerHTML = `<dom-module id="paper-icon-button">
+  <template strip-whitespace="">
+    <style>
+      :host {
+        display: inline-block;
+        position: relative;
+        padding: 8px;
+        outline: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        cursor: pointer;
+        z-index: 0;
+        line-height: 1;
+
+        width: 40px;
+        height: 40px;
+
+        /* NOTE: Both values are needed, since some phones require the value to be \`transparent\`. */
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        -webkit-tap-highlight-color: transparent;
+
+        /* Because of polymer/2558, this style has lower specificity than * */
+        box-sizing: border-box !important;
+
+        @apply --paper-icon-button;
+      }
+
+      :host #ink {
+        color: var(--paper-icon-button-ink-color, var(--primary-text-color));
+        opacity: 0.6;
+      }
+
+      :host([disabled]) {
+        color: var(--paper-icon-button-disabled-text, var(--disabled-text-color));
+        pointer-events: none;
+        cursor: auto;
+
+        @apply --paper-icon-button-disabled;
+      }
+
+      :host([hidden]) {
+        display: none !important;
+      }
+
+      :host(:hover) {
+        @apply --paper-icon-button-hover;
+      }
+
+      iron-icon {
+        --iron-icon-width: 100%;
+        --iron-icon-height: 100%;
+      }
+    </style>
+
+    <iron-icon id="icon" src="[[src]]" icon="[[icon]]" alt\$="[[alt]]"></iron-icon>
+  </template>
+
+  
+</dom-module>`;
+
+document.head.appendChild($_documentContainer);
+Object(__WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__["a" /* Polymer */])({
+  is: 'paper-icon-button',
+
+  hostAttributes: {
+    role: 'button',
+    tabindex: '0'
+  },
+
+  behaviors: [
+    __WEBPACK_IMPORTED_MODULE_2__paper_behaviors_paper_inky_focus_behavior_js__["a" /* PaperInkyFocusBehavior */]
+  ],
+
+  properties: {
+    /**
+     * The URL of an image for the icon. If the src property is specified,
+     * the icon property should not be.
+     */
+    src: {
+      type: String
+    },
+
+    /**
+     * Specifies the icon name or index in the set of icons available in
+     * the icon's icon set. If the icon property is specified,
+     * the src property should not be.
+     */
+    icon: {
+      type: String
+    },
+
+    /**
+     * Specifies the alternate text for the button, for accessibility.
+     */
+    alt: {
+      type: String,
+      observer: "_altChanged"
+    }
+  },
+
+  _altChanged: function(newValue, oldValue) {
+    var label = this.getAttribute('aria-label');
+
+    // Don't stomp over a user-set aria-label.
+    if (!label || oldValue == label) {
+      this.setAttribute('aria-label', newValue);
+    }
+  }
+});
+
+
+/***/ }),
+/* 63 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_meta_iron_meta_js__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
 
 
 
 
+/**
+ * The `iron-iconset-svg` element allows users to define their own icon sets
+ * that contain svg icons. The svg icon elements should be children of the
+ * `iron-iconset-svg` element. Multiple icons should be given distinct id's.
+ *
+ * Using svg elements to create icons has a few advantages over traditional
+ * bitmap graphics like jpg or png. Icons that use svg are vector based so
+ * they are resolution independent and should look good on any device. They
+ * are stylable via css. Icons can be themed, colorized, and even animated.
+ *
+ * Example:
+ *
+ *     <iron-iconset-svg name="my-svg-icons" size="24">
+ *       <svg>
+ *         <defs>
+ *           <g id="shape">
+ *             <rect x="12" y="0" width="12" height="24" />
+ *             <circle cx="12" cy="12" r="12" />
+ *           </g>
+ *         </defs>
+ *       </svg>
+ *     </iron-iconset-svg>
+ *
+ * This will automatically register the icon set "my-svg-icons" to the iconset
+ * database.  To use these icons from within another element, make a
+ * `iron-iconset` element and call the `byId` method
+ * to retrieve a given iconset. To apply a particular icon inside an
+ * element use the `applyIcon` method. For example:
+ *
+ *     iconset.applyIcon(iconNode, 'car');
+ *
+ * @element iron-iconset-svg
+ * @demo demo/index.html
+ * @implements {Polymer.Iconset}
+ */
+/**
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+*/
+Object(__WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_fn_js__["a" /* Polymer */])({
+  is: 'iron-iconset-svg',
 
-const PaperRippleBehavior = {
   properties: {
+
     /**
-     * If true, the element will not produce a ripple effect when interacted
-     * with via the pointer.
+     * The name of the iconset.
      */
-    noink: {
-      type: Boolean,
-      observer: '_noinkChanged'
+    name: {
+      type: String,
+      observer: '_nameChanged'
     },
 
     /**
-     * @type {Element|undefined}
+     * The size of an individual icon. Note that icons must be square.
      */
-    _rippleContainer: {
-      type: Object,
+    size: {
+      type: Number,
+      value: 24
+    },
+
+    /**
+     * Set to true to enable mirroring of icons where specified when they are
+     * stamped. Icons that should be mirrored should be decorated with a
+     * `mirror-in-rtl` attribute.
+     *
+     * NOTE: For performance reasons, direction will be resolved once per
+     * document per iconset, so moving icons in and out of RTL subtrees will
+     * not cause their mirrored state to change.
+     */
+    rtlMirroring: {
+      type: Boolean,
+      value: false
+    },
+
+    /**
+     * Set to true to measure RTL based on the dir attribute on the body or
+     * html elements (measured on document.body or document.documentElement as
+     * available).
+     */
+    useGlobalRtlAttribute: {
+      type: Boolean,
+      value: false
+    }
+  },
+
+  created: function() {
+    this._meta = new __WEBPACK_IMPORTED_MODULE_1__iron_meta_iron_meta_js__["a" /* IronMeta */]({type: 'iconset', key: null, value: null});
+  },
+
+  attached: function() {
+    this.style.display = 'none';
+  },
+
+  /**
+   * Construct an array of all icon names in this iconset.
+   *
+   * @return {!Array} Array of icon names.
+   */
+  getIconNames: function() {
+    this._icons = this._createIconMap();
+    return Object.keys(this._icons).map(function(n) {
+      return this.name + ':' + n;
+    }, this);
+  },
+
+  /**
+   * Applies an icon to the given element.
+   *
+   * An svg icon is prepended to the element's shadowRoot if it exists,
+   * otherwise to the element itself.
+   *
+   * If RTL mirroring is enabled, and the icon is marked to be mirrored in
+   * RTL, the element will be tested (once and only once ever for each
+   * iconset) to determine the direction of the subtree the element is in.
+   * This direction will apply to all future icon applications, although only
+   * icons marked to be mirrored will be affected.
+   *
+   * @method applyIcon
+   * @param {Element} element Element to which the icon is applied.
+   * @param {string} iconName Name of the icon to apply.
+   * @return {?Element} The svg element which renders the icon.
+   */
+  applyIcon: function(element, iconName) {
+    // Remove old svg element
+    this.removeIcon(element);
+    // install new svg element
+    var svg = this._cloneIcon(iconName,
+        this.rtlMirroring && this._targetIsRTL(element));
+    if (svg) {
+      // insert svg element into shadow root, if it exists
+      var pde = Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(element.root || element);
+      pde.insertBefore(svg, pde.childNodes[0]);
+      return element._svgIcon = svg;
+    }
+    return null;
+  },
+
+  /**
+   * Remove an icon from the given element by undoing the changes effected
+   * by `applyIcon`.
+   *
+   * @param {Element} element The element from which the icon is removed.
+   */
+  removeIcon: function(element) {
+    // Remove old svg element
+    if (element._svgIcon) {
+      Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(element.root || element).removeChild(element._svgIcon);
+      element._svgIcon = null;
     }
   },
 
   /**
-   * Ensures a `<paper-ripple>` element is available when the element is
-   * focused.
+   * Measures and memoizes the direction of the element. Note that this
+   * measurement is only done once and the result is memoized for future
+   * invocations.
    */
-  _buttonStateChanged: function() {
-    if (this.focused) {
-      this.ensureRipple();
-    }
-  },
+  _targetIsRTL: function(target) {
+    if (this.__targetIsRTL == null) {
+      if (this.useGlobalRtlAttribute) {
+        var globalElement =
+            (document.body && document.body.hasAttribute('dir'))
+                ? document.body
+                : document.documentElement;
 
-  /**
-   * In addition to the functionality provided in `IronButtonState`, ensures
-   * a ripple effect is created when the element is in a `pressed` state.
-   */
-  _downHandler: function(event) {
-    __WEBPACK_IMPORTED_MODULE_2__iron_behaviors_iron_button_state_js__["b" /* IronButtonStateImpl */]._downHandler.call(this, event);
-    if (this.pressed) {
-      this.ensureRipple(event);
-    }
-  },
-
-  /**
-   * Ensures this element contains a ripple effect. For startup efficiency
-   * the ripple effect is dynamically on demand when needed.
-   * @param {!Event=} optTriggeringEvent (optional) event that triggered the
-   * ripple.
-   */
-  ensureRipple: function(optTriggeringEvent) {
-    if (!this.hasRipple()) {
-      this._ripple = this._createRipple();
-      this._ripple.noink = this.noink;
-      var rippleContainer = this._rippleContainer || this.root;
-      if (rippleContainer) {
-        Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(rippleContainer).appendChild(this._ripple);
-      }
-      if (optTriggeringEvent) {
-        // Check if the event happened inside of the ripple container
-        // Fall back to host instead of the root because distributed text
-        // nodes are not valid event targets
-        var domContainer = Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(this._rippleContainer || this);
-        var target = Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(optTriggeringEvent).rootTarget;
-        if (domContainer.deepContains( /** @type {Node} */(target))) {
-          this._ripple.uiDownAction(optTriggeringEvent);
+        this.__targetIsRTL = globalElement.getAttribute('dir') === 'rtl';
+      } else {
+        if (target && target.nodeType !== Node.ELEMENT_NODE) {
+          target = target.host;
         }
+
+        this.__targetIsRTL = target &&
+            window.getComputedStyle(target)['direction'] === 'rtl';
       }
     }
+
+    return this.__targetIsRTL;
   },
 
   /**
-   * Returns the `<paper-ripple>` element used by this element to create
-   * ripple effects. The element's ripple is created on demand, when
-   * necessary, and calling this method will force the
-   * ripple to be created.
+   *
+   * When name is changed, register iconset metadata
+   *
    */
-  getRipple: function() {
-    this.ensureRipple();
-    return this._ripple;
+  _nameChanged: function() {
+    this._meta.value = null;
+    this._meta.key = this.name;
+    this._meta.value = this;
+
+    this.async(function() {
+      this.fire('iron-iconset-added', this, {node: window});
+    });
   },
 
   /**
-   * Returns true if this element currently contains a ripple effect.
-   * @return {boolean}
+   * Create a map of child SVG elements by id.
+   *
+   * @return {!Object} Map of id's to SVG elements.
    */
-  hasRipple: function() {
-    return Boolean(this._ripple);
+  _createIconMap: function() {
+    // Objects chained to Object.prototype (`{}`) have members. Specifically,
+    // on FF there is a `watch` method that confuses the icon map, so we
+    // need to use a null-based object here.
+    var icons = Object.create(null);
+    Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(this).querySelectorAll('[id]')
+      .forEach(function(icon) {
+        icons[icon.id] = icon;
+      });
+    return icons;
   },
 
   /**
-   * Create the element's ripple effect via creating a `<paper-ripple>`.
-   * Override this method to customize the ripple element.
-   * @return {!PaperRippleElement} Returns a `<paper-ripple>` element.
+   * Produce installable clone of the SVG element matching `id` in this
+   * iconset, or `undefined` if there is no matching element.
+   *
+   * @return {Element} Returns an installable clone of the SVG element
+   * matching `id`.
    */
-  _createRipple: function() {
-    return /** @type {!PaperRippleElement} */ (
-        document.createElement('paper-ripple'));
+  _cloneIcon: function(id, mirrorAllowed) {
+    // create the icon map on-demand, since the iconset itself has no discrete
+    // signal to know when it's children are fully parsed
+    this._icons = this._icons || this._createIconMap();
+    return this._prepareSvgClone(this._icons[id], this.size, mirrorAllowed);
   },
 
-  _noinkChanged: function(noink) {
-    if (this.hasRipple()) {
-      this._ripple.noink = noink;
+  /**
+   * @param {Element} sourceSvg
+   * @param {number} size
+   * @param {Boolean} mirrorAllowed
+   * @return {Element}
+   */
+  _prepareSvgClone: function(sourceSvg, size, mirrorAllowed) {
+    if (sourceSvg) {
+      var content = sourceSvg.cloneNode(true),
+          svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg'),
+          viewBox = content.getAttribute('viewBox') || '0 0 ' + size + ' ' + size,
+          cssText = 'pointer-events: none; display: block; width: 100%; height: 100%;';
+
+      if (mirrorAllowed && content.hasAttribute('mirror-in-rtl')) {
+        cssText += '-webkit-transform:scale(-1,1);transform:scale(-1,1);';
+      }
+
+      svg.setAttribute('viewBox', viewBox);
+      svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+      svg.setAttribute('focusable', 'false');
+      // TODO(dfreedm): `pointer-events: none` works around https://crbug.com/370136
+      // TODO(sjmiles): inline style may not be ideal, but avoids requiring a shadow-root
+      svg.style.cssText = cssText;
+      svg.appendChild(content).removeAttribute('id');
+      return svg;
     }
+    return null;
   }
-};
-/* harmony export (immutable) */ __webpack_exports__["a"] = PaperRippleBehavior;
 
+});
 
 
 /***/ }),
-/* 59 */
+/* 64 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_meta_iron_meta_js__ = __webpack_require__(37);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_flex_layout_iron_flex_layout_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
-
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_resizable_behavior_iron_resizable_behavior_js__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_selector_iron_selectable_js__ = __webpack_require__(42);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(3);
 
 
 
@@ -11757,132 +12906,54 @@ Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_fn_js__["a" /* Po
   _template: `
     <style>
       :host {
-        @apply --layout-inline;
-        @apply --layout-center-center;
-        position: relative;
-
-        vertical-align: middle;
-
-        fill: var(--iron-icon-fill-color, currentcolor);
-        stroke: var(--iron-icon-stroke-color, none);
-
-        width: var(--iron-icon-width, 24px);
-        height: var(--iron-icon-height, 24px);
-        @apply --iron-icon;
+        display: block;
       }
 
-      :host([hidden]) {
-        display: none;
+      :host > ::slotted(:not(.iron-selected)) {
+        display: none !important;
       }
     </style>
+
+    <slot></slot>
 `,
 
-  is: 'iron-icon',
+  is: 'iron-pages',
+
+  behaviors: [
+    __WEBPACK_IMPORTED_MODULE_1__iron_resizable_behavior_iron_resizable_behavior_js__["a" /* IronResizableBehavior */],
+    __WEBPACK_IMPORTED_MODULE_2__iron_selector_iron_selectable_js__["a" /* IronSelectableBehavior */]
+  ],
 
   properties: {
 
-    /**
-     * The name of the icon to use. The name should be of the form:
-     * `iconset_name:icon_name`.
-     */
-    icon: {
-      type: String
-    },
-
-    /**
-     * The name of the theme to used, if one is specified by the
-     * iconset.
-     */
-    theme: {
-      type: String
-    },
-
-    /**
-     * If using iron-icon without an iconset, you can set the src to be
-     * the URL of an individual icon image file. Note that this will take
-     * precedence over a given icon attribute.
-     */
-    src: {
-      type: String
-    },
-
-    /**
-     * @type {!Polymer.IronMeta}
-     */
-    _meta: {
-      value: __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__["a" /* Base */].create('iron-meta', {type: 'iconset'})
+    // as the selected page is the only one visible, activateEvent
+    // is both non-sensical and problematic; e.g. in cases where a user
+    // handler attempts to change the page and the activateEvent
+    // handler immediately changes it back
+    activateEvent: {
+      type: String,
+      value: null
     }
 
   },
 
   observers: [
-    '_updateIcon(_meta, isAttached)',
-    '_updateIcon(theme, isAttached)',
-    '_srcChanged(src, isAttached)',
-    '_iconChanged(icon, isAttached)'
+    '_selectedPageChanged(selected)'
   ],
 
-  _DEFAULT_ICONSET: 'icons',
-
-  _iconChanged: function(icon) {
-    var parts = (icon || '').split(':');
-    this._iconName = parts.pop();
-    this._iconsetName = parts.pop() || this._DEFAULT_ICONSET;
-    this._updateIcon();
-  },
-
-  _srcChanged: function(src) {
-    this._updateIcon();
-  },
-
-  _usesIconset: function() {
-    return this.icon || !this.src;
-  },
-
-  /** @suppress {visibility} */
-  _updateIcon: function() {
-    if (this._usesIconset()) {
-      if (this._img && this._img.parentNode) {
-        Object(__WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(this.root).removeChild(this._img);
-      }
-      if (this._iconName === "") {
-        if (this._iconset) {
-          this._iconset.removeIcon(this);
-        }
-      } else if (this._iconsetName && this._meta) {
-        this._iconset = /** @type {?Polymer.Iconset} */ (
-          this._meta.byKey(this._iconsetName));
-        if (this._iconset) {
-          this._iconset.applyIcon(this, this._iconName, this.theme);
-          this.unlisten(window, 'iron-iconset-added', '_updateIcon');
-        } else {
-          this.listen(window, 'iron-iconset-added', '_updateIcon');
-        }
-      }
-    } else {
-      if (this._iconset) {
-        this._iconset.removeIcon(this);
-      }
-      if (!this._img) {
-        this._img = document.createElement('img');
-        this._img.style.width = '100%';
-        this._img.style.height = '100%';
-        this._img.draggable = false;
-      }
-      this._img.src = this.src;
-      Object(__WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(this.root).appendChild(this._img);
-    }
+  _selectedPageChanged: function(selected, old) {
+    this.async(this.notifyResize);
   }
 });
 
 
 /***/ }),
-/* 60 */
+/* 65 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__polymer_polymer_element_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__polymer_polymer_element_js__ = __webpack_require__(1);
 
 
 
@@ -11955,12 +13026,12 @@ const IronFormElementBehavior = {
 
 
 /***/ }),
-/* 61 */
+/* 66 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(3);
 
 
 
@@ -12037,13 +13108,13 @@ IronA11yAnnouncer.requestAvailability = function() {
 
 
 /***/ }),
-/* 62 */
+/* 67 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* unused harmony export IronValidatableBehaviorMeta */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_meta_iron_meta_js__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_meta_iron_meta_js__ = __webpack_require__(41);
 
 
 let IronValidatableBehaviorMeta = null;
@@ -12139,14 +13210,14 @@ const IronValidatableBehavior = {
 
 
 /***/ }),
-/* 63 */
+/* 68 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_a11y_keys_behavior_iron_a11y_keys_behavior_js__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_a11y_keys_behavior_iron_a11y_keys_behavior_js__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_behaviors_iron_control_state_js__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_polymer_element_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_polymer_element_js__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
 
 
@@ -12696,14 +13767,14 @@ const PaperInputBehavior = [
 
 
 /***/ }),
-/* 64 */
+/* 69 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__paper_styles_typography_js__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__paper_input_addon_behavior_js__ = __webpack_require__(65);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__paper_styles_typography_js__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__paper_input_addon_behavior_js__ = __webpack_require__(70);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(3);
 
 
 
@@ -12774,7 +13845,7 @@ Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_fn_js__["a" /* Po
 
 
 /***/ }),
-/* 65 */
+/* 70 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -12810,15 +13881,15 @@ const PaperInputAddonBehavior = {
 
 
 /***/ }),
-/* 66 */
+/* 71 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_flex_layout_iron_flex_layout_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__paper_styles_default_theme_js__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__paper_styles_typography_js__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_flex_layout_iron_flex_layout_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__paper_styles_default_theme_js__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__paper_styles_typography_js__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__polymer_lib_utils_case_map_js__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
 
@@ -13393,15 +14464,15 @@ Object(__WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__["a" /* Po
 
 
 /***/ }),
-/* 67 */
+/* 72 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__paper_styles_default_theme_js__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__paper_styles_typography_js__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__paper_input_addon_behavior_js__ = __webpack_require__(65);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__paper_styles_default_theme_js__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__paper_styles_typography_js__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__paper_input_addon_behavior_js__ = __webpack_require__(70);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(3);
 
 
 
@@ -13466,7 +14537,428 @@ Object(__WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__["a" /* Po
 
 
 /***/ }),
-/* 68 */
+/* 73 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_selector_iron_multi_selectable_js__ = __webpack_require__(162);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_a11y_keys_behavior_iron_a11y_keys_behavior_js__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__iron_selector_iron_selectable_js__ = __webpack_require__(42);
+
+
+
+
+
+
+const IronMenuBehaviorImpl = {
+
+  properties: {
+
+    /**
+     * Returns the currently focused item.
+     * @type {?Object}
+     */
+    focusedItem: {
+      observer: '_focusedItemChanged',
+      readOnly: true,
+      type: Object
+    },
+
+    /**
+     * The attribute to use on menu items to look up the item title. Typing the first
+     * letter of an item when the menu is open focuses that item. If unset, `textContent`
+     * will be used.
+     */
+    attrForItemTitle: {
+      type: String
+    },
+
+    disabled: {
+      type: Boolean,
+      value: false,
+      observer: '_disabledChanged',
+    },
+  },
+
+  // The list of keys has been taken from
+  // https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/getModifierState
+  _MODIFIER_KEYS : [
+    'Alt',
+    'AltGraph',
+    'CapsLock',
+    'Control',
+    'Fn',
+    'FnLock',
+    'Hyper',
+    'Meta',
+    'NumLock',
+    'OS',
+    'ScrollLock',
+    'Shift',
+    'Super',
+    'Symbol',
+    'SymbolLock'
+  ],
+
+  _SEARCH_RESET_TIMEOUT_MS: 1000,
+
+  _previousTabIndex: 0,
+
+  hostAttributes: {
+    'role': 'menu',
+  },
+
+  observers: [
+    '_updateMultiselectable(multi)'
+  ],
+
+  listeners: {
+    'focus': '_onFocus',
+    'keydown': '_onKeydown',
+    'iron-items-changed': '_onIronItemsChanged'
+  },
+
+  keyBindings: {
+    'up': '_onUpKey',
+    'down': '_onDownKey',
+    'esc': '_onEscKey',
+    'shift+tab:keydown': '_onShiftTabDown'
+  },
+
+  attached: function() {
+    this._resetTabindices();
+  },
+
+  /**
+   * Selects the given value. If the `multi` property is true, then the selected state of the
+   * `value` will be toggled; otherwise the `value` will be selected.
+   *
+   * @param {string|number} value the value to select.
+   */
+  select: function(value) {
+    // Cancel automatically focusing a default item if the menu received focus
+    // through a user action selecting a particular item.
+    if (this._defaultFocusAsync) {
+      this.cancelAsync(this._defaultFocusAsync);
+      this._defaultFocusAsync = null;
+    }
+    var item = this._valueToItem(value);
+    if (item && item.hasAttribute('disabled')) return;
+    this._setFocusedItem(item);
+    __WEBPACK_IMPORTED_MODULE_1__iron_selector_iron_multi_selectable_js__["b" /* IronMultiSelectableBehaviorImpl */].select.apply(this, arguments);
+  },
+
+  /**
+   * Resets all tabindex attributes to the appropriate value based on the
+   * current selection state. The appropriate value is `0` (focusable) for
+   * the default selected item, and `-1` (not keyboard focusable) for all
+   * other items.
+   */
+  _resetTabindices: function() {
+    var selectedItem = this.multi ? (this.selectedItems && this.selectedItems[0]) : this.selectedItem;
+
+    this.items.forEach(function(item) {
+      item.setAttribute('tabindex', item === selectedItem ? '0' : '-1');
+    }, this);
+  },
+
+  /**
+   * Sets appropriate ARIA based on whether or not the menu is meant to be
+   * multi-selectable.
+   *
+   * @param {boolean} multi True if the menu should be multi-selectable.
+   */
+  _updateMultiselectable: function(multi) {
+    if (multi) {
+      this.setAttribute('aria-multiselectable', 'true');
+    } else {
+      this.removeAttribute('aria-multiselectable');
+    }
+  },
+
+  /**
+   * Given a KeyboardEvent, this method will focus the appropriate item in the
+   * menu (if there is a relevant item, and it is possible to focus it).
+   *
+   * @param {KeyboardEvent} event A KeyboardEvent.
+   */
+  _focusWithKeyboardEvent: function(event) {
+    // Make sure that the key pressed is not a modifier key.
+    // getModifierState is not being used, as it is not available in Safari
+    // earlier than 10.0.2 (https://trac.webkit.org/changeset/206725/webkit)
+    if (this._MODIFIER_KEYS.indexOf(event.key) !== -1)
+      return;
+
+    this.cancelDebouncer('_clearSearchText');
+
+    var searchText = this._searchText || '';
+    var key = event.key && event.key.length == 1 ? event.key :
+        String.fromCharCode(event.keyCode);
+    searchText += key.toLocaleLowerCase();
+
+    var searchLength = searchText.length;
+
+    for (var i = 0, item; item = this.items[i]; i++) {
+      if (item.hasAttribute('disabled')) {
+        continue;
+      }
+
+      var attr = this.attrForItemTitle || 'textContent';
+      var title = (item[attr] || item.getAttribute(attr) || '').trim();
+
+      if (title.length < searchLength) {
+        continue;
+      }
+
+      if (title.slice(0, searchLength).toLocaleLowerCase() == searchText) {
+        this._setFocusedItem(item);
+        break;
+      }
+    }
+
+    this._searchText = searchText;
+    this.debounce('_clearSearchText', this._clearSearchText,
+                  this._SEARCH_RESET_TIMEOUT_MS);
+  },
+
+  _clearSearchText: function() {
+    this._searchText = '';
+  },
+
+  /**
+   * Focuses the previous item (relative to the currently focused item) in the
+   * menu, disabled items will be skipped.
+   * Loop until length + 1 to handle case of single item in menu.
+   */
+  _focusPrevious: function() {
+    var length = this.items.length;
+    var curFocusIndex = Number(this.indexOf(this.focusedItem));
+
+    for (var i = 1; i < length + 1; i++) {
+      var item = this.items[(curFocusIndex - i + length) % length];
+      if (!item.hasAttribute('disabled')) {
+        var owner = Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(item).getOwnerRoot() || document;
+        this._setFocusedItem(item);
+
+        // Focus might not have worked, if the element was hidden or not
+        // focusable. In that case, try again.
+        if (Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(owner).activeElement == item) {
+          return;
+        }
+      }
+    }
+  },
+
+  /**
+   * Focuses the next item (relative to the currently focused item) in the
+   * menu, disabled items will be skipped.
+   * Loop until length + 1 to handle case of single item in menu.
+   */
+  _focusNext: function() {
+    var length = this.items.length;
+    var curFocusIndex = Number(this.indexOf(this.focusedItem));
+
+    for (var i = 1; i < length + 1; i++) {
+      var item = this.items[(curFocusIndex + i) % length];
+      if (!item.hasAttribute('disabled')) {
+        var owner = Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(item).getOwnerRoot() || document;
+        this._setFocusedItem(item);
+
+        // Focus might not have worked, if the element was hidden or not
+        // focusable. In that case, try again.
+        if (Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(owner).activeElement == item) {
+          return;
+        }
+      }
+    }
+  },
+
+  /**
+   * Mutates items in the menu based on provided selection details, so that
+   * all items correctly reflect selection state.
+   *
+   * @param {Element} item An item in the menu.
+   * @param {boolean} isSelected True if the item should be shown in a
+   * selected state, otherwise false.
+   */
+  _applySelection: function(item, isSelected) {
+    if (isSelected) {
+      item.setAttribute('aria-selected', 'true');
+    } else {
+      item.removeAttribute('aria-selected');
+    }
+    __WEBPACK_IMPORTED_MODULE_4__iron_selector_iron_selectable_js__["a" /* IronSelectableBehavior */]._applySelection.apply(this, arguments);
+  },
+
+  /**
+   * Discretely updates tabindex values among menu items as the focused item
+   * changes.
+   *
+   * @param {Element} focusedItem The element that is currently focused.
+   * @param {?Element} old The last element that was considered focused, if
+   * applicable.
+   */
+  _focusedItemChanged: function(focusedItem, old) {
+    old && old.setAttribute('tabindex', '-1');
+    if (focusedItem && !focusedItem.hasAttribute('disabled') && !this.disabled) {
+      focusedItem.setAttribute('tabindex', '0');
+      focusedItem.focus();
+    }
+  },
+
+  /**
+   * A handler that responds to mutation changes related to the list of items
+   * in the menu.
+   *
+   * @param {CustomEvent} event An event containing mutation records as its
+   * detail.
+   */
+  _onIronItemsChanged: function(event) {
+    if (event.detail.addedNodes.length) {
+      this._resetTabindices();
+    }
+  },
+
+  /**
+   * Handler that is called when a shift+tab keypress is detected by the menu.
+   *
+   * @param {CustomEvent} event A key combination event.
+   */
+  _onShiftTabDown: function(event) {
+    var oldTabIndex = this.getAttribute('tabindex');
+
+    IronMenuBehaviorImpl._shiftTabPressed = true;
+
+    this._setFocusedItem(null);
+
+    this.setAttribute('tabindex', '-1');
+
+    this.async(function() {
+      this.setAttribute('tabindex', oldTabIndex);
+      IronMenuBehaviorImpl._shiftTabPressed = false;
+      // NOTE(cdata): polymer/polymer#1305
+    }, 1);
+  },
+
+  /**
+   * Handler that is called when the menu receives focus.
+   *
+   * @param {FocusEvent} event A focus event.
+   */
+  _onFocus: function(event) {
+    if (IronMenuBehaviorImpl._shiftTabPressed) {
+      // do not focus the menu itself
+      return;
+    }
+
+    // Do not focus the selected tab if the deepest target is part of the
+    // menu element's local DOM and is focusable.
+    var rootTarget = /** @type {?HTMLElement} */(
+        Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(event).rootTarget);
+    if (rootTarget !== this && typeof rootTarget.tabIndex !== "undefined" && !this.isLightDescendant(rootTarget)) {
+      return;
+    }
+
+    // clear the cached focus item
+    this._defaultFocusAsync = this.async(function() {
+      // focus the selected item when the menu receives focus, or the first item
+      // if no item is selected
+      var selectedItem = this.multi ? (this.selectedItems && this.selectedItems[0]) : this.selectedItem;
+
+      this._setFocusedItem(null);
+
+      if (selectedItem) {
+        this._setFocusedItem(selectedItem);
+      } else if (this.items[0]) {
+        // We find the first none-disabled item (if one exists)
+        this._focusNext();
+      }
+    });
+  },
+
+  /**
+   * Handler that is called when the up key is pressed.
+   *
+   * @param {CustomEvent} event A key combination event.
+   */
+  _onUpKey: function(event) {
+    // up and down arrows moves the focus
+    this._focusPrevious();
+    event.detail.keyboardEvent.preventDefault();
+  },
+
+  /**
+   * Handler that is called when the down key is pressed.
+   *
+   * @param {CustomEvent} event A key combination event.
+   */
+  _onDownKey: function(event) {
+    this._focusNext();
+    event.detail.keyboardEvent.preventDefault();
+  },
+
+  /**
+   * Handler that is called when the esc key is pressed.
+   *
+   * @param {CustomEvent} event A key combination event.
+   */
+  _onEscKey: function(event) {
+    var focusedItem = this.focusedItem;
+    if (focusedItem) {
+      focusedItem.blur();
+    }
+  },
+
+  /**
+   * Handler that is called when a keydown event is detected.
+   *
+   * @param {KeyboardEvent} event A keyboard event.
+   */
+  _onKeydown: function(event) {
+    if (!this.keyboardEventMatchesKeys(event, 'up down esc')) {
+      // all other keys focus the menu item starting with that character
+      this._focusWithKeyboardEvent(event);
+    }
+    event.stopPropagation();
+  },
+
+  // override _activateHandler
+  _activateHandler: function(event) {
+    __WEBPACK_IMPORTED_MODULE_4__iron_selector_iron_selectable_js__["a" /* IronSelectableBehavior */]._activateHandler.call(this, event);
+    event.stopPropagation();
+  },
+
+  /**
+   * Updates this element's tab index when it's enabled/disabled.
+   * @param {boolean} disabled
+   */
+  _disabledChanged: function(disabled) {
+    if (disabled) {
+      this._previousTabIndex = this.hasAttribute('tabindex') ? this.tabIndex : 0;
+      this.removeAttribute('tabindex');  // No tabindex means not tab-able or select-able.
+    } else if (!this.hasAttribute('tabindex')) {
+      this.setAttribute('tabindex', this._previousTabIndex);
+    }
+  }
+};
+/* harmony export (immutable) */ __webpack_exports__["b"] = IronMenuBehaviorImpl;
+
+
+IronMenuBehaviorImpl._shiftTabPressed = false;
+
+const IronMenuBehavior = [
+  __WEBPACK_IMPORTED_MODULE_1__iron_selector_iron_multi_selectable_js__["a" /* IronMultiSelectableBehavior */],
+  __WEBPACK_IMPORTED_MODULE_2__iron_a11y_keys_behavior_iron_a11y_keys_behavior_js__["a" /* IronA11yKeysBehavior */],
+  IronMenuBehaviorImpl
+];
+/* harmony export (immutable) */ __webpack_exports__["a"] = IronMenuBehavior;
+
+
+
+/***/ }),
+/* 74 */
 /***/ (function(module, exports) {
 
 
@@ -13486,8 +14978,8 @@ module.exports = subclass =>
       return this.PackageModel.get(id);
     }
 
-    async _createPackage(name, overview) {
-      return this.PackageModel.create(name, overview);
+    async _createPackage(name, overview, organization) {
+      return this.PackageModel.create(name, overview, organization);
     }
 
     async _updatePackage(pkg) {
@@ -13504,45 +14996,264 @@ module.exports = subclass =>
   }
 
 /***/ }),
-/* 69 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // super simple module for the most common nodejs use case.
-exports.markdown = __webpack_require__(156);
+exports.markdown = __webpack_require__(168);
 exports.parse = exports.markdown.toHTML;
 
 
 /***/ }),
-/* 70 */
+/* 76 */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
+/* 77 */
+/***/ (function(module, exports) {
+
+// shim for using process in browser
+var process = module.exports = {};
+
+// cached from whatever global is present so that test runners that stub it
+// don't break things.  But we need to wrap it in a try catch in case it is
+// wrapped in strict mode code which doesn't define any globals.  It's inside a
+// function because try/catches deoptimize in certain engines.
+
+var cachedSetTimeout;
+var cachedClearTimeout;
+
+function defaultSetTimout() {
+    throw new Error('setTimeout has not been defined');
+}
+function defaultClearTimeout () {
+    throw new Error('clearTimeout has not been defined');
+}
+(function () {
+    try {
+        if (typeof setTimeout === 'function') {
+            cachedSetTimeout = setTimeout;
+        } else {
+            cachedSetTimeout = defaultSetTimout;
+        }
+    } catch (e) {
+        cachedSetTimeout = defaultSetTimout;
+    }
+    try {
+        if (typeof clearTimeout === 'function') {
+            cachedClearTimeout = clearTimeout;
+        } else {
+            cachedClearTimeout = defaultClearTimeout;
+        }
+    } catch (e) {
+        cachedClearTimeout = defaultClearTimeout;
+    }
+} ())
+function runTimeout(fun) {
+    if (cachedSetTimeout === setTimeout) {
+        //normal enviroments in sane situations
+        return setTimeout(fun, 0);
+    }
+    // if setTimeout wasn't available but was latter defined
+    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+        cachedSetTimeout = setTimeout;
+        return setTimeout(fun, 0);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedSetTimeout(fun, 0);
+    } catch(e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+            return cachedSetTimeout.call(null, fun, 0);
+        } catch(e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+            return cachedSetTimeout.call(this, fun, 0);
+        }
+    }
+
+
+}
+function runClearTimeout(marker) {
+    if (cachedClearTimeout === clearTimeout) {
+        //normal enviroments in sane situations
+        return clearTimeout(marker);
+    }
+    // if clearTimeout wasn't available but was latter defined
+    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+        cachedClearTimeout = clearTimeout;
+        return clearTimeout(marker);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedClearTimeout(marker);
+    } catch (e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+            return cachedClearTimeout.call(null, marker);
+        } catch (e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+            return cachedClearTimeout.call(this, marker);
+        }
+    }
+
+
+
+}
+var queue = [];
+var draining = false;
+var currentQueue;
+var queueIndex = -1;
+
+function cleanUpNextTick() {
+    if (!draining || !currentQueue) {
+        return;
+    }
+    draining = false;
+    if (currentQueue.length) {
+        queue = currentQueue.concat(queue);
+    } else {
+        queueIndex = -1;
+    }
+    if (queue.length) {
+        drainQueue();
+    }
+}
+
+function drainQueue() {
+    if (draining) {
+        return;
+    }
+    var timeout = runTimeout(cleanUpNextTick);
+    draining = true;
+
+    var len = queue.length;
+    while(len) {
+        currentQueue = queue;
+        queue = [];
+        while (++queueIndex < len) {
+            if (currentQueue) {
+                currentQueue[queueIndex].run();
+            }
+        }
+        queueIndex = -1;
+        len = queue.length;
+    }
+    currentQueue = null;
+    draining = false;
+    runClearTimeout(timeout);
+}
+
+process.nextTick = function (fun) {
+    var args = new Array(arguments.length - 1);
+    if (arguments.length > 1) {
+        for (var i = 1; i < arguments.length; i++) {
+            args[i - 1] = arguments[i];
+        }
+    }
+    queue.push(new Item(fun, args));
+    if (queue.length === 1 && !draining) {
+        runTimeout(drainQueue);
+    }
+};
+
+// v8 likes predictible objects
+function Item(fun, array) {
+    this.fun = fun;
+    this.array = array;
+}
+Item.prototype.run = function () {
+    this.fun.apply(null, this.array);
+};
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+process.versions = {};
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+process.prependListener = noop;
+process.prependOnceListener = noop;
+
+process.listeners = function (name) { return [] }
+
+process.binding = function (name) {
+    throw new Error('process.binding is not supported');
+};
+
+process.cwd = function () { return '/' };
+process.chdir = function (dir) {
+    throw new Error('process.chdir is not supported');
+};
+process.umask = function() { return 0; };
+
+
+/***/ }),
+/* 78 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__styles_style_properties__ = __webpack_require__(71);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__styles_shared_styles__ = __webpack_require__(91);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ucd_lib_cork_app_utils__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__styles_style_properties__ = __webpack_require__(79);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__styles_shared_styles__ = __webpack_require__(100);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ucd_lib_cork_app_utils__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ucd_lib_cork_app_utils___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__ucd_lib_cork_app_utils__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ucd_lib_cork_app_state_elements_app_route__ = __webpack_require__(49);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lib__ = __webpack_require__(108);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__polymer_polymer_polymer_element__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__polymer_paper_button_paper_button__ = __webpack_require__(57);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__polymer_app_layout_app_header_app_header__ = __webpack_require__(124);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__polymer_app_layout_app_toolbar_app_toolbar__ = __webpack_require__(129);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__polymer_app_layout_app_drawer_app_drawer__ = __webpack_require__(130);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__polymer_paper_icon_button_paper_icon_button__ = __webpack_require__(131);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__polymer_iron_icons_iron_icons__ = __webpack_require__(133);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__polymer_polymer_lib_elements_custom_style__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__polymer_paper_material_paper_material__ = __webpack_require__(135);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__polymer_iron_pages_iron_pages__ = __webpack_require__(137);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__utils_app_title_card__ = __webpack_require__(140);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__management_app_package_metadata_editor__ = __webpack_require__(142);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__search_app_package_search__ = __webpack_require__(167);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__app_home__ = __webpack_require__(181);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__landing_app_landing_page__ = __webpack_require__(183);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__interfaces_AppStateInterface__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__interfaces_AppStateInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_20__interfaces_AppStateInterface__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__ecosml_app_html__ = __webpack_require__(185);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__ecosml_app_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_21__ecosml_app_html__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ucd_lib_cork_app_state_elements_app_route__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lib__ = __webpack_require__(117);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__polymer_polymer_polymer_element__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__polymer_paper_button_paper_button__ = __webpack_require__(61);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__polymer_app_layout_app_header_app_header__ = __webpack_require__(135);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__polymer_app_layout_app_toolbar_app_toolbar__ = __webpack_require__(140);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__polymer_app_layout_app_drawer_app_drawer__ = __webpack_require__(141);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__polymer_paper_icon_button_paper_icon_button__ = __webpack_require__(62);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__polymer_iron_icons_iron_icons__ = __webpack_require__(143);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__polymer_polymer_lib_elements_custom_style__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__polymer_paper_material_paper_material__ = __webpack_require__(144);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__polymer_iron_pages_iron_pages__ = __webpack_require__(64);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__utils_app_title_card__ = __webpack_require__(147);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__management_app_package_metadata_editor__ = __webpack_require__(149);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__search_app_package_search__ = __webpack_require__(184);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__app_home__ = __webpack_require__(198);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__landing_app_landing_page__ = __webpack_require__(200);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__account_app_user_account__ = __webpack_require__(202);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__utils_app_auth_icon__ = __webpack_require__(206);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__interfaces_AppStateInterface__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__interfaces_AppStateInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_22__interfaces_AppStateInterface__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__ecosml_app_html__ = __webpack_require__(208);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__ecosml_app_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_23__ecosml_app_html__);
 // import styles
 
 
@@ -13575,16 +15286,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
+
+
 // element imports
 
 
 
 class EcoSMLApp extends Mixin(__WEBPACK_IMPORTED_MODULE_5__polymer_polymer_polymer_element__["a" /* Element */])
-      .with(EventInterface, __WEBPACK_IMPORTED_MODULE_20__interfaces_AppStateInterface___default.a) {
+      .with(EventInterface, __WEBPACK_IMPORTED_MODULE_22__interfaces_AppStateInterface___default.a) {
     
   // Define a string template instead of a `<template>` element.
   static get template() {
-    return __WEBPACK_IMPORTED_MODULE_21__ecosml_app_html___default.a;
+    return __WEBPACK_IMPORTED_MODULE_23__ecosml_app_html___default.a;
   }
 
   static get properties() {
@@ -13630,13 +15343,13 @@ class EcoSMLApp extends Mixin(__WEBPACK_IMPORTED_MODULE_5__polymer_polymer_polym
 customElements.define('ecosml-app', EcoSMLApp);
 
 /***/ }),
-/* 71 */
+/* 79 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_paper_styles_paper_styles__ = __webpack_require__(72);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__polymer_polymer_lib_elements_custom_style__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__style_properties_html__ = __webpack_require__(90);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_paper_styles_paper_styles__ = __webpack_require__(80);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__polymer_polymer_lib_elements_custom_style__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__style_properties_html__ = __webpack_require__(99);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__style_properties_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__style_properties_html__);
 
 
@@ -13648,15 +15361,15 @@ styleWrapper.innerHTML = __WEBPACK_IMPORTED_MODULE_2__style_properties_html___de
 document.head.appendChild(styleWrapper);
 
 /***/ }),
-/* 72 */
+/* 80 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__iron_flex_layout_iron_flex_layout_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__color_js__ = __webpack_require__(47);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__default_theme_js__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__shadow_js__ = __webpack_require__(21);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__typography_js__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__iron_flex_layout_iron_flex_layout_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__color_js__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__default_theme_js__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__shadow_js__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__typography_js__ = __webpack_require__(24);
 
 
 
@@ -13665,18 +15378,18 @@ document.head.appendChild(styleWrapper);
 
 
 /***/ }),
-/* 73 */
+/* 81 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__src_apply_shim_js__ = __webpack_require__(74);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__src_template_map_js__ = __webpack_require__(40);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__src_style_util_js__ = __webpack_require__(39);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__src_apply_shim_utils_js__ = __webpack_require__(75);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__src_document_wait_js__ = __webpack_require__(41);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__src_common_utils_js__ = __webpack_require__(27);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__src_custom_style_interface_js__ = __webpack_require__(42);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__src_style_settings_js__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__src_apply_shim_js__ = __webpack_require__(82);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__src_template_map_js__ = __webpack_require__(45);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__src_style_util_js__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__src_apply_shim_utils_js__ = __webpack_require__(84);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__src_document_wait_js__ = __webpack_require__(46);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__src_common_utils_js__ = __webpack_require__(30);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__src_custom_style_interface_js__ = __webpack_require__(47);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__src_style_settings_js__ = __webpack_require__(27);
 /**
 @license
 Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
@@ -13784,7 +15497,7 @@ class ApplyShimInterface {
    */
   styleElement(element) {
     this.ensure();
-    let {is} = Object(__WEBPACK_IMPORTED_MODULE_2__src_style_util_js__["b" /* getIsExtends */])(element);
+    let {is} = Object(__WEBPACK_IMPORTED_MODULE_2__src_style_util_js__["c" /* getIsExtends */])(element);
     let template = __WEBPACK_IMPORTED_MODULE_1__src_template_map_js__["a" /* default */][is];
     if (template && !__WEBPACK_IMPORTED_MODULE_3__src_apply_shim_utils_js__["c" /* templateIsValid */](template)) {
       // only revalidate template once
@@ -13799,7 +15512,7 @@ class ApplyShimInterface {
         if (style) {
           // reuse the template's style ast, it has all the original css text
           style['__cssRules'] = template['_styleAst'];
-          style.textContent = Object(__WEBPACK_IMPORTED_MODULE_2__src_style_util_js__["e" /* toCssText */])(template['_styleAst'])
+          style.textContent = Object(__WEBPACK_IMPORTED_MODULE_2__src_style_util_js__["f" /* toCssText */])(template['_styleAst'])
         }
       }
     }
@@ -13873,14 +15586,14 @@ if (!window.ShadyCSS || !window.ShadyCSS.ScopingShim) {
 window.ShadyCSS.ApplyShim = applyShim;
 
 /***/ }),
-/* 74 */
+/* 82 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__style_util_js__ = __webpack_require__(39);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__common_regex_js__ = __webpack_require__(26);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__common_utils_js__ = __webpack_require__(27);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__css_parse_js__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__style_util_js__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__common_regex_js__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__common_utils_js__ = __webpack_require__(30);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__css_parse_js__ = __webpack_require__(28);
 /**
 @license
 Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
@@ -14034,19 +15747,34 @@ class ApplyShim {
   detectMixin(cssText) {
     return Object(__WEBPACK_IMPORTED_MODULE_2__common_utils_js__["a" /* detectMixin */])(cssText);
   }
+
+  /**
+   * Gather styles into one style for easier processing
+   * @param {!HTMLTemplateElement} template
+   * @return {HTMLStyleElement}
+   */
+  gatherStyles(template) {
+    const styleText = Object(__WEBPACK_IMPORTED_MODULE_0__style_util_js__["b" /* gatherStyleText */])(template.content);
+    if (styleText) {
+      const style = /** @type {!HTMLStyleElement} */(document.createElement('style'));
+      style.textContent = styleText;
+      template.content.insertBefore(style, template.content.firstChild);
+      return style;
+    }
+    return null;
+  }
   /**
    * @param {!HTMLTemplateElement} template
    * @param {string} elementName
    * @return {StyleNode}
    */
   transformTemplate(template, elementName) {
-    const style = /** @type {HTMLStyleElement} */(template.content.querySelector('style'));
-    /** @type {StyleNode} */
-    let ast = null;
-    if (style) {
-      ast = this.transformStyle(style, elementName);
+    if (template._gatheredStyle === undefined) {
+      template._gatheredStyle = this.gatherStyles(template);
     }
-    return ast;
+    /** @type {HTMLStyleElement} */
+    const style = template._gatheredStyle;
+    return style ? this.transformStyle(style, elementName) : null;
   }
   /**
    * @param {!HTMLStyleElement} style
@@ -14054,9 +15782,9 @@ class ApplyShim {
    * @return {StyleNode}
    */
   transformStyle(style, elementName = '') {
-    let ast = Object(__WEBPACK_IMPORTED_MODULE_0__style_util_js__["d" /* rulesForStyle */])(style);
+    let ast = Object(__WEBPACK_IMPORTED_MODULE_0__style_util_js__["e" /* rulesForStyle */])(style);
     this.transformRules(ast, elementName);
-    style.textContent = Object(__WEBPACK_IMPORTED_MODULE_0__style_util_js__["e" /* toCssText */])(ast);
+    style.textContent = Object(__WEBPACK_IMPORTED_MODULE_0__style_util_js__["f" /* toCssText */])(ast);
     return ast;
   }
   /**
@@ -14064,14 +15792,14 @@ class ApplyShim {
    * @return {StyleNode}
    */
   transformCustomStyle(style) {
-    let ast = Object(__WEBPACK_IMPORTED_MODULE_0__style_util_js__["d" /* rulesForStyle */])(style);
+    let ast = Object(__WEBPACK_IMPORTED_MODULE_0__style_util_js__["e" /* rulesForStyle */])(style);
     Object(__WEBPACK_IMPORTED_MODULE_0__style_util_js__["a" /* forEachRule */])(ast, (rule) => {
       if (rule['selector'] === ':root') {
         rule['selector'] = 'html';
       }
       this.transformRule(rule);
     })
-    style.textContent = Object(__WEBPACK_IMPORTED_MODULE_0__style_util_js__["e" /* toCssText */])(ast);
+    style.textContent = Object(__WEBPACK_IMPORTED_MODULE_0__style_util_js__["f" /* toCssText */])(ast);
     return ast;
   }
   /**
@@ -14263,7 +15991,7 @@ class ApplyShim {
     // handle case where property value is a mixin
     if (valueProperty) {
       // form: --mixin2: var(--mixin1), where --mixin1 is in the map
-      Object(__WEBPACK_IMPORTED_MODULE_0__style_util_js__["c" /* processVariableAndFallback */])(valueProperty, (prefix, value) => {
+      Object(__WEBPACK_IMPORTED_MODULE_0__style_util_js__["d" /* processVariableAndFallback */])(valueProperty, (prefix, value) => {
         if (value && this._map.get(value)) {
           valueMixin = `@apply ${value};`
         }
@@ -14345,7 +16073,57 @@ Object.defineProperty(ApplyShim.prototype, 'invalidCallback', {
 /* harmony default export */ __webpack_exports__["a"] = (ApplyShim);
 
 /***/ }),
-/* 75 */
+/* 83 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["b"] = processUnscopedStyle;
+/* harmony export (immutable) */ __webpack_exports__["a"] = isUnscopedStyle;
+/**
+@license
+Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+*/
+
+
+
+/** @type {!Set<string>} */
+const styleTextSet = new Set();
+
+const scopingAttribute = 'shady-unscoped';
+/* unused harmony export scopingAttribute */
+
+
+/**
+ * Add a specifically-marked style to the document directly, and only one copy of that style.
+ *
+ * @param {!HTMLStyleElement} style
+ * @return {undefined}
+ */
+function processUnscopedStyle(style) {
+  const text = style.textContent;
+  if (!styleTextSet.has(text)) {
+    styleTextSet.add(text);
+    const newStyle = style.cloneNode(true);
+    document.head.appendChild(newStyle);
+  }
+}
+
+/**
+ * Check if a style is supposed to be unscoped
+ * @param {!HTMLStyleElement} style
+ * @return {boolean} true if the style has the unscoping attribute
+ */
+function isUnscopedStyle(style) {
+  return style.hasAttribute(scopingAttribute);
+}
+
+/***/ }),
+/* 84 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -14358,8 +16136,8 @@ Object.defineProperty(ApplyShim.prototype, 'invalidCallback', {
 /* unused harmony export startValidating */
 /* harmony export (immutable) */ __webpack_exports__["b"] = startValidatingTemplate;
 /* unused harmony export elementsAreInvalid */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__template_map_js__ = __webpack_require__(40);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__css_parse_js__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__template_map_js__ = __webpack_require__(45);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__css_parse_js__ = __webpack_require__(28);
 /**
 @license
 Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
@@ -14511,15 +16289,15 @@ function elementsAreInvalid() {
 }
 
 /***/ }),
-/* 76 */
+/* 85 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_boot_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__utils_boot_js__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_mixin_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_mixin_js__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_case_map_js__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_async_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_async_js__ = __webpack_require__(7);
 
 
 
@@ -15108,13 +16886,13 @@ const PropertyAccessors = Object(__WEBPACK_IMPORTED_MODULE_1__utils_mixin_js__["
 
 
 /***/ }),
-/* 77 */
+/* 86 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_boot_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__utils_boot_js__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_mixin_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_mixin_js__ = __webpack_require__(8);
 
 
 
@@ -15572,7 +17350,7 @@ const TemplateStamp = Object(__WEBPACK_IMPORTED_MODULE_1__utils_mixin_js__["a" /
 
 
 /***/ }),
-/* 78 */
+/* 87 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -15653,7 +17431,7 @@ const importHref = function(href, onload, onerror, optAsync) {
 
 
 /***/ }),
-/* 79 */
+/* 88 */
 /***/ (function(module, exports) {
 
 function resolve() {
@@ -15668,15 +17446,15 @@ if (document.readyState === 'interactive' || document.readyState === 'complete')
 
 
 /***/ }),
-/* 80 */
+/* 89 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FlattenedNodesObserver; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__boot_js__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__array_splice_js__ = __webpack_require__(46);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__async_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__array_splice_js__ = __webpack_require__(51);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__async_js__ = __webpack_require__(7);
 
 
 
@@ -15916,13 +17694,13 @@ class FlattenedNodesObserver {
 
 
 /***/ }),
-/* 81 */
+/* 90 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* unused harmony export mixinBehaviors */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__legacy_element_mixin_js__ = __webpack_require__(38);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__elements_dom_module_js__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__legacy_element_mixin_js__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__elements_dom_module_js__ = __webpack_require__(32);
 
 
 
@@ -16187,12 +17965,12 @@ const Class = function(info) {
 
 
 /***/ }),
-/* 82 */
+/* 91 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* unused harmony export Templatizer */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_templatize_js__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_templatize_js__ = __webpack_require__(35);
 
 
 let TemplateInstanceBase = __WEBPACK_IMPORTED_MODULE_0__utils_templatize_js__["a" /* TemplateInstanceBase */]; // eslint-disable-line
@@ -16332,16 +18110,16 @@ let Templatizer = {
 
 
 /***/ }),
-/* 83 */
+/* 92 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* unused harmony export DomBind */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_boot_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__utils_boot_js__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mixins_property_effects_js__ = __webpack_require__(30);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__mixins_mutable_data_js__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__mixins_gesture_event_listeners_js__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mixins_property_effects_js__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__mixins_mutable_data_js__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__mixins_gesture_event_listeners_js__ = __webpack_require__(49);
 
 
 
@@ -16460,18 +18238,18 @@ customElements.define('dom-bind', DomBind);
 
 
 /***/ }),
-/* 84 */
+/* 93 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* unused harmony export DomRepeat */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_element_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_templatize_js__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_element_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_templatize_js__ = __webpack_require__(35);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_debounce_js__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_flush_js__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__mixins_mutable_data_js__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_path_js__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__utils_async_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_flush_js__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__mixins_mutable_data_js__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_path_js__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__utils_async_js__ = __webpack_require__(7);
 
 
 
@@ -17160,17 +18938,17 @@ customElements.define(DomRepeat.is, DomRepeat);
 
 
 /***/ }),
-/* 85 */
+/* 94 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* unused harmony export DomIf */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_element_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_templatize_js__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_element_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_templatize_js__ = __webpack_require__(35);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_debounce_js__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_flush_js__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_async_js__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_path_js__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_flush_js__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_async_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_path_js__ = __webpack_require__(18);
 
 
 
@@ -17431,16 +19209,16 @@ customElements.define(DomIf.is, DomIf);
 
 
 /***/ }),
-/* 86 */
+/* 95 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* unused harmony export ArraySelectorMixin */
 /* unused harmony export ArraySelector */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_element_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_mixin_js__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_array_splice_js__ = __webpack_require__(46);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__mixins_element_mixin_js__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_element_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_mixin_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_array_splice_js__ = __webpack_require__(51);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__mixins_element_mixin_js__ = __webpack_require__(31);
 
 
 
@@ -17852,13 +19630,13 @@ customElements.define(ArraySelector.is, ArraySelector);
 
 
 /***/ }),
-/* 87 */
+/* 96 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__src_custom_style_interface_js__ = __webpack_require__(42);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__src_common_utils_js__ = __webpack_require__(27);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__src_style_settings_js__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__src_custom_style_interface_js__ = __webpack_require__(47);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__src_common_utils_js__ = __webpack_require__(30);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__src_style_settings_js__ = __webpack_require__(27);
 /**
 @license
 Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
@@ -17926,11 +19704,11 @@ if (!window.ShadyCSS) {
 window.ShadyCSS.CustomStyleInterface = customStyleInterface;
 
 /***/ }),
-/* 88 */
+/* 97 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixins_mutable_data_js__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixins_mutable_data_js__ = __webpack_require__(20);
 
 
 let mutablePropertyChange;
@@ -18004,7 +19782,7 @@ const OptionalMutableDataBehavior = {
 
 
 /***/ }),
-/* 89 */
+/* 98 */
 /***/ (function(module, exports) {
 
 const $_documentContainer = document.createElement('div');
@@ -18017,18 +19795,18 @@ document.head.appendChild($_documentContainer);
 
 
 /***/ }),
-/* 90 */
+/* 99 */
 /***/ (function(module, exports) {
 
-module.exports = "<custom-style>\n  <style is=\"custom-style\">\n    html {\n      --default-primary-color : #00867d;\n      --primary-color         : var(--default-primary-color); /* alt name */\n      --light-primary-color   : #4db6ac;\n\n      --default-secondary-color : #2286c3;\n      --light-secondary-color   : #64b5f6;\n\n      --default-background-color : #F5F5F6;\n      --dark-background-color    : #E1E2E1;\n      --extra-dark-background-color : #616161;\n      \n      --text-primary-color      : #313534;\n      --primary-text-color      : var(--text-primary-color);\n      --secondary-text-color    : #8c9794;\n      --disabled-text-color     : var(--input-border-color);\n      --inverse-text-color      : var(--default-background-color);\n      --max-width               : 1200px;\n      --max-text-width          : 650px;\n      --font-size               : 16px;\n      --font-weight             : 400;\n\n      /**\n       * Global Element Styles\n       */\n      /* paper-input */\n      --paper-input-container-color: var(--secondary-text-color);\n    }\n\n    body, html {\n      @apply --paper-font-common-base;\n      font-size        : var(--font-size);\n      font-weight      : var(--font-weight);\n      margin           : 0;\n      padding          : 0;\n      height           : 100%;\n      background-color : var(--default-background-color);\n      color            : var(--text-primary-color);\n    }\n  </style>\n</custom-style>";
+module.exports = "<custom-style>\n  <style is=\"custom-style\">\n    html {\n      --default-primary-color : #00867d;\n      --primary-color         : var(--default-primary-color); /* alt name */\n      --light-primary-color   : #4db6ac;\n\n      --default-secondary-color : #2286c3;\n      --light-secondary-color   : #64b5f6;\n\n      --default-background-color : #F5F5F6;\n      --dark-background-color    : #E1E2E1;\n      --extra-dark-background-color : #616161;\n      \n      --text-primary-color      : #313534;\n      --primary-text-color      : var(--text-primary-color);\n      --secondary-text-color    : #8c9794;\n      --disabled-text-color     : var(--input-border-color);\n      --inverse-text-color      : var(--default-background-color);\n      --max-width               : 1200px;\n      --max-text-width          : 650px;\n      --font-size               : 16px;\n      --font-weight             : 400;\n      --font-weight-heavy       : 700;\n\n      /**\n       * Global Element Styles\n       */\n      /* paper-input */\n      --paper-input-container-color: var(--secondary-text-color);\n    }\n\n    body, html {\n      @apply --paper-font-common-base;\n      font-size        : var(--font-size);\n      font-weight      : var(--font-weight);\n      margin           : 0;\n      padding          : 0;\n      height           : 100%;\n      background-color : var(--default-background-color);\n      color            : var(--text-primary-color);\n    }\n  </style>\n</custom-style>";
 
 /***/ }),
-/* 91 */
+/* 100 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_lib_elements_custom_style__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__shared_styles_html__ = __webpack_require__(92);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_lib_elements_custom_style__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__shared_styles_html__ = __webpack_require__(101);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__shared_styles_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__shared_styles_html__);
 
 
@@ -18039,16 +19817,16 @@ styleWrapper.innerHTML = __WEBPACK_IMPORTED_MODULE_1__shared_styles_html___defau
 document.head.appendChild(styleWrapper);
 
 /***/ }),
-/* 92 */
+/* 101 */
 /***/ (function(module, exports) {
 
-module.exports = "<dom-module id=\"shared-styles\">\n  <template>\n    <style>\n      paper-material {\n        background: white;\n        display: block;\n      }\n\n      [hidden] {\n        display: none !important;\n      }\n\n      input, select, button {\n        font-size        : var(--font-size);\n        font-weight      : var(--font-weight);\n        color            : var(--text-primary-color);\n      }\n\n      .help {\n        color: var(--secondary-text-color);\n        font-size: 14px;\n      }\n\n      .narrow-container {\n        display: flex;\n        justify-content: center;\n        flex-direction: column;\n        align-items: center;\n      }\n      \n      .narrow-container > * {\n        max-width: var(--max-text-width);\n        width: 100%;\n      }\n\n      .container {\n        display: flex;\n        justify-content: center;\n        flex-direction: column;\n        align-items: center;\n      }\n\n      .container > * {\n        max-width: var(--max-width);\n        width: 100%;\n      }\n\n      a, a:visited {\n        color: var(--text-primary-color);\n      }\n\n      a[inverse], a[inverse]:visited {\n        color: var(--inverse-text-color);\n      }\n\n      h2.uheader {\n        border-bottom-width: 2px;\n        border-bottom-style: solid;\n        margin: 0 20px 10px 0;\n        padding-bottom: 5px;\n      }\n\n      h2.uheader.blue {\n        border-bottom-color: var(--default-secondary-color);\n      }\n      h2.uheader.green {\n        border-bottom-color: var(--default-primary-color);\n      }\n      h2.uheader.lightblue {\n        border-bottom-color: var(--light-secondary-color);\n      }\n      h2.uheader.dark {\n        border-bottom-color: var(--text-primary-color);\n      }\n    </style>\n  </template>\n</dom-module>";
+module.exports = "<dom-module id=\"shared-styles\">\n  <template>\n    <style>\n      paper-material {\n        background: white;\n        display: block;\n      }\n\n      [hidden] {\n        display: none !important;\n      }\n\n      input, select, button, textarea {\n        font-size        : var(--font-size);\n        font-weight      : var(--font-weight);\n        color            : var(--text-primary-color);\n      }\n\n      input, textarea {\n        border-radius: 4px;\n        background-color: white;\n        border: 1px solid var(--dark-background-color);\n        padding: 9px;\n        margin: 3px 1px;\n      }\n\n      input:focus {\n        border: 1px solid var(--default-primary-color);\n        outline: none;\n      }\n\n      .help {\n        color: var(--secondary-text-color);\n        font-size: 14px;\n      }\n\n      .narrow-container {\n        display: flex;\n        justify-content: center;\n        flex-direction: column;\n        align-items: center;\n      }\n      \n      .narrow-container > * {\n        max-width: var(--max-text-width);\n        width: 100%;\n      }\n\n      .container {\n        display: flex;\n        justify-content: center;\n        flex-direction: column;\n        align-items: center;\n      }\n\n      .container > * {\n        max-width: var(--max-width);\n        width: 100%;\n      }\n\n      a, a:visited {\n        color: var(--text-primary-color);\n      }\n\n      a[inverse], a[inverse]:visited {\n        color: var(--inverse-text-color);\n      }\n\n      h2.uheader {\n        border-bottom-width: 2px;\n        border-bottom-style: solid;\n        margin: 0 20px 10px 0;\n        padding-bottom: 5px;\n      }\n\n      h2.uheader.blue {\n        border-bottom-color: var(--default-secondary-color);\n      }\n      h2.uheader.green {\n        border-bottom-color: var(--default-primary-color);\n      }\n      h2.uheader.lightblue {\n        border-bottom-color: var(--light-secondary-color);\n      }\n      h2.uheader.dark {\n        border-bottom-color: var(--text-primary-color);\n      }\n    </style>\n  </template>\n</dom-module>";
 
 /***/ }),
-/* 93 */
+/* 102 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var MasterController = __webpack_require__(33);
+var MasterController = __webpack_require__(37);
 
 /**
  * @class BaseModel
@@ -18130,7 +19908,7 @@ class BaseModel {
 module.exports = BaseModel;
 
 /***/ }),
-/* 94 */
+/* 103 */
 /***/ (function(module, exports) {
 
 // Copyright Joyent, Inc. and other Node contributors.
@@ -18438,10 +20216,10 @@ function isUndefined(arg) {
 
 
 /***/ }),
-/* 95 */
+/* 104 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var MasterController = __webpack_require__(33);
+var MasterController = __webpack_require__(37);
 
 /**
  * @class BaseStore
@@ -18530,11 +20308,11 @@ class BaseStore {
 module.exports = BaseStore;
 
 /***/ }),
-/* 96 */
+/* 105 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // help: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
-const fetch = __webpack_require__(48);
+const fetch = __webpack_require__(52);
 
 /**
  * @class BaseService
@@ -18658,7 +20436,7 @@ class BaseService {
     let promise = this._request(options);
     if( options.onLoading ) options.onLoading(promise);
 
-    return await promise;
+    return promise;
   }
 
   _request(options) {
@@ -18769,7 +20547,7 @@ class BaseService {
 module.exports = BaseService;
 
 /***/ }),
-/* 97 */
+/* 106 */
 /***/ (function(module, exports) {
 
 (function(self) {
@@ -19236,7 +21014,7 @@ module.exports = BaseService;
 
 
 /***/ }),
-/* 98 */
+/* 107 */
 /***/ (function(module, exports) {
 
  /**
@@ -19261,12 +21039,12 @@ if( typeof window !== 'undefined' ) {
 module.exports = Mixin;
 
 /***/ }),
-/* 99 */
+/* 108 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const {Debouncer} = __webpack_require__(11);
-const Async = __webpack_require__(5);
-const MasterController = __webpack_require__(33);
+const Async = __webpack_require__(7);
+const MasterController = __webpack_require__(37);
 
 /**
  * @mixin EventInterface
@@ -19596,15 +21374,15 @@ if( typeof window !== 'undefined' ) {
 module.exports = EventInterface;
 
 /***/ }),
-/* 100 */
+/* 109 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_location_iron_location_js__ = __webpack_require__(101);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_location_iron_query_params_js__ = __webpack_require__(102);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_route_converter_behavior_js__ = __webpack_require__(103);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_location_iron_location_js__ = __webpack_require__(110);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_location_iron_query_params_js__ = __webpack_require__(111);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_route_converter_behavior_js__ = __webpack_require__(112);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(3);
 
 
 
@@ -19740,12 +21518,12 @@ Object(__WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__["a" /* Po
 
 
 /***/ }),
-/* 101 */
+/* 110 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
 
 
@@ -19879,6 +21657,10 @@ Object(__WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_fn_js__["a" /* Po
     '_updateUrl(path, query, hash)'
   ],
 
+  created: function() {
+    this.__location = window.location;
+  },
+
   attached: function() {
     this.listen(window, 'hashchange', '_hashChanged');
     this.listen(window, 'location-changed', '_urlChanged');
@@ -19901,7 +21683,7 @@ Object(__WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_fn_js__["a" /* Po
   },
 
   _hashChanged: function() {
-    this.hash = window.decodeURIComponent(window.location.hash.substring(1));
+    this.hash = window.decodeURIComponent(this.__location.hash.substring(1));
   },
 
   _urlChanged: function() {
@@ -19912,8 +21694,8 @@ Object(__WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_fn_js__["a" /* Po
     // one when we set this.hash. Likewise for query.
     this._dontUpdateUrl = true;
     this._hashChanged();
-    this.path = window.decodeURIComponent(window.location.pathname);
-    this.query = window.location.search.substring(1);
+    this.path = window.decodeURIComponent(this.__location.pathname);
+    this.query = this.__location.search.substring(1);
     this._dontUpdateUrl = false;
     this._updateUrl();
   },
@@ -19938,17 +21720,17 @@ Object(__WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_fn_js__["a" /* Po
       return;
     }
 
-    if (this.path === window.decodeURIComponent(window.location.pathname) &&
-        this.query === window.location.search.substring(1) &&
+    if (this.path === window.decodeURIComponent(this.__location.pathname) &&
+        this.query === this.__location.search.substring(1) &&
         this.hash === window.decodeURIComponent(
-            window.location.hash.substring(1))) {
+            this.__location.hash.substring(1))) {
       // Nothing to do, the current URL is a representation of our properties.
       return;
     }
 
     var newUrl = this._getUrl();
     // Need to use a full URL in case the containing page has a base URI.
-    var fullNewUrl = resolveURL(newUrl, window.location.protocol + '//' + window.location.host).href;
+    var fullNewUrl = resolveURL(newUrl, this.__location.protocol + '//' + this.__location.host).href;
     var now = window.performance.now();
     var shouldReplace = this._lastChangedAt + this.dwellTime > now;
     this._lastChangedAt = now;
@@ -19986,7 +21768,7 @@ Object(__WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_fn_js__["a" /* Po
 
     // If the navigation is to the current page we shouldn't add a history
     // entry or fire a change event.
-    if (href === window.location.href) {
+    if (href === this.__location.href) {
       return;
     }
 
@@ -20042,6 +21824,11 @@ Object(__WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_fn_js__["a" /* Po
         window.top !== window) {
       return null;
     }
+    
+    // If the link is a download, don't intercept.
+    if (anchor.download) {
+      return null;
+    }
 
     var href = anchor.href;
 
@@ -20058,10 +21845,10 @@ Object(__WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_fn_js__["a" /* Po
     var origin;
 
     // IE Polyfill
-    if (window.location.origin) {
-      origin = window.location.origin;
+    if (this.__location.origin) {
+      origin = this.__location.origin;
     } else {
-      origin = window.location.protocol + '//' + window.location.host;
+      origin = this.__location.protocol + '//' + this.__location.host;
     }
 
     var urlOrigin;
@@ -20069,7 +21856,18 @@ Object(__WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_fn_js__["a" /* Po
     if (url.origin) {
       urlOrigin = url.origin;
     } else {
-      urlOrigin = url.protocol + '//' + url.host;
+      // IE always adds port number on HTTP and HTTPS on <a>.host but not on
+      // window.location.host
+      var urlHost = url.host;
+      var urlPort = url.port;
+      var urlProtocol = url.protocol;
+      var isExtraneousHTTPS = urlProtocol === 'https:' && urlPort === '443';
+      var isExtraneousHTTP = urlProtocol === 'http:' && urlPort === '80';
+
+      if (isExtraneousHTTPS || isExtraneousHTTP) {
+        urlHost = url.hostname;
+      }
+      urlOrigin = urlProtocol + '//' + urlHost;
     }
 
     if (urlOrigin !== origin) {
@@ -20091,7 +21889,7 @@ Object(__WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_fn_js__["a" /* Po
 
     // Need to use a full URL in case the containing page has a base URI.
     var fullNormalizedHref = resolveURL(
-        normalizedHref, window.location.href).href;
+        normalizedHref, this.__location.href).href;
     return fullNormalizedHref;
   },
 
@@ -20102,14 +21900,25 @@ Object(__WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_fn_js__["a" /* Po
 
 
 /***/ }),
-/* 102 */
+/* 111 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(3);
 
 
+/**
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+
+@demo demo/iron-query-params.html
+*/
 'use strict';
 
 Object(__WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_fn_js__["a" /* Polymer */])({
@@ -20197,7 +22006,7 @@ Object(__WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_fn_js__["a" /* Po
 
 
 /***/ }),
-/* 103 */
+/* 112 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -20295,14 +22104,14 @@ const AppRouteConverterBehavior = {
 
 
 /***/ }),
-/* 104 */
+/* 113 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var strictUriEncode = __webpack_require__(105);
-var objectAssign = __webpack_require__(106);
-var decodeComponent = __webpack_require__(107);
+var strictUriEncode = __webpack_require__(114);
+var objectAssign = __webpack_require__(115);
+var decodeComponent = __webpack_require__(116);
 
 function encoderForArrayFormat(opts) {
 	switch (opts.arrayFormat) {
@@ -20512,7 +22321,7 @@ exports.stringify = function (obj, opts) {
 
 
 /***/ }),
-/* 105 */
+/* 114 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -20525,7 +22334,7 @@ module.exports = function (str) {
 
 
 /***/ }),
-/* 106 */
+/* 115 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -20622,7 +22431,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 
 
 /***/ }),
-/* 107 */
+/* 116 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -20723,23 +22532,24 @@ module.exports = function (encodedURI) {
 
 
 /***/ }),
-/* 108 */
+/* 117 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* unused harmony default export */ var _unused_webpack_default_export = ({
-  AppStateModel : __webpack_require__(109),
-  PackageModel : __webpack_require__(113),
-  SearchModel : __webpack_require__(119),
-  vocabulary : __webpack_require__(56)
+  AppStateModel : __webpack_require__(118),
+  PackageModel : __webpack_require__(122),
+  SearchModel : __webpack_require__(128),
+  AuthModel : __webpack_require__(130),
+  vocabulary : __webpack_require__(60)
 });
 
 /***/ }),
-/* 109 */
+/* 118 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const {AppStateModel} = __webpack_require__(34);
-var AppStateStore = __webpack_require__(112);
+const {AppStateModel} = __webpack_require__(38);
+var AppStateStore = __webpack_require__(121);
 
 
 class AppStateModelImpl extends AppStateModel {
@@ -20754,10 +22564,10 @@ class AppStateModelImpl extends AppStateModel {
 module.exports = new AppStateModelImpl();
 
 /***/ }),
-/* 110 */
+/* 119 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var {BaseModel} = __webpack_require__(6);
+var {BaseModel} = __webpack_require__(5);
 
 
 /**
@@ -20818,10 +22628,10 @@ class AppStateModel extends BaseModel {
 module.exports = AppStateModel;
 
 /***/ }),
-/* 111 */
+/* 120 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const {BaseStore} = __webpack_require__(6);
+const {BaseStore} = __webpack_require__(5);
 
 class AppStateStore extends BaseStore {
 
@@ -20851,23 +22661,23 @@ class AppStateStore extends BaseStore {
 module.exports = AppStateStore;
 
 /***/ }),
-/* 112 */
+/* 121 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var {AppStateStore} = __webpack_require__(34);
+var {AppStateStore} = __webpack_require__(38);
 
 class AppStateStoreImpl extends AppStateStore {}
 
 module.exports = new AppStateStoreImpl();
 
 /***/ }),
-/* 113 */
+/* 122 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const {BaseModel} = __webpack_require__(6);
-const PackageService = __webpack_require__(114);
-const PackageStore = __webpack_require__(51);
-const PackageSchema = __webpack_require__(118).package;
+const {BaseModel} = __webpack_require__(5);
+const PackageService = __webpack_require__(123);
+const PackageStore = __webpack_require__(55);
+const PackageSchema = __webpack_require__(127).package;
 
 class PackageModel extends BaseModel {
 
@@ -20888,10 +22698,11 @@ class PackageModel extends BaseModel {
    * 
    * @param {String} name name of new package
    * @param {String} description short description of package 
+   * @param {String} organization package organization
    * @returns {Promise} fetch promise
    */
-  async create(name, description) {
-    return this.service.create(name, description);
+  async create(name, description, organization) {
+    return this.service.create(name, description, organization);
   }
 
   /**
@@ -20904,7 +22715,7 @@ class PackageModel extends BaseModel {
   async get(id) {
     this.service.get(id);
 
-    if( this.store.data.byId[id].state === 'loading' ) {
+    if( this.store.data.byId[id].state === this.store.STATE.LOADING ) {
       await this.store.data.byId[id].request;
     }
     
@@ -20955,12 +22766,12 @@ class PackageModel extends BaseModel {
 module.exports = new PackageModel();
 
 /***/ }),
-/* 114 */
+/* 123 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const {BaseService} = __webpack_require__(6);
-const PackageStore = __webpack_require__(51);
-const uuid = __webpack_require__(115);
+const {BaseService} = __webpack_require__(5);
+const PackageStore = __webpack_require__(55);
+const uuid = __webpack_require__(124);
 
 class PackageService extends BaseService {
 
@@ -20976,9 +22787,10 @@ class PackageService extends BaseService {
    * 
    * @param {String} name name of package 
    * @param {String} description one sentence overview description
+   * @param {String} organization package organization
    */
-  async create(name, description) {
-    let payload = {name, description};
+  async create(name, description, organization) {
+    let payload = {name, description, organization};
 
     return this.request({
       url : this.baseUrl,
@@ -20997,7 +22809,7 @@ class PackageService extends BaseService {
     let payload = pkg;
 
     return this.request({
-      url : this.baseUrl,
+      url : this.baseUrl+'/'+pkg.name,
       fetchOptions : {
         method : 'PATCH',
         body  : payload
@@ -21013,9 +22825,9 @@ class PackageService extends BaseService {
    * @method createRelease
    * @description create a new package release
    */
-  async createRelease(id, payload) {
+  async createRelease(name, payload) {
     return this.request({
-      url : `${this.baseUrl}/${id}/createRelease`,
+      url : `${this.baseUrl}/${name}/createRelease`,
       fetchOptions : {
         method : 'POST',
         body  : payload
@@ -21037,6 +22849,7 @@ class PackageService extends BaseService {
   async get(id) {
     return this.request({
       url : `${this.baseUrl}/${id}`,
+      checkCached : () => this.store.data.byId[id],
       onLoading : request => this.store.setGetPackageLoading(id, request),
       onLoad : result => this.store.setGetPackageSuccess(id, result.body),
       onError : error => this.store.setGetPackageError(id, error)
@@ -21076,11 +22889,11 @@ class PackageService extends BaseService {
 module.exports = new PackageService();
 
 /***/ }),
-/* 115 */
+/* 124 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var v1 = __webpack_require__(116);
-var v4 = __webpack_require__(117);
+var v1 = __webpack_require__(125);
+var v4 = __webpack_require__(126);
 
 var uuid = v4;
 uuid.v1 = v1;
@@ -21090,31 +22903,23 @@ module.exports = uuid;
 
 
 /***/ }),
-/* 116 */
+/* 125 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var rng = __webpack_require__(52);
-var bytesToUuid = __webpack_require__(54);
+var rng = __webpack_require__(56);
+var bytesToUuid = __webpack_require__(57);
 
 // **`v1()` - Generate time-based UUID**
 //
 // Inspired by https://github.com/LiosK/UUID.js
 // and http://docs.python.org/library/uuid.html
 
-// random #'s we need to init node and clockseq
-var _seedBytes = rng();
-
-// Per 4.5, create and 48-bit node id, (47 random bits + multicast bit = 1)
-var _nodeId = [
-  _seedBytes[0] | 0x01,
-  _seedBytes[1], _seedBytes[2], _seedBytes[3], _seedBytes[4], _seedBytes[5]
-];
-
-// Per 4.2.2, randomize (14 bit) clockseq
-var _clockseq = (_seedBytes[6] << 8 | _seedBytes[7]) & 0x3fff;
+var _nodeId;
+var _clockseq;
 
 // Previous uuid creation time
-var _lastMSecs = 0, _lastNSecs = 0;
+var _lastMSecs = 0;
+var _lastNSecs = 0;
 
 // See https://github.com/broofa/node-uuid for API details
 function v1(options, buf, offset) {
@@ -21122,8 +22927,26 @@ function v1(options, buf, offset) {
   var b = buf || [];
 
   options = options || {};
-
+  var node = options.node || _nodeId;
   var clockseq = options.clockseq !== undefined ? options.clockseq : _clockseq;
+
+  // node and clockseq need to be initialized to random values if they're not
+  // specified.  We do this lazily to minimize issues related to insufficient
+  // system entropy.  See #189
+  if (node == null || clockseq == null) {
+    var seedBytes = rng();
+    if (node == null) {
+      // Per 4.5, create and 48-bit node id, (47 random bits + multicast bit = 1)
+      node = _nodeId = [
+        seedBytes[0] | 0x01,
+        seedBytes[1], seedBytes[2], seedBytes[3], seedBytes[4], seedBytes[5]
+      ];
+    }
+    if (clockseq == null) {
+      // Per 4.2.2, randomize (14 bit) clockseq
+      clockseq = _clockseq = (seedBytes[6] << 8 | seedBytes[7]) & 0x3fff;
+    }
+  }
 
   // UUID timestamps are 100 nano-second units since the Gregorian epoch,
   // (1582-10-15 00:00).  JSNumbers aren't precise enough for this, so
@@ -21184,7 +23007,6 @@ function v1(options, buf, offset) {
   b[i++] = clockseq & 0xff;
 
   // `node`
-  var node = options.node || _nodeId;
   for (var n = 0; n < 6; ++n) {
     b[i + n] = node[n];
   }
@@ -21196,17 +23018,17 @@ module.exports = v1;
 
 
 /***/ }),
-/* 117 */
+/* 126 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var rng = __webpack_require__(52);
-var bytesToUuid = __webpack_require__(54);
+var rng = __webpack_require__(56);
+var bytesToUuid = __webpack_require__(57);
 
 function v4(options, buf, offset) {
   var i = buf && offset || 0;
 
   if (typeof(options) == 'string') {
-    buf = options == 'binary' ? new Array(16) : null;
+    buf = options === 'binary' ? new Array(16) : null;
     options = null;
   }
   options = options || {};
@@ -21231,7 +23053,7 @@ module.exports = v4;
 
 
 /***/ }),
-/* 118 */
+/* 127 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -21259,12 +23081,13 @@ module.exports = {
 }
 
 /***/ }),
-/* 119 */
+/* 128 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const {BaseModel} = __webpack_require__(6);
-const SearchService = __webpack_require__(120);
-const SearchStore = __webpack_require__(55);
+
+const {BaseModel} = __webpack_require__(5);
+const SearchService = __webpack_require__(129);
+const SearchStore = __webpack_require__(58);
 
 // NodeJS compatability
 let decode;
@@ -21364,7 +23187,9 @@ class SearchModel extends BaseModel {
     if( !this.store.getSearchQuery() ) {
       this.store.setSearchQuery(this.getEmptyQuery());
     }
-    return  this.store.getSearchQuery();
+    let q = this.store.getSearchQuery();
+    if( q.fromUrl ) delete q.fromUrl;
+    return q;
   }
 
   setOffset(offset) {
@@ -21427,11 +23252,11 @@ class SearchModel extends BaseModel {
 module.exports = new SearchModel();
 
 /***/ }),
-/* 120 */
+/* 129 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const {BaseService} = __webpack_require__(6);
-const SearchStore = __webpack_require__(55);
+const {BaseService} = __webpack_require__(5);
+const SearchStore = __webpack_require__(58);
 
 class SearchService extends BaseService {
 
@@ -21483,13 +23308,118 @@ class SearchService extends BaseService {
 module.exports = new SearchService();
 
 /***/ }),
-/* 121 */
+/* 130 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const {BaseModel} = __webpack_require__(5);
+const AuthService = __webpack_require__(131);
+const AuthStore = __webpack_require__(59);
+
+class AuthModel extends BaseModel {
+
+  constructor() {
+    super();
+
+    this.store = AuthStore;
+    this.service = AuthService;
+      
+    this.register('AuthModel');
+
+    if( typeof APP_CONFIG !== 'undefined' && APP_CONFIG.user) {
+      this.store.setAuthLoaded({username: APP_CONFIG.user});
+      this.getUserOrganizations();
+    }
+  }
+
+  get() {
+    return this.store.data.auth;
+  }
+
+  login(username, password) {
+    return this.service.login(username, password);  
+  }
+
+  logout() {
+    return this.service.logout();
+  }
+
+  async getUserOrganizations(reload=false) {
+    if( reload || this.store.data.organizations.state === this.store.STATE.INIT ) {
+      this.service.getUserOrgs();
+    }
+    
+    if( this.store.data.organizations.state === this.store.STATE.LOADING ) {
+      await this.store.data.organizations.request;
+    }
+
+    return this.store.data.organizations;
+  }
+
+}
+
+module.exports = new AuthModel();
+
+/***/ }),
+/* 131 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const {BaseService} = __webpack_require__(5);
+const AuthStore = __webpack_require__(59);
+
+class AuthService extends BaseService {
+
+  constructor() {
+    super();
+    this.store = AuthStore;
+    this.baseUrl = '/auth';
+  }
+
+  async login(username, password) {
+    return this.request({
+      url : `${this.baseUrl}/login`,
+      fetchOptions : {
+        method : 'POST',
+        headers : {
+          'Content-Type': 'application/json'
+        },
+        body : JSON.stringify({username, password})
+      },
+      onLoading : request => this.store.setAuthLoading(request, username),
+      onLoad : result => this.store.setAuthLoaded(result.body),
+      onError : error => this.store.setAuthError(error)
+    });
+  }
+
+  async logout() {
+    return this.request({
+      url : `${this.baseUrl}/logout`,
+      onLoading : request => {},
+      onLoad : result => this.store.logout(),
+      onError : error => console.error(error)
+    });
+  }
+
+  async getUserOrgs() {
+    return this.request({
+      url : `${this.baseUrl}/organizations`,
+      onLoading : request => this.store.setOrgsLoading(request),
+      onLoad : result => this.store.setOrgsLoaded(result.body),
+      onError : error => this.store.setOrgsError(error)
+    });
+  }
+
+}
+
+module.exports = new AuthService();
+
+/***/ }),
+/* 132 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_behaviors_iron_button_state_js__ = __webpack_require__(35);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__paper_ripple_behavior_js__ = __webpack_require__(58);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_behaviors_iron_button_state_js__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__paper_ripple_behavior_js__ = __webpack_require__(39);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__iron_behaviors_iron_control_state_js__ = __webpack_require__(12);
 
 
@@ -21582,14 +23512,14 @@ const PaperButtonBehavior = [
 
 
 /***/ }),
-/* 122 */
+/* 133 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_a11y_keys_behavior_iron_a11y_keys_behavior_js__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_a11y_keys_behavior_iron_a11y_keys_behavior_js__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(3);
 
 
 
@@ -22279,12 +24209,12 @@ Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_fn_js__["a" /* Po
 
 
 /***/ }),
-/* 123 */
+/* 134 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__shadow_js__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__shadow_js__ = __webpack_require__(23);
 
 
 const $_documentContainer = document.createElement('div');
@@ -22340,15 +24270,15 @@ document.head.appendChild($_documentContainer);
 
 
 /***/ }),
-/* 124 */
+/* 135 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_flex_layout_iron_flex_layout_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_scroll_effects_app_scroll_effects_behavior_js__ = __webpack_require__(125);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_layout_behavior_app_layout_behavior_js__ = __webpack_require__(128);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_flex_layout_iron_flex_layout_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_scroll_effects_app_scroll_effects_behavior_js__ = __webpack_require__(136);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_layout_behavior_app_layout_behavior_js__ = __webpack_require__(139);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
 
 
@@ -22801,13 +24731,13 @@ Object(__WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__["a" /* Po
 
 
 /***/ }),
-/* 125 */
+/* 136 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_scroll_target_behavior_iron_scroll_target_behavior_js__ = __webpack_require__(126);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__helpers_helpers_js__ = __webpack_require__(127);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_scroll_target_behavior_iron_scroll_target_behavior_js__ = __webpack_require__(137);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__helpers_helpers_js__ = __webpack_require__(138);
 
 
 
@@ -23105,7 +25035,7 @@ const AppScrollEffectsBehavior = [
 
 
 /***/ }),
-/* 126 */
+/* 137 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -23356,7 +25286,7 @@ const IronScrollTargetBehavior = {
 
 
 /***/ }),
-/* 127 */
+/* 138 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -23481,16 +25411,16 @@ const scroll = function scroll(options) {
 
 
 /***/ }),
-/* 128 */
+/* 139 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_resizable_behavior_iron_resizable_behavior_js__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_resizable_behavior_iron_resizable_behavior_js__ = __webpack_require__(26);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_utils_async_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_utils_async_js__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__polymer_lib_utils_debounce_js__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__polymer_lib_utils_flush_js__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__polymer_lib_utils_flush_js__ = __webpack_require__(19);
 
 
 
@@ -23574,13 +25504,13 @@ const AppLayoutBehavior = [
 
 
 /***/ }),
-/* 129 */
+/* 140 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_flex_layout_iron_flex_layout_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_flex_layout_iron_flex_layout_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(3);
 
 
 
@@ -23640,14 +25570,14 @@ Object(__WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_fn_js__["a" /* Po
 
 
 /***/ }),
-/* 130 */
+/* 141 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_flex_layout_iron_flex_layout_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_utils_render_status_js__ = __webpack_require__(45);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_flex_layout_iron_flex_layout_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_utils_render_status_js__ = __webpack_require__(50);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
 
 
@@ -24267,144 +26197,13 @@ Object(__WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_fn_js__["a" /* Po
 
 
 /***/ }),
-/* 131 */
+/* 142 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_icon_iron_icon_js__ = __webpack_require__(59);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__paper_behaviors_paper_inky_focus_behavior_js__ = __webpack_require__(132);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__paper_styles_default_theme_js__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
-
-
-
-
-
-const $_documentContainer = document.createElement('div');
-$_documentContainer.setAttribute('style', 'display: none;');
-
-$_documentContainer.innerHTML = `<dom-module id="paper-icon-button">
-  <template strip-whitespace="">
-    <style>
-      :host {
-        display: inline-block;
-        position: relative;
-        padding: 8px;
-        outline: none;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-        cursor: pointer;
-        z-index: 0;
-        line-height: 1;
-
-        width: 40px;
-        height: 40px;
-
-        /* NOTE: Both values are needed, since some phones require the value to be \`transparent\`. */
-        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-        -webkit-tap-highlight-color: transparent;
-
-        /* Because of polymer/2558, this style has lower specificity than * */
-        box-sizing: border-box !important;
-
-        @apply --paper-icon-button;
-      }
-
-      :host #ink {
-        color: var(--paper-icon-button-ink-color, var(--primary-text-color));
-        opacity: 0.6;
-      }
-
-      :host([disabled]) {
-        color: var(--paper-icon-button-disabled-text, var(--disabled-text-color));
-        pointer-events: none;
-        cursor: auto;
-
-        @apply --paper-icon-button-disabled;
-      }
-
-      :host([hidden]) {
-        display: none !important;
-      }
-
-      :host(:hover) {
-        @apply --paper-icon-button-hover;
-      }
-
-      iron-icon {
-        --iron-icon-width: 100%;
-        --iron-icon-height: 100%;
-      }
-    </style>
-
-    <iron-icon id="icon" src="[[src]]" icon="[[icon]]" alt\$="[[alt]]"></iron-icon>
-  </template>
-
-  
-</dom-module>`;
-
-document.head.appendChild($_documentContainer);
-Object(__WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__["a" /* Polymer */])({
-  is: 'paper-icon-button',
-
-  hostAttributes: {
-    role: 'button',
-    tabindex: '0'
-  },
-
-  behaviors: [
-    __WEBPACK_IMPORTED_MODULE_2__paper_behaviors_paper_inky_focus_behavior_js__["a" /* PaperInkyFocusBehavior */]
-  ],
-
-  properties: {
-    /**
-     * The URL of an image for the icon. If the src property is specified,
-     * the icon property should not be.
-     */
-    src: {
-      type: String
-    },
-
-    /**
-     * Specifies the icon name or index in the set of icons available in
-     * the icon's icon set. If the icon property is specified,
-     * the src property should not be.
-     */
-    icon: {
-      type: String
-    },
-
-    /**
-     * Specifies the alternate text for the button, for accessibility.
-     */
-    alt: {
-      type: String,
-      observer: "_altChanged"
-    }
-  },
-
-  _altChanged: function(newValue, oldValue) {
-    var label = this.getAttribute('aria-label');
-
-    // Don't stomp over a user-set aria-label.
-    if (!label || oldValue == label) {
-      this.setAttribute('aria-label', newValue);
-    }
-  }
-});
-
-
-/***/ }),
-/* 132 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_behaviors_iron_button_state_js__ = __webpack_require__(35);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__paper_ripple_behavior_js__ = __webpack_require__(58);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_behaviors_iron_button_state_js__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__paper_ripple_behavior_js__ = __webpack_require__(39);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__iron_behaviors_iron_control_state_js__ = __webpack_require__(12);
 
 
@@ -24447,12 +26246,12 @@ const PaperInkyFocusBehavior = [
 
 
 /***/ }),
-/* 133 */
+/* 143 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__iron_icon_iron_icon_js__ = __webpack_require__(59);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_iconset_svg_iron_iconset_svg_js__ = __webpack_require__(134);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__iron_icon_iron_icon_js__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_iconset_svg_iron_iconset_svg_js__ = __webpack_require__(63);
 
 
 const $_documentContainer = document.createElement('div');
@@ -24776,260 +26575,14 @@ document.head.appendChild($_documentContainer);
 
 
 /***/ }),
-/* 134 */
+/* 144 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_meta_iron_meta_js__ = __webpack_require__(37);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
-
-
-
-
-/**
- * The `iron-iconset-svg` element allows users to define their own icon sets
- * that contain svg icons. The svg icon elements should be children of the
- * `iron-iconset-svg` element. Multiple icons should be given distinct id's.
- *
- * Using svg elements to create icons has a few advantages over traditional
- * bitmap graphics like jpg or png. Icons that use svg are vector based so
- * they are resolution independent and should look good on any device. They
- * are stylable via css. Icons can be themed, colorized, and even animated.
- *
- * Example:
- *
- *     <iron-iconset-svg name="my-svg-icons" size="24">
- *       <svg>
- *         <defs>
- *           <g id="shape">
- *             <rect x="12" y="0" width="12" height="24" />
- *             <circle cx="12" cy="12" r="12" />
- *           </g>
- *         </defs>
- *       </svg>
- *     </iron-iconset-svg>
- *
- * This will automatically register the icon set "my-svg-icons" to the iconset
- * database.  To use these icons from within another element, make a
- * `iron-iconset` element and call the `byId` method
- * to retrieve a given iconset. To apply a particular icon inside an
- * element use the `applyIcon` method. For example:
- *
- *     iconset.applyIcon(iconNode, 'car');
- *
- * @element iron-iconset-svg
- * @demo demo/index.html
- * @implements {Polymer.Iconset}
- */
-Object(__WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_fn_js__["a" /* Polymer */])({
-  is: 'iron-iconset-svg',
-
-  properties: {
-
-    /**
-     * The name of the iconset.
-     */
-    name: {
-      type: String,
-      observer: '_nameChanged'
-    },
-
-    /**
-     * The size of an individual icon. Note that icons must be square.
-     */
-    size: {
-      type: Number,
-      value: 24
-    },
-
-    /**
-     * Set to true to enable mirroring of icons where specified when they are
-     * stamped. Icons that should be mirrored should be decorated with a
-     * `mirror-in-rtl` attribute.
-     *
-     * NOTE: For performance reasons, direction will be resolved once per
-     * document per iconset, so moving icons in and out of RTL subtrees will
-     * not cause their mirrored state to change.
-     */
-    rtlMirroring: {
-      type: Boolean,
-      value: false
-    }
-  },
-
-  created: function() {
-    this._meta = new __WEBPACK_IMPORTED_MODULE_1__iron_meta_iron_meta_js__["a" /* IronMeta */]({type: 'iconset', key: null, value: null});
-  },
-
-  attached: function() {
-    this.style.display = 'none';
-  },
-
-  /**
-   * Construct an array of all icon names in this iconset.
-   *
-   * @return {!Array} Array of icon names.
-   */
-  getIconNames: function() {
-    this._icons = this._createIconMap();
-    return Object.keys(this._icons).map(function(n) {
-      return this.name + ':' + n;
-    }, this);
-  },
-
-  /**
-   * Applies an icon to the given element.
-   *
-   * An svg icon is prepended to the element's shadowRoot if it exists,
-   * otherwise to the element itself.
-   *
-   * If RTL mirroring is enabled, and the icon is marked to be mirrored in
-   * RTL, the element will be tested (once and only once ever for each
-   * iconset) to determine the direction of the subtree the element is in.
-   * This direction will apply to all future icon applications, although only
-   * icons marked to be mirrored will be affected.
-   *
-   * @method applyIcon
-   * @param {Element} element Element to which the icon is applied.
-   * @param {string} iconName Name of the icon to apply.
-   * @return {?Element} The svg element which renders the icon.
-   */
-  applyIcon: function(element, iconName) {
-    // Remove old svg element
-    this.removeIcon(element);
-    // install new svg element
-    var svg = this._cloneIcon(iconName,
-        this.rtlMirroring && this._targetIsRTL(element));
-    if (svg) {
-      // insert svg element into shadow root, if it exists
-      var pde = Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(element.root || element);
-      pde.insertBefore(svg, pde.childNodes[0]);
-      return element._svgIcon = svg;
-    }
-    return null;
-  },
-
-  /**
-   * Remove an icon from the given element by undoing the changes effected
-   * by `applyIcon`.
-   *
-   * @param {Element} element The element from which the icon is removed.
-   */
-  removeIcon: function(element) {
-    // Remove old svg element
-    if (element._svgIcon) {
-      Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(element.root || element).removeChild(element._svgIcon);
-      element._svgIcon = null;
-    }
-  },
-
-  /**
-   * Measures and memoizes the direction of the element. Note that this
-   * measurement is only done once and the result is memoized for future
-   * invocations.
-   */
-  _targetIsRTL: function(target) {
-    if (this.__targetIsRTL == null) {
-      if (target && target.nodeType !== Node.ELEMENT_NODE) {
-        target = target.host;
-      }
-
-      this.__targetIsRTL = target &&
-          window.getComputedStyle(target)['direction'] === 'rtl';
-    }
-
-    return this.__targetIsRTL;
-  },
-
-  /**
-   *
-   * When name is changed, register iconset metadata
-   *
-   */
-  _nameChanged: function() {
-    this._meta.value = null;
-    this._meta.key = this.name;
-    this._meta.value = this;
-
-    this.async(function() {
-      this.fire('iron-iconset-added', this, {node: window});
-    });
-  },
-
-  /**
-   * Create a map of child SVG elements by id.
-   *
-   * @return {!Object} Map of id's to SVG elements.
-   */
-  _createIconMap: function() {
-    // Objects chained to Object.prototype (`{}`) have members. Specifically,
-    // on FF there is a `watch` method that confuses the icon map, so we
-    // need to use a null-based object here.
-    var icons = Object.create(null);
-    Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(this).querySelectorAll('[id]')
-      .forEach(function(icon) {
-        icons[icon.id] = icon;
-      });
-    return icons;
-  },
-
-  /**
-   * Produce installable clone of the SVG element matching `id` in this
-   * iconset, or `undefined` if there is no matching element.
-   *
-   * @return {Element} Returns an installable clone of the SVG element
-   * matching `id`.
-   */
-  _cloneIcon: function(id, mirrorAllowed) {
-    // create the icon map on-demand, since the iconset itself has no discrete
-    // signal to know when it's children are fully parsed
-    this._icons = this._icons || this._createIconMap();
-    return this._prepareSvgClone(this._icons[id], this.size, mirrorAllowed);
-  },
-
-  /**
-   * @param {Element} sourceSvg
-   * @param {number} size
-   * @param {Boolean} mirrorAllowed
-   * @return {Element}
-   */
-  _prepareSvgClone: function(sourceSvg, size, mirrorAllowed) {
-    if (sourceSvg) {
-      var content = sourceSvg.cloneNode(true),
-          svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg'),
-          viewBox = content.getAttribute('viewBox') || '0 0 ' + size + ' ' + size,
-          cssText = 'pointer-events: none; display: block; width: 100%; height: 100%;';
-
-      if (mirrorAllowed && content.hasAttribute('mirror-in-rtl')) {
-        cssText += '-webkit-transform:scale(-1,1);transform:scale(-1,1);';
-      }
-
-      svg.setAttribute('viewBox', viewBox);
-      svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-      svg.setAttribute('focusable', 'false');
-      // TODO(dfreedm): `pointer-events: none` works around https://crbug.com/370136
-      // TODO(sjmiles): inline style may not be ideal, but avoids requiring a shadow-root
-      svg.style.cssText = cssText;
-      svg.appendChild(content).removeAttribute('id');
-      return svg;
-    }
-    return null;
-  }
-
-});
-
-
-/***/ }),
-/* 135 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__paper_styles_shadow_js__ = __webpack_require__(21);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__paper_material_shared_styles_js__ = __webpack_require__(136);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__paper_styles_shadow_js__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__paper_material_shared_styles_js__ = __webpack_require__(145);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(3);
 
 
 
@@ -25085,11 +26638,11 @@ Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_fn_js__["a" /* Po
 
 
 /***/ }),
-/* 136 */
+/* 145 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__paper_styles_shadow_js__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__paper_styles_shadow_js__ = __webpack_require__(23);
 
 const $_documentContainer = document.createElement('div');
 $_documentContainer.setAttribute('style', 'display: none;');
@@ -25129,471 +26682,7 @@ document.head.appendChild($_documentContainer);
 
 
 /***/ }),
-/* 137 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_resizable_behavior_iron_resizable_behavior_js__ = __webpack_require__(36);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_selector_iron_selectable_js__ = __webpack_require__(138);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
-
-
-
-
-Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_fn_js__["a" /* Polymer */])({
-  _template: `
-    <style>
-      :host {
-        display: block;
-      }
-
-      :host > ::slotted(:not(.iron-selected)) {
-        display: none !important;
-      }
-    </style>
-
-    <slot></slot>
-`,
-
-  is: 'iron-pages',
-
-  behaviors: [
-    __WEBPACK_IMPORTED_MODULE_1__iron_resizable_behavior_iron_resizable_behavior_js__["a" /* IronResizableBehavior */],
-    __WEBPACK_IMPORTED_MODULE_2__iron_selector_iron_selectable_js__["a" /* IronSelectableBehavior */]
-  ],
-
-  properties: {
-
-    // as the selected page is the only one visible, activateEvent
-    // is both non-sensical and problematic; e.g. in cases where a user
-    // handler attempts to change the page and the activateEvent
-    // handler immediately changes it back
-    activateEvent: {
-      type: String,
-      value: null
-    }
-
-  },
-
-  observers: [
-    '_selectedPageChanged(selected)'
-  ],
-
-  _selectedPageChanged: function(selected, old) {
-    this.async(this.notifyResize);
-  }
-});
-
-
-/***/ }),
-/* 138 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_selection_js__ = __webpack_require__(139);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_utils_case_map_js__ = __webpack_require__(9);
-
-
-
-
-
-const IronSelectableBehavior = {
-
-    /**
-     * Fired when iron-selector is activated (selected or deselected).
-     * It is fired before the selected items are changed.
-     * Cancel the event to abort selection.
-     *
-     * @event iron-activate
-     */
-
-    /**
-     * Fired when an item is selected
-     *
-     * @event iron-select
-     */
-
-    /**
-     * Fired when an item is deselected
-     *
-     * @event iron-deselect
-     */
-
-    /**
-     * Fired when the list of selectable items changes (e.g., items are
-     * added or removed). The detail of the event is a mutation record that
-     * describes what changed.
-     *
-     * @event iron-items-changed
-     */
-
-  properties: {
-
-    /**
-     * If you want to use an attribute value or property of an element for
-     * `selected` instead of the index, set this to the name of the attribute
-     * or property. Hyphenated values are converted to camel case when used to
-     * look up the property of a selectable element. Camel cased values are
-     * *not* converted to hyphenated values for attribute lookup. It's
-     * recommended that you provide the hyphenated form of the name so that
-     * selection works in both cases. (Use `attr-or-property-name` instead of
-     * `attrOrPropertyName`.)
-     */
-    attrForSelected: {
-      type: String,
-      value: null
-    },
-
-    /**
-     * Gets or sets the selected element. The default is to use the index of the item.
-     * @type {string|number}
-     */
-    selected: {
-      type: String,
-      notify: true
-    },
-
-    /**
-     * Returns the currently selected item.
-     *
-     * @type {?Object}
-     */
-    selectedItem: {
-      type: Object,
-      readOnly: true,
-      notify: true
-    },
-
-    /**
-     * The event that fires from items when they are selected. Selectable
-     * will listen for this event from items and update the selection state.
-     * Set to empty string to listen to no events.
-     */
-    activateEvent: {
-      type: String,
-      value: 'tap',
-      observer: '_activateEventChanged'
-    },
-
-    /**
-     * This is a CSS selector string.  If this is set, only items that match the CSS selector
-     * are selectable.
-     */
-    selectable: String,
-
-    /**
-     * The class to set on elements when selected.
-     */
-    selectedClass: {
-      type: String,
-      value: 'iron-selected'
-    },
-
-    /**
-     * The attribute to set on elements when selected.
-     */
-    selectedAttribute: {
-      type: String,
-      value: null
-    },
-
-    /**
-     * Default fallback if the selection based on selected with `attrForSelected`
-     * is not found.
-     */
-    fallbackSelection: {
-      type: String,
-      value: null
-    },
-
-    /**
-     * The list of items from which a selection can be made.
-     */
-    items: {
-      type: Array,
-      readOnly: true,
-      notify: true,
-      value: function() {
-        return [];
-      }
-    },
-
-    /**
-     * The set of excluded elements where the key is the `localName`
-     * of the element that will be ignored from the item list.
-     *
-     * @default {template: 1}
-     */
-    _excludedLocalNames: {
-      type: Object,
-      value: function() {
-        return {
-          'template': 1,
-          'dom-bind': 1,
-          'dom-if': 1,
-          'dom-repeat': 1,
-        };
-      }
-    }
-  },
-
-  observers: [
-    '_updateAttrForSelected(attrForSelected)',
-    '_updateSelected(selected)',
-    '_checkFallback(fallbackSelection)'
-  ],
-
-  created: function() {
-    this._bindFilterItem = this._filterItem.bind(this);
-    this._selection = new __WEBPACK_IMPORTED_MODULE_1__iron_selection_js__["a" /* IronSelection */](this._applySelection.bind(this));
-  },
-
-  attached: function() {
-    this._observer = this._observeItems(this);
-    this._addListener(this.activateEvent);
-  },
-
-  detached: function() {
-    if (this._observer) {
-      Object(__WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(this).unobserveNodes(this._observer);
-    }
-    this._removeListener(this.activateEvent);
-  },
-
-  /**
-   * Returns the index of the given item.
-   *
-   * @method indexOf
-   * @param {Object} item
-   * @returns Returns the index of the item
-   */
-  indexOf: function(item) {
-    return this.items.indexOf(item);
-  },
-
-  /**
-   * Selects the given value.
-   *
-   * @method select
-   * @param {string|number} value the value to select.
-   */
-  select: function(value) {
-    this.selected = value;
-  },
-
-  /**
-   * Selects the previous item.
-   *
-   * @method selectPrevious
-   */
-  selectPrevious: function() {
-    var length = this.items.length;
-    var index = (Number(this._valueToIndex(this.selected)) - 1 + length) % length;
-    this.selected = this._indexToValue(index);
-  },
-
-  /**
-   * Selects the next item.
-   *
-   * @method selectNext
-   */
-  selectNext: function() {
-    var index = (Number(this._valueToIndex(this.selected)) + 1) % this.items.length;
-    this.selected = this._indexToValue(index);
-  },
-
-  /**
-   * Selects the item at the given index.
-   *
-   * @method selectIndex
-   */
-  selectIndex: function(index) {
-    this.select(this._indexToValue(index));
-  },
-
-  /**
-   * Force a synchronous update of the `items` property.
-   *
-   * NOTE: Consider listening for the `iron-items-changed` event to respond to
-   * updates to the set of selectable items after updates to the DOM list and
-   * selection state have been made.
-   *
-   * WARNING: If you are using this method, you should probably consider an
-   * alternate approach. Synchronously querying for items is potentially
-   * slow for many use cases. The `items` property will update asynchronously
-   * on its own to reflect selectable items in the DOM.
-   */
-  forceSynchronousItemUpdate: function() {
-    if (this._observer && typeof this._observer.flush === "function") {
-      // NOTE(bicknellr): `Polymer.dom.flush` above is no longer sufficient to
-      // trigger `observeNodes` callbacks. Polymer 2.x returns an object from
-      // `observeNodes` with a `flush` that synchronously gives the callback
-      // any pending MutationRecords (retrieved with `takeRecords`). Any case
-      // where ShadyDOM flushes were expected to synchronously trigger item
-      // updates will now require calling `forceSynchronousItemUpdate`.
-      this._observer.flush();
-    } else {
-      this._updateItems();
-    }
-  },
-
-  // UNUSED, FOR API COMPATIBILITY
-  get _shouldUpdateSelection() {
-    return this.selected != null;
-  },
-
-  _checkFallback: function() {
-    this._updateSelected();
-  },
-
-  _addListener: function(eventName) {
-    this.listen(this, eventName, '_activateHandler');
-  },
-
-  _removeListener: function(eventName) {
-    this.unlisten(this, eventName, '_activateHandler');
-  },
-
-  _activateEventChanged: function(eventName, old) {
-    this._removeListener(old);
-    this._addListener(eventName);
-  },
-
-  _updateItems: function() {
-    var nodes = Object(__WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(this).queryDistributedElements(this.selectable || '*');
-    nodes = Array.prototype.filter.call(nodes, this._bindFilterItem);
-    this._setItems(nodes);
-  },
-
-  _updateAttrForSelected: function() {
-    if (this.selectedItem) {
-      this.selected = this._valueForItem(this.selectedItem);
-    }
-  },
-
-  _updateSelected: function() {
-    this._selectSelected(this.selected);
-  },
-
-  _selectSelected: function(selected) {
-    if (!this.items) {
-      return;
-    }
-
-    var item = this._valueToItem(this.selected);
-    if (item) {
-      this._selection.select(item);
-    } else {
-      this._selection.clear();
-    }
-    // Check for items, since this array is populated only when attached
-    // Since Number(0) is falsy, explicitly check for undefined
-    if (this.fallbackSelection && this.items.length && (this._selection.get() === undefined)) {
-      this.selected = this.fallbackSelection;
-    }
-  },
-
-  _filterItem: function(node) {
-    return !this._excludedLocalNames[node.localName];
-  },
-
-  _valueToItem: function(value) {
-    return (value == null) ? null : this.items[this._valueToIndex(value)];
-  },
-
-  _valueToIndex: function(value) {
-    if (this.attrForSelected) {
-      for (var i = 0, item; item = this.items[i]; i++) {
-        if (this._valueForItem(item) == value) {
-          return i;
-        }
-      }
-    } else {
-      return Number(value);
-    }
-  },
-
-  _indexToValue: function(index) {
-    if (this.attrForSelected) {
-      var item = this.items[index];
-      if (item) {
-        return this._valueForItem(item);
-      }
-    } else {
-      return index;
-    }
-  },
-
-  _valueForItem: function(item) {
-    if (!item) {
-      return null;
-    }
-
-    var propValue = item[Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_utils_case_map_js__["dashToCamelCase"])(this.attrForSelected)];
-    return propValue != undefined ? propValue : item.getAttribute(this.attrForSelected);
-  },
-
-  _applySelection: function(item, isSelected) {
-    if (this.selectedClass) {
-      this.toggleClass(this.selectedClass, isSelected, item);
-    }
-    if (this.selectedAttribute) {
-      this.toggleAttribute(this.selectedAttribute, isSelected, item);
-    }
-    this._selectionChange();
-    this.fire('iron-' + (isSelected ? 'select' : 'deselect'), {item: item});
-  },
-
-  _selectionChange: function() {
-    this._setSelectedItem(this._selection.get());
-  },
-
-  // observe items change under the given node.
-  _observeItems: function(node) {
-    return Object(__WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(node).observeNodes(function(mutation) {
-      this._updateItems();
-      this._updateSelected();
-
-      // Let other interested parties know about the change so that
-      // we don't have to recreate mutation observers everywhere.
-      this.fire('iron-items-changed', mutation, {
-        bubbles: false,
-        cancelable: false
-      });
-    });
-  },
-
-  _activateHandler: function(e) {
-    var t = e.target;
-    var items = this.items;
-    while (t && t != this) {
-      var i = items.indexOf(t);
-      if (i >= 0) {
-        var value = this._indexToValue(i);
-        this._itemActivate(value, t);
-        return;
-      }
-      t = t.parentNode;
-    }
-  },
-
-  _itemActivate: function(value, item) {
-    if (!this.fire('iron-activate',
-        {selected: value, item: item}, {cancelable: true}).defaultPrevented) {
-      this.select(value);
-    }
-  }
-
-};
-/* harmony export (immutable) */ __webpack_exports__["a"] = IronSelectableBehavior;
-
-
-
-/***/ }),
-/* 139 */
+/* 146 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -25703,12 +26792,12 @@ IronSelection.prototype = {
 
 
 /***/ }),
-/* 140 */
+/* 147 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_title_card_html__ = __webpack_require__(141);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_title_card_html__ = __webpack_require__(148);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_title_card_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_title_card_html__);
 
 
@@ -25724,30 +26813,35 @@ class AppTitleCard extends __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_
 customElements.define('app-title-card', AppTitleCard);
 
 /***/ }),
-/* 141 */
+/* 148 */
 /***/ (function(module, exports) {
 
 module.exports = "<style>\n  :host {\n    display: block;\n  }\n  .header {\n    padding: 40px 40px 10px 40px;\n    background-color: white;\n  }\n  h2 {\n    font-size: 22px;\n    border-bottom: 2px solid var(--title-card-border-color, var(--default-primary-color));\n    margin : 0;\n    padding : 0 0 5px 0;\n  }\n  .content {\n    background-color: white;\n    padding: 10px 40px 40px 40px;\n  }\n</style>\n\n<div>\n  <div class=\"header\">\n    <h2>\n      <slot name=\"header\"></slot>\n    </h2>\n  </div>\n  <div class=\"content\">\n    <slot name=\"content\"></slot>\n  </div>\n</div>";
 
 /***/ }),
-/* 142 */
+/* 149 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__polymer_paper_input_paper_input__ = __webpack_require__(143);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__polymer_paper_input_paper_textarea__ = __webpack_require__(145);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_paper_toast_paper_toast__ = __webpack_require__(147);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_package_metadata_editor_html__ = __webpack_require__(153);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_package_metadata_editor_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__app_package_metadata_editor_html__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__interfaces_PackageInterface__ = __webpack_require__(68);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__interfaces_PackageInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__interfaces_PackageInterface__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__interfaces_AppStateInterface__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__interfaces_AppStateInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__interfaces_AppStateInterface__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__app_markdown_editor__ = __webpack_require__(154);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__app_keyword_input__ = __webpack_require__(161);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__app_theme_input__ = __webpack_require__(163);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__app_create_release__ = __webpack_require__(165);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__polymer_paper_input_paper_input__ = __webpack_require__(150);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__polymer_paper_input_paper_textarea__ = __webpack_require__(152);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_paper_toast_paper_toast__ = __webpack_require__(154);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__polymer_paper_tabs_paper_tabs__ = __webpack_require__(160);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_package_metadata_editor_html__ = __webpack_require__(165);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_package_metadata_editor_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__app_package_metadata_editor_html__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__interfaces_PackageInterface__ = __webpack_require__(74);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__interfaces_PackageInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__interfaces_PackageInterface__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__interfaces_AppStateInterface__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__interfaces_AppStateInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__interfaces_AppStateInterface__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__app_markdown_editor__ = __webpack_require__(166);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__app_keyword_input__ = __webpack_require__(172);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__app_theme_input__ = __webpack_require__(174);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__app_create_release__ = __webpack_require__(176);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__app_text_input__ = __webpack_require__(178);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__app_org_input__ = __webpack_require__(180);
+
+
 
 
 
@@ -25763,10 +26857,10 @@ module.exports = "<style>\n  :host {\n    display: block;\n  }\n  .header {\n   
 
 
 class AppPackageMetadataEditor extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__["a" /* Element */])
-      .with(EventInterface, __WEBPACK_IMPORTED_MODULE_6__interfaces_AppStateInterface___default.a, __WEBPACK_IMPORTED_MODULE_5__interfaces_PackageInterface___default.a) {
+      .with(EventInterface, __WEBPACK_IMPORTED_MODULE_7__interfaces_AppStateInterface___default.a, __WEBPACK_IMPORTED_MODULE_6__interfaces_PackageInterface___default.a) {
 
   static get template() {
-    return __WEBPACK_IMPORTED_MODULE_4__app_package_metadata_editor_html___default.a;
+    return __WEBPACK_IMPORTED_MODULE_5__app_package_metadata_editor_html___default.a;
   }
 
   static get properties() {
@@ -25782,6 +26876,11 @@ class AppPackageMetadataEditor extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polyme
       sections : {
         type : Array,
         value : () => ['basicInformation', 'details']
+      },
+
+      selectedSection : {
+        type : String,
+        value : 'basicInformation'
       },
 
       // package schema object
@@ -25842,6 +26941,7 @@ class AppPackageMetadataEditor extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polyme
   createPackage() {
     this.currentAction = 'Create';
     this.creating = true;
+    this.selectedSection = 'basicInformation';
     this.namePreview = '';
     for( var key in this.schema ) this.set(key);
   }
@@ -25857,8 +26957,15 @@ class AppPackageMetadataEditor extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polyme
     if( this.get('overview').length < 15 ) {
       return alert('Please provide a longer overview');
     }
+    if( !this.get('organization') ) {
+      return alert('Please select an organization');
+    }
 
-    this._createPackage(this.namePreview, this.get('overview'));
+    this._createPackage(
+      this.namePreview, 
+      this.get('overview'),
+      this.get('organization')
+    );
   }
 
   /**
@@ -25899,11 +27006,13 @@ class AppPackageMetadataEditor extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polyme
       else this.set(key);
     }
 
-    if( pkgData.releases ) {
+    if( pkgData.releases && pkgData.releases.length ) {
       let cRelease = pkgData.releases[pkgData.releases.length-1].name;
       this.$.release.release = cRelease;
       this.$.release.currentRelease = cRelease;
     }
+
+    this.$.organization.value = pkgData.organization;
 
     this.$.theme.setValues(pkgData);
   }
@@ -25931,7 +27040,7 @@ class AppPackageMetadataEditor extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polyme
       return alert('Failed to create package :( '+e.error.message);
     }
 
-    this._setWindowLocation('/package/'+e.payload.id);
+    this._setWindowLocation('/edit/'+e.payload.id);
   }
 
   /**
@@ -25945,7 +27054,8 @@ class AppPackageMetadataEditor extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polyme
       name : this.namePreview,
       overview : this.get('overview'),
       description : this.get('description'),
-      keywords : this.get('keywords')
+      keywords : this.get('keywords'),
+      organization : this.get('organization')
     }
 
     this.$.unsavedMsg.style.display = 'block';
@@ -25992,20 +27102,20 @@ class AppPackageMetadataEditor extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polyme
 customElements.define('app-package-metadata-editor', AppPackageMetadataEditor);
 
 /***/ }),
-/* 143 */
+/* 150 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_form_element_behavior_iron_form_element_behavior_js__ = __webpack_require__(60);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_input_iron_input_js__ = __webpack_require__(144);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__paper_input_behavior_js__ = __webpack_require__(63);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__paper_input_char_counter_js__ = __webpack_require__(64);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__paper_input_container_js__ = __webpack_require__(66);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__paper_input_error_js__ = __webpack_require__(67);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__polymer_lib_elements_dom_module_js__ = __webpack_require__(29);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__polymer_polymer_element_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_form_element_behavior_iron_form_element_behavior_js__ = __webpack_require__(65);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_input_iron_input_js__ = __webpack_require__(151);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__paper_input_behavior_js__ = __webpack_require__(68);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__paper_input_char_counter_js__ = __webpack_require__(69);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__paper_input_container_js__ = __webpack_require__(71);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__paper_input_error_js__ = __webpack_require__(72);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__polymer_lib_elements_dom_module_js__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__polymer_polymer_element_js__ = __webpack_require__(1);
 
 
 
@@ -26183,14 +27293,14 @@ Object(__WEBPACK_IMPORTED_MODULE_7__polymer_lib_legacy_polymer_fn_js__["a" /* Po
 
 
 /***/ }),
-/* 144 */
+/* 151 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_a11y_announcer_iron_a11y_announcer_js__ = __webpack_require__(61);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_validatable_behavior_iron_validatable_behavior_js__ = __webpack_require__(62);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_a11y_announcer_iron_a11y_announcer_js__ = __webpack_require__(66);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_validatable_behavior_iron_validatable_behavior_js__ = __webpack_require__(67);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
 
 
@@ -26476,18 +27586,18 @@ Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_fn_js__["a" /* Po
 
 
 /***/ }),
-/* 145 */
+/* 152 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_autogrow_textarea_iron_autogrow_textarea_js__ = __webpack_require__(146);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_form_element_behavior_iron_form_element_behavior_js__ = __webpack_require__(60);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__paper_input_behavior_js__ = __webpack_require__(63);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__paper_input_char_counter_js__ = __webpack_require__(64);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__paper_input_container_js__ = __webpack_require__(66);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__paper_input_error_js__ = __webpack_require__(67);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_autogrow_textarea_iron_autogrow_textarea_js__ = __webpack_require__(153);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_form_element_behavior_iron_form_element_behavior_js__ = __webpack_require__(65);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__paper_input_behavior_js__ = __webpack_require__(68);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__paper_input_char_counter_js__ = __webpack_require__(69);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__paper_input_container_js__ = __webpack_require__(71);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__paper_input_error_js__ = __webpack_require__(72);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(3);
 
 
 
@@ -26588,15 +27698,15 @@ Object(__WEBPACK_IMPORTED_MODULE_7__polymer_lib_legacy_polymer_fn_js__["a" /* Po
 
 
 /***/ }),
-/* 146 */
+/* 153 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_behaviors_iron_control_state_js__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_flex_layout_iron_flex_layout_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__iron_validatable_behavior_iron_validatable_behavior_js__ = __webpack_require__(62);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_flex_layout_iron_flex_layout_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__iron_validatable_behavior_iron_validatable_behavior_js__ = __webpack_require__(67);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
 
 
@@ -26938,14 +28048,14 @@ Object(__WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__["a" /* Po
 
 
 /***/ }),
-/* 147 */
+/* 154 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_a11y_announcer_iron_a11y_announcer_js__ = __webpack_require__(61);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_overlay_behavior_iron_overlay_behavior_js__ = __webpack_require__(148);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_a11y_announcer_iron_a11y_announcer_js__ = __webpack_require__(66);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_overlay_behavior_iron_overlay_behavior_js__ = __webpack_require__(155);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(3);
 
 
 
@@ -27206,15 +28316,15 @@ Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_fn_js__["a" /* Po
 
 
 /***/ }),
-/* 148 */
+/* 155 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_fit_behavior_iron_fit_behavior_js__ = __webpack_require__(149);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_resizable_behavior_iron_resizable_behavior_js__ = __webpack_require__(36);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__iron_overlay_manager_js__ = __webpack_require__(150);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__iron_focusables_helper_js__ = __webpack_require__(152);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_fit_behavior_iron_fit_behavior_js__ = __webpack_require__(156);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_resizable_behavior_iron_resizable_behavior_js__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__iron_overlay_manager_js__ = __webpack_require__(157);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__iron_focusables_helper_js__ = __webpack_require__(159);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
 
 
@@ -27781,7 +28891,7 @@ const IronOverlayBehavior = [__WEBPACK_IMPORTED_MODULE_1__iron_fit_behavior_iron
 
 
 /***/ }),
-/* 149 */
+/* 156 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -27833,7 +28943,7 @@ const IronFitBehavior = {
 
     /**
      * The orientation against which to align the element horizontally
-     * relative to the `positionTarget`. Possible values are "left", "right", "auto".
+     * relative to the `positionTarget`. Possible values are "left", "right", "center", "auto".
      */
     horizontalAlign: {
       type: String
@@ -27841,7 +28951,7 @@ const IronFitBehavior = {
 
     /**
      * The orientation against which to align the element vertically
-     * relative to the `positionTarget`. Possible values are "top", "bottom", "auto".
+     * relative to the `positionTarget`. Possible values are "top", "bottom", "middle", "auto".
      */
     verticalAlign: {
       type: String
@@ -27861,8 +28971,8 @@ const IronFitBehavior = {
      * of it as increasing or decreasing the distance to the side of the
      * screen given by `horizontalAlign`.
      *
-     * If `horizontalAlign` is "left", this offset will increase or decrease
-     * the distance to the left side of the screen: a negative offset will
+     * If `horizontalAlign` is "left" or "center", this offset will increase or
+     * decrease the distance to the left side of the screen: a negative offset will
      * move the dropdown to the left; a positive one, to the right.
      *
      * Conversely if `horizontalAlign` is "right", this offset will increase
@@ -27881,8 +28991,8 @@ const IronFitBehavior = {
      * of it as increasing or decreasing the distance to the side of the
      * screen given by `verticalAlign`.
      *
-     * If `verticalAlign` is "top", this offset will increase or decrease
-     * the distance to the top side of the screen: a negative offset will
+     * If `verticalAlign` is "top" or "middle", this offset will increase or
+     * decrease the distance to the top side of the screen: a negative offset will
      * move the dropdown upwards; a positive one, downwards.
      *
      * Conversely if `verticalAlign` is "bottom", this offset will increase
@@ -27977,6 +29087,15 @@ const IronFitBehavior = {
       }
     }
     return this.horizontalAlign;
+  },
+
+  /**
+   * True if the element should be positioned instead of centered.
+   * @private
+   */
+  get __shouldPosition() {
+    return (this.horizontalAlign || this.verticalAlign) &&
+      (this.horizontalAlign !== 'center' || this.verticalAlign !== 'middle');
   },
 
   attached: function() {
@@ -28095,7 +29214,7 @@ const IronFitBehavior = {
    * Positions the element according to `horizontalAlign, verticalAlign`.
    */
   position: function() {
-    if (!this.horizontalAlign && !this.verticalAlign) {
+    if (!this.__shouldPosition) {
       // needs to be centered, and it is done after constrain.
       return;
     }
@@ -28120,7 +29239,7 @@ const IronFitBehavior = {
       height: rect.height + margin.top + margin.bottom
     };
 
-    var position = this.__getPosition(this._localeHorizontalAlign, this.verticalAlign, size, positionRect,
+    var position = this.__getPosition(this._localeHorizontalAlign, this.verticalAlign, size, rect, positionRect,
       fitRect);
 
     var left = position.left + margin.left;
@@ -28151,7 +29270,7 @@ const IronFitBehavior = {
    * and/or `max-width`.
    */
   constrain: function() {
-    if (this.horizontalAlign || this.verticalAlign) {
+    if (this.__shouldPosition) {
       return;
     }
     this._discoverInfo();
@@ -28207,7 +29326,7 @@ const IronFitBehavior = {
    * `position:fixed`.
    */
   center: function() {
-    if (this.horizontalAlign || this.verticalAlign) {
+    if (this.__shouldPosition) {
       return;
     }
     this._discoverInfo();
@@ -28255,14 +29374,14 @@ const IronFitBehavior = {
     return target.getBoundingClientRect();
   },
 
-  __getCroppedArea: function(position, size, fitRect) {
+  __getOffscreenArea: function(position, size, fitRect) {
     var verticalCrop = Math.min(0, position.top) + Math.min(0, fitRect.bottom - (position.top + size.height));
     var horizontalCrop = Math.min(0, position.left) + Math.min(0, fitRect.right - (position.left + size.width));
     return Math.abs(verticalCrop) * size.width + Math.abs(horizontalCrop) * size.height;
   },
 
 
-  __getPosition: function(hAlign, vAlign, size, positionRect, fitRect) {
+  __getPosition: function(hAlign, vAlign, size, sizeNoMargins, positionRect, fitRect) {
     // All the possible configurations.
     // Ordered as top-left, top-right, bottom-left, bottom-right.
     var positions = [{
@@ -28308,23 +29427,53 @@ const IronFitBehavior = {
     vAlign = vAlign === 'auto' ? null : vAlign;
     hAlign = hAlign === 'auto' ? null : hAlign;
 
+    if (!hAlign || hAlign === 'center') {
+      positions.push({
+        verticalAlign: 'top',
+        horizontalAlign: 'center',
+        top: positionRect.top + this.verticalOffset + (this.noOverlap ? positionRect.height : 0),
+        left: positionRect.left - sizeNoMargins.width / 2 + positionRect.width / 2 + this.horizontalOffset
+      });
+      positions.push({
+        verticalAlign: 'bottom',
+        horizontalAlign: 'center',
+        top: positionRect.bottom - size.height - this.verticalOffset - (this.noOverlap ? positionRect.height : 0),
+        left: positionRect.left - sizeNoMargins.width / 2 + positionRect.width / 2 + this.horizontalOffset
+      });
+    }
+
+    if (!vAlign || vAlign === 'middle') {
+      positions.push({
+        verticalAlign: 'middle',
+        horizontalAlign: 'left',
+        top: positionRect.top - sizeNoMargins.height / 2 + positionRect.height / 2 + this.verticalOffset,
+        left: positionRect.left + this.horizontalOffset + (this.noOverlap ? positionRect.width : 0)
+      });
+      positions.push({
+        verticalAlign: 'middle',
+        horizontalAlign: 'right',
+        top: positionRect.top - sizeNoMargins.height / 2 + positionRect.height / 2 + this.verticalOffset,
+        left: positionRect.right - size.width - this.horizontalOffset - (this.noOverlap ? positionRect.width : 0)
+      });
+    }
+
     var position;
     for (var i = 0; i < positions.length; i++) {
-      var pos = positions[i];
+      var candidate = positions[i];
+      var vAlignOk = candidate.verticalAlign === vAlign;
+      var hAlignOk = candidate.horizontalAlign === hAlign;
 
       // If both vAlign and hAlign are defined, return exact match.
       // For dynamicAlign and noOverlap we'll have more than one candidate, so
-      // we'll have to check the croppedArea to make the best choice.
-      if (!this.dynamicAlign && !this.noOverlap &&
-        pos.verticalAlign === vAlign && pos.horizontalAlign === hAlign) {
-        position = pos;
+      // we'll have to check the offscreenArea to make the best choice.
+      if (!this.dynamicAlign && !this.noOverlap && vAlignOk && hAlignOk) {
+        position = candidate;
         break;
       }
 
       // Align is ok if alignment preferences are respected. If no preferences,
       // it is considered ok.
-      var alignOk = (!vAlign || pos.verticalAlign === vAlign) &&
-        (!hAlign || pos.horizontalAlign === hAlign);
+      var alignOk = (!vAlign || vAlignOk) && (!hAlign || hAlignOk);
 
       // Filter out elements that don't match the alignment (if defined).
       // With dynamicAlign, we need to consider all the positions to find the
@@ -28333,18 +29482,20 @@ const IronFitBehavior = {
         continue;
       }
 
-      position = position || pos;
-      pos.croppedArea = this.__getCroppedArea(pos, size, fitRect);
-      var diff = pos.croppedArea - position.croppedArea;
-      // Check which crops less. If it crops equally, check if align is ok.
-      if (diff < 0 || (diff === 0 && alignOk)) {
-        position = pos;
-      }
+      candidate.offscreenArea = this.__getOffscreenArea(candidate, size, fitRect);
       // If not cropped and respects the align requirements, keep it.
       // This allows to prefer positions overlapping horizontally over the
       // ones overlapping vertically.
-      if (position.croppedArea === 0 && alignOk) {
+      if (candidate.offscreenArea === 0 && alignOk) {
+        position = candidate;
         break;
+      }
+      position = position || candidate;
+      var diff = candidate.offscreenArea - position.offscreenArea;
+      // Check which crops less. If it crops equally, check if at least one
+      // align setting is ok.
+      if (diff < 0 || (diff === 0 && (vAlignOk || hAlignOk))) {
+        position = candidate;
       }
     }
 
@@ -28357,14 +29508,14 @@ const IronFitBehavior = {
 
 
 /***/ }),
-/* 150 */
+/* 157 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_a11y_keys_behavior_iron_a11y_keys_behavior_js__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_overlay_backdrop_js__ = __webpack_require__(151);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_utils_gestures_js__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_a11y_keys_behavior_iron_a11y_keys_behavior_js__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_overlay_backdrop_js__ = __webpack_require__(158);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_utils_gestures_js__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
 
 
@@ -28727,12 +29878,12 @@ const IronOverlayManager = new IronOverlayManagerClass();
 
 
 /***/ }),
-/* 151 */
+/* 158 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
 
 
@@ -28868,7 +30019,7 @@ Object(__WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_fn_js__["a" /* Po
 
 
 /***/ }),
-/* 152 */
+/* 159 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -29083,20 +30234,1016 @@ const IronFocusablesHelper = {
 
 
 /***/ }),
-/* 153 */
-/***/ (function(module, exports) {
-
-module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n  app-title-card {\n    margin-bottom: 25px;\n  }\n  paper-button {\n    color: var(--default-primary-color);\n  }\n  paper-button:hover {\n    background: var(--default-background-color);\n  }\n  h2 {\n    margin : 0 0 5px 0;\n  }\n  #unsavedMsg paper-button {\n    color: var(--inverse-text-color);\n    border: 1px solid var(--inverse-text-color);\n  }\n  #unsavedMsg paper-button:hover {\n    color: var(--default-primary-color);\n    border: 1px solid var(--default-primary-color);\n  }\n  #savedToast {\n    --paper-toast-background-color: var(--default-primary-color);\n    --paper-toast-color: var(--inverse-text-color);\n  }\n</style>\n\n<paper-toast id=\"savingToast\" duration=\"0\">\n  <div id=\"unsavedMsg\">\n    You have unsaved changes\n    <paper-button on-click=\"_onSaveChangesClicked\">Save</paper-button>  \n  </div>\n  <div id=\"savingMsg\">\n    Saving...\n  </div>\n</paper-toast>\n<paper-toast id=\"savedToast\">\n  Package Data Saved!\n</paper-toast>\n\n<div class=\"container\">\n  <div class=\"narrow-container\">\n    <h1>[[currentAction]] Package</h1>\n\n    <app-title-card id=\"basicInformation\">\n      <div slot=\"header\">\n        Basic Information\n      </div>\n      <div slot=\"content\">\n        <paper-input \n          id=\"name\" \n          label=\"Name\" \n          on-keyup=\"_updateNamePreview\" \n          on-change=\"_updateNamePreview\" \n          hidden$=\"[[!creating]]\">\n        </paper-input>\n        <div hidden$=\"[[!creating]]\">[[namePreview]]</div>\n        <div hidden$=\"[[creating]]\" class=\"help\">Package Name</div>\n        <h2 hidden$=\"[[creating]]\">[[namePreview]]</h2>\n\n        <paper-input id=\"overview\" label=\"[[schema.overview.label]]\" on-change=\"_onDataChange\"></paper-input>\n        <div class=\"help\">[[schema.overview.description]]</div>\n\n        <div style=\"text-align: right\">\n          <paper-button \n            hidden$=\"[[!creating]]\" \n            id=\"createBtn\"\n            on-click=\"_onCreateBtnClicked\">Create\n          </paper-button>\n        </div>\n      </div>\n    </app-title-card>\n\n    <app-title-card id=\"details\" hidden$=\"[[creating]]\">\n      <div slot=\"header\">\n        Package Details\n      </div>\n      <div slot=\"content\">\n        <app-markdown-editor label=\"Description\" id=\"description\" on-markdown-change=\"_onDataChange\"></app-markdown-editor>\n        <div class=\"help\">[[schema.description.description]]</div>\n\n        <app-keyword-input id=\"keywords\" label=\"Keywords.  Comma Separate\" on-keyword-change=\"_onDataChange\"></app-keyword-input>\n        <div class=\"help\">[[schema.keywords.description]]</div>\n\n        <app-theme-input id=\"theme\" on-update=\"_onThemeUpdate\"></app-theme-input>\n      </div>\n    </app-title-card>\n\n    <app-title-card hidden$=\"[[creating]]\">\n        <div slot=\"header\">\n          Package Releases\n        </div>\n        <div slot=\"content\">\n          <app-create-release id=\"release\"></app-create-release>\n        </div>\n      </app-title-card>\n\n    <div hidden$=\"[[creating]]\">\n      <paper-button on-click=\"_onDeleteBtnClicked\">Delete Package</paper-button>\n    </div>\n  </div>\n</div>";
-
-/***/ }),
-/* 154 */
+/* 160 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_markdown_editor_html__ = __webpack_require__(155);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_flex_layout_iron_flex_layout_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_icon_iron_icon_js__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__iron_menu_behavior_iron_menubar_behavior_js__ = __webpack_require__(161);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__iron_resizable_behavior_iron_resizable_behavior_js__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__paper_icon_button_paper_icon_button_js__ = __webpack_require__(62);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__paper_styles_color_js__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__paper_tabs_icons_js__ = __webpack_require__(163);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__paper_tab_js__ = __webpack_require__(164);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__iron_menu_behavior_iron_menu_behavior_js__ = __webpack_require__(73);
+
+
+
+
+
+
+
+
+
+
+
+
+Object(__WEBPACK_IMPORTED_MODULE_9__polymer_lib_legacy_polymer_fn_js__["a" /* Polymer */])({
+  _template: `
+    <style>
+      :host {
+        @apply --layout;
+        @apply --layout-center;
+
+        height: 48px;
+        font-size: 14px;
+        font-weight: 500;
+        overflow: hidden;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        -webkit-user-select: none;
+        user-select: none;
+
+        /* NOTE: Both values are needed, since some phones require the value to be \`transparent\`. */
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        -webkit-tap-highlight-color: transparent;
+
+        @apply --paper-tabs;
+      }
+
+      :host-context([dir=rtl]) {
+        @apply --layout-horizontal-reverse;
+      }
+
+      #tabsContainer {
+        position: relative;
+        height: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        @apply --layout-flex-auto;
+        @apply --paper-tabs-container;
+      }
+
+      #tabsContent {
+        height: 100%;
+        -moz-flex-basis: auto;
+        -ms-flex-basis: auto;
+        flex-basis: auto;
+        @apply --paper-tabs-content;
+      }
+
+      #tabsContent.scrollable {
+        position: absolute;
+        white-space: nowrap;
+      }
+
+      #tabsContent:not(.scrollable),
+      #tabsContent.scrollable.fit-container {
+        @apply --layout-horizontal;
+      }
+
+      #tabsContent.scrollable.fit-container {
+        min-width: 100%;
+      }
+
+      #tabsContent.scrollable.fit-container > ::slotted(*) {
+        /* IE - prevent tabs from compressing when they should scroll. */
+        -ms-flex: 1 0 auto;
+        -webkit-flex: 1 0 auto;
+        flex: 1 0 auto;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      .not-visible {
+        opacity: 0;
+        cursor: default;
+      }
+
+      paper-icon-button {
+        width: 48px;
+        height: 48px;
+        padding: 12px;
+        margin: 0 4px;
+      }
+
+      #selectionBar {
+        position: absolute;
+        height: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        border-bottom: 2px solid var(--paper-tabs-selection-bar-color, var(--paper-yellow-a100));
+          -webkit-transform: scale(0);
+        transform: scale(0);
+          -webkit-transform-origin: left center;
+        transform-origin: left center;
+          transition: -webkit-transform;
+        transition: transform;
+
+        @apply --paper-tabs-selection-bar;
+      }
+
+      #selectionBar.align-bottom {
+        top: 0;
+        bottom: auto;
+      }
+
+      #selectionBar.expand {
+        transition-duration: 0.15s;
+        transition-timing-function: cubic-bezier(0.4, 0.0, 1, 1);
+      }
+
+      #selectionBar.contract {
+        transition-duration: 0.18s;
+        transition-timing-function: cubic-bezier(0.0, 0.0, 0.2, 1);
+      }
+
+      #tabsContent > ::slotted(:not(#selectionBar)) {
+        height: 100%;
+      }
+    </style>
+
+    <paper-icon-button icon="paper-tabs:chevron-left" class\$="[[_computeScrollButtonClass(_leftHidden, scrollable, hideScrollButtons)]]" on-up="_onScrollButtonUp" on-down="_onLeftScrollButtonDown" tabindex="-1"></paper-icon-button>
+
+    <div id="tabsContainer" on-track="_scroll" on-down="_down">
+      <div id="tabsContent" class\$="[[_computeTabsContentClass(scrollable, fitContainer)]]">
+        <div id="selectionBar" class\$="[[_computeSelectionBarClass(noBar, alignBottom)]]" on-transitionend="_onBarTransitionEnd"></div>
+        <slot></slot>
+      </div>
+    </div>
+
+    <paper-icon-button icon="paper-tabs:chevron-right" class\$="[[_computeScrollButtonClass(_rightHidden, scrollable, hideScrollButtons)]]" on-up="_onScrollButtonUp" on-down="_onRightScrollButtonDown" tabindex="-1"></paper-icon-button>
+`,
+
+  is: 'paper-tabs',
+
+  behaviors: [
+    __WEBPACK_IMPORTED_MODULE_4__iron_resizable_behavior_iron_resizable_behavior_js__["a" /* IronResizableBehavior */],
+    __WEBPACK_IMPORTED_MODULE_3__iron_menu_behavior_iron_menubar_behavior_js__["a" /* IronMenubarBehavior */]
+  ],
+
+  properties: {
+    /**
+     * If true, ink ripple effect is disabled. When this property is changed,
+     * all descendant `<paper-tab>` elements have their `noink` property
+     * changed to the new value as well.
+     */
+    noink: {
+      type: Boolean,
+      value: false,
+      observer: '_noinkChanged'
+    },
+
+    /**
+     * If true, the bottom bar to indicate the selected tab will not be shown.
+     */
+    noBar: {
+      type: Boolean,
+      value: false
+    },
+
+    /**
+     * If true, the slide effect for the bottom bar is disabled.
+     */
+    noSlide: {
+      type: Boolean,
+      value: false
+    },
+
+    /**
+     * If true, tabs are scrollable and the tab width is based on the label width.
+     */
+    scrollable: {
+      type: Boolean,
+      value: false
+    },
+
+    /**
+     * If true, tabs expand to fit their container. This currently only applies when
+     * scrollable is true.
+     */
+    fitContainer: {
+      type: Boolean,
+      value: false
+    },
+
+    /**
+     * If true, dragging on the tabs to scroll is disabled.
+     */
+    disableDrag: {
+      type: Boolean,
+      value: false
+    },
+
+    /**
+     * If true, scroll buttons (left/right arrow) will be hidden for scrollable tabs.
+     */
+    hideScrollButtons: {
+      type: Boolean,
+      value: false
+    },
+
+    /**
+     * If true, the tabs are aligned to bottom (the selection bar appears at the top).
+     */
+    alignBottom: {
+      type: Boolean,
+      value: false
+    },
+
+    selectable: {
+      type: String,
+      value: 'paper-tab'
+    },
+
+    /**
+     * If true, tabs are automatically selected when focused using the
+     * keyboard.
+     */
+    autoselect: {
+      type: Boolean,
+      value: false
+    },
+
+    /**
+     * The delay (in milliseconds) between when the user stops interacting
+     * with the tabs through the keyboard and when the focused item is
+     * automatically selected (if `autoselect` is true).
+     */
+    autoselectDelay: {
+      type: Number,
+      value: 0
+    },
+
+    _step: {
+      type: Number,
+      value: 10
+    },
+
+    _holdDelay: {
+      type: Number,
+      value: 1
+    },
+
+    _leftHidden: {
+      type: Boolean,
+      value: false
+    },
+
+    _rightHidden: {
+      type: Boolean,
+      value: false
+    },
+
+    _previousTab: {
+      type: Object
+    }
+  },
+
+  hostAttributes: {
+    role: 'tablist'
+  },
+
+  listeners: {
+    'iron-resize': '_onTabSizingChanged',
+    'iron-items-changed': '_onTabSizingChanged',
+    'iron-select': '_onIronSelect',
+    'iron-deselect': '_onIronDeselect'
+  },
+
+  keyBindings: {
+    'left:keyup right:keyup': '_onArrowKeyup'
+  },
+
+  created: function() {
+    this._holdJob = null;
+    this._pendingActivationItem = undefined;
+    this._pendingActivationTimeout = undefined;
+    this._bindDelayedActivationHandler = this._delayedActivationHandler.bind(this);
+    this.addEventListener('blur', this._onBlurCapture.bind(this), true);
+  },
+
+  ready: function() {
+    this.setScrollDirection('y', this.$.tabsContainer);
+  },
+
+  detached: function() {
+    this._cancelPendingActivation();
+  },
+
+  _noinkChanged: function(noink) {
+    var childTabs = Object(__WEBPACK_IMPORTED_MODULE_10__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(this).querySelectorAll('paper-tab');
+    childTabs.forEach(noink ? this._setNoinkAttribute : this._removeNoinkAttribute);
+  },
+
+  _setNoinkAttribute: function(element) {
+    element.setAttribute('noink', '');
+  },
+
+  _removeNoinkAttribute: function(element) {
+    element.removeAttribute('noink');
+  },
+
+  _computeScrollButtonClass: function(hideThisButton, scrollable, hideScrollButtons) {
+    if (!scrollable || hideScrollButtons) {
+      return 'hidden';
+    }
+
+    if (hideThisButton) {
+      return 'not-visible';
+    }
+
+    return '';
+  },
+
+  _computeTabsContentClass: function(scrollable, fitContainer) {
+    return scrollable ? 'scrollable' + (fitContainer ? ' fit-container' : '') : ' fit-container';
+  },
+
+  _computeSelectionBarClass: function(noBar, alignBottom) {
+    if (noBar) {
+      return 'hidden';
+    } else if (alignBottom) {
+      return 'align-bottom';
+    }
+
+    return '';
+  },
+
+  // TODO(cdata): Add `track` response back in when gesture lands.
+
+  _onTabSizingChanged: function() {
+    this.debounce('_onTabSizingChanged', function() {
+      this._scroll();
+      this._tabChanged(this.selectedItem);
+    }, 10);
+  },
+
+  _onIronSelect: function(event) {
+    this._tabChanged(event.detail.item, this._previousTab);
+    this._previousTab = event.detail.item;
+    this.cancelDebouncer('tab-changed');
+  },
+
+  _onIronDeselect: function(event) {
+    this.debounce('tab-changed', function() {
+      this._tabChanged(null, this._previousTab);
+      this._previousTab = null;
+    // See polymer/polymer#1305
+    }, 1);
+  },
+
+  _activateHandler: function() {
+    // Cancel item activations scheduled by keyboard events when any other
+    // action causes an item to be activated (e.g. clicks).
+    this._cancelPendingActivation();
+
+    __WEBPACK_IMPORTED_MODULE_11__iron_menu_behavior_iron_menu_behavior_js__["b" /* IronMenuBehaviorImpl */]._activateHandler.apply(this, arguments);
+  },
+
+  /**
+   * Activates an item after a delay (in milliseconds).
+   */
+  _scheduleActivation: function(item, delay) {
+    this._pendingActivationItem = item;
+    this._pendingActivationTimeout = this.async(
+        this._bindDelayedActivationHandler, delay);
+  },
+
+  /**
+   * Activates the last item given to `_scheduleActivation`.
+   */
+  _delayedActivationHandler: function() {
+    var item = this._pendingActivationItem;
+    this._pendingActivationItem = undefined;
+    this._pendingActivationTimeout = undefined;
+    item.fire(this.activateEvent, null, {
+      bubbles: true,
+      cancelable: true
+    });
+  },
+
+  /**
+   * Cancels a previously scheduled item activation made with
+   * `_scheduleActivation`.
+   */
+  _cancelPendingActivation: function() {
+    if (this._pendingActivationTimeout !== undefined) {
+      this.cancelAsync(this._pendingActivationTimeout);
+      this._pendingActivationItem = undefined;
+      this._pendingActivationTimeout = undefined;
+    }
+  },
+
+  _onArrowKeyup: function(event) {
+    if (this.autoselect) {
+      this._scheduleActivation(this.focusedItem, this.autoselectDelay);
+    }
+  },
+
+  _onBlurCapture: function(event) {
+    // Cancel a scheduled item activation (if any) when that item is
+    // blurred.
+    if (event.target === this._pendingActivationItem) {
+      this._cancelPendingActivation();
+    }
+  },
+
+  get _tabContainerScrollSize () {
+    return Math.max(
+      0,
+      this.$.tabsContainer.scrollWidth -
+        this.$.tabsContainer.offsetWidth
+    );
+  },
+
+  _scroll: function(e, detail) {
+    if (!this.scrollable) {
+      return;
+    }
+
+    var ddx = (detail && -detail.ddx) || 0;
+    this._affectScroll(ddx);
+  },
+
+  _down: function(e) {
+    // go one beat async to defeat IronMenuBehavior
+    // autorefocus-on-no-selection timeout
+    this.async(function() {
+      if (this._defaultFocusAsync) {
+        this.cancelAsync(this._defaultFocusAsync);
+        this._defaultFocusAsync = null;
+      }
+    }, 1);
+  },
+
+  _affectScroll: function(dx) {
+    this.$.tabsContainer.scrollLeft += dx;
+
+    var scrollLeft = this.$.tabsContainer.scrollLeft;
+
+    this._leftHidden = scrollLeft === 0;
+    this._rightHidden = scrollLeft === this._tabContainerScrollSize;
+  },
+
+  _onLeftScrollButtonDown: function() {
+    this._scrollToLeft();
+    this._holdJob = setInterval(this._scrollToLeft.bind(this), this._holdDelay);
+  },
+
+  _onRightScrollButtonDown: function() {
+    this._scrollToRight();
+    this._holdJob = setInterval(this._scrollToRight.bind(this), this._holdDelay);
+  },
+
+  _onScrollButtonUp: function() {
+    clearInterval(this._holdJob);
+    this._holdJob = null;
+  },
+
+  _scrollToLeft: function() {
+    this._affectScroll(-this._step);
+  },
+
+  _scrollToRight: function() {
+    this._affectScroll(this._step);
+  },
+
+  _tabChanged: function(tab, old) {
+    if (!tab) {
+      // Remove the bar without animation.
+      this.$.selectionBar.classList.remove('expand');
+      this.$.selectionBar.classList.remove('contract');
+      this._positionBar(0, 0);
+      return;
+    }
+
+    var r = this.$.tabsContent.getBoundingClientRect();
+    var w = r.width;
+    var tabRect = tab.getBoundingClientRect();
+    var tabOffsetLeft = tabRect.left - r.left;
+
+    this._pos = {
+      width: this._calcPercent(tabRect.width, w),
+      left: this._calcPercent(tabOffsetLeft, w)
+    };
+
+    if (this.noSlide || old == null) {
+      // Position the bar without animation.
+      this.$.selectionBar.classList.remove('expand');
+      this.$.selectionBar.classList.remove('contract');
+      this._positionBar(this._pos.width, this._pos.left);
+      return;
+    }
+
+    var oldRect = old.getBoundingClientRect();
+    var oldIndex = this.items.indexOf(old);
+    var index = this.items.indexOf(tab);
+    var m = 5;
+
+    // bar animation: expand
+    this.$.selectionBar.classList.add('expand');
+
+    var moveRight = oldIndex < index;
+    var isRTL = this._isRTL;
+    if (isRTL) {
+      moveRight = !moveRight;
+    }
+
+    if (moveRight) {
+      this._positionBar(this._calcPercent(tabRect.left + tabRect.width - oldRect.left, w) - m,
+          this._left);
+    } else {
+      this._positionBar(this._calcPercent(oldRect.left + oldRect.width - tabRect.left, w) - m,
+          this._calcPercent(tabOffsetLeft, w) + m);
+    }
+
+    if (this.scrollable) {
+      this._scrollToSelectedIfNeeded(tabRect.width, tabOffsetLeft);
+    }
+  },
+
+  _scrollToSelectedIfNeeded: function(tabWidth, tabOffsetLeft) {
+    var l = tabOffsetLeft - this.$.tabsContainer.scrollLeft;
+    if (l < 0) {
+      this.$.tabsContainer.scrollLeft += l;
+    } else {
+      l += (tabWidth - this.$.tabsContainer.offsetWidth);
+      if (l > 0) {
+        this.$.tabsContainer.scrollLeft += l;
+      }
+    }
+  },
+
+  _calcPercent: function(w, w0) {
+    return 100 * w / w0;
+  },
+
+  _positionBar: function(width, left) {
+    width = width || 0;
+    left = left || 0;
+
+    this._width = width;
+    this._left = left;
+    this.transform(
+        'translateX(' + left + '%) scaleX(' + (width / 100) + ')',
+        this.$.selectionBar);
+  },
+
+  _onBarTransitionEnd: function(e) {
+    var cl = this.$.selectionBar.classList;
+    // bar animation: expand -> contract
+    if (cl.contains('expand')) {
+      cl.remove('expand');
+      cl.add('contract');
+      this._positionBar(this._pos.width, this._pos.left);
+    // bar animation done
+    } else if (cl.contains('contract')) {
+      cl.remove('contract');
+    }
+  }
+});
+
+
+/***/ }),
+/* 161 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_menu_behavior_js__ = __webpack_require__(73);
+
+
+
+const IronMenubarBehaviorImpl = {
+
+  hostAttributes: {
+    'role': 'menubar'
+  },
+
+  keyBindings: {
+    'left': '_onLeftKey',
+    'right': '_onRightKey'
+  },
+
+  _onUpKey: function(event) {
+    this.focusedItem.click();
+    event.detail.keyboardEvent.preventDefault();
+  },
+
+  _onDownKey: function(event) {
+    this.focusedItem.click();
+    event.detail.keyboardEvent.preventDefault();
+  },
+
+  get _isRTL() {
+    return window.getComputedStyle(this)['direction'] === 'rtl';
+  },
+
+  _onLeftKey: function(event) {
+    if (this._isRTL) {
+      this._focusNext();
+    } else {
+      this._focusPrevious();
+    }
+    event.detail.keyboardEvent.preventDefault();
+  },
+
+  _onRightKey: function(event) {
+    if (this._isRTL) {
+      this._focusPrevious();
+    } else {
+      this._focusNext();
+    }
+    event.detail.keyboardEvent.preventDefault();
+  },
+
+  _onKeydown: function(event) {
+    if (this.keyboardEventMatchesKeys(event, 'up down left right esc')) {
+      return;
+    }
+
+    // all other keys focus the menu item starting with that character
+    this._focusWithKeyboardEvent(event);
+  }
+
+};
+/* unused harmony export IronMenubarBehaviorImpl */
+
+
+const IronMenubarBehavior = [
+  __WEBPACK_IMPORTED_MODULE_1__iron_menu_behavior_js__["a" /* IronMenuBehavior */],
+  IronMenubarBehaviorImpl
+];
+/* harmony export (immutable) */ __webpack_exports__["a"] = IronMenubarBehavior;
+
+
+
+/***/ }),
+/* 162 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_selectable_js__ = __webpack_require__(42);
+
+
+
+const IronMultiSelectableBehaviorImpl = {
+  properties: {
+
+    /**
+     * If true, multiple selections are allowed.
+     */
+    multi: {
+      type: Boolean,
+      value: false,
+      observer: 'multiChanged'
+    },
+
+    /**
+     * Gets or sets the selected elements. This is used instead of `selected` when `multi`
+     * is true.
+     */
+    selectedValues: {
+      type: Array,
+      notify: true,
+      value: function() {
+        return [];
+      }
+    },
+
+    /**
+     * Returns an array of currently selected items.
+     */
+    selectedItems: {
+      type: Array,
+      readOnly: true,
+      notify: true,
+      value: function() {
+        return [];
+      }
+    },
+
+  },
+
+  observers: [
+    '_updateSelected(selectedValues.splices)'
+  ],
+
+  /**
+   * Selects the given value. If the `multi` property is true, then the selected state of the
+   * `value` will be toggled; otherwise the `value` will be selected.
+   *
+   * @method select
+   * @param {string|number} value the value to select.
+   */
+  select: function(value) {
+    if (this.multi) {
+      this._toggleSelected(value);
+    } else {
+      this.selected = value;
+    }
+  },
+
+  multiChanged: function(multi) {
+    this._selection.multi = multi;
+    this._updateSelected();
+  },
+
+  // UNUSED, FOR API COMPATIBILITY
+  get _shouldUpdateSelection() {
+    return this.selected != null ||
+      (this.selectedValues != null && this.selectedValues.length);
+  },
+
+  _updateAttrForSelected: function() {
+    if (!this.multi) {
+      __WEBPACK_IMPORTED_MODULE_1__iron_selectable_js__["a" /* IronSelectableBehavior */]._updateAttrForSelected.apply(this);
+    } else if (this.selectedItems && this.selectedItems.length > 0) {
+      this.selectedValues = this.selectedItems.map(function(selectedItem) {
+        return this._indexToValue(this.indexOf(selectedItem));
+      }, this).filter(function(unfilteredValue) {
+        return unfilteredValue != null;
+      }, this);
+    }
+  },
+
+  _updateSelected: function() {
+    if (this.multi) {
+      this._selectMulti(this.selectedValues);
+    } else {
+      this._selectSelected(this.selected);
+    }
+  },
+
+  _selectMulti: function(values) {
+    values = values || [];
+
+    var selectedItems = (this._valuesToItems(values) || []).filter(function(item) {
+      return item !== null && item !== undefined;
+    });
+
+    // clear all but the current selected items
+    this._selection.clear(selectedItems);
+
+    // select only those not selected yet
+    for (var i = 0; i < selectedItems.length; i++) {
+      this._selection.setItemSelected(selectedItems[i], true);
+    }
+
+    // Check for items, since this array is populated only when attached
+    if (this.fallbackSelection && !this._selection.get().length) {
+      var fallback = this._valueToItem(this.fallbackSelection);
+      if (fallback) {
+        this.select(this.fallbackSelection);
+      }
+    }
+  },
+
+  _selectionChange: function() {
+    var s = this._selection.get();
+    if (this.multi) {
+      this._setSelectedItems(s);
+      this._setSelectedItem(s.length ? s[0] : null);
+    } else {
+      if (s !== null && s !== undefined) {
+        this._setSelectedItems([s]);
+        this._setSelectedItem(s);
+      } else {
+        this._setSelectedItems([]);
+        this._setSelectedItem(null);
+      }
+    }
+  },
+
+  _toggleSelected: function(value) {
+    var i = this.selectedValues.indexOf(value);
+    var unselected = i < 0;
+    if (unselected) {
+      this.push('selectedValues',value);
+    } else {
+      this.splice('selectedValues',i,1);
+    }
+  },
+
+  _valuesToItems: function(values) {
+    return (values == null) ? null : values.map(function(value) {
+      return this._valueToItem(value);
+    }, this);
+  }
+};
+/* harmony export (immutable) */ __webpack_exports__["b"] = IronMultiSelectableBehaviorImpl;
+
+
+const IronMultiSelectableBehavior = [
+  __WEBPACK_IMPORTED_MODULE_1__iron_selectable_js__["a" /* IronSelectableBehavior */],
+  IronMultiSelectableBehaviorImpl
+];
+/* harmony export (immutable) */ __webpack_exports__["a"] = IronMultiSelectableBehavior;
+
+
+
+/***/ }),
+/* 163 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__iron_iconset_svg_iron_iconset_svg_js__ = __webpack_require__(63);
+
+const $_documentContainer = document.createElement('div');
+$_documentContainer.setAttribute('style', 'display: none;');
+
+$_documentContainer.innerHTML = `<iron-iconset-svg name="paper-tabs" size="24">
+<svg><defs>
+<g id="chevron-left"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path></g>
+<g id="chevron-right"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></g>
+</defs></svg>
+</iron-iconset-svg>`;
+
+document.head.appendChild($_documentContainer);
+
+
+/***/ }),
+/* 164 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_behaviors_iron_button_state_js__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_behaviors_iron_control_state_js__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__iron_flex_layout_iron_flex_layout_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__paper_behaviors_paper_ripple_behavior_js__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
+
+
+
+
+
+
+
+Object(__WEBPACK_IMPORTED_MODULE_5__polymer_lib_legacy_polymer_fn_js__["a" /* Polymer */])({
+  _template: `
+    <style>
+      :host {
+        @apply --layout-inline;
+        @apply --layout-center;
+        @apply --layout-center-justified;
+        @apply --layout-flex-auto;
+
+        position: relative;
+        padding: 0 12px;
+        overflow: hidden;
+        cursor: pointer;
+        vertical-align: middle;
+
+        @apply --paper-font-common-base;
+        @apply --paper-tab;
+      }
+
+      :host(:focus) {
+        outline: none;
+      }
+
+      :host([link]) {
+        padding: 0;
+      }
+
+      .tab-content {
+        height: 100%;
+        transform: translateZ(0);
+          -webkit-transform: translateZ(0);
+        transition: opacity 0.1s cubic-bezier(0.4, 0.0, 1, 1);
+        @apply --layout-horizontal;
+        @apply --layout-center-center;
+        @apply --layout-flex-auto;
+        @apply --paper-tab-content;
+      }
+
+      :host(:not(.iron-selected)) > .tab-content {
+        opacity: 0.8;
+
+        @apply --paper-tab-content-unselected;
+      }
+
+      :host(:focus) .tab-content {
+        opacity: 1;
+        font-weight: 700;
+      }
+
+      paper-ripple {
+        color: var(--paper-tab-ink, var(--paper-yellow-a100));
+      }
+
+      .tab-content > ::slotted(a) {
+        @apply --layout-flex-auto;
+
+        height: 100%;
+      }
+    </style>
+
+    <div class="tab-content">
+      <slot></slot>
+    </div>
+`,
+
+  is: 'paper-tab',
+
+  behaviors: [
+    __WEBPACK_IMPORTED_MODULE_2__iron_behaviors_iron_control_state_js__["a" /* IronControlState */],
+    __WEBPACK_IMPORTED_MODULE_1__iron_behaviors_iron_button_state_js__["a" /* IronButtonState */],
+    __WEBPACK_IMPORTED_MODULE_4__paper_behaviors_paper_ripple_behavior_js__["a" /* PaperRippleBehavior */]
+  ],
+
+  properties: {
+
+    /**
+     * If true, the tab will forward keyboard clicks (enter/space) to
+     * the first anchor element found in its descendants
+     */
+    link: {
+      type: Boolean,
+      value: false,
+      reflectToAttribute: true
+    }
+
+  },
+
+  hostAttributes: {
+    role: 'tab'
+  },
+
+  listeners: {
+    down: '_updateNoink',
+    tap: '_onTap'
+  },
+
+  attached: function() {
+    this._updateNoink();
+  },
+
+  get _parentNoink () {
+    var parent = Object(__WEBPACK_IMPORTED_MODULE_6__polymer_lib_legacy_polymer_dom_js__["a" /* dom */])(this).parentNode;
+    return !!parent && !!parent.noink;
+  },
+
+  _updateNoink: function() {
+    this.noink = !!this.noink || !!this._parentNoink;
+  },
+
+  _onTap: function(event) {
+    if (this.link) {
+      var anchor = this.queryEffectiveChildren('a');
+
+      if (!anchor) {
+        return;
+      }
+
+      // Don't get stuck in a loop delegating
+      // the listener from the child anchor
+      if (event.target === anchor) {
+        return;
+      }
+
+      anchor.click();
+    }
+  }
+});
+
+
+/***/ }),
+/* 165 */
+/***/ (function(module, exports) {
+
+module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n  app-title-card {\n    margin-bottom: 25px;\n  }\n  paper-button {\n    color: var(--default-primary-color);\n  }\n  paper-button:hover {\n    background: var(--default-background-color);\n  }\n  h2 {\n    margin : 0 0 5px 0;\n  }\n  #unsavedMsg paper-button {\n    color: var(--inverse-text-color);\n    border: 1px solid var(--inverse-text-color);\n  }\n  #unsavedMsg paper-button:hover {\n    color: var(--default-primary-color);\n    border: 1px solid var(--default-primary-color);\n  }\n  #savedToast {\n    --paper-toast-background-color: var(--default-primary-color);\n    --paper-toast-color: var(--inverse-text-color);\n  }\n\n  iron-pages > div {\n    padding: 40px;\n    background: white;\n  }\n\n  app-text-input {\n    display: block;\n  }\n\n  paper-tabs {\n    --paper-tabs-selection-bar-color: var(--default-primary-color);\n  }\n  paper-tab {\n    --paper-tab-ink: var(--default-primary-color);\n  }\n</style>\n\n<paper-toast id=\"savingToast\" duration=\"0\">\n  <div id=\"unsavedMsg\">\n    You have unsaved changes\n    <paper-button on-click=\"_onSaveChangesClicked\">Save</paper-button>  \n  </div>\n  <div id=\"savingMsg\">\n    Saving...\n  </div>\n</paper-toast>\n<paper-toast id=\"savedToast\">\n  Package Data Saved!\n</paper-toast>\n\n<div class=\"container\">\n  <div class=\"narrow-container\">\n    <h1>[[currentAction]] Package</h1>\n\n    <paper-tabs hidden$=\"[[creating]]\" selected=\"{{selectedSection}}\" attr-for-selected=\"id\">\n      <paper-tab id=\"basicInformation\">Basic Information</paper-tab>\n      <paper-tab id=\"details\">Details</paper-tab>\n      <paper-tab id=\"releasePanel\">Releases</paper-tab>\n    </paper-tabs>\n\n    <iron-pages selected=\"[[selectedSection]]\" attr-for-selected=\"id\">\n      <div id=\"basicInformation\">\n        <app-text-input  \n          id=\"name\" \n          label=\"Name\" \n          on-keyup=\"_updateNamePreview\" \n          on-change=\"_updateNamePreview\"\n          help=\"[[namePreview]]\"\n          hidden$=\"[[!creating]]\">\n        </app-text-input>\n\n        <div hidden$=\"[[creating]]\" class=\"help\">Package Name</div>\n        <h2 hidden$=\"[[creating]]\">[[namePreview]]</h2>\n\n        <app-text-input \n          id=\"overview\" \n          label=\"[[schema.overview.label]]\" \n          on-change=\"_onDataChange\"\n          help=\"[[schema.overview.description]]\">\n        </app-text-input>\n\n        <app-org-input id=\"organization\" on-change=\"_onDataChange\"></app-org-input>\n\n        <div style=\"text-align: right\">\n          <paper-button \n            hidden$=\"[[!creating]]\" \n            id=\"createBtn\"\n            on-click=\"_onCreateBtnClicked\">Create\n          </paper-button>\n        </div>\n      </div>\n\n      <div id=\"details\">\n        <app-markdown-editor label=\"Description\" id=\"description\" on-markdown-change=\"_onDataChange\"></app-markdown-editor>\n        <div class=\"help\">[[schema.description.description]]</div>\n\n        <app-keyword-input id=\"keywords\" label=\"Keywords.  Comma Separate\" on-keyword-change=\"_onDataChange\"></app-keyword-input>\n        <div class=\"help\">[[schema.keywords.description]]</div>\n\n        <app-theme-input id=\"theme\" on-update=\"_onThemeUpdate\"></app-theme-input>\n      </div>\n\n      <div id=\"releasePanel\">\n        <app-create-release id=\"release\"></app-create-release>\n      </div>\n\n      <div>\n        <paper-button on-click=\"_onDeleteBtnClicked\">Delete Package</paper-button>\n      </div>\n    </iron-pages>\n  </div>\n</div>";
+
+/***/ }),
+/* 166 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_markdown_editor_html__ = __webpack_require__(167);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_markdown_editor_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_markdown_editor_html__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_markdown__ = __webpack_require__(69);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_markdown__ = __webpack_require__(75);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_markdown___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_markdown__);
 
 
@@ -29178,13 +31325,13 @@ class AppMarkdownEditor extends __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_pol
 customElements.define('app-markdown-editor', AppMarkdownEditor);
 
 /***/ }),
-/* 155 */
+/* 167 */
 /***/ (function(module, exports) {
 
 module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n  .btns {\n    display: flex;\n    align-items: center;\n  }\n\n  textarea {\n    width: 100%;\n    min-height: 200px;\n  }\n\n  #preview {\n    min-height: 200px;\n    border: 1px solid #aaa;\n    overflow: auto;\n  }\n\n  paper-icon-button[disabled] {\n    color: #aaa;\n  }\n</style>\n\n\n<div class=\"btns\">\n  <div style=\"flex:1\">\n    <span hidden$=\"[[previewMode]]\">Edit</span>\n    <span hidden$=\"[[!previewMode]]\">Preview</span> \n    [[label]]\n  </div>\n  <paper-icon-button icon=\"code\" disabled$=\"[[!previewMode]]\" on-click=\"_toggle\"></paper-icon-button>\n  <paper-icon-button icon=\"visibility\" disabled$=\"[[previewMode]]\" on-click=\"_toggle\"></paper-icon-button>\n</div>\n\n<iron-pages selected=\"[[selected]]\" attr-for-selected=\"id\">\n  <textarea id=\"input\" on-change=\"_triggerChangeEvent\"></textarea>\n  <div id=\"preview\"></div>\n</iron-pages>\n";
 
 /***/ }),
-/* 156 */
+/* 168 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // Released under MIT license
@@ -29316,7 +31463,7 @@ function mk_block_toSource() {
 
 // node
 function mk_block_inspect() {
-  var util = __webpack_require__(157);
+  var util = __webpack_require__(169);
   return "Markdown.mk_block( " +
           util.inspect(this.toString()) +
           ", " +
@@ -30915,7 +33062,7 @@ function merge_text_nodes( jsonml ) {
 
 
 /***/ }),
-/* 157 */
+/* 169 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, process) {// Copyright Joyent, Inc. and other Node contributors.
@@ -31443,7 +33590,7 @@ function isPrimitive(arg) {
 }
 exports.isPrimitive = isPrimitive;
 
-exports.isBuffer = __webpack_require__(159);
+exports.isBuffer = __webpack_require__(170);
 
 function objectToString(o) {
   return Object.prototype.toString.call(o);
@@ -31487,7 +33634,7 @@ exports.log = function() {
  *     prototype.
  * @param {function} superCtor Constructor function to inherit prototype from.
  */
-exports.inherits = __webpack_require__(160);
+exports.inherits = __webpack_require__(171);
 
 exports._extend = function(origin, add) {
   // Don't do anything if add isn't an object
@@ -31505,200 +33652,10 @@ function hasOwnProperty(obj, prop) {
   return Object.prototype.hasOwnProperty.call(obj, prop);
 }
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(53), __webpack_require__(158)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(76), __webpack_require__(77)))
 
 /***/ }),
-/* 158 */
-/***/ (function(module, exports) {
-
-// shim for using process in browser
-var process = module.exports = {};
-
-// cached from whatever global is present so that test runners that stub it
-// don't break things.  But we need to wrap it in a try catch in case it is
-// wrapped in strict mode code which doesn't define any globals.  It's inside a
-// function because try/catches deoptimize in certain engines.
-
-var cachedSetTimeout;
-var cachedClearTimeout;
-
-function defaultSetTimout() {
-    throw new Error('setTimeout has not been defined');
-}
-function defaultClearTimeout () {
-    throw new Error('clearTimeout has not been defined');
-}
-(function () {
-    try {
-        if (typeof setTimeout === 'function') {
-            cachedSetTimeout = setTimeout;
-        } else {
-            cachedSetTimeout = defaultSetTimout;
-        }
-    } catch (e) {
-        cachedSetTimeout = defaultSetTimout;
-    }
-    try {
-        if (typeof clearTimeout === 'function') {
-            cachedClearTimeout = clearTimeout;
-        } else {
-            cachedClearTimeout = defaultClearTimeout;
-        }
-    } catch (e) {
-        cachedClearTimeout = defaultClearTimeout;
-    }
-} ())
-function runTimeout(fun) {
-    if (cachedSetTimeout === setTimeout) {
-        //normal enviroments in sane situations
-        return setTimeout(fun, 0);
-    }
-    // if setTimeout wasn't available but was latter defined
-    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
-        cachedSetTimeout = setTimeout;
-        return setTimeout(fun, 0);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedSetTimeout(fun, 0);
-    } catch(e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
-            return cachedSetTimeout.call(null, fun, 0);
-        } catch(e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
-            return cachedSetTimeout.call(this, fun, 0);
-        }
-    }
-
-
-}
-function runClearTimeout(marker) {
-    if (cachedClearTimeout === clearTimeout) {
-        //normal enviroments in sane situations
-        return clearTimeout(marker);
-    }
-    // if clearTimeout wasn't available but was latter defined
-    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
-        cachedClearTimeout = clearTimeout;
-        return clearTimeout(marker);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedClearTimeout(marker);
-    } catch (e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
-            return cachedClearTimeout.call(null, marker);
-        } catch (e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
-            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
-            return cachedClearTimeout.call(this, marker);
-        }
-    }
-
-
-
-}
-var queue = [];
-var draining = false;
-var currentQueue;
-var queueIndex = -1;
-
-function cleanUpNextTick() {
-    if (!draining || !currentQueue) {
-        return;
-    }
-    draining = false;
-    if (currentQueue.length) {
-        queue = currentQueue.concat(queue);
-    } else {
-        queueIndex = -1;
-    }
-    if (queue.length) {
-        drainQueue();
-    }
-}
-
-function drainQueue() {
-    if (draining) {
-        return;
-    }
-    var timeout = runTimeout(cleanUpNextTick);
-    draining = true;
-
-    var len = queue.length;
-    while(len) {
-        currentQueue = queue;
-        queue = [];
-        while (++queueIndex < len) {
-            if (currentQueue) {
-                currentQueue[queueIndex].run();
-            }
-        }
-        queueIndex = -1;
-        len = queue.length;
-    }
-    currentQueue = null;
-    draining = false;
-    runClearTimeout(timeout);
-}
-
-process.nextTick = function (fun) {
-    var args = new Array(arguments.length - 1);
-    if (arguments.length > 1) {
-        for (var i = 1; i < arguments.length; i++) {
-            args[i - 1] = arguments[i];
-        }
-    }
-    queue.push(new Item(fun, args));
-    if (queue.length === 1 && !draining) {
-        runTimeout(drainQueue);
-    }
-};
-
-// v8 likes predictible objects
-function Item(fun, array) {
-    this.fun = fun;
-    this.array = array;
-}
-Item.prototype.run = function () {
-    this.fun.apply(null, this.array);
-};
-process.title = 'browser';
-process.browser = true;
-process.env = {};
-process.argv = [];
-process.version = ''; // empty string to avoid regexp issues
-process.versions = {};
-
-function noop() {}
-
-process.on = noop;
-process.addListener = noop;
-process.once = noop;
-process.off = noop;
-process.removeListener = noop;
-process.removeAllListeners = noop;
-process.emit = noop;
-process.prependListener = noop;
-process.prependOnceListener = noop;
-
-process.listeners = function (name) { return [] }
-
-process.binding = function (name) {
-    throw new Error('process.binding is not supported');
-};
-
-process.cwd = function () { return '/' };
-process.chdir = function (dir) {
-    throw new Error('process.chdir is not supported');
-};
-process.umask = function() { return 0; };
-
-
-/***/ }),
-/* 159 */
+/* 170 */
 /***/ (function(module, exports) {
 
 module.exports = function isBuffer(arg) {
@@ -31709,7 +33666,7 @@ module.exports = function isBuffer(arg) {
 }
 
 /***/ }),
-/* 160 */
+/* 171 */
 /***/ (function(module, exports) {
 
 if (typeof Object.create === 'function') {
@@ -31738,12 +33695,12 @@ if (typeof Object.create === 'function') {
 
 
 /***/ }),
-/* 161 */
+/* 172 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_keyword_input_html__ = __webpack_require__(162);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_keyword_input_html__ = __webpack_require__(173);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_keyword_input_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_keyword_input_html__);
 
 
@@ -31836,20 +33793,20 @@ class AppKeywordInput extends __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polym
 customElements.define('app-keyword-input', AppKeywordInput);
 
 /***/ }),
-/* 162 */
+/* 173 */
 /***/ (function(module, exports) {
 
 module.exports = "\n<style>\n  div {\n    display: flex;\n    align-items: center;\n  }\n\n  span {\n    padding-left: 10px;\n    display: inline-block;\n  }\n\n  paper-button {\n    background: var(--dark-background-color)\n  }\n\n  paper-button:hover {\n    color: var(--inverse-text-color);\n    background: var(--default-primary-color);\n  }\n</style>\n\n<paper-input \n  id=\"input\" \n  label=\"[[label]]\"\n  on-change=\"_onChange\" \n  on-keypress=\"_onKeyPress\">\n</paper-input>\n\n<div>\n  <template is=\"dom-repeat\" items=\"[[keywords]]\">\n    <paper-button value$=\"[[item]]\" on-click=\"_onRemoveClicked\">\n      <iron-icon icon=\"clear\"></iron-icon>\n      <span>[[item]]</span>\n    </paper-button>\n  </template>\n</div>";
 
 /***/ }),
-/* 163 */
+/* 174 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_theme_input_html__ = __webpack_require__(164);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_theme_input_html__ = __webpack_require__(175);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_theme_input_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_theme_input_html__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lib_controlled_vocabulary__ = __webpack_require__(56);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lib_controlled_vocabulary__ = __webpack_require__(60);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lib_controlled_vocabulary___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__lib_controlled_vocabulary__);
 
 
@@ -31999,18 +33956,18 @@ class AppThemeInput extends __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer
 customElements.define('app-theme-input', AppThemeInput);
 
 /***/ }),
-/* 164 */
+/* 175 */
 /***/ (function(module, exports) {
 
 module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n  .layout {\n    display: flex;\n    flex-wrap: wrap;\n  }\n  .layout > * {\n    flex: .333;\n  }\n</style>\n\n<div class=\"layout\">\n  <div>\n    <h2>Theme</h2>\n    <select id=\"theme\" on-change=\"_onThemeSelect\">\n      <option></option>\n      <template is=\"dom-repeat\" items=\"[[themeOptions]]\">\n        <option value$=\"[[item]]\">[[item]]</option>\n      </template>\n    </select>\n  </div>\n\n  <div hidden$=\"[[!selectedTheme]]\">\n    <h2>Family</h2>\n    <select on-change=\"_onFamilySelect\" id=\"family\">\n      <option></option>\n      <template is=\"dom-repeat\" items=\"[[familyOptions]]\">\n        <option value$=\"[[item]]\">[[item]]</option>\n      </template>\n    </select>\n  </div>\n\n  <div hidden$=\"[[!selectedFamily]]\">\n    <h2>Specific</h2>\n    <select on-change=\"_onSpecificSelect\" id=\"specific\">\n      <option></option>\n      <template is=\"dom-repeat\" items=\"[[specificOptions]]\">\n        <option value$=\"[[item]]\">[[item]]</option>\n      </template>\n    </select>\n  </div>\n</div>\n\n<div>\n  Values: [[selectedTheme]] [[selectedFamily]] [[selectedSpecific]]\n</div>";
 
 /***/ }),
-/* 165 */
+/* 176 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_create_release_html__ = __webpack_require__(166);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_create_release_html__ = __webpack_require__(177);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_create_release_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_create_release_html__);
 
 
@@ -32095,25 +34052,428 @@ class AppCreateRelease extends __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_poly
 customElements.define('app-create-release', AppCreateRelease);
 
 /***/ }),
-/* 166 */
+/* 177 */
 /***/ (function(module, exports) {
 
 module.exports = "<style>\n  :host {\n    display: block;\n  }\n\n  .layout {\n    display: flex;\n    align-items: flex-end;\n  }\n</style>\n\n<div>Current Release: [[currentRelease]]</div>\n<div>See all releases</div>\n<div class=\"layout\">\n  <div>\n    <div>Major</div>\n    <input type=\"number\" id=\"major\" placeholder=\"1\" on-change=\"_onInputChange\" />\n  </div>\n  <div>.</div>\n  <div>\n    <div>Minor</div>\n    <input type=\"number\" id=\"minor\" placeholder=\"0\" on-change=\"_onInputChange\" />\n  </div>\n  <div>.</div>\n  <div>\n    <div>Patch</div>\n    <input type=\"number\" id=\"patch\" placeholder=\"0\" on-change=\"_onInputChange\" />\n  </div>\n</div>\n\n<div><a href=\"https://semver.org/\" target=\"_blank\">Help</a></div>\n<div><paper-button>Create Release</paper-button></div>\n";
 
 /***/ }),
-/* 167 */
+/* 178 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_package_search_html__ = __webpack_require__(168);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_text_input_html__ = __webpack_require__(179);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_text_input_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_text_input_html__);
+
+
+
+class AppTextInput extends __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__["a" /* Element */] {
+
+  static get template() {
+    return __WEBPACK_IMPORTED_MODULE_1__app_text_input_html___default.a;
+  }
+
+  static get properties() {
+    return {
+      type : {
+        type : String,
+        value : 'text'
+      },
+      label : {
+        type : String,
+        value : ''
+      },
+      help : {
+        type : String,
+        value : ''
+      }
+    }
+  }
+
+  get value() {
+    return this.$.input.value;
+  }
+
+  set value(value) {
+    this.$.input.value = value;
+  }
+
+  _onChange(e) {
+    this.dispatchEvent(new CustomEvent('change', {detail: this.value}));
+  }
+
+  _onKeyUp(e) {
+    e = {
+      which : e.which,
+      value : this.value
+    }
+    this.dispatchEvent(new CustomEvent('change', {detail: e}));
+  }
+
+}
+/* unused harmony export default */
+
+
+customElements.define('app-text-input', AppTextInput);
+
+/***/ }),
+/* 179 */
+/***/ (function(module, exports) {
+
+module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: inline-block;\n  }\n\n  input {\n    box-sizing: border-box;\n    width: 100%;\n    display: block;\n  }\n\n  .label {\n    font-weight: var(--font-weight-heavy);\n  }\n</style>\n\n<div class=\"label\">\n  <slot name=\"label\"></slot>\n  <span>[[label]]</span>\n</div>\n\n<input type$=\"[[type]]\" id=\"input\" on-change=\"_onChange\" on-keyup=\"_onKeyUp\" />\n\n<div class=\"help\">\n  <slot name=\"help\"></slot>\n  <span>[[help]]</span>\n</div>";
+
+/***/ }),
+/* 180 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_org_input_html__ = __webpack_require__(181);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_org_input_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_org_input_html__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_AuthInterface__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_AuthInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__interfaces_AuthInterface__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_timers__ = __webpack_require__(182);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_timers___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_timers__);
+
+
+
+
+
+
+class AppOrgInput extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__["a" /* Element */])
+  .with(EventInterface, __WEBPACK_IMPORTED_MODULE_2__interfaces_AuthInterface___default.a) {
+
+  static get template() {
+    return __WEBPACK_IMPORTED_MODULE_1__app_org_input_html___default.a;
+  }
+
+  static get properties() {
+    return {
+      orgs : {
+        type : Array,
+        value : () => []
+      },
+      selectedOrg : {
+        type : String,
+        value : ''
+      }
+    }
+  }
+
+  constructor() {
+    super();
+    this.active = true;
+  }
+
+  /**
+   * @method _onOrgsUpdate
+   * @description from AuthInterface, called when user orgs update
+   */
+  _onOrgsUpdate(e) {
+    if( e.state !== 'loaded' ) return;
+    this.orgs = e.payload;
+
+    requestAnimationFrame(() => {
+      this.$.input.value = this.selectedOrg;
+    });
+  }
+
+  /**
+   * @method _onInputChange
+   * @description bound to select element, fired on change
+   */
+  _onInputChange() {
+    this.selectedOrg = this.$.input.value;
+  }
+
+  get value() {
+    return this.selectedOrg;
+  }
+
+  set value(val) {
+    this.selectedOrg = val;
+    this.$.input.value = val;
+  }
+
+}
+/* unused harmony export default */
+
+
+customElements.define('app-org-input', AppOrgInput);
+
+/***/ }),
+/* 181 */
+/***/ (function(module, exports) {
+
+module.exports = "<select id=\"input\" on-change=\"_onInputChange\">\n  <option></option>\n  <template is=\"dom-repeat\" items=\"[[orgs]]\">\n    <option value=\"[[item.name]]\">[[item.displayName]]</option>\n  </template>\n</select>";
+
+/***/ }),
+/* 182 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var apply = Function.prototype.apply;
+
+// DOM APIs, for completeness
+
+exports.setTimeout = function() {
+  return new Timeout(apply.call(setTimeout, window, arguments), clearTimeout);
+};
+exports.setInterval = function() {
+  return new Timeout(apply.call(setInterval, window, arguments), clearInterval);
+};
+exports.clearTimeout =
+exports.clearInterval = function(timeout) {
+  if (timeout) {
+    timeout.close();
+  }
+};
+
+function Timeout(id, clearFn) {
+  this._id = id;
+  this._clearFn = clearFn;
+}
+Timeout.prototype.unref = Timeout.prototype.ref = function() {};
+Timeout.prototype.close = function() {
+  this._clearFn.call(window, this._id);
+};
+
+// Does not start the time, just sets up the members needed.
+exports.enroll = function(item, msecs) {
+  clearTimeout(item._idleTimeoutId);
+  item._idleTimeout = msecs;
+};
+
+exports.unenroll = function(item) {
+  clearTimeout(item._idleTimeoutId);
+  item._idleTimeout = -1;
+};
+
+exports._unrefActive = exports.active = function(item) {
+  clearTimeout(item._idleTimeoutId);
+
+  var msecs = item._idleTimeout;
+  if (msecs >= 0) {
+    item._idleTimeoutId = setTimeout(function onTimeout() {
+      if (item._onTimeout)
+        item._onTimeout();
+    }, msecs);
+  }
+};
+
+// setimmediate attaches itself to the global object
+__webpack_require__(183);
+exports.setImmediate = setImmediate;
+exports.clearImmediate = clearImmediate;
+
+
+/***/ }),
+/* 183 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
+    "use strict";
+
+    if (global.setImmediate) {
+        return;
+    }
+
+    var nextHandle = 1; // Spec says greater than zero
+    var tasksByHandle = {};
+    var currentlyRunningATask = false;
+    var doc = global.document;
+    var registerImmediate;
+
+    function setImmediate(callback) {
+      // Callback can either be a function or a string
+      if (typeof callback !== "function") {
+        callback = new Function("" + callback);
+      }
+      // Copy function arguments
+      var args = new Array(arguments.length - 1);
+      for (var i = 0; i < args.length; i++) {
+          args[i] = arguments[i + 1];
+      }
+      // Store and register the task
+      var task = { callback: callback, args: args };
+      tasksByHandle[nextHandle] = task;
+      registerImmediate(nextHandle);
+      return nextHandle++;
+    }
+
+    function clearImmediate(handle) {
+        delete tasksByHandle[handle];
+    }
+
+    function run(task) {
+        var callback = task.callback;
+        var args = task.args;
+        switch (args.length) {
+        case 0:
+            callback();
+            break;
+        case 1:
+            callback(args[0]);
+            break;
+        case 2:
+            callback(args[0], args[1]);
+            break;
+        case 3:
+            callback(args[0], args[1], args[2]);
+            break;
+        default:
+            callback.apply(undefined, args);
+            break;
+        }
+    }
+
+    function runIfPresent(handle) {
+        // From the spec: "Wait until any invocations of this algorithm started before this one have completed."
+        // So if we're currently running a task, we'll need to delay this invocation.
+        if (currentlyRunningATask) {
+            // Delay by doing a setTimeout. setImmediate was tried instead, but in Firefox 7 it generated a
+            // "too much recursion" error.
+            setTimeout(runIfPresent, 0, handle);
+        } else {
+            var task = tasksByHandle[handle];
+            if (task) {
+                currentlyRunningATask = true;
+                try {
+                    run(task);
+                } finally {
+                    clearImmediate(handle);
+                    currentlyRunningATask = false;
+                }
+            }
+        }
+    }
+
+    function installNextTickImplementation() {
+        registerImmediate = function(handle) {
+            process.nextTick(function () { runIfPresent(handle); });
+        };
+    }
+
+    function canUsePostMessage() {
+        // The test against `importScripts` prevents this implementation from being installed inside a web worker,
+        // where `global.postMessage` means something completely different and can't be used for this purpose.
+        if (global.postMessage && !global.importScripts) {
+            var postMessageIsAsynchronous = true;
+            var oldOnMessage = global.onmessage;
+            global.onmessage = function() {
+                postMessageIsAsynchronous = false;
+            };
+            global.postMessage("", "*");
+            global.onmessage = oldOnMessage;
+            return postMessageIsAsynchronous;
+        }
+    }
+
+    function installPostMessageImplementation() {
+        // Installs an event handler on `global` for the `message` event: see
+        // * https://developer.mozilla.org/en/DOM/window.postMessage
+        // * http://www.whatwg.org/specs/web-apps/current-work/multipage/comms.html#crossDocumentMessages
+
+        var messagePrefix = "setImmediate$" + Math.random() + "$";
+        var onGlobalMessage = function(event) {
+            if (event.source === global &&
+                typeof event.data === "string" &&
+                event.data.indexOf(messagePrefix) === 0) {
+                runIfPresent(+event.data.slice(messagePrefix.length));
+            }
+        };
+
+        if (global.addEventListener) {
+            global.addEventListener("message", onGlobalMessage, false);
+        } else {
+            global.attachEvent("onmessage", onGlobalMessage);
+        }
+
+        registerImmediate = function(handle) {
+            global.postMessage(messagePrefix + handle, "*");
+        };
+    }
+
+    function installMessageChannelImplementation() {
+        var channel = new MessageChannel();
+        channel.port1.onmessage = function(event) {
+            var handle = event.data;
+            runIfPresent(handle);
+        };
+
+        registerImmediate = function(handle) {
+            channel.port2.postMessage(handle);
+        };
+    }
+
+    function installReadyStateChangeImplementation() {
+        var html = doc.documentElement;
+        registerImmediate = function(handle) {
+            // Create a <script> element; its readystatechange event will be fired asynchronously once it is inserted
+            // into the document. Do so, thus queuing up the task. Remember to clean up once it's been called.
+            var script = doc.createElement("script");
+            script.onreadystatechange = function () {
+                runIfPresent(handle);
+                script.onreadystatechange = null;
+                html.removeChild(script);
+                script = null;
+            };
+            html.appendChild(script);
+        };
+    }
+
+    function installSetTimeoutImplementation() {
+        registerImmediate = function(handle) {
+            setTimeout(runIfPresent, 0, handle);
+        };
+    }
+
+    // If supported, we should attach to the prototype of global, since that is where setTimeout et al. live.
+    var attachTo = Object.getPrototypeOf && Object.getPrototypeOf(global);
+    attachTo = attachTo && attachTo.setTimeout ? attachTo : global;
+
+    // Don't get fooled by e.g. browserify environments.
+    if ({}.toString.call(global.process) === "[object process]") {
+        // For Node.js before 0.9
+        installNextTickImplementation();
+
+    } else if (canUsePostMessage()) {
+        // For non-IE10 modern browsers
+        installPostMessageImplementation();
+
+    } else if (global.MessageChannel) {
+        // For web workers, where supported
+        installMessageChannelImplementation();
+
+    } else if (doc && "onreadystatechange" in doc.createElement("script")) {
+        // For IE 6–8
+        installReadyStateChangeImplementation();
+
+    } else {
+        // For older browsers
+        installSetTimeoutImplementation();
+    }
+
+    attachTo.setImmediate = setImmediate;
+    attachTo.clearImmediate = clearImmediate;
+}(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(76), __webpack_require__(77)))
+
+/***/ }),
+/* 184 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_package_search_html__ = __webpack_require__(185);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_package_search_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_package_search_html__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_search_header__ = __webpack_require__(169);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__filters_app_filters_panel__ = __webpack_require__(173);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__results_app_search_results_panel__ = __webpack_require__(177);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_search_header__ = __webpack_require__(186);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__filters_app_filters_panel__ = __webpack_require__(190);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__results_app_search_results_panel__ = __webpack_require__(194);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__interfaces_SearchInterface__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__interfaces_SearchInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__interfaces_SearchInterface__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__interfaces_AppStateInterface__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__interfaces_AppStateInterface__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__interfaces_AppStateInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__interfaces_AppStateInterface__);
 
 
@@ -32173,7 +34533,6 @@ class AppPackageSearch extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polyme
 
     // flag queries that came from the url hash updating
     query.fromUrl = true;
-
     this._searchPackages(query);
   }
 
@@ -32185,7 +34544,7 @@ class AppPackageSearch extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polyme
    */
   _onSearchPackagesUpdate(e) {
     if( !e.query || e.state !== 'loading' ) return;
-    if( e.query.fromUrl ) return console.log('Ignoring query from url');
+    if( e.query.fromUrl ) return;
 
     this._setWindowLocation(this._searchQueryToUrl(e.query));
   }
@@ -32195,24 +34554,24 @@ class AppPackageSearch extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polyme
 customElements.define('app-package-search', AppPackageSearch);
 
 /***/ }),
-/* 168 */
+/* 185 */
 /***/ (function(module, exports) {
 
 module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n\n  .layout {\n    display: flex;\n    justify-content: center;\n  }\n\n  .inner-layout {\n    background-color: white;\n    display: flex;\n    width: 100%;\n    max-width: 1200px;\n    padding: 20px;\n    margin-top: 20px;\n  }\n\n  app-filters-panel {\n    width: 100%;\n    max-width: 300px;\n  }\n</style>\n\n<app-search-header></app-search-header>\n\n<div class=\"layout\">\n  <div class=\"inner-layout\">\n    <app-filters-panel></app-filters-panel>\n    <app-search-results-panel style=\"flex:1\"></app-search-results-panel>\n  </div>\n</div>\n\n";
 
 /***/ }),
-/* 169 */
+/* 186 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_search_header_html__ = __webpack_require__(170);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_search_header_html__ = __webpack_require__(187);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_search_header_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_search_header_html__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_AppStateInterface__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_AppStateInterface__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_AppStateInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__interfaces_AppStateInterface__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__interfaces_SearchInterface__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__interfaces_SearchInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__interfaces_SearchInterface__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__filters_app_active_filters_panel__ = __webpack_require__(171);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__filters_app_active_filters_panel__ = __webpack_require__(188);
 
 
 
@@ -32281,18 +34640,18 @@ class AppSearchHeader extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polymer
 customElements.define('app-search-header', AppSearchHeader);
 
 /***/ }),
-/* 170 */
+/* 187 */
 /***/ (function(module, exports) {
 
 module.exports = "<style>\n  :host {\n    display: block;\n    background-color: var(--text-primary-color);\n  }\n  .root {\n    display: flex;\n    justify-content: center;\n  }\n  input {\n    display: block;\n    width: 100%;\n    padding: 5px;\n    font-size: 26px;\n    margin: 15px 0;\n    height: 42px;\n    background: transparent;\n    color: var(--inverse-text-color);\n    border: 1px solid var(--inverse-text-color);\n    box-sizing: border-box;\n  }\n  button {\n    margin: 15px 0;\n    color : var(--inverse-text-color);\n    background: transparent;\n    height: 42px;\n    padding: 0 15px;\n    border-right: 1px solid var(--inverse-text-color);\n    border-top: 1px solid var(--inverse-text-color);\n    border-bottom: 1px solid var(--inverse-text-color);\n    border-left: none;\n    border-radius: 0;\n  }\n</style>\n\n<div class=\"root\">\n  <div style=\"flex:.66\">\n    <input type=\"text\" id=\"input\" on-keypress=\"_onKeyPress\"/>\n  </div>\n  <div>\n    <button on-click=\"_onButtonClick\">\n      <iron-icon icon=\"search\"></iron-icon>\n    </button>\n  </div>\n</div>\n\n<div class=\"root\">\n<app-active-filters-panel style=\"flex:.66\"></app-active-filters-panel>\n</div>";
 
 /***/ }),
-/* 171 */
+/* 188 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_active_filters_panel_html__ = __webpack_require__(172);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_active_filters_panel_html__ = __webpack_require__(189);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_active_filters_panel_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_active_filters_panel_html__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_SearchInterface__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_SearchInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__interfaces_SearchInterface__);
@@ -32352,22 +34711,22 @@ class AppActiveFiltersPanel extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_p
 customElements.define('app-active-filters-panel', AppActiveFiltersPanel);
 
 /***/ }),
-/* 172 */
+/* 189 */
 /***/ (function(module, exports) {
 
 module.exports = "<style>\n  :host {\n    display: block;\n  }\n\n  @keyframes show-button {\n    0%   { opacity: 0; transform: scale(0) }\n    100% { opacity: 1; transform: scale(1) }\n  }\n  paper-button {\n    color: var(--inverse-text-color);\n    border: 1px solid var(--inverse-text-color);\n    border-radius: 0;\n    padding: 4px;\n    font-size: 14px;\n\n    animation: show-button 300ms ease-out;\n  }\n\n  [has-filters] {\n    margin-bottom: 15px;\n  }\n\n  .btn-layout {\n    display: flex;\n    align-items: center;\n  }\n</style>\n\n<div has-filters$=\"[[hasFilters]]\"> \n  <template is=\"dom-repeat\" items=\"[[filters]]\">\n    <paper-button index$=\"[[index]]\" on-click=\"_onRemoveFilterClicked\">\n      <div class=\"btn-layout\">\n        <iron-icon icon=\"close\"></iron-icon>\n        <span>[[item.key]]: [[item.value]]</span>\n      </div>\n    </paper-button>\n  </template>\n</div>";
 
 /***/ }),
-/* 173 */
+/* 190 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_filters_panel_html__ = __webpack_require__(174);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_filters_panel_html__ = __webpack_require__(191);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_filters_panel_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_filters_panel_html__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_SearchInterface__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_SearchInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__interfaces_SearchInterface__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_filter_panel__ = __webpack_require__(175);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_filter_panel__ = __webpack_require__(192);
 
 
 
@@ -32424,18 +34783,18 @@ class AppFiltersPanel extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polymer
 customElements.define('app-filters-panel', AppFiltersPanel);
 
 /***/ }),
-/* 174 */
+/* 191 */
 /***/ (function(module, exports) {
 
 module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n  .title {\n    display: flex;\n    align-items: center;\n  }\n  .title h2 {\n    flex: 1;\n  }\n  .clear-filters {\n    display: none;\n  }\n  .clear-filters[active] {\n    display: inline-block;\n  }\n</style>\n\n<div class=\"title\">\n  <h2>Filters</h2>\n  <button class=\"clear-filters\">Clear Filters</button>\n</div>\n\n<div hidden$=\"[[hasFilters]]\">\n  No additional filters for current search\n</div>\n\n<template is=\"dom-repeat\" items=\"[[filters]]\">\n  <app-filter-panel filter=\"[[item]]\"></app-filter-panel>\n</template>";
 
 /***/ }),
-/* 175 */
+/* 192 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_filter_panel_html__ = __webpack_require__(176);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_filter_panel_html__ = __webpack_require__(193);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_filter_panel_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_filter_panel_html__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_SearchInterface__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_SearchInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__interfaces_SearchInterface__);
@@ -32487,22 +34846,22 @@ class AppFilterPanel extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polymer_
 customElements.define('app-filter-panel', AppFilterPanel);
 
 /***/ }),
-/* 176 */
+/* 193 */
 /***/ (function(module, exports) {
 
 module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n  a {\n    cursor: pointer;\n    color: var(--default-primary-color);\n  }\n</style>\n\n\n<div><b>[[filter.key]]</b></div>\n\n<template is=\"dom-repeat\" items=\"[[filter.values]]\">\n  <div><a on-click=\"_onFilterClicked\" filter$=\"[[item.filter]]\">[[item.filter]] ([[item.count]])</a></div>\n</template>\n";
 
 /***/ }),
-/* 177 */
+/* 194 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_search_results_panel_html__ = __webpack_require__(178);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_search_results_panel_html__ = __webpack_require__(195);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_search_results_panel_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_search_results_panel_html__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_SearchInterface__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_SearchInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__interfaces_SearchInterface__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_search_result__ = __webpack_require__(179);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_search_result__ = __webpack_require__(196);
 
 
 
@@ -32564,18 +34923,18 @@ class AppSearchResultsPanel extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_p
 customElements.define('app-search-results-panel', AppSearchResultsPanel);
 
 /***/ }),
-/* 178 */
+/* 195 */
 /***/ (function(module, exports) {
 
 module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n    padding: 10px;\n    min-height: 500px;\n  }\n\n  .no-match {\n    text-align: center;\n    padding-top: 50px;\n  }\n</style>\n\n<div class=\"no-match\" hidden$=\"[[hasResults]]\">\n  No packages match your current search.\n</div>\n\n<div>\n  <template is=\"dom-repeat\" items=\"[[results]]\">\n    <app-search-result item=\"[[item]]\"></app-search-result>\n  </template>\n</div>";
 
 /***/ }),
-/* 179 */
+/* 196 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_search_result_html__ = __webpack_require__(180);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_search_result_html__ = __webpack_require__(197);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_search_result_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_search_result_html__);
 
 
@@ -32602,23 +34961,28 @@ class AppSearchResult extends __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polym
 customElements.define('app-search-result', AppSearchResult);
 
 /***/ }),
-/* 180 */
+/* 197 */
 /***/ (function(module, exports) {
 
 module.exports = "<style>\n  :host {\n    display: block;\n    border-bottom: 1px solid var(--default-background-color);\n  }\n\n  a {\n    color: var(--default-primary-color);\n    text-decoration: none;\n  }\n</style>\n\n<h2><a href$=\"/package/[[item.id]]\">[[item.name]]</a></h2>\n<div>[[item.overview]]</div>";
 
 /***/ }),
-/* 181 */
+/* 198 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_home_html__ = __webpack_require__(182);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_home_html__ = __webpack_require__(199);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_home_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_home_html__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_AuthInterface__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_AuthInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__interfaces_AuthInterface__);
 
 
 
-class AppHome extends __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__["a" /* Element */] {
+
+
+class AppHome extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__["a" /* Element */])
+  .with(EventInterface, __WEBPACK_IMPORTED_MODULE_2__interfaces_AuthInterface___default.a) {
 
   static get template() {
     return __WEBPACK_IMPORTED_MODULE_1__app_home_html___default.a;
@@ -32626,7 +34990,29 @@ class AppHome extends __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_eleme
 
   static get properties() {
     return {
-      
+      loggedIn : {
+        type : Boolean,
+        value : false
+      }
+    }
+  }
+
+  constructor() {
+    super();
+    this.active = true;
+  }
+
+  /**
+   * @method _onAuthUpdate
+   * @description from AuthInterface, called when auth updates
+   * 
+   * @param {Object} e event payload
+   */
+  _onAuthUpdate(e) {
+    if( e.state === 'loggedIn' ) {
+      this.loggedIn = true;
+    } else {
+      this.loggedIn = false;
     }
   }
 
@@ -32637,27 +35023,30 @@ class AppHome extends __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_eleme
 customElements.define('app-home', AppHome);
 
 /***/ }),
-/* 182 */
+/* 199 */
 /***/ (function(module, exports) {
 
-module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n \n  .root {\n    display: flex;\n    justify-content: center;\n  }\n  .root > div {\n    margin-top: 20px;\n    padding: 40px;\n    background-color: white;\n    width: 100%;\n    max-width: 1200px;\n    min-height: 600px;\n  }\n\n  .row {\n    display: flex;\n  }\n  .row > * {\n    flex : 1;\n  }\n</style>\n\n<app-search-header></app-search-header>\n\n\n<div class=\"root\">\n  <h1>Ecological Spectral Model Library</h1>\n</div>\n\n<div class=\"root\">\n  <div>\n\n    <div class=\"row\" style=\"margin-bottom: 35px\">\n      <div>\n        <h2 class=\"uheader blue\">Top Organizations</h2>\n        <div>UW EnSpec </div>\n        <div>University of Utah</div>\n        <div>Foundational Datasets</div>\n        <div>The Remote Sensing Laboratory</div>\n        <div>University of California Santa Barbara</div>\n      </div>\n      <div>\n        <h2 class=\"uheader green\">Top Keywords</h2>\n        <div>nitrogen </div>\n        <div>lma</div>\n        <div>carbon</div>\n        <div>lignin</div>\n        <div>reflectance</div>\n      </div>\n      <div>\n        <h2 class=\"uheader lightblue\">Top Themes</h2>\n        <div>ecology</div>\n        <div>biochemistry</div>\n        <div>agriculture</div>\n        <div>forest</div>\n        <div>physiology</div>\n      </div>\n    </div>\n    \n    \n\n    <h2 class=\"dark\">Package Management</h2>\n    <div><a href=\"/create\">Create Package</a></div>\n  </div>\n</div>";
+module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n \n  .root {\n    display: flex;\n    justify-content: center;\n  }\n  .root > div {\n    margin-top: 20px;\n    padding: 40px;\n    background-color: white;\n    width: 100%;\n    max-width: 1200px;\n    min-height: 600px;\n  }\n\n  .row {\n    display: flex;\n  }\n  .row > * {\n    flex : 1;\n  }\n</style>\n\n<app-search-header></app-search-header>\n\n\n<div class=\"root\">\n  <h1>Ecological Spectral Model Library</h1>\n</div>\n\n<div class=\"root\">\n  <div>\n\n    <div class=\"row\" style=\"margin-bottom: 35px\">\n      <div>\n        <h2 class=\"uheader blue\">Top Organizations</h2>\n        <div>UW EnSpec </div>\n        <div>University of Utah</div>\n        <div>Foundational Datasets</div>\n        <div>The Remote Sensing Laboratory</div>\n        <div>University of California Santa Barbara</div>\n      </div>\n      <div>\n        <h2 class=\"uheader green\">Top Keywords</h2>\n        <div>nitrogen </div>\n        <div>lma</div>\n        <div>carbon</div>\n        <div>lignin</div>\n        <div>reflectance</div>\n      </div>\n      <div>\n        <h2 class=\"uheader lightblue\">Top Themes</h2>\n        <div>ecology</div>\n        <div>biochemistry</div>\n        <div>agriculture</div>\n        <div>forest</div>\n        <div>physiology</div>\n      </div>\n    </div>\n    \n    \n\n    <h2 class=\"dark\">Package Management</h2>\n    <div hidden$=\"[[!loggedIn]]\"><a href=\"/create\">Create Package</a></div>\n    <div hidden$=\"[[loggedIn]]\"><a href=\"/account\">Login to Create Package</a></div>\n  </div>\n</div>";
 
 /***/ }),
-/* 183 */
+/* 200 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_landing_page_html__ = __webpack_require__(184);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_landing_page_html__ = __webpack_require__(201);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_landing_page_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_landing_page_html__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_markdown__ = __webpack_require__(69);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_markdown__ = __webpack_require__(75);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_markdown___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_markdown__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__interfaces_AppStateInterface__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__interfaces_AppStateInterface__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__interfaces_AppStateInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__interfaces_AppStateInterface__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__interfaces_PackageInterface__ = __webpack_require__(68);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__interfaces_PackageInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__interfaces_PackageInterface__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__interfaces_SearchInterface__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__interfaces_SearchInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__interfaces_SearchInterface__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__interfaces_AuthInterface__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__interfaces_AuthInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__interfaces_AuthInterface__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__interfaces_PackageInterface__ = __webpack_require__(74);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__interfaces_PackageInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__interfaces_PackageInterface__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__interfaces_SearchInterface__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__interfaces_SearchInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__interfaces_SearchInterface__);
+
 
 
 
@@ -32667,7 +35056,7 @@ module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: blo
 
 
 class AppLandingPage extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__["a" /* Element */])
-  .with(EventInterface, __WEBPACK_IMPORTED_MODULE_3__interfaces_AppStateInterface___default.a, __WEBPACK_IMPORTED_MODULE_4__interfaces_PackageInterface___default.a, __WEBPACK_IMPORTED_MODULE_5__interfaces_SearchInterface___default.a) {
+  .with(EventInterface, __WEBPACK_IMPORTED_MODULE_3__interfaces_AppStateInterface___default.a, __WEBPACK_IMPORTED_MODULE_5__interfaces_PackageInterface___default.a, __WEBPACK_IMPORTED_MODULE_6__interfaces_SearchInterface___default.a, __WEBPACK_IMPORTED_MODULE_4__interfaces_AuthInterface___default.a) {
 
   static get template() {
     return __WEBPACK_IMPORTED_MODULE_1__app_landing_page_html___default.a;
@@ -32695,6 +35084,14 @@ class AppLandingPage extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polymer_
       specificLink :  {
         type : String,
         value : ''
+      },
+      username : {
+        type : String,
+        value : ''
+      },
+      userHasWriteAccess : {
+        type : Boolean,
+        value : false
       }
     }
   }
@@ -32702,6 +35099,7 @@ class AppLandingPage extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polymer_
   constructor() {
     super();
     this.active = true;
+    this._onAuthUpdate(this._getAuthState());
   }
 
   /**
@@ -32719,7 +35117,7 @@ class AppLandingPage extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polymer_
       }).join('');
     }
 
-    if( this.package.releases ) {
+    if( this.package.releases && this.package.releases.length ) {
       let r = this.package.releases[this.package.releases.length - 1];
       this.release = {
         name : r.name,
@@ -32733,6 +35131,30 @@ class AppLandingPage extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polymer_
     this.themeLink = this._getLink('theme');
     this.familyLink = this._getLink('family');
     this.specificLink = this._getLink('specific');
+
+    this.userHasWriteAccess = false;
+    if( !this.username ) return;
+
+    if( this.package.owner === this.username ) {
+      return this.userHasWriteAccess = true;
+    }
+
+    let orgs = await this._getUserOrganizations();
+    let inOrg = orgs.payload.find(org => org.name === this.package.organization);
+
+    if( inOrg ) {
+      this.userHasWriteAccess = true;
+    }
+  }
+
+  /**
+   * @method _onAuthUpdate
+   * @description from AuthInterface, called when auth updates
+   * 
+   * @param {Object} e event payload
+   */
+  _onAuthUpdate(e) {
+    this.username = e.username || '';
   }
 
   /**
@@ -32771,16 +35193,225 @@ class AppLandingPage extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polymer_
 customElements.define('app-landing-page', AppLandingPage);
 
 /***/ }),
-/* 184 */
+/* 201 */
 /***/ (function(module, exports) {
 
-module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n\n  .container > * {\n    background-color: white;\n    padding: 40px;\n  }\n\n  .overview {\n    color: var(--secondary-text-color);\n  }\n\n  .install {\n    color: var(--secondary-text-color);\n    font-family: monospace;\n    font-size: 14px;\n  }\n\n  .layout {\n    display: flex;\n  }\n  \n  h2.padded {\n    padding-top: 40px;\n  }\n\n</style>\n\n\n<h2 style=\"text-align: center\">[[package.name]]</h2>\n\n<div class=\"container\">\n\n  <div class=\"layout\">\n    <div style=\"flex: 1\">\n      <div class=\"overview\">[[package.overview]]</div>\n      <div id=\"readme\"></div>\n    </div>\n    \n    <div style=\"width: 300px\">\n      <div class=\"install\">\n        <iron-icon icon=\"chevron-right\"></iron-icon>ecosml download [[package.name]]\n      </div>\n      <div style=\"padding-bottom: 20px\"><a>Help</a></div>\n      \n      <h2 class=\"uheader dark\">Current Release</h2>\n      <div style=\"padding-bottom: 20px\" hidden$=\"[[!release]]\">\n        <div><a href$=\"[[release.downloadUrl]]\">[[release.name]]</a></div>\n        <div>[[release.description]]</div>\n      </div>\n      <div style=\"padding-bottom: 20px\" hidden$=\"[[release]]\">\n        No releases available\n      </div>\n\n      <h2 class=\"uheader blue\">Access</h2>\n      <div hidden$=\"[[!release]]\"><a href$=\"[[release.downloadUrl]]\">Download Current Release</a></div>\n      <div hidden$=\"[[!release]]\"><a href$=\"[[package.htmlUrl]]/releases\" target=\"_blank\">All Releases</a></div>\n      <div><a href$=\"[[package.htmlUrl]]\" target=\"_blank\">GitHub</a></div>\n\n      <div hidden$=\"[[!package.theme]]\">\n        <h2 class=\"uheader green padded\">Theme</h2>\n        <div hidden$=\"[[!package.theme]]\">Theme: <a href$=\"[[themeLink]]\">[[package.theme]]</a></div>\n        <div hidden$=\"[[!package.family]]\">Family: <a href$=\"[[familyLink]]\">[[package.family]]</a></div>\n        <div hidden$=\"[[!package.specific]]\">Specific: <a href$=\"[[specificLink]]\">[[package.specific]]</a></div>\n      </div>\n\n      <div hidden$=\"[[!package.keywords]]\">\n        <h2 class=\"uheader lightblue padded\">Keywords</h2>\n        <div id=\"keywords\"></div>\n      </div>\n\n      <h2 class=\"uheader dark padded\">Admin (if accesss)</h2>\n      <div><a href$=\"/edit/[[package.id]]\">Edit Package</a></div>\n    </div>\n  </div>\n\n</div>";
+module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n\n  .container > * {\n    background-color: white;\n    padding: 40px;\n  }\n\n  .overview {\n    color: var(--secondary-text-color);\n  }\n\n  .install {\n    color: var(--secondary-text-color);\n    font-family: monospace;\n    font-size: 14px;\n  }\n\n  .layout {\n    display: flex;\n  }\n  \n  h2.padded {\n    padding-top: 40px;\n  }\n\n</style>\n\n\n<h2 style=\"text-align: center\">[[package.name]]</h2>\n\n<div class=\"container\">\n\n  <div class=\"layout\">\n    <div style=\"flex: 1\">\n      <div class=\"overview\">[[package.overview]]</div>\n      <div id=\"readme\"></div>\n    </div>\n    \n    <div style=\"width: 300px\">\n      <div class=\"install\">\n        <iron-icon icon=\"chevron-right\"></iron-icon>ecosml download [[package.name]]\n      </div>\n      <div style=\"padding-bottom: 20px\"><a>Help</a></div>\n      \n      <h2 class=\"uheader dark\">Current Release</h2>\n      <div style=\"padding-bottom: 20px\" hidden$=\"[[!release]]\">\n        <div><a href$=\"[[release.downloadUrl]]\">[[release.name]]</a></div>\n        <div>[[release.description]]</div>\n      </div>\n      <div style=\"padding-bottom: 20px\" hidden$=\"[[release]]\">\n        No releases available\n      </div>\n\n      <h2 class=\"uheader blue\">Access</h2>\n      <div hidden$=\"[[!release]]\"><a href$=\"[[release.downloadUrl]]\">Download Current Release</a></div>\n      <div hidden$=\"[[!release]]\"><a href$=\"[[package.htmlUrl]]/releases\" target=\"_blank\">All Releases</a></div>\n      <div><a href$=\"[[package.htmlUrl]]\" target=\"_blank\">GitHub</a></div>\n\n      <div hidden$=\"[[!package.theme]]\">\n        <h2 class=\"uheader green padded\">Theme</h2>\n        <div hidden$=\"[[!package.theme]]\">Theme: <a href$=\"[[themeLink]]\">[[package.theme]]</a></div>\n        <div hidden$=\"[[!package.family]]\">Family: <a href$=\"[[familyLink]]\">[[package.family]]</a></div>\n        <div hidden$=\"[[!package.specific]]\">Specific: <a href$=\"[[specificLink]]\">[[package.specific]]</a></div>\n      </div>\n\n      <div hidden$=\"[[!package.keywords]]\">\n        <h2 class=\"uheader lightblue padded\">Keywords</h2>\n        <div id=\"keywords\"></div>\n      </div>\n\n      <div hidden$=\"[[!userHasWriteAccess]]\">\n        <h2 class=\"uheader dark padded\">Admin</h2>\n        <div><a href$=\"/edit/[[package.id]]\">Edit Package</a></div>\n      </div>\n    </div>\n  </div>\n\n</div>";
 
 /***/ }),
-/* 185 */
+/* 202 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_user_account_html__ = __webpack_require__(203);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_user_account_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_user_account_html__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_AuthInterface__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_AuthInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__interfaces_AuthInterface__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_iron_pages_iron_pages__ = __webpack_require__(64);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_login__ = __webpack_require__(204);
+
+
+
+
+
+
+
+
+class AppUserAccount extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__["a" /* Element */])
+  .with(EventInterface, __WEBPACK_IMPORTED_MODULE_2__interfaces_AuthInterface___default.a) {
+
+  static get template() {
+    return __WEBPACK_IMPORTED_MODULE_1__app_user_account_html___default.a;
+  }
+
+  static get properties() {
+    return {
+      loggedIn : {  
+        type : Boolean,
+        value : false
+      },
+      view : {
+        type : String,
+        value : 'login'
+      },
+      username : {
+        type : String,
+        value : ''
+      }
+    }
+  }
+
+  constructor() {
+    super();
+    this.active = true;
+    this._onAuthUpdate(this._getAuthState());
+  }
+
+  /**
+   * @method _onAuthUpdate
+   * @description from AuthInterface, called when auth updates
+   * 
+   * @param {Object} e event payload
+   */
+  _onAuthUpdate(e){
+    if( e.state === 'loggedIn' ) {
+      this.loggedIn = true;
+      this.view = 'account';
+      this.username = e.username;
+    } else {
+      this.loggedIn = false;
+      this.view = 'login';
+      this.username = '';
+    }
+  }
+
+}
+/* unused harmony export default */
+
+
+customElements.define('app-user-account', AppUserAccount);
+
+/***/ }),
+/* 203 */
 /***/ (function(module, exports) {
 
-module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n\n  .header {\n    display: flex;\n    align-items: center;\n    background: var(--default-primary-color);\n    padding: 10px;\n  }\n  .header [main-title] {\n    flex: 1;\n    font-size: 22px;\n  }\n  .header [main-title] small {\n    font-size: 14px;\n  }\n\n  paper-material {\n    background: white;\n    display: block;\n    padding: 10px;\n    margin: 10px;\n  }\n\n  [icon=\"menu\"], [main-title] {\n    color: var(--inverse-text-color);\n  }\n</style>\n\n<div class=\"header\">\n  <!-- <paper-icon-button icon=\"menu\" on-click=\"toggleDrawer\"></paper-icon-button> -->\n  <div main-title>EcoSML <small>Ecological Spectral Model Library</small></div>\n  <a href=\"/\" inverse><paper-icon-button icon=\"home\"></paper-icon-button></a>\n</div>\n<!-- <app-drawer id=\"drawer\" swipe-open></app-drawer> -->\n\n<app-route app-routes=\"[[appRoutes]]\"></app-route>\n\n<iron-pages selected=\"[[page]]\" attr-for-selected=\"id\">\n  <app-home id=\"home\"></app-home>\n  <app-package-metadata-editor id=\"edit\"></app-package-metadata-editor>\n  <app-package-search id=\"search\"></app-package-search>\n  <app-landing-page id=\"package\"></app-landing-page>\n</iron-pages>\n\n\n";
+module.exports = "<style include=\"shared-styles\">\n  :host {\n    display : block\n  }\n</style>\n\n<iron-pages selected=\"[[view]]\" attr-for-selected=\"id\">\n  <app-login id=\"login\"></app-login>\n  <div id=\"account\">\n    <h2>Hello [[username]]</h2>\n    <div><paper-button on-click=\"_logout\">Logout</paper-button></div>\n  </div>\n</iron-pages>\n";
+
+/***/ }),
+/* 204 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_login_html__ = __webpack_require__(205);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_login_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_login_html__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_AuthInterface__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_AuthInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__interfaces_AuthInterface__);
+
+
+
+
+
+class AppLogin extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__["a" /* Element */])
+  .with(EventInterface, __WEBPACK_IMPORTED_MODULE_2__interfaces_AuthInterface___default.a) {
+
+  static get template() {
+    return __WEBPACK_IMPORTED_MODULE_1__app_login_html___default.a;
+  }
+
+  static get properties() {
+    return {
+      
+    }
+  }
+
+  constructor() {
+    super();
+    this.active = true;
+  }
+
+  async _attemptLogin() {
+    let username = this.$.username.value;
+    let password = this.$.password.value;
+
+    try {
+      await this._login(username, password);
+    } catch(e) {
+      alert(e.details.message);
+    }
+  }
+
+  async _onPassKeyUp(e) {
+    if( e.which !== 13 ) return;
+    this._attemptLogin();
+  }
+
+}
+/* unused harmony export default */
+
+
+customElements.define('app-login', AppLogin);
+
+/***/ }),
+/* 205 */
+/***/ (function(module, exports) {
+
+module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n  .root {\n    display: flex;\n    justify-content: center;\n    flex-direction: column;\n    align-items: center;\n  }\n  .root > div {\n    margin-top: 20px;\n    padding: 40px;\n    background-color: white;\n  }\n  paper-button {\n    color: var(--default-primary-color);\n  }\n</style>\n\n<div class=\"root\">\n  <div>\n    <h2 class=\"uheader green\">Login</h2>\n\n    <div style=\"margin-top:30px\">\n      <app-text-input id=\"username\" label=\"Username\"></app-text-input>\n      <app-text-input id=\"password\" label=\"Password\" type=\"password\" on-keyup=\"_onPassKeyUp\"></app-text-input>\n    </div>\n\n    <div style=\"margin-top:20px\">\n      <paper-button on-click=\"_attemptLogin\">Login</paper-button>\n    </div>\n  </div>\n</div>";
+
+/***/ }),
+/* 206 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_auth_icon_html__ = __webpack_require__(207);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_auth_icon_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_auth_icon_html__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_AuthInterface__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_AuthInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__interfaces_AuthInterface__);
+
+
+
+
+
+class AppAuthIcon extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__["a" /* Element */])
+  .with(EventInterface, __WEBPACK_IMPORTED_MODULE_2__interfaces_AuthInterface___default.a) {
+
+  static get template() {
+    return __WEBPACK_IMPORTED_MODULE_1__app_auth_icon_html___default.a;
+  }
+
+  static get properties() {
+    return {
+      loggedIn : {
+        type : Boolean,
+        value : false
+      },
+      username : {
+        type : String,
+        value : false
+      }
+    }
+  }
+
+  constructor() {
+    super();
+    this.active = true;
+  }
+
+  /**
+   * @method _onAuthUpdate
+   * @description from AuthInterface, called when auth updates
+   * 
+   * @param {Object} e event payload
+   */
+  _onAuthUpdate(e) {
+    if( e.state === 'loggedIn' ) {
+      this.loggedIn = true;
+      this.username = e.username;
+    } else {
+      this.loggedIn = false;
+      this.username = '';
+    }
+  }
+
+}
+/* unused harmony export default */
+
+
+customElements.define('app-auth-icon', AppAuthIcon);
+
+/***/ }),
+/* 207 */
+/***/ (function(module, exports) {
+
+module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: inline-block;\n  }\n  a {\n    text-decoration: none;\n  }\n  paper-icon-button {\n    color: var(--inverse-text-color);\n  }\n</style>\n\n<div hidden$=\"[[loggedIn]]\">\n  <a href=\"/account\" inverse>\n    <iron-icon icon=\"perm-identity\"></iron-icon>\n  </a>\n</div>\n<div style=\"display: flex; align-items:center\" hidden$=\"[[!loggedIn]]\">\n  <a href=\"/account\" inverse>\n    <iron-icon icon=\"account-circle\"></iron-icon> [[username]]</a>\n  </a>\n  <paper-icon-button icon=\"exit-to-app\" on-click=\"_logout\"></paper-icon-button>\n</div>";
+
+/***/ }),
+/* 208 */
+/***/ (function(module, exports) {
+
+module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n\n  .header {\n    display: flex;\n    align-items: center;\n    background: var(--default-primary-color);\n    padding: 10px;\n  }\n  .header [main-title] {\n    flex: 1;\n    font-size: 22px;\n  }\n  .header [main-title] small {\n    font-size: 14px;\n  }\n\n  paper-material {\n    background: white;\n    display: block;\n    padding: 10px;\n    margin: 10px;\n  }\n\n  [icon=\"menu\"], [main-title] {\n    color: var(--inverse-text-color);\n  }\n</style>\n\n<div class=\"header\">\n  <!-- <paper-icon-button icon=\"menu\" on-click=\"toggleDrawer\"></paper-icon-button> -->\n  <div main-title>EcoSML <small>Ecological Spectral Model Library</small></div>\n  <a href=\"/\" inverse><paper-icon-button icon=\"home\"></paper-icon-button></a>\n  <app-auth-icon></app-auth-icon>\n</div>\n<!-- <app-drawer id=\"drawer\" swipe-open></app-drawer> -->\n\n<app-route app-routes=\"[[appRoutes]]\"></app-route>\n\n<iron-pages selected=\"[[page]]\" attr-for-selected=\"id\">\n  <app-home id=\"home\"></app-home>\n  <app-package-metadata-editor id=\"edit\"></app-package-metadata-editor>\n  <app-package-search id=\"search\"></app-package-search>\n  <app-landing-page id=\"package\"></app-landing-page>\n  <app-user-account id=\"account\"></app-user-account>\n</iron-pages>\n\n\n";
 
 /***/ })
 /******/ ]);

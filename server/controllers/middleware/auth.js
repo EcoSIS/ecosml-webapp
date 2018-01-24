@@ -32,15 +32,16 @@ class AuthMiddleware {
       }
     }
 
+    if( pkg.owner === req.session.username ) return true;
+
     if( pkg.organization ) {
-      let writeAccess = await model.canWriteOrg(pkg.organization, pkg.owner);
+      let writeAccess = await model.canWriteOrg(pkg.organization, req.session.username);
       if( !writeAccess ) {
         this.sendError(res, 403, 'You do not have write access to this group');
         return false;
       }
     }
 
-    if( next ) next();
     return true;
   }
 

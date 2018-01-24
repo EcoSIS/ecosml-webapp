@@ -69,7 +69,7 @@ export default class AppLandingPage extends Mixin(PolymerElement)
       }).join('');
     }
 
-    if( this.package.releases ) {
+    if( this.package.releases && this.package.releases.length ) {
       let r = this.package.releases[this.package.releases.length - 1];
       this.release = {
         name : r.name,

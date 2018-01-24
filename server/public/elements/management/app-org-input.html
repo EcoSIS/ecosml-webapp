@@ -1,0 +1,6 @@
+<select id="input" on-change="_onInputChange">
+  <option></option>
+  <template is="dom-repeat" items="[[orgs]]">
+    <option value="[[item.name]]">[[item.displayName]]</option>
+  </template>
+</select>

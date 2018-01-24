@@ -12,7 +12,7 @@ import "./app-keyword-input"
 import "./app-theme-input"
 import "./app-create-release"
 import "./app-text-input"
-
+import "./app-org-input"
 
 class AppPackageMetadataEditor extends Mixin(PolymerElement)
       .with(EventInterface, AppStateInterface, PackageInterface) {
@@ -34,6 +34,11 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
       sections : {
         type : Array,
         value : () => ['basicInformation', 'details']
+      },
+
+      selectedSection : {
+        type : String,
+        value : 'basicInformation'
       },
 
       // package schema object
@@ -94,6 +99,7 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
   createPackage() {
     this.currentAction = 'Create';
     this.creating = true;
+    this.selectedSection = 'basicInformation';
     this.namePreview = '';
     for( var key in this.schema ) this.set(key);
   }
@@ -109,8 +115,15 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
     if( this.get('overview').length < 15 ) {
       return alert('Please provide a longer overview');
     }
+    if( !this.get('organization') ) {
+      return alert('Please select an organization');
+    }
 
-    this._createPackage(this.namePreview, this.get('overview'));
+    this._createPackage(
+      this.namePreview, 
+      this.get('overview'),
+      this.get('organization')
+    );
   }
 
   /**
@@ -151,11 +164,13 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
       else this.set(key);
     }
 
-    if( pkgData.releases ) {
+    if( pkgData.releases && pkgData.releases.length ) {
       let cRelease = pkgData.releases[pkgData.releases.length-1].name;
       this.$.release.release = cRelease;
       this.$.release.currentRelease = cRelease;
     }
+
+    this.$.organization.value = pkgData.organization;
 
     this.$.theme.setValues(pkgData);
   }
@@ -183,7 +198,7 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
       return alert('Failed to create package :( '+e.error.message);
     }
 
-    this._setWindowLocation('/package/'+e.payload.id);
+    this._setWindowLocation('/edit/'+e.payload.id);
   }
 
   /**
@@ -197,7 +212,8 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
       name : this.namePreview,
       overview : this.get('overview'),
       description : this.get('description'),
-      keywords : this.get('keywords')
+      keywords : this.get('keywords'),
+      organization : this.get('organization')
     }
 
     this.$.unsavedMsg.style.display = 'block';

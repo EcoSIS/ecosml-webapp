@@ -16,9 +16,10 @@ class PackageService extends BaseService {
    * 
    * @param {String} name name of package 
    * @param {String} description one sentence overview description
+   * @param {String} organization package organization
    */
-  async create(name, description) {
-    let payload = {name, description};
+  async create(name, description, organization) {
+    let payload = {name, description, organization};
 
     return this.request({
       url : this.baseUrl,
@@ -37,7 +38,7 @@ class PackageService extends BaseService {
     let payload = pkg;
 
     return this.request({
-      url : this.baseUrl,
+      url : this.baseUrl+'/'+pkg.name,
       fetchOptions : {
         method : 'PATCH',
         body  : payload
@@ -53,9 +54,9 @@ class PackageService extends BaseService {
    * @method createRelease
    * @description create a new package release
    */
-  async createRelease(id, payload) {
+  async createRelease(name, payload) {
     return this.request({
-      url : `${this.baseUrl}/${id}/createRelease`,
+      url : `${this.baseUrl}/${name}/createRelease`,
       fetchOptions : {
         method : 'POST',
         body  : payload

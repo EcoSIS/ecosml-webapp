@@ -17,8 +17,8 @@ router.post('/', async (req, res) => {
   if( !writeAccess ) return;
 
   try {
-    package = await model.create(package);
-    res.status(201).json(package);
+    pkg = await model.create(pkg);
+    res.status(201).json(pkg);
   } catch(e) {
     utils.handleError(res, e);
   }

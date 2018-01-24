@@ -27,6 +27,11 @@
     --paper-toast-color: var(--inverse-text-color);
   }
 
+  iron-pages > div {
+    padding: 40px;
+    background: white;
+  }
+
   app-text-input {
     display: block;
   }
@@ -56,20 +61,19 @@
   <div class="narrow-container">
     <h1>[[currentAction]] Package</h1>
 
-    <paper-tabs>
-      <paper-tab>Basic Information</paper-tab>
-      <paper-tab disabled$="[[creating]]">Details</paper-tab>
-      <paper-tab disabled$="[[creating]]">Releases</paper-tab>
+    <paper-tabs hidden$="[[creating]]" selected="{{selectedSection}}" attr-for-selected="id">
+      <paper-tab id="basicInformation">Basic Information</paper-tab>
+      <paper-tab id="details">Details</paper-tab>
+      <paper-tab id="releasePanel">Releases</paper-tab>
     </paper-tabs>
 
-    <app-title-card id="basicInformation">
-      <div slot="content">
-
+    <iron-pages selected="[[selectedSection]]" attr-for-selected="id">
+      <div id="basicInformation">
         <app-text-input  
           id="name" 
           label="Name" 
           on-keyup="_updateNamePreview" 
-          on-change="_updateNamePreview" 
+          on-change="_updateNamePreview"
           help="[[namePreview]]"
           hidden$="[[!creating]]">
         </app-text-input>
@@ -84,6 +88,8 @@
           help="[[schema.overview.description]]">
         </app-text-input>
 
+        <app-org-input id="organization" on-change="_onDataChange"></app-org-input>
+
         <div style="text-align: right">
           <paper-button 
             hidden$="[[!creating]]" 
@@ -92,13 +98,8 @@
           </paper-button>
         </div>
       </div>
-    </app-title-card>
 
-    <app-title-card id="details" hidden$="[[creating]]">
-      <div slot="header">
-        Package Details
-      </div>
-      <div slot="content">
+      <div id="details">
         <app-markdown-editor label="Description" id="description" on-markdown-change="_onDataChange"></app-markdown-editor>
         <div class="help">[[schema.description.description]]</div>
 
@@ -107,19 +108,14 @@
 
         <app-theme-input id="theme" on-update="_onThemeUpdate"></app-theme-input>
       </div>
-    </app-title-card>
 
-    <app-title-card hidden$="[[creating]]">
-        <div slot="header">
-          Package Releases
-        </div>
-        <div slot="content">
-          <app-create-release id="release"></app-create-release>
-        </div>
-      </app-title-card>
+      <div id="releasePanel">
+        <app-create-release id="release"></app-create-release>
+      </div>
 
-    <div hidden$="[[creating]]">
-      <paper-button on-click="_onDeleteBtnClicked">Delete Package</paper-button>
-    </div>
+      <div>
+        <paper-button on-click="_onDeleteBtnClicked">Delete Package</paper-button>
+      </div>
+    </iron-pages>
   </div>
 </div>

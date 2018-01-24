@@ -18,7 +18,7 @@ class PackageModel {
     this.REQUIRED = {
       CREATE : ['name', 'description', 'owner', 'organization']
     }
-    this.UPDATE_ATTRIBUTES = ['name', 'description', 'theme',
+    this.UPDATE_ATTRIBUTES = ['name', 'description', 'theme', 'organization',
       'family', 'specific', 'keywords'];
 
     git.initConfig();
@@ -78,7 +78,7 @@ class PackageModel {
     let {response, body} = await github.createRepository(githubRepo);
     this.checkStatus(response, 201);
 
-    pkg = utils.githubRepoToEcosml(body);
+    pkg = Object.assign(pkg, utils.githubRepoToEcosml(body));
     pkg.id = ecosmlId;
 
     await mongo.insertPackage(pkg);
@@ -97,6 +97,7 @@ class PackageModel {
    * 
    * @param {Object} pkg package to update
    * @param {String} pkg.name package name, does not change
+   * @param {String} pkg.organization 
    * @param {String} pkg.overview package short description
    * @param {String} pkg.description package readme
    * @param {Array} pkg.keywords package keywords

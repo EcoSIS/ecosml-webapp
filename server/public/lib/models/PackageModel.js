@@ -22,10 +22,11 @@ class PackageModel extends BaseModel {
    * 
    * @param {String} name name of new package
    * @param {String} description short description of package 
+   * @param {String} organization package organization
    * @returns {Promise} fetch promise
    */
-  async create(name, description) {
-    return this.service.create(name, description);
+  async create(name, description, organization) {
+    return this.service.create(name, description, organization);
   }
 
   /**

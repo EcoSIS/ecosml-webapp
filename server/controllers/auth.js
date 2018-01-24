@@ -71,7 +71,9 @@ router.post('/webhook/organization-update', async (req, res) =>{
   
 });
 
+if( process.argv.indexOf('--no-sync') === -1 ) {
 model.reload()
      .catch(e => Logger.error('Falied to reload orgs from ', config.ecosis.host, e));
+}
 
 module.exports = router;

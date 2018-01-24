@@ -14,11 +14,11 @@ services:
       - ECOSIS_HOST=${ECOSIS_HOST}
       - SERVER_ASSET_DIR=dist
       - GITHUB_ORG=ecosml-dev
-    volumes:
-      - redis-data:/data
 
   redis:
     image: redis:3.2
+    volumes:
+      - redis-data:/data
 
   mongo:
     image: mongo:3.5

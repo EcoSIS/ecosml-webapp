@@ -34,8 +34,8 @@ class PackageService extends BaseService {
     })
   }
 
-  async update(pkg) {
-    let payload = pkg;
+  async update(pkg, msg) {
+    let payload = {pkg, msg};
 
     return this.request({
       url : this.baseUrl+'/'+pkg.name,

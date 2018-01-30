@@ -24,6 +24,7 @@ class AppUtils {
 
   ecosmlToMetadataFile(repo) {
     return {
+      id : repo.id,
       name : repo.name,
       overview : repo.overview,
       keywords : repo.keywords,

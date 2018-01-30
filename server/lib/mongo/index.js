@@ -26,6 +26,10 @@ class MongoDB {
     });
   }
 
+  disconnect() {
+    this.db.close();
+  }
+
   async packagesCollection() {
     await this.conn();
     return this.db.collection(config.mongodb.collections.package);
@@ -64,6 +68,9 @@ class MongoDB {
     return results;
   }
 
+  /**
+   * @method search
+   */
   async search(query = {}, options = {}, projection = {}) {
     let offset = options.offset || 0;
     let limit = options.limit || 10;

@@ -104,9 +104,10 @@ class PackageModel {
    * @param {String} pkg.theme
    * @param {String} pkg.family
    * @param {String} pkg.specific
+   * @param {String} commitMessage
    * @param {Boolean} refreshFromGithub preform a full refresh from Github API?
    */
-  async update(pkg, refreshFromGithub = false) {
+  async update(pkg, commitMessage, refreshFromGithub = false) {
     if( !pkg.name ) throw new AppError(AppError.ERROR_CODES.MISSING_ATTRIBUTE, 'name required');
 
     let cpkg = await mongo.getPackage(pkg.name);
@@ -152,7 +153,7 @@ class PackageModel {
 
     // write and commit ecosis-metadata.json file or other changes
     await this.writeMetadataFile(pkg);
-    await this.commitMetadataChanges(pkg.name);
+    await this.commitMetadataChanges(pkg.name, commitMessage);
 
     return pkg;
   }
@@ -228,7 +229,6 @@ class PackageModel {
    * @param {Object} data release data
    * @param {String} data.name release name (v1.0.0)
    * @param {String} data.description release description
-   * @param {Boolean} data.draft
    * @param {Boolean} data.draft
    */
   async createRelease(id, data) {

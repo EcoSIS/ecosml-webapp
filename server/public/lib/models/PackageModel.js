@@ -51,10 +51,11 @@ class PackageModel extends BaseModel {
    * @description update package
    * 
    * @param {Object} data data to update package with
+   * @param {String} msg commit message
    * @returns {Promise} fetch promise
    */
-  async update(data) {
-    await this.service.update(data);
+  async update(data, msg) {
+    await this.service.update(data, msg);
     return this.store.data.update;
   }
 

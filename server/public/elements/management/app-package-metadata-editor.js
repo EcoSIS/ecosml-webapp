@@ -155,6 +155,7 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
   updatePackage(pkgData) {
     this.currentAction = 'Update';
     this.creating = false;
+    this.$.commitMsg.value = '';
 
     this.namePreview = pkgData.name;
 
@@ -233,7 +234,7 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
   }
 
   _onSaveChangesClicked() {
-    this._updatePackage(this.unsavedData);
+    this._updatePackage(this.unsavedData, this.$.commitMsg.value);
   }
 
   _onEditPackageUpdate(e) {

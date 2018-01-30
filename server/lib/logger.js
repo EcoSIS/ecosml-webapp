@@ -2,7 +2,7 @@ const bunyan = require('bunyan');
 const config = require('./config');
 
 let streams = [];
-if( !global.testing ) {
+if( !global.testing && !global.quiteLogging ) {
   streams.push({stream: process.stdout});
 }
 

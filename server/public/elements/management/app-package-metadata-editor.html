@@ -42,15 +42,28 @@
   paper-tab {
     --paper-tab-ink: var(--default-primary-color);
   }
+
+  #commitMsg {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 20px;
+  }
+
 </style>
 
 <paper-toast id="savingToast" duration="0">
   <div id="unsavedMsg">
-    You have unsaved changes
-    <paper-button on-click="_onSaveChangesClicked">Save</paper-button>  
+    <div>
+      You have unsaved changes  
+      <paper-button on-click="_onSaveChangesClicked">Commit Changes</paper-button> 
+    </div> 
+    <div>
+      <input type="text" placeholder="Commit message" id="commitMsg">
+    </div>
   </div>
   <div id="savingMsg">
-    Saving...
+    Committing...
   </div>
 </paper-toast>
 <paper-toast id="savedToast">

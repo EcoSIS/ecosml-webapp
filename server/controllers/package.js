@@ -55,7 +55,7 @@ router.patch('/:name', async(req, res) => {
     let writeAccess = await middleware.canWritePackage(packageName, req, res);
     if( !writeAccess ) return;
 
-    package = await model.update(update);
+    package = await model.update(update.pkg, update.msg);
     res.json(package);
   } catch(e) {
     utils.handleError(res, e);

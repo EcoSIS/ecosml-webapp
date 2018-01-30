@@ -128,6 +128,16 @@ class GithubApi {
     });
   }
 
+  /**
+   * @method getRawFile
+   * @description download a file directly from github repo
+   * 
+   * @param {String} repoName name of repository
+   * @param {String} filePath full path to file in repo
+   * @param {String} branch optional. defaults to 'master'
+   * 
+   * @returns {Promise} resolves to http response
+   */
   getRawFile(repoName, filePath, branch = 'master') {
     let options = {
       uri : `${RAW_ROOT}/${ORG}/${repoName}/${branch}/${filePath}`,
@@ -139,7 +149,7 @@ class GithubApi {
     return new Promise((resolve, reject) => {
       request(options, (error, response, body) => {
         if( error ) return reject(error);
-        Logger.info(`GitHub API request: ${options.method || 'GET'} ${options.uri}, request remaining: ${response.headers['x-ratelimit-remaining']}`);
+        Logger.info(`Raw GitHub request: ${options.method || 'GET'} ${options.uri}`);
         resolve({response, body});
       });
     });

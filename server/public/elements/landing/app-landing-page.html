@@ -21,22 +21,29 @@
   .layout {
     display: flex;
   }
+
+  .layout .main {
+    padding-right: 40px;
+    flex: 1;
+  }
   
   h2.padded {
     padding-top: 40px;
   }
-
+  
+  #readme {
+    margin-top: 40px;
+  }
 </style>
-
 
 <h2 style="text-align: center">[[package.name]]</h2>
 
 <div class="container">
 
   <div class="layout">
-    <div style="flex: 1">
+    <div class="main">
       <div class="overview">[[package.overview]]</div>
-      <div id="readme"></div>
+      <app-markdown id="readme"></app-markdown>
     </div>
     
     <div style="width: 300px">

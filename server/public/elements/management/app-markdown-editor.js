@@ -1,9 +1,11 @@
 import {Element as PolymerElement} from "@polymer/polymer/polymer-element"
 import template from "./app-markdown-editor.html"
-// import "markdown"
-import { markdown } from "markdown";
 
-export default class AppMarkdownEditor extends PolymerElement {
+import PackageInterface from "../interfaces/PackageInterface";
+import "../utils/app-markdown"
+
+export default class AppMarkdownEditor extends Mixin(PolymerElement)
+  .with(EventInterface, PackageInterface) {
 
   static get template() {
     return template;
@@ -67,8 +69,8 @@ export default class AppMarkdownEditor extends PolymerElement {
   /**
    * update markdown previeew
    */
-  _updatePreview() {
-    this.$.preview.innerHTML = markdown.toHTML(this.value);
+  async _updatePreview() {
+    this.$.preview.render(this.value);
   }
 
 }

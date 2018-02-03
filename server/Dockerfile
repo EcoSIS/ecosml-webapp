@@ -1,5 +1,10 @@
 FROM node:8.7
 
+# install ruby and markdown library
+RUN apt-get update
+RUN apt-get install -y ruby-full
+RUN gem install commonmarker
+
 RUN mkdir server
 COPY ./dist /server/dist
 COPY ./package* /server/

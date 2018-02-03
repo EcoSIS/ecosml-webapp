@@ -83,7 +83,10 @@ class PackageModel extends BaseModel {
    */
   async createRelease(id, releaseInfo) {
     this.service.createRelease(id, releaseInfo);
+  }
 
+  previewMarkdown(markdown) {
+    return this.service.previewMarkdown(markdown);
   }
 
 }

@@ -165,6 +165,7 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
       else this.set(key);
     }
 
+    this.$.release.package = pkgData;
     if( pkgData.releases && pkgData.releases.length ) {
       let cRelease = pkgData.releases[pkgData.releases.length-1].name;
       this.$.release.release = cRelease;

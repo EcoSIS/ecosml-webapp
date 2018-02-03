@@ -17,6 +17,10 @@ export default class AppCreateRelease extends PolymerElement {
       currentRelease : {
         type : String,
         value : ''
+      },
+      package : {
+        type : Object,
+        value : () => {}
       }
     }
   }

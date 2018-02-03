@@ -27,4 +27,8 @@ module.exports = subclass =>
       return this.PackageModel.delete(name);
     }
 
+    _previewMarkdown(markdown) {
+      return this.PackageModel.previewMarkdown(markdown);
+    }
+
   }

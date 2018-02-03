@@ -10,7 +10,7 @@ import "@ucd-lib/cork-app-state/elements/app-route"
 import "../lib"
 
 // import polymer elements
-import {Element as PolymerElement} from "@polymer/polymer/polymer-element"
+import {Element as PolymerElement, html} from "@polymer/polymer/polymer-element"
 
 import "@polymer/paper-button/paper-button"
 import "@polymer/app-layout/app-header/app-header"
@@ -41,7 +41,7 @@ export class EcoSMLApp extends Mixin(PolymerElement)
     
   // Define a string template instead of a `<template>` element.
   static get template() {
-    return template;
+    return html`${template}`;
   }
 
   static get properties() {

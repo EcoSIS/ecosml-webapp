@@ -1,4 +1,4 @@
-<style>
+<style include="shared-styles">
   :host {
     display: block;
   }
@@ -9,8 +9,14 @@
   }
 </style>
 
-<div>Current Release: [[currentRelease]]</div>
-<div>See all releases</div>
+<div hidden$="[[!currentRelease]]">
+  <div>Current Release: [[currentRelease]]</div>
+  <div><a href="[[package.htmlUrl]]/releases" target="_blank">See all releases</a></div>
+</div>
+<div hidden$="[[currentRelease]]">
+  No current releases.
+</div>
+
 <div class="layout">
   <div>
     <div>Major</div>

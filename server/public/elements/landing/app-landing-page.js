@@ -1,11 +1,12 @@
 import {Element as PolymerElement} from "@polymer/polymer/polymer-element"
 import template from "./app-landing-page.html"
-import { markdown } from "markdown";
 
 import AppStateInterface from "../interfaces/AppStateInterface"
 import AuthInterface from "../interfaces/AuthInterface"
 import PackageInterface from "../interfaces/PackageInterface"
 import SearchInterface from "../interfaces/SearchInterface"
+
+import "../utils/app-markdown"
 
 export default class AppLandingPage extends Mixin(PolymerElement)
   .with(EventInterface, AppStateInterface, PackageInterface, SearchInterface, AuthInterface) {
@@ -135,7 +136,7 @@ export default class AppLandingPage extends Mixin(PolymerElement)
 
   render() {
     if( !this.package ) return;
-    this.$.readme.innerHTML = markdown.toHTML(this.package.description || '');
+    this.$.readme.show(this.package.renderedDescription);
   }
 
 }

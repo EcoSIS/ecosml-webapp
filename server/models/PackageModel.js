@@ -8,6 +8,7 @@ const path = require('path');
 const fs = require('fs-extra');
 const uuid = require('uuid');
 const utils = require('../lib/utils')
+const markdown = require('../lib/markdown');
 
 
 const METADATA_FILENAME = 'ecosml-metadata.json';
@@ -166,7 +167,13 @@ class PackageModel {
    * @return {Promise}
    */
   async get(packageNameOrId) {
-    return mongo.getPackage(packageNameOrId);
+    let pkg = await mongo.getPackage(packageNameOrId);
+    if( pkg.description ) {
+      pkg.renderedDescription = await markdown(pkg.description);
+    } else {
+      pkg.renderedDescription = '';
+    }
+    return pkg;
   }
 
   /**

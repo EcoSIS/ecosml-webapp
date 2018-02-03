@@ -113,6 +113,19 @@ class PackageService extends BaseService {
       onError : error => this.store.setFileSaveError(fileId, error)
     });
   }
+
+  previewMarkdown(markdown) {
+    return this.request({
+      url : `/api/markdown`,
+      fetchOptions : {
+        method : 'POST',
+        headers : {
+          'Content-Type' : 'text/plain'
+        },
+        body : markdown
+      }
+    });
+  }
 }
 
 module.exports = new PackageService();

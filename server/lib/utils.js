@@ -43,6 +43,7 @@ class AppUtils {
    * @param {Object} release github release object
    */
   githubReleaseToEcosml(release) {
+    if( release.author ) delete release.author;
     release.created_at = new Date(release.created_at);
     release.published_at = new Date(release.published_at);
     return this.toCamelCase(release);

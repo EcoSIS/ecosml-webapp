@@ -4,6 +4,7 @@
 const github = require('./github');
 const mongodb = require('./mongo');
 const config = require('./config');
+const utils = require('./utils');
 
 class GithubSync {
 
@@ -39,8 +40,19 @@ class GithubSync {
     try {
       var {body} = await github.getRawFile(repoName, 'ecosml-metadata.json');
       metadata = JSON.parse(body);
+      
       var {body} = await github.getRawFile(repoName, 'README.md');
       metadata.description = body;
+
+      var {body} = await github.listReleases(repoName);
+      let releases = JSON.parse(body).map(release => utils.githubReleaseToEcosml(release));
+      releases.sort((a, b) => {
+        if( a.publishedAt.getTime() < b.publishedAt.getTime() ) return -1;
+        if( a.publishedAt.getTime() > b.publishedAt.getTime() ) return 1;
+        return 0;
+      });
+      metadata.releases = releases;
+
     } catch(e) {
       console.error('Failed to download metadata file for repo '+repoName+', ignoring');
       console.error(e);

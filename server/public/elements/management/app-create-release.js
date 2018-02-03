@@ -1,7 +1,10 @@
 import {Element as PolymerElement} from "@polymer/polymer/polymer-element"
 import template from "./app-create-release.html"
 
-export default class AppCreateRelease extends PolymerElement {
+import PackageInferface from "../interfaces/PackageInterface"
+
+export default class AppCreateRelease extends Mixin(PolymerElement)
+  .with(EventInterface, PackageInferface) {
 
   static get template() {
     return template;
@@ -9,18 +12,30 @@ export default class AppCreateRelease extends PolymerElement {
 
   static get properties() {
     return {
-      release : {
-        type : String,
-        value : '',
-        observer : '_render'
+      releases : {
+        type : Array,
+        value : () => [],
+        observer : '_onReleasesUpdate'
       },
-      currentRelease : {
-        type : String,
-        value : ''
+      releasesInverse : {
+        type : Array,
+        value : () => []
       },
       package : {
         type : Object,
         value : () => {}
+      },
+      creating : {
+        type : Boolean,
+        value : false
+      },
+      saving : {
+        type : Boolean,
+        value : false
+      },
+      release : {
+        type : String,
+        value : ''
       }
     }
   }
@@ -50,6 +65,47 @@ export default class AppCreateRelease extends PolymerElement {
   }
 
   /**
+   * @method _toggleCreate
+   * @description called from top right create/cancel buttons
+   */
+  _toggleCreate() {
+    this.creating = !this.creating;
+
+    if( this.creating ) {
+      this.$.description.value = '';
+      this._render();
+    }
+  }
+
+  /**
+   * @method showList
+   * @description show the releases list
+   */
+  showList() {
+    this.creating = false;
+  }
+
+  /**
+   * @method _onReleasesUpdate
+   * @description called from releases property observer
+   */
+  _onReleasesUpdate() {
+    let index = this.releases.length-1;
+    if( index === -1 ) {
+      this.release = '';
+      this._render();
+      return;
+    }
+
+    this.releases[index].latest = true;
+    this.releasesInverse = this.releases.slice().reverse();
+
+    this.release = this.releases[index].name;
+    this._render();
+    this.patch++;
+  }
+
+  /**
    * @method _render
    * @description called whenever the release string updates, set the input fields
    */
@@ -57,7 +113,7 @@ export default class AppCreateRelease extends PolymerElement {
     if( !this.release ) {
       this.major = 0;
       this.minor = 0;
-      this.patch = 0;
+      this.patch = 1;
       return;
     }
 
@@ -65,7 +121,7 @@ export default class AppCreateRelease extends PolymerElement {
     if( parts.length < 3 ) return;
 
     this.major = parts[0];
-    this.manor = parts[1];
+    this.minor = parts[1];
     this.patch = parts[2];
   }
 
@@ -75,7 +131,32 @@ export default class AppCreateRelease extends PolymerElement {
    * the release string.
    */
   _onInputChange() {
-    this.release = `${this.major}.${this.minor}.${this.patch}`;
+    this.release = `v${this.major}.${this.minor}.${this.patch}`;
+  }
+
+  /**
+   * @method _onCreateClicked
+   * @description called when the create button is clicked
+   */
+  async _onCreateClicked() {
+    if( !this.release ) alert('Please enter a valid release');
+
+    let info = {
+      name : `v${this.major}.${this.minor}.${this.patch}`,
+      description : this.$.description.value
+    }
+
+    try {
+      this.saving = true;
+      await this._createRelease(this.package.name, info);
+      alert('Release '+info.name+' created');
+      this.showList();
+    } catch(e) {
+      let body = await e.details.json()
+      alert(body.message);
+    }
+
+    this.saving = false;
   }
 
 }

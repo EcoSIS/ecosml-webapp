@@ -16,12 +16,6 @@ const METADATA_FILENAME = 'ecosml-metadata.json';
 class PackageModel {
 
   constructor() {
-    this.REQUIRED = {
-      CREATE : ['name', 'description', 'owner', 'organization']
-    }
-    this.UPDATE_ATTRIBUTES = ['name', 'description', 'theme', 'organization',
-      'family', 'specific', 'keywords'];
-
     git.initConfig();
   }
 
@@ -58,7 +52,7 @@ class PackageModel {
    */
   async create(pkg) {
     logger.info(`Creating package: ${pkg.name}`);
-    this.verifyRequired(this.REQUIRED.CREATE, pkg);
+    this.verifyRequired(config.schemaFilter.REQUIRED_CREATE, pkg);
 
     // check access
     await this.checkAccess();
@@ -142,7 +136,7 @@ class PackageModel {
       gpkg = utils.githubRepoToEcosml(body);
     }
 
-    this.UPDATE_ATTRIBUTES.forEach(attr => {
+    config.schemaFilter.UPDATE_ATTRIBUTES.UPDATE_ATTRIBUTES.forEach(attr => {
       if( pkg[attr] !== undefined ) {
         gpkg[attr] = pkg[attr];
       }
@@ -237,6 +231,7 @@ class PackageModel {
    * @param {String} data.name release name (v1.0.0)
    * @param {String} data.description release description
    * @param {Boolean} data.draft
+   * @param {Boolean} data.prerelease
    */
   async createRelease(id, data) {
     if( !id ) throw new AppError('Package id required', AppError.ERROR_CODES.MISSING_ATTRIBUTE);
@@ -258,14 +253,12 @@ class PackageModel {
     }
 
     // create release on github
-    let response = await github.createRelease(id, release);
+    let {response} = await github.createRelease(pkg.name, release);
+    this.checkStatus(response, 201);
     response = JSON.parse(response.body);
     
     // clean up some stuff we don't care about
-    delete response.author;
-    response.created_at = new Date(response.created_at);
-    response.published_at = new Date(response.published_at);
-    response = utils.toCamelCase(response);
+    response = utils.githubReleaseToEcosml(response);
 
     let releases = [];
     if( pkg.releases ) {
@@ -277,7 +270,6 @@ class PackageModel {
 
     // save release data
     await mongo.updatePackage(id, {releases});
-
     return pkg;
   }
 

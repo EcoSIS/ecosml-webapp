@@ -27,6 +27,10 @@ module.exports = subclass =>
       return this.PackageModel.delete(name);
     }
 
+    _createRelease(pkg, releaseInfo) {
+      return this.PackageModel.createRelease(pkg, releaseInfo);
+    }
+
     _previewMarkdown(markdown) {
       return this.PackageModel.previewMarkdown(markdown);
     }

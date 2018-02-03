@@ -81,8 +81,8 @@ class PackageModel extends BaseModel {
    * 
    * @returns {Promise} fetch promise
    */
-  async createRelease(id, releaseInfo) {
-    this.service.createRelease(id, releaseInfo);
+  createRelease(id, releaseInfo) {
+    return this.service.createRelease(id, releaseInfo);
   }
 
   previewMarkdown(markdown) {

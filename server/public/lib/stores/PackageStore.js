@@ -17,7 +17,7 @@ class PackageStore extends BaseStore {
     }
 
     this.events = {
-      'GET_PACKAGE_UPDATE' : 'get-package-update',
+      'PACKAGE_UPDATE' : 'package-update',
       'CREATE_PACKAGE_UPDATE' : 'create-package-update',
       'EDIT_PACKAGE_UPDATE'   : 'edit-package-update',
       'DELETE_PACKAGE_UPDATE' : 'delete-package-update',
@@ -83,7 +83,7 @@ class PackageStore extends BaseStore {
 
   _setPackageState(id, state) {
     this.data.byId[id] = state;
-    this.emit(this.events.GET_PACKAGE_UPDATE, this.data.byId[id]);
+    this.emit(this.events.PACKAGE_UPDATE, this.data.byId[id]);
   }
 
 
@@ -116,6 +116,7 @@ class PackageStore extends BaseStore {
 
   setCreateReleaseSuccess(payload) {
     this._setCreateReleaseState({payload, state: this.STATE.LOADED});
+    this._setPackageState(payload.id, {payload, id: payload.id, state: this.STATE.LOADED});
   }
 
   setCreateReleaseError(error) {

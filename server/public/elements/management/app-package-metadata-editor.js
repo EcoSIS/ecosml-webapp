@@ -101,6 +101,7 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
     this.creating = true;
     this.selectedSection = 'basicInformation';
     this.namePreview = '';
+    this.packageId = '';
     for( var key in this.schema ) this.set(key);
   }
 
@@ -146,6 +147,12 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
     this.updatePackage(dataWrapper.payload);
   }
 
+  _onPackageUpdate(e) {
+    if( e.state !== 'loaded' ) return;
+    if( e.id !== this.packageId ) return;
+    this.updatePackage(e.payload);
+  }
+
   /**
    * @method updatePackage
    * @description update UI from package data
@@ -156,7 +163,7 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
     this.currentAction = 'Update';
     this.creating = false;
     this.$.commitMsg.value = '';
-
+    this.packageId = pkgData.id;
     this.namePreview = pkgData.name;
 
     let schema = this._getPackageSchema();
@@ -168,8 +175,11 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
     this.$.release.package = pkgData;
     if( pkgData.releases && pkgData.releases.length ) {
       let cRelease = pkgData.releases[pkgData.releases.length-1].name;
-      this.$.release.release = cRelease;
+      this.$.release.releases = pkgData.releases;
       this.$.release.currentRelease = cRelease;
+    } else {
+      this.$.release.releases = [];
+      this.$.release.currentRelease = null;
     }
 
     this.$.organization.value = pkgData.organization;
@@ -211,6 +221,7 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
     if( this.creating ) return;
 
     this.unsavedData = {
+      id : packageId,
       name : this.namePreview,
       overview : this.get('overview'),
       description : this.get('description'),

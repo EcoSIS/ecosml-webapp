@@ -78,6 +78,15 @@ module.exports = {
     }
   },
 
+  // control which attributes are allowed to post
+  schemaFilter : {
+    // required attributes for creating package
+    REQUIRED_CREATE : ['name', 'description', 'owner', 'organization'],
+    // attributes that are allowed to be updated
+    UPDATE_ATTRIBUTES : ['name', 'description', 'overview', 'theme', 'organization',
+      'family', 'specific', 'keywords']
+  },
+
   github : {
     access : secrets.github,
     org : env.GITHUB_ORG || 'ecosml-dev',

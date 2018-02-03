@@ -117,6 +117,18 @@ class GithubApi {
   }
 
   /**
+   * @method listReleases
+   * @description List all releases
+   * https://developer.github.com/v3/repos/releases/#list-releases-for-a-repository
+   */
+  async listReleases(repoName) {
+    return await this.request({
+      method : 'GET',
+      uri : `/repos/${ORG}/${repoName}/releases`
+    });
+  }
+
+  /**
    * @method deleteRelease
    * @description Delete a release
    * https://developer.github.com/v3/repos/releases/#delete-a-release

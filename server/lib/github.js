@@ -18,15 +18,14 @@ class GithubApi {
    * 
    * @returns {Promise}
    */
-  async listRepositories(org) {
-    if( !org ) org = ORG;
+  async listRepositories() {
     let last = false;
     let page = 1;
     let repos = [];
 
     while( !last ) {
       let {response} = await this.request({
-        uri : `/orgs/${org}/repos`,
+        uri : `/orgs/${ORG}/repos`,
         qs : {page}
       });
 
@@ -47,9 +46,13 @@ class GithubApi {
    * @method createRepository
    * @description Requires admin.
    * https://developer.github.com/v3/repos/#create
+   * 
+   * @param {Object} repo repository information
+   * 
+   * @returns {Promise}
    */
   async createRepository(repo) {
-    return await this.request({
+    return this.request({
       method : 'POST',
       uri : `/orgs/${ORG}/repos`,
       body : JSON.stringify(repo)
@@ -60,9 +63,13 @@ class GithubApi {
    * @method getRepository
    * @description Requires admin.
    * https://developer.github.com/v3/repos/#get
+   * 
+   * @param {String} repoName repository name to get
+   * 
+   * @returns {Promise}
    */
   async getRepository(repoName) {
-    return await this.request({
+    return this.request({
       method : 'GET',
       uri : `/repos/${ORG}/${repoName}`,
     });
@@ -72,9 +79,13 @@ class GithubApi {
    * @method deleteRepository
    * @description Requires admin.
    * https://developer.github.com/v3/repos/#delete-a-repository
+   * 
+   * @param {String} repoName repository name to delete
+   * 
+   * @returns {Promise}
    */
   async deleteRepository(repoName) {
-    return await this.request({
+    return this.request({
       method : 'DELETE',
       uri : `/repos/${ORG}/${repoName}`
     });
@@ -84,9 +95,14 @@ class GithubApi {
    * @method editRepository
    * @description Requires admin.
    * https://developer.github.com/v3/repos/#edit
+   * 
+   * @param {Object} repo repository updates, must include name
+   * @param {String} repo.name repository name to update
+   * 
+   * @returns {Promise}
    */
   async editRepository(repo) {
-    return await this.request({
+    return this.request({
       method : 'PATCH',
       uri : `/repos/${ORG}/${repo.name}`,
       body : JSON.stringify(repo)
@@ -107,9 +123,20 @@ class GithubApi {
    *  "draft": false,
    *  "prerelease": false
    * }
+   * 
+   * @param {String} repoName repository name
+   * @param {Object} release
+   * @param {String} release.tag_name
+   * @param {String} release.target_commitish
+   * @param {String} release.name
+   * @param {String} release.body
+   * @param {Boolean} release.draft
+   * @param {Boolean} release.prerelease
+   * 
+   * @returns {Promise}
    */
   async createRelease(repoName, release) {
-    return await this.request({
+    return this.request({
       method : 'POST',
       uri : `/repos/${ORG}/${repoName}/releases`,
       body : JSON.stringify(release)
@@ -120,9 +147,13 @@ class GithubApi {
    * @method listReleases
    * @description List all releases
    * https://developer.github.com/v3/repos/releases/#list-releases-for-a-repository
+   *
+   * @param {String} repoName repository name
+   * 
+   * @returns {Promise}
    */
   async listReleases(repoName) {
-    return await this.request({
+    return this.request({
       method : 'GET',
       uri : `/repos/${ORG}/${repoName}/releases`
     });
@@ -132,11 +163,16 @@ class GithubApi {
    * @method deleteRelease
    * @description Delete a release
    * https://developer.github.com/v3/repos/releases/#delete-a-release
+   *
+   * @param {String} repoName repository name
+   * @param {Number} releaseId GitHub release id
+   * 
+   * @returns {Promise}
    */
-  async deleteRelease(repoName, releaseName) {
-    return await request({
+  async deleteRelease(repoName, releaseId) {
+    return this.request({
       method : 'DELETE',
-      uri : `/repos/${ORG}/${repoName}/releases/${releaseName}`
+      uri : `/repos/${ORG}/${repoName}/releases/${releaseId}`
     });
   }
 

@@ -31,7 +31,8 @@
     "markdown": "^0.5.0",
     "prismjs": "^1.10.0",
     "query-string": "^5.0.1",
-    "uuid": "^3.1.0"
+    "uuid": "^3.1.0",
+    "vaadin-upload": "^3.0.0-beta1"
   },
   "resolutions": {
     "@polymer/iron-flex-layout": "3.0.0-pre.7",

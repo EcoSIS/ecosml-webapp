@@ -174,27 +174,28 @@ class PackageModel {
    * @method addFile
    * @description add file to package
    * 
-   * @param {Object} user 
    * @param {Object} options 
    * @param {String} options.filename
-   * @param {String} options.filepath 
-   * @param {String} options.packagename 
-   * @param {String} options.packagepath 
+   * @param {String} options.buffer 
+   * @param {String} options.packageName
+   * @param {String} options.message
    */
-  async addFile(user, options) {
+  async addFile(options) {
 
-    // check access
-    await this.checkAccess(user);
-
-    // make repo path
-    let packagepath = git.getRepoPath(options.packagename);
-    fs.mkdirsSync(packagepath);
+    // update repo path
+    await git.resetHEAD(options.packageName);
 
     // get full repo path name
+    let packagepath = git.getRepoPath(options.packageName);
     let repoFilePath = path.join(packagepath, options.filename);
+
+    if( fs.existsSync(repoFilePath) ) {
+      await fs.unlink(repoFilePath);
+    }
     
-    // move file
-    await fs.move(options.filepath, repoFilePath);
+    await fs.writeFile(repoFilePath, options.buffer);
+
+    await commit(options.packageName, options.message || 'Updating package file');
   }
 
   async commit(packageName, message) {

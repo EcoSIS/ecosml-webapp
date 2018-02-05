@@ -1,2 +1,2 @@
-// require('./mongo');
+require('./mongo');
 require('./github');

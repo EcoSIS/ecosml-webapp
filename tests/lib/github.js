@@ -11,7 +11,7 @@ let repo = {
 let release = {
   name : 'v0.0.1',
   tag_name : 'v0.0.1',
-  body : 'texting',
+  body : 'testing',
   draft : false,
   prerelease : false
 }

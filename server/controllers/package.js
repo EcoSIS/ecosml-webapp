@@ -96,20 +96,22 @@ router.post('/:name/createRelease', async (req, res) => {
 });
 
 router.post('/:name/addFile', upload.any(), async (req, res) => {
-  let packageName = req.params.name;
-
   let writeAccess = await middleware.canWritePackage(packageName, req, res);
   if( !writeAccess ) return;
 
-  // req.files is array of `photos` files 
-  // req.body will contain the text fields, if there were any 
+  if( req.files.length === 0 ) {
+    return res.status(400).send({error: true, message: 'no file provided'});
+  }
 
-  await model.addFile(req.user, {
-    filename : req.file.filename,
-    filepath : req.file.destination,
-    packageName : req.body.packageName,
-    packagePath : req.body.packagePath
-  })
+  var packageName = req.get('X-Package-Name');
+  var message = req.get('X-Commit-Message');
+  var file = req.files[0];
+
+  await model.addFile({
+    filename : file.filename,
+    buffer : file.buffer,
+    packageName, message
+  });
 });
 
 module.exports = router;

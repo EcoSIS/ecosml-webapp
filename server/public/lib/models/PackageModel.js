@@ -2,6 +2,7 @@ const {BaseModel} = require('@ucd-lib/cork-app-utils');
 const PackageService = require('../services/PackageService');
 const PackageStore = require('../stores/PackageStore');
 const PackageSchema = require('../schema').package;
+const uuid = require('uuid');
 
 class PackageModel extends BaseModel {
 
@@ -85,9 +86,37 @@ class PackageModel extends BaseModel {
     return this.service.createRelease(id, releaseInfo);
   }
 
+  /**
+   * @method uploadFile
+   * @description add a file to a repository
+   * 
+   * @param {Object} options
+   * @param {String} options.repoName name of repository to add file to
+   * @param {Object} file reference to file from form element
+   * @param {String} filename
+   * @param {String} filePath path to place file in repo
+   * @param {String} message message for commit
+   * 
+   * @returns {Promis}
+   */
+  uploadFile(options) {
+    options.id = uuid.v4();
+    return this.service.uploadFile(options);
+  }
+
+  /**
+   * @method previewMarkdown
+   * @description render markdown with Github flavored markdown service
+   * 
+   * @param {String} markdown markdown to render
+   * 
+   * @returns {Promise} resolves to html string
+   */
   previewMarkdown(markdown) {
     return this.service.previewMarkdown(markdown);
   }
+
+
 
 }
 

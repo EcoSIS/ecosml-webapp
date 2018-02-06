@@ -1,5 +1,6 @@
 const {BaseService} = require('@ucd-lib/cork-app-utils');
 const PackageStore = require('../stores/PackageStore');
+const upload = require('../upload');
 const uuid = require('uuid');
 
 class PackageService extends BaseService {
@@ -111,6 +112,24 @@ class PackageService extends BaseService {
       onLoading : request => this.store.setFileSaving(request, fileId, payload),
       onLoad : result => this.store.setFileSaved(fileId, payload),
       onError : error => this.store.setFileSaveError(fileId, error)
+    });
+  }
+
+  uploadFile(options) {
+    options.url = `${baseUrl}/uploadFile`;
+    return new Promise(async (resolve, reject) => {
+      
+      options.onProgress = (e) => this.store.onFileUploadProgress(e);
+      this.store.onFileUploadStart(options);
+
+      try {
+        let response = await upload(options);
+        this.store.onFileUploadSuccess(options, response);
+        resolve(response);
+      } catch(e) {
+        this.store.onFileUploadError(options, e);
+        reject(e);
+      }
     });
   }
 

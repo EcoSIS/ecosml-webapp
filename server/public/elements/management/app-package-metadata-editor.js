@@ -13,6 +13,7 @@ import "./app-theme-input"
 import "./app-create-release"
 import "./app-text-input"
 import "./app-org-input"
+import "./file-manager/app-file-manager"
 
 class AppPackageMetadataEditor extends Mixin(PolymerElement)
       .with(EventInterface, AppStateInterface, PackageInterface) {

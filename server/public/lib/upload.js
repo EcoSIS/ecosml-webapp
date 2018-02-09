@@ -35,7 +35,8 @@ function browserUpload(options) {
           options.onProgress({
             progress : ((e.loaded / e.total)*100).toFixed(0), 
             speed : speed.toFixed(2),
-            speedUnits : 'Mbps'
+            speedUnits : 'Mbps',
+            file : options
           });
         }
       }

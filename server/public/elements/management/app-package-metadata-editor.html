@@ -77,6 +77,7 @@
     <paper-tabs hidden$="[[creating]]" selected="{{selectedSection}}" attr-for-selected="id">
       <paper-tab id="basicInformation">Basic Information</paper-tab>
       <paper-tab id="details">Details</paper-tab>
+      <paper-tab id="files">Files</paper-tab>
       <paper-tab id="releasePanel">Releases</paper-tab>
     </paper-tabs>
 
@@ -120,6 +121,12 @@
         <div class="help">[[schema.keywords.description]]</div>
 
         <app-theme-input id="theme" on-update="_onThemeUpdate"></app-theme-input>
+      </div>
+
+      <div id="files">
+        <app-file-manager label="Papers" path="/papers"></app-file-manager>
+        <app-file-manager label="Coefficients" path="/coefficients"></app-file-manager>
+        <app-file-manager label="Source" path="/main"></app-file-manager>
       </div>
 
       <div id="releasePanel">

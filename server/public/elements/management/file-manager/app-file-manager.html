@@ -1,0 +1,66 @@
+<style>
+  :host {
+    display: block;
+  } 
+
+  input {
+    display: none;
+  }
+
+  .inputfile + label {
+    font-size: 1.25em;
+    font-weight: 700;
+    color: white;
+    background-color: black;
+    display: inline-block;
+  }
+
+  input:focus + label,
+  input + label:hover {
+    background-color: red;
+  }
+
+  #dropbox {
+    display: flex;
+    align-items: center;
+    border: 1px dashed var(--secondary-text-color);
+    padding: 15px;
+    margin: 5px;
+    border-radius: 8p;
+  }
+
+  #dropbox .droplabel {
+    transition: transform 350ms linear;
+    will-change: transform;
+    transform: scale(1);
+    font-size: 14px;
+    color : var(--secondary-text-color);
+  }
+
+  #dropbox.hover {
+    border: 2px dashed var(--default-primary-color);
+  }
+
+  #dropbox.hover .droplabel {
+    transform: scale(2) translateX(50px);
+    color: var(--default-primary-color);
+  }
+</style>
+
+<h2>[[label]]</h2>
+<div>[[description]]</div>
+<div id="dropbox" on-dragover="_onDropBoxDragOver" on-dragleave="_onDropBoxDragLeave" on-drop="_onDropBoxDrop">
+  <div>
+    <input type="file" multiple id="fileInput" on-change="_onFileInputChange" />
+    <paper-button on-click="_onChooseClicked">Choose File</paper-button>
+    <!-- <label for="fileInput">Choose a file</label> -->
+  </div>
+  <div class="droplabel">
+    Drag and drop files here
+  </div>
+</div>
+<div>
+  <template is="dom-repeat" items="[[files]]">
+    <app-file-uploader="[[file]]"></app-file-uploader>
+  </template>
+</div>

@@ -41,6 +41,12 @@ export default class AppFileManager extends Mixin(PolymerElement)
     this.active = true;
   }
 
+
+  _onFileUpdate(e) {
+    if( e.payload.dir !== this.directory ) return;
+    this._addFile(e.payload);
+  }
+
   _onSelectedPackageUpdate(payload) {
     this.currentPackageId = payload.id;
   }
@@ -92,14 +98,33 @@ export default class AppFileManager extends Mixin(PolymerElement)
     e.preventDefault();
 
     let files = e.dataTransfer ? e.dataTransfer.files : e.target.files; // FileList object.
-    this.files = [].slice.call(files).map(file => ({
+    [].slice.call(files).forEach(file => this._addFile({
       file,
+      id : this._getFileId(this.directory, file.name),
       filename : file.name,
       dir : this.directory,
       message : '',
       packageId : this.currentPackageId,
       upload : true
     }));
+  }
+
+  _addFile(file) {
+    clearTimeout(this.fileUpdateTimer);
+
+    let index = this.files.findIndex(f => f.id == file.id);
+    if( index > -1 ) this.files[index] = file;
+    else this.files.push(file);
+
+    this.fileUpdateTimer = setTimeout(() => {
+      this.files = this.files.slice(0);
+    }, 25);
+  }
+
+  _getFileId(dir, name) {
+    let sep = '';
+    if( !dir.match(/\/^/) ) sep = '/';
+    return dir + sep + name;
   }
 
   /**

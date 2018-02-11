@@ -12,6 +12,11 @@
     width: 100%;
     --paper-progress-active-color: var(--default-primary-color);
   }
+
+  .upload-text {
+    font-size: 12px;
+    color: var(--secondary-text-color);
+  }
 </style>
 
 <div class="layout">
@@ -21,5 +26,6 @@
   </div>
 </div>
 <div hidden$="[[!uploading]]">
+  <div class="upload-text">[[uploadText]]</div>
   <paper-progress value="[[uploadPercent]]" min="0" max="100" class="red"></paper-progress>
 </div>

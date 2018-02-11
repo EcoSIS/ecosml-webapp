@@ -99,7 +99,7 @@ class PackageModel extends BaseModel {
    * @returns {Promis}
    */
   uploadFile(options) {
-    options.id = uuid.v4();
+    options.uploadId = uuid.v4();
     options.dir = options.dir || '/';
     return this.service.uploadFile(options);
   }
@@ -125,6 +125,17 @@ class PackageModel extends BaseModel {
 
   deleteFile(packageId, filePath) {
 
+  }
+
+  /**
+   * @method getFiles
+   * @description get package files
+   * 
+   * @param {String} packageId
+   */
+  async getFiles(packageId) {
+    await this.service.getFiles(packageId);
+    return this.store.getFiles(packageId);
   }
 
   /**

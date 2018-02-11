@@ -134,36 +134,22 @@ class PackageStore extends BaseStore {
   }
 
   /**
-   * Add File Operations
-   */
-  setFileSaving(request, fileId, payload) {
-    this._setFileSaveState(fileId, {request, payload, fileId, state: this.STATE.SAVING});
-  }
-
-  setFileSaved(fileId, payload) {
-    this._setFileSaveState(fileId, {payload, fileId, state: this.STATE.LOADED});
-  }
-
-  setFileSaveError(fileId, error) {
-    this._setFileSaveState(fileId, {error, fileId, state: this.STATE.SAVE_ERROR});
-  }
-
-  _setFileSaveState(fileId, state) {
-    this.data.addedFiles[fileId] = state;
-    this.emit(this.events.ADD_FILE_UPDATE, this.data.addedFiles[fileId]);
-  }
-
-  /**
    * Upload File Operations
    */
+  getFiles(packageId) {
+    return this.data.files[packageId];
+  }
+
   onFileUploadProgress(uploadId, e) {
     this.data.fileUploadStatus[uploadId] = {id: uploadId, status: e};
     this.emit(this.events.UPLOAD_FILE_STATUS_UPDATE, this.data.fileUploadStatus[uploadId]);
   }
 
   onFileUploadStart(packageId, file) {
+    file.id = this._createFileId(file);
+
     let state = {
-      id : file.dir + '/' + file.filename,
+      id : file.id,
       packageId : packageId,
       payload : file, 
       state : 'uploading'
@@ -176,8 +162,9 @@ class PackageStore extends BaseStore {
   }
 
   onFileLoaded(packageId, file) {
+    file.id = this._createFileId(file);
     let state = {
-      id : file.dir + '/' + file.filename,
+      id : file.id,
       packageId : packageId,
       payload : file, 
       state : this.STATE.LOADED
@@ -186,8 +173,9 @@ class PackageStore extends BaseStore {
   }
 
   onFileError(packageId, file, error) {
+    file.id = this._createFileId(file);
     let state = {
-      id : file.dir + '/' + file.filename,
+      id : file.id,
       packageId : packageId,
       error : error,
       payload : file, 
@@ -214,6 +202,12 @@ class PackageStore extends BaseStore {
 
   getSelectedPackageId() {
     return this.data.selectedPackageId;
+  }
+
+  _createFileId(file) {
+    let sep = '';
+    if( !file.dir.match(/\/$/) ) sep = '/';
+    return file.dir + sep + file.filename;
   }
 
 }

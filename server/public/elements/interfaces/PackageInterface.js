@@ -43,4 +43,8 @@ module.exports = subclass =>
       this.PackageModel.setSelectedPackageId(packageId);
     }
 
+    _getPackageFiles(packageId) {
+      return this.PackageModel.getFiles(packageId);
+    }
+
   }

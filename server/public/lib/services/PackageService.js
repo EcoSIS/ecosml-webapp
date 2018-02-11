@@ -91,8 +91,8 @@ class PackageService extends BaseService {
 
   async getFiles(packageId) {
     return this.request({
-      url : `${this.baseUrl}/${packageId}`,
-      onLoad : result => this.store.onFilesLoaded(packageId, result.body)
+      url : `${this.baseUrl}/${packageId}/files`,
+      onLoad : result => this.store.onFilesLoaded(packageId, result.body.files)
     });
   }
 
@@ -116,7 +116,7 @@ class PackageService extends BaseService {
     options.url = `${this.baseUrl}/${options.packageId}/updateFile`;
     return new Promise(async (resolve, reject) => {
       
-      options.onProgress = (e) => this.store.onFileUploadProgress(options.id, e);
+      options.onProgress = (e) => this.store.onFileUploadProgress(options.uploadId, e);
 
       let file = {
         filename : options.file.name,

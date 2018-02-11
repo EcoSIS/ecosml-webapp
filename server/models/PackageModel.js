@@ -210,7 +210,7 @@ class PackageModel {
     }
 
     // TODO: uncomment when working
-    // await commit(pkg.name, file.message || 'Updating package file');
+    await this.commit(pkg.name, file.message || 'Updating package file');
   
     return this._getFileInfo(
       path.join(file.dir, file.filename)
@@ -227,7 +227,7 @@ class PackageModel {
    * @returns {Promise}
    */
   async deleteFile(pkg, filepath) {
-    pkg = await this.get(packageNameOrId);
+    pkg = await this.get(pkg);
 
     // update repo path
     await git.resetHEAD(pkg.name);
@@ -236,12 +236,12 @@ class PackageModel {
     let packagepath = git.getRepoPath(pkg.name);
     let repoFilePath = path.join(packagepath, filepath);
 
-    if( fs.existsSync(repoFilePath) ) {
+    if( !fs.existsSync(repoFilePath) ) {
       throw new Error('Package file does not exist: '+filepath);
     }
 
     await fs.unlink(repoFilePath);
-    await commit(pkg.name, 'Removing package file');
+    await this.commit(pkg.name, 'Removing package file');
   }
 
   /**

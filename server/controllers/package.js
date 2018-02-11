@@ -82,10 +82,11 @@ router.post('/:package/updateFile', packageWriteAccess, upload.any(), async (req
 
 router.delete('/:package/file/*', packageWriteAccess, async (req, res) => {
   let file = req.url.replace('/'+req.params.package+'/file', '');
+  file = decodeURI(file);
 
   try {
     await model.deleteFile(req.ecosmlPackage, file);
-    res.status(204);
+    res.status(204).send();
   } catch(e) {
     utils.handleError(res, e);
   }

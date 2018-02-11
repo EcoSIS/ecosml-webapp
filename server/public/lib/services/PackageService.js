@@ -136,18 +136,22 @@ class PackageService extends BaseService {
     });
   }
 
-  deleteFile(packageId, dir, filename) {
-    let file = {
-      dir : dir,
-      filename : filename
-    }
+  /**
+   * 
+   * @param {String} packageId 
+   * @param {String} file 
+   */
+  deleteFile(packageId, file) {
+    let sep = '';
+    if( !file.dir.match(/\/^/) ) sep = '/';
+    let filepath = file.dir+sep+encodeURI(file.filename);
 
     return this.request({
-      url : `${this.baseUrl}/${packageId}/${dir}/${filename}`,
+      url : `${this.baseUrl}/${packageId}/file${filepath}`,
       fetchOptions : {
         method : 'DELETE'
       },
-      onLoading : request => this.store.setFileDeleteStart(request, packageId, file),
+      // onLoading : request => this.store.setFileDeleteStart(request, packageId, file),
       onLoad : result => this.store.setFileDeleteSuccess(result.body, packageId, file),
       onError : error => this.store.onFileError(packageId, file, error)
     });

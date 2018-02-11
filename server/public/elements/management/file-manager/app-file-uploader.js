@@ -18,6 +18,12 @@ export default class AppFileUploader extends Mixin(PolymerElement)
         value : () => {},
         observer : '_onDataUpdate'
       },
+      
+      packageId : {
+        type : String,
+        value : ''
+      },
+      
       uploading : {
         type : Boolean,
         value : false
@@ -54,8 +60,14 @@ export default class AppFileUploader extends Mixin(PolymerElement)
     this.uploadText = e.status.speed+e.status.speedUnits;
   }
 
+  _onSelectedPackageUpdate(payload) {
+    this.currentPackageId = payload.id;
+  }
+
   _onFileUpdate(e) {
     if( e.id !== this.data.id ) return;
+
+    this.data = e.payload;
 
     if( e.state === 'uploading' ) {
       this.uploading = true;
@@ -105,8 +117,6 @@ export default class AppFileUploader extends Mixin(PolymerElement)
     try {
       if( this.uploading ) await this.cancel();
       else await this.remove();
-
-      this.fire('file-removed', this.data);
     } catch(e) {
       // TODO: handle
     }
@@ -125,7 +135,7 @@ export default class AppFileUploader extends Mixin(PolymerElement)
    * @description remove a file from the repository
    */
   remove() {
-
+    return this._deleteFile(this.packageId, this.data);
   }
 
 }

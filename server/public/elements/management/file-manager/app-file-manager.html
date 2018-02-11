@@ -71,7 +71,10 @@
 
   <div>
     <template is="dom-repeat" items="[[files]]">
-      <app-file-uploader data="[[item]]" on-file-removed="_onFileRemoved"></app-file-uploader>
+      <app-file-uploader 
+        data="[[item]]" 
+        package-id="[[currentPackageId]]">
+      </app-file-uploader>
     </template>
   </div>
 </div>

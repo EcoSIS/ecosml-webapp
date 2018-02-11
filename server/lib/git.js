@@ -152,7 +152,7 @@ class GitCli {
 
     return new Promise((resolve, reject) => {
       exec(cmd, options, (error, stdout, stderr) => {
-        if( error ) reject(error);
+        if( error ) reject({stdout, stderror, error});
         else resolve({stdout, stderr});
       });
     });

@@ -44,6 +44,8 @@ export default class AppFileManager extends Mixin(PolymerElement)
 
   _onFileUpdate(e) {
     if( e.payload.dir !== this.directory ) return;
+    if( e.state === 'deleted' ) return this._onFileRemoved(e.payload);
+
     this._addFile(e.payload);
   }
 
@@ -129,12 +131,12 @@ export default class AppFileManager extends Mixin(PolymerElement)
 
   /**
    * @method _onFileRemoved
-   * @description Triggered from app-file-uploader when file has been removed
+   * @description 
    * 
-   * @param {Object} e 
+   * @param {Object} file
    */
-  _onFileRemoved(e) {
-    let index = this.files.findIndex(file => file === e.detail);
+  _onFileRemoved(file) {
+    let index = this.files.findIndex(f => f.id === file.id);
     this.files.splice(index, 1)
     this.files = this.files.slice(0);
   }

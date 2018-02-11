@@ -39,6 +39,10 @@ module.exports = subclass =>
       return this.PackageModel.uploadFile(options);
     }
 
+    _deleteFile(packageId, file) {
+      return this.PackageModel.deleteFile(packageId, file);
+    }
+
     _setSelectedPackageId(packageId) {
       this.PackageModel.setSelectedPackageId(packageId);
     }

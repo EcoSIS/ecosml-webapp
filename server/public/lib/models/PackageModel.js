@@ -123,8 +123,17 @@ class PackageModel extends BaseModel {
     this.store.setFileUploadCancelled(options.packageId, file);
   }
 
-  deleteFile(packageId, filePath) {
-
+  /**
+   * @method deleteFile
+   * @description delete a file
+   * 
+   * @param {String} packageId id of package
+   * @param {String} file file object
+   * 
+   * @returns {Promise}
+   */
+  deleteFile(packageId, file) {
+    return this.service.deleteFile(packageId, file);
   }
 
   /**

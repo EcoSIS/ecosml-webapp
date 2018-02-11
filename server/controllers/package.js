@@ -1,8 +1,10 @@
 const router = require('express').Router();
 const path = require('path');
 const multer = require('multer');
+
+const uploadPath = path.join(__dirname, '..', 'uploads');
 const upload = multer({ 
-  dest: 'uploads/' 
+  dest: uploadPath
 });
 const model = require('../models/PackageModel');
 const {packageWriteAccess, packageReadAccess} = require('./middleware/auth');
@@ -69,8 +71,8 @@ router.post('/:package/updateFile', packageWriteAccess, upload.any(), async (req
   let response = await model.addFile(
     req.ecosmlPackage,
     {
-      filename : path.parse(file.filename).base,
-      buffer : file.buffer,
+      filename : file.originalname,
+      tmpFile : file.path,
       dir, message
     }
   );

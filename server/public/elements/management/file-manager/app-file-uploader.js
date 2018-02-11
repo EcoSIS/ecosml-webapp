@@ -27,6 +27,11 @@ export default class AppFileUploader extends Mixin(PolymerElement)
       uploadPercent : {
         type : Number,
         value : 0
+      },
+
+      uploadSession : {
+        type : Object,
+        value : null
       }
     }
   }
@@ -38,6 +43,25 @@ export default class AppFileUploader extends Mixin(PolymerElement)
    */
   _onDataUpdate() {
     if( !this.data ) return;
+
+    if( this.data.upload ) {
+      this._startFileUpload();
+    }
+  }
+
+  async _startFileUpload() {
+    this.uploadSession = {
+      file : this.data.file,
+      dir : this.data.dir,
+      packageId : this.data.packageId,
+      message : this.data.message
+    }
+
+    try {
+      this._uploadFile(this.uploadSession);
+    } catch(e) {
+      console.error(e);
+    }
   }
 
   /**

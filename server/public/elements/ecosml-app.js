@@ -34,10 +34,11 @@ import "./utils/app-auth-icon"
 
 // element imports
 import AppStateInterface from "./interfaces/AppStateInterface"
+import PackageInterface from "./interfaces/PackageInterface"
 import template from "./ecosml-app.html";
 
 export class EcoSMLApp extends Mixin(PolymerElement)
-      .with(EventInterface, AppStateInterface) {
+      .with(EventInterface, AppStateInterface, PackageInterface) {
     
   // Define a string template instead of a `<template>` element.
   static get template() {

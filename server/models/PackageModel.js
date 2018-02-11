@@ -36,10 +36,6 @@ class PackageModel {
     }
   }
 
-  async checkAccess(user) {
-
-  }
-
   /**
    * @method create
    * @description create a package
@@ -53,9 +49,6 @@ class PackageModel {
   async create(pkg) {
     logger.info(`Creating package: ${pkg.name}`);
     this.verifyRequired(config.schemaFilter.REQUIRED_CREATE, pkg);
-
-    // check access
-    await this.checkAccess();
 
     if( pkg.name.length < 4 ) throw new AppError('Package name must be at least 4 characters', AppError.ERROR_CODES.INVALID_ATTRIBUTE);
     if( pkg.description.length < 15 ) throw new AppError('Please provide a longer overview', AppError.ERROR_CODES.INVALID_ATTRIBUTE);
@@ -162,18 +155,23 @@ class PackageModel {
    * @return {Promise}
    */
   async get(pkg, renderMarkdown=false) {
-    if( typeof pkg === 'object' ) return pkg;
-
-    pkg = await mongo.getPackage(pkg);
-    if( !pkg ) throw new Error('Unknown package: '+pkg);
-
-    if( pkg.description && renderMarkdown ) {
-      pkg.renderedDescription = await markdown(pkg.description);
+    let pkgObj;
+    
+    if( typeof pkg === 'object' ) {
+      pkgObj = pkg;
     } else {
-      pkg.renderedDescription = '';
+      pkgObj = await mongo.getPackage(pkg);
     }
 
-    return pkg;
+    if( !pkgObj ) throw new Error('Unknown package: '+pkg);
+
+    if( pkgObj.description && renderMarkdown ) {
+      pkgObj.renderedDescription = await markdown(pkgObj.description);
+    } else {
+      pkgObj.renderedDescription = '';
+    }
+
+    return pkgObj;
   }
 
   /**
@@ -183,7 +181,7 @@ class PackageModel {
    * @param {Object|String} pkg package object, name or id
    * @param {Object} file 
    * @param {String} file.filename
-   * @param {String} file.buffer 
+   * @param {String} file.tmpFile 
    * @param {String} file.dir
    * @param {String} file.message
    */
@@ -195,15 +193,24 @@ class PackageModel {
 
     // get full repo path name
     let packagepath = git.getRepoPath(pkg.name);
-    let repoFilePath = path.join(packagepath, file.dir, file.filename);
+    let baseFileDir = path.join(packagepath, file.dir);
+
+    await fs.mkdirs(baseFileDir);
+
+    let repoFilePath = path.join(baseFileDir, file.filename);
 
     if( fs.existsSync(repoFilePath) ) {
       await fs.unlink(repoFilePath);
     }
     
-    await fs.writeFile(repoFilePath, file.buffer);
+    if( file.buffer ) {
+      await fs.writeFile(repoFilePath, file.buffer);
+    } else if( file.tmpFile ) {
+      await fs.move(file.tmpFile, repoFilePath);
+    }
 
-    await commit(pkg.name, file.message || 'Updating package file');
+    // TODO: uncomment when working
+    // await commit(pkg.name, file.message || 'Updating package file');
   
     return this._getFileInfo(
       path.join(file.dir, file.filename)

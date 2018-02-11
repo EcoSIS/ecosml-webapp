@@ -223,7 +223,6 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
     if( this.creating ) return;
 
     this.unsavedData = {
-      id : packageId,
       name : this.namePreview,
       overview : this.get('overview'),
       description : this.get('description'),
@@ -248,7 +247,7 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
   }
 
   _onSaveChangesClicked() {
-    this._updatePackage(this.unsavedData, this.$.commitMsg.value);
+    this._updatePackage(this.packageId, this.unsavedData, this.$.commitMsg.value);
   }
 
   _onEditPackageUpdate(e) {

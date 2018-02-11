@@ -166,9 +166,9 @@ class PackageStore extends BaseStore {
       id : file.dir + '/' + file.filename,
       packageId : packageId,
       payload : file, 
-      state
+      state : 'uploading'
     }
-    this._setFileState(packageId, file, 'uploading');
+    this._setFileState(packageId, state);
   }
 
   onFilesLoaded(packageId, files = []) {
@@ -180,7 +180,7 @@ class PackageStore extends BaseStore {
       id : file.dir + '/' + file.filename,
       packageId : packageId,
       payload : file, 
-      state
+      state : this.STATE.LOADED
     }
     this._setFileState(packageId, state);
   }
@@ -191,7 +191,7 @@ class PackageStore extends BaseStore {
       packageId : packageId,
       error : error,
       payload : file, 
-      state
+      state : this.STATE.ERROR
     }
     this._setFileState(packageId, state);
   }

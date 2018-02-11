@@ -35,11 +35,14 @@ class PackageService extends BaseService {
     })
   }
 
-  async update(pkg, msg) {
-    let payload = {pkg, msg};
+  async update(pkgNameOrId, pkg, msg) {
+    let payload = {
+      update: pkg, 
+      message: msg
+    };
 
     return this.request({
-      url : this.baseUrl+'/'+pkg.name,
+      url : this.baseUrl+'/'+pkgNameOrId,
       fetchOptions : {
         method : 'PATCH',
         body  : payload
@@ -55,9 +58,9 @@ class PackageService extends BaseService {
    * @method createRelease
    * @description create a new package release
    */
-  async createRelease(name, payload) {
+  async createRelease(pkgNameOrId, payload) {
     return this.request({
-      url : `${this.baseUrl}/${name}/createRelease`,
+      url : `${this.baseUrl}/${pkgNameOrId}/createRelease`,
       fetchOptions : {
         method : 'POST',
         body  : payload
@@ -74,28 +77,28 @@ class PackageService extends BaseService {
    * @description get a package by id.  the /package/:id request also 
    * accepts /package/:name
    * 
-   * @param {String} id package ecosml id 
+   * @param {String} packageId package ecosml id 
    */
-  async get(id) {
+  async get(packageId) {
     return this.request({
-      url : `${this.baseUrl}/${id}`,
-      checkCached : () => this.store.data.byId[id],
-      onLoading : request => this.store.setGetPackageLoading(id, request),
-      onLoad : result => this.store.setGetPackageSuccess(id, result.body),
-      onError : error => this.store.setGetPackageError(id, error)
+      url : `${this.baseUrl}/${packageId}`,
+      checkCached : () => this.store.data.byId[packageId],
+      onLoading : request => this.store.setGetPackageLoading(packageId, request),
+      onLoad : result => this.store.setGetPackageSuccess(packageId, result.body),
+      onError : error => this.store.setGetPackageError(packageId, error)
     });
   }
 
-  async getFiles(id) {
+  async getFiles(packageId) {
     return this.request({
-      url : `${this.baseUrl}/${id}`,
-      onLoad : result => this.store.onFilesLoaded(id, result.body)
+      url : `${this.baseUrl}/${packageId}`,
+      onLoad : result => this.store.onFilesLoaded(packageId, result.body)
     });
   }
 
-  async delete(name) {
+  async delete(packageId) {
     return this.request({
-      url : `${this.baseUrl}/${name}`,
+      url : `${this.baseUrl}/${packageId}`,
       fetchOptions : {
         method : 'DELETE'
       },
@@ -110,13 +113,13 @@ class PackageService extends BaseService {
    * 
    */
   uploadFile(options) {
-    options.url = `${baseUrl}/updateFile`;
+    options.url = `${this.baseUrl}/${options.packageId}/updateFile`;
     return new Promise(async (resolve, reject) => {
       
       options.onProgress = (e) => this.store.onFileUploadProgress(options.id, e);
-      
+
       let file = {
-        base : options.file.filename,
+        filename : options.file.name,
         dir : options.dir
       }
       this.store.onFileUploadStart(options.packageId, file);
@@ -136,7 +139,7 @@ class PackageService extends BaseService {
   deleteFile(packageId, dir, filename) {
     let file = {
       dir : dir,
-      base : filename
+      filename : filename
     }
 
     return this.request({

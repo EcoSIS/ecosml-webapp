@@ -19,8 +19,8 @@ module.exports = subclass =>
       return this.PackageModel.create(name, overview, organization);
     }
 
-    async _updatePackage(pkg, msg) {
-      return this.PackageModel.update(pkg, msg);
+    async _updatePackage(packageId, data, msg) {
+      return this.PackageModel.update(packageId, data, msg);
     }
 
     async _deletePackage(name) {
@@ -37,6 +37,10 @@ module.exports = subclass =>
 
     _uploadFile(options) {
       return this.PackageModel.uploadFile(options);
+    }
+
+    _setSelectedPackageId(packageId) {
+      this.PackageModel.setSelectedPackageId(packageId);
     }
 
   }

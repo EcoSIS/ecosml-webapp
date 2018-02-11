@@ -17,7 +17,7 @@ export default class AppFileManager extends Mixin(PolymerElement)
         type : Array,
         value : () => []
       },
-      path : {
+      directory : {
         type : String,
         value : ''
       },
@@ -93,12 +93,13 @@ export default class AppFileManager extends Mixin(PolymerElement)
 
     let files = e.dataTransfer ? e.dataTransfer.files : e.target.files; // FileList object.
     this.files = [].slice.call(files).map(file => ({
-        file,
-        filename : file.name,
-        filePath : this.path,
-        message : '',
-        repoName : this.currentPackageId
-      }));
+      file,
+      filename : file.name,
+      dir : this.directory,
+      message : '',
+      packageId : this.currentPackageId,
+      upload : true
+    }));
   }
 
   /**

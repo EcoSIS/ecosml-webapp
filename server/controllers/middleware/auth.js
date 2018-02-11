@@ -1,16 +1,17 @@
 let model = require('../../models/AuthModel');
+let packageModel = require('../../models/PackageModel');
 let mongo = require('../../lib/mongo');
 let utils = require('../utils');
 let AppError = require('../../lib/AppError');
 
-class AuthMiddleware {
 
-  sendError(res, code, msg) {
+
+  function sendError(res, code, msg) {
     res.status(code);
     res.json({error: true, message: msg});
   } 
 
-  authenticated(req, res, next) {
+  function authenticated(req, res, next) {
     if( !req.session.username ) {
       this.sendError(res, 401, 'You must login');
       return false;
@@ -20,13 +21,13 @@ class AuthMiddleware {
     return true;
   }
 
-  async packageWriteAccess(req, res, next) {
-    if( !this.authenticated(req, res) ) return res.send(403);
+  async function packageWriteAccess(req, res, next) {
+    if( !authenticated(req, res) ) return res.send(403);
 
     let pkg;
     if( req.params.package ) {
       try {
-        pkg = await model.get(req.params.package);
+        pkg = await packageModel.get(req.params.package);
       } catch(e) {
         return utils.handleError(res, e);
       }
@@ -51,9 +52,10 @@ class AuthMiddleware {
     next();
   }
 
-  async packageReadAccess(req, res, next) {
+  async function packageReadAccess(req, res, next) {
+    let pkg;
     try {
-      pkg = await model.get(req.params.package);
+      pkg = await packageModel.get(req.params.package);
     } catch(e) {
       return utils.handleError(res, e);
     }
@@ -78,6 +80,8 @@ class AuthMiddleware {
     next();
   }
 
+module.exports = {
+  sendError,
+  packageReadAccess,
+  packageWriteAccess
 }
-
-module.exports = new AuthMiddleware();

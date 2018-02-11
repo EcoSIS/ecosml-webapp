@@ -35,6 +35,7 @@ export default class AppMarkdownEditor extends Mixin(PolymerElement)
 
   set value(value) {
     this.$.input.value = value;
+    this._autoSize();
     if( this.previewMode ) this._updatePreview();
   }
 
@@ -59,6 +60,7 @@ export default class AppMarkdownEditor extends Mixin(PolymerElement)
   _toggle(e) {
     if( e.currentTarget.icon === 'code' ) {
       this.selected = 'input';
+      this._autoSize();
     } else {
       this.$.preview.style.height = this.$.input.offsetHeight+'px';
       this.selected = 'preview';
@@ -73,17 +75,16 @@ export default class AppMarkdownEditor extends Mixin(PolymerElement)
     this.$.preview.render(this.value);
   }
 
-  /**
-   * function autosize(){
-  var el = this;
-  setTimeout(function(){
-    el.style.cssText = 'height:auto; padding:0';
-    // for box-sizing other than "content-box" use:
-    // el.style.cssText = '-moz-box-sizing:content-box';
-    el.style.cssText = 'height:' + el.scrollHeight + 'px';
-  },0);
-}
-   */
+  _onTextAreaKeyUp() {
+    this._autoSize();
+  }
+
+  _autoSize() {
+    setTimeout(() => {
+      this.$.input.style.height = (this.$.input.scrollHeight) + 'px';
+    }, 0);
+  }
+
 
 }
 

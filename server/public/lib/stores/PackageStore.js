@@ -6,23 +6,28 @@ class PackageStore extends BaseStore {
     super();
 
     this.data = {
+      selectedPackageId : '',
       // single state objects
       create : {},
       update : {},
       delete : {},
       createRelease : {},
-      // hash by id
-      addedFiles : {},
+
+      files : {},
+      fileUploadStatus : {},
+
       byId : {}
     }
 
     this.events = {
+      'SELECTED_PACKAGE_UPDATE' : 'selected-package-update',
       'PACKAGE_UPDATE' : 'package-update',
       'CREATE_PACKAGE_UPDATE' : 'create-package-update',
       'EDIT_PACKAGE_UPDATE'   : 'edit-package-update',
       'DELETE_PACKAGE_UPDATE' : 'delete-package-update',
       'CREATE_PACKAGE_RELEASE_UPDATE' : 'create-package-release-update',
-      'ADD_FILE_UPDATE' : 'add-file-update'
+      'FILE_UPDATE' : 'file-update',
+      'UPLOAD_FILE_STATUS_UPDATE' : 'upload-file-status-update'
     }
   }
 
@@ -147,6 +152,70 @@ class PackageStore extends BaseStore {
     this.data.addedFiles[fileId] = state;
     this.emit(this.events.ADD_FILE_UPDATE, this.data.addedFiles[fileId]);
   }
+
+  /**
+   * Upload File Operations
+   */
+  onFileUploadProgress(uploadId, e) {
+    this.data.fileUploadStatus[uploadId] = {id: uploadId, status: e};
+    this.emit(this.events.UPLOAD_FILE_STATUS_UPDATE, this.data.fileUploadStatus[uploadId]);
+  }
+
+  onFileUploadStart(packageId, file) {
+    let state = {
+      id : file.dir + '/' + file.filename,
+      packageId : packageId,
+      payload : file, 
+      state
+    }
+    this._setFileState(packageId, file, 'uploading');
+  }
+
+  onFilesLoaded(packageId, files = []) {
+    files.forEach(file => this.onFileLoaded(packageId, file));
+  }
+
+  onFileLoaded(packageId, file) {
+    let state = {
+      id : file.dir + '/' + file.filename,
+      packageId : packageId,
+      payload : file, 
+      state
+    }
+    this._setFileState(packageId, state);
+  }
+
+  onFileError(packageId, file, error) {
+    let state = {
+      id : file.dir + '/' + file.filename,
+      packageId : packageId,
+      error : error,
+      payload : file, 
+      state
+    }
+    this._setFileState(packageId, state);
+  }
+
+  _setFileState(packageId, state) {
+    if( !this.data.files[packageId] ) {
+      this.data.files[packageId] = {};
+    }
+    this.data.files[packageId][state.id] = state;
+    this.emit(this.events.FILE_UPDATE, this.data.files[packageId][state.id]);
+  }
+
+  /**
+   * Selected package operations
+   */
+  setSelectedPackageId(packageId) {
+    this.data.selectedPackageId = {id: packageId};
+    this.emit(this.events.SELECTED_PACKAGE_UPDATE, this.data.selectedPackageId);
+  }
+
+  getSelectedPackageId() {
+    return this.data.selectedPackageId;
+  }
+
 }
 
 module.exports = new PackageStore();

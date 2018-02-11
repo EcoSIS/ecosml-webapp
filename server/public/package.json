@@ -18,6 +18,7 @@
     "@polymer/paper-icon-button": "^3.0.0-pre.7",
     "@polymer/paper-input": "^3.0.0-pre.7",
     "@polymer/paper-material": "^3.0.0-pre.7",
+    "@polymer/paper-progress": "^3.0.0-pre.8",
     "@polymer/paper-ripple": "^3.0.0-pre.7",
     "@polymer/paper-styles": "^3.0.0-pre.7",
     "@polymer/paper-tabs": "^3.0.0-pre.7",

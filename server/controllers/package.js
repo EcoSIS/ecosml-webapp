@@ -1,20 +1,17 @@
 const router = require('express').Router();
+const path = require('path');
 const multer = require('multer');
 const upload = multer({ 
   dest: 'uploads/' 
 });
 const model = require('../models/PackageModel');
-const middleware = require('./middleware/auth');
+const {packageWriteAccess, packageReadAccess} = require('./middleware/auth');
 const utils = require('./utils');
 const AppError = require('../lib/AppError');
 
-router.post('/', async (req, res) => {
-  let pkg = req.body || {};
-
+router.post('/', packageWriteAccess, async (req, res) => {
+  let pkg = req.ecosmlPackage;
   pkg.owner = req.session.username;
-
-  let writeAccess = await middleware.canWritePackage(pkg, req, res);
-  if( !writeAccess ) return;
 
   try {
     pkg = await model.create(pkg);
@@ -24,94 +21,84 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.get('/:name', async(req, res) => {
-  let packageName = req.params.name;
-  if( !packageName ) {
-    let e = new AppError('Package name or id required. /api/package/:name', AppError.ERROR_CODES.MISSING_ATTRIBUTE)
-    return utils.handleError(res, e);
-  }
-
-  let readAccess = await middleware.canReadPackage(packageName, req, res);
-  if( !readAccess ) return;
-
+router.get('/:package', packageReadAccess, async(req, res) => {
   try {
-    let package = await model.get(packageName);
+    let package = await model.get(req.ecosmlPackage);
     res.json(package);
   } catch(e) {
     utils.handleError(res, e);
   }
 });
 
-router.patch('/:name', async(req, res) => {
-  let packageName = req.params.name;
-  if( !packageName ) {
-    let e = new AppError('Package name or id required. /api/package/:name', AppError.ERROR_CODES.MISSING_ATTRIBUTE)
-    return utils.handleError(res, e);
-  }
-
-  let update = req.body;
-
+router.patch('/:package', packageWriteAccess, async(req, res) => {
   try {
-    let writeAccess = await middleware.canWritePackage(packageName, req, res);
-    if( !writeAccess ) return;
-
-    package = await model.update(update.pkg, update.msg);
+    package = await model.update(req.ecosmlPackage, req.body.update, req.body.message);
     res.json(package);
   } catch(e) {
     utils.handleError(res, e);
   }
 });
 
-router.delete('/:name', async (req, res) => {
-  let packageName = req.params.name;
-  if( !packageName ) {
-    let e = new AppError('Package name required. /api/package/:name', AppError.ERROR_CODES.MISSING_ATTRIBUTE)
-    return utils.handleError(res, e);
-  }
-
-  try {
-    let writeAccess = await middleware.canWritePackage(packageName, req, res);
-    if( !writeAccess ) return;
-  
-    await model.delete(packageName);
+router.delete('/:package', packageWriteAccess, async (req, res) => {
+  try {  
+    await model.delete(req.ecosmlPackage);
     res.status(204);
   } catch(e) {
     utils.handleError(res, e);
   }
 });
 
-router.post('/:name/createRelease', async (req, res) => {
-  let releaseInfo = req.body;
-  let packageName = req.params.name;
-
-  let writeAccess = await middleware.canWritePackage(packageName, req, res);
-  if( !writeAccess ) return;
-  
+router.post('/:package/createRelease', packageWriteAccess, async (req, res) => {
   try {
-    package = await model.createRelease(packageName, releaseInfo);
+    package = await model.createRelease(req.ecosmlPackage, req.body);
     res.status(201).json(package);
   } catch(e) {
     utils.handleError(res, e);
   }
 });
 
-router.post('/:name/addFile', upload.any(), async (req, res) => {
-  let writeAccess = await middleware.canWritePackage(packageName, req, res);
-  if( !writeAccess ) return;
-
+router.post('/:package/updateFile', packageWriteAccess, upload.any(), async (req, res) => {
   if( req.files.length === 0 ) {
     return res.status(400).send({error: true, message: 'no file provided'});
   }
 
-  var packageName = req.get('X-Package-Name');
-  var message = req.get('X-Commit-Message');
+  let message = req.body.message;
+  let dir = req.body.dir;
   var file = req.files[0];
 
-  await model.addFile({
-    filename : file.filename,
-    buffer : file.buffer,
-    packageName, message
-  });
+  let response = await model.addFile(
+    req.ecosmlPackage,
+    {
+      filename : path.parse(file.filename).base,
+      buffer : file.buffer,
+      dir, message
+    }
+  );
+
+  res.send(response);
+});
+
+router.delete('/:package/file/*', packageWriteAccess, async (req, res) => {
+  let file = req.url.replace('/'+req.params.package+'/file', '');
+
+  try {
+    await model.deleteFile(req.ecosmlPackage, file);
+    res.status(204);
+  } catch(e) {
+    utils.handleError(res, e);
+  }
+});
+
+router.get('/:package/files', packageReadAccess, async (req, res) => {
+  try {
+    let files = await model.getFiles(req.ecosmlPackage);
+    res.json({
+      package: req.ecosmlPackage.name,
+      files : files
+    });
+  } catch(e) {
+    utils.handleError(res, e);
+  }
 });
 
 module.exports = router;

@@ -1,7 +1,11 @@
 import {Element as PolymerElement} from "@polymer/polymer/polymer-element"
 import template from "./app-file-manager.html"
 
-export default class AppFileManager extends PolymerElement {
+import "./app-file-uploader"
+import PackageInterface from "../../interfaces/PackageInterface"
+
+export default class AppFileManager extends Mixin(PolymerElement)
+  .with(EventInterface, PackageInterface) {
 
   static get template() {
     return template;
@@ -24,12 +28,21 @@ export default class AppFileManager extends PolymerElement {
       description : {
         type : String,
         value : ''
+      },
+      currentPackageId : {
+        type : String,
+        value : ''
       }
     }
   }
 
-  ready() {
-    super.ready();
+  constructor() {
+    super();
+    this.active = true;
+  }
+
+  _onSelectedPackageUpdate(payload) {
+    this.currentPackageId = payload.id;
   }
 
   /**
@@ -53,7 +66,7 @@ export default class AppFileManager extends PolymerElement {
    */
   _onDropBoxDrop(e) {
     this.$.dropbox.classList.remove('hover');
-    this._handleUpload(e);
+    this._startFileUpload(e);
   }
 
   /**
@@ -61,29 +74,43 @@ export default class AppFileManager extends PolymerElement {
    * @description called when the fileInput change event is fired
    */
   _onFileInputChange(e) {
-    this._handleUpload(e);
+    this._startFileUpload(e);
   }
 
   _onChooseClicked(e) {
-    setTimeout(() =>  this.$.fileInput.click(), 200);
+    setTimeout(() =>  this.$.fileInput.click(), 100);
   }
 
-  _handleUpload(e) {
+  /**
+   * @method _startFileUpload
+   * @description start a file upload process based on given input event
+   * 
+   * @param {Object} e html event
+   */
+  _startFileUpload(e) {
     e.stopPropagation();
     e.preventDefault();
 
     let files = e.dataTransfer ? e.dataTransfer.files : e.target.files; // FileList object.
-    let staggedFiles = [].slice.call(files).map(file => {
-      return {
+    this.files = [].slice.call(files).map(file => ({
         file,
         filename : file.name,
         filePath : this.path,
         message : '',
-        repoName : this.currentPackage
-      }
-    });
+        repoName : this.currentPackageId
+      }));
+  }
 
-    console.log(staggedFiles)
+  /**
+   * @method _onFileRemoved
+   * @description Triggered from app-file-uploader when file has been removed
+   * 
+   * @param {Object} e 
+   */
+  _onFileRemoved(e) {
+    let index = this.files.findIndex(file => file === e.detail);
+    this.files.splice(index, 1)
+    this.files = this.files.slice(0);
   }
 
 }

@@ -91,17 +91,40 @@ class PackageModel extends BaseModel {
    * @description add a file to a repository
    * 
    * @param {Object} options
-   * @param {String} options.repoName name of repository to add file to
-   * @param {Object} file reference to file from form element
-   * @param {String} filename
-   * @param {String} filePath path to place file in repo
-   * @param {String} message message for commit
+   * @param {String} options.packageId id of package to add file
+   * @param {Object} options.file reference to file from form element
+   * @param {String} options.dir path to place file in repo
+   * @param {String} options.message message for commit
    * 
    * @returns {Promis}
    */
   uploadFile(options) {
     options.id = uuid.v4();
+    options.dir = options.dir || '/';
     return this.service.uploadFile(options);
+  }
+
+  /**
+   * @method cancelFileUpload
+   * @description cancel a file upload.  Options should be the same object
+   * passed to the uploadFile method.  The actual xhr element will have been
+   * attached and will be aborted
+   * 
+   * @param {Object} options 
+   */
+  cancelFileUpload(options) {
+    if( !options.xhr ) throw new Error('Upload object has no xhr to cancel');
+    options.xhr.abort();
+    
+    let file = {
+      filename : options.file.filename,
+      dir : options.dir
+    }
+    this.store.setFileUploadCancelled(options.packageId, file);
+  }
+
+  deleteFile(packageId, filePath) {
+
   }
 
   /**
@@ -116,7 +139,21 @@ class PackageModel extends BaseModel {
     return this.service.previewMarkdown(markdown);
   }
 
+  /**
+   * @method setSelectedPackageId
+   * @description set the curretly selected package
+   */
+  setSelectedPackageId(packageId) {
+    this.store.setSelectedPackageId(packageId);
+  }
 
+  /**
+   * @method getSelectedPackageId
+   * @description get the currently select packages
+   */
+  getSelectedPackageId(packageId) {
+    return this.store.getSelectedPackageId(packageId);
+  }
 
 }
 

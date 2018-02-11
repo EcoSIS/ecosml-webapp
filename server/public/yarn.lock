@@ -152,6 +152,12 @@
     "@polymer/iron-selector" "^3.0.0-pre.7"
     "@polymer/polymer" "^3.0.0-pre.7"
 
+"@polymer/iron-range-behavior@^3.0.0-pre.7":
+  version "3.0.0-pre.8"
+  resolved "https://registry.yarnpkg.com/@polymer/iron-range-behavior/-/iron-range-behavior-3.0.0-pre.8.tgz#cb56f955e6588ff25d0195214f3b5d6b07ef6d92"
+  dependencies:
+    "@polymer/polymer" "^3.0.0-pre.7"
+
 "@polymer/iron-resizable-behavior@3.0.0-pre.7", "@polymer/iron-resizable-behavior@^3.0.0-pre.7":
   version "3.0.0-pre.7"
   resolved "https://registry.yarnpkg.com/@polymer/iron-resizable-behavior/-/iron-resizable-behavior-3.0.0-pre.7.tgz#0162c6a7bff1c002f9af6fb960e5486735ccb883"
@@ -220,6 +226,15 @@
   version "3.0.0-pre.7"
   resolved "https://registry.yarnpkg.com/@polymer/paper-material/-/paper-material-3.0.0-pre.7.tgz#c15358e09c47f3f3b364df22534eba1f349d6b21"
   dependencies:
+    "@polymer/paper-styles" "^3.0.0-pre.7"
+    "@polymer/polymer" "^3.0.0-pre.7"
+
+"@polymer/paper-progress@^3.0.0-pre.8":
+  version "3.0.0-pre.8"
+  resolved "https://registry.yarnpkg.com/@polymer/paper-progress/-/paper-progress-3.0.0-pre.8.tgz#9fadd3eb41dfa2d0123467d0c979b7a6b014c1ec"
+  dependencies:
+    "@polymer/iron-flex-layout" "^3.0.0-pre.7"
+    "@polymer/iron-range-behavior" "^3.0.0-pre.7"
     "@polymer/paper-styles" "^3.0.0-pre.7"
     "@polymer/polymer" "^3.0.0-pre.7"
 

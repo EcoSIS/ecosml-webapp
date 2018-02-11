@@ -76,6 +76,11 @@ export class EcoSMLApp extends Mixin(PolymerElement)
     if( page === this.page ) return;
 
     if( page === 'create' ) page = 'edit';
+    if( page === 'edit' || page === 'package' ) {
+      if( e.location.path.length > 1 ) {
+        this._setSelectedPackageId(e.location.path[1]);
+      }
+    }
     
     window.scrollTo(0, 0);
     this.page = page;

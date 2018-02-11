@@ -20,49 +20,62 @@ class AuthMiddleware {
     return true;
   }
 
-  async canWritePackage(pkg, req, res) {
-    if( !this.authenticated(req, res) ) return false;
+  async packageWriteAccess(req, res, next) {
+    if( !this.authenticated(req, res) ) return res.send(403);
 
-    if( typeof pkg === 'string' ) {
-      pkg = await mongo.getPackage(pkg);
-      if( !pkg ) {
-        let e = new AppError('Unknown package name or id', AppError.ERROR_CODES.INVALID_ATTRIBUTE);
-        utils.handleError(res, e);
-        return false;
+    let pkg;
+    if( req.params.package ) {
+      try {
+        pkg = await model.get(req.params.package);
+      } catch(e) {
+        return utils.handleError(res, e);
       }
+    } else {
+      pkg = req.body;
     }
+    
+    req.ecosmlPackage = pkg;
 
-    if( pkg.owner === req.session.username ) return true;
+    // if this is the owner, they are good
+    if( pkg.owner && pkg.owner === req.session.username ) {
+      return next();
+    }
 
     if( pkg.organization ) {
       let writeAccess = await model.canWriteOrg(pkg.organization, req.session.username);
       if( !writeAccess ) {
-        this.sendError(res, 403, 'You do not have write access to this group');
-        return false;
+        return this.sendError(res, 403, 'You do not have write access to this package');
       }
     }
 
-    return true;
+    next();
   }
 
-  async canReadPackage(pkg, req, res) {
-    if( typeof pkg === 'string' ) {
-      pkg = await mongo.getPackage(pkg);
+  async packageReadAccess(req, res, next) {
+    try {
+      pkg = await model.get(req.params.package);
+    } catch(e) {
+      return utils.handleError(res, e);
     }
 
-    if( !pkg.private ) return true;
+    req.ecosmlPackage = pkg;
 
-    if( pkg.owner === req.session.username ) return true;
+    // it's public!
+    if( pkg.private !== true ) return next();
+
+    // it's the owner
+    if( pkg.owner && pkg.owner === req.session.username ) {
+      return next();
+    }
     
     if( pkg.organization ) {
-      let writeAccess = await model.canReadOrg(pkg.organization, pkg.owner);
-      if( !writeAccess ) {
-        this.sendError(res, 403, 'You do not have write access to this group');
-        return false;
+      let readAccess = await model.canReadOrg(pkg.organization, pkg.owner);
+      if( !readAccess ) {
+        return this.sendError(res, 403, 'You do not have read access to this package');
       }
     }
 
-    return true;
+    next();
   }
 
 }

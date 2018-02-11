@@ -35,4 +35,8 @@ module.exports = subclass =>
       return this.PackageModel.previewMarkdown(markdown);
     }
 
+    _uploadFile(options) {
+      return this.PackageModel.uploadFile(options);
+    }
+
   }

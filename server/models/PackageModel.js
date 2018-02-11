@@ -90,34 +90,32 @@ class PackageModel {
    * @method update
    * @description update a package
    * 
+   * @param {Object|string} pkg either pkg object, name or id
    * @param {Object} pkg package to update
-   * @param {String} pkg.name package name, does not change
-   * @param {String} pkg.organization 
-   * @param {String} pkg.overview package short description
-   * @param {String} pkg.description package readme
-   * @param {Array} pkg.keywords package keywords
-   * @param {String} pkg.theme
-   * @param {String} pkg.family
-   * @param {String} pkg.specific
+   * @param {String} update.organization 
+   * @param {String} update.overview package short description
+   * @param {String} update.description package readme
+   * @param {Array} update.keywords package keywords
+   * @param {String} update.theme
+   * @param {String} update.family
+   * @param {String} update.specific
    * @param {String} commitMessage
    * @param {Boolean} refreshFromGithub preform a full refresh from Github API?
    */
-  async update(pkg, commitMessage, refreshFromGithub = false) {
-    if( !pkg.name ) throw new AppError(AppError.ERROR_CODES.MISSING_ATTRIBUTE, 'name required');
-
-    let cpkg = await mongo.getPackage(pkg.name);
+  async update(pkg, update, commitMessage, refreshFromGithub = false) {
+    pkg = this.get(pkg);
 
     // First update readme if it changed via git
     await git.resetHEAD(pkg.name);
-    if( pkg.description !== cpkg.description ) {
+    if( update.description && pkg.description !== update.description ) {
       let README = path.join(git.getRepoPath(pkg.name), 'README.md');
-      await fs.writeFile(README, pkg.description || '');
+      await fs.writeFile(README, update.description || '');
     }
     
     // update package overview in github
     let body;
     
-    if( cpkg.overview !== pkg.overview ) {
+    if( update.overview && update.overview !== pkg.overview ) {
       let response = await github.editRepository({
         name : pkg.name,
         description : pkg.overview
@@ -155,18 +153,26 @@ class PackageModel {
 
   /**
    * @method get
-   * @description get a package by name or id
+   * @description get a package by name or id.  If a package object is passed, it
+   * is simply returned
    * 
-   * @param {String} packageNameOrId package name or id
+   * @param {Object|String} pkg either package object, name or id
+   * @param {Boolean} renderMarkdown do you want the description markdown rendered as HTML?
+   * 
    * @return {Promise}
    */
-  async get(packageNameOrId) {
-    let pkg = await mongo.getPackage(packageNameOrId);
-    if( pkg.description ) {
+  async get(pkg, renderMarkdown=false) {
+    if( typeof pkg === 'object' ) return pkg;
+
+    pkg = await mongo.getPackage(pkg);
+    if( !pkg ) throw new Error('Unknown package: '+pkg);
+
+    if( pkg.description && renderMarkdown ) {
       pkg.renderedDescription = await markdown(pkg.description);
     } else {
       pkg.renderedDescription = '';
     }
+
     return pkg;
   }
 
@@ -174,46 +180,84 @@ class PackageModel {
    * @method addFile
    * @description add file to package
    * 
-   * @param {Object} options 
-   * @param {String} options.filename
-   * @param {String} options.buffer 
-   * @param {String} options.packageName
-   * @param {String} options.message
+   * @param {Object|String} pkg package object, name or id
+   * @param {Object} file 
+   * @param {String} file.filename
+   * @param {String} file.buffer 
+   * @param {String} file.dir
+   * @param {String} file.message
    */
-  async addFile(options) {
+  async addFile(pkg, file) {
+    pkg = await this.get(pkg);
 
     // update repo path
-    await git.resetHEAD(options.packageName);
+    await git.resetHEAD(pkg.name);
 
     // get full repo path name
-    let packagepath = git.getRepoPath(options.packageName);
-    let repoFilePath = path.join(packagepath, options.filename);
+    let packagepath = git.getRepoPath(pkg.name);
+    let repoFilePath = path.join(packagepath, file.dir, file.filename);
 
     if( fs.existsSync(repoFilePath) ) {
       await fs.unlink(repoFilePath);
     }
     
-    await fs.writeFile(repoFilePath, options.buffer);
+    await fs.writeFile(repoFilePath, file.buffer);
 
-    await commit(options.packageName, options.message || 'Updating package file');
+    await commit(pkg.name, file.message || 'Updating package file');
+  
+    return this._getFileInfo(
+      path.join(file.dir, file.filename)
+    );
   }
 
+  /**
+   * @method deleteFile
+   * @description delete a package file
+   * 
+   * @param {*} pkg package object, id or name
+   * @param {String} filepath path to file in repo 
+   * 
+   * @returns {Promise}
+   */
+  async deleteFile(pkg, filepath) {
+    pkg = await this.get(packageNameOrId);
+
+    // update repo path
+    await git.resetHEAD(pkg.name);
+
+    // get full repo path name
+    let packagepath = git.getRepoPath(pkg.name);
+    let repoFilePath = path.join(packagepath, filepath);
+
+    if( fs.existsSync(repoFilePath) ) {
+      throw new Error('Package file does not exist: '+filepath);
+    }
+
+    await fs.unlink(repoFilePath);
+    await commit(pkg.name, 'Removing package file');
+  }
+
+  /**
+   * @method commit
+   * @description commit change to a package to github
+   * 
+   * @param {String} packageName actual package name (not id)
+   * @param {String} message commit message
+   */
   async commit(packageName, message) {
     await git.addAll(packageName);
     await git.commit(packageName, message);
-    return await git.push(packageName);
+    return git.push(packageName);
   }
 
   /**
    * @method delete
    * @description delete a package
    */
-  async delete(packageNameOrId) {
-    if( !packageNameOrId ) throw new AppError('Package name or id required', AppError.ERROR_CODES.MISSING_ATTRIBUTE);
-    logger.info(`Deleting package: ${packageNameOrId}`);
+  async delete(pkg) {
+    pkg = this.get(pkg);
 
-    // in case name is actually an id
-    let pkg = await this.get(packageNameOrId);
+    logger.info(`Deleting package: ${pkg.names}`);
 
     let {response} = await github.deleteRepository(pkg.name);
     
@@ -227,7 +271,7 @@ class PackageModel {
    * @method createRelease
    * @description Create a new release
    * 
-   * @param {String} id package id
+   * @param {Object|String} pkg package object, name or id
    * @param {Object} data release data
    * @param {String} data.name release name (v1.0.0)
    * @param {String} data.description release description
@@ -235,11 +279,12 @@ class PackageModel {
    * @param {Boolean} data.prerelease
    */
   async createRelease(id, data) {
-    if( !id ) throw new AppError('Package id required', AppError.ERROR_CODES.MISSING_ATTRIBUTE);
+    pkg = this.get(pkg);
+
+
     if( !data.name ) throw new AppError('Release name required', AppError.ERROR_CODES.MISSING_ATTRIBUTE);
     if( !data.description ) throw new AppError('Release description required', AppError.ERROR_CODES.MISSING_ATTRIBUTE);
     
-    let pkg = await this.get(id);
     if( pkg.releases ) {
       let exists = pkg.releases.find(release => release.name === data.name);
       if( exists ) throw new AppError(`Release ${data.name} already exists`, AppError.ERROR_CODES.INVALID_ATTRIBUTE);
@@ -276,14 +321,14 @@ class PackageModel {
 
   /**
    * @method writeMetadataFile
-   * @description given a ecosml repo object, write the git repo metadata file
+   * @description given a ecosml package object, write the git repo metadata file
    * 
-   * @param {Object} repo ecosml repo object
+   * @param {Object} pkg ecosml package object
    * @returns {Promise}
    */
-  async writeMetadataFile(repo) {
-    let metadata = utils.ecosmlToMetadataFile(repo);
-    let filepath = path.join(git.getRepoPath(repo.name), METADATA_FILENAME);
+  async writeMetadataFile(pkg) {
+    let metadata = utils.ecosmlToMetadataFile(pkg);
+    let filepath = path.join(git.getRepoPath(pkg.name), METADATA_FILENAME);
     await fs.writeFile(filepath, JSON.stringify(metadata, '  ', '  '));
   }
 
@@ -316,6 +361,57 @@ class PackageModel {
       await git.commit(repoName, msg || 'Updating package metadata');
       await git.push(repoName);
     }
+  }
+
+    /**
+   * @method getFiles
+   * @description get all files for this repository
+   * 
+   * @param {Object|String} pkg package object, name or id
+   * 
+   * @returns {Promise} resolves to array
+   */
+  async getFiles(pkg) {
+    pkg = await this.get(pkg);
+
+    let dir = await git.ensureDir(pkg.name);
+    return this._walkPackage(dir, dir);
+  }
+
+  async _walkPackage(root, dir, filelist = []) {
+    let files = await fs.readdir(dir);
+
+    for( let i = 0; i < files.length; i++ ) {
+      let filename = files[i];
+      if( filename.match(/^\./) ) continue;
+      let file = path.join(dir, filename);
+
+      let isDir = (await fs.statSync(file)).isDirectory();
+      if( isDir ) {
+        await this._walkPackage(root, file, filelist);
+      } else {
+        let info = this._getFileInfo(file.replace(new RegExp('^'+root), ''));
+        filelist.push(info);
+      }
+    }
+
+    return filelist;
+  }
+
+  /**
+   * @method _getFileInfo
+   * @description parse file info from file path
+   * 
+   * @param {String} path file path
+   * 
+   * @return {Object}
+   */
+  _getFileInfo(filepath) {
+    let info = path.parse(filepath);
+    info.filename = info.base;
+    delete info.root;
+    delete info.base;
+    return info;
   }
 }
 

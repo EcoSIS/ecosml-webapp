@@ -8,16 +8,16 @@ module.exports = function(options) {
 
 function browserUpload(options) {
   var formData = new FormData();
-  if( options.filename ) formData.set('filename', options.filename);
-  if( options.filePath ) formData.set('filePath', options.filePath);
+  if( options.path ) formData.set('path', options.path);
   if( options.message ) formData.set('message', options.message);
   if( options.file ) formData.set('file', options.file);
-  if( options.repoName ) formData.set('repoName', options.repoName);
+  if( options.packageName ) formData.set('packageName', options.packageName);
 
   let time = new Date().getTime();
 
   return new Promise((resolve, reject) => {
     var xhr = new XMLHttpRequest();
+    options.xhr = xhr;
     xhr.open('POST', options.url);
 
     for( let key in options.headers||{} ) {

@@ -86,6 +86,13 @@ class PackageService extends BaseService {
     });
   }
 
+  async getFiles(id) {
+    return this.request({
+      url : `${this.baseUrl}/${id}`,
+      onLoad : result => this.store.onFilesLoaded(id, result.body)
+    });
+  }
+
   async delete(name) {
     return this.request({
       url : `${this.baseUrl}/${name}`,
@@ -98,38 +105,48 @@ class PackageService extends BaseService {
     });
   }
 
-  async addFile(formData) {
-    let id = uuid.v4();
-    let filename = formData.get('filename'); 
-    let payload = {filename};
 
-    return this.request({
-      url : `${this.baseUrl}/addFile`,
-      fetchOptions : {
-        method : 'POST',
-        body : formData
-      },
-      onLoading : request => this.store.setFileSaving(request, fileId, payload),
-      onLoad : result => this.store.setFileSaved(fileId, payload),
-      onError : error => this.store.setFileSaveError(fileId, error)
-    });
-  }
-
+  /**
+   * 
+   */
   uploadFile(options) {
-    options.url = `${baseUrl}/uploadFile`;
+    options.url = `${baseUrl}/updateFile`;
     return new Promise(async (resolve, reject) => {
       
-      options.onProgress = (e) => this.store.onFileUploadProgress(e);
-      this.store.onFileUploadStart(options);
+      options.onProgress = (e) => this.store.onFileUploadProgress(options.id, e);
+      
+      let file = {
+        base : options.file.filename,
+        dir : options.dir
+      }
+      this.store.onFileUploadStart(options.packageId, file);
 
       try {
         let response = await upload(options);
-        this.store.onFileUploadSuccess(options, response);
+        let file = JSON.parse(response);
+        this.store.onFileLoaded(options.packageId, file);
         resolve(response);
       } catch(e) {
-        this.store.onFileUploadError(options, e);
+        this.store.onFileError(options.packageId, file, e);
         reject(e);
       }
+    });
+  }
+
+  deleteFile(packageId, dir, filename) {
+    let file = {
+      dir : dir,
+      base : filename
+    }
+
+    return this.request({
+      url : `${this.baseUrl}/${packageId}/${dir}/${filename}`,
+      fetchOptions : {
+        method : 'DELETE'
+      },
+      onLoading : request => this.store.setFileDeleteStart(request, packageId, file),
+      onLoad : result => this.store.setFileDeleteSuccess(result.body, packageId, file),
+      onError : error => this.store.onFileError(packageId, file, error)
     });
   }
 

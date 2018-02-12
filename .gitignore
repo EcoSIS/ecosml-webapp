@@ -2,6 +2,7 @@ server/node_modules
 server/public/node_modules
 server/public/webcomponentsjs
 server/public/bundle.js
+server/uploads
 .env
 secrets.json
 gitdata

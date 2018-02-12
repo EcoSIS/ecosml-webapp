@@ -29,6 +29,11 @@ export default class AppFileUploader extends Mixin(PolymerElement)
         value : false
       },
 
+      committing : {
+        type : Boolean,
+        value : false
+      },
+
       // should be 0 - 100
       uploadPercent : {
         type : Number,
@@ -58,6 +63,10 @@ export default class AppFileUploader extends Mixin(PolymerElement)
 
     this.uploadPercent = e.status.progress;
     this.uploadText = e.status.speed+e.status.speedUnits;
+
+    if( this.uploadPercent === '100' ) {
+      this.committing = true;
+    }
   }
 
   _onSelectedPackageUpdate(payload) {
@@ -70,11 +79,14 @@ export default class AppFileUploader extends Mixin(PolymerElement)
     this.data = e.payload;
 
     if( e.state === 'uploading' ) {
+      
       this.uploading = true;
+      this.committing = false;
       return;
     }
 
     if( e.state === 'loaded' ) {
+      this.committing = false;
       setTimeout(() => this.uploading = false, 500);
       return;
     }
@@ -95,6 +107,8 @@ export default class AppFileUploader extends Mixin(PolymerElement)
 
   async _startFileUpload() {
     this.uploading = true;
+    this.committing = false;
+
     this.uploadSession = {
       file : this.data.file,
       dir : this.data.dir,
@@ -114,12 +128,14 @@ export default class AppFileUploader extends Mixin(PolymerElement)
    * @description fired when the close icon button is clicked
    */
   async _onRemoveClicked() {
+    this.committing = true;
     try {
       if( this.uploading ) await this.cancel();
       else await this.remove();
     } catch(e) {
       // TODO: handle
     }
+    this.committing = false;
   }
 
   /**

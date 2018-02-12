@@ -7,6 +7,7 @@ const upload = multer({
   dest: uploadPath
 });
 const model = require('../models/PackageModel');
+const queue = require('../models/PackageQueueModel')
 const {packageWriteAccess, packageReadAccess} = require('./middleware/auth');
 const utils = require('./utils');
 const AppError = require('../lib/AppError');
@@ -34,7 +35,10 @@ router.get('/:package', packageReadAccess, async(req, res) => {
 
 router.patch('/:package', packageWriteAccess, async(req, res) => {
   try {
-    package = await model.update(req.ecosmlPackage, req.body.update, req.body.message);
+    // queue replaces:
+    // package = await model.update(req.ecosmlPackage, req.body.update, req.body.message);
+    let package = await queue.add('update', req.ecosmlPackage.name, [req.ecosmlPackage, req.body.update, req.body.message]);
+    
     res.json(package);
   } catch(e) {
     utils.handleError(res, e);
@@ -68,14 +72,15 @@ router.post('/:package/updateFile', packageWriteAccess, upload.any(), async (req
   let dir = req.body.dir;
   var file = req.files[0];
 
-  let response = await model.addFile(
-    req.ecosmlPackage,
-    {
-      filename : file.originalname,
-      tmpFile : file.path,
-      dir, message
-    }
-  );
+  let data = {
+    filename : file.originalname,
+    tmpFile : file.path,
+    dir, message
+  }
+  
+  // queue replaces:
+  // let response = await model.addFile(req.ecosmlPackage, data);
+  let response = await queue.add('addFile', req.ecosmlPackage.name, [req.ecosmlPackage, data]);
 
   res.send(response);
 });
@@ -85,7 +90,10 @@ router.delete('/:package/file/*', packageWriteAccess, async (req, res) => {
   file = decodeURI(file);
 
   try {
-    await model.deleteFile(req.ecosmlPackage, file);
+    // queue replaces:
+    // await model.deleteFile(req.ecosmlPackage, file);
+    await queue.add('deleteFile', req.ecosmlPackage.name, [req.ecosmlPackage, file]);
+    
     res.status(204).send();
   } catch(e) {
     utils.handleError(res, e);

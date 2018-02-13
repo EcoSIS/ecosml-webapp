@@ -74,7 +74,7 @@ class PackageModel {
 
     // write and commit ecosis-metadata.json file
     await this.writeMetadataFile(pkg);
-    await this.commitMetadataChanges(pkg.name);
+    await this.commit(pkg.name, 'Updating package metadata');
 
     return pkg;
   }
@@ -139,7 +139,7 @@ class PackageModel {
 
     // write and commit ecosis-metadata.json file or other changes
     await this.writeMetadataFile(pkg);
-    await this.commitMetadataChanges(pkg.name, commitMessage);
+    await this.commit(pkg.name, commitMessage || 'Updating package metadata');
 
     return pkg;
   }
@@ -245,19 +245,6 @@ class PackageModel {
   }
 
   /**
-   * @method commit
-   * @description commit change to a package to github
-   * 
-   * @param {String} packageName actual package name (not id)
-   * @param {String} message commit message
-   */
-  async commit(packageName, message) {
-    await git.addAll(packageName);
-    await git.commit(packageName, message);
-    return git.push(packageName);
-  }
-
-  /**
    * @method delete
    * @description delete a package
    */
@@ -353,21 +340,19 @@ class PackageModel {
   }
 
   /**
-   * @method commitMetadataChanges
-   * @description see if changes were made, if so, commit them
+   * @method commit
+   * @description commit change to a package to github
    * 
-   * @param {String} repoName repo to commit
-   * @param {String} msg option message
-   * 
-   * @returns {Promise}
+   * @param {String} packageName actual package name (not id)
+   * @param {String} message commit message
    */
-  async commitMetadataChanges(repoName, msg) {
-    let changes = await git.currentChangesCount(repoName);
-    if( changes > 0 ) {
-      await git.addAll(repoName);
-      await git.commit(repoName, msg || 'Updating package metadata');
-      await git.push(repoName);
-    }
+  async commit(packageName, message) {
+    let changes = await git.currentChangesCount(packageName);
+    if( changes === 0 ) return;
+    
+    await git.addAll(packageName);
+    await git.commit(packageName, message);
+    return git.push(packageName);
   }
 
     /**

@@ -125,10 +125,9 @@ class PackageService extends BaseService {
       this.store.onFileUploadStart(options.packageId, file);
 
       try {
-        let response = await upload(options);
-        let file = JSON.parse(response);
+        let file = await upload(options);
         this.store.onFileLoaded(options.packageId, file);
-        resolve(response);
+        resolve(file);
       } catch(e) {
         this.store.onFileError(options.packageId, file, e);
         reject(e);

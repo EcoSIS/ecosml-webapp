@@ -101,6 +101,18 @@ class GitCli {
   }
 
   /**
+   * @method clean
+   * @description remove all untracked files and directories
+   * @param {String} repoName name of repository
+   * 
+   * @returns {Promise} 
+   */
+  async clean(repoName) {
+    let dir = await this.ensureDir(repoName);
+    return this.exec('clean -f -d', {cwd: dir});
+  }
+
+  /**
    * @method addAll
    * @description add all changes
    * @param {String} repoName name of repository
@@ -123,6 +135,18 @@ class GitCli {
   async commit(repoName, message) {
     let dir = await this.ensureDir(repoName);
     return this.exec(`commit -m "${message}"`, {cwd: dir});
+  }
+
+  /**
+   * @method status
+   * @description repo status
+   * @param {String} repoName name of repository
+   * 
+   * @returns {Promise} 
+   */
+  async status(repoName) {
+    let dir = await this.ensureDir(repoName);
+    return this.exec(`status -s`, {cwd: dir});
   }
 
   /**

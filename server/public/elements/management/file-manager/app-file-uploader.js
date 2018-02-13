@@ -48,6 +48,11 @@ export default class AppFileUploader extends Mixin(PolymerElement)
       uploadSession : {
         type : Object,
         value : null
+      },
+
+      error : {
+        type : Boolean,
+        value : false
       }
     }
   }
@@ -60,12 +65,14 @@ export default class AppFileUploader extends Mixin(PolymerElement)
   _onUploadFileStatusUpdate(e) {
     if( !this.uploadSession ) return;
     if( e.id !== this.uploadSession.uploadId ) return;
+    if( this.error ) return;
 
     this.uploadPercent = e.status.progress;
-    this.uploadText = e.status.speed+e.status.speedUnits;
+    this.uploadText = 'Upload '+e.status.progress+'% complete @'+e.status.speed+e.status.speedUnits;
 
     if( this.uploadPercent === '100' ) {
       this.committing = true;
+      this.uploadText = 'Upload Complete.  Committing file...';
     }
   }
 
@@ -105,22 +112,40 @@ export default class AppFileUploader extends Mixin(PolymerElement)
   }
 
 
-  async _startFileUpload() {
+  async _startFileUpload(reupload = false) {
     this.uploading = true;
     this.committing = false;
+    this.error = false;
 
-    this.uploadSession = {
-      file : this.data.file,
-      dir : this.data.dir,
-      packageId : this.data.packageId,
-      message : this.data.message
+    if( !reupload ) {
+      this.reuploadSession = {
+        file : this.data.file,
+        dir : this.data.dir,
+        packageId : this.data.packageId,
+        message : this.data.message
+      }
     }
+
+    this.uploadSession = Object.assign({}, this.reuploadSession);
 
     try {
-      this._uploadFile(this.uploadSession);
+      await this._uploadFile(this.uploadSession);
     } catch(e) {
+      this.error = true;
+      this.uploadPercent = 100;
+      this.uploadText = 'Error uploading file: '+e.message;
       console.error(e);
     }
+  }
+
+  /**
+   * @method _onResendIconClicked
+   * @description Called when the upload error 'resend icon' is clicked.  Try reuploading
+   * file.
+   * 
+   */
+  _onResendIconClicked() {
+    this._startFileUpload(true);
   }
 
   /**

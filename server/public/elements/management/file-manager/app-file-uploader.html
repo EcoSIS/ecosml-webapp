@@ -13,9 +13,17 @@
     --paper-progress-active-color: var(--default-primary-color);
   }
 
+  paper-progress[error] {
+    --paper-progress-active-color: red;
+  }
+
   .upload-text {
     font-size: 12px;
     color: var(--secondary-text-color);
+  }
+
+  .upload-text[error] {
+    color: red;
   }
 
   @keyframes spin {
@@ -30,12 +38,15 @@
 
 <div class="layout">
   <div style="flex:1">[[data.filename]]</div>
-  <div>
+  <div hidden$="[[error]]">
     <paper-icon-button hidden$="[[committing]]" icon="close" on-click="_onRemoveClicked"></paper-icon-button>
     <iron-icon hidden$="[[!committing]]" icon="autorenew"></iron-icon>
   </div>
+  <div hidden$="[[!error]]">
+    <paper-icon-button icon="autorenew" on-click="_onResendIconClicked"></paper-icon-button>
+  </div>
 </div>
 <div hidden$="[[!uploading]]">
-  <div class="upload-text">[[uploadText]]</div>
-  <paper-progress value="[[uploadPercent]]" min="0" max="100" class="red"></paper-progress>
+  <div class="upload-text" error$="[[error]]">[[uploadText]]</div>
+  <paper-progress value="[[uploadPercent]]" error$="[[error]]" min="0" max="100" class="red"></paper-progress>
 </div>

@@ -96,7 +96,7 @@ class PackageModel extends BaseModel {
    * @param {String} options.dir path to place file in repo
    * @param {String} options.message message for commit
    * 
-   * @returns {Promis}
+   * @returns {Promise}
    */
   uploadFile(options) {
     options.uploadId = uuid.v4();

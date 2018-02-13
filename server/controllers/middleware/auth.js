@@ -13,7 +13,7 @@ let AppError = require('../../lib/AppError');
 
   function authenticated(req, res, next) {
     if( !req.session.username ) {
-      this.sendError(res, 401, 'You must login');
+      sendError(res, 401, 'You must login');
       return false;
     }
 
@@ -45,7 +45,7 @@ let AppError = require('../../lib/AppError');
     if( pkg.organization ) {
       let writeAccess = await model.canWriteOrg(pkg.organization, req.session.username);
       if( !writeAccess ) {
-        return this.sendError(res, 403, 'You do not have write access to this package');
+        return sendError(res, 403, 'You do not have write access to this package');
       }
     }
 
@@ -73,7 +73,7 @@ let AppError = require('../../lib/AppError');
     if( pkg.organization ) {
       let readAccess = await model.canReadOrg(pkg.organization, pkg.owner);
       if( !readAccess ) {
-        return this.sendError(res, 403, 'You do not have read access to this package');
+        return sendError(res, 403, 'You do not have read access to this package');
       }
     }
 

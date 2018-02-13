@@ -37,7 +37,11 @@ router.patch('/:package', packageWriteAccess, async(req, res) => {
   try {
     // queue replaces:
     // package = await model.update(req.ecosmlPackage, req.body.update, req.body.message);
-    let package = await queue.add('update', req.ecosmlPackage.name, [req.ecosmlPackage, req.body.update, req.body.message]);
+    let package = await queue.add(
+      'update', 
+      req.ecosmlPackage.name, 
+      [req.ecosmlPackage, req.body.update, req.body.message]
+    );
     
     res.json(package);
   } catch(e) {
@@ -78,11 +82,19 @@ router.post('/:package/updateFile', packageWriteAccess, upload.any(), async (req
     dir, message
   }
   
-  // queue replaces:
-  // let response = await model.addFile(req.ecosmlPackage, data);
-  let response = await queue.add('addFile', req.ecosmlPackage.name, [req.ecosmlPackage, data]);
+  try {
+    // queue replaces:
+    // let response = await model.addFile(req.ecosmlPackage, data);
+    let response = await queue.add(
+      'addFile', 
+      req.ecosmlPackage.name, 
+      [req.ecosmlPackage, data]
+    );
 
-  res.send(response);
+    res.send(response);
+  } catch(e) {
+    utils.handleError(res, e);
+  }
 });
 
 router.delete('/:package/file/*', packageWriteAccess, async (req, res) => {
@@ -92,7 +104,11 @@ router.delete('/:package/file/*', packageWriteAccess, async (req, res) => {
   try {
     // queue replaces:
     // await model.deleteFile(req.ecosmlPackage, file);
-    await queue.add('deleteFile', req.ecosmlPackage.name, [req.ecosmlPackage, file]);
+    await queue.add(
+      'deleteFile', 
+      req.ecosmlPackage.name, 
+      [req.ecosmlPackage, file]
+    );
     
     res.status(204).send();
   } catch(e) {

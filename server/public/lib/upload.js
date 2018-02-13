@@ -23,7 +23,15 @@ function browserUpload(options) {
       xhr.setRequestHeader(k, options.headers[key]);
     }
 
-    xhr.onload = e => resolve(e.target.responseText);
+    xhr.onload = e => {
+      let response = e.target.responseText;
+      try {
+        response = JSON.parse(response);
+      } catch(e) {}
+
+      if( e.target.status < 200 || e.target.status >= 300 ) reject(response);
+      else resolve(response);
+    }
     xhr.onerror = reject;
 
     if( xhr.upload && options.onProgress ) {

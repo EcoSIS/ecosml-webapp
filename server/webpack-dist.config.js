@@ -17,6 +17,10 @@ var modern =  {
                   attrs: false
               }
             }
+          },
+          {
+            test: /\.css$/,
+            use: [ 'to-string-loader', 'css-loader' ]
           }
         ]
     }
@@ -47,6 +51,10 @@ var ie =  {
                 attrs: false
             }
           }
+        },
+        {
+          test: /\.css$/,
+          use: [ 'to-string-loader', 'css-loader' ]
         }
       ]
     }

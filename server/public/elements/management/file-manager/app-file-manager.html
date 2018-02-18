@@ -1,4 +1,4 @@
-<style>
+<style include="shared-styles">
   :host {
     display: block;
   } 
@@ -26,10 +26,10 @@
   }
 
   #dropbox {
-    border: 1px dashed var(--secondary-text-color);
+    border: 1px solid var(--dark-background-color);
+    /* border: 1px dashed var(--secondary-text-color); */
     padding: 15px;
-    margin: 5px;
-    border-radius: 8px;
+    border-radius: 6px;
   }
 
   #dropbox .droplabel {
@@ -54,10 +54,17 @@
     background-color: var(--default-primary-color);
     color: white;
   }
+
+  .help {
+    color: var(--secondary-text-color);
+    font-size: 14px;
+  }
 </style>
 
-<h2>[[label]]</h2>
-<div>[[description]]</div>
+<h2 class="uheader" color$="[[color]]" hidden$="[[!label]]">[[label]]</h2>
+
+<div class="help"><slot name="help"></slot></div>
+
 <div id="dropbox" on-dragover="_onDropBoxDragOver" on-dragleave="_onDropBoxDragLeave" on-drop="_onDropBoxDrop">
   <div class="layout">
     <div>

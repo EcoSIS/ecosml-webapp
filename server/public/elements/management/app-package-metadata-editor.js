@@ -14,6 +14,7 @@ import "./app-create-release"
 import "./app-text-input"
 import "./app-org-input"
 import "./file-manager/app-file-manager"
+import "./file-manager/app-example-editor"
 
 class AppPackageMetadataEditor extends Mixin(PolymerElement)
       .with(EventInterface, AppStateInterface, PackageInterface) {
@@ -53,6 +54,11 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
       namePreview : {
         type : String,
         value : ''
+      },
+
+      examples : {
+        type : Array,
+        value : () => []
       }
     }
   }
@@ -235,6 +241,15 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
     this.$.unsavedMsg.style.display = 'block';
     this.$.savingMsg.style.display = 'none';
     this.$.savingToast.open();
+  }
+
+  _onCreateExampleClicked() {
+    let len = this.examples.length+1;
+    this.push('examples', {
+      directory : '/examples/package_example_'+len, 
+      label : 'package_example_'+len,
+      isNew : true
+    });
   }
 
   /**

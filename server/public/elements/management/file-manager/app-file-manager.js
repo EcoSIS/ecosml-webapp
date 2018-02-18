@@ -32,6 +32,10 @@ export default class AppFileManager extends Mixin(PolymerElement)
       currentPackageId : {
         type : String,
         value : ''
+      },
+      color : {
+        type : String,
+        value : ''
       }
     }
   }
@@ -41,7 +45,12 @@ export default class AppFileManager extends Mixin(PolymerElement)
     this.active = true;
   }
 
-
+  /**
+   * @method _onFileUpdate
+   * @description via PackageInterface, called whenever a file is updated
+   * 
+   * @param {Object} e 
+   */
   _onFileUpdate(e) {
     if( e.payload.dir !== this.directory ) return;
     if( e.state === 'deleted' ) return this._onFileRemoved(e.payload);

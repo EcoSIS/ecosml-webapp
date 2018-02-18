@@ -150,11 +150,30 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
       let pkg = await this._getPackage(pkgId);
       let files = await this._getPackageFiles(pkgId);
 
+      
+      this._updateExamples(files);
       this.updatePackage(pkg.payload);
     } catch(e) {
+      console.error(e);
       return alert('Failed to fetch package with id: '+pkgId);
     }
-    
+  }
+
+  _updateExamples(files) {
+    let examples = {};
+    for( let id in files ) {
+      if( id.match(/^\/examples\//) ) {
+        let name = id.replace(/^\/examples\//, '').split('/')[0];
+        examples[name] = true;
+      }
+    }
+
+    Object.keys(examples).forEach(example => {
+      this.push('examples', {
+        directory : '/examples/'+example, 
+        label : example,
+      });
+    });
   }
 
   _onPackageUpdate(e) {

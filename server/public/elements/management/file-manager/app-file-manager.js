@@ -43,6 +43,7 @@ export default class AppFileManager extends Mixin(PolymerElement)
   constructor() {
     super();
     this.active = true;
+    this.currentPackageId = this._getSelectedPackageId().id;
   }
 
   /**

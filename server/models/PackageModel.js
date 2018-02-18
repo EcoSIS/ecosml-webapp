@@ -193,7 +193,7 @@ class PackageModel {
 
     // get full repo path name
     let packagepath = git.getRepoPath(pkg.name);
-    let baseFileDir = path.join(packagepath, file.dir);
+    let baseFileDir = path.join(packagepath, this._sanitizePath(file.dir));
 
     await fs.mkdirs(baseFileDir);
 
@@ -228,6 +228,7 @@ class PackageModel {
    */
   async deleteFile(pkg, filepath) {
     pkg = await this.get(pkg);
+    filepath = this._sanitizePath(filepath);
 
     // update repo path
     await git.resetHEAD(pkg.name);
@@ -348,11 +349,21 @@ class PackageModel {
    */
   async commit(packageName, message) {
     let changes = await git.currentChangesCount(packageName);
-    if( changes === 0 ) return;
+    if( changes === 0 ) {
+      logger.debug(`Package ${packageName} commit: told to commit, but no changes have been made`);
+      return;
+    }
     
-    await git.addAll(packageName);
-    await git.commit(packageName, message);
-    return git.push(packageName);
+    logger.debug(`Package ${packageName} commit: ${changes} change(s)`);
+    
+    var {stdout} = await git.addAll(packageName);
+    logger.debug(`Package ${packageName} add --all: ${stdout}`);
+    
+    var {stdout} = await git.commit(packageName, message);
+    logger.debug(`Package ${packageName} commit: ${stdout}`);
+
+    var {stdout} = await git.push(packageName);
+    logger.debug(`Package ${packageName} push: ${stdout}`);
   }
 
     /**
@@ -391,6 +402,45 @@ class PackageModel {
   }
 
   /**
+   * @method deleteExample
+   * @description move examples
+   */
+  async deleteExample(pkg, name) {
+    let dir = await git.ensureDir(pkg.name);
+    name = this._sanitizeExampleName(name);
+    dir = path.join(dir, 'examples', name);
+
+    if( !fs.existsSync(dir) ) {
+      throw new Error('Example directory does not exist: '+path.join('examples', name));
+    }
+    
+    return fs.remove(dir);
+  }
+
+  /**
+   * @method moveExample
+   * @description move examples
+   */
+  async moveExample(pkg, src, dst) {
+    let dir = await git.ensureDir(pkg.name);
+
+    src = this._sanitizeExampleName(src);
+    dst = this._sanitizeExampleName(dst);
+
+    src = path.join(dir, 'examples', src);
+    dst = path.join(dir, 'examples', dst);
+
+    if( !fs.existsSync(src) ) {
+      throw new Error('Source directory does not exist: '+path.join('examples', src));
+    }
+    if( fs.existsSync(dst) ) {
+      throw new Error('Destination directory already exists: '+path.join('examples', dst));
+    }
+
+    return fs.move(src, dst);
+  }
+
+  /**
    * @method _getFileInfo
    * @description parse file info from file path
    * 
@@ -405,6 +455,37 @@ class PackageModel {
     delete info.base;
     return info;
   }
+
+  /**
+   * @method _sanitizeFilename
+   * @description make sure a filename is just that, a filename.  no crazy path
+   * 
+   * @param {String} filename
+   * 
+   * @return {String}
+   */
+  _sanitizeFilename(filename) {
+    return path.parse(filename).base;
+  }
+
+  /**
+   * @method _sanitizePath
+   * @description make sure a path is just a local path, no '..'.
+   * 
+   * @param {String} pathname
+   * 
+   * @return {String}
+   */
+  _sanitizePath(pathname) {
+    return pathname.replace(/\.\.\.*\/?/g, '');
+  }
+
+  _sanitizeExampleName(pathname) {
+    return pathname
+            .replace(/-/g, '_')
+            .replace(/\W/g, '');
+  }
+
 }
 
 module.exports = new PackageModel();

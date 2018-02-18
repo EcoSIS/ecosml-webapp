@@ -11,7 +11,7 @@ module.exports = {
     url : env.SERVER_URL || 'http://localhost:3000',
     label : env.SERVER_LABEL || 'EcoSML', // used for auth redirect
     assets : env.SERVER_ASSET_DIR || 'public',
-    loglevel : env.SERVER_LOG_LEVEL || 'info',
+    loglevel : env.SERVER_LOG_LEVEL || 'debug',
 
     jwt : {
       secret : env.JWT_SECRET || 'not set'

@@ -47,8 +47,20 @@ module.exports = subclass =>
       this.PackageModel.setSelectedPackageId(packageId);
     }
 
+    _getSelectedPackageId() {
+      return this.PackageModel.getSelectedPackageId();
+    }
+
     _getPackageFiles(packageId) {
       return this.PackageModel.getFiles(packageId);
+    }
+
+    _moveExampleDirectory(packageId, src, dst) {
+      return this.PackageModel.moveExample(packageId, src, dst);
+    }
+
+    _deleteExampleDirectory(packageId, name) {
+      return this.PackageModel.deleteExample(packageId, name);
     }
 
   }

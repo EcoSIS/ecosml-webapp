@@ -3,7 +3,8 @@ import template from "./app-example-editor.html"
 
 import PackageInterface from "../../interfaces/PackageInterface"
 
-export default class AppExampleEditor extends PolymerElement {
+export default class AppExampleEditor extends Mixin(PolymerElement)
+  .with(EventInterface, PackageInterface) {
 
   static get template() {
     return template;
@@ -68,6 +69,10 @@ export default class AppExampleEditor extends PolymerElement {
     this.open = !this.open;
   }
 
+  /**
+   * @method _onOpenChange
+   * @description fired from property observer.  called when open value changes
+   */
   _onOpenChange() {
     this._updatePanelHeight();
   }
@@ -77,14 +82,8 @@ export default class AppExampleEditor extends PolymerElement {
    * @description make sure main panel is set to correct height
    */
   _updatePanelHeight() {
-    setTimeout(() => {
-      if( !this.open ) {
-        return this.$.panel.style.height = '0px';
-      }
-
-      console.log(this.$.reveal.offsetHeight+'px');
-      this.$.panel.style.height = this.$.reveal.offsetHeight+'px';
-    }, 0);
+    if( !this.open ) this.$.panel.style.display = 'none';
+    else this.$.panel.style.display = 'block';
   }
 
   /**
@@ -98,9 +97,34 @@ export default class AppExampleEditor extends PolymerElement {
     this._updatePanelHeight();
   }
 
-  _onExampleNameChange() {
-    this.label = this._cleanLabelName(this.$.name.value);
-    // todo: this is a special call
+  /**
+   * @method _onExampleNameChange
+   * @description fired from the name input on-change event
+   */
+  async _onExampleNameChange() {
+    let src = this.label;
+    let dst = this._cleanLabelName(this.$.name.value);
+    let packageId = this._getSelectedPackageId();
+    
+    this.$.name.disabled = true;
+    try {
+      this._moveExampleDirectory(packageId, src, dst);
+    } catch(e) {
+      // noop?
+    }
+
+    this.$.name.disabled = false;
+    this.label = dst;
+  }
+
+  async _onDeleteClicked() {
+    try {
+      this._deleteExampleDirectory(packageId, this.label);
+    } catch(e) {
+      // noop?
+    }
+
+    this.fire('example-deleted', {label: this.label});
   }
 
   _onLabelChange() {

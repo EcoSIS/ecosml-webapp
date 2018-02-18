@@ -128,4 +128,22 @@ router.get('/:package/files', packageReadAccess, async (req, res) => {
   }
 });
 
+router.post('/:package/moveExample', packageWriteAccess, async (req, res) => {
+  try {
+    await model.moveExample(req.ecosmlPackage, req.body.src, req.body.dst);
+    res.json({success: true});
+  } catch(e) {
+    utils.handleError(res, e);
+  }
+});
+
+router.delete('/:package/example/:name', packageWriteAccess, async (req, res) => {
+  try {
+    await model.deleteExample(req.ecosmlPackage, req.params.name);
+    res.json({success: true});
+  } catch(e) {
+    utils.handleError(res, e);
+  }
+});
+
 module.exports = router;

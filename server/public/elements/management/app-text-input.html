@@ -19,7 +19,12 @@
   <span>[[label]]</span>
 </div>
 
-<input type$="[[type]]" id="input" on-change="_onChange" on-keyup="_onKeyUp" />
+<input 
+  type$="[[type]]" 
+  id="input" 
+  disabled$="[[disabled]]"
+  on-change="_onChange" 
+  on-keyup="_onKeyUp" />
 
 <div class="help">
   <slot name="help"></slot>

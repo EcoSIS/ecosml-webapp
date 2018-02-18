@@ -148,6 +148,35 @@ class PackageModel extends BaseModel {
   }
 
   /**
+   * @method moveExample
+   * @description move (rename) example directory
+   * 
+   * @param {String} packageId
+   * @param {String} src current example directory name
+   * @param {String} dst new example directory name
+   * 
+   * @returns {Promise}
+   */
+  async moveExample(packageId, src, dst) {
+    await this.service.moveExample(packageId, src, dst);
+    return this.getFiles(pacakgeId);
+  }
+
+  /**
+   * @method deleteExample
+   * @description delete example directory
+   * 
+   * @param {String} packageId
+   * @param {String} name example directory to delete
+   * 
+   * @returns {Promise}
+   */
+  async deleteExample(packageId, name) {
+    await this.service.deleteExample(packageId, name);
+    return this.getFiles(pacakgeId);
+  }
+
+  /**
    * @method previewMarkdown
    * @description render markdown with Github flavored markdown service
    * 

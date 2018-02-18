@@ -23,7 +23,7 @@
 
   #toggle iron-icon {
     transform: rotate(0);
-    transition: transform 250ms linear;
+    transition: transform 250ms ease-out;
     will-change: transfrom;
   }
 
@@ -31,11 +31,24 @@
     transform: rotate(90deg);
   }
 
-  #panel {
-    overflow: hidden;
-    height: 0;
-    transition: height 250ms linear;
+  @keyframes spin {
+    from {
+      transform: scale(0.9);
+      opacity: 0.3;
+    }
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
   }
+  #panel {
+    animation: spin 250ms ease-out;
+    /* overflow: hidden; */
+    /* height: 0; */
+    /* transition: height 250ms linear; */
+  }
+
+
 
   #reveal {
     padding: 15px 0 15px 25px;
@@ -71,7 +84,7 @@
     <div class="manager-label">Transform</div>
     <app-file-manager 
       color="blue" 
-      directory="[[outputDir]]">
+      directory="[[transfromDir]]">
       <div slot="help">Optional transform code to apply to spectra.  Required if your input spectra
         needs to be manipulated before being passed to model source code.
       </div>
@@ -80,7 +93,7 @@
     <div class="manager-label">Output</div>
     <app-file-manager 
       color="blue" 
-      directory="[[transfromDir]]">
+      directory="[[outputDir]]">
       <div slot="help">
         Model output (csv).  This file should exactly match the output from the model
         given the provided example input and optional transform.

@@ -156,6 +156,25 @@ class PackageService extends BaseService {
     });
   }
 
+  moveExample(packageId, src, dst) {
+    return this.request({
+      url : `${this.baseUrl}/${packageId}/moveExample`,
+      fetchOptions : {
+        method : 'POST',
+        body : {src, dst}
+      }
+    });
+  }
+
+  deleteExample(packageId, name) {
+    return this.request({
+      url : `${this.baseUrl}/${packageId}/example/${name}`,
+      fetchOptions : {
+        method : 'DELETE'
+      }
+    });
+  }
+
   previewMarkdown(markdown) {
     return this.request({
       url : `/api/markdown`,

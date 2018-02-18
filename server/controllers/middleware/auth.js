@@ -13,7 +13,7 @@ let AppError = require('../../lib/AppError');
 
   function authenticated(req, res, next) {
     if( !req.session.username ) {
-      sendError(res, 401, 'You must login');
+      sendError(res, 403, 'You must login');
       return false;
     }
 
@@ -22,7 +22,7 @@ let AppError = require('../../lib/AppError');
   }
 
   async function packageWriteAccess(req, res, next) {
-    if( !authenticated(req, res) ) return res.send(403);
+    if( !authenticated(req, res) ) return;
 
     let pkg;
     if( req.params.package ) {

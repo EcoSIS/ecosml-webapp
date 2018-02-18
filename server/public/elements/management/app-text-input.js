@@ -20,6 +20,10 @@ export default class AppTextInput extends PolymerElement {
       help : {
         type : String,
         value : ''
+      },
+      disabled : {
+        type : Boolean,
+        value : false
       }
     }
   }
@@ -33,7 +37,7 @@ export default class AppTextInput extends PolymerElement {
   }
 
   _onChange(e) {
-    this.dispatchEvent(new CustomEvent('change', {detail: this.value}));
+    this.dispatchEvent(new CustomEvent('change', {detail: {value: this.value}}));
   }
 
   _onKeyUp(e) {
@@ -41,7 +45,7 @@ export default class AppTextInput extends PolymerElement {
       which : e.which,
       value : this.value
     }
-    this.dispatchEvent(new CustomEvent('change', {detail: e}));
+    this.dispatchEvent(new CustomEvent('keyup', {detail: e}));
   }
 
 }

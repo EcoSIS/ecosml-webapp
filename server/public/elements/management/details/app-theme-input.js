@@ -1,7 +1,7 @@
 import {Element as PolymerElement} from "@polymer/polymer/polymer-element"
 import template from "./app-theme-input.html"
 
-import VOCAB from "../../lib/controlled-vocabulary"
+import VOCAB from "../../../lib/controlled-vocabulary"
 
 const THEMES = [];
 for( let theme in VOCAB ) {

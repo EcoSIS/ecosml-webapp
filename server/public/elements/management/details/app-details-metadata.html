@@ -1,0 +1,42 @@
+<style include="shared-styles">
+  :host {
+    display: block;
+  }
+
+  app-org-input {
+    margin-top: 15px;
+  }
+  
+  app-keyword-input {
+    margin-top: 15px;
+  }
+
+  h2.uheader.break {
+    margin-top: var(--form-break-margin);
+  }
+</style>
+
+<h2 class="uheader lightblue">README</h2>
+<div class="help">Please provide documentation on the model
+  and how it should be used. Code snippets are encourage. Markdown is supported and highly 
+  encouraged.  Markdown is simple markup syntax that can be used to make your documentation
+  easier to follow and read.  <a href="https://help.github.com/articles/basic-writing-and-formatting-syntax/" target="_blank">Markdown help.</a>
+  <a href="https://help.github.com/articles/creating-and-highlighting-code-blocks/" target="_blank">Supports code syntax highlighting as well.</a>
+</div>
+<app-markdown-editor label="Description" id="description" on-markdown-change="_onInputChange"></app-markdown-editor>
+
+<h2 class="uheader green break">Keywords</h2>
+<div class="help">[[schema.keywords.description]]</div>
+<app-keyword-input 
+  id="keywords" 
+  label="Keywords. Comma Separate" 
+  on-keyword-change="_onInputChange">
+</app-keyword-input>
+
+<h2 class="uheader blue break">Theme</h2>
+<div class="help">Package theming information</div>
+<app-theme-input 
+  id="theme" 
+  on-update="_onThemeUpdate" 
+  style="margin-top: 15px">
+</app-theme-input>

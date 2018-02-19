@@ -1,0 +1,47 @@
+<style include="shared-styles">
+  :host {
+    display: block;
+  }
+
+  h2.uheader.break {
+    margin-top: var(--form-break-margin);
+  }
+
+  app-text-input {
+    display: block;
+  }
+</style>
+
+<h2 class="uheader blue" hidden$="[[!creating]]">Package Name</h2>
+<app-text-input  
+  id="name" 
+  on-change="_updateNamePreview"
+  hidden$="[[!creating]]">
+</app-text-input>
+
+<h2 class="uheader green break" hidden$="[[!creating]]">Package Overview</h2>
+<div class="help">One sentance summary of package</div>
+<app-text-input 
+  id="overview"
+  on-change="_onInputChange"
+  placeholder="Overview (Short Description)">
+</app-text-input>
+
+<h2 class="uheader lightblue break">Organization</h2>
+<div class="help">The <a href="https://data.ecosis.org" target="_blank">EcoSIS</a> organization this package belongs to, 
+  all members will have access. If you need to create or edit an organization, do so via 
+  <a href="https://data.ecosis.org/organization" target="_blank">EcoSIS organization management.</a>
+</div>
+<app-org-input id="organization" on-change="_onInputChange"></app-org-input>
+
+<div style="text-align: right">
+  <paper-button 
+    hidden$="[[!creating]]" 
+    id="createBtn"
+    on-click="_onCreateBtnClicked">Create
+  </paper-button>
+</div>
+
+<div hidden$="[[creating]]">
+  <paper-button on-click="_onDeleteBtnClicked">Delete Package</paper-button>
+</div>

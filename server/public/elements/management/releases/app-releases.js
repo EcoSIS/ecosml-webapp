@@ -1,9 +1,9 @@
 import {Element as PolymerElement} from "@polymer/polymer/polymer-element"
-import template from "./app-create-release.html"
+import template from "./app-releases.html"
 
-import PackageInferface from "../interfaces/PackageInterface"
+import PackageInferface from "../../interfaces/PackageInterface"
 
-export default class AppCreateRelease extends Mixin(PolymerElement)
+export default class AppReleases extends Mixin(PolymerElement)
   .with(EventInterface, PackageInferface) {
 
   static get template() {
@@ -166,4 +166,4 @@ export default class AppCreateRelease extends Mixin(PolymerElement)
 
 }
 
-customElements.define('app-create-release', AppCreateRelease);
+customElements.define('app-releases', AppReleases);

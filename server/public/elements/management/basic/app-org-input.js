@@ -1,8 +1,7 @@
 import {Element as PolymerElement} from "@polymer/polymer/polymer-element"
 import template from "./app-org-input.html"
 
-import AuthInterface from "../interfaces/AuthInterface";
-import { setImmediate } from "timers";
+import AuthInterface from "../../interfaces/AuthInterface";
 
 export default class AppOrgInput extends Mixin(PolymerElement)
   .with(EventInterface, AuthInterface) {

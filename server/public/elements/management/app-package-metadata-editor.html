@@ -3,15 +3,6 @@
     display: block;
     padding-bottom: 50px;
   }
-  app-title-card {
-    margin-bottom: 25px;
-  }
-  paper-button {
-    color: var(--default-primary-color);
-  }
-  paper-button:hover {
-    background: var(--default-background-color);
-  }
 
   .container {
     margin-bottom: 100px;
@@ -21,41 +12,28 @@
     color: var(--inverse-text-color);
     border: 1px solid var(--inverse-text-color);
   }
+  
   #unsavedMsg paper-button:hover {
     color: var(--default-primary-color);
     border: 1px solid var(--default-primary-color);
   }
+
   #savedToast {
     --paper-toast-background-color: var(--default-primary-color);
     --paper-toast-color: var(--inverse-text-color);
   }
 
-  iron-pages > div {
+  iron-pages > * {
     padding: 40px;
     background: white;
-  }
-
-  app-text-input {
-    display: block;
-  }
-
-  app-org-input {
-    margin-top: 15px;
-  }
-  
-  app-keyword-input {
-    margin-top: 15px;
   }
 
   paper-tabs {
     --paper-tabs-selection-bar-color: var(--default-primary-color);
   }
+
   paper-tab {
     --paper-tab-ink: var(--default-primary-color);
-  }
-
-  app-file-manager {
-    margin-bottom: 75px;
   }
 
   #commitMsg {
@@ -63,37 +41,6 @@
     width: 100%;
     box-sizing: border-box;
     margin-top: 20px;
-  }
-
-  #files {
-    padding-bottom: 100px;
-  }
-
-  .examples {
-    display: flex;
-    align-items: center;
-  }
-
-  .examples :first-child {
-    flex: 1;
-  }
-
-  .examples paper-button {
-    font-size: 14px;
-    color: var(--default-secondary-color);
-  }
-
-  [slot="help"] {
-    margin-bottom: 20px;
-  }
-
-  .help {
-    color: var(--secondary-text-color);
-    font-size: 14px;
-  }
-
-  h2.uheader.org-label {
-    margin-top: var(--form-break-margin);
   }
 </style>
 
@@ -118,143 +65,21 @@
 <div class="container">
   <div class="narrow-container">
     <h1>
-      [[currentAction]] Package<span hidden$="[[creating]]">: [[namePreview]]</span>
+      [[currentAction]] Package<span hidden$="[[creating]]">: [[name]]</span>
     </h1>
 
     <paper-tabs id="tabs" hidden$="[[creating]]" selected="{{selectedSection}}" attr-for-selected="id">
-      <paper-tab id="basicInformation">Basic Information</paper-tab>
+      <paper-tab id="basic">Basic Information</paper-tab>
       <paper-tab id="details">Details</paper-tab>
       <paper-tab id="files">Files</paper-tab>
-      <paper-tab id="releasePanel">Releases</paper-tab>
+      <paper-tab id="release">Releases</paper-tab>
     </paper-tabs>
 
     <iron-pages selected="[[selectedSection]]" attr-for-selected="id">
-      <div id="basicInformation">
-        <app-text-input  
-          id="name" 
-          label="Name" 
-          on-keyup="_updateNamePreview" 
-          on-change="_updateNamePreview"
-          help="[[namePreview]]"
-          hidden$="[[!creating]]">
-        </app-text-input>
-
-
-        <div class="help">[[schema.overview.description]]</div>
-        <app-text-input 
-          id="overview"
-          on-change="_onDataChange"
-          placeholder="[[schema.overview.label]]">
-        </app-text-input>
-
-        <h2 class="uheader lightblue org-label">Organization</h2>
-        <div class="help">The <a href="https://data.ecosis.org" target="_blank">EcoSIS</a> organization this package belongs to, 
-          all members will have access. If you need to create or edit an organization, do so via 
-          <a href="https://data.ecosis.org/organization" target="_blank">EcoSIS organization management.</a>
-        </div>
-        <app-org-input id="organization" on-change="_onDataChange"></app-org-input>
-
-        <div style="text-align: right">
-          <paper-button 
-            hidden$="[[!creating]]" 
-            id="createBtn"
-            on-click="_onCreateBtnClicked">Create
-          </paper-button>
-        </div>
-      </div>
-
-      <div id="details">
-        <h2 class="uheader lightblue">README</h2>
-        <div class="help">Please provide documentation on the model
-          and how it should be used. Code snippets are encourage. Markdown is supported and highly 
-          encouraged.  Markdown is simple markup syntax that can be used to make your documentation
-          easier to follow and read.  <a href="https://help.github.com/articles/basic-writing-and-formatting-syntax/" target="_blank">Markdown help.</a>
-          <a href="https://help.github.com/articles/creating-and-highlighting-code-blocks/" target="_blank">Supports code syntax highlighting as well.</a>
-        </div>
-        <app-markdown-editor label="Description" id="description" on-markdown-change="_onDataChange"></app-markdown-editor>
-
-        <h2 class="uheader green org-label">Keywords</h2>
-        <div class="help">[[schema.keywords.description]]</div>
-        <app-keyword-input 
-          id="keywords" 
-          label="Keywords. Comma Separate" 
-          on-keyword-change="_onDataChange">
-        </app-keyword-input>
-
-        <h2 class="uheader blue org-label">Theme</h2>
-        <div class="help">Package theming information</div>
-        <app-theme-input id="theme" on-update="_onThemeUpdate" style="margin-top: 15px"></app-theme-input>
-      </div>
-
-      <div id="files">
-        <app-file-manager 
-          label="Coefficients" 
-          directory="/coefficients"
-          color="lightblue">
-          <div slot="help">Upload model coefficients.  These should be in CSV format.</div>
-        </app-file-manager>
-        
-        <app-file-manager 
-          label="Source" 
-          directory="/main"
-          color="green">
-          <div slot="help">Upload model source code.</div>
-        </app-file-manager>
-        
-        <app-file-manager 
-          label="Papers" 
-          directory="/papers"
-          color="dark">
-          <div slot="help">Upload any published work or additional documentation you wish
-            to have associated with this package.  Can't provide the papers directly?  Feel 
-            free to upload a simple text file with links to journal article(s).
-          </div>
-        </app-file-manager>
-
-
-        <h2 class="examples uheader blue">
-          <div>Examples</div>
-          <paper-button on-click="_onCreateExampleClicked">
-            <iron-icon icon="add"></iron-icon> Create
-          </paper-button>
-        </h2>
-
-        <div class="help">
-          Given a small (less than 100) sample
-          of spectra and optional transform the model should produce the exact output file provided.
-          Examples provide two very important features.:
-          
-          <ul>
-            <li>
-                The example code will be tested and if the provided spectra input matches the 
-                provided model output the package will be given a 
-                <span style="color:green">Verified</span> status.
-            </li>
-            <li>
-                Examples are a great way for others to learn about the model and see it in action.  
-                A quality example can go a long way to showing others how they can use the model 
-                for their own purposes.
-            </li>
-          </ul>
-        </div>
-
-        <template is="dom-repeat" items="[[examples]]">
-          <app-example-editor 
-            label="[[item.label]]" 
-            directory="[[item.directory]]"
-            open="[[item.isNew]]">
-          </app-example-editor>
-        </template>
-
-      </div>
-
-      <div id="releasePanel">
-        <app-create-release id="release"></app-create-release>
-      </div>
-
-      <div>
-        <paper-button on-click="_onDeleteBtnClicked">Delete Package</paper-button>
-      </div>
+      <app-basic-metadata id="basic" creating="[[creating]]" on-change="_onDataChange"></app-basic-metadata>
+      <app-details-metadata id="details" on-change="_onDataChange"></app-details-metadata>
+      <app-files id="files"></app-files>
+      <app-releases id="release"></app-releases>
     </iron-pages>
   </div>
 </div>

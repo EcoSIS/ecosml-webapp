@@ -1,8 +1,8 @@
 import {Element as PolymerElement} from "@polymer/polymer/polymer-element"
 import template from "./app-markdown-editor.html"
 
-import PackageInterface from "../interfaces/PackageInterface";
-import "../utils/app-markdown"
+import PackageInterface from "../../interfaces/PackageInterface";
+import "../../utils/app-markdown"
 
 export default class AppMarkdownEditor extends Mixin(PolymerElement)
   .with(EventInterface, PackageInterface) {

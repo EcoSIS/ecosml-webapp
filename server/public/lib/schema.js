@@ -6,8 +6,8 @@ module.exports = {
     },
     overview : {
       type : String,
-      label : 'Overview (Short Description)',
-      description : 'One sentance summary of package'
+      label : '',
+      description : ''
     },
     description : {
       type : String,

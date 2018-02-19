@@ -7,14 +7,12 @@ import "@polymer/paper-tabs/paper-tabs"
 import template from "./app-package-metadata-editor.html"
 import PackageInterface from "../interfaces/PackageInterface"
 import AppStateInterface from "../interfaces/AppStateInterface"
-import "./app-markdown-editor"
-import "./app-keyword-input"
-import "./app-theme-input"
-import "./app-create-release"
+
 import "./app-text-input"
-import "./app-org-input"
-import "./file-manager/app-file-manager"
-import "./file-manager/app-example-editor"
+import "./basic/app-basic-metadata"
+import "./details/app-details-metadata"
+import "./files/app-files"
+import "./releases/app-releases"
 
 class AppPackageMetadataEditor extends Mixin(PolymerElement)
       .with(EventInterface, AppStateInterface, PackageInterface) {
@@ -29,18 +27,16 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
         type : Boolean,
         value : true
       },
+
       currentAction : {
         type : String,
         value : 'Create'
       },
-      sections : {
-        type : Array,
-        value : () => ['basicInformation', 'details']
-      },
+
 
       selectedSection : {
         type : String,
-        value : 'basicInformation'
+        value : 'basic'
         // value : 'files'
       },
 
@@ -51,15 +47,11 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
       },
 
       // used for displaying package name
-      namePreview : {
+      name : {
         type : String,
         value : ''
-      },
-
-      examples : {
-        type : Array,
-        value : () => []
       }
+
     }
   }
 
@@ -86,20 +78,12 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
     if( page === 'edit' && e.location.path.length > 0 ) {
       if( this.packageId === e.location.path[1] ) return;
       this.packageId = e.location.path[1];
-      this.fetchAndUpdatePackage( e.location.path[1] );
+      this._fetchAndUpdatePackage( e.location.path[1] );
     } else if( page === 'create' ) {
       this.createPackage();
     }
 
     setTimeout(() => this.$.tabs.notifyResize(), 25);
-  }
-
-  get(attr) {
-    return this.$[attr].value;
-  }
-
-  set(attr, value) {
-    this.$[attr].value = value || '';
   }
 
   /**
@@ -109,32 +93,10 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
   createPackage() {
     this.currentAction = 'Create';
     this.creating = true;
-    this.selectedSection = 'basicInformation';
-    this.namePreview = '';
+    this.selectedSection = 'basic';
+    this.name = '';
     this.packageId = '';
-    for( var key in this.schema ) this.set(key);
-  }
-
-  /**
-   * @method _onCreateBtnClicked
-   * @description function fired when the create button is clicked
-   */
-  _onCreateBtnClicked() {
-    if( this.namePreview.length < 4 ) {
-      return alert('Name must be at least 4 characters');
-    }
-    if( this.get('overview').length < 15 ) {
-      return alert('Please provide a longer overview');
-    }
-    if( !this.get('organization') ) {
-      return alert('Please select an organization');
-    }
-
-    this._createPackage(
-      this.namePreview, 
-      this.get('overview'),
-      this.get('organization')
-    );
+    this.$.basic.reset();
   }
 
   /**
@@ -147,61 +109,52 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
     this._deletePackage(this.packageId); 
   }
 
-  async fetchAndUpdatePackage(pkgId) {
+  /**
+   * @method _fetchAndUpdatePackage
+   * @description called when app state updates
+   */
+  async _fetchAndUpdatePackage(pkgId) {
     try {
       let pkg = await this._getPackage(pkgId);
-      let files = await this._getPackageFiles(pkgId);
-
-      this._updateExamples(files);
-      this.updatePackage(pkg.payload);
+      this._setPackageData(pkg.payload);
     } catch(e) {
       console.error(e);
-      return alert('Failed to fetch package with id: '+pkgId);
+      return alert('Failed to fetch package '+pkgId+': '+e.message);
     }
-  }
-
-  _updateExamples(files) {
-    let examples = {};
-    for( let id in files ) {
-      if( id.match(/^\/examples\//) ) {
-        let name = id.replace(/^\/examples\//, '').split('/')[0];
-        examples[name] = true;
-      }
-    }
-
-    Object.keys(examples).forEach(example => {
-      this.push('examples', {
-        directory : '/examples/'+example, 
-        label : example,
-      });
-    });
-  }
-
-  _onPackageUpdate(e) {
-    if( e.state !== 'loaded' ) return;
-    if( e.id !== this.packageId ) return;
-    this.updatePackage(e.payload);
   }
 
   /**
-   * @method updatePackage
+   * @method _onPackageUpdate
+   * @description via package interface, called when package data updates
+   */
+  _setPackageData(e) {
+    if( e.state !== 'loaded' ) return;
+    if( e.id !== this.packageId ) return;
+    this._setPackageData(e.payload);
+  }
+
+  /**
+   * @method _setPackageData
    * @description update UI from package data
    * 
    * @param {Object} pkgData package to render
    */
-  updatePackage(pkgData) {
+  async _setPackageData(pkgData) {
     this.currentAction = 'Update';
     this.creating = false;
     this.$.commitMsg.value = '';
     this.packageId = pkgData.id;
-    this.namePreview = pkgData.name;
+    this.name = pkgData.name;
+    this.data = pkgData;
 
-    let schema = this._getPackageSchema();
-    for( var key in schema ) {
-      if( pkgData[key] ) this.set(key, pkgData[key]);
-      else this.set(key);
-    }
+    // set basic metadata inputs
+    this.$.basic.data = pkgData;
+    this.$.details.data = pkgData;
 
+    // get and set files
+    this.$.files.files = await this._getPackageFiles(pkgData.id);
+
+    // set release info
     this.$.release.package = pkgData;
     if( pkgData.releases && pkgData.releases.length ) {
       let cRelease = pkgData.releases[pkgData.releases.length-1].name;
@@ -211,36 +164,6 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
       this.$.release.releases = [];
       this.$.release.currentRelease = null;
     }
-
-    this.$.organization.value = pkgData.organization;
-
-    this.$.theme.setValues(pkgData);
-  }
-
-  /**
-   * Fired from name input
-   */
-  _updateNamePreview() {
-    this.namePreview = this.get('name').toLowerCase().replace(/ /g, '-');
-  }
-
-  /**
-   * Fired when create package state updates
-   */
-  _onCreatePackageUpdate(e) {
-    if( e.state === 'loading' ) {
-      this.$.createBtn.setAttribute('disabled', 'disabled');
-      this.$.createBtn.innerHTML = 'Creating...';
-      return;
-    }
-
-    this.$.createBtn.removeAttribute('disabled', 'disabled');
-    this.$.createBtn.innerHTML = 'Create';
-    if( e.state === 'error' ) {
-      return alert('Failed to create package :( '+e.error.message);
-    }
-
-    this._setWindowLocation('/edit/'+e.payload.id);
   }
 
   /**
@@ -250,37 +173,24 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
   _onDataChange() {
     if( this.creating ) return;
 
-    this.unsavedData = {
-      name : this.namePreview,
-      overview : this.get('overview'),
-      description : this.get('description'),
-      keywords : this.get('keywords'),
-      organization : this.get('organization')
+    let unsavedData = Object.assign(
+      this.$.basic.getValues(),
+      this.$.details.getValues()
+    );
+
+    let tmp = {};
+    for( var key in unsavedData ) {
+      tmp[key] = this.data[key] || '';
+    }
+
+    if( JSON.stringify(tmp) === JSON.stringify(unsavedData) ) {
+      this.$.savingToast.close();
+      return;
     }
 
     this.$.unsavedMsg.style.display = 'block';
     this.$.savingMsg.style.display = 'none';
     this.$.savingToast.open();
-  }
-
-  _onCreateExampleClicked() {
-    let len = this.examples.length+1;
-    this.push('examples', {
-      directory : '/examples/package_example_'+len, 
-      label : 'package_example_'+len,
-      isNew : true
-    });
-  }
-
-  /**
-   * @method _onThemeUpdate
-   * @description called from the app-theme-input when a value updates
-   */
-  _onThemeUpdate(e) {
-    this._onDataChange();
-    for( var key in e.detail ) {
-      this.unsavedData[key] = e.detail[key];
-    }
   }
 
   _onSaveChangesClicked() {
@@ -305,7 +215,6 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
   _valueToArray(value) {
     return value.split(',').map(value => value.trim());
   }
-
 
 }
 customElements.define('app-package-metadata-editor', AppPackageMetadataEditor);

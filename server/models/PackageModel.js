@@ -350,20 +350,20 @@ class PackageModel {
   async commit(packageName, message) {
     let changes = await git.currentChangesCount(packageName);
     if( changes === 0 ) {
-      logger.debug(`Package ${packageName} commit: told to commit, but no changes have been made`);
+      logger.debug(`Package ${packageName} committing: told to commit, but no changes have been made`);
       return;
     }
     
-    logger.debug(`Package ${packageName} commit: ${changes} change(s)`);
+    logger.debug(`Package ${packageName} committing: ${changes} change(s)`);
     
-    var {stdout} = await git.addAll(packageName);
-    logger.debug(`Package ${packageName} add --all: ${stdout}`);
+    var {stdout, stderr} = await git.addAll(packageName);
+    logger.debug(`Package ${packageName} add --all`, stdout, stderr);
     
-    var {stdout} = await git.commit(packageName, message);
-    logger.debug(`Package ${packageName} commit: ${stdout}`);
+    var {stdout, stderr} = await git.commit(packageName, message);
+    logger.debug(`Package ${packageName} commit`, stdout, stderr);
 
-    var {stdout} = await git.push(packageName);
-    logger.debug(`Package ${packageName} push: ${stdout}`);
+    var {stdout, stderr} = await git.push(packageName);
+    logger.debug(`Package ${packageName} push`, stdout, stderr);
   }
 
     /**
@@ -414,7 +414,9 @@ class PackageModel {
       throw new Error('Example directory does not exist: '+path.join('examples', name));
     }
     
-    return fs.remove(dir);
+    await fs.remove(dir);
+
+    return this.commit(pkg.name, `Deleting example ${name}`);
   }
 
   /**
@@ -423,6 +425,9 @@ class PackageModel {
    */
   async moveExample(pkg, src, dst) {
     let dir = await git.ensureDir(pkg.name);
+
+    let srcName = src;
+    let dstName = dst;
 
     src = this._sanitizeExampleName(src);
     dst = this._sanitizeExampleName(dst);
@@ -437,7 +442,9 @@ class PackageModel {
       throw new Error('Destination directory already exists: '+path.join('examples', dst));
     }
 
-    return fs.move(src, dst);
+    await fs.move(src, dst);
+
+    return this.commit(pkg.name, `Renaming example: ${srcName} to ${dstName}`);
   }
 
   /**
@@ -482,7 +489,7 @@ class PackageModel {
 
   _sanitizeExampleName(pathname) {
     return pathname
-            .replace(/-/g, '_')
+            .replace(/( |-)/g, '_')
             .replace(/\W/g, '');
   }
 

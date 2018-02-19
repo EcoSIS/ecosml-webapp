@@ -158,10 +158,10 @@ class PackageService extends BaseService {
 
   moveExample(packageId, src, dst) {
     return this.request({
-      url : `${this.baseUrl}/${packageId}/moveExample`,
+      url : `${this.baseUrl}/${packageId}/example/${src}`,
       fetchOptions : {
-        method : 'POST',
-        body : {src, dst}
+        method : 'MOVE',
+        body : dst
       }
     });
   }

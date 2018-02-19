@@ -9,11 +9,15 @@
   .layout > * {
     flex: .333;
   }
+  h3 {
+    padding: 0;
+    margin: 0;
+  }
 </style>
 
 <div class="layout">
   <div>
-    <h2>Theme</h2>
+    <h3>Theme</h3>
     <select id="theme" on-change="_onThemeSelect">
       <option></option>
       <template is="dom-repeat" items="[[themeOptions]]">
@@ -23,7 +27,7 @@
   </div>
 
   <div hidden$="[[!selectedTheme]]">
-    <h2>Family</h2>
+    <h3>Family</h3>
     <select on-change="_onFamilySelect" id="family">
       <option></option>
       <template is="dom-repeat" items="[[familyOptions]]">
@@ -33,7 +37,7 @@
   </div>
 
   <div hidden$="[[!selectedFamily]]">
-    <h2>Specific</h2>
+    <h3>Specific</h3>
     <select on-change="_onSpecificSelect" id="specific">
       <option></option>
       <template is="dom-repeat" items="[[specificOptions]]">

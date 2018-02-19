@@ -15,15 +15,20 @@
   .period {
     font-size: 40px;
   }
+
+  paper-button {
+    font-size: 14px;
+    color: var(--light-secondary-color);
+  }
 </style>
 
-<div style="display:flex">
-  <h2 style="flex:1">Releases</h2>
+<h2 class="uheader lightblue" style="display:flex; align-items: center">
+  <div style="flex:1">Releases</div>
   <div>
-    <paper-button hidden$="[[creating]]" on-click="_toggleCreate">Create Release</paper-button>
+    <paper-button hidden$="[[creating]]" on-click="_toggleCreate"><iron-icon icon="add"></iron-icon> Create</paper-button>
     <paper-button hidden$="[[!creating]]" on-click="_toggleCreate">Cancel</paper-button>
   </div>
-</div>
+</h2>
 
 <div hidden$="[[!creating]]">
   <div class="layout">

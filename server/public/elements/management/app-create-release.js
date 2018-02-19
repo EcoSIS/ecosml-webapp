@@ -23,7 +23,8 @@ export default class AppCreateRelease extends Mixin(PolymerElement)
       },
       package : {
         type : Object,
-        value : () => {}
+        value : () => {},
+        observer : '_tmp'
       },
       creating : {
         type : Boolean,
@@ -38,6 +39,10 @@ export default class AppCreateRelease extends Mixin(PolymerElement)
         value : ''
       }
     }
+  }
+
+  _tmp() {
+    console.log(this.package);
   }
 
   get major() {

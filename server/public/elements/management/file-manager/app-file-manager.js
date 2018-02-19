@@ -47,6 +47,22 @@ export default class AppFileManager extends Mixin(PolymerElement)
   }
 
   /**
+   * @method removeByBasePath
+   * @description given a base file path, remove all files matching this path.
+   * Good for after a move operation.
+   * 
+   * @param {String} path base path to remove
+   */
+  removeByBasePath(path) {
+    let re = new RegExp('^'+path);
+    for( let i = this.files.length - 1; i >= 0; i-- ) {
+      if( this.files[i].dir.match(re) ) {
+        this.files.splice(i, 1);
+      }
+    }
+  }
+
+  /**
    * @method _onFileUpdate
    * @description via PackageInterface, called whenever a file is updated
    * 
@@ -124,7 +140,7 @@ export default class AppFileManager extends Mixin(PolymerElement)
   _addFile(file) {
     clearTimeout(this.fileUpdateTimer);
 
-    let index = this.files.findIndex(f => f.id == file.id);
+    let index = this.files.findIndex(f => f.id === file.id);
     if( index > -1 ) this.files[index] = file;
     else this.files.push(file);
 

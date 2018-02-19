@@ -12,12 +12,6 @@
     min-height: 200px;
   }
 
-  #preview {
-    min-height: 200px;
-    /* border: 1px solid #aaa; */
-    overflow: auto;
-  }
-
   paper-icon-button[disabled] {
     color: #aaa;
   }
@@ -28,7 +22,7 @@
   <div style="flex:1">
     <span hidden$="[[previewMode]]">Edit</span>
     <span hidden$="[[!previewMode]]">Preview</span> 
-    [[label]]
+    Mode
   </div>
   <paper-icon-button icon="code" disabled$="[[!previewMode]]" on-click="_toggle"></paper-icon-button>
   <paper-icon-button icon="visibility" disabled$="[[previewMode]]" on-click="_toggle"></paper-icon-button>

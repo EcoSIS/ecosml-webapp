@@ -128,9 +128,15 @@ router.get('/:package/files', packageReadAccess, async (req, res) => {
   }
 });
 
-router.post('/:package/moveExample', packageWriteAccess, async (req, res) => {
+router.move('/:package/example/:name', packageWriteAccess, async (req, res) => {
   try {
-    await model.moveExample(req.ecosmlPackage, req.body.src, req.body.dst);
+    // await model.moveExample(req.ecosmlPackage, req.params.name, req.body);
+    await queue.add(
+      'moveExample', 
+      req.ecosmlPackage.name, 
+      [req.ecosmlPackage, req.params.name, req.body]
+    );
+
     res.json({success: true});
   } catch(e) {
     utils.handleError(res, e);
@@ -139,7 +145,13 @@ router.post('/:package/moveExample', packageWriteAccess, async (req, res) => {
 
 router.delete('/:package/example/:name', packageWriteAccess, async (req, res) => {
   try {
-    await model.deleteExample(req.ecosmlPackage, req.params.name);
+    // await model.deleteExample(req.ecosmlPackage, req.params.name);
+    await queue.add(
+      'deleteExample', 
+      req.ecosmlPackage.name, 
+      [req.ecosmlPackage, req.params.name]
+    );
+
     res.json({success: true});
   } catch(e) {
     utils.handleError(res, e);

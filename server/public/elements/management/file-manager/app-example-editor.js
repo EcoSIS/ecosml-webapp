@@ -29,6 +29,11 @@ export default class AppExampleEditor extends Mixin(PolymerElement)
         observer : "_onLabelChange"
       },
 
+      disabled : {
+        type : Boolean,
+        value : false
+      },
+
       inputDir : {
         type : String,
         value : ''
@@ -104,16 +109,29 @@ export default class AppExampleEditor extends Mixin(PolymerElement)
   async _onExampleNameChange() {
     let src = this.label;
     let dst = this._cleanLabelName(this.$.name.value);
-    let packageId = this._getSelectedPackageId();
+    let packageId = this._getSelectedPackageId().id;
     
     this.$.name.disabled = true;
+    let helpTxt = this.$.name.help;
+    this.$.name.help = 'Renaming example ...';
+    this.disabled = true;
+
     try {
-      this._moveExampleDirectory(packageId, src, dst);
+      await this._moveExampleDirectory(packageId, src, dst);
+
+      // remove all old files
+      ['input', 'transform', 'output'].forEach(id => {
+        this.$[id].removeByBasePath(`/examples/${src}`);
+      });
     } catch(e) {
       // noop?
     }
 
+
+
+    this.disabled = false;
     this.$.name.disabled = false;
+    this.$.name.help = helpTxt;
     this.label = dst;
   }
 
@@ -137,7 +155,7 @@ export default class AppExampleEditor extends Mixin(PolymerElement)
 
   _cleanLabelName(txt) {
     return txt.toLowerCase()
-      .replace(/ /g, '_')
+      .replace(/( |-)/g, '_')
       .replace(/\W/g, '');
   }
 

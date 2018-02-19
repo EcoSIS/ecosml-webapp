@@ -20,12 +20,13 @@
   }
 </style>
 
-<paper-input 
+<app-text-input 
   id="input" 
-  label="[[label]]"
+  placeholder="[[label]]"
+  help="[[help]]"
   on-change="_onChange" 
-  on-keypress="_onKeyPress">
-</paper-input>
+  on-keyup="_onKeyPress">
+</app-text-input>
 
 <div>
   <template is="dom-repeat" items="[[keywords]]">

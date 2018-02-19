@@ -12,9 +12,7 @@
   paper-button:hover {
     background: var(--default-background-color);
   }
-  h2 {
-    margin : 0 0 5px 0;
-  }
+
   #unsavedMsg paper-button {
     color: var(--inverse-text-color);
     border: 1px solid var(--inverse-text-color);
@@ -82,6 +80,9 @@
     font-size: 14px;
   }
 
+  h2.uheader.org-label {
+    margin-top: var(--form-break-margin);
+  }
 </style>
 
 <paper-toast id="savingToast" duration="0">
@@ -104,7 +105,9 @@
 
 <div class="container">
   <div class="narrow-container">
-    <h1>[[currentAction]] Package</h1>
+    <h1>
+      [[currentAction]] Package<span hidden$="[[creating]]">: [[namePreview]]</span>
+    </h1>
 
     <paper-tabs hidden$="[[creating]]" selected="{{selectedSection}}" attr-for-selected="id">
       <paper-tab id="basicInformation">Basic Information</paper-tab>
@@ -124,16 +127,15 @@
           hidden$="[[!creating]]">
         </app-text-input>
 
-        <div hidden$="[[creating]]" class="help">Package Name</div>
-        <h2 hidden$="[[creating]]">[[namePreview]]</h2>
 
         <app-text-input 
-          id="overview" 
-          label="[[schema.overview.label]]" 
+          id="overview"
           on-change="_onDataChange"
+          placeholder="[[schema.overview.label]]"
           help="[[schema.overview.description]]">
         </app-text-input>
 
+        <h2 class="uheader lightblue org-label">Organization</h2>
         <app-org-input id="organization" on-change="_onDataChange"></app-org-input>
 
         <div style="text-align: right">
@@ -146,12 +148,19 @@
       </div>
 
       <div id="details">
+        <h2 class="uheader lightblue">README</h2>
         <app-markdown-editor label="Description" id="description" on-markdown-change="_onDataChange"></app-markdown-editor>
         <div class="help">[[schema.description.description]]</div>
 
-        <app-keyword-input id="keywords" label="Keywords.  Comma Separate" on-keyword-change="_onDataChange"></app-keyword-input>
-        <div class="help">[[schema.keywords.description]]</div>
+        <h2 class="uheader green org-label">Keywords</h2>
+        <app-keyword-input 
+          id="keywords" 
+          label="Keywords. Comma Separate" 
+          help="[[schema.keywords.description]]"
+          on-keyword-change="_onDataChange">
+        </app-keyword-input>
 
+        <h2 class="uheader blue org-label">Themes</h2>
         <app-theme-input id="theme" on-update="_onThemeUpdate"></app-theme-input>
       </div>
 

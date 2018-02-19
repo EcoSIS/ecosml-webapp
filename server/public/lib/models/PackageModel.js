@@ -159,7 +159,7 @@ class PackageModel extends BaseModel {
    */
   async moveExample(packageId, src, dst) {
     await this.service.moveExample(packageId, src, dst);
-    return this.getFiles(pacakgeId);
+    return this.getFiles(packageId);
   }
 
   /**
@@ -173,7 +173,7 @@ class PackageModel extends BaseModel {
    */
   async deleteExample(packageId, name) {
     await this.service.deleteExample(packageId, name);
-    return this.getFiles(pacakgeId);
+    return this.getFiles(packageId);
   }
 
   /**

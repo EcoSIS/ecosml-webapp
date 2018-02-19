@@ -21,6 +21,10 @@ export default class AppTextInput extends PolymerElement {
         type : String,
         value : ''
       },
+      placeholder : {
+        type : String,
+        value : ''
+      },
       disabled : {
         type : Boolean,
         value : false

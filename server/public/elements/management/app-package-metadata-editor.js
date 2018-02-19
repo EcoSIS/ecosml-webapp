@@ -40,8 +40,8 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
 
       selectedSection : {
         type : String,
-        // value : 'basicInformation'
-        value : 'files'
+        value : 'basicInformation'
+        // value : 'files'
       },
 
       // package schema object
@@ -150,7 +150,6 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
       let pkg = await this._getPackage(pkgId);
       let files = await this._getPackageFiles(pkgId);
 
-      
       this._updateExamples(files);
       this.updatePackage(pkg.payload);
     } catch(e) {

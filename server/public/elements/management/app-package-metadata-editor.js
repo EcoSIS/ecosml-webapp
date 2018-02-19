@@ -180,9 +180,9 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
 
     let tmp = {};
     for( var key in unsavedData ) {
-      tmp[key] = this.data[key] || '';
+      tmp[key] = this.data[key] || (key === 'keywords' ? [] : '');
     }
-
+    
     if( JSON.stringify(tmp) === JSON.stringify(unsavedData) ) {
       this.$.savingToast.close();
       return;

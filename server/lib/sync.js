@@ -38,8 +38,11 @@ class GithubSync {
     let metadata;
 
     try {
+      var {body} = await github.getRepository(repoName);
+      metadata = utils.githubRepoToEcosml(JSON.parse(body));
+
       var {body} = await github.getRawFile(repoName, 'ecosml-metadata.json');
-      metadata = JSON.parse(body);
+      metadata = Object.assign(metadata, JSON.parse(body));
       
       var {body} = await github.getRawFile(repoName, 'README.md');
       metadata.description = body;

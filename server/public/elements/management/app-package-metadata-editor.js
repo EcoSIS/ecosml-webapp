@@ -90,6 +90,8 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
     } else if( page === 'create' ) {
       this.createPackage();
     }
+
+    setTimeout(() => this.$.tabs.notifyResize(), 25);
   }
 
   get(attr) {

@@ -13,6 +13,10 @@
     background: var(--default-background-color);
   }
 
+  .container {
+    margin-bottom: 100px;
+  }
+
   #unsavedMsg paper-button {
     color: var(--inverse-text-color);
     border: 1px solid var(--inverse-text-color);
@@ -33,6 +37,14 @@
 
   app-text-input {
     display: block;
+  }
+
+  app-org-input {
+    margin-top: 15px;
+  }
+  
+  app-keyword-input {
+    margin-top: 15px;
   }
 
   paper-tabs {
@@ -109,7 +121,7 @@
       [[currentAction]] Package<span hidden$="[[creating]]">: [[namePreview]]</span>
     </h1>
 
-    <paper-tabs hidden$="[[creating]]" selected="{{selectedSection}}" attr-for-selected="id">
+    <paper-tabs id="tabs" hidden$="[[creating]]" selected="{{selectedSection}}" attr-for-selected="id">
       <paper-tab id="basicInformation">Basic Information</paper-tab>
       <paper-tab id="details">Details</paper-tab>
       <paper-tab id="files">Files</paper-tab>
@@ -128,14 +140,18 @@
         </app-text-input>
 
 
+        <div class="help">[[schema.overview.description]]</div>
         <app-text-input 
           id="overview"
           on-change="_onDataChange"
-          placeholder="[[schema.overview.label]]"
-          help="[[schema.overview.description]]">
+          placeholder="[[schema.overview.label]]">
         </app-text-input>
 
         <h2 class="uheader lightblue org-label">Organization</h2>
+        <div class="help">The <a href="https://data.ecosis.org" target="_blank">EcoSIS</a> organization this package belongs to, 
+          all members will have access. If you need to create or edit an organization, do so via 
+          <a href="https://data.ecosis.org/organization" target="_blank">EcoSIS organization management.</a>
+        </div>
         <app-org-input id="organization" on-change="_onDataChange"></app-org-input>
 
         <div style="text-align: right">
@@ -149,19 +165,25 @@
 
       <div id="details">
         <h2 class="uheader lightblue">README</h2>
+        <div class="help">Please provide documentation on the model
+          and how it should be used. Code snippets are encourage. Markdown is supported and highly 
+          encouraged.  Markdown is simple markup syntax that can be used to make your documentation
+          easier to follow and read.  <a href="https://help.github.com/articles/basic-writing-and-formatting-syntax/" target="_blank">Markdown help.</a>
+          <a href="https://help.github.com/articles/creating-and-highlighting-code-blocks/" target="_blank">Supports code syntax highlighting as well.</a>
+        </div>
         <app-markdown-editor label="Description" id="description" on-markdown-change="_onDataChange"></app-markdown-editor>
-        <div class="help">[[schema.description.description]]</div>
 
         <h2 class="uheader green org-label">Keywords</h2>
+        <div class="help">[[schema.keywords.description]]</div>
         <app-keyword-input 
           id="keywords" 
           label="Keywords. Comma Separate" 
-          help="[[schema.keywords.description]]"
           on-keyword-change="_onDataChange">
         </app-keyword-input>
 
-        <h2 class="uheader blue org-label">Themes</h2>
-        <app-theme-input id="theme" on-update="_onThemeUpdate"></app-theme-input>
+        <h2 class="uheader blue org-label">Theme</h2>
+        <div class="help">Package theming information</div>
+        <app-theme-input id="theme" on-update="_onThemeUpdate" style="margin-top: 15px"></app-theme-input>
       </div>
 
       <div id="files">

@@ -1,38 +1,55 @@
 
 <style>
+  :host {
+    display: block;
+  }
+
   div {
     display: flex;
     align-items: center;
   }
 
   span {
-    padding-left: 10px;
+    /* padding-left: 5px; */
     display: inline-block;
+    vertical-align: baseline;
   }
 
-  paper-button {
-    background: var(--dark-background-color)
+  button {
+    margin: 3px 5px;
+    padding: 8px;
+    background: white;
+    border-radius: 3px;
   }
 
-  paper-button:hover {
+  iron-icon {
+    --iron-icon-width: 18px;
+    --iron-icon-height: 18px;
+  }
+
+  button:hover {
+    cursor: pointer;
     color: var(--inverse-text-color);
     background: var(--default-primary-color);
+  }
+
+  app-text-input {
+    display: block;
   }
 </style>
 
 <app-text-input 
   id="input" 
   placeholder="[[label]]"
-  help="[[help]]"
   on-change="_onChange" 
   on-keyup="_onKeyPress">
 </app-text-input>
 
 <div>
   <template is="dom-repeat" items="[[keywords]]">
-    <paper-button value$="[[item]]" on-click="_onRemoveClicked">
+    <button value$="[[item]]" on-click="_onRemoveClicked">
       <iron-icon icon="clear"></iron-icon>
       <span>[[item]]</span>
-    </paper-button>
+    </button>
   </template>
 </div>

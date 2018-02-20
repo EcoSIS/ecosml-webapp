@@ -7,7 +7,7 @@ const git = require('../../server/lib/git');
 
 let pkg = {
   name : 'Unit-Test-Package',
-  description : 'This is a test, this is only a test',
+  overview : 'This is a test, this is only a test',
   owner : 'bob',
   organization : 'myorg'
 };

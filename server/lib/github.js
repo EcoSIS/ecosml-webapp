@@ -236,6 +236,14 @@ class GithubApi {
           return reject(error);
         }
         Logger.info(`GitHub API request: ${options.method || 'GET'} ${options.uri}, request remaining: ${response.headers['x-ratelimit-remaining']}`);
+        
+        if( parseInt(response.headers['x-ratelimit-remaining']) < 500 ) {
+          let time = parseInt(response.headers['x-ratelimit-reset']);
+          let resets = Math.floor((time - (Date.now()/1000)) / 60);
+
+          Logger.warn('Less that '+response.headers['x-ratelimit-remaining']+' GitHub requests remaining.  Resets in '+resets+'min');
+        }
+
         resolve({response, body});
       });
     });

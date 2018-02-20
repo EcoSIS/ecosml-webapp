@@ -182,7 +182,7 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
     for( var key in unsavedData ) {
       tmp[key] = this.data[key] || (key === 'keywords' ? [] : '');
     }
-    
+
     if( JSON.stringify(tmp) === JSON.stringify(unsavedData) ) {
       this.$.savingToast.close();
       return;
@@ -194,7 +194,12 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
   }
 
   _onSaveChangesClicked() {
-    this._updatePackage(this.packageId, this.unsavedData, this.$.commitMsg.value);
+    let unsavedData = Object.assign(
+      this.$.basic.getValues(),
+      this.$.details.getValues()
+    );
+
+    this._updatePackage(this.packageId, unsavedData, this.$.commitMsg.value);
   }
 
   _onEditPackageUpdate(e) {

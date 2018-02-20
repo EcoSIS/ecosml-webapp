@@ -9,7 +9,7 @@ const fs = require('fs-extra');
 const uuid = require('uuid');
 const utils = require('../lib/utils')
 const markdown = require('../lib/markdown');
-
+const schema = require('../lib/schema');
 
 const METADATA_FILENAME = 'ecosml-metadata.json';
 
@@ -17,12 +17,6 @@ class PackageModel {
 
   constructor() {
     git.initConfig();
-  }
-
-  verifyRequired(attrs, obj) {
-    attrs.forEach(attr => {
-      if( !obj[attr] ) throw new AppError(`${attr} required`, AppError.ERROR_CODES.MISSING_ATTRIBUTE);
-    });
   }
 
   checkStatus(response, expectedStatus) {
@@ -48,10 +42,7 @@ class PackageModel {
    */
   async create(pkg) {
     logger.info(`Creating package: ${pkg.name}`);
-    this.verifyRequired(config.schemaFilter.REQUIRED_CREATE, pkg);
-
-    if( pkg.name.length < 4 ) throw new AppError('Package name must be at least 4 characters', AppError.ERROR_CODES.INVALID_ATTRIBUTE);
-    if( pkg.description.length < 15 ) throw new AppError('Please provide a longer overview', AppError.ERROR_CODES.INVALID_ATTRIBUTE);
+    schema.validate('create', pkg);
 
     let ecosmlId = uuid.v4();
 
@@ -96,7 +87,8 @@ class PackageModel {
    * @param {Boolean} refreshFromGithub preform a full refresh from Github API?
    */
   async update(pkg, update, commitMessage, refreshFromGithub = false) {
-    pkg = this.get(pkg);
+    pkg = await this.get(pkg);
+    schema.validate('update', update);
 
     // First update readme if it changed via git
     await git.resetHEAD(pkg.name);
@@ -111,7 +103,7 @@ class PackageModel {
     if( update.overview && update.overview !== pkg.overview ) {
       let response = await github.editRepository({
         name : pkg.name,
-        description : pkg.overview
+        description : update.overview
       });
       body = response.body;
     }
@@ -127,11 +119,7 @@ class PackageModel {
       gpkg = utils.githubRepoToEcosml(body);
     }
 
-    config.schemaFilter.UPDATE_ATTRIBUTES.UPDATE_ATTRIBUTES.forEach(attr => {
-      if( pkg[attr] !== undefined ) {
-        gpkg[attr] = pkg[attr];
-      }
-    });
+    gpkg = Object.assign(gpkg, update);
 
     // now save changes in mongo
     await mongo.updatePackage(pkg.name, gpkg);
@@ -250,7 +238,7 @@ class PackageModel {
    * @description delete a package
    */
   async delete(pkg) {
-    pkg = this.get(pkg);
+    pkg = await this.get(pkg);
 
     logger.info(`Deleting package: ${pkg.names}`);
 
@@ -274,7 +262,7 @@ class PackageModel {
    * @param {Boolean} data.prerelease
    */
   async createRelease(id, data) {
-    pkg = this.get(pkg);
+    pkg = await this.get(pkg);
 
 
     if( !data.name ) throw new AppError('Release name required', AppError.ERROR_CODES.MISSING_ATTRIBUTE);

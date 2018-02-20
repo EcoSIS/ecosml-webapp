@@ -8,11 +8,11 @@ const git = require('../../server/lib/git');
 
 let pkg = {
   name : 'Unit-Test-Package',
-  description : 'This is a test, this is only a test',
+  overview : 'This is a test, this is only a test',
   owner : 'bob',
   keywords : ['foo', 'bar'],
   organization : 'myorg'
-};
+}
 
 function wait(time = 5000) {
   return new Promise((resolve, reject) => {
@@ -25,7 +25,6 @@ describe('Package Search Methods', function() {
   before(async function() {
     this.timeout(20000);
     await packageModel.create(pkg);
-    await packageModel.update(pkg);
   });
 
   it(`should find a package ${pkg.name}`, async () => {

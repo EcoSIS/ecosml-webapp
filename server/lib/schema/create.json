@@ -1,0 +1,38 @@
+{
+    "id": "/CreatePackage",
+    "type": "object",
+    "properties": {
+      "name" : {
+        "type" : "string",
+        "format" : "packageName"
+      },
+      "organization": {
+        "type" : "string"
+      },
+      "owner" : {
+        "type" : "string"
+      },
+      "overview" : {
+        "type": "string",
+        "format" : "packageOverview"
+      },
+      "description" : {
+        "type" : "string"
+      },
+      "keywords" : {
+        "type" : "array",
+        "items": {"type": "string"}
+      },
+      "theme" : {
+        "type" : "String"
+      },
+      "family" : {
+        "type" : "string"
+      },
+      "specific" : {
+        "type" : "string"
+      }
+    },
+    "additionalProperties": false,
+    "required": ["name", "organization", "overview", "owner"]
+  }

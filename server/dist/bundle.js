@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 82);
+/******/ 	return __webpack_require__(__webpack_require__.s = 81);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -70,13 +70,13 @@
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_legacy_legacy_element_mixin_js__ = __webpack_require__(44);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_legacy_polymer_fn_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lib_legacy_templatizer_behavior_js__ = __webpack_require__(95);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lib_elements_dom_bind_js__ = __webpack_require__(96);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lib_elements_dom_repeat_js__ = __webpack_require__(97);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__lib_elements_dom_if_js__ = __webpack_require__(98);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__lib_elements_array_selector_js__ = __webpack_require__(99);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lib_legacy_templatizer_behavior_js__ = __webpack_require__(94);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lib_elements_dom_bind_js__ = __webpack_require__(95);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lib_elements_dom_repeat_js__ = __webpack_require__(96);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__lib_elements_dom_if_js__ = __webpack_require__(97);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__lib_elements_array_selector_js__ = __webpack_require__(98);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__lib_elements_custom_style_js__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__lib_legacy_mutable_data_behavior_js__ = __webpack_require__(101);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__lib_legacy_mutable_data_behavior_js__ = __webpack_require__(100);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__lib_utils_html_tag_js__ = __webpack_require__(55);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__polymer_element_js__ = __webpack_require__(1);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_10__polymer_element_js__["b"]; });
@@ -140,7 +140,7 @@ const Element = Object(__WEBPACK_IMPORTED_MODULE_0__lib_mixins_element_mixin_js_
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_boot_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_boot_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__utils_boot_js__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_settings_js__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_flattened_nodes_observer_js__ = __webpack_require__(93);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_flattened_nodes_observer_js__ = __webpack_require__(92);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_flush_js__ = __webpack_require__(21);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_3__utils_flush_js__["b"]; });
 /* unused harmony reexport addDebouncer */
@@ -509,7 +509,7 @@ const dom = function(obj) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__class_js__ = __webpack_require__(94);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__class_js__ = __webpack_require__(93);
 
 
 const Polymer = function(info) {
@@ -543,11 +543,11 @@ let Polymer;
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = {
-  BaseModel : __webpack_require__(106),
-  BaseStore : __webpack_require__(108),
-  BaseService : __webpack_require__(109),
-  Mixin : __webpack_require__(111),
-  EventInterface : __webpack_require__(112),
+  BaseModel : __webpack_require__(105),
+  BaseStore : __webpack_require__(107),
+  BaseService : __webpack_require__(108),
+  Mixin : __webpack_require__(110),
+  EventInterface : __webpack_require__(111),
   fetch : __webpack_require__(56)
 }
 
@@ -1250,8 +1250,20 @@ module.exports = subclass =>
       this.PackageModel.setSelectedPackageId(packageId);
     }
 
+    _getSelectedPackageId() {
+      return this.PackageModel.getSelectedPackageId();
+    }
+
     _getPackageFiles(packageId) {
       return this.PackageModel.getFiles(packageId);
+    }
+
+    _moveExampleDirectory(packageId, src, dst) {
+      return this.PackageModel.moveExample(packageId, src, dst);
+    }
+
+    _deleteExampleDirectory(packageId, name) {
+      return this.PackageModel.deleteExample(packageId, name);
     }
 
   }
@@ -2881,7 +2893,7 @@ MutableData._mutablePropertyChange = mutablePropertyChange;
 
 "use strict";
 /* unused harmony export CustomStyle */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__webcomponents_shadycss_entrypoints_custom_style_interface_js__ = __webpack_require__(100);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__webcomponents_shadycss_entrypoints_custom_style_interface_js__ = __webpack_require__(99);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_style_gather_js__ = __webpack_require__(49);
 
 
@@ -3164,7 +3176,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__font_roboto_roboto_js__ = __webpack_require__(102);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__font_roboto_roboto_js__ = __webpack_require__(101);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__font_roboto_roboto_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__font_roboto_roboto_js__);
 
 
@@ -4240,7 +4252,7 @@ function detectMixin(cssText) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_resolve_url_js__ = __webpack_require__(19);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__elements_dom_module_js__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__property_effects_js__ = __webpack_require__(35);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__properties_mixin_js__ = __webpack_require__(89);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__properties_mixin_js__ = __webpack_require__(88);
 
 
 
@@ -5005,7 +5017,7 @@ customElements.define('dom-module', DomModule);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_path_js__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_case_map_js__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__property_accessors_js__ = __webpack_require__(50);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__template_stamp_js__ = __webpack_require__(88);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__template_stamp_js__ = __webpack_require__(87);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__utils_settings_js__ = __webpack_require__(14);
 
 
@@ -9189,7 +9201,7 @@ const Templatize = {
 /* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var EventEmitter = __webpack_require__(107).EventEmitter;
+var EventEmitter = __webpack_require__(106).EventEmitter;
 
 /**
  * @class MasterController
@@ -9255,8 +9267,8 @@ module.exports = new MasterController();
 
 module.exports = {
   AppStateInterface : __webpack_require__(58),
-  AppStateModel : __webpack_require__(123),
-  AppStateStore : __webpack_require__(124),
+  AppStateModel : __webpack_require__(122),
+  AppStateStore : __webpack_require__(123),
   'app-route' : __webpack_require__(57)
 }
 
@@ -9267,7 +9279,7 @@ module.exports = {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_behaviors_iron_button_state_js__ = __webpack_require__(27);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__paper_ripple_paper_ripple_js__ = __webpack_require__(137);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__paper_ripple_paper_ripple_js__ = __webpack_require__(136);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
 
 
@@ -9773,7 +9785,7 @@ Object(__WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_fn_js__["a" /* Po
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_selection_js__ = __webpack_require__(150);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_selection_js__ = __webpack_require__(149);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_utils_case_map_js__ = __webpack_require__(15);
 
@@ -10181,14 +10193,14 @@ const IronSelectableBehavior = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__webcomponents_shadycss_entrypoints_apply_shim_js__ = __webpack_require__(84);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__webcomponents_shadycss_entrypoints_apply_shim_js__ = __webpack_require__(83);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mixins_element_mixin_js__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__mixins_gesture_event_listeners_js__ = __webpack_require__(52);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__mixins_dir_mixin_js__ = __webpack_require__(90);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__mixins_dir_mixin_js__ = __webpack_require__(89);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_mixin_js__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_import_href_js__ = __webpack_require__(91);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_import_href_js__ = __webpack_require__(90);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__utils_render_status_js__ = __webpack_require__(53);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__utils_unresolved_js__ = __webpack_require__(92);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__utils_unresolved_js__ = __webpack_require__(91);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__utils_unresolved_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__utils_unresolved_js__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__polymer_dom_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__utils_gestures_js__ = __webpack_require__(36);
@@ -11194,7 +11206,7 @@ const LegacyElementMixin = Object(__WEBPACK_IMPORTED_MODULE_4__utils_mixin_js__[
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__style_settings_js__ = __webpack_require__(29);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__css_parse_js__ = __webpack_require__(30);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__common_regex_js__ = __webpack_require__(31);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__unscoped_style_handler_js__ = __webpack_require__(86);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__unscoped_style_handler_js__ = __webpack_require__(85);
 /**
 @license
 Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
@@ -13133,7 +13145,7 @@ const html = function html(strings, ...values) {
 // on the global object (window or self)
 //
 // Return that as the export for use in Webpack, Browserify etc.
-__webpack_require__(110);
+__webpack_require__(109);
 module.exports = self.fetch.bind(self);
 
 
@@ -13144,10 +13156,10 @@ module.exports = self.fetch.bind(self);
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__polymer_app_route_app_location__ = __webpack_require__(113);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__polymer_app_route_app_location__ = __webpack_require__(112);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ucd_lib_cork_app_utils__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ucd_lib_cork_app_utils___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__ucd_lib_cork_app_utils__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_query_string__ = __webpack_require__(117);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_query_string__ = __webpack_require__(116);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_query_string___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_query_string__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lib_AppStateInterface__ = __webpack_require__(58);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lib_AppStateInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__lib_AppStateInterface__);
@@ -13497,8 +13509,8 @@ module.exports = new PackageStore();
 /* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var v1 = __webpack_require__(129);
-var v4 = __webpack_require__(130);
+var v1 = __webpack_require__(128);
+var v4 = __webpack_require__(129);
 
 var uuid = v4;
 uuid.v1 = v1;
@@ -13749,8 +13761,8 @@ module.exports = {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_flex_layout_iron_flex_layout_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__paper_behaviors_paper_button_behavior_js__ = __webpack_require__(136);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__paper_styles_element_styles_paper_material_styles_js__ = __webpack_require__(138);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__paper_behaviors_paper_button_behavior_js__ = __webpack_require__(135);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__paper_styles_element_styles_paper_material_styles_js__ = __webpack_require__(137);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(3);
 
 
@@ -13970,7 +13982,7 @@ Object(__WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__["a" /* Po
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_icon_iron_icon_js__ = __webpack_require__(41);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__paper_behaviors_paper_inky_focus_behavior_js__ = __webpack_require__(146);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__paper_behaviors_paper_inky_focus_behavior_js__ = __webpack_require__(145);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__paper_styles_default_theme_js__ = __webpack_require__(24);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(3);
 
@@ -16303,7 +16315,7 @@ Object(__WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__["a" /* Po
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_selector_iron_multi_selectable_js__ = __webpack_require__(167);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_selector_iron_multi_selectable_js__ = __webpack_require__(166);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_a11y_keys_behavior_iron_a11y_keys_behavior_js__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__iron_selector_iron_selectable_js__ = __webpack_require__(43);
@@ -16724,21 +16736,21 @@ const IronMenuBehavior = [
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_markdown_html__ = __webpack_require__(173);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_markdown_html__ = __webpack_require__(182);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_markdown_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_markdown_html__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_PackageInterface__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_PackageInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__interfaces_PackageInterface__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_github_markdown_css_github_markdown_css__ = __webpack_require__(174);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_github_markdown_css_github_markdown_css__ = __webpack_require__(183);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_github_markdown_css_github_markdown_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_github_markdown_css_github_markdown_css__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_prismjs_themes_prism_okaidia_css__ = __webpack_require__(176);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_prismjs_themes_prism_okaidia_css__ = __webpack_require__(185);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_prismjs_themes_prism_okaidia_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_prismjs_themes_prism_okaidia_css__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_prismjs_prism__ = __webpack_require__(178);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_prismjs_prism__ = __webpack_require__(187);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_prismjs_prism___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_prismjs_prism__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_prismjs_components_prism_python__ = __webpack_require__(179);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_prismjs_components_prism_python__ = __webpack_require__(189);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_prismjs_components_prism_python___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_prismjs_components_prism_python__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_prismjs_components_prism_bash__ = __webpack_require__(180);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_prismjs_components_prism_bash__ = __webpack_require__(190);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_prismjs_components_prism_bash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_prismjs_components_prism_bash__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_prismjs_components_prism_r__ = __webpack_require__(181);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_prismjs_components_prism_r__ = __webpack_require__(191);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_prismjs_components_prism_r___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8_prismjs_components_prism_r__);
 
 
@@ -16866,65 +16878,38 @@ function toComment(sourceMap) {
 
 /***/ }),
 /* 81 */
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-/* 82 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__styles_style_properties__ = __webpack_require__(83);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__styles_shared_styles__ = __webpack_require__(104);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__styles_style_properties__ = __webpack_require__(82);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__styles_shared_styles__ = __webpack_require__(103);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ucd_lib_cork_app_utils__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ucd_lib_cork_app_utils___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__ucd_lib_cork_app_utils__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ucd_lib_cork_app_state_elements_app_route__ = __webpack_require__(57);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lib__ = __webpack_require__(121);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lib__ = __webpack_require__(120);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__polymer_polymer_polymer_element__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__polymer_paper_button_paper_button__ = __webpack_require__(66);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__polymer_app_layout_app_header_app_header__ = __webpack_require__(139);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__polymer_app_layout_app_toolbar_app_toolbar__ = __webpack_require__(144);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__polymer_app_layout_app_drawer_app_drawer__ = __webpack_require__(145);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__polymer_app_layout_app_header_app_header__ = __webpack_require__(138);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__polymer_app_layout_app_toolbar_app_toolbar__ = __webpack_require__(143);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__polymer_app_layout_app_drawer_app_drawer__ = __webpack_require__(144);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__polymer_paper_icon_button_paper_icon_button__ = __webpack_require__(67);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__polymer_iron_icons_iron_icons__ = __webpack_require__(147);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__polymer_iron_icons_iron_icons__ = __webpack_require__(146);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__polymer_polymer_lib_elements_custom_style__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__polymer_paper_material_paper_material__ = __webpack_require__(148);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__polymer_paper_material_paper_material__ = __webpack_require__(147);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__polymer_iron_pages_iron_pages__ = __webpack_require__(69);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__utils_app_title_card__ = __webpack_require__(151);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__management_app_package_metadata_editor__ = __webpack_require__(153);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__search_app_package_search__ = __webpack_require__(201);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__app_home__ = __webpack_require__(215);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__landing_app_landing_page__ = __webpack_require__(217);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__account_app_user_account__ = __webpack_require__(219);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__utils_app_auth_icon__ = __webpack_require__(223);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__utils_app_title_card__ = __webpack_require__(150);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__management_app_package_metadata_editor__ = __webpack_require__(152);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__search_app_package_search__ = __webpack_require__(206);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__app_home__ = __webpack_require__(220);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__landing_app_landing_page__ = __webpack_require__(222);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__account_app_user_account__ = __webpack_require__(224);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__utils_app_auth_icon__ = __webpack_require__(228);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__interfaces_AppStateInterface__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__interfaces_AppStateInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_22__interfaces_AppStateInterface__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__interfaces_PackageInterface__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__interfaces_PackageInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_23__interfaces_PackageInterface__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__ecosml_app_html__ = __webpack_require__(225);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__ecosml_app_html__ = __webpack_require__(230);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__ecosml_app_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_24__ecosml_app_html__);
 // import styles
 
@@ -17021,7 +17006,7 @@ class EcoSMLApp extends Mixin(__WEBPACK_IMPORTED_MODULE_5__polymer_polymer_polym
 customElements.define('ecosml-app', EcoSMLApp);
 
 /***/ }),
-/* 83 */
+/* 82 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -17030,7 +17015,7 @@ customElements.define('ecosml-app', EcoSMLApp);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__polymer_paper_styles_shadow__ = __webpack_require__(25);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_paper_styles_typography__ = __webpack_require__(26);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__polymer_polymer_lib_elements_custom_style__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__style_properties_html__ = __webpack_require__(103);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__style_properties_html__ = __webpack_require__(102);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__style_properties_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__style_properties_html__);
 
 
@@ -17046,14 +17031,14 @@ styleWrapper.id="ecosml-style-properties";
 document.head.appendChild(styleWrapper);
 
 /***/ }),
-/* 84 */
+/* 83 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__src_apply_shim_js__ = __webpack_require__(85);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__src_apply_shim_js__ = __webpack_require__(84);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__src_template_map_js__ = __webpack_require__(46);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__src_style_util_js__ = __webpack_require__(45);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__src_apply_shim_utils_js__ = __webpack_require__(87);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__src_apply_shim_utils_js__ = __webpack_require__(86);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__src_document_wait_js__ = __webpack_require__(47);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__src_common_utils_js__ = __webpack_require__(32);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__src_custom_style_interface_js__ = __webpack_require__(48);
@@ -17254,7 +17239,7 @@ if (!window.ShadyCSS || !window.ShadyCSS.ScopingShim) {
 window.ShadyCSS.ApplyShim = applyShim;
 
 /***/ }),
-/* 85 */
+/* 84 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -17741,7 +17726,7 @@ Object.defineProperty(ApplyShim.prototype, 'invalidCallback', {
 /* harmony default export */ __webpack_exports__["a"] = (ApplyShim);
 
 /***/ }),
-/* 86 */
+/* 85 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -17791,7 +17776,7 @@ function isUnscopedStyle(style) {
 }
 
 /***/ }),
-/* 87 */
+/* 86 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -17957,7 +17942,7 @@ function elementsAreInvalid() {
 }
 
 /***/ }),
-/* 88 */
+/* 87 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -18428,7 +18413,7 @@ const TemplateStamp = Object(__WEBPACK_IMPORTED_MODULE_1__utils_mixin_js__["a" /
 
 
 /***/ }),
-/* 89 */
+/* 88 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -18630,7 +18615,7 @@ const PropertiesMixin = Object(__WEBPACK_IMPORTED_MODULE_1__utils_mixin_js__["a"
 
 
 /***/ }),
-/* 90 */
+/* 89 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -18787,7 +18772,7 @@ const DirMixin = Object(__WEBPACK_IMPORTED_MODULE_1__utils_mixin_js__["a" /* ded
 
 
 /***/ }),
-/* 91 */
+/* 90 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -18868,7 +18853,7 @@ const importHref = function(href, onload, onerror, optAsync) {
 
 
 /***/ }),
-/* 92 */
+/* 91 */
 /***/ (function(module, exports) {
 
 function resolve() {
@@ -18883,7 +18868,7 @@ if (document.readyState === 'interactive' || document.readyState === 'complete')
 
 
 /***/ }),
-/* 93 */
+/* 92 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -19192,7 +19177,7 @@ class FlattenedNodesObserver {
 
 
 /***/ }),
-/* 94 */
+/* 93 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -19495,7 +19480,7 @@ const Class = function(info) {
 
 
 /***/ }),
-/* 95 */
+/* 94 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -19579,7 +19564,7 @@ const Templatizer = {
 
 
 /***/ }),
-/* 96 */
+/* 95 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -19712,7 +19697,7 @@ customElements.define('dom-bind', DomBind);
 
 
 /***/ }),
-/* 97 */
+/* 96 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -20440,7 +20425,7 @@ customElements.define(DomRepeat.is, DomRepeat);
 
 
 /***/ }),
-/* 98 */
+/* 97 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -20726,7 +20711,7 @@ customElements.define(DomIf.is, DomIf);
 
 
 /***/ }),
-/* 99 */
+/* 98 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21151,7 +21136,7 @@ customElements.define(ArraySelector.is, ArraySelector);
 
 
 /***/ }),
-/* 100 */
+/* 99 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21225,7 +21210,7 @@ if (!window.ShadyCSS) {
 window.ShadyCSS.CustomStyleInterface = customStyleInterface;
 
 /***/ }),
-/* 101 */
+/* 100 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21302,7 +21287,7 @@ const OptionalMutableDataBehavior = {
 
 
 /***/ }),
-/* 102 */
+/* 101 */
 /***/ (function(module, exports) {
 
 /**
@@ -21318,18 +21303,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
 /***/ }),
-/* 103 */
+/* 102 */
 /***/ (function(module, exports) {
 
-module.exports = "<custom-style>\n  <style is=\"custom-style\">\n    html {\n      --default-primary-color : #00867d;\n      --primary-color         : var(--default-primary-color); /* alt name */\n      --light-primary-color   : #4db6ac;\n\n      --default-secondary-color : #2286c3;\n      --light-secondary-color   : #64b5f6;\n\n      --default-background-color : #F5F5F6;\n      --dark-background-color    : #E1E2E1;\n      --extra-dark-background-color : #616161;\n      \n      --text-primary-color      : #313534;\n      --primary-text-color      : var(--text-primary-color);\n      --secondary-text-color    : #8c9794;\n      --disabled-text-color     : var(--input-border-color);\n      --inverse-text-color      : var(--default-background-color);\n      --max-width               : 1200px;\n      --max-text-width          : 650px;\n      --font-size               : 16px;\n      --font-weight             : 400;\n      --font-weight-heavy       : 700;\n\n      /**\n       * Global Element Styles\n       */\n      /* paper-input */\n      --paper-input-container-color: var(--secondary-text-color);\n    }\n\n    body, html {\n      @apply --paper-font-common-base;\n      font-size        : var(--font-size);\n      font-weight      : var(--font-weight);\n      margin           : 0;\n      padding          : 0;\n      height           : 100%;\n      background-color : var(--default-background-color);\n      color            : var(--text-primary-color);\n    }\n  </style>\n</custom-style>";
+module.exports = "<custom-style>\n  <style is=\"custom-style\">\n    html {\n      --default-primary-color : #00867d;\n      --primary-color         : var(--default-primary-color); /* alt name */\n      --light-primary-color   : #4db6ac;\n\n      --default-secondary-color : #2286c3;\n      --light-secondary-color   : #64b5f6;\n\n      --default-background-color : #F5F5F6;\n      --dark-background-color    : #E1E2E1;\n      --extra-dark-background-color : #616161;\n      \n      --text-primary-color      : #313534;\n      --primary-text-color      : var(--text-primary-color);\n      --secondary-text-color    : #8c9794;\n      --disabled-text-color     : var(--input-border-color);\n      --inverse-text-color      : var(--default-background-color);\n      --max-width               : 1200px;\n      --max-text-width          : 650px;\n      --font-size               : 16px;\n      --font-weight             : 400;\n      --font-weight-heavy       : 700;\n      --form-break-margin       : 75px;\n\n      /**\n       * Global Element Styles\n       */\n      /* paper-input */\n      --paper-input-container-color: var(--secondary-text-color);\n    }\n\n    body, html {\n      @apply --paper-font-common-base;\n      font-size        : var(--font-size);\n      font-weight      : var(--font-weight);\n      margin           : 0;\n      padding          : 0;\n      height           : 100%;\n      background-color : var(--default-background-color);\n      color            : var(--text-primary-color);\n      font-weight      : 400;\n    }\n  </style>\n</custom-style>";
 
 /***/ }),
-/* 104 */
+/* 103 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_lib_elements_custom_style__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__shared_styles_html__ = __webpack_require__(105);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__shared_styles_html__ = __webpack_require__(104);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__shared_styles_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__shared_styles_html__);
 
 
@@ -21340,13 +21325,13 @@ styleWrapper.innerHTML = __WEBPACK_IMPORTED_MODULE_1__shared_styles_html___defau
 document.head.appendChild(styleWrapper);
 
 /***/ }),
-/* 105 */
+/* 104 */
 /***/ (function(module, exports) {
 
-module.exports = "<dom-module id=\"shared-styles\">\n  <template>\n    <style>\n      paper-material {\n        background: white;\n        display: block;\n      }\n\n      [hidden] {\n        display: none !important;\n      }\n\n      input, select, button, textarea {\n        font-size        : var(--font-size);\n        font-weight      : var(--font-weight);\n        color            : var(--text-primary-color);\n        box-sizing       : border-box;\n      }\n\n      input, textarea {\n        border-radius: 4px;\n        background-color: white;\n        border: 1px solid var(--dark-background-color);\n        padding: 9px;\n        margin: 3px 1px;\n      }\n\n      input:focus {\n        border: 1px solid var(--default-primary-color);\n        outline: none;\n      }\n\n      .help {\n        color: var(--secondary-text-color);\n        font-size: 14px;\n      }\n\n      .narrow-container {\n        display: flex;\n        justify-content: center;\n        flex-direction: column;\n        align-items: center;\n      }\n      \n      .narrow-container > * {\n        max-width: var(--max-text-width);\n        width: 100%;\n      }\n\n      .container {\n        display: flex;\n        justify-content: center;\n        flex-direction: column;\n        align-items: center;\n      }\n\n      .container > * {\n        max-width: var(--max-width);\n        width: 100%;\n      }\n\n      a, a:visited {\n        color: var(--text-primary-color);\n      }\n\n      a[inverse], a[inverse]:visited {\n        color: var(--inverse-text-color);\n      }\n\n      h2.uheader {\n        border-bottom-width: 2px;\n        border-bottom-style: solid;\n        margin: 0 20px 10px 0;\n        padding-bottom: 5px;\n      }\n\n      h2.uheader.blue {\n        border-bottom-color: var(--default-secondary-color);\n      }\n      h2.uheader.green {\n        border-bottom-color: var(--default-primary-color);\n      }\n      h2.uheader.lightblue {\n        border-bottom-color: var(--light-secondary-color);\n      }\n      h2.uheader.dark {\n        border-bottom-color: var(--text-primary-color);\n      }\n    </style>\n  </template>\n</dom-module>";
+module.exports = "<dom-module id=\"shared-styles\">\n  <template>\n    <style>\n      paper-material {\n        background: white;\n        display: block;\n      }\n\n      [hidden] {\n        display: none !important;\n      }\n\n      input, select, button, textarea {\n        font-size        : var(--font-size);\n        font-weight      : var(--font-weight);\n        color            : var(--text-primary-color);\n        box-sizing       : border-box;\n      }\n\n      input, textarea, select {\n        border-radius: 4px;\n        background-color: white;\n        border: 1px solid var(--dark-background-color);\n        padding: 9px;\n        margin: 3px 1px;\n      }\n\n      input:focus {\n        border: 1px solid var(--default-primary-color);\n        outline: none;\n      }\n\n      input[disabled] {\n        background-color: var(--default-background-color);\n        color: var(--secondary-text-color);\n        cursor: not-allowed;\n      }\n\n      select {\n        -webkit-appearance: none;\n        -moz-appearance: none;\n        appearance: none;\n      }\n\n      select::after {\n        width: 0;\n        height: 0;\n        border-left: 4px solid transparent;\n        border-right: 4px solid transparent;\n        border-top: 7px solid #666;\n        margin-top: -3px;\n      }\n\n      .help {\n        color: var(--secondary-text-color);\n        font-size: 14px;\n      }\n\n      .narrow-container {\n        display: flex;\n        justify-content: center;\n        flex-direction: column;\n        align-items: center;\n      }\n      \n      .narrow-container > * {\n        max-width: var(--max-text-width);\n        width: 100%;\n      }\n\n      .container {\n        display: flex;\n        justify-content: center;\n        flex-direction: column;\n        align-items: center;\n      }\n\n      .container > * {\n        max-width: var(--max-width);\n        width: 100%;\n      }\n\n      a, a:visited {\n        color: var(--text-primary-color);\n      }\n\n      a[inverse], a[inverse]:visited {\n        color: var(--inverse-text-color);\n      }\n\n      h1, h2, h3, h4 {\n        font-weight: 400;\n      }\n\n      h2.uheader {\n        border-bottom-width: 2px;\n        border-bottom-style: solid;\n        margin: 0 0 10px 0;\n        padding-bottom: 5px;\n      }\n\n      h2.uheader.blue, h2.uheader[color=\"blue\"] {\n        border-bottom-color: var(--default-secondary-color);\n      }\n      h2.uheader.green, h2.uheader[color=\"green\"] {\n        border-bottom-color: var(--default-primary-color);\n      }\n      h2.uheader.lightblue, h2.uheader[color=\"lightblue\"] {\n        border-bottom-color: var(--light-secondary-color);\n      }\n      h2.uheader.dark, h2.uheader[color=\"dark\"] {\n        border-bottom-color: var(--text-primary-color);\n      }\n    </style>\n  </template>\n</dom-module>";
 
 /***/ }),
-/* 106 */
+/* 105 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var MasterController = __webpack_require__(38);
@@ -21431,7 +21416,7 @@ class BaseModel {
 module.exports = BaseModel;
 
 /***/ }),
-/* 107 */
+/* 106 */
 /***/ (function(module, exports) {
 
 // Copyright Joyent, Inc. and other Node contributors.
@@ -21739,7 +21724,7 @@ function isUndefined(arg) {
 
 
 /***/ }),
-/* 108 */
+/* 107 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var MasterController = __webpack_require__(38);
@@ -21831,7 +21816,7 @@ class BaseStore {
 module.exports = BaseStore;
 
 /***/ }),
-/* 109 */
+/* 108 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // help: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
@@ -22070,7 +22055,7 @@ class BaseService {
 module.exports = BaseService;
 
 /***/ }),
-/* 110 */
+/* 109 */
 /***/ (function(module, exports) {
 
 (function(self) {
@@ -22537,7 +22522,7 @@ module.exports = BaseService;
 
 
 /***/ }),
-/* 111 */
+/* 110 */
 /***/ (function(module, exports) {
 
  /**
@@ -22562,7 +22547,7 @@ if( typeof window !== 'undefined' ) {
 module.exports = Mixin;
 
 /***/ }),
-/* 112 */
+/* 111 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const {Debouncer} = __webpack_require__(11);
@@ -22897,14 +22882,14 @@ if( typeof window !== 'undefined' ) {
 module.exports = EventInterface;
 
 /***/ }),
-/* 113 */
+/* 112 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_location_iron_location_js__ = __webpack_require__(114);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_location_iron_query_params_js__ = __webpack_require__(115);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_route_converter_behavior_js__ = __webpack_require__(116);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_location_iron_location_js__ = __webpack_require__(113);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_location_iron_query_params_js__ = __webpack_require__(114);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_route_converter_behavior_js__ = __webpack_require__(115);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(3);
 
 
@@ -23041,7 +23026,7 @@ Object(__WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__["a" /* Po
 
 
 /***/ }),
-/* 114 */
+/* 113 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -23423,7 +23408,7 @@ Object(__WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_fn_js__["a" /* Po
 
 
 /***/ }),
-/* 115 */
+/* 114 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -23529,7 +23514,7 @@ Object(__WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_fn_js__["a" /* Po
 
 
 /***/ }),
-/* 116 */
+/* 115 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -23627,14 +23612,14 @@ const AppRouteConverterBehavior = {
 
 
 /***/ }),
-/* 117 */
+/* 116 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var strictUriEncode = __webpack_require__(118);
-var objectAssign = __webpack_require__(119);
-var decodeComponent = __webpack_require__(120);
+var strictUriEncode = __webpack_require__(117);
+var objectAssign = __webpack_require__(118);
+var decodeComponent = __webpack_require__(119);
 
 function encoderForArrayFormat(opts) {
 	switch (opts.arrayFormat) {
@@ -23844,7 +23829,7 @@ exports.stringify = function (obj, opts) {
 
 
 /***/ }),
-/* 118 */
+/* 117 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23857,7 +23842,7 @@ module.exports = function (str) {
 
 
 /***/ }),
-/* 119 */
+/* 118 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23954,7 +23939,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 
 
 /***/ }),
-/* 120 */
+/* 119 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24055,24 +24040,24 @@ module.exports = function (encodedURI) {
 
 
 /***/ }),
-/* 121 */
+/* 120 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* unused harmony default export */ var _unused_webpack_default_export = ({
-  AppStateModel : __webpack_require__(122),
-  PackageModel : __webpack_require__(126),
-  SearchModel : __webpack_require__(132),
-  AuthModel : __webpack_require__(134),
+  AppStateModel : __webpack_require__(121),
+  PackageModel : __webpack_require__(125),
+  SearchModel : __webpack_require__(131),
+  AuthModel : __webpack_require__(133),
   vocabulary : __webpack_require__(65)
 });
 
 /***/ }),
-/* 122 */
+/* 121 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const {AppStateModel} = __webpack_require__(39);
-var AppStateStore = __webpack_require__(125);
+var AppStateStore = __webpack_require__(124);
 
 
 class AppStateModelImpl extends AppStateModel {
@@ -24087,7 +24072,7 @@ class AppStateModelImpl extends AppStateModel {
 module.exports = new AppStateModelImpl();
 
 /***/ }),
-/* 123 */
+/* 122 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var {BaseModel} = __webpack_require__(5);
@@ -24151,7 +24136,7 @@ class AppStateModel extends BaseModel {
 module.exports = AppStateModel;
 
 /***/ }),
-/* 124 */
+/* 123 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const {BaseStore} = __webpack_require__(5);
@@ -24184,7 +24169,7 @@ class AppStateStore extends BaseStore {
 module.exports = AppStateStore;
 
 /***/ }),
-/* 125 */
+/* 124 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var {AppStateStore} = __webpack_require__(39);
@@ -24194,13 +24179,13 @@ class AppStateStoreImpl extends AppStateStore {}
 module.exports = new AppStateStoreImpl();
 
 /***/ }),
-/* 126 */
+/* 125 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const {BaseModel} = __webpack_require__(5);
-const PackageService = __webpack_require__(127);
+const PackageService = __webpack_require__(126);
 const PackageStore = __webpack_require__(59);
-const PackageSchema = __webpack_require__(131).package;
+const PackageSchema = __webpack_require__(130).package;
 const uuid = __webpack_require__(60);
 
 class PackageModel extends BaseModel {
@@ -24347,6 +24332,35 @@ class PackageModel extends BaseModel {
   }
 
   /**
+   * @method moveExample
+   * @description move (rename) example directory
+   * 
+   * @param {String} packageId
+   * @param {String} src current example directory name
+   * @param {String} dst new example directory name
+   * 
+   * @returns {Promise}
+   */
+  async moveExample(packageId, src, dst) {
+    await this.service.moveExample(packageId, src, dst);
+    return this.getFiles(packageId);
+  }
+
+  /**
+   * @method deleteExample
+   * @description delete example directory
+   * 
+   * @param {String} packageId
+   * @param {String} name example directory to delete
+   * 
+   * @returns {Promise}
+   */
+  async deleteExample(packageId, name) {
+    await this.service.deleteExample(packageId, name);
+    return this.getFiles(packageId);
+  }
+
+  /**
    * @method previewMarkdown
    * @description render markdown with Github flavored markdown service
    * 
@@ -24379,12 +24393,12 @@ class PackageModel extends BaseModel {
 module.exports = new PackageModel();
 
 /***/ }),
-/* 127 */
+/* 126 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const {BaseService} = __webpack_require__(5);
 const PackageStore = __webpack_require__(59);
-const upload = __webpack_require__(128);
+const upload = __webpack_require__(127);
 const uuid = __webpack_require__(60);
 
 class PackageService extends BaseService {
@@ -24540,6 +24554,25 @@ class PackageService extends BaseService {
     });
   }
 
+  moveExample(packageId, src, dst) {
+    return this.request({
+      url : `${this.baseUrl}/${packageId}/example/${src}`,
+      fetchOptions : {
+        method : 'MOVE',
+        body : dst
+      }
+    });
+  }
+
+  deleteExample(packageId, name) {
+    return this.request({
+      url : `${this.baseUrl}/${packageId}/example/${name}`,
+      fetchOptions : {
+        method : 'DELETE'
+      }
+    });
+  }
+
   previewMarkdown(markdown) {
     return this.request({
       url : `/api/markdown`,
@@ -24557,7 +24590,7 @@ class PackageService extends BaseService {
 module.exports = new PackageService();
 
 /***/ }),
-/* 128 */
+/* 127 */
 /***/ (function(module, exports) {
 
 
@@ -24620,7 +24653,7 @@ function nodeUpload(options) {
 }
 
 /***/ }),
-/* 129 */
+/* 128 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var rng = __webpack_require__(61);
@@ -24735,7 +24768,7 @@ module.exports = v1;
 
 
 /***/ }),
-/* 130 */
+/* 129 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var rng = __webpack_require__(61);
@@ -24770,7 +24803,7 @@ module.exports = v4;
 
 
 /***/ }),
-/* 131 */
+/* 130 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -24781,8 +24814,8 @@ module.exports = {
     },
     overview : {
       type : String,
-      label : 'Overview (Short Description)',
-      description : 'One sentance summary of package'
+      label : '',
+      description : ''
     },
     description : {
       type : String,
@@ -24798,12 +24831,12 @@ module.exports = {
 }
 
 /***/ }),
-/* 132 */
+/* 131 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
 const {BaseModel} = __webpack_require__(5);
-const SearchService = __webpack_require__(133);
+const SearchService = __webpack_require__(132);
 const SearchStore = __webpack_require__(63);
 
 // NodeJS compatability
@@ -24969,7 +25002,7 @@ class SearchModel extends BaseModel {
 module.exports = new SearchModel();
 
 /***/ }),
-/* 133 */
+/* 132 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const {BaseService} = __webpack_require__(5);
@@ -25025,11 +25058,11 @@ class SearchService extends BaseService {
 module.exports = new SearchService();
 
 /***/ }),
-/* 134 */
+/* 133 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const {BaseModel} = __webpack_require__(5);
-const AuthService = __webpack_require__(135);
+const AuthService = __webpack_require__(134);
 const AuthStore = __webpack_require__(64);
 
 class AuthModel extends BaseModel {
@@ -25077,7 +25110,7 @@ class AuthModel extends BaseModel {
 module.exports = new AuthModel();
 
 /***/ }),
-/* 135 */
+/* 134 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const {BaseService} = __webpack_require__(5);
@@ -25130,7 +25163,7 @@ class AuthService extends BaseService {
 module.exports = new AuthService();
 
 /***/ }),
-/* 136 */
+/* 135 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -25229,7 +25262,7 @@ const PaperButtonBehavior = [
 
 
 /***/ }),
-/* 137 */
+/* 136 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -25926,7 +25959,7 @@ Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_fn_js__["a" /* Po
 
 
 /***/ }),
-/* 138 */
+/* 137 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -26017,14 +26050,14 @@ Example:
 
 
 /***/ }),
-/* 139 */
+/* 138 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_flex_layout_iron_flex_layout_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_scroll_effects_app_scroll_effects_behavior_js__ = __webpack_require__(140);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_layout_behavior_app_layout_behavior_js__ = __webpack_require__(143);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_scroll_effects_app_scroll_effects_behavior_js__ = __webpack_require__(139);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_layout_behavior_app_layout_behavior_js__ = __webpack_require__(142);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
 
@@ -26698,13 +26731,13 @@ Object(__WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__["a" /* Po
 
 
 /***/ }),
-/* 140 */
+/* 139 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_scroll_target_behavior_iron_scroll_target_behavior_js__ = __webpack_require__(141);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__helpers_helpers_js__ = __webpack_require__(142);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_scroll_target_behavior_iron_scroll_target_behavior_js__ = __webpack_require__(140);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__helpers_helpers_js__ = __webpack_require__(141);
 
 
 
@@ -27002,7 +27035,7 @@ const AppScrollEffectsBehavior = [
 
 
 /***/ }),
-/* 141 */
+/* 140 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -27253,7 +27286,7 @@ const IronScrollTargetBehavior = {
 
 
 /***/ }),
-/* 142 */
+/* 141 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -27382,7 +27415,7 @@ const scroll = function scroll(options) {
 
 
 /***/ }),
-/* 143 */
+/* 142 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -27475,7 +27508,7 @@ const AppLayoutBehavior = [
 
 
 /***/ }),
-/* 144 */
+/* 143 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -27597,7 +27630,7 @@ Object(__WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_fn_js__["a" /* Po
 
 
 /***/ }),
-/* 145 */
+/* 144 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -28283,7 +28316,7 @@ Object(__WEBPACK_IMPORTED_MODULE_2__polymer_lib_legacy_polymer_fn_js__["a" /* Po
 
 
 /***/ }),
-/* 146 */
+/* 145 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -28332,7 +28365,7 @@ const PaperInkyFocusBehavior = [
 
 
 /***/ }),
-/* 147 */
+/* 146 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -28701,13 +28734,13 @@ See [iron-iconset](#iron-iconset) and [iron-iconset-svg](#iron-iconset-svg) for 
 
 
 /***/ }),
-/* 148 */
+/* 147 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__paper_styles_shadow_js__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__paper_material_shared_styles_js__ = __webpack_require__(149);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__paper_material_shared_styles_js__ = __webpack_require__(148);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(3);
 
 
@@ -28788,7 +28821,7 @@ Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_fn_js__["a" /* Po
 
 
 /***/ }),
-/* 149 */
+/* 148 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -28843,7 +28876,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
 /***/ }),
-/* 150 */
+/* 149 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -28953,12 +28986,12 @@ IronSelection.prototype = {
 
 
 /***/ }),
-/* 151 */
+/* 150 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_title_card_html__ = __webpack_require__(152);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_title_card_html__ = __webpack_require__(151);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_title_card_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_title_card_html__);
 
 
@@ -28974,35 +29007,32 @@ class AppTitleCard extends __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_
 customElements.define('app-title-card', AppTitleCard);
 
 /***/ }),
-/* 152 */
+/* 151 */
 /***/ (function(module, exports) {
 
 module.exports = "<style>\n  :host {\n    display: block;\n  }\n  .header {\n    padding: 40px 40px 10px 40px;\n    background-color: white;\n  }\n  h2 {\n    font-size: 22px;\n    border-bottom: 2px solid var(--title-card-border-color, var(--default-primary-color));\n    margin : 0;\n    padding : 0 0 5px 0;\n  }\n  .content {\n    background-color: white;\n    padding: 10px 40px 40px 40px;\n  }\n</style>\n\n<div>\n  <div class=\"header\">\n    <h2>\n      <slot name=\"header\"></slot>\n    </h2>\n  </div>\n  <div class=\"content\">\n    <slot name=\"content\"></slot>\n  </div>\n</div>";
 
 /***/ }),
-/* 153 */
+/* 152 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__polymer_paper_input_paper_input__ = __webpack_require__(154);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__polymer_paper_input_paper_textarea__ = __webpack_require__(156);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_paper_toast_paper_toast__ = __webpack_require__(158);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__polymer_paper_tabs_paper_tabs__ = __webpack_require__(165);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_package_metadata_editor_html__ = __webpack_require__(170);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__polymer_paper_input_paper_input__ = __webpack_require__(153);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__polymer_paper_input_paper_textarea__ = __webpack_require__(155);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_paper_toast_paper_toast__ = __webpack_require__(157);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__polymer_paper_tabs_paper_tabs__ = __webpack_require__(164);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_package_metadata_editor_html__ = __webpack_require__(169);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_package_metadata_editor_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__app_package_metadata_editor_html__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__interfaces_PackageInterface__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__interfaces_PackageInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__interfaces_PackageInterface__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__interfaces_AppStateInterface__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__interfaces_AppStateInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__interfaces_AppStateInterface__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__app_markdown_editor__ = __webpack_require__(171);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__app_keyword_input__ = __webpack_require__(182);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__app_theme_input__ = __webpack_require__(184);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__app_create_release__ = __webpack_require__(186);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__app_text_input__ = __webpack_require__(188);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__app_org_input__ = __webpack_require__(190);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__file_manager_app_file_manager__ = __webpack_require__(195);
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__app_text_input__ = __webpack_require__(170);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__basic_app_basic_metadata__ = __webpack_require__(172);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__details_app_details_metadata__ = __webpack_require__(176);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__files_app_files__ = __webpack_require__(194);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__releases_app_releases__ = __webpack_require__(204);
 
 
 
@@ -29032,19 +29062,17 @@ class AppPackageMetadataEditor extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polyme
         type : Boolean,
         value : true
       },
+
       currentAction : {
         type : String,
         value : 'Create'
       },
-      sections : {
-        type : Array,
-        value : () => ['basicInformation', 'details']
-      },
+
 
       selectedSection : {
         type : String,
-        // value : 'basicInformation'
-        value : 'files'
+        value : 'basic'
+        // value : 'files'
       },
 
       // package schema object
@@ -29054,10 +29082,11 @@ class AppPackageMetadataEditor extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polyme
       },
 
       // used for displaying package name
-      namePreview : {
+      name : {
         type : String,
         value : ''
       }
+
     }
   }
 
@@ -29084,18 +29113,12 @@ class AppPackageMetadataEditor extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polyme
     if( page === 'edit' && e.location.path.length > 0 ) {
       if( this.packageId === e.location.path[1] ) return;
       this.packageId = e.location.path[1];
-      this.fetchAndUpdatePackage( e.location.path[1] );
+      this._fetchAndUpdatePackage( e.location.path[1] );
     } else if( page === 'create' ) {
       this.createPackage();
     }
-  }
 
-  get(attr) {
-    return this.$[attr].value;
-  }
-
-  set(attr, value) {
-    this.$[attr].value = value || '';
+    setTimeout(() => this.$.tabs.notifyResize(), 25);
   }
 
   /**
@@ -29105,32 +29128,10 @@ class AppPackageMetadataEditor extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polyme
   createPackage() {
     this.currentAction = 'Create';
     this.creating = true;
-    this.selectedSection = 'basicInformation';
-    this.namePreview = '';
+    this.selectedSection = 'basic';
+    this.name = '';
     this.packageId = '';
-    for( var key in this.schema ) this.set(key);
-  }
-
-  /**
-   * @method _onCreateBtnClicked
-   * @description function fired when the create button is clicked
-   */
-  _onCreateBtnClicked() {
-    if( this.namePreview.length < 4 ) {
-      return alert('Name must be at least 4 characters');
-    }
-    if( this.get('overview').length < 15 ) {
-      return alert('Please provide a longer overview');
-    }
-    if( !this.get('organization') ) {
-      return alert('Please select an organization');
-    }
-
-    this._createPackage(
-      this.namePreview, 
-      this.get('overview'),
-      this.get('organization')
-    );
+    this.$.basic.reset();
   }
 
   /**
@@ -29143,43 +29144,52 @@ class AppPackageMetadataEditor extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polyme
     this._deletePackage(this.packageId); 
   }
 
-  async fetchAndUpdatePackage(pkgId) {
+  /**
+   * @method _fetchAndUpdatePackage
+   * @description called when app state updates
+   */
+  async _fetchAndUpdatePackage(pkgId) {
     try {
       let pkg = await this._getPackage(pkgId);
-      let files = await this._getPackageFiles(pkgId);
-
-      this.updatePackage(pkg.payload);
+      this._setPackageData(pkg.payload);
     } catch(e) {
-      return alert('Failed to fetch package with id: '+pkgId);
+      console.error(e);
+      return alert('Failed to fetch package '+pkgId+': '+e.message);
     }
-    
-  }
-
-  _onPackageUpdate(e) {
-    if( e.state !== 'loaded' ) return;
-    if( e.id !== this.packageId ) return;
-    this.updatePackage(e.payload);
   }
 
   /**
-   * @method updatePackage
+   * @method _onPackageUpdate
+   * @description via package interface, called when package data updates
+   */
+  _setPackageData(e) {
+    if( e.state !== 'loaded' ) return;
+    if( e.id !== this.packageId ) return;
+    this._setPackageData(e.payload);
+  }
+
+  /**
+   * @method _setPackageData
    * @description update UI from package data
    * 
    * @param {Object} pkgData package to render
    */
-  updatePackage(pkgData) {
+  async _setPackageData(pkgData) {
     this.currentAction = 'Update';
     this.creating = false;
     this.$.commitMsg.value = '';
     this.packageId = pkgData.id;
-    this.namePreview = pkgData.name;
+    this.name = pkgData.name;
+    this.data = pkgData;
 
-    let schema = this._getPackageSchema();
-    for( var key in schema ) {
-      if( pkgData[key] ) this.set(key, pkgData[key]);
-      else this.set(key);
-    }
+    // set basic metadata inputs
+    this.$.basic.data = pkgData;
+    this.$.details.data = pkgData;
 
+    // get and set files
+    this.$.files.files = await this._getPackageFiles(pkgData.id);
+
+    // set release info
     this.$.release.package = pkgData;
     if( pkgData.releases && pkgData.releases.length ) {
       let cRelease = pkgData.releases[pkgData.releases.length-1].name;
@@ -29189,36 +29199,6 @@ class AppPackageMetadataEditor extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polyme
       this.$.release.releases = [];
       this.$.release.currentRelease = null;
     }
-
-    this.$.organization.value = pkgData.organization;
-
-    this.$.theme.setValues(pkgData);
-  }
-
-  /**
-   * Fired from name input
-   */
-  _updateNamePreview() {
-    this.namePreview = this.get('name').toLowerCase().replace(/ /g, '-');
-  }
-
-  /**
-   * Fired when create package state updates
-   */
-  _onCreatePackageUpdate(e) {
-    if( e.state === 'loading' ) {
-      this.$.createBtn.setAttribute('disabled', 'disabled');
-      this.$.createBtn.innerHTML = 'Creating...';
-      return;
-    }
-
-    this.$.createBtn.removeAttribute('disabled', 'disabled');
-    this.$.createBtn.innerHTML = 'Create';
-    if( e.state === 'error' ) {
-      return alert('Failed to create package :( '+e.error.message);
-    }
-
-    this._setWindowLocation('/edit/'+e.payload.id);
   }
 
   /**
@@ -29228,12 +29208,19 @@ class AppPackageMetadataEditor extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polyme
   _onDataChange() {
     if( this.creating ) return;
 
-    this.unsavedData = {
-      name : this.namePreview,
-      overview : this.get('overview'),
-      description : this.get('description'),
-      keywords : this.get('keywords'),
-      organization : this.get('organization')
+    let unsavedData = Object.assign(
+      this.$.basic.getValues(),
+      this.$.details.getValues()
+    );
+
+    let tmp = {};
+    for( var key in unsavedData ) {
+      tmp[key] = this.data[key] || (key === 'keywords' ? [] : '');
+    }
+
+    if( JSON.stringify(tmp) === JSON.stringify(unsavedData) ) {
+      this.$.savingToast.close();
+      return;
     }
 
     this.$.unsavedMsg.style.display = 'block';
@@ -29241,19 +29228,13 @@ class AppPackageMetadataEditor extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polyme
     this.$.savingToast.open();
   }
 
-  /**
-   * @method _onThemeUpdate
-   * @description called from the app-theme-input when a value updates
-   */
-  _onThemeUpdate(e) {
-    this._onDataChange();
-    for( var key in e.detail ) {
-      this.unsavedData[key] = e.detail[key];
-    }
-  }
-
   _onSaveChangesClicked() {
-    this._updatePackage(this.packageId, this.unsavedData, this.$.commitMsg.value);
+    let unsavedData = Object.assign(
+      this.$.basic.getValues(),
+      this.$.details.getValues()
+    );
+
+    this._updatePackage(this.packageId, unsavedData, this.$.commitMsg.value);
   }
 
   _onEditPackageUpdate(e) {
@@ -29275,18 +29256,17 @@ class AppPackageMetadataEditor extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polyme
     return value.split(',').map(value => value.trim());
   }
 
-
 }
 customElements.define('app-package-metadata-editor', AppPackageMetadataEditor);
 
 /***/ }),
-/* 154 */
+/* 153 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_form_element_behavior_iron_form_element_behavior_js__ = __webpack_require__(70);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_input_iron_input_js__ = __webpack_require__(155);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_input_iron_input_js__ = __webpack_require__(154);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__paper_input_behavior_js__ = __webpack_require__(73);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__paper_input_char_counter_js__ = __webpack_require__(74);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__paper_input_container_js__ = __webpack_require__(76);
@@ -29558,7 +29538,7 @@ Object(__WEBPACK_IMPORTED_MODULE_7__polymer_lib_legacy_polymer_fn_js__["a" /* Po
 
 
 /***/ }),
-/* 155 */
+/* 154 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -29943,12 +29923,12 @@ Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_fn_js__["a" /* Po
 
 
 /***/ }),
-/* 156 */
+/* 155 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_autogrow_textarea_iron_autogrow_textarea_js__ = __webpack_require__(157);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_autogrow_textarea_iron_autogrow_textarea_js__ = __webpack_require__(156);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_form_element_behavior_iron_form_element_behavior_js__ = __webpack_require__(70);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__paper_input_behavior_js__ = __webpack_require__(73);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__paper_input_char_counter_js__ = __webpack_require__(74);
@@ -30096,7 +30076,7 @@ Object(__WEBPACK_IMPORTED_MODULE_7__polymer_lib_legacy_polymer_fn_js__["a" /* Po
 
 
 /***/ }),
-/* 157 */
+/* 156 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -30475,13 +30455,13 @@ Object(__WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__["a" /* Po
 
 
 /***/ }),
-/* 158 */
+/* 157 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_a11y_announcer_iron_a11y_announcer_js__ = __webpack_require__(71);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_overlay_behavior_iron_overlay_behavior_js__ = __webpack_require__(159);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_overlay_behavior_iron_overlay_behavior_js__ = __webpack_require__(158);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(3);
 
 
@@ -30743,16 +30723,16 @@ Object(__WEBPACK_IMPORTED_MODULE_3__polymer_lib_legacy_polymer_fn_js__["a" /* Po
 
 
 /***/ }),
-/* 159 */
+/* 158 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_fit_behavior_iron_fit_behavior_js__ = __webpack_require__(160);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_fit_behavior_iron_fit_behavior_js__ = __webpack_require__(159);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_resizable_behavior_iron_resizable_behavior_js__ = __webpack_require__(28);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__iron_overlay_manager_js__ = __webpack_require__(161);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__iron_scroll_manager_js__ = __webpack_require__(163);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__iron_focusables_helper_js__ = __webpack_require__(164);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__iron_overlay_manager_js__ = __webpack_require__(160);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__iron_scroll_manager_js__ = __webpack_require__(162);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__iron_focusables_helper_js__ = __webpack_require__(163);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
 
 
@@ -31501,7 +31481,7 @@ const IronOverlayBehavior = [__WEBPACK_IMPORTED_MODULE_1__iron_fit_behavior_iron
 
 
 /***/ }),
-/* 160 */
+/* 159 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -32118,13 +32098,13 @@ const IronFitBehavior = {
 
 
 /***/ }),
-/* 161 */
+/* 160 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_a11y_keys_behavior_iron_a11y_keys_behavior_js__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_overlay_backdrop_js__ = __webpack_require__(162);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_overlay_backdrop_js__ = __webpack_require__(161);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_lib_utils_gestures_js__ = __webpack_require__(36);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
 
@@ -32502,7 +32482,7 @@ const IronOverlayManager = new IronOverlayManagerClass();
 
 
 /***/ }),
-/* 162 */
+/* 161 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -32643,7 +32623,7 @@ Object(__WEBPACK_IMPORTED_MODULE_1__polymer_lib_legacy_polymer_fn_js__["a" /* Po
 
 
 /***/ }),
-/* 163 */
+/* 162 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -33014,7 +32994,7 @@ const IronScrollManager = {
 
 
 /***/ }),
-/* 164 */
+/* 163 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -33229,19 +33209,19 @@ const IronFocusablesHelper = {
 
 
 /***/ }),
-/* 165 */
+/* 164 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_flex_layout_iron_flex_layout_js__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_icon_iron_icon_js__ = __webpack_require__(41);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__iron_menu_behavior_iron_menubar_behavior_js__ = __webpack_require__(166);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__iron_menu_behavior_iron_menubar_behavior_js__ = __webpack_require__(165);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__iron_resizable_behavior_iron_resizable_behavior_js__ = __webpack_require__(28);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__paper_icon_button_paper_icon_button_js__ = __webpack_require__(67);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__paper_styles_color_js__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__paper_tabs_icons_js__ = __webpack_require__(168);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__paper_tab_js__ = __webpack_require__(169);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__paper_tabs_icons_js__ = __webpack_require__(167);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__paper_tab_js__ = __webpack_require__(168);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__polymer_lib_legacy_polymer_dom_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__iron_menu_behavior_iron_menu_behavior_js__ = __webpack_require__(78);
@@ -33903,7 +33883,7 @@ Object(__WEBPACK_IMPORTED_MODULE_9__polymer_lib_legacy_polymer_fn_js__["a" /* Po
 
 
 /***/ }),
-/* 166 */
+/* 165 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -33977,7 +33957,7 @@ const IronMenubarBehavior = [
 
 
 /***/ }),
-/* 167 */
+/* 166 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -34142,7 +34122,7 @@ const IronMultiSelectableBehavior = [
 
 
 /***/ }),
-/* 168 */
+/* 167 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -34173,7 +34153,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
 /***/ }),
-/* 169 */
+/* 168 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -34357,18 +34337,586 @@ Object(__WEBPACK_IMPORTED_MODULE_5__polymer_lib_legacy_polymer_fn_js__["a" /* Po
 
 
 /***/ }),
-/* 170 */
+/* 169 */
 /***/ (function(module, exports) {
 
-module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n  app-title-card {\n    margin-bottom: 25px;\n  }\n  paper-button {\n    color: var(--default-primary-color);\n  }\n  paper-button:hover {\n    background: var(--default-background-color);\n  }\n  h2 {\n    margin : 0 0 5px 0;\n  }\n  #unsavedMsg paper-button {\n    color: var(--inverse-text-color);\n    border: 1px solid var(--inverse-text-color);\n  }\n  #unsavedMsg paper-button:hover {\n    color: var(--default-primary-color);\n    border: 1px solid var(--default-primary-color);\n  }\n  #savedToast {\n    --paper-toast-background-color: var(--default-primary-color);\n    --paper-toast-color: var(--inverse-text-color);\n  }\n\n  iron-pages > div {\n    padding: 40px;\n    background: white;\n  }\n\n  app-text-input {\n    display: block;\n  }\n\n  paper-tabs {\n    --paper-tabs-selection-bar-color: var(--default-primary-color);\n  }\n  paper-tab {\n    --paper-tab-ink: var(--default-primary-color);\n  }\n\n  #commitMsg {\n    display: block;\n    width: 100%;\n    box-sizing: border-box;\n    margin-top: 20px;\n  }\n\n</style>\n\n<paper-toast id=\"savingToast\" duration=\"0\">\n  <div id=\"unsavedMsg\">\n    <div>\n      You have unsaved changes  \n      <paper-button on-click=\"_onSaveChangesClicked\">Commit Changes</paper-button> \n    </div> \n    <div>\n      <input type=\"text\" placeholder=\"Commit message\" id=\"commitMsg\">\n    </div>\n  </div>\n  <div id=\"savingMsg\">\n    Committing...\n  </div>\n</paper-toast>\n<paper-toast id=\"savedToast\">\n  Package Data Saved!\n</paper-toast>\n\n<div class=\"container\">\n  <div class=\"narrow-container\">\n    <h1>[[currentAction]] Package</h1>\n\n    <paper-tabs hidden$=\"[[creating]]\" selected=\"{{selectedSection}}\" attr-for-selected=\"id\">\n      <paper-tab id=\"basicInformation\">Basic Information</paper-tab>\n      <paper-tab id=\"details\">Details</paper-tab>\n      <paper-tab id=\"files\">Files</paper-tab>\n      <paper-tab id=\"releasePanel\">Releases</paper-tab>\n    </paper-tabs>\n\n    <iron-pages selected=\"[[selectedSection]]\" attr-for-selected=\"id\">\n      <div id=\"basicInformation\">\n        <app-text-input  \n          id=\"name\" \n          label=\"Name\" \n          on-keyup=\"_updateNamePreview\" \n          on-change=\"_updateNamePreview\"\n          help=\"[[namePreview]]\"\n          hidden$=\"[[!creating]]\">\n        </app-text-input>\n\n        <div hidden$=\"[[creating]]\" class=\"help\">Package Name</div>\n        <h2 hidden$=\"[[creating]]\">[[namePreview]]</h2>\n\n        <app-text-input \n          id=\"overview\" \n          label=\"[[schema.overview.label]]\" \n          on-change=\"_onDataChange\"\n          help=\"[[schema.overview.description]]\">\n        </app-text-input>\n\n        <app-org-input id=\"organization\" on-change=\"_onDataChange\"></app-org-input>\n\n        <div style=\"text-align: right\">\n          <paper-button \n            hidden$=\"[[!creating]]\" \n            id=\"createBtn\"\n            on-click=\"_onCreateBtnClicked\">Create\n          </paper-button>\n        </div>\n      </div>\n\n      <div id=\"details\">\n        <app-markdown-editor label=\"Description\" id=\"description\" on-markdown-change=\"_onDataChange\"></app-markdown-editor>\n        <div class=\"help\">[[schema.description.description]]</div>\n\n        <app-keyword-input id=\"keywords\" label=\"Keywords.  Comma Separate\" on-keyword-change=\"_onDataChange\"></app-keyword-input>\n        <div class=\"help\">[[schema.keywords.description]]</div>\n\n        <app-theme-input id=\"theme\" on-update=\"_onThemeUpdate\"></app-theme-input>\n      </div>\n\n      <div id=\"files\">\n        <app-file-manager label=\"Papers\" directory=\"/papers\"></app-file-manager>\n        <app-file-manager label=\"Coefficients\" directory=\"/coefficients\"></app-file-manager>\n        <app-file-manager label=\"Source\" directory=\"/main\"></app-file-manager>\n      </div>\n\n      <div id=\"releasePanel\">\n        <app-create-release id=\"release\"></app-create-release>\n      </div>\n\n      <div>\n        <paper-button on-click=\"_onDeleteBtnClicked\">Delete Package</paper-button>\n      </div>\n    </iron-pages>\n  </div>\n</div>";
+module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n    padding-bottom: 50px;\n  }\n\n  .container {\n    margin-bottom: 100px;\n  }\n\n  #unsavedMsg paper-button {\n    color: var(--inverse-text-color);\n    border: 1px solid var(--inverse-text-color);\n  }\n  \n  #unsavedMsg paper-button:hover {\n    color: var(--default-primary-color);\n    border: 1px solid var(--default-primary-color);\n  }\n\n  #savedToast {\n    --paper-toast-background-color: var(--default-primary-color);\n    --paper-toast-color: var(--inverse-text-color);\n  }\n\n  iron-pages > * {\n    padding: 40px;\n    background: white;\n  }\n\n  paper-tabs {\n    --paper-tabs-selection-bar-color: var(--default-primary-color);\n  }\n\n  paper-tab {\n    --paper-tab-ink: var(--default-primary-color);\n  }\n\n  #commitMsg {\n    display: block;\n    width: 100%;\n    box-sizing: border-box;\n    margin-top: 20px;\n  }\n</style>\n\n<paper-toast id=\"savingToast\" duration=\"0\">\n  <div id=\"unsavedMsg\">\n    <div>\n      You have unsaved changes  \n      <paper-button on-click=\"_onSaveChangesClicked\">Commit Changes</paper-button> \n    </div> \n    <div>\n      <input type=\"text\" placeholder=\"Commit message\" id=\"commitMsg\">\n    </div>\n  </div>\n  <div id=\"savingMsg\">\n    Committing...\n  </div>\n</paper-toast>\n<paper-toast id=\"savedToast\">\n  Package Data Saved!\n</paper-toast>\n\n<div class=\"container\">\n  <div class=\"narrow-container\">\n    <h1>\n      [[currentAction]] Package<span hidden$=\"[[creating]]\">: [[name]]</span>\n    </h1>\n\n    <paper-tabs id=\"tabs\" hidden$=\"[[creating]]\" selected=\"{{selectedSection}}\" attr-for-selected=\"id\">\n      <paper-tab id=\"basic\">Basic Information</paper-tab>\n      <paper-tab id=\"details\">Details</paper-tab>\n      <paper-tab id=\"files\">Files</paper-tab>\n      <paper-tab id=\"release\">Releases</paper-tab>\n    </paper-tabs>\n\n    <iron-pages selected=\"[[selectedSection]]\" attr-for-selected=\"id\">\n      <app-basic-metadata id=\"basic\" creating=\"[[creating]]\" on-change=\"_onDataChange\"></app-basic-metadata>\n      <app-details-metadata id=\"details\" on-change=\"_onDataChange\"></app-details-metadata>\n      <app-files id=\"files\"></app-files>\n      <app-releases id=\"release\"></app-releases>\n    </iron-pages>\n  </div>\n</div>";
 
 /***/ }),
-/* 171 */
+/* 170 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_markdown_editor_html__ = __webpack_require__(172);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_text_input_html__ = __webpack_require__(171);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_text_input_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_text_input_html__);
+
+
+
+class AppTextInput extends __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__["a" /* Element */] {
+
+  static get template() {
+    return __WEBPACK_IMPORTED_MODULE_1__app_text_input_html___default.a;
+  }
+
+  static get properties() {
+    return {
+      type : {
+        type : String,
+        value : 'text'
+      },
+      label : {
+        type : String,
+        value : ''
+      },
+      help : {
+        type : String,
+        value : ''
+      },
+      placeholder : {
+        type : String,
+        value : ''
+      },
+      disabled : {
+        type : Boolean,
+        value : false
+      }
+    }
+  }
+
+  get value() {
+    return this.$.input.value;
+  }
+
+  set value(value) {
+    this.$.input.value = value;
+  }
+
+  _onChange(e) {
+    this.dispatchEvent(new CustomEvent('change', {detail: {value: this.value}}));
+  }
+
+  _onKeyUp(e) {
+    e = {
+      which : e.which,
+      value : this.value
+    }
+    this.dispatchEvent(new CustomEvent('keyup', {detail: e}));
+  }
+
+}
+/* unused harmony export default */
+
+
+customElements.define('app-text-input', AppTextInput);
+
+/***/ }),
+/* 171 */
+/***/ (function(module, exports) {
+
+module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: inline-block;\n  }\n\n  input {\n    box-sizing: border-box;\n    width: 100%;\n    display: block;\n  }\n\n  .label {\n    font-weight: var(--font-weight-heavy);\n  }\n</style>\n\n<div class=\"label\">\n  <slot name=\"label\"></slot>\n  <span>[[label]]</span>\n</div>\n\n<input \n  type$=\"[[type]]\" \n  id=\"input\" \n  placeholder$=\"[[placeholder]]\"\n  disabled$=\"[[disabled]]\"\n  on-change=\"_onChange\" \n  on-keyup=\"_onKeyUp\" />\n\n<div class=\"help\">\n  <slot name=\"help\"></slot>\n  <span>[[help]]</span>\n</div>";
+
+/***/ }),
+/* 172 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_basic_metadata_html__ = __webpack_require__(173);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_basic_metadata_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_basic_metadata_html__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_org_input__ = __webpack_require__(174);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__interfaces_PackageInterface__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__interfaces_PackageInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__interfaces_PackageInterface__);
+
+
+
+
+
+
+const VALUES = ['name', 'overview', 'organization'];
+
+class AppBasicMetadata extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__["a" /* Element */])
+  .with(EventInterface, __WEBPACK_IMPORTED_MODULE_3__interfaces_PackageInterface___default.a) {
+
+  static get template() {
+    return __WEBPACK_IMPORTED_MODULE_1__app_basic_metadata_html___default.a;
+  }
+
+  static get properties() {
+    return {
+      data : {
+        type : Object,
+        value : () => {},
+        observer : '_onDataUpdate'
+      },
+      creating : {
+        type : Boolean,
+        value : false
+      }
+    }
+  }
+
+  get name() {
+    return this.$.name.value;
+  }
+
+  set name(value) {
+    this.$.name.value = value || '';
+  }
+
+  get overview() {
+    return this.$.overview.value;
+  }
+
+  set overview(value) {
+    this.$.overview.value = value || '';
+  }
+
+  get organization() {
+    return this.$.organization.value;
+  }
+
+  set organization(value) {
+    this.$.organization.value = value || '';
+  }
+
+  /**
+   * @method reset
+   * @description clear all inputs
+   */
+  reset() {
+    this.name = '';
+    this.overview = '';
+    this.organization = '';
+  }
+
+  /**
+   * @method getValues
+   * @description return an object with all current values controlled by
+   * the basic metadata inputs.
+   * 
+   * @returns {Object}
+   */
+  getValues() {
+    let data = {};
+    VALUES.forEach(value => {
+      data[value] = this[value];
+    });
+    return data;
+  }
+
+  /**
+   * @method _onDataUpdate
+   * @description called when data property updates
+   */
+  _onDataUpdate() {
+    if( !this.data ) return;
+    VALUES.forEach(value => {
+      this[value] = this.data[value];
+    });
+  }
+
+  /**
+   * @method _updateNamePreview
+   * @description Fired from name input
+   */
+  _updateNamePreview() {
+    this.name = this.$.name.value.toLowerCase().replace(/ /g, '-').replace(/[^a-zA-Z0-9_-]/g, '');
+    this._onInputChange();
+  }
+
+  /**
+   * @method _onInputChange
+   * @description called when any input changes
+   */
+  _onInputChange() {
+    this.fire('change');
+  }
+
+  /**
+   * @method _onCreateBtnClicked
+   * @description function fired when the create button is clicked
+   */
+  async _onCreateBtnClicked() {
+    let data = this.getValues();
+
+    if( data.name.length < 4 ) {
+      return alert('Name must be at least 4 characters');
+    }
+    if( data.overview.length < 15 ) {
+      return alert('Please provide a longer overview');
+    }
+    if( !data.organization) {
+      return alert('Please select an organization');
+    }
+
+    try {
+      await this._createPackage(data.name, data.overview, data.organization);
+    } catch(e) {
+      alert('Failed to create package: '+e.message);
+    }
+  }
+
+    /**
+   * @method _onCreatePackageUpdate
+   * @description via PackageInterface, Fired when create package state updates
+   */
+  _onCreatePackageUpdate(e) {
+    if( e.state === 'loading' ) {
+      this.$.createBtn.setAttribute('disabled', 'disabled');
+      this.$.createBtn.innerHTML = 'Creating...';
+      return;
+    }
+
+    this.$.createBtn.removeAttribute('disabled', 'disabled');
+    this.$.createBtn.innerHTML = 'Create';
+    if( e.state === 'error' ) {
+      return alert('Failed to create package :( '+e.error.message);
+    }
+
+    this._setWindowLocation('/edit/'+e.payload.id);
+  }
+
+}
+/* unused harmony export default */
+
+
+customElements.define('app-basic-metadata', AppBasicMetadata);
+
+/***/ }),
+/* 173 */
+/***/ (function(module, exports) {
+
+module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n\n  h2.uheader.break {\n    margin-top: var(--form-break-margin);\n  }\n\n  app-text-input {\n    display: block;\n  }\n</style>\n\n<h2 class=\"uheader blue\" hidden$=\"[[!creating]]\">Package Name</h2>\n<app-text-input  \n  id=\"name\" \n  on-change=\"_updateNamePreview\"\n  hidden$=\"[[!creating]]\">\n</app-text-input>\n\n<h2 class=\"uheader green break\" hidden$=\"[[!creating]]\">Package Overview</h2>\n<div class=\"help\">One sentance summary of package</div>\n<app-text-input \n  id=\"overview\"\n  on-change=\"_onInputChange\"\n  placeholder=\"Overview (Short Description)\">\n</app-text-input>\n\n<h2 class=\"uheader lightblue break\">Organization</h2>\n<div class=\"help\">The <a href=\"https://data.ecosis.org\" target=\"_blank\">EcoSIS</a> organization this package belongs to, \n  all members will have access. If you need to create or edit an organization, do so via \n  <a href=\"https://data.ecosis.org/organization\" target=\"_blank\">EcoSIS organization management.</a>\n</div>\n<app-org-input id=\"organization\" on-change=\"_onInputChange\"></app-org-input>\n\n<div style=\"text-align: right\">\n  <paper-button \n    hidden$=\"[[!creating]]\" \n    id=\"createBtn\"\n    on-click=\"_onCreateBtnClicked\">Create\n  </paper-button>\n</div>\n\n<div hidden$=\"[[creating]]\">\n  <paper-button on-click=\"_onDeleteBtnClicked\">Delete Package</paper-button>\n</div>";
+
+/***/ }),
+/* 174 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_org_input_html__ = __webpack_require__(175);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_org_input_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_org_input_html__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_AuthInterface__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_AuthInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__interfaces_AuthInterface__);
+
+
+
+
+
+class AppOrgInput extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__["a" /* Element */])
+  .with(EventInterface, __WEBPACK_IMPORTED_MODULE_2__interfaces_AuthInterface___default.a) {
+
+  static get template() {
+    return __WEBPACK_IMPORTED_MODULE_1__app_org_input_html___default.a;
+  }
+
+  static get properties() {
+    return {
+      orgs : {
+        type : Array,
+        value : () => []
+      },
+      selectedOrg : {
+        type : String,
+        value : ''
+      }
+    }
+  }
+
+  constructor() {
+    super();
+    this.active = true;
+  }
+
+  /**
+   * @method _onOrgsUpdate
+   * @description from AuthInterface, called when user orgs update
+   */
+  _onOrgsUpdate(e) {
+    if( e.state !== 'loaded' ) return;
+    this.orgs = e.payload;
+
+    requestAnimationFrame(() => {
+      this.$.input.value = this.selectedOrg;
+    });
+  }
+
+  /**
+   * @method _onInputChange
+   * @description bound to select element, fired on change
+   */
+  _onInputChange() {
+    this.selectedOrg = this.$.input.value;
+  }
+
+  get value() {
+    return this.selectedOrg;
+  }
+
+  set value(val) {
+    this.selectedOrg = val;
+    this.$.input.value = val;
+  }
+
+}
+/* unused harmony export default */
+
+
+customElements.define('app-org-input', AppOrgInput);
+
+/***/ }),
+/* 175 */
+/***/ (function(module, exports) {
+
+module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n\n  select {\n    min-width: 200px;\n  }\n</style>\n\n<select id=\"input\" on-change=\"_onInputChange\">\n  <option></option>\n  <template is=\"dom-repeat\" items=\"[[orgs]]\">\n    <option value=\"[[item.name]]\">[[item.displayName]]</option>\n  </template>\n</select>";
+
+/***/ }),
+/* 176 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_details_metadata_html__ = __webpack_require__(177);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_details_metadata_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_details_metadata_html__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_keyword_input__ = __webpack_require__(178);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_markdown_editor__ = __webpack_require__(180);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_theme_input__ = __webpack_require__(192);
+
+
+
+
+
+
+
+const VALUES = ['description', 'keywords', 'theme', 'family', 'specific'];
+
+class AppDetailsMetadata extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__["a" /* Element */])
+  .with(EventInterface) {
+
+  static get template() {
+    return __WEBPACK_IMPORTED_MODULE_1__app_details_metadata_html___default.a;
+  }
+
+  static get properties() {
+    return {
+      data : {
+        type : Object,
+        value : () => {},
+        observer : '_onDataUpdate'
+      }
+    }
+  }
+
+  get description() {
+    return this.$.description.value;
+  }
+
+  set description(value) {
+    this.$.description.value = value || '';
+  }
+
+  get keywords() {
+    return this.$.keywords.value;
+  }
+
+  set keywords(value) {
+    this.$.keywords.value = value || '';
+  }
+
+  get theme() {
+    return this.$.theme.selectedTheme;
+  }
+
+  set theme(value) {
+    this.$.theme.selectedTheme = value || '';
+  }
+
+  get family() {
+    return this.$.theme.selectedFamily;
+  }
+
+  set family(value) {
+    this.$.theme.selectedFamily = value || '';
+  }
+
+  get specific() {
+    return this.$.theme.selectedSpecific;
+  }
+
+  set specific(value) {
+    this.$.theme.selectedFpecific = value || '';
+  }
+
+  /**
+   * @method getValues
+   * @description return an object with all current values controlled by
+   * the basic metadata inputs.
+   * 
+   * @returns {Object}
+   */
+  getValues() {
+    let data = {};
+    VALUES.forEach(value => {
+      data[value] = this[value];
+    });
+    return data;
+  }
+
+  /**
+   * @method _onDataUpdate
+   * @description called when data property updates
+   */
+  _onDataUpdate() {
+    if( !this.data ) return;
+    VALUES.forEach(value => {
+      this[value] = this.data[value];
+    });
+  }
+
+  /**
+   * @method _onInputChange
+   * @description called when any input changes
+   */
+  _onInputChange() {
+    this.fire('change');
+  }
+
+  /**
+   * @method _onThemeUpdate
+   * @description called from the app-theme-input when a value updates
+   */
+  _onThemeUpdate(e) {
+    this.theme = e.detail.theme;
+    this.family = e.detail.family;
+    this.specific = e.detail.specific;
+
+    this._onInputChange();
+  }
+
+}
+/* unused harmony export default */
+
+
+customElements.define('app-details-metadata', AppDetailsMetadata);
+
+/***/ }),
+/* 177 */
+/***/ (function(module, exports) {
+
+module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n\n  app-org-input {\n    margin-top: 15px;\n  }\n  \n  app-keyword-input {\n    margin-top: 15px;\n  }\n\n  h2.uheader.break {\n    margin-top: var(--form-break-margin);\n  }\n</style>\n\n<h2 class=\"uheader lightblue\">README</h2>\n<div class=\"help\">Please provide documentation on the model\n  and how it should be used. Code snippets are encourage. Markdown is supported and highly \n  encouraged.  Markdown is simple markup syntax that can be used to make your documentation\n  easier to follow and read.  <a href=\"https://help.github.com/articles/basic-writing-and-formatting-syntax/\" target=\"_blank\">Markdown help.</a>\n  <a href=\"https://help.github.com/articles/creating-and-highlighting-code-blocks/\" target=\"_blank\">Supports code syntax highlighting as well.</a>\n</div>\n<app-markdown-editor label=\"Description\" id=\"description\" on-markdown-change=\"_onInputChange\"></app-markdown-editor>\n\n<h2 class=\"uheader green break\">Keywords</h2>\n<div class=\"help\">[[schema.keywords.description]]</div>\n<app-keyword-input \n  id=\"keywords\" \n  label=\"Keywords. Comma Separate\" \n  on-keyword-change=\"_onInputChange\">\n</app-keyword-input>\n\n<h2 class=\"uheader blue break\">Theme</h2>\n<div class=\"help\">Package theming information</div>\n<app-theme-input \n  id=\"theme\" \n  on-update=\"_onThemeUpdate\" \n  style=\"margin-top: 15px\">\n</app-theme-input>";
+
+/***/ }),
+/* 178 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_keyword_input_html__ = __webpack_require__(179);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_keyword_input_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_keyword_input_html__);
+
+
+
+class AppKeywordInput extends __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__["a" /* Element */] {
+
+  static get template() {
+    return __WEBPACK_IMPORTED_MODULE_1__app_keyword_input_html___default.a;
+  }
+
+  static get properties() {
+    return {
+      keywords : {
+        type : Array,
+        value : () => []
+      },
+      label : {
+        type : String,
+        value : ''
+      }
+    }
+  }
+
+  get value() {
+    return this.keywords;
+  }
+
+  set value(value) {
+    this.keywords = this._clean(value);
+  }
+
+  /**
+   * Cleanup input values
+   */
+  _clean(value) {
+    if( typeof value === 'string' ) {
+      value = value.split(',');
+    }
+    value = value.map(val => val.trim().toLowerCase());
+    for( let i = value.length-1; i >= 0; i-- ) {
+      if( !value[i] ) value.splice(i, 1);
+    }
+    return value;
+  }
+
+  /**
+   * called from paper-input
+   */
+  _onKeyPress(e) {
+    if( e.which === 13 ) this._onChange();
+  }
+
+  /**
+   * Called from paper-input
+   */
+  _onChange(e) {
+    this.appendKeywords(this.$.input.value);
+    this.$.input.value = '';
+    this.dispatchEvent(new CustomEvent('keyword-change', {detail: this.keywords}));
+  }
+
+  /**
+   * Fired from remove btn 
+   */
+  _onRemoveClicked(e) {
+    let val = e.currentTarget.getAttribute('value');
+    let index = this.keywords.indexOf(val);
+    this.keywords.splice(index, 1);
+    
+    this.value = this.keywords.slice(0);
+    this.dispatchEvent(new CustomEvent('keyword-change', {detail: this.keywords}));
+  }
+
+  appendKeywords(value) {
+    value = this._clean(value);
+    value.forEach(val => {
+      if( this.keywords.indexOf(val) === -1 ) {
+        this.keywords.push(val);
+      }
+    });
+
+    this.value = this.keywords.slice(0);
+  }
+
+
+}
+/* unused harmony export default */
+
+
+customElements.define('app-keyword-input', AppKeywordInput);
+
+/***/ }),
+/* 179 */
+/***/ (function(module, exports) {
+
+module.exports = "\n<style>\n  :host {\n    display: block;\n  }\n\n  div {\n    display: flex;\n    align-items: center;\n  }\n\n  span {\n    /* padding-left: 5px; */\n    display: inline-block;\n    vertical-align: baseline;\n  }\n\n  button {\n    margin: 3px 5px;\n    padding: 8px;\n    background: white;\n    border-radius: 3px;\n  }\n\n  iron-icon {\n    --iron-icon-width: 18px;\n    --iron-icon-height: 18px;\n  }\n\n  button:hover {\n    cursor: pointer;\n    color: var(--inverse-text-color);\n    background: var(--default-primary-color);\n  }\n\n  app-text-input {\n    display: block;\n  }\n</style>\n\n<app-text-input \n  id=\"input\" \n  placeholder=\"[[label]]\"\n  on-change=\"_onChange\" \n  on-keyup=\"_onKeyPress\">\n</app-text-input>\n\n<div>\n  <template is=\"dom-repeat\" items=\"[[keywords]]\">\n    <button value$=\"[[item]]\" on-click=\"_onRemoveClicked\">\n      <iron-icon icon=\"clear\"></iron-icon>\n      <span>[[item]]</span>\n    </button>\n  </template>\n</div>";
+
+/***/ }),
+/* 180 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_markdown_editor_html__ = __webpack_require__(181);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_markdown_editor_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_markdown_editor_html__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_PackageInterface__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_PackageInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__interfaces_PackageInterface__);
@@ -34468,23 +35016,23 @@ class AppMarkdownEditor extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polym
 customElements.define('app-markdown-editor', AppMarkdownEditor);
 
 /***/ }),
-/* 172 */
+/* 181 */
 /***/ (function(module, exports) {
 
-module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n  .btns {\n    display: flex;\n    align-items: center;\n  }\n\n  textarea {\n    width: 100%;\n    min-height: 200px;\n  }\n\n  #preview {\n    min-height: 200px;\n    /* border: 1px solid #aaa; */\n    overflow: auto;\n  }\n\n  paper-icon-button[disabled] {\n    color: #aaa;\n  }\n</style>\n\n\n<div class=\"btns\">\n  <div style=\"flex:1\">\n    <span hidden$=\"[[previewMode]]\">Edit</span>\n    <span hidden$=\"[[!previewMode]]\">Preview</span> \n    [[label]]\n  </div>\n  <paper-icon-button icon=\"code\" disabled$=\"[[!previewMode]]\" on-click=\"_toggle\"></paper-icon-button>\n  <paper-icon-button icon=\"visibility\" disabled$=\"[[previewMode]]\" on-click=\"_toggle\"></paper-icon-button>\n</div>\n\n<iron-pages selected=\"[[selected]]\" attr-for-selected=\"id\">\n  <textarea id=\"input\" on-change=\"_triggerChangeEvent\" on-keyup=\"_onTextAreaKeyUp\"></textarea>\n  <app-markdown id=\"preview\"></app-markdown>\n</iron-pages>\n";
+module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n  .btns {\n    display: flex;\n    align-items: center;\n  }\n\n  textarea {\n    width: 100%;\n    min-height: 200px;\n  }\n\n  paper-icon-button[disabled] {\n    color: #aaa;\n  }\n</style>\n\n\n<div class=\"btns\">\n  <div style=\"flex:1\">\n    <!-- <span hidden$=\"[[previewMode]]\">Edit</span>\n    <span hidden$=\"[[!previewMode]]\">Preview</span>  -->\n    <!-- Mode -->\n  </div>\n  <paper-icon-button icon=\"code\" disabled$=\"[[!previewMode]]\" on-click=\"_toggle\"></paper-icon-button>\n  <paper-icon-button icon=\"visibility\" disabled$=\"[[previewMode]]\" on-click=\"_toggle\"></paper-icon-button>\n</div>\n\n<iron-pages selected=\"[[selected]]\" attr-for-selected=\"id\">\n  <textarea id=\"input\" on-change=\"_triggerChangeEvent\" on-keyup=\"_onTextAreaKeyUp\"></textarea>\n  <app-markdown id=\"preview\"></app-markdown>\n</iron-pages>\n";
 
 /***/ }),
-/* 173 */
+/* 182 */
 /***/ (function(module, exports) {
 
 module.exports = "<style>\n  :host {\n    display: block;\n  }\n</style>\n<div id=\"root\" class=\"markdown-body\"></div>";
 
 /***/ }),
-/* 174 */
+/* 183 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-        var result = __webpack_require__(175);
+        var result = __webpack_require__(184);
 
         if (typeof result === "string") {
             module.exports = result;
@@ -34494,7 +35042,7 @@ module.exports = "<style>\n  :host {\n    display: block;\n  }\n</style>\n<div i
     
 
 /***/ }),
-/* 175 */
+/* 184 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(80)(false);
@@ -34508,11 +35056,11 @@ exports.push([module.i, "@font-face {\n  font-family: octicons-link;\n  src: url
 
 
 /***/ }),
-/* 176 */
+/* 185 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-        var result = __webpack_require__(177);
+        var result = __webpack_require__(186);
 
         if (typeof result === "string") {
             module.exports = result;
@@ -34522,7 +35070,7 @@ exports.push([module.i, "@font-face {\n  font-family: octicons-link;\n  src: url
     
 
 /***/ }),
-/* 177 */
+/* 186 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(80)(false);
@@ -34536,7 +35084,7 @@ exports.push([module.i, "/**\n * okaidia theme for JavaScript, CSS and HTML\n * 
 
 
 /***/ }),
-/* 178 */
+/* 187 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {
@@ -35378,10 +35926,37 @@ Prism.languages.js = Prism.languages.javascript;
 
 })();
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(81)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(188)))
 
 /***/ }),
-/* 179 */
+/* 188 */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
+/* 189 */
 /***/ (function(module, exports) {
 
 Prism.languages.python = {
@@ -35416,7 +35991,7 @@ Prism.languages.python = {
 
 
 /***/ }),
-/* 180 */
+/* 190 */
 /***/ (function(module, exports) {
 
 (function(Prism) {
@@ -35502,7 +36077,7 @@ Prism.languages.python = {
 
 
 /***/ }),
-/* 181 */
+/* 191 */
 /***/ (function(module, exports) {
 
 Prism.languages.r = {
@@ -35529,116 +36104,12 @@ Prism.languages.r = {
 };
 
 /***/ }),
-/* 182 */
+/* 192 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_keyword_input_html__ = __webpack_require__(183);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_keyword_input_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_keyword_input_html__);
-
-
-
-class AppKeywordInput extends __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__["a" /* Element */] {
-
-  static get template() {
-    return __WEBPACK_IMPORTED_MODULE_1__app_keyword_input_html___default.a;
-  }
-
-  static get properties() {
-    return {
-      keywords : {
-        type : Array,
-        value : () => []
-      },
-      label : {
-        type : String,
-        value : ''
-      }
-    }
-  }
-
-  get value() {
-    return this.keywords;
-  }
-
-  set value(value) {
-    this.keywords = this._clean(value);
-  }
-
-  /**
-   * Cleanup input values
-   */
-  _clean(value) {
-    if( typeof value === 'string' ) {
-      value = value.split(',');
-    }
-    value = value.map(val => val.trim().toLowerCase());
-    for( let i = value.length-1; i >= 0; i-- ) {
-      if( !value[i] ) value.splice(i, 1);
-    }
-    return value;
-  }
-
-  /**
-   * called from paper-input
-   */
-  _onKeyPress(e) {
-    if( e.which === 13 ) this._onChange();
-  }
-
-  /**
-   * Called from paper-input
-   */
-  _onChange(e) {
-    this.appendKeywords(this.$.input.value);
-    this.$.input.value = '';
-    this.dispatchEvent(new CustomEvent('keyword-change', {detail: this.keywords}));
-  }
-
-  /**
-   * Fired from remove btn 
-   */
-  _onRemoveClicked(e) {
-    let val = e.currentTarget.getAttribute('value');
-    let index = this.keywords.indexOf(val);
-    this.keywords.splice(index, 1);
-    
-    this.value = this.keywords.slice(0);
-    this.dispatchEvent(new CustomEvent('keyword-change', {detail: this.keywords}));
-  }
-
-  appendKeywords(value) {
-    value = this._clean(value);
-    value.forEach(val => {
-      if( this.keywords.indexOf(val) === -1 ) {
-        this.keywords.push(val);
-      }
-    });
-
-    this.value = this.keywords.slice(0);
-  }
-
-
-}
-/* unused harmony export default */
-
-
-customElements.define('app-keyword-input', AppKeywordInput);
-
-/***/ }),
-/* 183 */
-/***/ (function(module, exports) {
-
-module.exports = "\n<style>\n  div {\n    display: flex;\n    align-items: center;\n  }\n\n  span {\n    padding-left: 10px;\n    display: inline-block;\n  }\n\n  paper-button {\n    background: var(--dark-background-color)\n  }\n\n  paper-button:hover {\n    color: var(--inverse-text-color);\n    background: var(--default-primary-color);\n  }\n</style>\n\n<paper-input \n  id=\"input\" \n  label=\"[[label]]\"\n  on-change=\"_onChange\" \n  on-keypress=\"_onKeyPress\">\n</paper-input>\n\n<div>\n  <template is=\"dom-repeat\" items=\"[[keywords]]\">\n    <paper-button value$=\"[[item]]\" on-click=\"_onRemoveClicked\">\n      <iron-icon icon=\"clear\"></iron-icon>\n      <span>[[item]]</span>\n    </paper-button>\n  </template>\n</div>";
-
-/***/ }),
-/* 184 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_theme_input_html__ = __webpack_require__(185);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_theme_input_html__ = __webpack_require__(193);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_theme_input_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_theme_input_html__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lib_controlled_vocabulary__ = __webpack_require__(65);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lib_controlled_vocabulary___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__lib_controlled_vocabulary__);
@@ -35790,796 +36261,105 @@ class AppThemeInput extends __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer
 customElements.define('app-theme-input', AppThemeInput);
 
 /***/ }),
-/* 185 */
+/* 193 */
 /***/ (function(module, exports) {
 
-module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n  .layout {\n    display: flex;\n    flex-wrap: wrap;\n  }\n  .layout > * {\n    flex: .333;\n  }\n</style>\n\n<div class=\"layout\">\n  <div>\n    <h2>Theme</h2>\n    <select id=\"theme\" on-change=\"_onThemeSelect\">\n      <option></option>\n      <template is=\"dom-repeat\" items=\"[[themeOptions]]\">\n        <option value$=\"[[item]]\">[[item]]</option>\n      </template>\n    </select>\n  </div>\n\n  <div hidden$=\"[[!selectedTheme]]\">\n    <h2>Family</h2>\n    <select on-change=\"_onFamilySelect\" id=\"family\">\n      <option></option>\n      <template is=\"dom-repeat\" items=\"[[familyOptions]]\">\n        <option value$=\"[[item]]\">[[item]]</option>\n      </template>\n    </select>\n  </div>\n\n  <div hidden$=\"[[!selectedFamily]]\">\n    <h2>Specific</h2>\n    <select on-change=\"_onSpecificSelect\" id=\"specific\">\n      <option></option>\n      <template is=\"dom-repeat\" items=\"[[specificOptions]]\">\n        <option value$=\"[[item]]\">[[item]]</option>\n      </template>\n    </select>\n  </div>\n</div>\n\n<div>\n  Values: [[selectedTheme]] [[selectedFamily]] [[selectedSpecific]]\n</div>";
+module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n  .layout {\n    display: flex;\n    flex-wrap: wrap;\n  }\n  .layout > * {\n    flex: .333;\n  }\n  h3 {\n    padding: 0;\n    margin: 0;\n  }\n</style>\n\n<div class=\"layout\">\n  <div>\n    <h3>Category</h3>\n    <select id=\"theme\" on-change=\"_onThemeSelect\">\n      <option></option>\n      <template is=\"dom-repeat\" items=\"[[themeOptions]]\">\n        <option value$=\"[[item]]\">[[item]]</option>\n      </template>\n    </select>\n  </div>\n\n  <div hidden$=\"[[!selectedTheme]]\">\n    <h3>Family</h3>\n    <select on-change=\"_onFamilySelect\" id=\"family\">\n      <option></option>\n      <template is=\"dom-repeat\" items=\"[[familyOptions]]\">\n        <option value$=\"[[item]]\">[[item]]</option>\n      </template>\n    </select>\n  </div>\n\n  <div hidden$=\"[[!selectedFamily]]\">\n    <h3>Specific</h3>\n    <select on-change=\"_onSpecificSelect\" id=\"specific\">\n      <option></option>\n      <template is=\"dom-repeat\" items=\"[[specificOptions]]\">\n        <option value$=\"[[item]]\">[[item]]</option>\n      </template>\n    </select>\n  </div>\n</div>";
 
 /***/ }),
-/* 186 */
+/* 194 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_create_release_html__ = __webpack_require__(187);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_create_release_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_create_release_html__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_PackageInterface__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_PackageInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__interfaces_PackageInterface__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_files_html__ = __webpack_require__(195);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_files_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_files_html__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_file_manager__ = __webpack_require__(196);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_example_editor__ = __webpack_require__(202);
 
 
 
 
 
-class AppCreateRelease extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__["a" /* Element */])
-  .with(EventInterface, __WEBPACK_IMPORTED_MODULE_2__interfaces_PackageInterface___default.a) {
+
+class AppFiles extends __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__["a" /* Element */] {
 
   static get template() {
-    return __WEBPACK_IMPORTED_MODULE_1__app_create_release_html___default.a;
+    return __WEBPACK_IMPORTED_MODULE_1__app_files_html___default.a;
   }
 
   static get properties() {
     return {
-      releases : {
-        type : Array,
-        value : () => [],
-        observer : '_onReleasesUpdate'
-      },
-      releasesInverse : {
-        type : Array,
-        value : () => []
-      },
-      package : {
+      files : {
         type : Object,
-        value : () => {}
+        value : () => {},
+        observer : '_onFilesUpdate'
       },
-      creating : {
-        type : Boolean,
-        value : false
-      },
-      saving : {
-        type : Boolean,
-        value : false
-      },
-      release : {
-        type : String,
-        value : ''
-      }
-    }
-  }
 
-  get major() {
-    return parseInt(this.$.major.value) || 0;
-  }
-
-  set major(val) {
-    this.$.major.value = val+'';
-  }
-
-  get minor() {
-    return parseInt(this.$.minor.value) || 0;
-  }
-
-  set minor(val) {
-    this.$.minor.value = val+'';
-  }
-
-  get patch() {
-    return parseInt(this.$.patch.value) || 0;
-  }
-
-  set patch(val) {
-    this.$.patch.value = val+'';
-  }
-
-  /**
-   * @method _toggleCreate
-   * @description called from top right create/cancel buttons
-   */
-  _toggleCreate() {
-    this.creating = !this.creating;
-
-    if( this.creating ) {
-      this.$.description.value = '';
-      this._render();
-    }
-  }
-
-  /**
-   * @method showList
-   * @description show the releases list
-   */
-  showList() {
-    this.creating = false;
-  }
-
-  /**
-   * @method _onReleasesUpdate
-   * @description called from releases property observer
-   */
-  _onReleasesUpdate() {
-    let index = this.releases.length-1;
-    if( index === -1 ) {
-      this.release = '';
-      this._render();
-      return;
-    }
-
-    this.releases[index].latest = true;
-    this.releasesInverse = this.releases.slice().reverse();
-
-    this.release = this.releases[index].name;
-    this._render();
-    this.patch++;
-  }
-
-  /**
-   * @method _render
-   * @description called whenever the release string updates, set the input fields
-   */
-  _render() {
-    if( !this.release ) {
-      this.major = 0;
-      this.minor = 0;
-      this.patch = 1;
-      return;
-    }
-
-    let parts = this.release.replace(/^v/, '').split('.');
-    if( parts.length < 3 ) return;
-
-    this.major = parts[0];
-    this.minor = parts[1];
-    this.patch = parts[2];
-  }
-
-  /**
-   * @method _onInputChange
-   * @description called whenever a input field changes due to user input, set
-   * the release string.
-   */
-  _onInputChange() {
-    this.release = `v${this.major}.${this.minor}.${this.patch}`;
-  }
-
-  /**
-   * @method _onCreateClicked
-   * @description called when the create button is clicked
-   */
-  async _onCreateClicked() {
-    if( !this.release ) alert('Please enter a valid release');
-
-    let info = {
-      name : `v${this.major}.${this.minor}.${this.patch}`,
-      description : this.$.description.value
-    }
-
-    try {
-      this.saving = true;
-      await this._createRelease(this.package.name, info);
-      alert('Release '+info.name+' created');
-      this.showList();
-    } catch(e) {
-      let body = await e.details.json()
-      alert(body.message);
-    }
-
-    this.saving = false;
-  }
-
-}
-/* unused harmony export default */
-
-
-customElements.define('app-create-release', AppCreateRelease);
-
-/***/ }),
-/* 187 */
-/***/ (function(module, exports) {
-
-module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n\n  .layout {\n    display: flex;\n    align-items: flex-end;\n  }\n\n  .layout input {\n    width: 100%;\n  }\n\n  .period {\n    font-size: 40px;\n  }\n</style>\n\n<div style=\"display:flex\">\n  <h2 style=\"flex:1\">Releases</h2>\n  <div>\n    <paper-button hidden$=\"[[creating]]\" on-click=\"_toggleCreate\">Create Release</paper-button>\n    <paper-button hidden$=\"[[!creating]]\" on-click=\"_toggleCreate\">Cancel</paper-button>\n  </div>\n</div>\n\n<div hidden$=\"[[!creating]]\">\n  <div class=\"layout\">\n    <div>\n      <div>Major</div>\n      <input type=\"number\" id=\"major\" placeholder=\"1\" on-change=\"_onInputChange\" />\n    </div>\n    <div class=\"period\">.</div>\n    <div>\n      <div>Minor</div>\n      <input type=\"number\" id=\"minor\" placeholder=\"0\" on-change=\"_onInputChange\" />\n    </div>\n    <div class=\"period\">.</div>\n    <div>\n      <div>Patch</div>\n      <input type=\"number\" id=\"patch\" placeholder=\"0\" on-change=\"_onInputChange\" />\n    </div>\n  </div>\n  <div>\n    <input type=\"text\" placeholder=\"Release description\" id=\"description\" style=\"width: 100%\" />\n  </div>\n\n  <div style=\"text-align: right\">\n    <a href=\"https://semver.org/\" target=\"_blank\">Versioning Help</a>\n  </div>\n  <div><paper-button on-click=\"_onCreateClicked\" disabled$=\"[[saving]]\">Create Release</paper-button></div>\n</div>\n\n<div hidden$=\"[[creating]]\">\n  <div><a href=\"[[package.htmlUrl]]/releases\" target=\"_blank\">View on GitHub</a></div>\n  <template is=\"dom-repeat\" items=\"[[releasesInverse]]\">\n    <div>\n      <h4>[[item.name]]</h4>\n      <div>[[item.body]]</div>\n      <div>Published [[item.publishedAt]]</div>\n      <div><a href$=\"[[item.zipballUrl]]\">Download</a></div>\n    </div>\n  </template>\n</div>\n";
-
-/***/ }),
-/* 188 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_text_input_html__ = __webpack_require__(189);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_text_input_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_text_input_html__);
-
-
-
-class AppTextInput extends __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__["a" /* Element */] {
-
-  static get template() {
-    return __WEBPACK_IMPORTED_MODULE_1__app_text_input_html___default.a;
-  }
-
-  static get properties() {
-    return {
-      type : {
-        type : String,
-        value : 'text'
-      },
-      label : {
-        type : String,
-        value : ''
-      },
-      help : {
-        type : String,
-        value : ''
-      }
-    }
-  }
-
-  get value() {
-    return this.$.input.value;
-  }
-
-  set value(value) {
-    this.$.input.value = value;
-  }
-
-  _onChange(e) {
-    this.dispatchEvent(new CustomEvent('change', {detail: this.value}));
-  }
-
-  _onKeyUp(e) {
-    e = {
-      which : e.which,
-      value : this.value
-    }
-    this.dispatchEvent(new CustomEvent('change', {detail: e}));
-  }
-
-}
-/* unused harmony export default */
-
-
-customElements.define('app-text-input', AppTextInput);
-
-/***/ }),
-/* 189 */
-/***/ (function(module, exports) {
-
-module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: inline-block;\n  }\n\n  input {\n    box-sizing: border-box;\n    width: 100%;\n    display: block;\n  }\n\n  .label {\n    font-weight: var(--font-weight-heavy);\n  }\n</style>\n\n<div class=\"label\">\n  <slot name=\"label\"></slot>\n  <span>[[label]]</span>\n</div>\n\n<input type$=\"[[type]]\" id=\"input\" on-change=\"_onChange\" on-keyup=\"_onKeyUp\" />\n\n<div class=\"help\">\n  <slot name=\"help\"></slot>\n  <span>[[help]]</span>\n</div>";
-
-/***/ }),
-/* 190 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_org_input_html__ = __webpack_require__(191);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_org_input_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_org_input_html__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_AuthInterface__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_AuthInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__interfaces_AuthInterface__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_timers__ = __webpack_require__(192);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_timers___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_timers__);
-
-
-
-
-
-
-class AppOrgInput extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__["a" /* Element */])
-  .with(EventInterface, __WEBPACK_IMPORTED_MODULE_2__interfaces_AuthInterface___default.a) {
-
-  static get template() {
-    return __WEBPACK_IMPORTED_MODULE_1__app_org_input_html___default.a;
-  }
-
-  static get properties() {
-    return {
-      orgs : {
+      examples : {
         type : Array,
         value : () => []
-      },
-      selectedOrg : {
-        type : String,
-        value : ''
       }
     }
   }
 
-  constructor() {
-    super();
-    this.active = true;
-  }
-
   /**
-   * @method _onOrgsUpdate
-   * @description from AuthInterface, called when user orgs update
+   * @method _onFilesUpdate
+   * @description called when files updates
    */
-  _onOrgsUpdate(e) {
-    if( e.state !== 'loaded' ) return;
-    this.orgs = e.payload;
+  _onFilesUpdate() {
+    if( !this.files ) return;
 
-    requestAnimationFrame(() => {
-      this.$.input.value = this.selectedOrg;
+    let examples = {};
+    for( let id in this.files ) {
+      if( id.match(/^\/examples\//) ) {
+        let name = id.replace(/^\/examples\//, '').split('/')[0];
+        examples[name] = true;
+      }
+    }
+
+    Object.keys(examples).forEach(example => {
+      this.push('examples', {
+        directory : '/examples/'+example, 
+        label : example,
+      });
     });
   }
 
   /**
-   * @method _onInputChange
-   * @description bound to select element, fired on change
+   * @method _onCreateExampleClicked
+   * @description bound to examples create button
    */
-  _onInputChange() {
-    this.selectedOrg = this.$.input.value;
-  }
-
-  get value() {
-    return this.selectedOrg;
-  }
-
-  set value(val) {
-    this.selectedOrg = val;
-    this.$.input.value = val;
+  _onCreateExampleClicked() {
+    let len = this.examples.length+1;
+    this.push('examples', {
+      directory : '/examples/package_example_'+len, 
+      label : 'package_example_'+len,
+      isNew : true
+    });
   }
 
 }
 /* unused harmony export default */
 
 
-customElements.define('app-org-input', AppOrgInput);
-
-/***/ }),
-/* 191 */
-/***/ (function(module, exports) {
-
-module.exports = "<select id=\"input\" on-change=\"_onInputChange\">\n  <option></option>\n  <template is=\"dom-repeat\" items=\"[[orgs]]\">\n    <option value=\"[[item.name]]\">[[item.displayName]]</option>\n  </template>\n</select>";
-
-/***/ }),
-/* 192 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var apply = Function.prototype.apply;
-
-// DOM APIs, for completeness
-
-exports.setTimeout = function() {
-  return new Timeout(apply.call(setTimeout, window, arguments), clearTimeout);
-};
-exports.setInterval = function() {
-  return new Timeout(apply.call(setInterval, window, arguments), clearInterval);
-};
-exports.clearTimeout =
-exports.clearInterval = function(timeout) {
-  if (timeout) {
-    timeout.close();
-  }
-};
-
-function Timeout(id, clearFn) {
-  this._id = id;
-  this._clearFn = clearFn;
-}
-Timeout.prototype.unref = Timeout.prototype.ref = function() {};
-Timeout.prototype.close = function() {
-  this._clearFn.call(window, this._id);
-};
-
-// Does not start the time, just sets up the members needed.
-exports.enroll = function(item, msecs) {
-  clearTimeout(item._idleTimeoutId);
-  item._idleTimeout = msecs;
-};
-
-exports.unenroll = function(item) {
-  clearTimeout(item._idleTimeoutId);
-  item._idleTimeout = -1;
-};
-
-exports._unrefActive = exports.active = function(item) {
-  clearTimeout(item._idleTimeoutId);
-
-  var msecs = item._idleTimeout;
-  if (msecs >= 0) {
-    item._idleTimeoutId = setTimeout(function onTimeout() {
-      if (item._onTimeout)
-        item._onTimeout();
-    }, msecs);
-  }
-};
-
-// setimmediate attaches itself to the global object
-__webpack_require__(193);
-exports.setImmediate = setImmediate;
-exports.clearImmediate = clearImmediate;
-
-
-/***/ }),
-/* 193 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
-    "use strict";
-
-    if (global.setImmediate) {
-        return;
-    }
-
-    var nextHandle = 1; // Spec says greater than zero
-    var tasksByHandle = {};
-    var currentlyRunningATask = false;
-    var doc = global.document;
-    var registerImmediate;
-
-    function setImmediate(callback) {
-      // Callback can either be a function or a string
-      if (typeof callback !== "function") {
-        callback = new Function("" + callback);
-      }
-      // Copy function arguments
-      var args = new Array(arguments.length - 1);
-      for (var i = 0; i < args.length; i++) {
-          args[i] = arguments[i + 1];
-      }
-      // Store and register the task
-      var task = { callback: callback, args: args };
-      tasksByHandle[nextHandle] = task;
-      registerImmediate(nextHandle);
-      return nextHandle++;
-    }
-
-    function clearImmediate(handle) {
-        delete tasksByHandle[handle];
-    }
-
-    function run(task) {
-        var callback = task.callback;
-        var args = task.args;
-        switch (args.length) {
-        case 0:
-            callback();
-            break;
-        case 1:
-            callback(args[0]);
-            break;
-        case 2:
-            callback(args[0], args[1]);
-            break;
-        case 3:
-            callback(args[0], args[1], args[2]);
-            break;
-        default:
-            callback.apply(undefined, args);
-            break;
-        }
-    }
-
-    function runIfPresent(handle) {
-        // From the spec: "Wait until any invocations of this algorithm started before this one have completed."
-        // So if we're currently running a task, we'll need to delay this invocation.
-        if (currentlyRunningATask) {
-            // Delay by doing a setTimeout. setImmediate was tried instead, but in Firefox 7 it generated a
-            // "too much recursion" error.
-            setTimeout(runIfPresent, 0, handle);
-        } else {
-            var task = tasksByHandle[handle];
-            if (task) {
-                currentlyRunningATask = true;
-                try {
-                    run(task);
-                } finally {
-                    clearImmediate(handle);
-                    currentlyRunningATask = false;
-                }
-            }
-        }
-    }
-
-    function installNextTickImplementation() {
-        registerImmediate = function(handle) {
-            process.nextTick(function () { runIfPresent(handle); });
-        };
-    }
-
-    function canUsePostMessage() {
-        // The test against `importScripts` prevents this implementation from being installed inside a web worker,
-        // where `global.postMessage` means something completely different and can't be used for this purpose.
-        if (global.postMessage && !global.importScripts) {
-            var postMessageIsAsynchronous = true;
-            var oldOnMessage = global.onmessage;
-            global.onmessage = function() {
-                postMessageIsAsynchronous = false;
-            };
-            global.postMessage("", "*");
-            global.onmessage = oldOnMessage;
-            return postMessageIsAsynchronous;
-        }
-    }
-
-    function installPostMessageImplementation() {
-        // Installs an event handler on `global` for the `message` event: see
-        // * https://developer.mozilla.org/en/DOM/window.postMessage
-        // * http://www.whatwg.org/specs/web-apps/current-work/multipage/comms.html#crossDocumentMessages
-
-        var messagePrefix = "setImmediate$" + Math.random() + "$";
-        var onGlobalMessage = function(event) {
-            if (event.source === global &&
-                typeof event.data === "string" &&
-                event.data.indexOf(messagePrefix) === 0) {
-                runIfPresent(+event.data.slice(messagePrefix.length));
-            }
-        };
-
-        if (global.addEventListener) {
-            global.addEventListener("message", onGlobalMessage, false);
-        } else {
-            global.attachEvent("onmessage", onGlobalMessage);
-        }
-
-        registerImmediate = function(handle) {
-            global.postMessage(messagePrefix + handle, "*");
-        };
-    }
-
-    function installMessageChannelImplementation() {
-        var channel = new MessageChannel();
-        channel.port1.onmessage = function(event) {
-            var handle = event.data;
-            runIfPresent(handle);
-        };
-
-        registerImmediate = function(handle) {
-            channel.port2.postMessage(handle);
-        };
-    }
-
-    function installReadyStateChangeImplementation() {
-        var html = doc.documentElement;
-        registerImmediate = function(handle) {
-            // Create a <script> element; its readystatechange event will be fired asynchronously once it is inserted
-            // into the document. Do so, thus queuing up the task. Remember to clean up once it's been called.
-            var script = doc.createElement("script");
-            script.onreadystatechange = function () {
-                runIfPresent(handle);
-                script.onreadystatechange = null;
-                html.removeChild(script);
-                script = null;
-            };
-            html.appendChild(script);
-        };
-    }
-
-    function installSetTimeoutImplementation() {
-        registerImmediate = function(handle) {
-            setTimeout(runIfPresent, 0, handle);
-        };
-    }
-
-    // If supported, we should attach to the prototype of global, since that is where setTimeout et al. live.
-    var attachTo = Object.getPrototypeOf && Object.getPrototypeOf(global);
-    attachTo = attachTo && attachTo.setTimeout ? attachTo : global;
-
-    // Don't get fooled by e.g. browserify environments.
-    if ({}.toString.call(global.process) === "[object process]") {
-        // For Node.js before 0.9
-        installNextTickImplementation();
-
-    } else if (canUsePostMessage()) {
-        // For non-IE10 modern browsers
-        installPostMessageImplementation();
-
-    } else if (global.MessageChannel) {
-        // For web workers, where supported
-        installMessageChannelImplementation();
-
-    } else if (doc && "onreadystatechange" in doc.createElement("script")) {
-        // For IE 6–8
-        installReadyStateChangeImplementation();
-
-    } else {
-        // For older browsers
-        installSetTimeoutImplementation();
-    }
-
-    attachTo.setImmediate = setImmediate;
-    attachTo.clearImmediate = clearImmediate;
-}(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
-
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(81), __webpack_require__(194)))
-
-/***/ }),
-/* 194 */
-/***/ (function(module, exports) {
-
-// shim for using process in browser
-var process = module.exports = {};
-
-// cached from whatever global is present so that test runners that stub it
-// don't break things.  But we need to wrap it in a try catch in case it is
-// wrapped in strict mode code which doesn't define any globals.  It's inside a
-// function because try/catches deoptimize in certain engines.
-
-var cachedSetTimeout;
-var cachedClearTimeout;
-
-function defaultSetTimout() {
-    throw new Error('setTimeout has not been defined');
-}
-function defaultClearTimeout () {
-    throw new Error('clearTimeout has not been defined');
-}
-(function () {
-    try {
-        if (typeof setTimeout === 'function') {
-            cachedSetTimeout = setTimeout;
-        } else {
-            cachedSetTimeout = defaultSetTimout;
-        }
-    } catch (e) {
-        cachedSetTimeout = defaultSetTimout;
-    }
-    try {
-        if (typeof clearTimeout === 'function') {
-            cachedClearTimeout = clearTimeout;
-        } else {
-            cachedClearTimeout = defaultClearTimeout;
-        }
-    } catch (e) {
-        cachedClearTimeout = defaultClearTimeout;
-    }
-} ())
-function runTimeout(fun) {
-    if (cachedSetTimeout === setTimeout) {
-        //normal enviroments in sane situations
-        return setTimeout(fun, 0);
-    }
-    // if setTimeout wasn't available but was latter defined
-    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
-        cachedSetTimeout = setTimeout;
-        return setTimeout(fun, 0);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedSetTimeout(fun, 0);
-    } catch(e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
-            return cachedSetTimeout.call(null, fun, 0);
-        } catch(e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
-            return cachedSetTimeout.call(this, fun, 0);
-        }
-    }
-
-
-}
-function runClearTimeout(marker) {
-    if (cachedClearTimeout === clearTimeout) {
-        //normal enviroments in sane situations
-        return clearTimeout(marker);
-    }
-    // if clearTimeout wasn't available but was latter defined
-    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
-        cachedClearTimeout = clearTimeout;
-        return clearTimeout(marker);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedClearTimeout(marker);
-    } catch (e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
-            return cachedClearTimeout.call(null, marker);
-        } catch (e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
-            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
-            return cachedClearTimeout.call(this, marker);
-        }
-    }
-
-
-
-}
-var queue = [];
-var draining = false;
-var currentQueue;
-var queueIndex = -1;
-
-function cleanUpNextTick() {
-    if (!draining || !currentQueue) {
-        return;
-    }
-    draining = false;
-    if (currentQueue.length) {
-        queue = currentQueue.concat(queue);
-    } else {
-        queueIndex = -1;
-    }
-    if (queue.length) {
-        drainQueue();
-    }
-}
-
-function drainQueue() {
-    if (draining) {
-        return;
-    }
-    var timeout = runTimeout(cleanUpNextTick);
-    draining = true;
-
-    var len = queue.length;
-    while(len) {
-        currentQueue = queue;
-        queue = [];
-        while (++queueIndex < len) {
-            if (currentQueue) {
-                currentQueue[queueIndex].run();
-            }
-        }
-        queueIndex = -1;
-        len = queue.length;
-    }
-    currentQueue = null;
-    draining = false;
-    runClearTimeout(timeout);
-}
-
-process.nextTick = function (fun) {
-    var args = new Array(arguments.length - 1);
-    if (arguments.length > 1) {
-        for (var i = 1; i < arguments.length; i++) {
-            args[i - 1] = arguments[i];
-        }
-    }
-    queue.push(new Item(fun, args));
-    if (queue.length === 1 && !draining) {
-        runTimeout(drainQueue);
-    }
-};
-
-// v8 likes predictible objects
-function Item(fun, array) {
-    this.fun = fun;
-    this.array = array;
-}
-Item.prototype.run = function () {
-    this.fun.apply(null, this.array);
-};
-process.title = 'browser';
-process.browser = true;
-process.env = {};
-process.argv = [];
-process.version = ''; // empty string to avoid regexp issues
-process.versions = {};
-
-function noop() {}
-
-process.on = noop;
-process.addListener = noop;
-process.once = noop;
-process.off = noop;
-process.removeListener = noop;
-process.removeAllListeners = noop;
-process.emit = noop;
-process.prependListener = noop;
-process.prependOnceListener = noop;
-
-process.listeners = function (name) { return [] }
-
-process.binding = function (name) {
-    throw new Error('process.binding is not supported');
-};
-
-process.cwd = function () { return '/' };
-process.chdir = function (dir) {
-    throw new Error('process.chdir is not supported');
-};
-process.umask = function() { return 0; };
-
+customElements.define('app-files', AppFiles);
 
 /***/ }),
 /* 195 */
+/***/ (function(module, exports) {
+
+module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n\n  app-file-manager {\n    margin-bottom: 75px;\n  }\n\n  .examples {\n    display: flex;\n    align-items: center;\n  }\n\n  .examples :first-child {\n    flex: 1;\n  }\n\n  .examples paper-button {\n    font-size: 14px;\n    color: var(--default-secondary-color);\n  }\n\n  [slot=\"help\"] {\n    margin-bottom: 20px;\n    font-size: 14px;\n    color: var(--secondary-text-color);\n  }\n</style>\n\n<app-file-manager \n  label=\"Coefficients\" \n  directory=\"/coefficients\"\n  color=\"lightblue\">\n  <div slot=\"help\">Upload model coefficients.  These should be in CSV format.</div>\n</app-file-manager>\n\n<app-file-manager \n  label=\"Source\" \n  directory=\"/main\"\n  color=\"green\">\n  <div slot=\"help\">Upload model source code.</div>\n</app-file-manager>\n\n<app-file-manager \n  label=\"Papers\" \n  directory=\"/papers\"\n  color=\"dark\">\n  <div slot=\"help\" class=\"help\">Upload any published work or additional documentation you wish\n    to have associated with this package.  Can't provide the papers directly?  Feel \n    free to upload a simple text file with links to journal article(s).\n  </div>\n</app-file-manager>\n\n\n<h2 class=\"examples uheader blue\">\n  <div>Examples</div>\n  <paper-button on-click=\"_onCreateExampleClicked\">\n    <iron-icon icon=\"add\"></iron-icon> Create\n  </paper-button>\n</h2>\n\n<div class=\"help\">\n  Given a small (less than 100) sample\n  of spectra and optional transform the model should produce the exact output file provided.\n  Examples provide two very important features.:\n  \n  <ul>\n    <li>\n        The example code will be tested and if the provided spectra input matches the \n        provided model output the package will be given a \n        <span style=\"color:green\">Verified</span> status.\n    </li>\n    <li>\n        Examples are a great way for others to learn about the model and see it in action.  \n        A quality example can go a long way to showing others how they can use the model \n        for their own purposes.\n    </li>\n  </ul>\n</div>\n\n<template is=\"dom-repeat\" items=\"[[examples]]\">\n  <app-example-editor \n    label=\"[[item.label]]\" \n    directory=\"[[item.directory]]\"\n    open=\"[[item.isNew]]\">\n  </app-example-editor>\n</template>\n";
+
+/***/ }),
+/* 196 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_file_manager_html__ = __webpack_require__(196);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_file_manager_html__ = __webpack_require__(197);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_file_manager_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_file_manager_html__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_file_uploader__ = __webpack_require__(197);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_file_uploader__ = __webpack_require__(198);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__interfaces_PackageInterface__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__interfaces_PackageInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__interfaces_PackageInterface__);
 
@@ -36616,6 +36396,10 @@ class AppFileManager extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polymer_
       currentPackageId : {
         type : String,
         value : ''
+      },
+      color : {
+        type : String,
+        value : ''
       }
     }
   }
@@ -36623,9 +36407,31 @@ class AppFileManager extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polymer_
   constructor() {
     super();
     this.active = true;
+    this.currentPackageId = this._getSelectedPackageId().id;
   }
 
+  /**
+   * @method removeByBasePath
+   * @description given a base file path, remove all files matching this path.
+   * Good for after a move operation.
+   * 
+   * @param {String} path base path to remove
+   */
+  removeByBasePath(path) {
+    let re = new RegExp('^'+path);
+    for( let i = this.files.length - 1; i >= 0; i-- ) {
+      if( this.files[i].dir.match(re) ) {
+        this.files.splice(i, 1);
+      }
+    }
+  }
 
+  /**
+   * @method _onFileUpdate
+   * @description via PackageInterface, called whenever a file is updated
+   * 
+   * @param {Object} e 
+   */
   _onFileUpdate(e) {
     if( e.payload.dir !== this.directory ) return;
     if( e.state === 'deleted' ) return this._onFileRemoved(e.payload);
@@ -36698,7 +36504,7 @@ class AppFileManager extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polymer_
   _addFile(file) {
     clearTimeout(this.fileUpdateTimer);
 
-    let index = this.files.findIndex(f => f.id == file.id);
+    let index = this.files.findIndex(f => f.id === file.id);
     if( index > -1 ) this.files[index] = file;
     else this.files.push(file);
 
@@ -36732,20 +36538,20 @@ class AppFileManager extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polymer_
 customElements.define('app-file-manager', AppFileManager);
 
 /***/ }),
-/* 196 */
+/* 197 */
 /***/ (function(module, exports) {
 
-module.exports = "<style>\n  :host {\n    display: block;\n  } \n\n  input {\n    display: none;\n  }\n\n  .inputfile + label {\n    font-size: 1.25em;\n    font-weight: 700;\n    color: white;\n    background-color: black;\n    display: inline-block;\n  }\n\n  input:focus + label,\n  input + label:hover {\n    background-color: red;\n  }\n\n  .layout {\n    display: flex;\n    align-items: center;\n  }\n\n  #dropbox {\n    border: 1px dashed var(--secondary-text-color);\n    padding: 15px;\n    margin: 5px;\n    border-radius: 8px;\n  }\n\n  #dropbox .droplabel {\n    transition: transform 350ms linear;\n    will-change: transform;\n    transform: scale(1);\n    font-size: 14px;\n    color : var(--secondary-text-color);\n  }\n\n  #dropbox.hover {\n    border: 1px dashed var(--default-primary-color);\n    background-color: var(--default-background-color);\n  }\n\n  #dropbox.hover .droplabel {\n    transform: scale(1.25) translateX(15px);\n    color: var(--default-primary-color);\n  }\n\n  paper-button {\n    background-color: var(--default-primary-color);\n    color: white;\n  }\n</style>\n\n<h2>[[label]]</h2>\n<div>[[description]]</div>\n<div id=\"dropbox\" on-dragover=\"_onDropBoxDragOver\" on-dragleave=\"_onDropBoxDragLeave\" on-drop=\"_onDropBoxDrop\">\n  <div class=\"layout\">\n    <div>\n      <input type=\"file\" multiple id=\"fileInput\" on-change=\"_onFileInputChange\" />\n      <paper-button on-click=\"_onChooseClicked\">Choose File</paper-button>\n    </div>\n    <div class=\"droplabel\">\n      Drag and drop files here\n    </div>\n  </div>\n\n  <div>\n    <template is=\"dom-repeat\" items=\"[[files]]\">\n      <app-file-uploader \n        data=\"[[item]]\" \n        package-id=\"[[currentPackageId]]\">\n      </app-file-uploader>\n    </template>\n  </div>\n</div>";
+module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  } \n\n  input {\n    display: none;\n  }\n\n  .inputfile + label {\n    font-size: 1.25em;\n    font-weight: 700;\n    color: white;\n    background-color: black;\n    display: inline-block;\n  }\n\n  input:focus + label,\n  input + label:hover {\n    background-color: red;\n  }\n\n  .layout {\n    display: flex;\n    align-items: center;\n  }\n\n  #dropbox {\n    border: 1px solid var(--dark-background-color);\n    /* border: 1px dashed var(--secondary-text-color); */\n    padding: 15px;\n    border-radius: 6px;\n  }\n\n  #dropbox .droplabel {\n    transition: transform 350ms linear;\n    will-change: transform;\n    transform: scale(1);\n    font-size: 14px;\n    color : var(--secondary-text-color);\n  }\n\n  #dropbox.hover {\n    border: 1px dashed var(--default-primary-color);\n    background-color: var(--default-background-color);\n  }\n\n  #dropbox.hover .droplabel {\n    transform: scale(1.25) translateX(15px);\n    color: var(--default-primary-color);\n  }\n\n  paper-button {\n    background-color: var(--default-primary-color);\n    color: white;\n  }\n\n  .help {\n    color: var(--secondary-text-color);\n    font-size: 14px;\n  }\n</style>\n\n<h2 class=\"uheader\" color$=\"[[color]]\" hidden$=\"[[!label]]\">[[label]]</h2>\n<div class=\"help\"><slot name=\"help\"></slot></div>\n\n<div id=\"dropbox\" on-dragover=\"_onDropBoxDragOver\" on-dragleave=\"_onDropBoxDragLeave\" on-drop=\"_onDropBoxDrop\">\n  <div class=\"layout\">\n    <div>\n      <input type=\"file\" multiple id=\"fileInput\" on-change=\"_onFileInputChange\" />\n      <paper-button on-click=\"_onChooseClicked\">Choose File</paper-button>\n    </div>\n    <div class=\"droplabel\">\n      Drag and drop files here\n    </div>\n  </div>\n\n  <div>\n    <template is=\"dom-repeat\" items=\"[[files]]\">\n      <app-file-uploader \n        data=\"[[item]]\" \n        package-id=\"[[currentPackageId]]\">\n      </app-file-uploader>\n    </template>\n  </div>\n</div>";
 
 /***/ }),
-/* 197 */
+/* 198 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_file_uploader_html__ = __webpack_require__(198);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_file_uploader_html__ = __webpack_require__(199);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_file_uploader_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_file_uploader_html__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__polymer_paper_progress_paper_progress__ = __webpack_require__(199);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__polymer_paper_progress_paper_progress__ = __webpack_require__(200);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__interfaces_PackageInterface__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__interfaces_PackageInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__interfaces_PackageInterface__);
 
@@ -36936,19 +36742,19 @@ class AppFileUploader extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polymer
 customElements.define('app-file-uploader', AppFileUploader);
 
 /***/ }),
-/* 198 */
+/* 199 */
 /***/ (function(module, exports) {
 
 module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n\n  .layout {\n    display: flex;\n    align-items: center;\n  }\n\n  paper-progress {\n    width: 100%;\n    --paper-progress-active-color: var(--default-primary-color);\n  }\n\n  paper-progress[error] {\n    --paper-progress-active-color: red;\n  }\n\n  .upload-text {\n    font-size: 12px;\n    color: var(--secondary-text-color);\n  }\n\n  .upload-text[error] {\n    color: red;\n  }\n\n  @keyframes spin {\n    from {transform:rotate(0deg);}\n    to {transform:rotate(360deg);}\n  }\n  iron-icon {\n    padding: 8px;\n    animation: spin 3s infinite linear;\n  }\n</style>\n\n<div class=\"layout\">\n  <div style=\"flex:1\">[[data.filename]]</div>\n  <div hidden$=\"[[error]]\">\n    <paper-icon-button hidden$=\"[[committing]]\" icon=\"close\" on-click=\"_onRemoveClicked\"></paper-icon-button>\n    <iron-icon hidden$=\"[[!committing]]\" icon=\"autorenew\"></iron-icon>\n  </div>\n  <div hidden$=\"[[!error]]\">\n    <paper-icon-button icon=\"autorenew\" on-click=\"_onResendIconClicked\"></paper-icon-button>\n  </div>\n</div>\n<div hidden$=\"[[!uploading]]\">\n  <div class=\"upload-text\" error$=\"[[error]]\">[[uploadText]]</div>\n  <paper-progress value=\"[[uploadPercent]]\" error$=\"[[error]]\" min=\"0\" max=\"100\" class=\"red\"></paper-progress>\n</div>";
 
 /***/ }),
-/* 199 */
+/* 200 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__iron_flex_layout_iron_flex_layout_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_range_behavior_iron_range_behavior_js__ = __webpack_require__(200);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__iron_range_behavior_iron_range_behavior_js__ = __webpack_require__(201);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__paper_styles_color_js__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__ = __webpack_require__(3);
 
@@ -37306,7 +37112,7 @@ Object(__WEBPACK_IMPORTED_MODULE_4__polymer_lib_legacy_polymer_fn_js__["a" /* Po
 
 
 /***/ }),
-/* 200 */
+/* 201 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -37418,16 +37224,387 @@ const IronRangeBehavior = {
 
 
 /***/ }),
-/* 201 */
+/* 202 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_package_search_html__ = __webpack_require__(202);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_example_editor_html__ = __webpack_require__(203);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_example_editor_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_example_editor_html__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_PackageInterface__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_PackageInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__interfaces_PackageInterface__);
+
+
+
+
+
+class AppExampleEditor extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__["a" /* Element */])
+  .with(EventInterface, __WEBPACK_IMPORTED_MODULE_2__interfaces_PackageInterface___default.a) {
+
+  static get template() {
+    return __WEBPACK_IMPORTED_MODULE_1__app_example_editor_html___default.a;
+  }
+
+  static get properties() {
+    return {
+      open : {
+        type : Boolean,
+        value : false,
+        observer : '_onOpenChange'
+      },
+
+      directory : {
+        type : String,
+        value : ''
+      },
+
+      label : {
+        type : String,
+        value : '',
+        observer : "_onLabelChange"
+      },
+
+      disabled : {
+        type : Boolean,
+        value : false
+      },
+
+      inputDir : {
+        type : String,
+        value : ''
+      },
+
+      outputDir : {
+        type : String,
+        value : ''
+      },
+
+      transformDir : {
+        type : String,
+        value : ''
+      }
+    }
+  }
+
+  constructor() {
+    super();
+    this._updatePanelHeight = this._updatePanelHeight.bind(this);
+  }
+
+  attachedCallback() {
+    super.attachedCallback();
+    window.addEventListener('resize', this._updatePanelHeight);
+  }
+
+  dettachedCallback() {
+    super.dettachedCallback();
+    window.removeEventListener('resize', this._updatePanelHeight);
+  }
+
+  /**
+   * @method toggle
+   * @description toggle visibility of main panel
+   */
+  toggle() {
+    this.open = !this.open;
+  }
+
+  /**
+   * @method _onOpenChange
+   * @description fired from property observer.  called when open value changes
+   */
+  _onOpenChange() {
+    this._updatePanelHeight();
+  }
+
+  /**
+   * @method _updatePanelHeight
+   * @description make sure main panel is set to correct height
+   */
+  _updatePanelHeight() {
+    if( !this.open ) this.$.panel.style.display = 'none';
+    else this.$.panel.style.display = 'block';
+  }
+
+  /**
+   * @method _onFileUpdate
+   * @description via PackageInterface, called whenever a file is updated
+   * 
+   * @param {Object} e 
+   */
+  _onFileUpdate(e) {
+    if( e.payload.dir !== this.directory ) return;
+    this._updatePanelHeight();
+  }
+
+  /**
+   * @method _onExampleNameChange
+   * @description fired from the name input on-change event
+   */
+  async _onExampleNameChange() {
+    let src = this.label;
+    let dst = this._cleanLabelName(this.$.name.value);
+    let packageId = this._getSelectedPackageId().id;
+    
+    this.$.name.disabled = true;
+    let helpTxt = this.$.name.help;
+    this.$.name.help = 'Renaming example ...';
+    this.disabled = true;
+
+    try {
+      await this._moveExampleDirectory(packageId, src, dst);
+
+      // remove all old files
+      ['input', 'transform', 'output'].forEach(id => {
+        this.$[id].removeByBasePath(`/examples/${src}`);
+      });
+    } catch(e) {
+      // noop?
+    }
+
+
+
+    this.disabled = false;
+    this.$.name.disabled = false;
+    this.$.name.help = helpTxt;
+    this.label = dst;
+  }
+
+  async _onDeleteClicked() {
+    try {
+      this._deleteExampleDirectory(packageId, this.label);
+    } catch(e) {
+      // noop?
+    }
+
+    this.fire('example-deleted', {label: this.label});
+  }
+
+  _onLabelChange() {
+    this.$.name.value = this.label;
+    this.directory = '/examples/'+this.label;
+    this.inputDir = this.directory+'/input';
+    this.outputDir = this.directory+'/output';
+    this.transfromDir = this.directory+'/transform';
+  }
+
+  _cleanLabelName(txt) {
+    return txt.toLowerCase()
+      .replace(/( |-)/g, '_')
+      .replace(/\W/g, '');
+  }
+
+}
+/* unused harmony export default */
+
+
+customElements.define('app-example-editor', AppExampleEditor);
+
+/***/ }),
+/* 203 */
+/***/ (function(module, exports) {
+
+module.exports = "<style include=\"shared-styles\">\n  :host {\n    margin: 10px 0;\n    display: block;\n  }\n\n  h3 {\n    flex: 1;\n    margin : 0;\n    padding : 5px;\n    border-bottom: 1px solid var(--dark-background-color);\n  }\n\n  #toggle {\n    display: flex;\n    align-items: center;\n  }\n\n  #toggle:hover {\n    color: var(--default-secondary-color);\n    cursor: pointer;\n  }\n\n  #toggle iron-icon {\n    transform: rotate(0);\n    transition: transform 250ms ease-out;\n    will-change: transfrom;\n  }\n\n  #toggle[open] iron-icon {\n    transform: rotate(90deg);\n  }\n\n  @keyframes spin {\n    from {\n      transform: scale(0.9);\n      opacity: 0.3;\n    }\n    to {\n      transform: scale(1);\n      opacity: 1;\n    }\n  }\n  #panel {\n    animation: spin 250ms ease-out;\n    /* overflow: hidden; */\n    /* height: 0; */\n    /* transition: height 250ms linear; */\n  }\n\n  [not-visible] {\n    visibility: hidden;\n  }\n\n  #reveal {\n    padding: 15px 0 15px 25px;\n  }\n\n  .manager-label {\n    margin-top: 15px;\n  }\n\n</style>\n\n<div id=\"toggle\" open$=\"[[open]]\" on-click=\"toggle\">\n  <iron-icon icon=\"chevron-right\"></iron-icon>\n  <h3>[[label]]</h3>\n</div>\n\n<div id=\"panel\" open$=\"[[open]]\">\n  <div id=\"reveal\">\n    <app-text-input \n      id=\"name\" \n      label=\"Example Name\" \n      on-change=\"_onExampleNameChange\"\n      help=\"Set or change the examples name\">\n    </app-text-input>\n\n    <div not-visible$=\"[[disabled]]\">\n      <div class=\"manager-label\">Input</div>\n      <app-file-manager\n        id=\"input\" \n        color=\"blue\"\n        directory=\"[[inputDir]]\">\n        <div slot=\"help\">Input spectra for this example (csv).</div>\n      </app-file-manager>\n      \n      <div class=\"manager-label\">Transform</div>\n      <app-file-manager \n        id=\"transform\"\n        color=\"blue\" \n        directory=\"[[transfromDir]]\">\n        <div slot=\"help\">Optional transform code to apply to spectra.  Required if your input spectra\n          needs to be manipulated before being passed to model source code.\n        </div>\n      </app-file-manager>\n      \n      <div class=\"manager-label\">Output</div>\n      <app-file-manager \n        id=\"output\"\n        color=\"blue\" \n        directory=\"[[outputDir]]\">\n        <div slot=\"help\">\n          Model output (csv).  This file should exactly match the output from the model\n          given the provided example input and optional transform.\n        </div>\n      </app-file-manager>\n\n    </div>\n  </div>\n</div>";
+
+/***/ }),
+/* 204 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_releases_html__ = __webpack_require__(205);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_releases_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_releases_html__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_PackageInterface__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_PackageInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__interfaces_PackageInterface__);
+
+
+
+
+
+class AppReleases extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__["a" /* Element */])
+  .with(EventInterface, __WEBPACK_IMPORTED_MODULE_2__interfaces_PackageInterface___default.a) {
+
+  static get template() {
+    return __WEBPACK_IMPORTED_MODULE_1__app_releases_html___default.a;
+  }
+
+  static get properties() {
+    return {
+      releases : {
+        type : Array,
+        value : () => [],
+        observer : '_onReleasesUpdate'
+      },
+      releasesInverse : {
+        type : Array,
+        value : () => []
+      },
+      package : {
+        type : Object,
+        value : () => {},
+        observer : '_tmp'
+      },
+      creating : {
+        type : Boolean,
+        value : false
+      },
+      saving : {
+        type : Boolean,
+        value : false
+      },
+      release : {
+        type : String,
+        value : ''
+      }
+    }
+  }
+
+  _tmp() {
+    console.log(this.package);
+  }
+
+  get major() {
+    return parseInt(this.$.major.value) || 0;
+  }
+
+  set major(val) {
+    this.$.major.value = val+'';
+  }
+
+  get minor() {
+    return parseInt(this.$.minor.value) || 0;
+  }
+
+  set minor(val) {
+    this.$.minor.value = val+'';
+  }
+
+  get patch() {
+    return parseInt(this.$.patch.value) || 0;
+  }
+
+  set patch(val) {
+    this.$.patch.value = val+'';
+  }
+
+  /**
+   * @method _toggleCreate
+   * @description called from top right create/cancel buttons
+   */
+  _toggleCreate() {
+    this.creating = !this.creating;
+
+    if( this.creating ) {
+      this.$.description.value = '';
+      this._render();
+    }
+  }
+
+  /**
+   * @method showList
+   * @description show the releases list
+   */
+  showList() {
+    this.creating = false;
+  }
+
+  /**
+   * @method _onReleasesUpdate
+   * @description called from releases property observer
+   */
+  _onReleasesUpdate() {
+    let index = this.releases.length-1;
+    if( index === -1 ) {
+      this.release = '';
+      this._render();
+      return;
+    }
+
+    this.releases[index].latest = true;
+    this.releasesInverse = this.releases.slice().reverse();
+
+    this.release = this.releases[index].name;
+    this._render();
+    this.patch++;
+  }
+
+  /**
+   * @method _render
+   * @description called whenever the release string updates, set the input fields
+   */
+  _render() {
+    if( !this.release ) {
+      this.major = 0;
+      this.minor = 0;
+      this.patch = 1;
+      return;
+    }
+
+    let parts = this.release.replace(/^v/, '').split('.');
+    if( parts.length < 3 ) return;
+
+    this.major = parts[0];
+    this.minor = parts[1];
+    this.patch = parts[2];
+  }
+
+  /**
+   * @method _onInputChange
+   * @description called whenever a input field changes due to user input, set
+   * the release string.
+   */
+  _onInputChange() {
+    this.release = `v${this.major}.${this.minor}.${this.patch}`;
+  }
+
+  /**
+   * @method _onCreateClicked
+   * @description called when the create button is clicked
+   */
+  async _onCreateClicked() {
+    if( !this.release ) alert('Please enter a valid release');
+
+    let info = {
+      name : `v${this.major}.${this.minor}.${this.patch}`,
+      description : this.$.description.value
+    }
+
+    try {
+      this.saving = true;
+      await this._createRelease(this.package.name, info);
+      alert('Release '+info.name+' created');
+      this.showList();
+    } catch(e) {
+      let body = await e.details.json()
+      alert(body.message);
+    }
+
+    this.saving = false;
+  }
+
+}
+/* unused harmony export default */
+
+
+customElements.define('app-releases', AppReleases);
+
+/***/ }),
+/* 205 */
+/***/ (function(module, exports) {
+
+module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n\n  .layout {\n    display: flex;\n    align-items: flex-end;\n  }\n\n  .layout input {\n    width: 100%;\n  }\n\n  .period {\n    font-size: 40px;\n  }\n\n  paper-button {\n    font-size: 14px;\n    color: var(--light-secondary-color);\n  }\n</style>\n\n<h2 class=\"uheader lightblue\" style=\"display:flex; align-items: center\">\n  <div style=\"flex:1\">Releases</div>\n  <div>\n    <paper-button hidden$=\"[[creating]]\" on-click=\"_toggleCreate\"><iron-icon icon=\"add\"></iron-icon> Create</paper-button>\n    <paper-button hidden$=\"[[!creating]]\" on-click=\"_toggleCreate\">Cancel</paper-button>\n  </div>\n</h2>\n\n<div hidden$=\"[[!creating]]\">\n  <div class=\"layout\">\n    <div>\n      <div>Major</div>\n      <input type=\"number\" id=\"major\" placeholder=\"1\" on-change=\"_onInputChange\" />\n    </div>\n    <div class=\"period\">.</div>\n    <div>\n      <div>Minor</div>\n      <input type=\"number\" id=\"minor\" placeholder=\"0\" on-change=\"_onInputChange\" />\n    </div>\n    <div class=\"period\">.</div>\n    <div>\n      <div>Patch</div>\n      <input type=\"number\" id=\"patch\" placeholder=\"0\" on-change=\"_onInputChange\" />\n    </div>\n  </div>\n  <div>\n    <input type=\"text\" placeholder=\"Release description\" id=\"description\" style=\"width: 100%\" />\n  </div>\n\n  <div style=\"text-align: right\">\n    <a href=\"https://semver.org/\" target=\"_blank\">Versioning Help</a>\n  </div>\n  <div><paper-button on-click=\"_onCreateClicked\" disabled$=\"[[saving]]\">Create Release</paper-button></div>\n</div>\n\n<div hidden$=\"[[creating]]\">\n  <div><a href=\"[[package.htmlUrl]]/releases\" target=\"_blank\">View on GitHub</a></div>\n  <template is=\"dom-repeat\" items=\"[[releasesInverse]]\">\n    <div>\n      <h4>[[item.name]]</h4>\n      <div>[[item.body]]</div>\n      <div>Published [[item.publishedAt]]</div>\n      <div><a href$=\"[[item.zipballUrl]]\">Download</a></div>\n    </div>\n  </template>\n</div>\n";
+
+/***/ }),
+/* 206 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_package_search_html__ = __webpack_require__(207);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_package_search_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_package_search_html__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_search_header__ = __webpack_require__(203);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__filters_app_filters_panel__ = __webpack_require__(207);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__results_app_search_results_panel__ = __webpack_require__(211);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_search_header__ = __webpack_require__(208);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__filters_app_filters_panel__ = __webpack_require__(212);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__results_app_search_results_panel__ = __webpack_require__(216);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__interfaces_SearchInterface__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__interfaces_SearchInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__interfaces_SearchInterface__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__interfaces_AppStateInterface__ = __webpack_require__(17);
@@ -37511,24 +37688,24 @@ class AppPackageSearch extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polyme
 customElements.define('app-package-search', AppPackageSearch);
 
 /***/ }),
-/* 202 */
+/* 207 */
 /***/ (function(module, exports) {
 
 module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n\n  .layout {\n    display: flex;\n    justify-content: center;\n  }\n\n  .inner-layout {\n    background-color: white;\n    display: flex;\n    width: 100%;\n    max-width: 1200px;\n    padding: 20px;\n    margin-top: 20px;\n  }\n\n  app-filters-panel {\n    width: 100%;\n    max-width: 300px;\n  }\n</style>\n\n<app-search-header></app-search-header>\n\n<div class=\"layout\">\n  <div class=\"inner-layout\">\n    <app-filters-panel></app-filters-panel>\n    <app-search-results-panel style=\"flex:1\"></app-search-results-panel>\n  </div>\n</div>\n\n";
 
 /***/ }),
-/* 203 */
+/* 208 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_search_header_html__ = __webpack_require__(204);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_search_header_html__ = __webpack_require__(209);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_search_header_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_search_header_html__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_AppStateInterface__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_AppStateInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__interfaces_AppStateInterface__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__interfaces_SearchInterface__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__interfaces_SearchInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__interfaces_SearchInterface__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__filters_app_active_filters_panel__ = __webpack_require__(205);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__filters_app_active_filters_panel__ = __webpack_require__(210);
 
 
 
@@ -37597,18 +37774,18 @@ class AppSearchHeader extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polymer
 customElements.define('app-search-header', AppSearchHeader);
 
 /***/ }),
-/* 204 */
+/* 209 */
 /***/ (function(module, exports) {
 
 module.exports = "<style>\n  :host {\n    display: block;\n    background-color: var(--text-primary-color);\n  }\n  .root {\n    display: flex;\n    justify-content: center;\n  }\n  input {\n    display: block;\n    width: 100%;\n    padding: 5px;\n    font-size: 26px;\n    margin: 15px 0;\n    height: 42px;\n    background: transparent;\n    color: var(--inverse-text-color);\n    border: 1px solid var(--inverse-text-color);\n    box-sizing: border-box;\n  }\n  button {\n    margin: 15px 0;\n    color : var(--inverse-text-color);\n    background: transparent;\n    height: 42px;\n    padding: 0 15px;\n    border-right: 1px solid var(--inverse-text-color);\n    border-top: 1px solid var(--inverse-text-color);\n    border-bottom: 1px solid var(--inverse-text-color);\n    border-left: none;\n    border-radius: 0;\n  }\n</style>\n\n<div class=\"root\">\n  <div style=\"flex:.66\">\n    <input type=\"text\" id=\"input\" on-keypress=\"_onKeyPress\"/>\n  </div>\n  <div>\n    <button on-click=\"_onButtonClick\">\n      <iron-icon icon=\"search\"></iron-icon>\n    </button>\n  </div>\n</div>\n\n<div class=\"root\">\n<app-active-filters-panel style=\"flex:.66\"></app-active-filters-panel>\n</div>";
 
 /***/ }),
-/* 205 */
+/* 210 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_active_filters_panel_html__ = __webpack_require__(206);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_active_filters_panel_html__ = __webpack_require__(211);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_active_filters_panel_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_active_filters_panel_html__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_SearchInterface__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_SearchInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__interfaces_SearchInterface__);
@@ -37668,22 +37845,22 @@ class AppActiveFiltersPanel extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_p
 customElements.define('app-active-filters-panel', AppActiveFiltersPanel);
 
 /***/ }),
-/* 206 */
+/* 211 */
 /***/ (function(module, exports) {
 
 module.exports = "<style>\n  :host {\n    display: block;\n  }\n\n  @keyframes show-button {\n    0%   { opacity: 0; transform: scale(0) }\n    100% { opacity: 1; transform: scale(1) }\n  }\n  paper-button {\n    color: var(--inverse-text-color);\n    border: 1px solid var(--inverse-text-color);\n    border-radius: 0;\n    padding: 4px;\n    font-size: 14px;\n\n    animation: show-button 300ms ease-out;\n  }\n\n  [has-filters] {\n    margin-bottom: 15px;\n  }\n\n  .btn-layout {\n    display: flex;\n    align-items: center;\n  }\n</style>\n\n<div has-filters$=\"[[hasFilters]]\"> \n  <template is=\"dom-repeat\" items=\"[[filters]]\">\n    <paper-button index$=\"[[index]]\" on-click=\"_onRemoveFilterClicked\">\n      <div class=\"btn-layout\">\n        <iron-icon icon=\"close\"></iron-icon>\n        <span>[[item.key]]: [[item.value]]</span>\n      </div>\n    </paper-button>\n  </template>\n</div>";
 
 /***/ }),
-/* 207 */
+/* 212 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_filters_panel_html__ = __webpack_require__(208);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_filters_panel_html__ = __webpack_require__(213);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_filters_panel_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_filters_panel_html__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_SearchInterface__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_SearchInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__interfaces_SearchInterface__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_filter_panel__ = __webpack_require__(209);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_filter_panel__ = __webpack_require__(214);
 
 
 
@@ -37740,18 +37917,18 @@ class AppFiltersPanel extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polymer
 customElements.define('app-filters-panel', AppFiltersPanel);
 
 /***/ }),
-/* 208 */
+/* 213 */
 /***/ (function(module, exports) {
 
 module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n  .title {\n    display: flex;\n    align-items: center;\n  }\n  .title h2 {\n    flex: 1;\n  }\n  .clear-filters {\n    display: none;\n  }\n  .clear-filters[active] {\n    display: inline-block;\n  }\n</style>\n\n<div class=\"title\">\n  <h2>Filters</h2>\n  <button class=\"clear-filters\">Clear Filters</button>\n</div>\n\n<div hidden$=\"[[hasFilters]]\">\n  No additional filters for current search\n</div>\n\n<template is=\"dom-repeat\" items=\"[[filters]]\">\n  <app-filter-panel filter=\"[[item]]\"></app-filter-panel>\n</template>";
 
 /***/ }),
-/* 209 */
+/* 214 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_filter_panel_html__ = __webpack_require__(210);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_filter_panel_html__ = __webpack_require__(215);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_filter_panel_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_filter_panel_html__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_SearchInterface__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_SearchInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__interfaces_SearchInterface__);
@@ -37803,22 +37980,22 @@ class AppFilterPanel extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polymer_
 customElements.define('app-filter-panel', AppFilterPanel);
 
 /***/ }),
-/* 210 */
+/* 215 */
 /***/ (function(module, exports) {
 
 module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n  a {\n    cursor: pointer;\n    color: var(--default-primary-color);\n  }\n</style>\n\n\n<div><b>[[filter.key]]</b></div>\n\n<template is=\"dom-repeat\" items=\"[[filter.values]]\">\n  <div><a on-click=\"_onFilterClicked\" filter$=\"[[item.filter]]\">[[item.filter]] ([[item.count]])</a></div>\n</template>\n";
 
 /***/ }),
-/* 211 */
+/* 216 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_search_results_panel_html__ = __webpack_require__(212);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_search_results_panel_html__ = __webpack_require__(217);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_search_results_panel_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_search_results_panel_html__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_SearchInterface__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_SearchInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__interfaces_SearchInterface__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_search_result__ = __webpack_require__(213);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_search_result__ = __webpack_require__(218);
 
 
 
@@ -37880,18 +38057,18 @@ class AppSearchResultsPanel extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_p
 customElements.define('app-search-results-panel', AppSearchResultsPanel);
 
 /***/ }),
-/* 212 */
+/* 217 */
 /***/ (function(module, exports) {
 
 module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n    padding: 10px;\n    min-height: 500px;\n  }\n\n  .no-match {\n    text-align: center;\n    padding-top: 50px;\n  }\n</style>\n\n<div class=\"no-match\" hidden$=\"[[hasResults]]\">\n  No packages match your current search.\n</div>\n\n<div>\n  <template is=\"dom-repeat\" items=\"[[results]]\">\n    <app-search-result item=\"[[item]]\"></app-search-result>\n  </template>\n</div>";
 
 /***/ }),
-/* 213 */
+/* 218 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_search_result_html__ = __webpack_require__(214);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_search_result_html__ = __webpack_require__(219);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_search_result_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_search_result_html__);
 
 
@@ -37918,18 +38095,18 @@ class AppSearchResult extends __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polym
 customElements.define('app-search-result', AppSearchResult);
 
 /***/ }),
-/* 214 */
+/* 219 */
 /***/ (function(module, exports) {
 
 module.exports = "<style>\n  :host {\n    display: block;\n    border-bottom: 1px solid var(--default-background-color);\n  }\n\n  a {\n    color: var(--default-primary-color);\n    text-decoration: none;\n  }\n</style>\n\n<h2><a href$=\"/package/[[item.id]]\">[[item.name]]</a></h2>\n<div>[[item.overview]]</div>";
 
 /***/ }),
-/* 215 */
+/* 220 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_home_html__ = __webpack_require__(216);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_home_html__ = __webpack_require__(221);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_home_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_home_html__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_AuthInterface__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_AuthInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__interfaces_AuthInterface__);
@@ -37980,18 +38157,18 @@ class AppHome extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer
 customElements.define('app-home', AppHome);
 
 /***/ }),
-/* 216 */
+/* 221 */
 /***/ (function(module, exports) {
 
 module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n \n  .root {\n    display: flex;\n    justify-content: center;\n  }\n  .root > div {\n    margin-top: 20px;\n    padding: 40px;\n    background-color: white;\n    width: 100%;\n    max-width: 1200px;\n    min-height: 600px;\n  }\n\n  .row {\n    display: flex;\n  }\n  .row > * {\n    flex : 1;\n  }\n</style>\n\n<app-search-header></app-search-header>\n\n\n<div class=\"root\">\n  <h1>Ecological Spectral Model Library</h1>\n</div>\n\n<div class=\"root\">\n  <div>\n\n    <div class=\"row\" style=\"margin-bottom: 35px\">\n      <div>\n        <h2 class=\"uheader blue\">Top Organizations</h2>\n        <div>UW EnSpec </div>\n        <div>University of Utah</div>\n        <div>Foundational Datasets</div>\n        <div>The Remote Sensing Laboratory</div>\n        <div>University of California Santa Barbara</div>\n      </div>\n      <div>\n        <h2 class=\"uheader green\">Top Keywords</h2>\n        <div>nitrogen </div>\n        <div>lma</div>\n        <div>carbon</div>\n        <div>lignin</div>\n        <div>reflectance</div>\n      </div>\n      <div>\n        <h2 class=\"uheader lightblue\">Top Themes</h2>\n        <div>ecology</div>\n        <div>biochemistry</div>\n        <div>agriculture</div>\n        <div>forest</div>\n        <div>physiology</div>\n      </div>\n    </div>\n    \n    \n\n    <h2 class=\"dark\">Package Management</h2>\n    <div hidden$=\"[[!loggedIn]]\"><a href=\"/create\">Create Package</a></div>\n    <div hidden$=\"[[loggedIn]]\"><a href=\"/account\">Login to Create Package</a></div>\n  </div>\n</div>";
 
 /***/ }),
-/* 217 */
+/* 222 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_landing_page_html__ = __webpack_require__(218);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_landing_page_html__ = __webpack_require__(223);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_landing_page_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_landing_page_html__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_AppStateInterface__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_AppStateInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__interfaces_AppStateInterface__);
@@ -38150,23 +38327,23 @@ class AppLandingPage extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polymer_
 customElements.define('app-landing-page', AppLandingPage);
 
 /***/ }),
-/* 218 */
+/* 223 */
 /***/ (function(module, exports) {
 
 module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n\n  .container > * {\n    background-color: white;\n    padding: 40px;\n  }\n\n  .overview {\n    color: var(--secondary-text-color);\n  }\n\n  .install {\n    color: var(--secondary-text-color);\n    font-family: monospace;\n    font-size: 14px;\n  }\n\n  .layout {\n    display: flex;\n  }\n\n  .layout .main {\n    padding-right: 40px;\n    flex: 1;\n  }\n  \n  h2.padded {\n    padding-top: 40px;\n  }\n  \n  #readme {\n    margin-top: 40px;\n  }\n</style>\n\n<h2 style=\"text-align: center\">[[package.name]]</h2>\n\n<div class=\"container\">\n\n  <div class=\"layout\">\n    <div class=\"main\">\n      <div class=\"overview\">[[package.overview]]</div>\n      <app-markdown id=\"readme\"></app-markdown>\n    </div>\n    \n    <div style=\"width: 300px\">\n      <div class=\"install\">\n        <iron-icon icon=\"chevron-right\"></iron-icon>ecosml download [[package.name]]\n      </div>\n      <div style=\"padding-bottom: 20px\"><a>Help</a></div>\n      \n      <h2 class=\"uheader dark\">Current Release</h2>\n      <div style=\"padding-bottom: 20px\" hidden$=\"[[!release]]\">\n        <div><a href$=\"[[release.downloadUrl]]\">[[release.name]]</a></div>\n        <div>[[release.description]]</div>\n      </div>\n      <div style=\"padding-bottom: 20px\" hidden$=\"[[release]]\">\n        No releases available\n      </div>\n\n      <h2 class=\"uheader blue\">Access</h2>\n      <div hidden$=\"[[!release]]\"><a href$=\"[[release.downloadUrl]]\">Download Current Release</a></div>\n      <div hidden$=\"[[!release]]\"><a href$=\"[[package.htmlUrl]]/releases\" target=\"_blank\">All Releases</a></div>\n      <div><a href$=\"[[package.htmlUrl]]\" target=\"_blank\">GitHub</a></div>\n\n      <div hidden$=\"[[!package.theme]]\">\n        <h2 class=\"uheader green padded\">Theme</h2>\n        <div hidden$=\"[[!package.theme]]\">Theme: <a href$=\"[[themeLink]]\">[[package.theme]]</a></div>\n        <div hidden$=\"[[!package.family]]\">Family: <a href$=\"[[familyLink]]\">[[package.family]]</a></div>\n        <div hidden$=\"[[!package.specific]]\">Specific: <a href$=\"[[specificLink]]\">[[package.specific]]</a></div>\n      </div>\n\n      <div hidden$=\"[[!package.keywords]]\">\n        <h2 class=\"uheader lightblue padded\">Keywords</h2>\n        <div id=\"keywords\"></div>\n      </div>\n\n      <div hidden$=\"[[!userHasWriteAccess]]\">\n        <h2 class=\"uheader dark padded\">Admin</h2>\n        <div><a href$=\"/edit/[[package.id]]\">Edit Package</a></div>\n      </div>\n    </div>\n  </div>\n\n</div>";
 
 /***/ }),
-/* 219 */
+/* 224 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_user_account_html__ = __webpack_require__(220);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_user_account_html__ = __webpack_require__(225);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_user_account_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_user_account_html__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_AuthInterface__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_AuthInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__interfaces_AuthInterface__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__polymer_iron_pages_iron_pages__ = __webpack_require__(69);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_login__ = __webpack_require__(221);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_login__ = __webpack_require__(226);
 
 
 
@@ -38230,18 +38407,18 @@ class AppUserAccount extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polymer_
 customElements.define('app-user-account', AppUserAccount);
 
 /***/ }),
-/* 220 */
+/* 225 */
 /***/ (function(module, exports) {
 
 module.exports = "<style include=\"shared-styles\">\n  :host {\n    display : block\n  }\n</style>\n\n<iron-pages selected=\"[[view]]\" attr-for-selected=\"id\">\n  <app-login id=\"login\"></app-login>\n  <div id=\"account\">\n    <h2>Hello [[username]]</h2>\n    <div><paper-button on-click=\"_logout\">Logout</paper-button></div>\n  </div>\n</iron-pages>\n";
 
 /***/ }),
-/* 221 */
+/* 226 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_login_html__ = __webpack_require__(222);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_login_html__ = __webpack_require__(227);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_login_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_login_html__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_AuthInterface__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_AuthInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__interfaces_AuthInterface__);
@@ -38291,18 +38468,18 @@ class AppLogin extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polyme
 customElements.define('app-login', AppLogin);
 
 /***/ }),
-/* 222 */
+/* 227 */
 /***/ (function(module, exports) {
 
 module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n  .root {\n    display: flex;\n    justify-content: center;\n    flex-direction: column;\n    align-items: center;\n  }\n  .root > div {\n    margin-top: 20px;\n    padding: 40px;\n    background-color: white;\n  }\n  paper-button {\n    color: var(--default-primary-color);\n  }\n</style>\n\n<div class=\"root\">\n  <div>\n    <h2 class=\"uheader green\">Login</h2>\n\n    <div style=\"margin-top:30px\">\n      <app-text-input id=\"username\" label=\"Username\"></app-text-input>\n      <app-text-input id=\"password\" label=\"Password\" type=\"password\" on-keyup=\"_onPassKeyUp\"></app-text-input>\n    </div>\n\n    <div style=\"margin-top:20px\">\n      <paper-button on-click=\"_attemptLogin\">Login</paper-button>\n    </div>\n  </div>\n</div>";
 
 /***/ }),
-/* 223 */
+/* 228 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polymer_polymer_polymer_element__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_auth_icon_html__ = __webpack_require__(224);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_auth_icon_html__ = __webpack_require__(229);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_auth_icon_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__app_auth_icon_html__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_AuthInterface__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__interfaces_AuthInterface___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__interfaces_AuthInterface__);
@@ -38359,13 +38536,13 @@ class AppAuthIcon extends Mixin(__WEBPACK_IMPORTED_MODULE_0__polymer_polymer_pol
 customElements.define('app-auth-icon', AppAuthIcon);
 
 /***/ }),
-/* 224 */
+/* 229 */
 /***/ (function(module, exports) {
 
 module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: inline-block;\n  }\n  a {\n    text-decoration: none;\n  }\n  paper-icon-button {\n    color: var(--inverse-text-color);\n  }\n</style>\n\n<div hidden$=\"[[loggedIn]]\">\n  <a href=\"/account\" inverse>\n    <iron-icon icon=\"perm-identity\"></iron-icon>\n  </a>\n</div>\n<div style=\"display: flex; align-items:center\" hidden$=\"[[!loggedIn]]\">\n  <a href=\"/account\" inverse>\n    <iron-icon icon=\"account-circle\"></iron-icon> [[username]]</a>\n  </a>\n  <paper-icon-button icon=\"exit-to-app\" on-click=\"_logout\"></paper-icon-button>\n</div>";
 
 /***/ }),
-/* 225 */
+/* 230 */
 /***/ (function(module, exports) {
 
 module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n\n  .header {\n    display: flex;\n    align-items: center;\n    background: var(--default-primary-color);\n    padding: 10px;\n  }\n  .header [main-title] {\n    flex: 1;\n    font-size: 22px;\n  }\n  .header [main-title] small {\n    font-size: 14px;\n  }\n\n  paper-material {\n    background: white;\n    display: block;\n    padding: 10px;\n    margin: 10px;\n  }\n\n  [icon=\"menu\"], [main-title] {\n    color: var(--inverse-text-color);\n  }\n</style>\n\n<div class=\"header\">\n  <!-- <paper-icon-button icon=\"menu\" on-click=\"toggleDrawer\"></paper-icon-button> -->\n  <div main-title>EcoSML <small>Ecological Spectral Model Library</small></div>\n  <a href=\"/\" inverse><paper-icon-button icon=\"home\"></paper-icon-button></a>\n  <app-auth-icon></app-auth-icon>\n</div>\n<!-- <app-drawer id=\"drawer\" swipe-open></app-drawer> -->\n\n<app-route app-routes=\"[[appRoutes]]\"></app-route>\n\n<iron-pages selected=\"[[page]]\" attr-for-selected=\"id\">\n  <app-home id=\"home\"></app-home>\n  <app-package-metadata-editor id=\"edit\"></app-package-metadata-editor>\n  <app-package-search id=\"search\"></app-package-search>\n  <app-landing-page id=\"package\"></app-landing-page>\n  <app-user-account id=\"account\"></app-user-account>\n</iron-pages>\n\n\n";

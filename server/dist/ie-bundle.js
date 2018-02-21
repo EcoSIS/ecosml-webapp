@@ -70,7 +70,7 @@
 "use strict";
 
 
-var global = __webpack_require__(3);
+var global = __webpack_require__(4);
 var core = __webpack_require__(28);
 var hide = __webpack_require__(17);
 var redefine = __webpack_require__(18);
@@ -140,45 +140,19 @@ __webpack_require__(424);
 
 __webpack_require__(425);
 
-__webpack_require__(87);
+__webpack_require__(86);
 
 __webpack_require__(427);
 
 __webpack_require__(179);
 
-var _polymerElement = __webpack_require__(4);
+var _polymerElement = __webpack_require__(2);
 
 var Base = exports.Base = (0, _legacyElementMixin.LegacyElementMixin)(HTMLElement).prototype;
 exports.html = _polymerElement.html;
 
 /***/ }),
 /* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var isObject = __webpack_require__(6);
-module.exports = function (it) {
-  if (!isObject(it)) throw TypeError(it + ' is not an object!');
-  return it;
-};
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
-var global = module.exports = typeof window != 'undefined' && window.Math == Math ? window : typeof self != 'undefined' && self.Math == Math ? self
-// eslint-disable-next-line no-new-func
-: Function('return this')();
-if (typeof __g == 'number') __g = global; // eslint-disable-line no-undef
-
-/***/ }),
-/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -212,6 +186,32 @@ var _htmlTag = __webpack_require__(179);
 var Element = (0, _elementMixin.ElementMixin)(HTMLElement);
 exports.Element = Element;
 exports.html = _htmlTag.html;
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var isObject = __webpack_require__(6);
+module.exports = function (it) {
+  if (!isObject(it)) throw TypeError(it + ' is not an object!');
+  return it;
+};
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
+var global = module.exports = typeof window != 'undefined' && window.Math == Math ? window : typeof self != 'undefined' && self.Math == Math ? self
+// eslint-disable-next-line no-new-func
+: Function('return this')();
+if (typeof __g == 'number') __g = global; // eslint-disable-line no-undef
 
 /***/ }),
 /* 5 */
@@ -261,7 +261,7 @@ __webpack_require__(63);
 
 var _flattenedNodesObserver = __webpack_require__(419);
 
-var _flush = __webpack_require__(85);
+var _flush = __webpack_require__(84);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -702,9 +702,9 @@ var Polymer = exports.Polymer = function Polymer(info) {
 "use strict";
 
 
-var store = __webpack_require__(67)('wks');
+var store = __webpack_require__(66)('wks');
 var uid = __webpack_require__(42);
-var _Symbol = __webpack_require__(3).Symbol;
+var _Symbol = __webpack_require__(4).Symbol;
 var USE_SYMBOL = typeof _Symbol == 'function';
 
 var $exports = module.exports = function (name) {
@@ -748,7 +748,7 @@ module.exports = !__webpack_require__(5)(function () {
 "use strict";
 
 
-var anObject = __webpack_require__(2);
+var anObject = __webpack_require__(3);
 var IE8_DOM_DEFINE = __webpack_require__(134);
 var toPrimitive = __webpack_require__(29);
 var dP = Object.defineProperty;
@@ -839,7 +839,7 @@ module.exports = __webpack_require__(11) ? function (object, key, value) {
 "use strict";
 
 
-var global = __webpack_require__(3);
+var global = __webpack_require__(4);
 var hide = __webpack_require__(17);
 var has = __webpack_require__(16);
 var SRC = __webpack_require__(42)('src');
@@ -1308,14 +1308,196 @@ A complete [guide](https://elements.polymer-project.org/guides/flex-layout) to `
 "use strict";
 
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+module.exports = function (subclass) {
+  return function (_subclass) {
+    _inherits(PackageInterface, _subclass);
+
+    function PackageInterface() {
+      _classCallCheck(this, PackageInterface);
+
+      var _this = _possibleConstructorReturn(this, (PackageInterface.__proto__ || Object.getPrototypeOf(PackageInterface)).call(this));
+
+      _this._injectModel('PackageModel');
+      return _this;
+    }
+
+    _createClass(PackageInterface, [{
+      key: '_getPackageSchema',
+      value: function _getPackageSchema() {
+        return this.PackageModel.schema;
+      }
+    }, {
+      key: '_getPackage',
+      value: function () {
+        var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(id) {
+          return regeneratorRuntime.wrap(function _callee$(_context) {
+            while (1) {
+              switch (_context.prev = _context.next) {
+                case 0:
+                  return _context.abrupt('return', this.PackageModel.get(id));
+
+                case 1:
+                case 'end':
+                  return _context.stop();
+              }
+            }
+          }, _callee, this);
+        }));
+
+        function _getPackage(_x) {
+          return _ref.apply(this, arguments);
+        }
+
+        return _getPackage;
+      }()
+    }, {
+      key: '_createPackage',
+      value: function () {
+        var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(name, overview, organization) {
+          return regeneratorRuntime.wrap(function _callee2$(_context2) {
+            while (1) {
+              switch (_context2.prev = _context2.next) {
+                case 0:
+                  return _context2.abrupt('return', this.PackageModel.create(name, overview, organization));
+
+                case 1:
+                case 'end':
+                  return _context2.stop();
+              }
+            }
+          }, _callee2, this);
+        }));
+
+        function _createPackage(_x2, _x3, _x4) {
+          return _ref2.apply(this, arguments);
+        }
+
+        return _createPackage;
+      }()
+    }, {
+      key: '_updatePackage',
+      value: function () {
+        var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(packageId, data, msg) {
+          return regeneratorRuntime.wrap(function _callee3$(_context3) {
+            while (1) {
+              switch (_context3.prev = _context3.next) {
+                case 0:
+                  return _context3.abrupt('return', this.PackageModel.update(packageId, data, msg));
+
+                case 1:
+                case 'end':
+                  return _context3.stop();
+              }
+            }
+          }, _callee3, this);
+        }));
+
+        function _updatePackage(_x5, _x6, _x7) {
+          return _ref3.apply(this, arguments);
+        }
+
+        return _updatePackage;
+      }()
+    }, {
+      key: '_deletePackage',
+      value: function () {
+        var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(name) {
+          return regeneratorRuntime.wrap(function _callee4$(_context4) {
+            while (1) {
+              switch (_context4.prev = _context4.next) {
+                case 0:
+                  return _context4.abrupt('return', this.PackageModel.delete(name));
+
+                case 1:
+                case 'end':
+                  return _context4.stop();
+              }
+            }
+          }, _callee4, this);
+        }));
+
+        function _deletePackage(_x8) {
+          return _ref4.apply(this, arguments);
+        }
+
+        return _deletePackage;
+      }()
+    }, {
+      key: '_createRelease',
+      value: function _createRelease(pkg, releaseInfo) {
+        return this.PackageModel.createRelease(pkg, releaseInfo);
+      }
+    }, {
+      key: '_previewMarkdown',
+      value: function _previewMarkdown(markdown) {
+        return this.PackageModel.previewMarkdown(markdown);
+      }
+    }, {
+      key: '_uploadFile',
+      value: function _uploadFile(options) {
+        return this.PackageModel.uploadFile(options);
+      }
+    }, {
+      key: '_deleteFile',
+      value: function _deleteFile(packageId, file) {
+        return this.PackageModel.deleteFile(packageId, file);
+      }
+    }, {
+      key: '_setSelectedPackageId',
+      value: function _setSelectedPackageId(packageId) {
+        this.PackageModel.setSelectedPackageId(packageId);
+      }
+    }, {
+      key: '_getSelectedPackageId',
+      value: function _getSelectedPackageId() {
+        return this.PackageModel.getSelectedPackageId();
+      }
+    }, {
+      key: '_getPackageFiles',
+      value: function _getPackageFiles(packageId) {
+        return this.PackageModel.getFiles(packageId);
+      }
+    }, {
+      key: '_moveExampleDirectory',
+      value: function _moveExampleDirectory(packageId, src, dst) {
+        return this.PackageModel.moveExample(packageId, src, dst);
+      }
+    }, {
+      key: '_deleteExampleDirectory',
+      value: function _deleteExampleDirectory(packageId, name) {
+        return this.PackageModel.deleteExample(packageId, name);
+      }
+    }]);
+
+    return PackageInterface;
+  }(subclass);
+};
+
+/***/ }),
+/* 36 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 if (__webpack_require__(11)) {
   var LIBRARY = __webpack_require__(43);
-  var global = __webpack_require__(3);
+  var global = __webpack_require__(4);
   var fails = __webpack_require__(5);
   var $export = __webpack_require__(0);
-  var $typed = __webpack_require__(77);
+  var $typed = __webpack_require__(76);
   var $buffer = __webpack_require__(118);
   var ctx = __webpack_require__(25);
   var anInstance = __webpack_require__(49);
@@ -1339,11 +1521,11 @@ if (__webpack_require__(11)) {
   var uid = __webpack_require__(42);
   var wks = __webpack_require__(9);
   var createArrayMethod = __webpack_require__(33);
-  var createArrayIncludes = __webpack_require__(68);
-  var speciesConstructor = __webpack_require__(75);
+  var createArrayIncludes = __webpack_require__(67);
+  var speciesConstructor = __webpack_require__(74);
   var ArrayIterators = __webpack_require__(114);
   var Iterators = __webpack_require__(55);
-  var $iterDetect = __webpack_require__(72);
+  var $iterDetect = __webpack_require__(71);
   var setSpecies = __webpack_require__(48);
   var arrayFill = __webpack_require__(113);
   var arrayCopyWithin = __webpack_require__(150);
@@ -1791,7 +1973,7 @@ if (__webpack_require__(11)) {
 } else module.exports = function () {/* empty */};
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1801,7 +1983,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 var Map = __webpack_require__(155);
 var $export = __webpack_require__(0);
-var shared = __webpack_require__(67)('metadata');
+var shared = __webpack_require__(66)('metadata');
 var store = shared.store || (shared.store = new (__webpack_require__(158))());
 
 var getOrCreateMetadataMap = function getOrCreateMetadataMap(target, targetKey, create) {
@@ -1854,7 +2036,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2020,7 +2202,7 @@ var microTask = exports.microTask = {
 };
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2083,7 +2265,7 @@ var meta = module.exports = {
 };
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2095,173 +2277,6 @@ var ArrayProto = Array.prototype;
 if (ArrayProto[UNSCOPABLES] == undefined) __webpack_require__(17)(ArrayProto, UNSCOPABLES, {});
 module.exports = function (key) {
   ArrayProto[UNSCOPABLES][key] = true;
-};
-
-/***/ }),
-/* 40 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-module.exports = function (subclass) {
-  return function (_subclass) {
-    _inherits(PackageInterface, _subclass);
-
-    function PackageInterface() {
-      _classCallCheck(this, PackageInterface);
-
-      var _this = _possibleConstructorReturn(this, (PackageInterface.__proto__ || Object.getPrototypeOf(PackageInterface)).call(this));
-
-      _this._injectModel('PackageModel');
-      return _this;
-    }
-
-    _createClass(PackageInterface, [{
-      key: '_getPackageSchema',
-      value: function _getPackageSchema() {
-        return this.PackageModel.schema;
-      }
-    }, {
-      key: '_getPackage',
-      value: function () {
-        var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(id) {
-          return regeneratorRuntime.wrap(function _callee$(_context) {
-            while (1) {
-              switch (_context.prev = _context.next) {
-                case 0:
-                  return _context.abrupt('return', this.PackageModel.get(id));
-
-                case 1:
-                case 'end':
-                  return _context.stop();
-              }
-            }
-          }, _callee, this);
-        }));
-
-        function _getPackage(_x) {
-          return _ref.apply(this, arguments);
-        }
-
-        return _getPackage;
-      }()
-    }, {
-      key: '_createPackage',
-      value: function () {
-        var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(name, overview, organization) {
-          return regeneratorRuntime.wrap(function _callee2$(_context2) {
-            while (1) {
-              switch (_context2.prev = _context2.next) {
-                case 0:
-                  return _context2.abrupt('return', this.PackageModel.create(name, overview, organization));
-
-                case 1:
-                case 'end':
-                  return _context2.stop();
-              }
-            }
-          }, _callee2, this);
-        }));
-
-        function _createPackage(_x2, _x3, _x4) {
-          return _ref2.apply(this, arguments);
-        }
-
-        return _createPackage;
-      }()
-    }, {
-      key: '_updatePackage',
-      value: function () {
-        var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(packageId, data, msg) {
-          return regeneratorRuntime.wrap(function _callee3$(_context3) {
-            while (1) {
-              switch (_context3.prev = _context3.next) {
-                case 0:
-                  return _context3.abrupt('return', this.PackageModel.update(packageId, data, msg));
-
-                case 1:
-                case 'end':
-                  return _context3.stop();
-              }
-            }
-          }, _callee3, this);
-        }));
-
-        function _updatePackage(_x5, _x6, _x7) {
-          return _ref3.apply(this, arguments);
-        }
-
-        return _updatePackage;
-      }()
-    }, {
-      key: '_deletePackage',
-      value: function () {
-        var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(name) {
-          return regeneratorRuntime.wrap(function _callee4$(_context4) {
-            while (1) {
-              switch (_context4.prev = _context4.next) {
-                case 0:
-                  return _context4.abrupt('return', this.PackageModel.delete(name));
-
-                case 1:
-                case 'end':
-                  return _context4.stop();
-              }
-            }
-          }, _callee4, this);
-        }));
-
-        function _deletePackage(_x8) {
-          return _ref4.apply(this, arguments);
-        }
-
-        return _deletePackage;
-      }()
-    }, {
-      key: '_createRelease',
-      value: function _createRelease(pkg, releaseInfo) {
-        return this.PackageModel.createRelease(pkg, releaseInfo);
-      }
-    }, {
-      key: '_previewMarkdown',
-      value: function _previewMarkdown(markdown) {
-        return this.PackageModel.previewMarkdown(markdown);
-      }
-    }, {
-      key: '_uploadFile',
-      value: function _uploadFile(options) {
-        return this.PackageModel.uploadFile(options);
-      }
-    }, {
-      key: '_deleteFile',
-      value: function _deleteFile(packageId, file) {
-        return this.PackageModel.deleteFile(packageId, file);
-      }
-    }, {
-      key: '_setSelectedPackageId',
-      value: function _setSelectedPackageId(packageId) {
-        this.PackageModel.setSelectedPackageId(packageId);
-      }
-    }, {
-      key: '_getPackageFiles',
-      value: function _getPackageFiles(packageId) {
-        return this.PackageModel.getFiles(packageId);
-      }
-    }]);
-
-    return PackageInterface;
-  }(subclass);
 };
 
 /***/ }),
@@ -2340,7 +2355,7 @@ module.exports = function (index, length) {
 
 
 // 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
-var anObject = __webpack_require__(2);
+var anObject = __webpack_require__(3);
 var dPs = __webpack_require__(137);
 var enumBugKeys = __webpack_require__(96);
 var IE_PROTO = __webpack_require__(95)('IE_PROTO');
@@ -2404,7 +2419,7 @@ exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
 "use strict";
 
 
-var global = __webpack_require__(3);
+var global = __webpack_require__(4);
 var dP = __webpack_require__(12);
 var DESCRIPTORS = __webpack_require__(11);
 var SPECIES = __webpack_require__(9)('species');
@@ -2442,7 +2457,7 @@ module.exports = function (it, Constructor, name, forbiddenField) {
 var ctx = __webpack_require__(25);
 var call = __webpack_require__(148);
 var isArrayIter = __webpack_require__(109);
-var anObject = __webpack_require__(2);
+var anObject = __webpack_require__(3);
 var toLength = __webpack_require__(13);
 var getIterFn = __webpack_require__(111);
 var BREAK = {};
@@ -2674,7 +2689,7 @@ __webpack_require__(10);
 
 __webpack_require__(24);
 
-__webpack_require__(37);
+__webpack_require__(38);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -2815,7 +2830,7 @@ exports.IronControlState = undefined;
 
 __webpack_require__(1);
 
-var _polymerElement = __webpack_require__(4);
+var _polymerElement = __webpack_require__(2);
 
 var _polymerDom = __webpack_require__(7);
 
@@ -3043,7 +3058,7 @@ exports.setPassiveTouchGestures = exports.passiveTouchGestures = exports.setSani
 
 __webpack_require__(10);
 
-var _resolveUrl = __webpack_require__(82);
+var _resolveUrl = __webpack_require__(81);
 
 var useShadow = exports.useShadow = !window.ShadyDOM;
 var useNativeCSSProperties = exports.useNativeCSSProperties = Boolean(!window.ShadyCSS || window.ShadyCSS.nativeCss);
@@ -3588,37 +3603,7 @@ module.exports = function (subclass) {
 "use strict";
 
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var g;
-
-// This works in non-strict mode
-g = function () {
-	return this;
-}();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1, eval)("this");
-} catch (e) {
-	// This works if the window reference is available
-	if ((typeof window === "undefined" ? "undefined" : _typeof(window)) === "object") g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-/***/ }),
-/* 67 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var global = __webpack_require__(3);
+var global = __webpack_require__(4);
 var SHARED = '__core-js_shared__';
 var store = global[SHARED] || (global[SHARED] = {});
 module.exports = function (key) {
@@ -3626,7 +3611,7 @@ module.exports = function (key) {
 };
 
 /***/ }),
-/* 68 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3659,7 +3644,7 @@ module.exports = function (IS_INCLUDES) {
 };
 
 /***/ }),
-/* 69 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3668,7 +3653,7 @@ module.exports = function (IS_INCLUDES) {
 exports.f = Object.getOwnPropertySymbols;
 
 /***/ }),
-/* 70 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3681,7 +3666,7 @@ module.exports = Array.isArray || function isArray(arg) {
 };
 
 /***/ }),
-/* 71 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3697,7 +3682,7 @@ module.exports = function (it) {
 };
 
 /***/ }),
-/* 72 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3735,14 +3720,14 @@ module.exports = function (exec, skipClosing) {
 };
 
 /***/ }),
-/* 73 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 // 21.2.5.3 get RegExp.prototype.flags
 
-var anObject = __webpack_require__(2);
+var anObject = __webpack_require__(3);
 module.exports = function () {
   var that = anObject(this);
   var result = '';
@@ -3755,7 +3740,7 @@ module.exports = function () {
 };
 
 /***/ }),
-/* 74 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3795,14 +3780,14 @@ module.exports = function (KEY, length, exec) {
 };
 
 /***/ }),
-/* 75 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 // 7.3.20 SpeciesConstructor(O, defaultConstructor)
-var anObject = __webpack_require__(2);
+var anObject = __webpack_require__(3);
 var aFunction = __webpack_require__(15);
 var SPECIES = __webpack_require__(9)('species');
 module.exports = function (O, D) {
@@ -3812,22 +3797,22 @@ module.exports = function (O, D) {
 };
 
 /***/ }),
-/* 76 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var global = __webpack_require__(3);
+var global = __webpack_require__(4);
 var $export = __webpack_require__(0);
 var redefine = __webpack_require__(18);
 var redefineAll = __webpack_require__(51);
-var meta = __webpack_require__(38);
+var meta = __webpack_require__(39);
 var forOf = __webpack_require__(50);
 var anInstance = __webpack_require__(49);
 var isObject = __webpack_require__(6);
 var fails = __webpack_require__(5);
-var $iterDetect = __webpack_require__(72);
+var $iterDetect = __webpack_require__(71);
 var setToStringTag = __webpack_require__(53);
 var inheritIfRequired = __webpack_require__(100);
 
@@ -3910,13 +3895,13 @@ module.exports = function (NAME, wrapper, methods, common, IS_MAP, IS_WEAK) {
 };
 
 /***/ }),
-/* 77 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var global = __webpack_require__(3);
+var global = __webpack_require__(4);
 var hide = __webpack_require__(17);
 var uid = __webpack_require__(42);
 var TYPED = uid('typed_array');
@@ -3944,7 +3929,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 78 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3956,11 +3941,11 @@ module.exports = __webpack_require__(43) || !__webpack_require__(5)(function () 
   // In FF throws only define methods
   // eslint-disable-next-line no-undef, no-useless-call
   __defineSetter__.call(null, K, function () {/* empty */});
-  delete __webpack_require__(3)[K];
+  delete __webpack_require__(4)[K];
 });
 
 /***/ }),
-/* 79 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3980,7 +3965,7 @@ module.exports = function (COLLECTION) {
 };
 
 /***/ }),
-/* 80 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4015,7 +4000,7 @@ module.exports = function (COLLECTION) {
 };
 
 /***/ }),
-/* 81 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4042,7 +4027,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 ;
 
 /***/ }),
-/* 82 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4129,7 +4114,7 @@ exports.resolveUrl = resolveUrl;
 exports.pathFromUrl = pathFromUrl;
 
 /***/ }),
-/* 83 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4246,7 +4231,7 @@ function set(root, path, value) {
 var isDeep = exports.isDeep = isPath;
 
 /***/ }),
-/* 84 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4275,7 +4260,7 @@ function camelToDashCase(camel) {
 }
 
 /***/ }),
-/* 85 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4321,7 +4306,7 @@ var flush = exports.flush = function flush() {
 };
 
 /***/ }),
-/* 86 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4480,7 +4465,7 @@ var OptionalMutableData = exports.OptionalMutableData = (0, _mixin.dedupingMixin
 MutableData._mutablePropertyChange = mutablePropertyChange;
 
 /***/ }),
-/* 87 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4614,7 +4599,7 @@ window.customElements.define('custom-style', CustomStyle);
 exports.CustomStyle = CustomStyle;
 
 /***/ }),
-/* 88 */
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4622,7 +4607,7 @@ exports.CustomStyle = CustomStyle;
 
 __webpack_require__(1);
 
-__webpack_require__(81);
+__webpack_require__(80);
 
 var $_documentContainer = document.createElement('div');
 $_documentContainer.setAttribute('style', 'display: none;');
@@ -4644,7 +4629,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 ;
 
 /***/ }),
-/* 89 */
+/* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4671,7 +4656,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 ;
 
 /***/ }),
-/* 90 */
+/* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4708,7 +4693,7 @@ Design typography section.
 ;
 
 /***/ }),
-/* 91 */
+/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4933,7 +4918,7 @@ var IronButtonStateImpl = exports.IronButtonStateImpl = {
 var IronButtonState = exports.IronButtonState = [_ironA11yKeysBehavior.IronA11yKeysBehavior, IronButtonStateImpl];
 
 /***/ }),
-/* 92 */
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5135,6 +5120,36 @@ var IronResizableBehavior = exports.IronResizableBehavior = {
 };
 
 /***/ }),
+/* 92 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var g;
+
+// This works in non-strict mode
+g = function () {
+	return this;
+}();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1, eval)("this");
+} catch (e) {
+	// This works if the window reference is available
+	if ((typeof window === "undefined" ? "undefined" : _typeof(window)) === "object") g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+/***/ }),
 /* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -5142,7 +5157,7 @@ var IronResizableBehavior = exports.IronResizableBehavior = {
 
 
 var isObject = __webpack_require__(6);
-var document = __webpack_require__(3).document;
+var document = __webpack_require__(4).document;
 // typeof document.createElement is 'object' in old IE
 var is = isObject(document) && isObject(document.createElement);
 module.exports = function (it) {
@@ -5156,7 +5171,7 @@ module.exports = function (it) {
 "use strict";
 
 
-var global = __webpack_require__(3);
+var global = __webpack_require__(4);
 var core = __webpack_require__(28);
 var LIBRARY = __webpack_require__(43);
 var wksExt = __webpack_require__(135);
@@ -5173,7 +5188,7 @@ module.exports = function (name) {
 "use strict";
 
 
-var shared = __webpack_require__(67)('keys');
+var shared = __webpack_require__(66)('keys');
 var uid = __webpack_require__(42);
 module.exports = function (key) {
   return shared[key] || (shared[key] = uid(key));
@@ -5196,7 +5211,7 @@ module.exports = 'constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,
 "use strict";
 
 
-var document = __webpack_require__(3).document;
+var document = __webpack_require__(4).document;
 module.exports = document && document.documentElement;
 
 /***/ }),
@@ -5209,7 +5224,7 @@ module.exports = document && document.documentElement;
 // Works with __proto__ only. Old v8 can't work with null proto objects.
 /* eslint-disable no-proto */
 var isObject = __webpack_require__(6);
-var anObject = __webpack_require__(2);
+var anObject = __webpack_require__(3);
 var check = function check(O, proto) {
   anObject(O);
   if (!isObject(proto) && proto !== null) throw TypeError(proto + ": can't set as prototype!");
@@ -5451,7 +5466,7 @@ module.exports = function (Constructor, NAME, next) {
 
 
 // helper for String#{startsWith, endsWith, includes}
-var isRegExp = __webpack_require__(71);
+var isRegExp = __webpack_require__(70);
 var defined = __webpack_require__(30);
 
 module.exports = function (that, searchString, NAME) {
@@ -5567,7 +5582,7 @@ module.exports = function fill(value /* , start = 0, end = @length */) {
 "use strict";
 
 
-var addToUnscopables = __webpack_require__(39);
+var addToUnscopables = __webpack_require__(40);
 var step = __webpack_require__(151);
 var Iterators = __webpack_require__(55);
 var toIObject = __webpack_require__(21);
@@ -5612,7 +5627,7 @@ var ctx = __webpack_require__(25);
 var invoke = __webpack_require__(141);
 var html = __webpack_require__(97);
 var cel = __webpack_require__(93);
-var global = __webpack_require__(3);
+var global = __webpack_require__(4);
 var process = global.process;
 var setTask = global.setImmediate;
 var clearTask = global.clearImmediate;
@@ -5701,7 +5716,7 @@ module.exports = {
 "use strict";
 
 
-var global = __webpack_require__(3);
+var global = __webpack_require__(4);
 var macrotask = __webpack_require__(115).set;
 var Observer = global.MutationObserver || global.WebKitMutationObserver;
 var process = global.process;
@@ -5801,10 +5816,10 @@ module.exports.f = function (C) {
 "use strict";
 
 
-var global = __webpack_require__(3);
+var global = __webpack_require__(4);
 var DESCRIPTORS = __webpack_require__(11);
 var LIBRARY = __webpack_require__(43);
-var $typed = __webpack_require__(77);
+var $typed = __webpack_require__(76);
 var hide = __webpack_require__(17);
 var redefineAll = __webpack_require__(51);
 var fails = __webpack_require__(5);
@@ -6536,7 +6551,7 @@ var _mixin = __webpack_require__(24);
 
 var _styleGather = __webpack_require__(173);
 
-var _resolveUrl = __webpack_require__(82);
+var _resolveUrl = __webpack_require__(81);
 
 var _domModule = __webpack_require__(124);
 
@@ -7211,7 +7226,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 __webpack_require__(10);
 
-var _resolveUrl = __webpack_require__(82);
+var _resolveUrl = __webpack_require__(81);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -7391,9 +7406,9 @@ __webpack_require__(10);
 
 var _mixin = __webpack_require__(24);
 
-var _path = __webpack_require__(83);
+var _path = __webpack_require__(82);
 
-var _caseMap = __webpack_require__(84);
+var _caseMap = __webpack_require__(83);
 
 var caseMap = _interopRequireWildcard(_caseMap);
 
@@ -10336,7 +10351,7 @@ exports.resetMouseCanceller = resetMouseCanceller;
 
 __webpack_require__(10);
 
-var _async = __webpack_require__(37);
+var _async = __webpack_require__(38);
 
 var _debounce = __webpack_require__(57);
 
@@ -11230,7 +11245,7 @@ __webpack_require__(10);
 
 var _propertyEffects = __webpack_require__(125);
 
-var _mutableData = __webpack_require__(86);
+var _mutableData = __webpack_require__(85);
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
@@ -11955,7 +11970,7 @@ exports.PaperRippleBehavior = undefined;
 
 __webpack_require__(1);
 
-var _ironButtonState = __webpack_require__(91);
+var _ironButtonState = __webpack_require__(90);
 
 __webpack_require__(464);
 
@@ -12448,7 +12463,7 @@ var _ironSelection = __webpack_require__(477);
 
 var _polymerDom = __webpack_require__(7);
 
-var _caseMap = __webpack_require__(84);
+var _caseMap = __webpack_require__(83);
 
 var IronSelectableBehavior = exports.IronSelectableBehavior = {
 
@@ -12868,7 +12883,7 @@ exports.f = __webpack_require__(9);
 
 var has = __webpack_require__(16);
 var toIObject = __webpack_require__(21);
-var arrayIndexOf = __webpack_require__(68)(false);
+var arrayIndexOf = __webpack_require__(67)(false);
 var IE_PROTO = __webpack_require__(95)('IE_PROTO');
 
 module.exports = function (object, names) {
@@ -12894,7 +12909,7 @@ module.exports = function (object, names) {
 
 
 var dP = __webpack_require__(12);
-var anObject = __webpack_require__(2);
+var anObject = __webpack_require__(3);
 var getKeys = __webpack_require__(44);
 
 module.exports = __webpack_require__(11) ? Object.defineProperties : function defineProperties(O, Properties) {
@@ -12945,7 +12960,7 @@ module.exports.f = function getOwnPropertyNames(it) {
 // 19.1.2.1 Object.assign(target, source, ...)
 
 var getKeys = __webpack_require__(44);
-var gOPS = __webpack_require__(69);
+var gOPS = __webpack_require__(68);
 var pIE = __webpack_require__(61);
 var toObject = __webpack_require__(14);
 var IObject = __webpack_require__(60);
@@ -13046,7 +13061,7 @@ module.exports = function (fn, args, that) {
 "use strict";
 
 
-var $parseInt = __webpack_require__(3).parseInt;
+var $parseInt = __webpack_require__(4).parseInt;
 var $trim = __webpack_require__(54).trim;
 var ws = __webpack_require__(99);
 var hex = /^[-+]?0[xX]/;
@@ -13063,7 +13078,7 @@ module.exports = $parseInt(ws + '08') !== 8 || $parseInt(ws + '0x16') !== 22 ? f
 "use strict";
 
 
-var $parseFloat = __webpack_require__(3).parseFloat;
+var $parseFloat = __webpack_require__(4).parseFloat;
 var $trim = __webpack_require__(54).trim;
 
 module.exports = 1 / $parseFloat(__webpack_require__(99) + '-0') !== -Infinity ? function parseFloat(str) {
@@ -13150,7 +13165,7 @@ module.exports = Math.fround || function fround(x) {
 
 
 // call something on iterator step with safe closing on error
-var anObject = __webpack_require__(2);
+var anObject = __webpack_require__(3);
 module.exports = function (iterator, fn, value, entries) {
   try {
     return entries ? fn(anObject(value)[0], value[1]) : fn(value);
@@ -13252,7 +13267,7 @@ module.exports = function (done, value) {
 // 21.2.5.3 get RegExp.prototype.flags()
 if (__webpack_require__(11) && /./g.flags != 'g') __webpack_require__(12).f(RegExp.prototype, 'flags', {
   configurable: true,
-  get: __webpack_require__(73)
+  get: __webpack_require__(72)
 });
 
 /***/ }),
@@ -13277,7 +13292,7 @@ module.exports = function (exec) {
 "use strict";
 
 
-var anObject = __webpack_require__(2);
+var anObject = __webpack_require__(3);
 var isObject = __webpack_require__(6);
 var newPromiseCapability = __webpack_require__(117);
 
@@ -13302,7 +13317,7 @@ var validate = __webpack_require__(56);
 var MAP = 'Map';
 
 // 23.1 Map Objects
-module.exports = __webpack_require__(76)(MAP, function (get) {
+module.exports = __webpack_require__(75)(MAP, function (get) {
   return function Map() {
     return get(this, arguments.length > 0 ? arguments[0] : undefined);
   };
@@ -13335,7 +13350,7 @@ var $iterDefine = __webpack_require__(105);
 var step = __webpack_require__(151);
 var setSpecies = __webpack_require__(48);
 var DESCRIPTORS = __webpack_require__(11);
-var fastKey = __webpack_require__(38).fastKey;
+var fastKey = __webpack_require__(39).fastKey;
 var validate = __webpack_require__(56);
 var SIZE = DESCRIPTORS ? '_s' : 'size';
 
@@ -13484,7 +13499,7 @@ var validate = __webpack_require__(56);
 var SET = 'Set';
 
 // 23.2 Set Objects
-module.exports = __webpack_require__(76)(SET, function (get) {
+module.exports = __webpack_require__(75)(SET, function (get) {
   return function Set() {
     return get(this, arguments.length > 0 ? arguments[0] : undefined);
   };
@@ -13504,7 +13519,7 @@ module.exports = __webpack_require__(76)(SET, function (get) {
 
 var each = __webpack_require__(33)(0);
 var redefine = __webpack_require__(18);
-var meta = __webpack_require__(38);
+var meta = __webpack_require__(39);
 var assign = __webpack_require__(139);
 var weak = __webpack_require__(159);
 var isObject = __webpack_require__(6);
@@ -13539,7 +13554,7 @@ var methods = {
 };
 
 // 23.3 WeakMap Objects
-var $WeakMap = module.exports = __webpack_require__(76)(WEAK_MAP, wrapper, methods, weak, true, true);
+var $WeakMap = module.exports = __webpack_require__(75)(WEAK_MAP, wrapper, methods, weak, true, true);
 
 // IE11 WeakMap frozen keys fix
 if (fails(function () {
@@ -13571,8 +13586,8 @@ if (fails(function () {
 
 
 var redefineAll = __webpack_require__(51);
-var getWeak = __webpack_require__(38).getWeak;
-var anObject = __webpack_require__(2);
+var getWeak = __webpack_require__(39).getWeak;
+var anObject = __webpack_require__(3);
 var isObject = __webpack_require__(6);
 var anInstance = __webpack_require__(49);
 var forOf = __webpack_require__(50);
@@ -13680,9 +13695,9 @@ module.exports = function (it) {
 
 // all object keys, includes non-enumerable and symbols
 var gOPN = __webpack_require__(47);
-var gOPS = __webpack_require__(69);
-var anObject = __webpack_require__(2);
-var Reflect = __webpack_require__(3).Reflect;
+var gOPS = __webpack_require__(68);
+var anObject = __webpack_require__(3);
+var Reflect = __webpack_require__(4).Reflect;
 module.exports = Reflect && Reflect.ownKeys || function ownKeys(it) {
   var keys = gOPN.f(anObject(it));
   var getSymbols = gOPS.f;
@@ -13697,7 +13712,7 @@ module.exports = Reflect && Reflect.ownKeys || function ownKeys(it) {
 
 // https://tc39.github.io/proposal-flatMap/#sec-FlattenIntoArray
 
-var isArray = __webpack_require__(70);
+var isArray = __webpack_require__(69);
 var isObject = __webpack_require__(6);
 var toLength = __webpack_require__(13);
 var ctx = __webpack_require__(25);
@@ -13879,9 +13894,9 @@ var _gestures = __webpack_require__(126);
 
 var _debounce = __webpack_require__(57);
 
-var _async = __webpack_require__(37);
+var _async = __webpack_require__(38);
 
-var _path = __webpack_require__(83);
+var _path = __webpack_require__(82);
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
@@ -15666,7 +15681,7 @@ exports.cssFromTemplate = cssFromTemplate;
 exports.cssFromModuleImports = cssFromModuleImports;
 exports._cssFromModuleImports = _cssFromModuleImports;
 
-var _resolveUrl = __webpack_require__(82);
+var _resolveUrl = __webpack_require__(81);
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
@@ -15852,7 +15867,7 @@ __webpack_require__(10);
 
 var _mixin = __webpack_require__(24);
 
-var _caseMap = __webpack_require__(84);
+var _caseMap = __webpack_require__(83);
 
 var caseMap$0 = _interopRequireWildcard(_caseMap);
 
@@ -16199,7 +16214,7 @@ __webpack_require__(10);
 
 var _mixin = __webpack_require__(24);
 
-var _async = __webpack_require__(37);
+var _async = __webpack_require__(38);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -17237,7 +17252,7 @@ module.exports = self.fetch.bind(self);
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _polymerElement = __webpack_require__(4);
+var _polymerElement = __webpack_require__(2);
 
 __webpack_require__(439);
 
@@ -18042,7 +18057,7 @@ __webpack_require__(131);
 
 var _paperInkyFocusBehavior = __webpack_require__(473);
 
-__webpack_require__(88);
+__webpack_require__(87);
 
 var _polymerFn = __webpack_require__(8);
 
@@ -18443,7 +18458,7 @@ var _templateObject = _taggedTemplateLiteral(['\n    <style>\n      :host {\n   
 
 var _polymer = __webpack_require__(1);
 
-var _ironResizableBehavior = __webpack_require__(92);
+var _ironResizableBehavior = __webpack_require__(91);
 
 var _ironSelectable = __webpack_require__(133);
 
@@ -18524,7 +18539,7 @@ exports.IronFormElementBehavior = undefined;
 
 __webpack_require__(1);
 
-var _polymerElement = __webpack_require__(4);
+var _polymerElement = __webpack_require__(2);
 
 var IronFormElementBehavior = exports.IronFormElementBehavior = {
 
@@ -18789,7 +18804,7 @@ var _ironA11yKeysBehavior = __webpack_require__(64);
 
 var _ironControlState = __webpack_require__(58);
 
-var _polymerElement = __webpack_require__(4);
+var _polymerElement = __webpack_require__(2);
 
 var _polymerDom = __webpack_require__(7);
 
@@ -19353,7 +19368,7 @@ var _templateObject = _taggedTemplateLiteral(['\n    <style>\n      :host {\n   
 
 var _polymer = __webpack_require__(1);
 
-__webpack_require__(90);
+__webpack_require__(89);
 
 var _paperInputAddonBehavior = __webpack_require__(198);
 
@@ -19480,13 +19495,13 @@ var _polymer = __webpack_require__(1);
 
 __webpack_require__(34);
 
-__webpack_require__(88);
+__webpack_require__(87);
 
-__webpack_require__(90);
+__webpack_require__(89);
 
 var _polymerFn = __webpack_require__(8);
 
-var _caseMap = __webpack_require__(84);
+var _caseMap = __webpack_require__(83);
 
 var _polymerDom = __webpack_require__(7);
 
@@ -19920,9 +19935,9 @@ var _templateObject = _taggedTemplateLiteral(['\n    <style>\n      :host {\n   
 
 var _polymer = __webpack_require__(1);
 
-__webpack_require__(88);
+__webpack_require__(87);
 
-__webpack_require__(90);
+__webpack_require__(89);
 
 var _paperInputAddonBehavior = __webpack_require__(198);
 
@@ -20400,31 +20415,31 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _polymerElement = __webpack_require__(4);
+var _polymerElement = __webpack_require__(2);
 
-var _appMarkdown = __webpack_require__(500);
+var _appMarkdown = __webpack_require__(510);
 
 var _appMarkdown2 = _interopRequireDefault(_appMarkdown);
 
-var _PackageInterface = __webpack_require__(40);
+var _PackageInterface = __webpack_require__(35);
 
 var _PackageInterface2 = _interopRequireDefault(_PackageInterface);
 
-var _githubMarkdown = __webpack_require__(501);
+var _githubMarkdown = __webpack_require__(511);
 
 var _githubMarkdown2 = _interopRequireDefault(_githubMarkdown);
 
-var _prismOkaidia = __webpack_require__(503);
+var _prismOkaidia = __webpack_require__(513);
 
 var _prismOkaidia2 = _interopRequireDefault(_prismOkaidia);
 
-__webpack_require__(505);
+__webpack_require__(515);
 
-__webpack_require__(506);
+__webpack_require__(516);
 
-__webpack_require__(507);
+__webpack_require__(517);
 
-__webpack_require__(508);
+__webpack_require__(518);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -20627,7 +20642,7 @@ define(String.prototype, "padRight", "".padEnd);
 "pop,reverse,shift,keys,values,entries,indexOf,every,some,forEach,map,filter,find,findIndex,includes,join,slice,concat,push,splice,unshift,sort,lastIndexOf,reduce,reduceRight,copyWithin,fill".split(",").forEach(function (key) {
   [][key] && define(Array, key, Function.call.bind([][key]));
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(66)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(92)))
 
 /***/ }),
 /* 206 */
@@ -20844,22 +20859,22 @@ module.exports = __webpack_require__(28);
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var global = __webpack_require__(3);
+var global = __webpack_require__(4);
 var has = __webpack_require__(16);
 var DESCRIPTORS = __webpack_require__(11);
 var $export = __webpack_require__(0);
 var redefine = __webpack_require__(18);
-var META = __webpack_require__(38).KEY;
+var META = __webpack_require__(39).KEY;
 var $fails = __webpack_require__(5);
-var shared = __webpack_require__(67);
+var shared = __webpack_require__(66);
 var setToStringTag = __webpack_require__(53);
 var uid = __webpack_require__(42);
 var wks = __webpack_require__(9);
 var wksExt = __webpack_require__(135);
 var wksDefine = __webpack_require__(94);
 var enumKeys = __webpack_require__(208);
-var isArray = __webpack_require__(70);
-var anObject = __webpack_require__(2);
+var isArray = __webpack_require__(69);
+var anObject = __webpack_require__(3);
 var toIObject = __webpack_require__(21);
 var toPrimitive = __webpack_require__(29);
 var createDesc = __webpack_require__(41);
@@ -20995,7 +21010,7 @@ if (!USE_NATIVE) {
   $DP.f = $defineProperty;
   __webpack_require__(47).f = gOPNExt.f = $getOwnPropertyNames;
   __webpack_require__(61).f = $propertyIsEnumerable;
-  __webpack_require__(69).f = $getOwnPropertySymbols;
+  __webpack_require__(68).f = $getOwnPropertySymbols;
 
   if (DESCRIPTORS && !__webpack_require__(43)) {
     redefine(ObjectProto, 'propertyIsEnumerable', $propertyIsEnumerable, true);
@@ -21093,7 +21108,7 @@ setToStringTag(global.JSON, 'JSON', true);
 
 // all enumerable object keys, includes symbols
 var getKeys = __webpack_require__(44);
-var gOPS = __webpack_require__(69);
+var gOPS = __webpack_require__(68);
 var pIE = __webpack_require__(61);
 module.exports = function (it) {
   var result = getKeys(it);
@@ -21214,7 +21229,7 @@ __webpack_require__(32)('getOwnPropertyNames', function () {
 
 // 19.1.2.5 Object.freeze(O)
 var isObject = __webpack_require__(6);
-var meta = __webpack_require__(38).onFreeze;
+var meta = __webpack_require__(39).onFreeze;
 
 __webpack_require__(32)('freeze', function ($freeze) {
   return function freeze(it) {
@@ -21231,7 +21246,7 @@ __webpack_require__(32)('freeze', function ($freeze) {
 
 // 19.1.2.17 Object.seal(O)
 var isObject = __webpack_require__(6);
-var meta = __webpack_require__(38).onFreeze;
+var meta = __webpack_require__(39).onFreeze;
 
 __webpack_require__(32)('seal', function ($seal) {
   return function seal(it) {
@@ -21248,7 +21263,7 @@ __webpack_require__(32)('seal', function ($seal) {
 
 // 19.1.2.15 Object.preventExtensions(O)
 var isObject = __webpack_require__(6);
-var meta = __webpack_require__(38).onFreeze;
+var meta = __webpack_require__(39).onFreeze;
 
 __webpack_require__(32)('preventExtensions', function ($preventExtensions) {
   return function preventExtensions(it) {
@@ -21456,7 +21471,7 @@ $export($export.G + $export.F * (parseFloat != $parseFloat), { parseFloat: $pars
 "use strict";
 
 
-var global = __webpack_require__(3);
+var global = __webpack_require__(4);
 var has = __webpack_require__(16);
 var cof = __webpack_require__(26);
 var inheritIfRequired = __webpack_require__(100);
@@ -21689,7 +21704,7 @@ $export($export.S, 'Number', { EPSILON: Math.pow(2, -52) });
 
 // 20.1.2.2 Number.isFinite(number)
 var $export = __webpack_require__(0);
-var _isFinite = __webpack_require__(3).isFinite;
+var _isFinite = __webpack_require__(4).isFinite;
 
 $export($export.S, 'Number', {
   isFinite: function isFinite(it) {
@@ -22592,7 +22607,7 @@ if (!(TO_PRIMITIVE in proto)) __webpack_require__(17)(proto, TO_PRIMITIVE, __web
 "use strict";
 
 
-var anObject = __webpack_require__(2);
+var anObject = __webpack_require__(3);
 var toPrimitive = __webpack_require__(29);
 var NUMBER = 'number';
 
@@ -22611,7 +22626,7 @@ module.exports = function (hint) {
 // 22.1.2.2 / 15.4.3.2 Array.isArray(arg)
 var $export = __webpack_require__(0);
 
-$export($export.S, 'Array', { isArray: __webpack_require__(70) });
+$export($export.S, 'Array', { isArray: __webpack_require__(69) });
 
 /***/ }),
 /* 291 */
@@ -22629,7 +22644,7 @@ var toLength = __webpack_require__(13);
 var createProperty = __webpack_require__(110);
 var getIterFn = __webpack_require__(111);
 
-$export($export.S + $export.F * !__webpack_require__(72)(function (iter) {
+$export($export.S + $export.F * !__webpack_require__(71)(function (iter) {
   Array.from(iter);
 }), 'Array', {
   // 22.1.2.1 Array.from(arrayLike, mapfn = undefined, thisArg = undefined)
@@ -22793,7 +22808,7 @@ $export($export.P + $export.F * !STRICT, 'Array', {
 
 
 var isObject = __webpack_require__(6);
-var isArray = __webpack_require__(70);
+var isArray = __webpack_require__(69);
 var SPECIES = __webpack_require__(9)('species');
 
 module.exports = function (original) {
@@ -22919,7 +22934,7 @@ $export($export.P + $export.F * !__webpack_require__(27)([].reduceRight, true), 
 
 
 var $export = __webpack_require__(0);
-var $indexOf = __webpack_require__(68)(false);
+var $indexOf = __webpack_require__(67)(false);
 var $native = [].indexOf;
 var NEGATIVE_ZERO = !!$native && 1 / [1].indexOf(1, -0) < 0;
 
@@ -22974,7 +22989,7 @@ var $export = __webpack_require__(0);
 
 $export($export.P, 'Array', { copyWithin: __webpack_require__(150) });
 
-__webpack_require__(39)('copyWithin');
+__webpack_require__(40)('copyWithin');
 
 /***/ }),
 /* 307 */
@@ -22988,7 +23003,7 @@ var $export = __webpack_require__(0);
 
 $export($export.P, 'Array', { fill: __webpack_require__(113) });
 
-__webpack_require__(39)('fill');
+__webpack_require__(40)('fill');
 
 /***/ }),
 /* 308 */
@@ -23011,7 +23026,7 @@ $export($export.P + $export.F * forced, 'Array', {
     return $find(this, callbackfn, arguments.length > 1 ? arguments[1] : undefined);
   }
 });
-__webpack_require__(39)(KEY);
+__webpack_require__(40)(KEY);
 
 /***/ }),
 /* 309 */
@@ -23034,7 +23049,7 @@ $export($export.P + $export.F * forced, 'Array', {
     return $find(this, callbackfn, arguments.length > 1 ? arguments[1] : undefined);
   }
 });
-__webpack_require__(39)(KEY);
+__webpack_require__(40)(KEY);
 
 /***/ }),
 /* 310 */
@@ -23052,12 +23067,12 @@ __webpack_require__(48)('Array');
 "use strict";
 
 
-var global = __webpack_require__(3);
+var global = __webpack_require__(4);
 var inheritIfRequired = __webpack_require__(100);
 var dP = __webpack_require__(12).f;
 var gOPN = __webpack_require__(47).f;
-var isRegExp = __webpack_require__(71);
-var $flags = __webpack_require__(73);
+var isRegExp = __webpack_require__(70);
+var $flags = __webpack_require__(72);
 var $RegExp = global.RegExp;
 var Base = $RegExp;
 var proto = $RegExp.prototype;
@@ -23105,8 +23120,8 @@ __webpack_require__(48)('RegExp');
 
 
 __webpack_require__(152);
-var anObject = __webpack_require__(2);
-var $flags = __webpack_require__(73);
+var anObject = __webpack_require__(3);
+var $flags = __webpack_require__(72);
 var DESCRIPTORS = __webpack_require__(11);
 var TO_STRING = 'toString';
 var $toString = /./[TO_STRING];
@@ -23138,7 +23153,7 @@ if (__webpack_require__(5)(function () {
 
 
 // @@match logic
-__webpack_require__(74)('match', 1, function (defined, MATCH, $match) {
+__webpack_require__(73)('match', 1, function (defined, MATCH, $match) {
   // 21.1.3.11 String.prototype.match(regexp)
   return [function match(regexp) {
     'use strict';
@@ -23157,7 +23172,7 @@ __webpack_require__(74)('match', 1, function (defined, MATCH, $match) {
 
 
 // @@replace logic
-__webpack_require__(74)('replace', 2, function (defined, REPLACE, $replace) {
+__webpack_require__(73)('replace', 2, function (defined, REPLACE, $replace) {
   // 21.1.3.14 String.prototype.replace(searchValue, replaceValue)
   return [function replace(searchValue, replaceValue) {
     'use strict';
@@ -23176,7 +23191,7 @@ __webpack_require__(74)('replace', 2, function (defined, REPLACE, $replace) {
 
 
 // @@search logic
-__webpack_require__(74)('search', 1, function (defined, SEARCH, $search) {
+__webpack_require__(73)('search', 1, function (defined, SEARCH, $search) {
   // 21.1.3.15 String.prototype.search(regexp)
   return [function search(regexp) {
     'use strict';
@@ -23195,10 +23210,10 @@ __webpack_require__(74)('search', 1, function (defined, SEARCH, $search) {
 
 
 // @@split logic
-__webpack_require__(74)('split', 2, function (defined, SPLIT, $split) {
+__webpack_require__(73)('split', 2, function (defined, SPLIT, $split) {
   'use strict';
 
-  var isRegExp = __webpack_require__(71);
+  var isRegExp = __webpack_require__(70);
   var _split = $split;
   var $push = [].push;
   var $SPLIT = 'split';
@@ -23267,7 +23282,7 @@ __webpack_require__(74)('split', 2, function (defined, SPLIT, $split) {
 
 
 var LIBRARY = __webpack_require__(43);
-var global = __webpack_require__(3);
+var global = __webpack_require__(4);
 var ctx = __webpack_require__(25);
 var classof = __webpack_require__(62);
 var $export = __webpack_require__(0);
@@ -23275,7 +23290,7 @@ var isObject = __webpack_require__(6);
 var aFunction = __webpack_require__(15);
 var anInstance = __webpack_require__(49);
 var forOf = __webpack_require__(50);
-var speciesConstructor = __webpack_require__(75);
+var speciesConstructor = __webpack_require__(74);
 var task = __webpack_require__(115).set;
 var microtask = __webpack_require__(116)();
 var newPromiseCapabilityModule = __webpack_require__(117);
@@ -23500,7 +23515,7 @@ $export($export.S + $export.F * (LIBRARY || !USE_NATIVE), PROMISE, {
     return promiseResolve(LIBRARY && this === Wrapper ? $Promise : this, x);
   }
 });
-$export($export.S + $export.F * !(USE_NATIVE && __webpack_require__(72)(function (iter) {
+$export($export.S + $export.F * !(USE_NATIVE && __webpack_require__(71)(function (iter) {
   $Promise.all(iter)['catch'](empty);
 })), PROMISE, {
   // 25.4.4.1 Promise.all(iterable)
@@ -23557,7 +23572,7 @@ var validate = __webpack_require__(56);
 var WEAK_SET = 'WeakSet';
 
 // 23.4 WeakSet Objects
-__webpack_require__(76)(WEAK_SET, function (get) {
+__webpack_require__(75)(WEAK_SET, function (get) {
   return function WeakSet() {
     return get(this, arguments.length > 0 ? arguments[0] : undefined);
   };
@@ -23576,14 +23591,14 @@ __webpack_require__(76)(WEAK_SET, function (get) {
 
 
 var $export = __webpack_require__(0);
-var $typed = __webpack_require__(77);
+var $typed = __webpack_require__(76);
 var buffer = __webpack_require__(118);
-var anObject = __webpack_require__(2);
+var anObject = __webpack_require__(3);
 var toAbsoluteIndex = __webpack_require__(45);
 var toLength = __webpack_require__(13);
 var isObject = __webpack_require__(6);
-var ArrayBuffer = __webpack_require__(3).ArrayBuffer;
-var speciesConstructor = __webpack_require__(75);
+var ArrayBuffer = __webpack_require__(4).ArrayBuffer;
+var speciesConstructor = __webpack_require__(74);
 var $ArrayBuffer = buffer.ArrayBuffer;
 var $DataView = buffer.DataView;
 var $isView = $typed.ABV && ArrayBuffer.isView;
@@ -23629,7 +23644,7 @@ __webpack_require__(48)(ARRAY_BUFFER);
 
 
 var $export = __webpack_require__(0);
-$export($export.G + $export.W + $export.F * !__webpack_require__(77).ABV, {
+$export($export.G + $export.W + $export.F * !__webpack_require__(76).ABV, {
   DataView: __webpack_require__(118).DataView
 });
 
@@ -23640,7 +23655,7 @@ $export($export.G + $export.W + $export.F * !__webpack_require__(77).ABV, {
 "use strict";
 
 
-__webpack_require__(35)('Int8', 1, function (init) {
+__webpack_require__(36)('Int8', 1, function (init) {
   return function Int8Array(data, byteOffset, length) {
     return init(this, data, byteOffset, length);
   };
@@ -23653,7 +23668,7 @@ __webpack_require__(35)('Int8', 1, function (init) {
 "use strict";
 
 
-__webpack_require__(35)('Uint8', 1, function (init) {
+__webpack_require__(36)('Uint8', 1, function (init) {
   return function Uint8Array(data, byteOffset, length) {
     return init(this, data, byteOffset, length);
   };
@@ -23666,7 +23681,7 @@ __webpack_require__(35)('Uint8', 1, function (init) {
 "use strict";
 
 
-__webpack_require__(35)('Uint8', 1, function (init) {
+__webpack_require__(36)('Uint8', 1, function (init) {
   return function Uint8ClampedArray(data, byteOffset, length) {
     return init(this, data, byteOffset, length);
   };
@@ -23679,7 +23694,7 @@ __webpack_require__(35)('Uint8', 1, function (init) {
 "use strict";
 
 
-__webpack_require__(35)('Int16', 2, function (init) {
+__webpack_require__(36)('Int16', 2, function (init) {
   return function Int16Array(data, byteOffset, length) {
     return init(this, data, byteOffset, length);
   };
@@ -23692,7 +23707,7 @@ __webpack_require__(35)('Int16', 2, function (init) {
 "use strict";
 
 
-__webpack_require__(35)('Uint16', 2, function (init) {
+__webpack_require__(36)('Uint16', 2, function (init) {
   return function Uint16Array(data, byteOffset, length) {
     return init(this, data, byteOffset, length);
   };
@@ -23705,7 +23720,7 @@ __webpack_require__(35)('Uint16', 2, function (init) {
 "use strict";
 
 
-__webpack_require__(35)('Int32', 4, function (init) {
+__webpack_require__(36)('Int32', 4, function (init) {
   return function Int32Array(data, byteOffset, length) {
     return init(this, data, byteOffset, length);
   };
@@ -23718,7 +23733,7 @@ __webpack_require__(35)('Int32', 4, function (init) {
 "use strict";
 
 
-__webpack_require__(35)('Uint32', 4, function (init) {
+__webpack_require__(36)('Uint32', 4, function (init) {
   return function Uint32Array(data, byteOffset, length) {
     return init(this, data, byteOffset, length);
   };
@@ -23731,7 +23746,7 @@ __webpack_require__(35)('Uint32', 4, function (init) {
 "use strict";
 
 
-__webpack_require__(35)('Float32', 4, function (init) {
+__webpack_require__(36)('Float32', 4, function (init) {
   return function Float32Array(data, byteOffset, length) {
     return init(this, data, byteOffset, length);
   };
@@ -23744,7 +23759,7 @@ __webpack_require__(35)('Float32', 4, function (init) {
 "use strict";
 
 
-__webpack_require__(35)('Float64', 8, function (init) {
+__webpack_require__(36)('Float64', 8, function (init) {
   return function Float64Array(data, byteOffset, length) {
     return init(this, data, byteOffset, length);
   };
@@ -23760,8 +23775,8 @@ __webpack_require__(35)('Float64', 8, function (init) {
 // 26.1.1 Reflect.apply(target, thisArgument, argumentsList)
 var $export = __webpack_require__(0);
 var aFunction = __webpack_require__(15);
-var anObject = __webpack_require__(2);
-var rApply = (__webpack_require__(3).Reflect || {}).apply;
+var anObject = __webpack_require__(3);
+var rApply = (__webpack_require__(4).Reflect || {}).apply;
 var fApply = Function.apply;
 // MS Edge argumentsList argument is optional
 $export($export.S + $export.F * !__webpack_require__(5)(function () {
@@ -23785,11 +23800,11 @@ $export($export.S + $export.F * !__webpack_require__(5)(function () {
 var $export = __webpack_require__(0);
 var create = __webpack_require__(46);
 var aFunction = __webpack_require__(15);
-var anObject = __webpack_require__(2);
+var anObject = __webpack_require__(3);
 var isObject = __webpack_require__(6);
 var fails = __webpack_require__(5);
 var bind = __webpack_require__(140);
-var rConstruct = (__webpack_require__(3).Reflect || {}).construct;
+var rConstruct = (__webpack_require__(4).Reflect || {}).construct;
 
 // MS Edge supports only 2 arguments and argumentsList argument is optional
 // FF Nightly sets third argument as `new.target`, but does not create `this` from it
@@ -23844,7 +23859,7 @@ $export($export.S + $export.F * (NEW_TARGET_BUG || ARGS_BUG), 'Reflect', {
 // 26.1.3 Reflect.defineProperty(target, propertyKey, attributes)
 var dP = __webpack_require__(12);
 var $export = __webpack_require__(0);
-var anObject = __webpack_require__(2);
+var anObject = __webpack_require__(3);
 var toPrimitive = __webpack_require__(29);
 
 // MS Edge has broken Reflect.defineProperty - throwing instead of returning false
@@ -23875,7 +23890,7 @@ $export($export.S + $export.F * __webpack_require__(5)(function () {
 // 26.1.4 Reflect.deleteProperty(target, propertyKey)
 var $export = __webpack_require__(0);
 var gOPD = __webpack_require__(22).f;
-var anObject = __webpack_require__(2);
+var anObject = __webpack_require__(3);
 
 $export($export.S, 'Reflect', {
   deleteProperty: function deleteProperty(target, propertyKey) {
@@ -23893,7 +23908,7 @@ $export($export.S, 'Reflect', {
 // 26.1.5 Reflect.enumerate(target)
 
 var $export = __webpack_require__(0);
-var anObject = __webpack_require__(2);
+var anObject = __webpack_require__(3);
 var Enumerate = function Enumerate(iterated) {
   this._t = anObject(iterated); // target
   this._i = 0; // next index
@@ -23932,7 +23947,7 @@ var getPrototypeOf = __webpack_require__(23);
 var has = __webpack_require__(16);
 var $export = __webpack_require__(0);
 var isObject = __webpack_require__(6);
-var anObject = __webpack_require__(2);
+var anObject = __webpack_require__(3);
 
 function get(target, propertyKey /* , receiver */) {
   var receiver = arguments.length < 3 ? target : arguments[2];
@@ -23954,7 +23969,7 @@ $export($export.S, 'Reflect', { get: get });
 // 26.1.7 Reflect.getOwnPropertyDescriptor(target, propertyKey)
 var gOPD = __webpack_require__(22);
 var $export = __webpack_require__(0);
-var anObject = __webpack_require__(2);
+var anObject = __webpack_require__(3);
 
 $export($export.S, 'Reflect', {
   getOwnPropertyDescriptor: function getOwnPropertyDescriptor(target, propertyKey) {
@@ -23972,7 +23987,7 @@ $export($export.S, 'Reflect', {
 // 26.1.8 Reflect.getPrototypeOf(target)
 var $export = __webpack_require__(0);
 var getProto = __webpack_require__(23);
-var anObject = __webpack_require__(2);
+var anObject = __webpack_require__(3);
 
 $export($export.S, 'Reflect', {
   getPrototypeOf: function getPrototypeOf(target) {
@@ -24005,7 +24020,7 @@ $export($export.S, 'Reflect', {
 
 // 26.1.10 Reflect.isExtensible(target)
 var $export = __webpack_require__(0);
-var anObject = __webpack_require__(2);
+var anObject = __webpack_require__(3);
 var $isExtensible = Object.isExtensible;
 
 $export($export.S, 'Reflect', {
@@ -24036,7 +24051,7 @@ $export($export.S, 'Reflect', { ownKeys: __webpack_require__(161) });
 
 // 26.1.12 Reflect.preventExtensions(target)
 var $export = __webpack_require__(0);
-var anObject = __webpack_require__(2);
+var anObject = __webpack_require__(3);
 var $preventExtensions = Object.preventExtensions;
 
 $export($export.S, 'Reflect', {
@@ -24065,7 +24080,7 @@ var getPrototypeOf = __webpack_require__(23);
 var has = __webpack_require__(16);
 var $export = __webpack_require__(0);
 var createDesc = __webpack_require__(41);
-var anObject = __webpack_require__(2);
+var anObject = __webpack_require__(3);
 var isObject = __webpack_require__(6);
 
 function set(target, propertyKey, V /* , receiver */) {
@@ -24122,7 +24137,7 @@ if (setProto) $export($export.S, 'Reflect', {
 // https://github.com/tc39/Array.prototype.includes
 
 var $export = __webpack_require__(0);
-var $includes = __webpack_require__(68)(true);
+var $includes = __webpack_require__(67)(true);
 
 $export($export.P, 'Array', {
   includes: function includes(el /* , fromIndex = 0 */) {
@@ -24130,7 +24145,7 @@ $export($export.P, 'Array', {
   }
 });
 
-__webpack_require__(39)('includes');
+__webpack_require__(40)('includes');
 
 /***/ }),
 /* 345 */
@@ -24159,7 +24174,7 @@ $export($export.P, 'Array', {
   }
 });
 
-__webpack_require__(39)('flatMap');
+__webpack_require__(40)('flatMap');
 
 /***/ }),
 /* 346 */
@@ -24187,7 +24202,7 @@ $export($export.P, 'Array', {
   }
 });
 
-__webpack_require__(39)('flatten');
+__webpack_require__(40)('flatten');
 
 /***/ }),
 /* 347 */
@@ -24279,8 +24294,8 @@ __webpack_require__(54)('trimRight', function ($trim) {
 var $export = __webpack_require__(0);
 var defined = __webpack_require__(30);
 var toLength = __webpack_require__(13);
-var isRegExp = __webpack_require__(71);
-var getFlags = __webpack_require__(73);
+var isRegExp = __webpack_require__(70);
+var getFlags = __webpack_require__(72);
 var RegExpProto = RegExp.prototype;
 
 var $RegExpStringIterator = function $RegExpStringIterator(regexp, string) {
@@ -24400,7 +24415,7 @@ var aFunction = __webpack_require__(15);
 var $defineProperty = __webpack_require__(12);
 
 // B.2.2.2 Object.prototype.__defineGetter__(P, getter)
-__webpack_require__(11) && $export($export.P + __webpack_require__(78), 'Object', {
+__webpack_require__(11) && $export($export.P + __webpack_require__(77), 'Object', {
   __defineGetter__: function __defineGetter__(P, getter) {
     $defineProperty.f(toObject(this), P, { get: aFunction(getter), enumerable: true, configurable: true });
   }
@@ -24419,7 +24434,7 @@ var aFunction = __webpack_require__(15);
 var $defineProperty = __webpack_require__(12);
 
 // B.2.2.3 Object.prototype.__defineSetter__(P, setter)
-__webpack_require__(11) && $export($export.P + __webpack_require__(78), 'Object', {
+__webpack_require__(11) && $export($export.P + __webpack_require__(77), 'Object', {
   __defineSetter__: function __defineSetter__(P, setter) {
     $defineProperty.f(toObject(this), P, { set: aFunction(setter), enumerable: true, configurable: true });
   }
@@ -24439,7 +24454,7 @@ var getPrototypeOf = __webpack_require__(23);
 var getOwnPropertyDescriptor = __webpack_require__(22).f;
 
 // B.2.2.4 Object.prototype.__lookupGetter__(P)
-__webpack_require__(11) && $export($export.P + __webpack_require__(78), 'Object', {
+__webpack_require__(11) && $export($export.P + __webpack_require__(77), 'Object', {
   __lookupGetter__: function __lookupGetter__(P) {
     var O = toObject(this);
     var K = toPrimitive(P, true);
@@ -24464,7 +24479,7 @@ var getPrototypeOf = __webpack_require__(23);
 var getOwnPropertyDescriptor = __webpack_require__(22).f;
 
 // B.2.2.5 Object.prototype.__lookupSetter__(P)
-__webpack_require__(11) && $export($export.P + __webpack_require__(78), 'Object', {
+__webpack_require__(11) && $export($export.P + __webpack_require__(77), 'Object', {
   __lookupSetter__: function __lookupSetter__(P) {
     var O = toObject(this);
     var K = toPrimitive(P, true);
@@ -24507,7 +24522,7 @@ $export($export.P + $export.R, 'Set', { toJSON: __webpack_require__(165)('Set') 
 
 
 // https://tc39.github.io/proposal-setmap-offrom/#sec-map.of
-__webpack_require__(79)('Map');
+__webpack_require__(78)('Map');
 
 /***/ }),
 /* 365 */
@@ -24517,7 +24532,7 @@ __webpack_require__(79)('Map');
 
 
 // https://tc39.github.io/proposal-setmap-offrom/#sec-set.of
-__webpack_require__(79)('Set');
+__webpack_require__(78)('Set');
 
 /***/ }),
 /* 366 */
@@ -24527,7 +24542,7 @@ __webpack_require__(79)('Set');
 
 
 // https://tc39.github.io/proposal-setmap-offrom/#sec-weakmap.of
-__webpack_require__(79)('WeakMap');
+__webpack_require__(78)('WeakMap');
 
 /***/ }),
 /* 367 */
@@ -24537,7 +24552,7 @@ __webpack_require__(79)('WeakMap');
 
 
 // https://tc39.github.io/proposal-setmap-offrom/#sec-weakset.of
-__webpack_require__(79)('WeakSet');
+__webpack_require__(78)('WeakSet');
 
 /***/ }),
 /* 368 */
@@ -24547,7 +24562,7 @@ __webpack_require__(79)('WeakSet');
 
 
 // https://tc39.github.io/proposal-setmap-offrom/#sec-map.from
-__webpack_require__(80)('Map');
+__webpack_require__(79)('Map');
 
 /***/ }),
 /* 369 */
@@ -24557,7 +24572,7 @@ __webpack_require__(80)('Map');
 
 
 // https://tc39.github.io/proposal-setmap-offrom/#sec-set.from
-__webpack_require__(80)('Set');
+__webpack_require__(79)('Set');
 
 /***/ }),
 /* 370 */
@@ -24567,7 +24582,7 @@ __webpack_require__(80)('Set');
 
 
 // https://tc39.github.io/proposal-setmap-offrom/#sec-weakmap.from
-__webpack_require__(80)('WeakMap');
+__webpack_require__(79)('WeakMap');
 
 /***/ }),
 /* 371 */
@@ -24577,7 +24592,7 @@ __webpack_require__(80)('WeakMap');
 
 
 // https://tc39.github.io/proposal-setmap-offrom/#sec-weakset.from
-__webpack_require__(80)('WeakSet');
+__webpack_require__(79)('WeakSet');
 
 /***/ }),
 /* 372 */
@@ -24589,7 +24604,7 @@ __webpack_require__(80)('WeakSet');
 // https://github.com/tc39/proposal-global
 var $export = __webpack_require__(0);
 
-$export($export.G, { global: __webpack_require__(3) });
+$export($export.G, { global: __webpack_require__(4) });
 
 /***/ }),
 /* 373 */
@@ -24601,7 +24616,7 @@ $export($export.G, { global: __webpack_require__(3) });
 // https://github.com/tc39/proposal-global
 var $export = __webpack_require__(0);
 
-$export($export.S, 'System', { global: __webpack_require__(3) });
+$export($export.S, 'System', { global: __webpack_require__(4) });
 
 /***/ }),
 /* 374 */
@@ -24835,8 +24850,8 @@ $export($export.S, 'Math', { signbit: function signbit(x) {
 
 var $export = __webpack_require__(0);
 var core = __webpack_require__(28);
-var global = __webpack_require__(3);
-var speciesConstructor = __webpack_require__(75);
+var global = __webpack_require__(4);
+var speciesConstructor = __webpack_require__(74);
 var promiseResolve = __webpack_require__(154);
 
 $export($export.P + $export.R, 'Promise', { 'finally': function _finally(onFinally) {
@@ -24879,8 +24894,8 @@ $export($export.S, 'Promise', { 'try': function _try(callbackfn) {
 "use strict";
 
 
-var metadata = __webpack_require__(36);
-var anObject = __webpack_require__(2);
+var metadata = __webpack_require__(37);
+var anObject = __webpack_require__(3);
 var toMetaKey = metadata.key;
 var ordinaryDefineOwnMetadata = metadata.set;
 
@@ -24895,8 +24910,8 @@ metadata.exp({ defineMetadata: function defineMetadata(metadataKey, metadataValu
 "use strict";
 
 
-var metadata = __webpack_require__(36);
-var anObject = __webpack_require__(2);
+var metadata = __webpack_require__(37);
+var anObject = __webpack_require__(3);
 var toMetaKey = metadata.key;
 var getOrCreateMetadataMap = metadata.map;
 var store = metadata.store;
@@ -24918,8 +24933,8 @@ metadata.exp({ deleteMetadata: function deleteMetadata(metadataKey, target /* , 
 "use strict";
 
 
-var metadata = __webpack_require__(36);
-var anObject = __webpack_require__(2);
+var metadata = __webpack_require__(37);
+var anObject = __webpack_require__(3);
 var getPrototypeOf = __webpack_require__(23);
 var ordinaryHasOwnMetadata = metadata.has;
 var ordinaryGetOwnMetadata = metadata.get;
@@ -24945,8 +24960,8 @@ metadata.exp({ getMetadata: function getMetadata(metadataKey, target /* , target
 
 var Set = __webpack_require__(157);
 var from = __webpack_require__(166);
-var metadata = __webpack_require__(36);
-var anObject = __webpack_require__(2);
+var metadata = __webpack_require__(37);
+var anObject = __webpack_require__(3);
 var getPrototypeOf = __webpack_require__(23);
 var ordinaryOwnMetadataKeys = metadata.keys;
 var toMetaKey = metadata.key;
@@ -24970,8 +24985,8 @@ metadata.exp({ getMetadataKeys: function getMetadataKeys(target /* , targetKey *
 "use strict";
 
 
-var metadata = __webpack_require__(36);
-var anObject = __webpack_require__(2);
+var metadata = __webpack_require__(37);
+var anObject = __webpack_require__(3);
 var ordinaryGetOwnMetadata = metadata.get;
 var toMetaKey = metadata.key;
 
@@ -24986,8 +25001,8 @@ metadata.exp({ getOwnMetadata: function getOwnMetadata(metadataKey, target /* , 
 "use strict";
 
 
-var metadata = __webpack_require__(36);
-var anObject = __webpack_require__(2);
+var metadata = __webpack_require__(37);
+var anObject = __webpack_require__(3);
 var ordinaryOwnMetadataKeys = metadata.keys;
 var toMetaKey = metadata.key;
 
@@ -25002,8 +25017,8 @@ metadata.exp({ getOwnMetadataKeys: function getOwnMetadataKeys(target /* , targe
 "use strict";
 
 
-var metadata = __webpack_require__(36);
-var anObject = __webpack_require__(2);
+var metadata = __webpack_require__(37);
+var anObject = __webpack_require__(3);
 var getPrototypeOf = __webpack_require__(23);
 var ordinaryHasOwnMetadata = metadata.has;
 var toMetaKey = metadata.key;
@@ -25026,8 +25041,8 @@ metadata.exp({ hasMetadata: function hasMetadata(metadataKey, target /* , target
 "use strict";
 
 
-var metadata = __webpack_require__(36);
-var anObject = __webpack_require__(2);
+var metadata = __webpack_require__(37);
+var anObject = __webpack_require__(3);
 var ordinaryHasOwnMetadata = metadata.has;
 var toMetaKey = metadata.key;
 
@@ -25042,8 +25057,8 @@ metadata.exp({ hasOwnMetadata: function hasOwnMetadata(metadataKey, target /* , 
 "use strict";
 
 
-var $metadata = __webpack_require__(36);
-var anObject = __webpack_require__(2);
+var $metadata = __webpack_require__(37);
+var anObject = __webpack_require__(3);
 var aFunction = __webpack_require__(15);
 var toMetaKey = $metadata.key;
 var ordinaryDefineOwnMetadata = $metadata.set;
@@ -25064,7 +25079,7 @@ $metadata.exp({ metadata: function metadata(metadataKey, metadataValue) {
 // https://github.com/rwaldron/tc39-notes/blob/master/es6/2014-09/sept-25.md#510-globalasap-for-enqueuing-a-microtask
 var $export = __webpack_require__(0);
 var microtask = __webpack_require__(116)();
-var process = __webpack_require__(3).process;
+var process = __webpack_require__(4).process;
 var isNode = __webpack_require__(26)(process) == 'process';
 
 $export($export.G, {
@@ -25083,12 +25098,12 @@ $export($export.G, {
 // https://github.com/zenparsing/es-observable
 
 var $export = __webpack_require__(0);
-var global = __webpack_require__(3);
+var global = __webpack_require__(4);
 var core = __webpack_require__(28);
 var microtask = __webpack_require__(116)();
 var OBSERVABLE = __webpack_require__(9)('observable');
 var aFunction = __webpack_require__(15);
-var anObject = __webpack_require__(2);
+var anObject = __webpack_require__(3);
 var anInstance = __webpack_require__(49);
 var redefineAll = __webpack_require__(51);
 var hide = __webpack_require__(17);
@@ -25298,7 +25313,7 @@ __webpack_require__(48)('Observable');
 
 
 // ie9- setTimeout & setInterval additional parameters fix
-var global = __webpack_require__(3);
+var global = __webpack_require__(4);
 var $export = __webpack_require__(0);
 var navigator = global.navigator;
 var slice = [].slice;
@@ -25342,7 +25357,7 @@ $export($export.G + $export.B, {
 var $iterators = __webpack_require__(114);
 var getKeys = __webpack_require__(44);
 var redefine = __webpack_require__(18);
-var global = __webpack_require__(3);
+var global = __webpack_require__(4);
 var hide = __webpack_require__(17);
 var Iterators = __webpack_require__(55);
 var wks = __webpack_require__(9);
@@ -26111,7 +26126,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 // object, this seems to be the most reliable technique that does not
 // use indirect eval (which violates Content Security Policy).
 (typeof global === "undefined" ? "undefined" : _typeof(global)) === "object" ? global : (typeof window === "undefined" ? "undefined" : _typeof(window)) === "object" ? window : (typeof self === "undefined" ? "undefined" : _typeof(self)) === "object" ? self : undefined);
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(66), __webpack_require__(404)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(92), __webpack_require__(404)(module)))
 
 /***/ }),
 /* 404 */
@@ -26210,7 +26225,7 @@ __webpack_require__(181);
 
 __webpack_require__(447);
 
-var _polymerElement = __webpack_require__(4);
+var _polymerElement = __webpack_require__(2);
 
 __webpack_require__(462);
 
@@ -26224,7 +26239,7 @@ __webpack_require__(190);
 
 __webpack_require__(474);
 
-__webpack_require__(87);
+__webpack_require__(86);
 
 __webpack_require__(475);
 
@@ -26234,25 +26249,25 @@ __webpack_require__(478);
 
 __webpack_require__(480);
 
-__webpack_require__(528);
+__webpack_require__(533);
 
-__webpack_require__(542);
+__webpack_require__(547);
 
-__webpack_require__(544);
+__webpack_require__(549);
 
-__webpack_require__(546);
+__webpack_require__(551);
 
-__webpack_require__(550);
+__webpack_require__(555);
 
 var _AppStateInterface = __webpack_require__(65);
 
 var _AppStateInterface2 = _interopRequireDefault(_AppStateInterface);
 
-var _PackageInterface = __webpack_require__(40);
+var _PackageInterface = __webpack_require__(35);
 
 var _PackageInterface2 = _interopRequireDefault(_PackageInterface);
 
-var _ecosmlApp = __webpack_require__(552);
+var _ecosmlApp = __webpack_require__(557);
 
 var _ecosmlApp2 = _interopRequireDefault(_ecosmlApp);
 
@@ -26360,15 +26375,15 @@ customElements.define('ecosml-app', EcoSMLApp);
 "use strict";
 
 
-__webpack_require__(81);
+__webpack_require__(80);
+
+__webpack_require__(87);
 
 __webpack_require__(88);
 
 __webpack_require__(89);
 
-__webpack_require__(90);
-
-__webpack_require__(87);
+__webpack_require__(86);
 
 var _styleProperties = __webpack_require__(429);
 
@@ -28533,7 +28548,7 @@ __webpack_require__(10);
 
 var _arraySplice = __webpack_require__(178);
 
-var _async = __webpack_require__(37);
+var _async = __webpack_require__(38);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -29332,7 +29347,7 @@ __webpack_require__(10);
 
 var _propertyEffects = __webpack_require__(125);
 
-var _mutableData = __webpack_require__(86);
+var _mutableData = __webpack_require__(85);
 
 var _gestureEventListeners = __webpack_require__(176);
 
@@ -29501,19 +29516,19 @@ var _get = function get(object, property, receiver) { if (object === null) objec
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _polymerElement = __webpack_require__(4);
+var _polymerElement = __webpack_require__(2);
 
 var _templatize = __webpack_require__(127);
 
 var _debounce = __webpack_require__(57);
 
-var _flush = __webpack_require__(85);
+var _flush = __webpack_require__(84);
 
-var _mutableData = __webpack_require__(86);
+var _mutableData = __webpack_require__(85);
 
-var _path = __webpack_require__(83);
+var _path = __webpack_require__(82);
 
-var _async = __webpack_require__(37);
+var _async = __webpack_require__(38);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -30325,17 +30340,17 @@ var _get = function get(object, property, receiver) { if (object === null) objec
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _polymerElement = __webpack_require__(4);
+var _polymerElement = __webpack_require__(2);
 
 var _templatize = __webpack_require__(127);
 
 var _debounce = __webpack_require__(57);
 
-var _flush = __webpack_require__(85);
+var _flush = __webpack_require__(84);
 
-var _async = __webpack_require__(37);
+var _async = __webpack_require__(38);
 
-var _path = __webpack_require__(83);
+var _path = __webpack_require__(82);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -30659,7 +30674,7 @@ exports.ArraySelector = exports.ArraySelectorMixin = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _polymerElement = __webpack_require__(4);
+var _polymerElement = __webpack_require__(2);
 
 var _mixin = __webpack_require__(24);
 
@@ -31244,7 +31259,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.OptionalMutableDataBehavior = exports.MutableDataBehavior = undefined;
 
-var _mutableData = __webpack_require__(86);
+var _mutableData = __webpack_require__(85);
 
 var mutablePropertyChange = void 0;
 /** @suppress {missingProperties} */
@@ -31332,7 +31347,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 /* 429 */
 /***/ (function(module, exports) {
 
-module.exports = "<custom-style>\n  <style is=\"custom-style\">\n    html {\n      --default-primary-color : #00867d;\n      --primary-color         : var(--default-primary-color); /* alt name */\n      --light-primary-color   : #4db6ac;\n\n      --default-secondary-color : #2286c3;\n      --light-secondary-color   : #64b5f6;\n\n      --default-background-color : #F5F5F6;\n      --dark-background-color    : #E1E2E1;\n      --extra-dark-background-color : #616161;\n      \n      --text-primary-color      : #313534;\n      --primary-text-color      : var(--text-primary-color);\n      --secondary-text-color    : #8c9794;\n      --disabled-text-color     : var(--input-border-color);\n      --inverse-text-color      : var(--default-background-color);\n      --max-width               : 1200px;\n      --max-text-width          : 650px;\n      --font-size               : 16px;\n      --font-weight             : 400;\n      --font-weight-heavy       : 700;\n\n      /**\n       * Global Element Styles\n       */\n      /* paper-input */\n      --paper-input-container-color: var(--secondary-text-color);\n    }\n\n    body, html {\n      @apply --paper-font-common-base;\n      font-size        : var(--font-size);\n      font-weight      : var(--font-weight);\n      margin           : 0;\n      padding          : 0;\n      height           : 100%;\n      background-color : var(--default-background-color);\n      color            : var(--text-primary-color);\n    }\n  </style>\n</custom-style>";
+module.exports = "<custom-style>\n  <style is=\"custom-style\">\n    html {\n      --default-primary-color : #00867d;\n      --primary-color         : var(--default-primary-color); /* alt name */\n      --light-primary-color   : #4db6ac;\n\n      --default-secondary-color : #2286c3;\n      --light-secondary-color   : #64b5f6;\n\n      --default-background-color : #F5F5F6;\n      --dark-background-color    : #E1E2E1;\n      --extra-dark-background-color : #616161;\n      \n      --text-primary-color      : #313534;\n      --primary-text-color      : var(--text-primary-color);\n      --secondary-text-color    : #8c9794;\n      --disabled-text-color     : var(--input-border-color);\n      --inverse-text-color      : var(--default-background-color);\n      --max-width               : 1200px;\n      --max-text-width          : 650px;\n      --font-size               : 16px;\n      --font-weight             : 400;\n      --font-weight-heavy       : 700;\n      --form-break-margin       : 75px;\n\n      /**\n       * Global Element Styles\n       */\n      /* paper-input */\n      --paper-input-container-color: var(--secondary-text-color);\n    }\n\n    body, html {\n      @apply --paper-font-common-base;\n      font-size        : var(--font-size);\n      font-weight      : var(--font-weight);\n      margin           : 0;\n      padding          : 0;\n      height           : 100%;\n      background-color : var(--default-background-color);\n      color            : var(--text-primary-color);\n      font-weight      : 400;\n    }\n  </style>\n</custom-style>";
 
 /***/ }),
 /* 430 */
@@ -31341,7 +31356,7 @@ module.exports = "<custom-style>\n  <style is=\"custom-style\">\n    html {\n   
 "use strict";
 
 
-__webpack_require__(87);
+__webpack_require__(86);
 
 var _sharedStyles = __webpack_require__(431);
 
@@ -31358,7 +31373,7 @@ document.head.appendChild(styleWrapper);
 /* 431 */
 /***/ (function(module, exports) {
 
-module.exports = "<dom-module id=\"shared-styles\">\n  <template>\n    <style>\n      paper-material {\n        background: white;\n        display: block;\n      }\n\n      [hidden] {\n        display: none !important;\n      }\n\n      input, select, button, textarea {\n        font-size        : var(--font-size);\n        font-weight      : var(--font-weight);\n        color            : var(--text-primary-color);\n        box-sizing       : border-box;\n      }\n\n      input, textarea {\n        border-radius: 4px;\n        background-color: white;\n        border: 1px solid var(--dark-background-color);\n        padding: 9px;\n        margin: 3px 1px;\n      }\n\n      input:focus {\n        border: 1px solid var(--default-primary-color);\n        outline: none;\n      }\n\n      .help {\n        color: var(--secondary-text-color);\n        font-size: 14px;\n      }\n\n      .narrow-container {\n        display: flex;\n        justify-content: center;\n        flex-direction: column;\n        align-items: center;\n      }\n      \n      .narrow-container > * {\n        max-width: var(--max-text-width);\n        width: 100%;\n      }\n\n      .container {\n        display: flex;\n        justify-content: center;\n        flex-direction: column;\n        align-items: center;\n      }\n\n      .container > * {\n        max-width: var(--max-width);\n        width: 100%;\n      }\n\n      a, a:visited {\n        color: var(--text-primary-color);\n      }\n\n      a[inverse], a[inverse]:visited {\n        color: var(--inverse-text-color);\n      }\n\n      h2.uheader {\n        border-bottom-width: 2px;\n        border-bottom-style: solid;\n        margin: 0 20px 10px 0;\n        padding-bottom: 5px;\n      }\n\n      h2.uheader.blue {\n        border-bottom-color: var(--default-secondary-color);\n      }\n      h2.uheader.green {\n        border-bottom-color: var(--default-primary-color);\n      }\n      h2.uheader.lightblue {\n        border-bottom-color: var(--light-secondary-color);\n      }\n      h2.uheader.dark {\n        border-bottom-color: var(--text-primary-color);\n      }\n    </style>\n  </template>\n</dom-module>";
+module.exports = "<dom-module id=\"shared-styles\">\n  <template>\n    <style>\n      paper-material {\n        background: white;\n        display: block;\n      }\n\n      [hidden] {\n        display: none !important;\n      }\n\n      input, select, button, textarea {\n        font-size        : var(--font-size);\n        font-weight      : var(--font-weight);\n        color            : var(--text-primary-color);\n        box-sizing       : border-box;\n      }\n\n      input, textarea, select {\n        border-radius: 4px;\n        background-color: white;\n        border: 1px solid var(--dark-background-color);\n        padding: 9px;\n        margin: 3px 1px;\n      }\n\n      input:focus {\n        border: 1px solid var(--default-primary-color);\n        outline: none;\n      }\n\n      input[disabled] {\n        background-color: var(--default-background-color);\n        color: var(--secondary-text-color);\n        cursor: not-allowed;\n      }\n\n      select {\n        -webkit-appearance: none;\n        -moz-appearance: none;\n        appearance: none;\n      }\n\n      select::after {\n        width: 0;\n        height: 0;\n        border-left: 4px solid transparent;\n        border-right: 4px solid transparent;\n        border-top: 7px solid #666;\n        margin-top: -3px;\n      }\n\n      .help {\n        color: var(--secondary-text-color);\n        font-size: 14px;\n      }\n\n      .narrow-container {\n        display: flex;\n        justify-content: center;\n        flex-direction: column;\n        align-items: center;\n      }\n      \n      .narrow-container > * {\n        max-width: var(--max-text-width);\n        width: 100%;\n      }\n\n      .container {\n        display: flex;\n        justify-content: center;\n        flex-direction: column;\n        align-items: center;\n      }\n\n      .container > * {\n        max-width: var(--max-width);\n        width: 100%;\n      }\n\n      a, a:visited {\n        color: var(--text-primary-color);\n      }\n\n      a[inverse], a[inverse]:visited {\n        color: var(--inverse-text-color);\n      }\n\n      h1, h2, h3, h4 {\n        font-weight: 400;\n      }\n\n      h2.uheader {\n        border-bottom-width: 2px;\n        border-bottom-style: solid;\n        margin: 0 0 10px 0;\n        padding-bottom: 5px;\n      }\n\n      h2.uheader.blue, h2.uheader[color=\"blue\"] {\n        border-bottom-color: var(--default-secondary-color);\n      }\n      h2.uheader.green, h2.uheader[color=\"green\"] {\n        border-bottom-color: var(--default-primary-color);\n      }\n      h2.uheader.lightblue, h2.uheader[color=\"lightblue\"] {\n        border-bottom-color: var(--light-secondary-color);\n      }\n      h2.uheader.dark, h2.uheader[color=\"dark\"] {\n        border-bottom-color: var(--text-primary-color);\n      }\n    </style>\n  </template>\n</dom-module>";
 
 /***/ }),
 /* 432 */
@@ -32753,7 +32768,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var _require = __webpack_require__(57),
     Debouncer = _require.Debouncer;
 
-var Async = __webpack_require__(37);
+var Async = __webpack_require__(38);
 var _MasterController = __webpack_require__(128);
 
 /**
@@ -34804,6 +34819,85 @@ var PackageModel = function (_BaseModel) {
     }()
 
     /**
+     * @method moveExample
+     * @description move (rename) example directory
+     * 
+     * @param {String} packageId
+     * @param {String} src current example directory name
+     * @param {String} dst new example directory name
+     * 
+     * @returns {Promise}
+     */
+
+  }, {
+    key: 'moveExample',
+    value: function () {
+      var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(packageId, src, dst) {
+        return regeneratorRuntime.wrap(function _callee6$(_context6) {
+          while (1) {
+            switch (_context6.prev = _context6.next) {
+              case 0:
+                _context6.next = 2;
+                return this.service.moveExample(packageId, src, dst);
+
+              case 2:
+                return _context6.abrupt('return', this.getFiles(packageId));
+
+              case 3:
+              case 'end':
+                return _context6.stop();
+            }
+          }
+        }, _callee6, this);
+      }));
+
+      function moveExample(_x10, _x11, _x12) {
+        return _ref6.apply(this, arguments);
+      }
+
+      return moveExample;
+    }()
+
+    /**
+     * @method deleteExample
+     * @description delete example directory
+     * 
+     * @param {String} packageId
+     * @param {String} name example directory to delete
+     * 
+     * @returns {Promise}
+     */
+
+  }, {
+    key: 'deleteExample',
+    value: function () {
+      var _ref7 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(packageId, name) {
+        return regeneratorRuntime.wrap(function _callee7$(_context7) {
+          while (1) {
+            switch (_context7.prev = _context7.next) {
+              case 0:
+                _context7.next = 2;
+                return this.service.deleteExample(packageId, name);
+
+              case 2:
+                return _context7.abrupt('return', this.getFiles(packageId));
+
+              case 3:
+              case 'end':
+                return _context7.stop();
+            }
+          }
+        }, _callee7, this);
+      }));
+
+      function deleteExample(_x13, _x14) {
+        return _ref7.apply(this, arguments);
+      }
+
+      return deleteExample;
+    }()
+
+    /**
      * @method previewMarkdown
      * @description render markdown with Github flavored markdown service
      * 
@@ -35246,6 +35340,27 @@ var PackageService = function (_BaseService) {
       });
     }
   }, {
+    key: 'moveExample',
+    value: function moveExample(packageId, src, dst) {
+      return this.request({
+        url: this.baseUrl + '/' + packageId + '/example/' + src,
+        fetchOptions: {
+          method: 'MOVE',
+          body: dst
+        }
+      });
+    }
+  }, {
+    key: 'deleteExample',
+    value: function deleteExample(packageId, name) {
+      return this.request({
+        url: this.baseUrl + '/' + packageId + '/example/' + name,
+        fetchOptions: {
+          method: 'DELETE'
+        }
+      });
+    }
+  }, {
     key: 'previewMarkdown',
     value: function previewMarkdown(markdown) {
       return this.request({
@@ -35496,8 +35611,8 @@ module.exports = {
     },
     overview: {
       type: String,
-      label: 'Overview (Short Description)',
-      description: 'One sentance summary of package'
+      label: '',
+      description: ''
     },
     description: {
       type: String,
@@ -36230,7 +36345,7 @@ exports.PaperButtonBehavior = exports.PaperButtonBehaviorImpl = undefined;
 
 __webpack_require__(1);
 
-var _ironButtonState = __webpack_require__(91);
+var _ironButtonState = __webpack_require__(90);
 
 var _paperRippleBehavior = __webpack_require__(130);
 
@@ -36913,7 +37028,7 @@ Ripple.prototype = {
 
 __webpack_require__(1);
 
-__webpack_require__(89);
+__webpack_require__(88);
 
 var $_documentContainer = document.createElement('div');
 $_documentContainer.setAttribute('style', 'display: none;');
@@ -38229,17 +38344,17 @@ exports.AppLayoutBehavior = undefined;
 
 __webpack_require__(1);
 
-var _ironResizableBehavior = __webpack_require__(92);
+var _ironResizableBehavior = __webpack_require__(91);
 
 var _polymerDom = __webpack_require__(7);
 
-var _async = __webpack_require__(37);
+var _async = __webpack_require__(38);
 
 var async = _interopRequireWildcard(_async);
 
 var _debounce = __webpack_require__(57);
 
-var _flush = __webpack_require__(85);
+var _flush = __webpack_require__(84);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -38960,7 +39075,7 @@ exports.PaperInkyFocusBehavior = exports.PaperInkyFocusBehaviorImpl = undefined;
 
 __webpack_require__(1);
 
-var _ironButtonState = __webpack_require__(91);
+var _ironButtonState = __webpack_require__(90);
 
 var _paperRippleBehavior = __webpack_require__(130);
 
@@ -39058,7 +39173,7 @@ var _templateObject = _taggedTemplateLiteral(['\n    <style include="paper-mater
 
 var _polymer = __webpack_require__(1);
 
-__webpack_require__(89);
+__webpack_require__(88);
 
 __webpack_require__(476);
 
@@ -39134,7 +39249,7 @@ Example:
 "use strict";
 
 
-__webpack_require__(89);
+__webpack_require__(88);
 
 var $_documentContainer = document.createElement('div');
 $_documentContainer.setAttribute('style', 'display: none;');
@@ -39281,7 +39396,7 @@ exports.AppTitleCard = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _polymerElement = __webpack_require__(4);
+var _polymerElement = __webpack_require__(2);
 
 var _appTitleCard = __webpack_require__(479);
 
@@ -39331,7 +39446,7 @@ module.exports = "<style>\n  :host {\n    display: block;\n  }\n  .header {\n   
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _polymerElement = __webpack_require__(4);
+var _polymerElement = __webpack_require__(2);
 
 __webpack_require__(481);
 
@@ -39345,7 +39460,7 @@ var _appPackageMetadataEditor = __webpack_require__(497);
 
 var _appPackageMetadataEditor2 = _interopRequireDefault(_appPackageMetadataEditor);
 
-var _PackageInterface = __webpack_require__(40);
+var _PackageInterface = __webpack_require__(35);
 
 var _PackageInterface2 = _interopRequireDefault(_PackageInterface);
 
@@ -39355,17 +39470,13 @@ var _AppStateInterface2 = _interopRequireDefault(_AppStateInterface);
 
 __webpack_require__(498);
 
-__webpack_require__(509);
+__webpack_require__(500);
 
-__webpack_require__(511);
+__webpack_require__(504);
 
-__webpack_require__(513);
+__webpack_require__(521);
 
-__webpack_require__(515);
-
-__webpack_require__(517);
-
-__webpack_require__(522);
+__webpack_require__(531);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -39393,21 +39504,16 @@ var AppPackageMetadataEditor = function (_Mixin$with) {
           type: Boolean,
           value: true
         },
+
         currentAction: {
           type: String,
           value: 'Create'
         },
-        sections: {
-          type: Array,
-          value: function value() {
-            return ['basicInformation', 'details'];
-          }
-        },
 
         selectedSection: {
           type: String,
-          // value : 'basicInformation'
-          value: 'files'
+          value: 'basic'
+          // value : 'files'
         },
 
         // package schema object
@@ -39417,10 +39523,11 @@ var AppPackageMetadataEditor = function (_Mixin$with) {
         },
 
         // used for displaying package name
-        namePreview: {
+        name: {
           type: String,
           value: ''
         }
+
       };
     }
   }]);
@@ -39439,6 +39546,8 @@ var AppPackageMetadataEditor = function (_Mixin$with) {
   _createClass(AppPackageMetadataEditor, [{
     key: "_onAppStateUpdate",
     value: function _onAppStateUpdate(e) {
+      var _this2 = this;
+
       if (this.unsavedData) {
         if (confirm('You have unsaved changes, are you sure you want to leave?')) {
           this.unsavedData = null;
@@ -39454,20 +39563,14 @@ var AppPackageMetadataEditor = function (_Mixin$with) {
       if (page === 'edit' && e.location.path.length > 0) {
         if (this.packageId === e.location.path[1]) return;
         this.packageId = e.location.path[1];
-        this.fetchAndUpdatePackage(e.location.path[1]);
+        this._fetchAndUpdatePackage(e.location.path[1]);
       } else if (page === 'create') {
         this.createPackage();
       }
-    }
-  }, {
-    key: "get",
-    value: function get(attr) {
-      return this.$[attr].value;
-    }
-  }, {
-    key: "set",
-    value: function set(attr, value) {
-      this.$[attr].value = value || '';
+
+      setTimeout(function () {
+        return _this2.$.tabs.notifyResize();
+      }, 25);
     }
 
     /**
@@ -39480,33 +39583,10 @@ var AppPackageMetadataEditor = function (_Mixin$with) {
     value: function createPackage() {
       this.currentAction = 'Create';
       this.creating = true;
-      this.selectedSection = 'basicInformation';
-      this.namePreview = '';
+      this.selectedSection = 'basic';
+      this.name = '';
       this.packageId = '';
-      for (var key in this.schema) {
-        this.set(key);
-      }
-    }
-
-    /**
-     * @method _onCreateBtnClicked
-     * @description function fired when the create button is clicked
-     */
-
-  }, {
-    key: "_onCreateBtnClicked",
-    value: function _onCreateBtnClicked() {
-      if (this.namePreview.length < 4) {
-        return alert('Name must be at least 4 characters');
-      }
-      if (this.get('overview').length < 15) {
-        return alert('Please provide a longer overview');
-      }
-      if (!this.get('organization')) {
-        return alert('Please select an organization');
-      }
-
-      this._createPackage(this.namePreview, this.get('overview'), this.get('organization'));
+      this.$.basic.reset();
     }
 
     /**
@@ -39521,11 +39601,17 @@ var AppPackageMetadataEditor = function (_Mixin$with) {
       if (!confirm('Are you really sure?')) return;
       this._deletePackage(this.packageId);
     }
+
+    /**
+     * @method _fetchAndUpdatePackage
+     * @description called when app state updates
+     */
+
   }, {
-    key: "fetchAndUpdatePackage",
+    key: "_fetchAndUpdatePackage",
     value: function () {
       var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(pkgId) {
-        var pkg, files;
+        var pkg;
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -39536,111 +39622,107 @@ var AppPackageMetadataEditor = function (_Mixin$with) {
 
               case 3:
                 pkg = _context.sent;
-                _context.next = 6;
-                return this._getPackageFiles(pkgId);
 
-              case 6:
-                files = _context.sent;
-
-
-                this.updatePackage(pkg.payload);
-                _context.next = 13;
+                this._setPackageData(pkg.payload);
+                _context.next = 11;
                 break;
 
-              case 10:
-                _context.prev = 10;
+              case 7:
+                _context.prev = 7;
                 _context.t0 = _context["catch"](0);
-                return _context.abrupt("return", alert('Failed to fetch package with id: ' + pkgId));
 
-              case 13:
+                console.error(_context.t0);
+                return _context.abrupt("return", alert('Failed to fetch package ' + pkgId + ': ' + _context.t0.message));
+
+              case 11:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this, [[0, 10]]);
+        }, _callee, this, [[0, 7]]);
       }));
 
-      function fetchAndUpdatePackage(_x) {
+      function _fetchAndUpdatePackage(_x) {
         return _ref.apply(this, arguments);
       }
 
-      return fetchAndUpdatePackage;
+      return _fetchAndUpdatePackage;
     }()
+
+    /**
+     * @method _onPackageUpdate
+     * @description via package interface, called when package data updates
+     */
+
   }, {
-    key: "_onPackageUpdate",
-    value: function _onPackageUpdate(e) {
+    key: "_setPackageData",
+    value: function _setPackageData(e) {
       if (e.state !== 'loaded') return;
       if (e.id !== this.packageId) return;
-      this.updatePackage(e.payload);
+      this._setPackageData(e.payload);
     }
 
     /**
-     * @method updatePackage
+     * @method _setPackageData
      * @description update UI from package data
      * 
      * @param {Object} pkgData package to render
      */
 
   }, {
-    key: "updatePackage",
-    value: function updatePackage(pkgData) {
-      this.currentAction = 'Update';
-      this.creating = false;
-      this.$.commitMsg.value = '';
-      this.packageId = pkgData.id;
-      this.namePreview = pkgData.name;
+    key: "_setPackageData",
+    value: function () {
+      var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(pkgData) {
+        var cRelease;
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                this.currentAction = 'Update';
+                this.creating = false;
+                this.$.commitMsg.value = '';
+                this.packageId = pkgData.id;
+                this.name = pkgData.name;
+                this.data = pkgData;
 
-      var schema = this._getPackageSchema();
-      for (var key in schema) {
-        if (pkgData[key]) this.set(key, pkgData[key]);else this.set(key);
+                // set basic metadata inputs
+                this.$.basic.data = pkgData;
+                this.$.details.data = pkgData;
+
+                // get and set files
+                _context2.next = 10;
+                return this._getPackageFiles(pkgData.id);
+
+              case 10:
+                this.$.files.files = _context2.sent;
+
+
+                // set release info
+                this.$.release.package = pkgData;
+                if (pkgData.releases && pkgData.releases.length) {
+                  cRelease = pkgData.releases[pkgData.releases.length - 1].name;
+
+                  this.$.release.releases = pkgData.releases;
+                  this.$.release.currentRelease = cRelease;
+                } else {
+                  this.$.release.releases = [];
+                  this.$.release.currentRelease = null;
+                }
+
+              case 13:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      function _setPackageData(_x2) {
+        return _ref2.apply(this, arguments);
       }
 
-      this.$.release.package = pkgData;
-      if (pkgData.releases && pkgData.releases.length) {
-        var cRelease = pkgData.releases[pkgData.releases.length - 1].name;
-        this.$.release.releases = pkgData.releases;
-        this.$.release.currentRelease = cRelease;
-      } else {
-        this.$.release.releases = [];
-        this.$.release.currentRelease = null;
-      }
-
-      this.$.organization.value = pkgData.organization;
-
-      this.$.theme.setValues(pkgData);
-    }
-
-    /**
-     * Fired from name input
-     */
-
-  }, {
-    key: "_updateNamePreview",
-    value: function _updateNamePreview() {
-      this.namePreview = this.get('name').toLowerCase().replace(/ /g, '-');
-    }
-
-    /**
-     * Fired when create package state updates
-     */
-
-  }, {
-    key: "_onCreatePackageUpdate",
-    value: function _onCreatePackageUpdate(e) {
-      if (e.state === 'loading') {
-        this.$.createBtn.setAttribute('disabled', 'disabled');
-        this.$.createBtn.innerHTML = 'Creating...';
-        return;
-      }
-
-      this.$.createBtn.removeAttribute('disabled', 'disabled');
-      this.$.createBtn.innerHTML = 'Create';
-      if (e.state === 'error') {
-        return alert('Failed to create package :( ' + e.error.message);
-      }
-
-      this._setWindowLocation('/edit/' + e.payload.id);
-    }
+      return _setPackageData;
+    }()
 
     /**
      * @method _onDataChange
@@ -39652,36 +39734,28 @@ var AppPackageMetadataEditor = function (_Mixin$with) {
     value: function _onDataChange() {
       if (this.creating) return;
 
-      this.unsavedData = {
-        name: this.namePreview,
-        overview: this.get('overview'),
-        description: this.get('description'),
-        keywords: this.get('keywords'),
-        organization: this.get('organization')
-      };
+      var unsavedData = Object.assign(this.$.basic.getValues(), this.$.details.getValues());
+
+      var tmp = {};
+      for (var key in unsavedData) {
+        tmp[key] = this.data[key] || (key === 'keywords' ? [] : '');
+      }
+
+      if (JSON.stringify(tmp) === JSON.stringify(unsavedData)) {
+        this.$.savingToast.close();
+        return;
+      }
 
       this.$.unsavedMsg.style.display = 'block';
       this.$.savingMsg.style.display = 'none';
       this.$.savingToast.open();
     }
-
-    /**
-     * @method _onThemeUpdate
-     * @description called from the app-theme-input when a value updates
-     */
-
-  }, {
-    key: "_onThemeUpdate",
-    value: function _onThemeUpdate(e) {
-      this._onDataChange();
-      for (var key in e.detail) {
-        this.unsavedData[key] = e.detail[key];
-      }
-    }
   }, {
     key: "_onSaveChangesClicked",
     value: function _onSaveChangesClicked() {
-      this._updatePackage(this.packageId, this.unsavedData, this.$.commitMsg.value);
+      var unsavedData = Object.assign(this.$.basic.getValues(), this.$.details.getValues());
+
+      this._updatePackage(this.packageId, unsavedData, this.$.commitMsg.value);
     }
   }, {
     key: "_onEditPackageUpdate",
@@ -39738,7 +39812,7 @@ var _polymerFn = __webpack_require__(8);
 
 var _domModule = __webpack_require__(124);
 
-var _polymerElement = __webpack_require__(4);
+var _polymerElement = __webpack_require__(2);
 
 var $_documentContainer = document.createElement('div');
 $_documentContainer.setAttribute('style', 'display: none;');
@@ -40928,7 +41002,7 @@ __webpack_require__(1);
 
 var _ironFitBehavior = __webpack_require__(487);
 
-var _ironResizableBehavior = __webpack_require__(92);
+var _ironResizableBehavior = __webpack_require__(91);
 
 var _ironOverlayManager = __webpack_require__(488);
 
@@ -43387,11 +43461,11 @@ __webpack_require__(131);
 
 var _ironMenubarBehavior = __webpack_require__(493);
 
-var _ironResizableBehavior = __webpack_require__(92);
+var _ironResizableBehavior = __webpack_require__(91);
 
 __webpack_require__(190);
 
-__webpack_require__(81);
+__webpack_require__(80);
 
 __webpack_require__(495);
 
@@ -44180,7 +44254,7 @@ var _templateObject = _taggedTemplateLiteral(['\n    <style>\n      :host {\n   
 
 var _polymer = __webpack_require__(1);
 
-var _ironButtonState = __webpack_require__(91);
+var _ironButtonState = __webpack_require__(90);
 
 var _ironControlState = __webpack_require__(58);
 
@@ -44296,7 +44370,7 @@ In order to apply the `Roboto` font to this element, make sure you've imported `
 /* 497 */
 /***/ (function(module, exports) {
 
-module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n  app-title-card {\n    margin-bottom: 25px;\n  }\n  paper-button {\n    color: var(--default-primary-color);\n  }\n  paper-button:hover {\n    background: var(--default-background-color);\n  }\n  h2 {\n    margin : 0 0 5px 0;\n  }\n  #unsavedMsg paper-button {\n    color: var(--inverse-text-color);\n    border: 1px solid var(--inverse-text-color);\n  }\n  #unsavedMsg paper-button:hover {\n    color: var(--default-primary-color);\n    border: 1px solid var(--default-primary-color);\n  }\n  #savedToast {\n    --paper-toast-background-color: var(--default-primary-color);\n    --paper-toast-color: var(--inverse-text-color);\n  }\n\n  iron-pages > div {\n    padding: 40px;\n    background: white;\n  }\n\n  app-text-input {\n    display: block;\n  }\n\n  paper-tabs {\n    --paper-tabs-selection-bar-color: var(--default-primary-color);\n  }\n  paper-tab {\n    --paper-tab-ink: var(--default-primary-color);\n  }\n\n  #commitMsg {\n    display: block;\n    width: 100%;\n    box-sizing: border-box;\n    margin-top: 20px;\n  }\n\n</style>\n\n<paper-toast id=\"savingToast\" duration=\"0\">\n  <div id=\"unsavedMsg\">\n    <div>\n      You have unsaved changes  \n      <paper-button on-click=\"_onSaveChangesClicked\">Commit Changes</paper-button> \n    </div> \n    <div>\n      <input type=\"text\" placeholder=\"Commit message\" id=\"commitMsg\">\n    </div>\n  </div>\n  <div id=\"savingMsg\">\n    Committing...\n  </div>\n</paper-toast>\n<paper-toast id=\"savedToast\">\n  Package Data Saved!\n</paper-toast>\n\n<div class=\"container\">\n  <div class=\"narrow-container\">\n    <h1>[[currentAction]] Package</h1>\n\n    <paper-tabs hidden$=\"[[creating]]\" selected=\"{{selectedSection}}\" attr-for-selected=\"id\">\n      <paper-tab id=\"basicInformation\">Basic Information</paper-tab>\n      <paper-tab id=\"details\">Details</paper-tab>\n      <paper-tab id=\"files\">Files</paper-tab>\n      <paper-tab id=\"releasePanel\">Releases</paper-tab>\n    </paper-tabs>\n\n    <iron-pages selected=\"[[selectedSection]]\" attr-for-selected=\"id\">\n      <div id=\"basicInformation\">\n        <app-text-input  \n          id=\"name\" \n          label=\"Name\" \n          on-keyup=\"_updateNamePreview\" \n          on-change=\"_updateNamePreview\"\n          help=\"[[namePreview]]\"\n          hidden$=\"[[!creating]]\">\n        </app-text-input>\n\n        <div hidden$=\"[[creating]]\" class=\"help\">Package Name</div>\n        <h2 hidden$=\"[[creating]]\">[[namePreview]]</h2>\n\n        <app-text-input \n          id=\"overview\" \n          label=\"[[schema.overview.label]]\" \n          on-change=\"_onDataChange\"\n          help=\"[[schema.overview.description]]\">\n        </app-text-input>\n\n        <app-org-input id=\"organization\" on-change=\"_onDataChange\"></app-org-input>\n\n        <div style=\"text-align: right\">\n          <paper-button \n            hidden$=\"[[!creating]]\" \n            id=\"createBtn\"\n            on-click=\"_onCreateBtnClicked\">Create\n          </paper-button>\n        </div>\n      </div>\n\n      <div id=\"details\">\n        <app-markdown-editor label=\"Description\" id=\"description\" on-markdown-change=\"_onDataChange\"></app-markdown-editor>\n        <div class=\"help\">[[schema.description.description]]</div>\n\n        <app-keyword-input id=\"keywords\" label=\"Keywords.  Comma Separate\" on-keyword-change=\"_onDataChange\"></app-keyword-input>\n        <div class=\"help\">[[schema.keywords.description]]</div>\n\n        <app-theme-input id=\"theme\" on-update=\"_onThemeUpdate\"></app-theme-input>\n      </div>\n\n      <div id=\"files\">\n        <app-file-manager label=\"Papers\" directory=\"/papers\"></app-file-manager>\n        <app-file-manager label=\"Coefficients\" directory=\"/coefficients\"></app-file-manager>\n        <app-file-manager label=\"Source\" directory=\"/main\"></app-file-manager>\n      </div>\n\n      <div id=\"releasePanel\">\n        <app-create-release id=\"release\"></app-create-release>\n      </div>\n\n      <div>\n        <paper-button on-click=\"_onDeleteBtnClicked\">Delete Package</paper-button>\n      </div>\n    </iron-pages>\n  </div>\n</div>";
+module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n    padding-bottom: 50px;\n  }\n\n  .container {\n    margin-bottom: 100px;\n  }\n\n  #unsavedMsg paper-button {\n    color: var(--inverse-text-color);\n    border: 1px solid var(--inverse-text-color);\n  }\n  \n  #unsavedMsg paper-button:hover {\n    color: var(--default-primary-color);\n    border: 1px solid var(--default-primary-color);\n  }\n\n  #savedToast {\n    --paper-toast-background-color: var(--default-primary-color);\n    --paper-toast-color: var(--inverse-text-color);\n  }\n\n  iron-pages > * {\n    padding: 40px;\n    background: white;\n  }\n\n  paper-tabs {\n    --paper-tabs-selection-bar-color: var(--default-primary-color);\n  }\n\n  paper-tab {\n    --paper-tab-ink: var(--default-primary-color);\n  }\n\n  #commitMsg {\n    display: block;\n    width: 100%;\n    box-sizing: border-box;\n    margin-top: 20px;\n  }\n</style>\n\n<paper-toast id=\"savingToast\" duration=\"0\">\n  <div id=\"unsavedMsg\">\n    <div>\n      You have unsaved changes  \n      <paper-button on-click=\"_onSaveChangesClicked\">Commit Changes</paper-button> \n    </div> \n    <div>\n      <input type=\"text\" placeholder=\"Commit message\" id=\"commitMsg\">\n    </div>\n  </div>\n  <div id=\"savingMsg\">\n    Committing...\n  </div>\n</paper-toast>\n<paper-toast id=\"savedToast\">\n  Package Data Saved!\n</paper-toast>\n\n<div class=\"container\">\n  <div class=\"narrow-container\">\n    <h1>\n      [[currentAction]] Package<span hidden$=\"[[creating]]\">: [[name]]</span>\n    </h1>\n\n    <paper-tabs id=\"tabs\" hidden$=\"[[creating]]\" selected=\"{{selectedSection}}\" attr-for-selected=\"id\">\n      <paper-tab id=\"basic\">Basic Information</paper-tab>\n      <paper-tab id=\"details\">Details</paper-tab>\n      <paper-tab id=\"files\">Files</paper-tab>\n      <paper-tab id=\"release\">Releases</paper-tab>\n    </paper-tabs>\n\n    <iron-pages selected=\"[[selectedSection]]\" attr-for-selected=\"id\">\n      <app-basic-metadata id=\"basic\" creating=\"[[creating]]\" on-change=\"_onDataChange\"></app-basic-metadata>\n      <app-details-metadata id=\"details\" on-change=\"_onDataChange\"></app-details-metadata>\n      <app-files id=\"files\"></app-files>\n      <app-releases id=\"release\"></app-releases>\n    </iron-pages>\n  </div>\n</div>";
 
 /***/ }),
 /* 498 */
@@ -44311,13 +44385,837 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _polymerElement = __webpack_require__(4);
+var _polymerElement = __webpack_require__(2);
 
-var _appMarkdownEditor = __webpack_require__(499);
+var _appTextInput = __webpack_require__(499);
+
+var _appTextInput2 = _interopRequireDefault(_appTextInput);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var AppTextInput = function (_PolymerElement) {
+  _inherits(AppTextInput, _PolymerElement);
+
+  function AppTextInput() {
+    _classCallCheck(this, AppTextInput);
+
+    return _possibleConstructorReturn(this, (AppTextInput.__proto__ || Object.getPrototypeOf(AppTextInput)).apply(this, arguments));
+  }
+
+  _createClass(AppTextInput, [{
+    key: "_onChange",
+    value: function _onChange(e) {
+      this.dispatchEvent(new CustomEvent('change', { detail: { value: this.value } }));
+    }
+  }, {
+    key: "_onKeyUp",
+    value: function _onKeyUp(e) {
+      e = {
+        which: e.which,
+        value: this.value
+      };
+      this.dispatchEvent(new CustomEvent('keyup', { detail: e }));
+    }
+  }, {
+    key: "value",
+    get: function get() {
+      return this.$.input.value;
+    },
+    set: function set(value) {
+      this.$.input.value = value;
+    }
+  }], [{
+    key: "template",
+    get: function get() {
+      return _appTextInput2.default;
+    }
+  }, {
+    key: "properties",
+    get: function get() {
+      return {
+        type: {
+          type: String,
+          value: 'text'
+        },
+        label: {
+          type: String,
+          value: ''
+        },
+        help: {
+          type: String,
+          value: ''
+        },
+        placeholder: {
+          type: String,
+          value: ''
+        },
+        disabled: {
+          type: Boolean,
+          value: false
+        }
+      };
+    }
+  }]);
+
+  return AppTextInput;
+}(_polymerElement.Element);
+
+exports.default = AppTextInput;
+
+
+customElements.define('app-text-input', AppTextInput);
+
+/***/ }),
+/* 499 */
+/***/ (function(module, exports) {
+
+module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: inline-block;\n  }\n\n  input {\n    box-sizing: border-box;\n    width: 100%;\n    display: block;\n  }\n\n  .label {\n    font-weight: var(--font-weight-heavy);\n  }\n</style>\n\n<div class=\"label\">\n  <slot name=\"label\"></slot>\n  <span>[[label]]</span>\n</div>\n\n<input \n  type$=\"[[type]]\" \n  id=\"input\" \n  placeholder$=\"[[placeholder]]\"\n  disabled$=\"[[disabled]]\"\n  on-change=\"_onChange\" \n  on-keyup=\"_onKeyUp\" />\n\n<div class=\"help\">\n  <slot name=\"help\"></slot>\n  <span>[[help]]</span>\n</div>";
+
+/***/ }),
+/* 500 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _polymerElement = __webpack_require__(2);
+
+var _appBasicMetadata = __webpack_require__(501);
+
+var _appBasicMetadata2 = _interopRequireDefault(_appBasicMetadata);
+
+__webpack_require__(502);
+
+var _PackageInterface = __webpack_require__(35);
+
+var _PackageInterface2 = _interopRequireDefault(_PackageInterface);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var VALUES = ['name', 'overview', 'organization'];
+
+var AppBasicMetadata = function (_Mixin$with) {
+  _inherits(AppBasicMetadata, _Mixin$with);
+
+  function AppBasicMetadata() {
+    _classCallCheck(this, AppBasicMetadata);
+
+    return _possibleConstructorReturn(this, (AppBasicMetadata.__proto__ || Object.getPrototypeOf(AppBasicMetadata)).apply(this, arguments));
+  }
+
+  _createClass(AppBasicMetadata, [{
+    key: "reset",
+
+
+    /**
+     * @method reset
+     * @description clear all inputs
+     */
+    value: function reset() {
+      this.name = '';
+      this.overview = '';
+      this.organization = '';
+    }
+
+    /**
+     * @method getValues
+     * @description return an object with all current values controlled by
+     * the basic metadata inputs.
+     * 
+     * @returns {Object}
+     */
+
+  }, {
+    key: "getValues",
+    value: function getValues() {
+      var _this2 = this;
+
+      var data = {};
+      VALUES.forEach(function (value) {
+        data[value] = _this2[value];
+      });
+      return data;
+    }
+
+    /**
+     * @method _onDataUpdate
+     * @description called when data property updates
+     */
+
+  }, {
+    key: "_onDataUpdate",
+    value: function _onDataUpdate() {
+      var _this3 = this;
+
+      if (!this.data) return;
+      VALUES.forEach(function (value) {
+        _this3[value] = _this3.data[value];
+      });
+    }
+
+    /**
+     * @method _updateNamePreview
+     * @description Fired from name input
+     */
+
+  }, {
+    key: "_updateNamePreview",
+    value: function _updateNamePreview() {
+      this.name = this.$.name.value.toLowerCase().replace(/ /g, '-').replace(/[^a-zA-Z0-9_-]/g, '');
+      this._onInputChange();
+    }
+
+    /**
+     * @method _onInputChange
+     * @description called when any input changes
+     */
+
+  }, {
+    key: "_onInputChange",
+    value: function _onInputChange() {
+      this.fire('change');
+    }
+
+    /**
+     * @method _onCreateBtnClicked
+     * @description function fired when the create button is clicked
+     */
+
+  }, {
+    key: "_onCreateBtnClicked",
+    value: function () {
+      var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+        var data;
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                data = this.getValues();
+
+                if (!(data.name.length < 4)) {
+                  _context.next = 3;
+                  break;
+                }
+
+                return _context.abrupt("return", alert('Name must be at least 4 characters'));
+
+              case 3:
+                if (!(data.overview.length < 15)) {
+                  _context.next = 5;
+                  break;
+                }
+
+                return _context.abrupt("return", alert('Please provide a longer overview'));
+
+              case 5:
+                if (data.organization) {
+                  _context.next = 7;
+                  break;
+                }
+
+                return _context.abrupt("return", alert('Please select an organization'));
+
+              case 7:
+                _context.prev = 7;
+                _context.next = 10;
+                return this._createPackage(data.name, data.overview, data.organization);
+
+              case 10:
+                _context.next = 15;
+                break;
+
+              case 12:
+                _context.prev = 12;
+                _context.t0 = _context["catch"](7);
+
+                alert('Failed to create package: ' + _context.t0.message);
+
+              case 15:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this, [[7, 12]]);
+      }));
+
+      function _onCreateBtnClicked() {
+        return _ref.apply(this, arguments);
+      }
+
+      return _onCreateBtnClicked;
+    }()
+
+    /**
+    * @method _onCreatePackageUpdate
+    * @description via PackageInterface, Fired when create package state updates
+    */
+
+  }, {
+    key: "_onCreatePackageUpdate",
+    value: function _onCreatePackageUpdate(e) {
+      if (e.state === 'loading') {
+        this.$.createBtn.setAttribute('disabled', 'disabled');
+        this.$.createBtn.innerHTML = 'Creating...';
+        return;
+      }
+
+      this.$.createBtn.removeAttribute('disabled', 'disabled');
+      this.$.createBtn.innerHTML = 'Create';
+      if (e.state === 'error') {
+        return alert('Failed to create package :( ' + e.error.message);
+      }
+
+      this._setWindowLocation('/edit/' + e.payload.id);
+    }
+  }, {
+    key: "name",
+    get: function get() {
+      return this.$.name.value;
+    },
+    set: function set(value) {
+      this.$.name.value = value || '';
+    }
+  }, {
+    key: "overview",
+    get: function get() {
+      return this.$.overview.value;
+    },
+    set: function set(value) {
+      this.$.overview.value = value || '';
+    }
+  }, {
+    key: "organization",
+    get: function get() {
+      return this.$.organization.value;
+    },
+    set: function set(value) {
+      this.$.organization.value = value || '';
+    }
+  }], [{
+    key: "template",
+    get: function get() {
+      return _appBasicMetadata2.default;
+    }
+  }, {
+    key: "properties",
+    get: function get() {
+      return {
+        data: {
+          type: Object,
+          value: function value() {},
+          observer: '_onDataUpdate'
+        },
+        creating: {
+          type: Boolean,
+          value: false
+        }
+      };
+    }
+  }]);
+
+  return AppBasicMetadata;
+}(Mixin(_polymerElement.Element).with(EventInterface, _PackageInterface2.default));
+
+exports.default = AppBasicMetadata;
+
+
+customElements.define('app-basic-metadata', AppBasicMetadata);
+
+/***/ }),
+/* 501 */
+/***/ (function(module, exports) {
+
+module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n\n  h2.uheader.break {\n    margin-top: var(--form-break-margin);\n  }\n\n  app-text-input {\n    display: block;\n  }\n</style>\n\n<h2 class=\"uheader blue\" hidden$=\"[[!creating]]\">Package Name</h2>\n<app-text-input  \n  id=\"name\" \n  on-change=\"_updateNamePreview\"\n  hidden$=\"[[!creating]]\">\n</app-text-input>\n\n<h2 class=\"uheader green break\" hidden$=\"[[!creating]]\">Package Overview</h2>\n<div class=\"help\">One sentance summary of package</div>\n<app-text-input \n  id=\"overview\"\n  on-change=\"_onInputChange\"\n  placeholder=\"Overview (Short Description)\">\n</app-text-input>\n\n<h2 class=\"uheader lightblue break\">Organization</h2>\n<div class=\"help\">The <a href=\"https://data.ecosis.org\" target=\"_blank\">EcoSIS</a> organization this package belongs to, \n  all members will have access. If you need to create or edit an organization, do so via \n  <a href=\"https://data.ecosis.org/organization\" target=\"_blank\">EcoSIS organization management.</a>\n</div>\n<app-org-input id=\"organization\" on-change=\"_onInputChange\"></app-org-input>\n\n<div style=\"text-align: right\">\n  <paper-button \n    hidden$=\"[[!creating]]\" \n    id=\"createBtn\"\n    on-click=\"_onCreateBtnClicked\">Create\n  </paper-button>\n</div>\n\n<div hidden$=\"[[creating]]\">\n  <paper-button on-click=\"_onDeleteBtnClicked\">Delete Package</paper-button>\n</div>";
+
+/***/ }),
+/* 502 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _polymerElement = __webpack_require__(2);
+
+var _appOrgInput = __webpack_require__(503);
+
+var _appOrgInput2 = _interopRequireDefault(_appOrgInput);
+
+var _AuthInterface = __webpack_require__(59);
+
+var _AuthInterface2 = _interopRequireDefault(_AuthInterface);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var AppOrgInput = function (_Mixin$with) {
+  _inherits(AppOrgInput, _Mixin$with);
+
+  _createClass(AppOrgInput, null, [{
+    key: "template",
+    get: function get() {
+      return _appOrgInput2.default;
+    }
+  }, {
+    key: "properties",
+    get: function get() {
+      return {
+        orgs: {
+          type: Array,
+          value: function value() {
+            return [];
+          }
+        },
+        selectedOrg: {
+          type: String,
+          value: ''
+        }
+      };
+    }
+  }]);
+
+  function AppOrgInput() {
+    _classCallCheck(this, AppOrgInput);
+
+    var _this = _possibleConstructorReturn(this, (AppOrgInput.__proto__ || Object.getPrototypeOf(AppOrgInput)).call(this));
+
+    _this.active = true;
+    return _this;
+  }
+
+  /**
+   * @method _onOrgsUpdate
+   * @description from AuthInterface, called when user orgs update
+   */
+
+
+  _createClass(AppOrgInput, [{
+    key: "_onOrgsUpdate",
+    value: function _onOrgsUpdate(e) {
+      var _this2 = this;
+
+      if (e.state !== 'loaded') return;
+      this.orgs = e.payload;
+
+      requestAnimationFrame(function () {
+        _this2.$.input.value = _this2.selectedOrg;
+      });
+    }
+
+    /**
+     * @method _onInputChange
+     * @description bound to select element, fired on change
+     */
+
+  }, {
+    key: "_onInputChange",
+    value: function _onInputChange() {
+      this.selectedOrg = this.$.input.value;
+    }
+  }, {
+    key: "value",
+    get: function get() {
+      return this.selectedOrg;
+    },
+    set: function set(val) {
+      this.selectedOrg = val;
+      this.$.input.value = val;
+    }
+  }]);
+
+  return AppOrgInput;
+}(Mixin(_polymerElement.Element).with(EventInterface, _AuthInterface2.default));
+
+exports.default = AppOrgInput;
+
+
+customElements.define('app-org-input', AppOrgInput);
+
+/***/ }),
+/* 503 */
+/***/ (function(module, exports) {
+
+module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n\n  select {\n    min-width: 200px;\n  }\n</style>\n\n<select id=\"input\" on-change=\"_onInputChange\">\n  <option></option>\n  <template is=\"dom-repeat\" items=\"[[orgs]]\">\n    <option value=\"[[item.name]]\">[[item.displayName]]</option>\n  </template>\n</select>";
+
+/***/ }),
+/* 504 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _polymerElement = __webpack_require__(2);
+
+var _appDetailsMetadata = __webpack_require__(505);
+
+var _appDetailsMetadata2 = _interopRequireDefault(_appDetailsMetadata);
+
+__webpack_require__(506);
+
+__webpack_require__(508);
+
+__webpack_require__(519);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var VALUES = ['description', 'keywords', 'theme', 'family', 'specific'];
+
+var AppDetailsMetadata = function (_Mixin$with) {
+  _inherits(AppDetailsMetadata, _Mixin$with);
+
+  function AppDetailsMetadata() {
+    _classCallCheck(this, AppDetailsMetadata);
+
+    return _possibleConstructorReturn(this, (AppDetailsMetadata.__proto__ || Object.getPrototypeOf(AppDetailsMetadata)).apply(this, arguments));
+  }
+
+  _createClass(AppDetailsMetadata, [{
+    key: "getValues",
+
+
+    /**
+     * @method getValues
+     * @description return an object with all current values controlled by
+     * the basic metadata inputs.
+     * 
+     * @returns {Object}
+     */
+    value: function getValues() {
+      var _this2 = this;
+
+      var data = {};
+      VALUES.forEach(function (value) {
+        data[value] = _this2[value];
+      });
+      return data;
+    }
+
+    /**
+     * @method _onDataUpdate
+     * @description called when data property updates
+     */
+
+  }, {
+    key: "_onDataUpdate",
+    value: function _onDataUpdate() {
+      var _this3 = this;
+
+      if (!this.data) return;
+      VALUES.forEach(function (value) {
+        _this3[value] = _this3.data[value];
+      });
+    }
+
+    /**
+     * @method _onInputChange
+     * @description called when any input changes
+     */
+
+  }, {
+    key: "_onInputChange",
+    value: function _onInputChange() {
+      this.fire('change');
+    }
+
+    /**
+     * @method _onThemeUpdate
+     * @description called from the app-theme-input when a value updates
+     */
+
+  }, {
+    key: "_onThemeUpdate",
+    value: function _onThemeUpdate(e) {
+      this.theme = e.detail.theme;
+      this.family = e.detail.family;
+      this.specific = e.detail.specific;
+
+      this._onInputChange();
+    }
+  }, {
+    key: "description",
+    get: function get() {
+      return this.$.description.value;
+    },
+    set: function set(value) {
+      this.$.description.value = value || '';
+    }
+  }, {
+    key: "keywords",
+    get: function get() {
+      return this.$.keywords.value;
+    },
+    set: function set(value) {
+      this.$.keywords.value = value || '';
+    }
+  }, {
+    key: "theme",
+    get: function get() {
+      return this.$.theme.selectedTheme;
+    },
+    set: function set(value) {
+      this.$.theme.selectedTheme = value || '';
+    }
+  }, {
+    key: "family",
+    get: function get() {
+      return this.$.theme.selectedFamily;
+    },
+    set: function set(value) {
+      this.$.theme.selectedFamily = value || '';
+    }
+  }, {
+    key: "specific",
+    get: function get() {
+      return this.$.theme.selectedSpecific;
+    },
+    set: function set(value) {
+      this.$.theme.selectedFpecific = value || '';
+    }
+  }], [{
+    key: "template",
+    get: function get() {
+      return _appDetailsMetadata2.default;
+    }
+  }, {
+    key: "properties",
+    get: function get() {
+      return {
+        data: {
+          type: Object,
+          value: function value() {},
+          observer: '_onDataUpdate'
+        }
+      };
+    }
+  }]);
+
+  return AppDetailsMetadata;
+}(Mixin(_polymerElement.Element).with(EventInterface));
+
+exports.default = AppDetailsMetadata;
+
+
+customElements.define('app-details-metadata', AppDetailsMetadata);
+
+/***/ }),
+/* 505 */
+/***/ (function(module, exports) {
+
+module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n\n  app-org-input {\n    margin-top: 15px;\n  }\n  \n  app-keyword-input {\n    margin-top: 15px;\n  }\n\n  h2.uheader.break {\n    margin-top: var(--form-break-margin);\n  }\n</style>\n\n<h2 class=\"uheader lightblue\">README</h2>\n<div class=\"help\">Please provide documentation on the model\n  and how it should be used. Code snippets are encourage. Markdown is supported and highly \n  encouraged.  Markdown is simple markup syntax that can be used to make your documentation\n  easier to follow and read.  <a href=\"https://help.github.com/articles/basic-writing-and-formatting-syntax/\" target=\"_blank\">Markdown help.</a>\n  <a href=\"https://help.github.com/articles/creating-and-highlighting-code-blocks/\" target=\"_blank\">Supports code syntax highlighting as well.</a>\n</div>\n<app-markdown-editor label=\"Description\" id=\"description\" on-markdown-change=\"_onInputChange\"></app-markdown-editor>\n\n<h2 class=\"uheader green break\">Keywords</h2>\n<div class=\"help\">[[schema.keywords.description]]</div>\n<app-keyword-input \n  id=\"keywords\" \n  label=\"Keywords. Comma Separate\" \n  on-keyword-change=\"_onInputChange\">\n</app-keyword-input>\n\n<h2 class=\"uheader blue break\">Theme</h2>\n<div class=\"help\">Package theming information</div>\n<app-theme-input \n  id=\"theme\" \n  on-update=\"_onThemeUpdate\" \n  style=\"margin-top: 15px\">\n</app-theme-input>";
+
+/***/ }),
+/* 506 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _polymerElement = __webpack_require__(2);
+
+var _appKeywordInput = __webpack_require__(507);
+
+var _appKeywordInput2 = _interopRequireDefault(_appKeywordInput);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var AppKeywordInput = function (_PolymerElement) {
+  _inherits(AppKeywordInput, _PolymerElement);
+
+  function AppKeywordInput() {
+    _classCallCheck(this, AppKeywordInput);
+
+    return _possibleConstructorReturn(this, (AppKeywordInput.__proto__ || Object.getPrototypeOf(AppKeywordInput)).apply(this, arguments));
+  }
+
+  _createClass(AppKeywordInput, [{
+    key: "_clean",
+
+
+    /**
+     * Cleanup input values
+     */
+    value: function _clean(value) {
+      if (typeof value === 'string') {
+        value = value.split(',');
+      }
+      value = value.map(function (val) {
+        return val.trim().toLowerCase();
+      });
+      for (var i = value.length - 1; i >= 0; i--) {
+        if (!value[i]) value.splice(i, 1);
+      }
+      return value;
+    }
+
+    /**
+     * called from paper-input
+     */
+
+  }, {
+    key: "_onKeyPress",
+    value: function _onKeyPress(e) {
+      if (e.which === 13) this._onChange();
+    }
+
+    /**
+     * Called from paper-input
+     */
+
+  }, {
+    key: "_onChange",
+    value: function _onChange(e) {
+      this.appendKeywords(this.$.input.value);
+      this.$.input.value = '';
+      this.dispatchEvent(new CustomEvent('keyword-change', { detail: this.keywords }));
+    }
+
+    /**
+     * Fired from remove btn 
+     */
+
+  }, {
+    key: "_onRemoveClicked",
+    value: function _onRemoveClicked(e) {
+      var val = e.currentTarget.getAttribute('value');
+      var index = this.keywords.indexOf(val);
+      this.keywords.splice(index, 1);
+
+      this.value = this.keywords.slice(0);
+      this.dispatchEvent(new CustomEvent('keyword-change', { detail: this.keywords }));
+    }
+  }, {
+    key: "appendKeywords",
+    value: function appendKeywords(value) {
+      var _this2 = this;
+
+      value = this._clean(value);
+      value.forEach(function (val) {
+        if (_this2.keywords.indexOf(val) === -1) {
+          _this2.keywords.push(val);
+        }
+      });
+
+      this.value = this.keywords.slice(0);
+    }
+  }, {
+    key: "value",
+    get: function get() {
+      return this.keywords;
+    },
+    set: function set(value) {
+      this.keywords = this._clean(value);
+    }
+  }], [{
+    key: "template",
+    get: function get() {
+      return _appKeywordInput2.default;
+    }
+  }, {
+    key: "properties",
+    get: function get() {
+      return {
+        keywords: {
+          type: Array,
+          value: function value() {
+            return [];
+          }
+        },
+        label: {
+          type: String,
+          value: ''
+        }
+      };
+    }
+  }]);
+
+  return AppKeywordInput;
+}(_polymerElement.Element);
+
+exports.default = AppKeywordInput;
+
+
+customElements.define('app-keyword-input', AppKeywordInput);
+
+/***/ }),
+/* 507 */
+/***/ (function(module, exports) {
+
+module.exports = "\n<style>\n  :host {\n    display: block;\n  }\n\n  div {\n    display: flex;\n    align-items: center;\n  }\n\n  span {\n    /* padding-left: 5px; */\n    display: inline-block;\n    vertical-align: baseline;\n  }\n\n  button {\n    margin: 3px 5px;\n    padding: 8px;\n    background: white;\n    border-radius: 3px;\n  }\n\n  iron-icon {\n    --iron-icon-width: 18px;\n    --iron-icon-height: 18px;\n  }\n\n  button:hover {\n    cursor: pointer;\n    color: var(--inverse-text-color);\n    background: var(--default-primary-color);\n  }\n\n  app-text-input {\n    display: block;\n  }\n</style>\n\n<app-text-input \n  id=\"input\" \n  placeholder=\"[[label]]\"\n  on-change=\"_onChange\" \n  on-keyup=\"_onKeyPress\">\n</app-text-input>\n\n<div>\n  <template is=\"dom-repeat\" items=\"[[keywords]]\">\n    <button value$=\"[[item]]\" on-click=\"_onRemoveClicked\">\n      <iron-icon icon=\"clear\"></iron-icon>\n      <span>[[item]]</span>\n    </button>\n  </template>\n</div>";
+
+/***/ }),
+/* 508 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _polymerElement = __webpack_require__(2);
+
+var _appMarkdownEditor = __webpack_require__(509);
 
 var _appMarkdownEditor2 = _interopRequireDefault(_appMarkdownEditor);
 
-var _PackageInterface = __webpack_require__(40);
+var _PackageInterface = __webpack_require__(35);
 
 var _PackageInterface2 = _interopRequireDefault(_PackageInterface);
 
@@ -44466,23 +45364,23 @@ exports.default = AppMarkdownEditor;
 customElements.define('app-markdown-editor', AppMarkdownEditor);
 
 /***/ }),
-/* 499 */
+/* 509 */
 /***/ (function(module, exports) {
 
-module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n  .btns {\n    display: flex;\n    align-items: center;\n  }\n\n  textarea {\n    width: 100%;\n    min-height: 200px;\n  }\n\n  #preview {\n    min-height: 200px;\n    /* border: 1px solid #aaa; */\n    overflow: auto;\n  }\n\n  paper-icon-button[disabled] {\n    color: #aaa;\n  }\n</style>\n\n\n<div class=\"btns\">\n  <div style=\"flex:1\">\n    <span hidden$=\"[[previewMode]]\">Edit</span>\n    <span hidden$=\"[[!previewMode]]\">Preview</span> \n    [[label]]\n  </div>\n  <paper-icon-button icon=\"code\" disabled$=\"[[!previewMode]]\" on-click=\"_toggle\"></paper-icon-button>\n  <paper-icon-button icon=\"visibility\" disabled$=\"[[previewMode]]\" on-click=\"_toggle\"></paper-icon-button>\n</div>\n\n<iron-pages selected=\"[[selected]]\" attr-for-selected=\"id\">\n  <textarea id=\"input\" on-change=\"_triggerChangeEvent\" on-keyup=\"_onTextAreaKeyUp\"></textarea>\n  <app-markdown id=\"preview\"></app-markdown>\n</iron-pages>\n";
+module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n  .btns {\n    display: flex;\n    align-items: center;\n  }\n\n  textarea {\n    width: 100%;\n    min-height: 200px;\n  }\n\n  paper-icon-button[disabled] {\n    color: #aaa;\n  }\n</style>\n\n\n<div class=\"btns\">\n  <div style=\"flex:1\">\n    <!-- <span hidden$=\"[[previewMode]]\">Edit</span>\n    <span hidden$=\"[[!previewMode]]\">Preview</span>  -->\n    <!-- Mode -->\n  </div>\n  <paper-icon-button icon=\"code\" disabled$=\"[[!previewMode]]\" on-click=\"_toggle\"></paper-icon-button>\n  <paper-icon-button icon=\"visibility\" disabled$=\"[[previewMode]]\" on-click=\"_toggle\"></paper-icon-button>\n</div>\n\n<iron-pages selected=\"[[selected]]\" attr-for-selected=\"id\">\n  <textarea id=\"input\" on-change=\"_triggerChangeEvent\" on-keyup=\"_onTextAreaKeyUp\"></textarea>\n  <app-markdown id=\"preview\"></app-markdown>\n</iron-pages>\n";
 
 /***/ }),
-/* 500 */
+/* 510 */
 /***/ (function(module, exports) {
 
 module.exports = "<style>\n  :host {\n    display: block;\n  }\n</style>\n<div id=\"root\" class=\"markdown-body\"></div>";
 
 /***/ }),
-/* 501 */
+/* 511 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-        var result = __webpack_require__(502);
+        var result = __webpack_require__(512);
 
         if (typeof result === "string") {
             module.exports = result;
@@ -44492,7 +45390,7 @@ module.exports = "<style>\n  :host {\n    display: block;\n  }\n</style>\n<div i
     
 
 /***/ }),
-/* 502 */
+/* 512 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(203)(false);
@@ -44506,11 +45404,11 @@ exports.push([module.i, "@font-face {\n  font-family: octicons-link;\n  src: url
 
 
 /***/ }),
-/* 503 */
+/* 513 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-        var result = __webpack_require__(504);
+        var result = __webpack_require__(514);
 
         if (typeof result === "string") {
             module.exports = result;
@@ -44520,7 +45418,7 @@ exports.push([module.i, "@font-face {\n  font-family: octicons-link;\n  src: url
     
 
 /***/ }),
-/* 504 */
+/* 514 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(203)(false);
@@ -44534,7 +45432,7 @@ exports.push([module.i, "/**\n * okaidia theme for JavaScript, CSS and HTML\n * 
 
 
 /***/ }),
-/* 505 */
+/* 515 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -45357,10 +46255,10 @@ Prism.languages.js = Prism.languages.javascript;
 
 	document.addEventListener('DOMContentLoaded', self.Prism.fileHighlight);
 })();
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(66)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(92)))
 
 /***/ }),
-/* 506 */
+/* 516 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -45397,7 +46295,7 @@ Prism.languages.python = {
 };
 
 /***/ }),
-/* 507 */
+/* 517 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -45479,7 +46377,7 @@ Prism.languages.python = {
 })(Prism);
 
 /***/ }),
-/* 508 */
+/* 518 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -45506,7 +46404,7 @@ Prism.languages.r = {
 };
 
 /***/ }),
-/* 509 */
+/* 519 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -45518,160 +46416,9 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _polymerElement = __webpack_require__(4);
+var _polymerElement = __webpack_require__(2);
 
-var _appKeywordInput = __webpack_require__(510);
-
-var _appKeywordInput2 = _interopRequireDefault(_appKeywordInput);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var AppKeywordInput = function (_PolymerElement) {
-  _inherits(AppKeywordInput, _PolymerElement);
-
-  function AppKeywordInput() {
-    _classCallCheck(this, AppKeywordInput);
-
-    return _possibleConstructorReturn(this, (AppKeywordInput.__proto__ || Object.getPrototypeOf(AppKeywordInput)).apply(this, arguments));
-  }
-
-  _createClass(AppKeywordInput, [{
-    key: "_clean",
-
-
-    /**
-     * Cleanup input values
-     */
-    value: function _clean(value) {
-      if (typeof value === 'string') {
-        value = value.split(',');
-      }
-      value = value.map(function (val) {
-        return val.trim().toLowerCase();
-      });
-      for (var i = value.length - 1; i >= 0; i--) {
-        if (!value[i]) value.splice(i, 1);
-      }
-      return value;
-    }
-
-    /**
-     * called from paper-input
-     */
-
-  }, {
-    key: "_onKeyPress",
-    value: function _onKeyPress(e) {
-      if (e.which === 13) this._onChange();
-    }
-
-    /**
-     * Called from paper-input
-     */
-
-  }, {
-    key: "_onChange",
-    value: function _onChange(e) {
-      this.appendKeywords(this.$.input.value);
-      this.$.input.value = '';
-      this.dispatchEvent(new CustomEvent('keyword-change', { detail: this.keywords }));
-    }
-
-    /**
-     * Fired from remove btn 
-     */
-
-  }, {
-    key: "_onRemoveClicked",
-    value: function _onRemoveClicked(e) {
-      var val = e.currentTarget.getAttribute('value');
-      var index = this.keywords.indexOf(val);
-      this.keywords.splice(index, 1);
-
-      this.value = this.keywords.slice(0);
-      this.dispatchEvent(new CustomEvent('keyword-change', { detail: this.keywords }));
-    }
-  }, {
-    key: "appendKeywords",
-    value: function appendKeywords(value) {
-      var _this2 = this;
-
-      value = this._clean(value);
-      value.forEach(function (val) {
-        if (_this2.keywords.indexOf(val) === -1) {
-          _this2.keywords.push(val);
-        }
-      });
-
-      this.value = this.keywords.slice(0);
-    }
-  }, {
-    key: "value",
-    get: function get() {
-      return this.keywords;
-    },
-    set: function set(value) {
-      this.keywords = this._clean(value);
-    }
-  }], [{
-    key: "template",
-    get: function get() {
-      return _appKeywordInput2.default;
-    }
-  }, {
-    key: "properties",
-    get: function get() {
-      return {
-        keywords: {
-          type: Array,
-          value: function value() {
-            return [];
-          }
-        },
-        label: {
-          type: String,
-          value: ''
-        }
-      };
-    }
-  }]);
-
-  return AppKeywordInput;
-}(_polymerElement.Element);
-
-exports.default = AppKeywordInput;
-
-
-customElements.define('app-keyword-input', AppKeywordInput);
-
-/***/ }),
-/* 510 */
-/***/ (function(module, exports) {
-
-module.exports = "\n<style>\n  div {\n    display: flex;\n    align-items: center;\n  }\n\n  span {\n    padding-left: 10px;\n    display: inline-block;\n  }\n\n  paper-button {\n    background: var(--dark-background-color)\n  }\n\n  paper-button:hover {\n    color: var(--inverse-text-color);\n    background: var(--default-primary-color);\n  }\n</style>\n\n<paper-input \n  id=\"input\" \n  label=\"[[label]]\"\n  on-change=\"_onChange\" \n  on-keypress=\"_onKeyPress\">\n</paper-input>\n\n<div>\n  <template is=\"dom-repeat\" items=\"[[keywords]]\">\n    <paper-button value$=\"[[item]]\" on-click=\"_onRemoveClicked\">\n      <iron-icon icon=\"clear\"></iron-icon>\n      <span>[[item]]</span>\n    </paper-button>\n  </template>\n</div>";
-
-/***/ }),
-/* 511 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _polymerElement = __webpack_require__(4);
-
-var _appThemeInput = __webpack_require__(512);
+var _appThemeInput = __webpack_require__(520);
 
 var _appThemeInput2 = _interopRequireDefault(_appThemeInput);
 
@@ -45862,748 +46609,10 @@ exports.default = AppThemeInput;
 customElements.define('app-theme-input', AppThemeInput);
 
 /***/ }),
-/* 512 */
-/***/ (function(module, exports) {
-
-module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n  .layout {\n    display: flex;\n    flex-wrap: wrap;\n  }\n  .layout > * {\n    flex: .333;\n  }\n</style>\n\n<div class=\"layout\">\n  <div>\n    <h2>Theme</h2>\n    <select id=\"theme\" on-change=\"_onThemeSelect\">\n      <option></option>\n      <template is=\"dom-repeat\" items=\"[[themeOptions]]\">\n        <option value$=\"[[item]]\">[[item]]</option>\n      </template>\n    </select>\n  </div>\n\n  <div hidden$=\"[[!selectedTheme]]\">\n    <h2>Family</h2>\n    <select on-change=\"_onFamilySelect\" id=\"family\">\n      <option></option>\n      <template is=\"dom-repeat\" items=\"[[familyOptions]]\">\n        <option value$=\"[[item]]\">[[item]]</option>\n      </template>\n    </select>\n  </div>\n\n  <div hidden$=\"[[!selectedFamily]]\">\n    <h2>Specific</h2>\n    <select on-change=\"_onSpecificSelect\" id=\"specific\">\n      <option></option>\n      <template is=\"dom-repeat\" items=\"[[specificOptions]]\">\n        <option value$=\"[[item]]\">[[item]]</option>\n      </template>\n    </select>\n  </div>\n</div>\n\n<div>\n  Values: [[selectedTheme]] [[selectedFamily]] [[selectedSpecific]]\n</div>";
-
-/***/ }),
-/* 513 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _polymerElement = __webpack_require__(4);
-
-var _appCreateRelease = __webpack_require__(514);
-
-var _appCreateRelease2 = _interopRequireDefault(_appCreateRelease);
-
-var _PackageInterface = __webpack_require__(40);
-
-var _PackageInterface2 = _interopRequireDefault(_PackageInterface);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var AppCreateRelease = function (_Mixin$with) {
-  _inherits(AppCreateRelease, _Mixin$with);
-
-  function AppCreateRelease() {
-    _classCallCheck(this, AppCreateRelease);
-
-    return _possibleConstructorReturn(this, (AppCreateRelease.__proto__ || Object.getPrototypeOf(AppCreateRelease)).apply(this, arguments));
-  }
-
-  _createClass(AppCreateRelease, [{
-    key: "_toggleCreate",
-
-
-    /**
-     * @method _toggleCreate
-     * @description called from top right create/cancel buttons
-     */
-    value: function _toggleCreate() {
-      this.creating = !this.creating;
-
-      if (this.creating) {
-        this.$.description.value = '';
-        this._render();
-      }
-    }
-
-    /**
-     * @method showList
-     * @description show the releases list
-     */
-
-  }, {
-    key: "showList",
-    value: function showList() {
-      this.creating = false;
-    }
-
-    /**
-     * @method _onReleasesUpdate
-     * @description called from releases property observer
-     */
-
-  }, {
-    key: "_onReleasesUpdate",
-    value: function _onReleasesUpdate() {
-      var index = this.releases.length - 1;
-      if (index === -1) {
-        this.release = '';
-        this._render();
-        return;
-      }
-
-      this.releases[index].latest = true;
-      this.releasesInverse = this.releases.slice().reverse();
-
-      this.release = this.releases[index].name;
-      this._render();
-      this.patch++;
-    }
-
-    /**
-     * @method _render
-     * @description called whenever the release string updates, set the input fields
-     */
-
-  }, {
-    key: "_render",
-    value: function _render() {
-      if (!this.release) {
-        this.major = 0;
-        this.minor = 0;
-        this.patch = 1;
-        return;
-      }
-
-      var parts = this.release.replace(/^v/, '').split('.');
-      if (parts.length < 3) return;
-
-      this.major = parts[0];
-      this.minor = parts[1];
-      this.patch = parts[2];
-    }
-
-    /**
-     * @method _onInputChange
-     * @description called whenever a input field changes due to user input, set
-     * the release string.
-     */
-
-  }, {
-    key: "_onInputChange",
-    value: function _onInputChange() {
-      this.release = "v" + this.major + "." + this.minor + "." + this.patch;
-    }
-
-    /**
-     * @method _onCreateClicked
-     * @description called when the create button is clicked
-     */
-
-  }, {
-    key: "_onCreateClicked",
-    value: function () {
-      var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-        var info, body;
-        return regeneratorRuntime.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                if (!this.release) alert('Please enter a valid release');
-
-                info = {
-                  name: "v" + this.major + "." + this.minor + "." + this.patch,
-                  description: this.$.description.value
-                };
-                _context.prev = 2;
-
-                this.saving = true;
-                _context.next = 6;
-                return this._createRelease(this.package.name, info);
-
-              case 6:
-                alert('Release ' + info.name + ' created');
-                this.showList();
-                _context.next = 16;
-                break;
-
-              case 10:
-                _context.prev = 10;
-                _context.t0 = _context["catch"](2);
-                _context.next = 14;
-                return _context.t0.details.json();
-
-              case 14:
-                body = _context.sent;
-
-                alert(body.message);
-
-              case 16:
-
-                this.saving = false;
-
-              case 17:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee, this, [[2, 10]]);
-      }));
-
-      function _onCreateClicked() {
-        return _ref.apply(this, arguments);
-      }
-
-      return _onCreateClicked;
-    }()
-  }, {
-    key: "major",
-    get: function get() {
-      return parseInt(this.$.major.value) || 0;
-    },
-    set: function set(val) {
-      this.$.major.value = val + '';
-    }
-  }, {
-    key: "minor",
-    get: function get() {
-      return parseInt(this.$.minor.value) || 0;
-    },
-    set: function set(val) {
-      this.$.minor.value = val + '';
-    }
-  }, {
-    key: "patch",
-    get: function get() {
-      return parseInt(this.$.patch.value) || 0;
-    },
-    set: function set(val) {
-      this.$.patch.value = val + '';
-    }
-  }], [{
-    key: "template",
-    get: function get() {
-      return _appCreateRelease2.default;
-    }
-  }, {
-    key: "properties",
-    get: function get() {
-      return {
-        releases: {
-          type: Array,
-          value: function value() {
-            return [];
-          },
-          observer: '_onReleasesUpdate'
-        },
-        releasesInverse: {
-          type: Array,
-          value: function value() {
-            return [];
-          }
-        },
-        package: {
-          type: Object,
-          value: function value() {}
-        },
-        creating: {
-          type: Boolean,
-          value: false
-        },
-        saving: {
-          type: Boolean,
-          value: false
-        },
-        release: {
-          type: String,
-          value: ''
-        }
-      };
-    }
-  }]);
-
-  return AppCreateRelease;
-}(Mixin(_polymerElement.Element).with(EventInterface, _PackageInterface2.default));
-
-exports.default = AppCreateRelease;
-
-
-customElements.define('app-create-release', AppCreateRelease);
-
-/***/ }),
-/* 514 */
-/***/ (function(module, exports) {
-
-module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n\n  .layout {\n    display: flex;\n    align-items: flex-end;\n  }\n\n  .layout input {\n    width: 100%;\n  }\n\n  .period {\n    font-size: 40px;\n  }\n</style>\n\n<div style=\"display:flex\">\n  <h2 style=\"flex:1\">Releases</h2>\n  <div>\n    <paper-button hidden$=\"[[creating]]\" on-click=\"_toggleCreate\">Create Release</paper-button>\n    <paper-button hidden$=\"[[!creating]]\" on-click=\"_toggleCreate\">Cancel</paper-button>\n  </div>\n</div>\n\n<div hidden$=\"[[!creating]]\">\n  <div class=\"layout\">\n    <div>\n      <div>Major</div>\n      <input type=\"number\" id=\"major\" placeholder=\"1\" on-change=\"_onInputChange\" />\n    </div>\n    <div class=\"period\">.</div>\n    <div>\n      <div>Minor</div>\n      <input type=\"number\" id=\"minor\" placeholder=\"0\" on-change=\"_onInputChange\" />\n    </div>\n    <div class=\"period\">.</div>\n    <div>\n      <div>Patch</div>\n      <input type=\"number\" id=\"patch\" placeholder=\"0\" on-change=\"_onInputChange\" />\n    </div>\n  </div>\n  <div>\n    <input type=\"text\" placeholder=\"Release description\" id=\"description\" style=\"width: 100%\" />\n  </div>\n\n  <div style=\"text-align: right\">\n    <a href=\"https://semver.org/\" target=\"_blank\">Versioning Help</a>\n  </div>\n  <div><paper-button on-click=\"_onCreateClicked\" disabled$=\"[[saving]]\">Create Release</paper-button></div>\n</div>\n\n<div hidden$=\"[[creating]]\">\n  <div><a href=\"[[package.htmlUrl]]/releases\" target=\"_blank\">View on GitHub</a></div>\n  <template is=\"dom-repeat\" items=\"[[releasesInverse]]\">\n    <div>\n      <h4>[[item.name]]</h4>\n      <div>[[item.body]]</div>\n      <div>Published [[item.publishedAt]]</div>\n      <div><a href$=\"[[item.zipballUrl]]\">Download</a></div>\n    </div>\n  </template>\n</div>\n";
-
-/***/ }),
-/* 515 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _polymerElement = __webpack_require__(4);
-
-var _appTextInput = __webpack_require__(516);
-
-var _appTextInput2 = _interopRequireDefault(_appTextInput);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var AppTextInput = function (_PolymerElement) {
-  _inherits(AppTextInput, _PolymerElement);
-
-  function AppTextInput() {
-    _classCallCheck(this, AppTextInput);
-
-    return _possibleConstructorReturn(this, (AppTextInput.__proto__ || Object.getPrototypeOf(AppTextInput)).apply(this, arguments));
-  }
-
-  _createClass(AppTextInput, [{
-    key: "_onChange",
-    value: function _onChange(e) {
-      this.dispatchEvent(new CustomEvent('change', { detail: this.value }));
-    }
-  }, {
-    key: "_onKeyUp",
-    value: function _onKeyUp(e) {
-      e = {
-        which: e.which,
-        value: this.value
-      };
-      this.dispatchEvent(new CustomEvent('change', { detail: e }));
-    }
-  }, {
-    key: "value",
-    get: function get() {
-      return this.$.input.value;
-    },
-    set: function set(value) {
-      this.$.input.value = value;
-    }
-  }], [{
-    key: "template",
-    get: function get() {
-      return _appTextInput2.default;
-    }
-  }, {
-    key: "properties",
-    get: function get() {
-      return {
-        type: {
-          type: String,
-          value: 'text'
-        },
-        label: {
-          type: String,
-          value: ''
-        },
-        help: {
-          type: String,
-          value: ''
-        }
-      };
-    }
-  }]);
-
-  return AppTextInput;
-}(_polymerElement.Element);
-
-exports.default = AppTextInput;
-
-
-customElements.define('app-text-input', AppTextInput);
-
-/***/ }),
-/* 516 */
-/***/ (function(module, exports) {
-
-module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: inline-block;\n  }\n\n  input {\n    box-sizing: border-box;\n    width: 100%;\n    display: block;\n  }\n\n  .label {\n    font-weight: var(--font-weight-heavy);\n  }\n</style>\n\n<div class=\"label\">\n  <slot name=\"label\"></slot>\n  <span>[[label]]</span>\n</div>\n\n<input type$=\"[[type]]\" id=\"input\" on-change=\"_onChange\" on-keyup=\"_onKeyUp\" />\n\n<div class=\"help\">\n  <slot name=\"help\"></slot>\n  <span>[[help]]</span>\n</div>";
-
-/***/ }),
-/* 517 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _polymerElement = __webpack_require__(4);
-
-var _appOrgInput = __webpack_require__(518);
-
-var _appOrgInput2 = _interopRequireDefault(_appOrgInput);
-
-var _AuthInterface = __webpack_require__(59);
-
-var _AuthInterface2 = _interopRequireDefault(_AuthInterface);
-
-var _timers = __webpack_require__(519);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var AppOrgInput = function (_Mixin$with) {
-  _inherits(AppOrgInput, _Mixin$with);
-
-  _createClass(AppOrgInput, null, [{
-    key: "template",
-    get: function get() {
-      return _appOrgInput2.default;
-    }
-  }, {
-    key: "properties",
-    get: function get() {
-      return {
-        orgs: {
-          type: Array,
-          value: function value() {
-            return [];
-          }
-        },
-        selectedOrg: {
-          type: String,
-          value: ''
-        }
-      };
-    }
-  }]);
-
-  function AppOrgInput() {
-    _classCallCheck(this, AppOrgInput);
-
-    var _this = _possibleConstructorReturn(this, (AppOrgInput.__proto__ || Object.getPrototypeOf(AppOrgInput)).call(this));
-
-    _this.active = true;
-    return _this;
-  }
-
-  /**
-   * @method _onOrgsUpdate
-   * @description from AuthInterface, called when user orgs update
-   */
-
-
-  _createClass(AppOrgInput, [{
-    key: "_onOrgsUpdate",
-    value: function _onOrgsUpdate(e) {
-      var _this2 = this;
-
-      if (e.state !== 'loaded') return;
-      this.orgs = e.payload;
-
-      requestAnimationFrame(function () {
-        _this2.$.input.value = _this2.selectedOrg;
-      });
-    }
-
-    /**
-     * @method _onInputChange
-     * @description bound to select element, fired on change
-     */
-
-  }, {
-    key: "_onInputChange",
-    value: function _onInputChange() {
-      this.selectedOrg = this.$.input.value;
-    }
-  }, {
-    key: "value",
-    get: function get() {
-      return this.selectedOrg;
-    },
-    set: function set(val) {
-      this.selectedOrg = val;
-      this.$.input.value = val;
-    }
-  }]);
-
-  return AppOrgInput;
-}(Mixin(_polymerElement.Element).with(EventInterface, _AuthInterface2.default));
-
-exports.default = AppOrgInput;
-
-
-customElements.define('app-org-input', AppOrgInput);
-
-/***/ }),
-/* 518 */
-/***/ (function(module, exports) {
-
-module.exports = "<select id=\"input\" on-change=\"_onInputChange\">\n  <option></option>\n  <template is=\"dom-repeat\" items=\"[[orgs]]\">\n    <option value=\"[[item.name]]\">[[item.displayName]]</option>\n  </template>\n</select>";
-
-/***/ }),
-/* 519 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var apply = Function.prototype.apply;
-
-// DOM APIs, for completeness
-
-exports.setTimeout = function () {
-  return new Timeout(apply.call(setTimeout, window, arguments), clearTimeout);
-};
-exports.setInterval = function () {
-  return new Timeout(apply.call(setInterval, window, arguments), clearInterval);
-};
-exports.clearTimeout = exports.clearInterval = function (timeout) {
-  if (timeout) {
-    timeout.close();
-  }
-};
-
-function Timeout(id, clearFn) {
-  this._id = id;
-  this._clearFn = clearFn;
-}
-Timeout.prototype.unref = Timeout.prototype.ref = function () {};
-Timeout.prototype.close = function () {
-  this._clearFn.call(window, this._id);
-};
-
-// Does not start the time, just sets up the members needed.
-exports.enroll = function (item, msecs) {
-  clearTimeout(item._idleTimeoutId);
-  item._idleTimeout = msecs;
-};
-
-exports.unenroll = function (item) {
-  clearTimeout(item._idleTimeoutId);
-  item._idleTimeout = -1;
-};
-
-exports._unrefActive = exports.active = function (item) {
-  clearTimeout(item._idleTimeoutId);
-
-  var msecs = item._idleTimeout;
-  if (msecs >= 0) {
-    item._idleTimeoutId = setTimeout(function onTimeout() {
-      if (item._onTimeout) item._onTimeout();
-    }, msecs);
-  }
-};
-
-// setimmediate attaches itself to the global object
-__webpack_require__(520);
-exports.setImmediate = setImmediate;
-exports.clearImmediate = clearImmediate;
-
-/***/ }),
 /* 520 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-/* WEBPACK VAR INJECTION */(function(global, process) {
-
-(function (global, undefined) {
-    "use strict";
-
-    if (global.setImmediate) {
-        return;
-    }
-
-    var nextHandle = 1; // Spec says greater than zero
-    var tasksByHandle = {};
-    var currentlyRunningATask = false;
-    var doc = global.document;
-    var registerImmediate;
-
-    function setImmediate(callback) {
-        // Callback can either be a function or a string
-        if (typeof callback !== "function") {
-            callback = new Function("" + callback);
-        }
-        // Copy function arguments
-        var args = new Array(arguments.length - 1);
-        for (var i = 0; i < args.length; i++) {
-            args[i] = arguments[i + 1];
-        }
-        // Store and register the task
-        var task = { callback: callback, args: args };
-        tasksByHandle[nextHandle] = task;
-        registerImmediate(nextHandle);
-        return nextHandle++;
-    }
-
-    function clearImmediate(handle) {
-        delete tasksByHandle[handle];
-    }
-
-    function run(task) {
-        var callback = task.callback;
-        var args = task.args;
-        switch (args.length) {
-            case 0:
-                callback();
-                break;
-            case 1:
-                callback(args[0]);
-                break;
-            case 2:
-                callback(args[0], args[1]);
-                break;
-            case 3:
-                callback(args[0], args[1], args[2]);
-                break;
-            default:
-                callback.apply(undefined, args);
-                break;
-        }
-    }
-
-    function runIfPresent(handle) {
-        // From the spec: "Wait until any invocations of this algorithm started before this one have completed."
-        // So if we're currently running a task, we'll need to delay this invocation.
-        if (currentlyRunningATask) {
-            // Delay by doing a setTimeout. setImmediate was tried instead, but in Firefox 7 it generated a
-            // "too much recursion" error.
-            setTimeout(runIfPresent, 0, handle);
-        } else {
-            var task = tasksByHandle[handle];
-            if (task) {
-                currentlyRunningATask = true;
-                try {
-                    run(task);
-                } finally {
-                    clearImmediate(handle);
-                    currentlyRunningATask = false;
-                }
-            }
-        }
-    }
-
-    function installNextTickImplementation() {
-        registerImmediate = function registerImmediate(handle) {
-            process.nextTick(function () {
-                runIfPresent(handle);
-            });
-        };
-    }
-
-    function canUsePostMessage() {
-        // The test against `importScripts` prevents this implementation from being installed inside a web worker,
-        // where `global.postMessage` means something completely different and can't be used for this purpose.
-        if (global.postMessage && !global.importScripts) {
-            var postMessageIsAsynchronous = true;
-            var oldOnMessage = global.onmessage;
-            global.onmessage = function () {
-                postMessageIsAsynchronous = false;
-            };
-            global.postMessage("", "*");
-            global.onmessage = oldOnMessage;
-            return postMessageIsAsynchronous;
-        }
-    }
-
-    function installPostMessageImplementation() {
-        // Installs an event handler on `global` for the `message` event: see
-        // * https://developer.mozilla.org/en/DOM/window.postMessage
-        // * http://www.whatwg.org/specs/web-apps/current-work/multipage/comms.html#crossDocumentMessages
-
-        var messagePrefix = "setImmediate$" + Math.random() + "$";
-        var onGlobalMessage = function onGlobalMessage(event) {
-            if (event.source === global && typeof event.data === "string" && event.data.indexOf(messagePrefix) === 0) {
-                runIfPresent(+event.data.slice(messagePrefix.length));
-            }
-        };
-
-        if (global.addEventListener) {
-            global.addEventListener("message", onGlobalMessage, false);
-        } else {
-            global.attachEvent("onmessage", onGlobalMessage);
-        }
-
-        registerImmediate = function registerImmediate(handle) {
-            global.postMessage(messagePrefix + handle, "*");
-        };
-    }
-
-    function installMessageChannelImplementation() {
-        var channel = new MessageChannel();
-        channel.port1.onmessage = function (event) {
-            var handle = event.data;
-            runIfPresent(handle);
-        };
-
-        registerImmediate = function registerImmediate(handle) {
-            channel.port2.postMessage(handle);
-        };
-    }
-
-    function installReadyStateChangeImplementation() {
-        var html = doc.documentElement;
-        registerImmediate = function registerImmediate(handle) {
-            // Create a <script> element; its readystatechange event will be fired asynchronously once it is inserted
-            // into the document. Do so, thus queuing up the task. Remember to clean up once it's been called.
-            var script = doc.createElement("script");
-            script.onreadystatechange = function () {
-                runIfPresent(handle);
-                script.onreadystatechange = null;
-                html.removeChild(script);
-                script = null;
-            };
-            html.appendChild(script);
-        };
-    }
-
-    function installSetTimeoutImplementation() {
-        registerImmediate = function registerImmediate(handle) {
-            setTimeout(runIfPresent, 0, handle);
-        };
-    }
-
-    // If supported, we should attach to the prototype of global, since that is where setTimeout et al. live.
-    var attachTo = Object.getPrototypeOf && Object.getPrototypeOf(global);
-    attachTo = attachTo && attachTo.setTimeout ? attachTo : global;
-
-    // Don't get fooled by e.g. browserify environments.
-    if ({}.toString.call(global.process) === "[object process]") {
-        // For Node.js before 0.9
-        installNextTickImplementation();
-    } else if (canUsePostMessage()) {
-        // For non-IE10 modern browsers
-        installPostMessageImplementation();
-    } else if (global.MessageChannel) {
-        // For web workers, where supported
-        installMessageChannelImplementation();
-    } else if (doc && "onreadystatechange" in doc.createElement("script")) {
-        // For IE 6–8
-        installReadyStateChangeImplementation();
-    } else {
-        // For older browsers
-        installSetTimeoutImplementation();
-    }
-
-    attachTo.setImmediate = setImmediate;
-    attachTo.clearImmediate = clearImmediate;
-})(typeof self === "undefined" ? typeof global === "undefined" ? undefined : global : self);
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(66), __webpack_require__(521)))
+module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n  .layout {\n    display: flex;\n    flex-wrap: wrap;\n  }\n  .layout > * {\n    flex: .333;\n  }\n  h3 {\n    padding: 0;\n    margin: 0;\n  }\n</style>\n\n<div class=\"layout\">\n  <div>\n    <h3>Category</h3>\n    <select id=\"theme\" on-change=\"_onThemeSelect\">\n      <option></option>\n      <template is=\"dom-repeat\" items=\"[[themeOptions]]\">\n        <option value$=\"[[item]]\">[[item]]</option>\n      </template>\n    </select>\n  </div>\n\n  <div hidden$=\"[[!selectedTheme]]\">\n    <h3>Family</h3>\n    <select on-change=\"_onFamilySelect\" id=\"family\">\n      <option></option>\n      <template is=\"dom-repeat\" items=\"[[familyOptions]]\">\n        <option value$=\"[[item]]\">[[item]]</option>\n      </template>\n    </select>\n  </div>\n\n  <div hidden$=\"[[!selectedFamily]]\">\n    <h3>Specific</h3>\n    <select on-change=\"_onSpecificSelect\" id=\"specific\">\n      <option></option>\n      <template is=\"dom-repeat\" items=\"[[specificOptions]]\">\n        <option value$=\"[[item]]\">[[item]]</option>\n      </template>\n    </select>\n  </div>\n</div>";
 
 /***/ }),
 /* 521 */
@@ -46612,194 +46621,124 @@ exports.clearImmediate = clearImmediate;
 "use strict";
 
 
-// shim for using process in browser
-var process = module.exports = {};
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-// cached from whatever global is present so that test runners that stub it
-// don't break things.  But we need to wrap it in a try catch in case it is
-// wrapped in strict mode code which doesn't define any globals.  It's inside a
-// function because try/catches deoptimize in certain engines.
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var cachedSetTimeout;
-var cachedClearTimeout;
+var _polymerElement = __webpack_require__(2);
 
-function defaultSetTimout() {
-    throw new Error('setTimeout has not been defined');
-}
-function defaultClearTimeout() {
-    throw new Error('clearTimeout has not been defined');
-}
-(function () {
-    try {
-        if (typeof setTimeout === 'function') {
-            cachedSetTimeout = setTimeout;
-        } else {
-            cachedSetTimeout = defaultSetTimout;
+var _appFiles = __webpack_require__(522);
+
+var _appFiles2 = _interopRequireDefault(_appFiles);
+
+__webpack_require__(523);
+
+__webpack_require__(529);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var AppFiles = function (_PolymerElement) {
+  _inherits(AppFiles, _PolymerElement);
+
+  function AppFiles() {
+    _classCallCheck(this, AppFiles);
+
+    return _possibleConstructorReturn(this, (AppFiles.__proto__ || Object.getPrototypeOf(AppFiles)).apply(this, arguments));
+  }
+
+  _createClass(AppFiles, [{
+    key: "_onFilesUpdate",
+
+
+    /**
+     * @method _onFilesUpdate
+     * @description called when files updates
+     */
+    value: function _onFilesUpdate() {
+      var _this2 = this;
+
+      if (!this.files) return;
+
+      var examples = {};
+      for (var id in this.files) {
+        if (id.match(/^\/examples\//)) {
+          var name = id.replace(/^\/examples\//, '').split('/')[0];
+          examples[name] = true;
         }
-    } catch (e) {
-        cachedSetTimeout = defaultSetTimout;
+      }
+
+      Object.keys(examples).forEach(function (example) {
+        _this2.push('examples', {
+          directory: '/examples/' + example,
+          label: example
+        });
+      });
     }
-    try {
-        if (typeof clearTimeout === 'function') {
-            cachedClearTimeout = clearTimeout;
-        } else {
-            cachedClearTimeout = defaultClearTimeout;
+
+    /**
+     * @method _onCreateExampleClicked
+     * @description bound to examples create button
+     */
+
+  }, {
+    key: "_onCreateExampleClicked",
+    value: function _onCreateExampleClicked() {
+      var len = this.examples.length + 1;
+      this.push('examples', {
+        directory: '/examples/package_example_' + len,
+        label: 'package_example_' + len,
+        isNew: true
+      });
+    }
+  }], [{
+    key: "template",
+    get: function get() {
+      return _appFiles2.default;
+    }
+  }, {
+    key: "properties",
+    get: function get() {
+      return {
+        files: {
+          type: Object,
+          value: function value() {},
+          observer: '_onFilesUpdate'
+        },
+
+        examples: {
+          type: Array,
+          value: function value() {
+            return [];
+          }
         }
-    } catch (e) {
-        cachedClearTimeout = defaultClearTimeout;
+      };
     }
-})();
-function runTimeout(fun) {
-    if (cachedSetTimeout === setTimeout) {
-        //normal enviroments in sane situations
-        return setTimeout(fun, 0);
-    }
-    // if setTimeout wasn't available but was latter defined
-    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
-        cachedSetTimeout = setTimeout;
-        return setTimeout(fun, 0);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedSetTimeout(fun, 0);
-    } catch (e) {
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
-            return cachedSetTimeout.call(null, fun, 0);
-        } catch (e) {
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
-            return cachedSetTimeout.call(this, fun, 0);
-        }
-    }
-}
-function runClearTimeout(marker) {
-    if (cachedClearTimeout === clearTimeout) {
-        //normal enviroments in sane situations
-        return clearTimeout(marker);
-    }
-    // if clearTimeout wasn't available but was latter defined
-    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
-        cachedClearTimeout = clearTimeout;
-        return clearTimeout(marker);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedClearTimeout(marker);
-    } catch (e) {
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
-            return cachedClearTimeout.call(null, marker);
-        } catch (e) {
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
-            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
-            return cachedClearTimeout.call(this, marker);
-        }
-    }
-}
-var queue = [];
-var draining = false;
-var currentQueue;
-var queueIndex = -1;
+  }]);
 
-function cleanUpNextTick() {
-    if (!draining || !currentQueue) {
-        return;
-    }
-    draining = false;
-    if (currentQueue.length) {
-        queue = currentQueue.concat(queue);
-    } else {
-        queueIndex = -1;
-    }
-    if (queue.length) {
-        drainQueue();
-    }
-}
+  return AppFiles;
+}(_polymerElement.Element);
 
-function drainQueue() {
-    if (draining) {
-        return;
-    }
-    var timeout = runTimeout(cleanUpNextTick);
-    draining = true;
+exports.default = AppFiles;
 
-    var len = queue.length;
-    while (len) {
-        currentQueue = queue;
-        queue = [];
-        while (++queueIndex < len) {
-            if (currentQueue) {
-                currentQueue[queueIndex].run();
-            }
-        }
-        queueIndex = -1;
-        len = queue.length;
-    }
-    currentQueue = null;
-    draining = false;
-    runClearTimeout(timeout);
-}
 
-process.nextTick = function (fun) {
-    var args = new Array(arguments.length - 1);
-    if (arguments.length > 1) {
-        for (var i = 1; i < arguments.length; i++) {
-            args[i - 1] = arguments[i];
-        }
-    }
-    queue.push(new Item(fun, args));
-    if (queue.length === 1 && !draining) {
-        runTimeout(drainQueue);
-    }
-};
-
-// v8 likes predictible objects
-function Item(fun, array) {
-    this.fun = fun;
-    this.array = array;
-}
-Item.prototype.run = function () {
-    this.fun.apply(null, this.array);
-};
-process.title = 'browser';
-process.browser = true;
-process.env = {};
-process.argv = [];
-process.version = ''; // empty string to avoid regexp issues
-process.versions = {};
-
-function noop() {}
-
-process.on = noop;
-process.addListener = noop;
-process.once = noop;
-process.off = noop;
-process.removeListener = noop;
-process.removeAllListeners = noop;
-process.emit = noop;
-process.prependListener = noop;
-process.prependOnceListener = noop;
-
-process.listeners = function (name) {
-    return [];
-};
-
-process.binding = function (name) {
-    throw new Error('process.binding is not supported');
-};
-
-process.cwd = function () {
-    return '/';
-};
-process.chdir = function (dir) {
-    throw new Error('process.chdir is not supported');
-};
-process.umask = function () {
-    return 0;
-};
+customElements.define('app-files', AppFiles);
 
 /***/ }),
 /* 522 */
+/***/ (function(module, exports) {
+
+module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n\n  app-file-manager {\n    margin-bottom: 75px;\n  }\n\n  .examples {\n    display: flex;\n    align-items: center;\n  }\n\n  .examples :first-child {\n    flex: 1;\n  }\n\n  .examples paper-button {\n    font-size: 14px;\n    color: var(--default-secondary-color);\n  }\n\n  [slot=\"help\"] {\n    margin-bottom: 20px;\n    font-size: 14px;\n    color: var(--secondary-text-color);\n  }\n</style>\n\n<app-file-manager \n  label=\"Coefficients\" \n  directory=\"/coefficients\"\n  color=\"lightblue\">\n  <div slot=\"help\">Upload model coefficients.  These should be in CSV format.</div>\n</app-file-manager>\n\n<app-file-manager \n  label=\"Source\" \n  directory=\"/main\"\n  color=\"green\">\n  <div slot=\"help\">Upload model source code.</div>\n</app-file-manager>\n\n<app-file-manager \n  label=\"Papers\" \n  directory=\"/papers\"\n  color=\"dark\">\n  <div slot=\"help\" class=\"help\">Upload any published work or additional documentation you wish\n    to have associated with this package.  Can't provide the papers directly?  Feel \n    free to upload a simple text file with links to journal article(s).\n  </div>\n</app-file-manager>\n\n\n<h2 class=\"examples uheader blue\">\n  <div>Examples</div>\n  <paper-button on-click=\"_onCreateExampleClicked\">\n    <iron-icon icon=\"add\"></iron-icon> Create\n  </paper-button>\n</h2>\n\n<div class=\"help\">\n  Given a small (less than 100) sample\n  of spectra and optional transform the model should produce the exact output file provided.\n  Examples provide two very important features.:\n  \n  <ul>\n    <li>\n        The example code will be tested and if the provided spectra input matches the \n        provided model output the package will be given a \n        <span style=\"color:green\">Verified</span> status.\n    </li>\n    <li>\n        Examples are a great way for others to learn about the model and see it in action.  \n        A quality example can go a long way to showing others how they can use the model \n        for their own purposes.\n    </li>\n  </ul>\n</div>\n\n<template is=\"dom-repeat\" items=\"[[examples]]\">\n  <app-example-editor \n    label=\"[[item.label]]\" \n    directory=\"[[item.directory]]\"\n    open=\"[[item.isNew]]\">\n  </app-example-editor>\n</template>\n";
+
+/***/ }),
+/* 523 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -46811,15 +46750,15 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _polymerElement = __webpack_require__(4);
+var _polymerElement = __webpack_require__(2);
 
-var _appFileManager = __webpack_require__(523);
+var _appFileManager = __webpack_require__(524);
 
 var _appFileManager2 = _interopRequireDefault(_appFileManager);
 
-__webpack_require__(524);
+__webpack_require__(525);
 
-var _PackageInterface = __webpack_require__(40);
+var _PackageInterface = __webpack_require__(35);
 
 var _PackageInterface2 = _interopRequireDefault(_PackageInterface);
 
@@ -46864,6 +46803,10 @@ var AppFileManager = function (_Mixin$with) {
         currentPackageId: {
           type: String,
           value: ''
+        },
+        color: {
+          type: String,
+          value: ''
         }
       };
     }
@@ -46875,10 +46818,38 @@ var AppFileManager = function (_Mixin$with) {
     var _this = _possibleConstructorReturn(this, (AppFileManager.__proto__ || Object.getPrototypeOf(AppFileManager)).call(this));
 
     _this.active = true;
+    _this.currentPackageId = _this._getSelectedPackageId().id;
     return _this;
   }
 
+  /**
+   * @method removeByBasePath
+   * @description given a base file path, remove all files matching this path.
+   * Good for after a move operation.
+   * 
+   * @param {String} path base path to remove
+   */
+
+
   _createClass(AppFileManager, [{
+    key: "removeByBasePath",
+    value: function removeByBasePath(path) {
+      var re = new RegExp('^' + path);
+      for (var i = this.files.length - 1; i >= 0; i--) {
+        if (this.files[i].dir.match(re)) {
+          this.files.splice(i, 1);
+        }
+      }
+    }
+
+    /**
+     * @method _onFileUpdate
+     * @description via PackageInterface, called whenever a file is updated
+     * 
+     * @param {Object} e 
+     */
+
+  }, {
     key: "_onFileUpdate",
     value: function _onFileUpdate(e) {
       if (e.payload.dir !== this.directory) return;
@@ -46979,7 +46950,7 @@ var AppFileManager = function (_Mixin$with) {
       clearTimeout(this.fileUpdateTimer);
 
       var index = this.files.findIndex(function (f) {
-        return f.id == file.id;
+        return f.id === file.id;
       });
       if (index > -1) this.files[index] = file;else this.files.push(file);
 
@@ -47022,13 +46993,13 @@ exports.default = AppFileManager;
 customElements.define('app-file-manager', AppFileManager);
 
 /***/ }),
-/* 523 */
+/* 524 */
 /***/ (function(module, exports) {
 
-module.exports = "<style>\n  :host {\n    display: block;\n  } \n\n  input {\n    display: none;\n  }\n\n  .inputfile + label {\n    font-size: 1.25em;\n    font-weight: 700;\n    color: white;\n    background-color: black;\n    display: inline-block;\n  }\n\n  input:focus + label,\n  input + label:hover {\n    background-color: red;\n  }\n\n  .layout {\n    display: flex;\n    align-items: center;\n  }\n\n  #dropbox {\n    border: 1px dashed var(--secondary-text-color);\n    padding: 15px;\n    margin: 5px;\n    border-radius: 8px;\n  }\n\n  #dropbox .droplabel {\n    transition: transform 350ms linear;\n    will-change: transform;\n    transform: scale(1);\n    font-size: 14px;\n    color : var(--secondary-text-color);\n  }\n\n  #dropbox.hover {\n    border: 1px dashed var(--default-primary-color);\n    background-color: var(--default-background-color);\n  }\n\n  #dropbox.hover .droplabel {\n    transform: scale(1.25) translateX(15px);\n    color: var(--default-primary-color);\n  }\n\n  paper-button {\n    background-color: var(--default-primary-color);\n    color: white;\n  }\n</style>\n\n<h2>[[label]]</h2>\n<div>[[description]]</div>\n<div id=\"dropbox\" on-dragover=\"_onDropBoxDragOver\" on-dragleave=\"_onDropBoxDragLeave\" on-drop=\"_onDropBoxDrop\">\n  <div class=\"layout\">\n    <div>\n      <input type=\"file\" multiple id=\"fileInput\" on-change=\"_onFileInputChange\" />\n      <paper-button on-click=\"_onChooseClicked\">Choose File</paper-button>\n    </div>\n    <div class=\"droplabel\">\n      Drag and drop files here\n    </div>\n  </div>\n\n  <div>\n    <template is=\"dom-repeat\" items=\"[[files]]\">\n      <app-file-uploader \n        data=\"[[item]]\" \n        package-id=\"[[currentPackageId]]\">\n      </app-file-uploader>\n    </template>\n  </div>\n</div>";
+module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  } \n\n  input {\n    display: none;\n  }\n\n  .inputfile + label {\n    font-size: 1.25em;\n    font-weight: 700;\n    color: white;\n    background-color: black;\n    display: inline-block;\n  }\n\n  input:focus + label,\n  input + label:hover {\n    background-color: red;\n  }\n\n  .layout {\n    display: flex;\n    align-items: center;\n  }\n\n  #dropbox {\n    border: 1px solid var(--dark-background-color);\n    /* border: 1px dashed var(--secondary-text-color); */\n    padding: 15px;\n    border-radius: 6px;\n  }\n\n  #dropbox .droplabel {\n    transition: transform 350ms linear;\n    will-change: transform;\n    transform: scale(1);\n    font-size: 14px;\n    color : var(--secondary-text-color);\n  }\n\n  #dropbox.hover {\n    border: 1px dashed var(--default-primary-color);\n    background-color: var(--default-background-color);\n  }\n\n  #dropbox.hover .droplabel {\n    transform: scale(1.25) translateX(15px);\n    color: var(--default-primary-color);\n  }\n\n  paper-button {\n    background-color: var(--default-primary-color);\n    color: white;\n  }\n\n  .help {\n    color: var(--secondary-text-color);\n    font-size: 14px;\n  }\n</style>\n\n<h2 class=\"uheader\" color$=\"[[color]]\" hidden$=\"[[!label]]\">[[label]]</h2>\n<div class=\"help\"><slot name=\"help\"></slot></div>\n\n<div id=\"dropbox\" on-dragover=\"_onDropBoxDragOver\" on-dragleave=\"_onDropBoxDragLeave\" on-drop=\"_onDropBoxDrop\">\n  <div class=\"layout\">\n    <div>\n      <input type=\"file\" multiple id=\"fileInput\" on-change=\"_onFileInputChange\" />\n      <paper-button on-click=\"_onChooseClicked\">Choose File</paper-button>\n    </div>\n    <div class=\"droplabel\">\n      Drag and drop files here\n    </div>\n  </div>\n\n  <div>\n    <template is=\"dom-repeat\" items=\"[[files]]\">\n      <app-file-uploader \n        data=\"[[item]]\" \n        package-id=\"[[currentPackageId]]\">\n      </app-file-uploader>\n    </template>\n  </div>\n</div>";
 
 /***/ }),
-/* 524 */
+/* 525 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -47040,15 +47011,15 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _polymerElement = __webpack_require__(4);
+var _polymerElement = __webpack_require__(2);
 
-var _appFileUploader = __webpack_require__(525);
+var _appFileUploader = __webpack_require__(526);
 
 var _appFileUploader2 = _interopRequireDefault(_appFileUploader);
 
-__webpack_require__(526);
+__webpack_require__(527);
 
-var _PackageInterface = __webpack_require__(40);
+var _PackageInterface = __webpack_require__(35);
 
 var _PackageInterface2 = _interopRequireDefault(_PackageInterface);
 
@@ -47344,13 +47315,13 @@ exports.default = AppFileUploader;
 customElements.define('app-file-uploader', AppFileUploader);
 
 /***/ }),
-/* 525 */
+/* 526 */
 /***/ (function(module, exports) {
 
 module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n\n  .layout {\n    display: flex;\n    align-items: center;\n  }\n\n  paper-progress {\n    width: 100%;\n    --paper-progress-active-color: var(--default-primary-color);\n  }\n\n  paper-progress[error] {\n    --paper-progress-active-color: red;\n  }\n\n  .upload-text {\n    font-size: 12px;\n    color: var(--secondary-text-color);\n  }\n\n  .upload-text[error] {\n    color: red;\n  }\n\n  @keyframes spin {\n    from {transform:rotate(0deg);}\n    to {transform:rotate(360deg);}\n  }\n  iron-icon {\n    padding: 8px;\n    animation: spin 3s infinite linear;\n  }\n</style>\n\n<div class=\"layout\">\n  <div style=\"flex:1\">[[data.filename]]</div>\n  <div hidden$=\"[[error]]\">\n    <paper-icon-button hidden$=\"[[committing]]\" icon=\"close\" on-click=\"_onRemoveClicked\"></paper-icon-button>\n    <iron-icon hidden$=\"[[!committing]]\" icon=\"autorenew\"></iron-icon>\n  </div>\n  <div hidden$=\"[[!error]]\">\n    <paper-icon-button icon=\"autorenew\" on-click=\"_onResendIconClicked\"></paper-icon-button>\n  </div>\n</div>\n<div hidden$=\"[[!uploading]]\">\n  <div class=\"upload-text\" error$=\"[[error]]\">[[uploadText]]</div>\n  <paper-progress value=\"[[uploadPercent]]\" error$=\"[[error]]\" min=\"0\" max=\"100\" class=\"red\"></paper-progress>\n</div>";
 
 /***/ }),
-/* 526 */
+/* 527 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -47362,9 +47333,9 @@ var _polymer = __webpack_require__(1);
 
 __webpack_require__(34);
 
-var _ironRangeBehavior = __webpack_require__(527);
+var _ironRangeBehavior = __webpack_require__(528);
 
-__webpack_require__(81);
+__webpack_require__(80);
 
 var _polymerFn = __webpack_require__(8);
 
@@ -47551,7 +47522,7 @@ Custom property                                  | Description                  
 });
 
 /***/ }),
-/* 527 */
+/* 528 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -47664,7 +47635,563 @@ var IronRangeBehavior = exports.IronRangeBehavior = {
 };
 
 /***/ }),
-/* 528 */
+/* 529 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _polymerElement = __webpack_require__(2);
+
+var _appExampleEditor = __webpack_require__(530);
+
+var _appExampleEditor2 = _interopRequireDefault(_appExampleEditor);
+
+var _PackageInterface = __webpack_require__(35);
+
+var _PackageInterface2 = _interopRequireDefault(_PackageInterface);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var AppExampleEditor = function (_Mixin$with) {
+  _inherits(AppExampleEditor, _Mixin$with);
+
+  _createClass(AppExampleEditor, null, [{
+    key: "template",
+    get: function get() {
+      return _appExampleEditor2.default;
+    }
+  }, {
+    key: "properties",
+    get: function get() {
+      return {
+        open: {
+          type: Boolean,
+          value: false,
+          observer: '_onOpenChange'
+        },
+
+        directory: {
+          type: String,
+          value: ''
+        },
+
+        label: {
+          type: String,
+          value: '',
+          observer: "_onLabelChange"
+        },
+
+        disabled: {
+          type: Boolean,
+          value: false
+        },
+
+        inputDir: {
+          type: String,
+          value: ''
+        },
+
+        outputDir: {
+          type: String,
+          value: ''
+        },
+
+        transformDir: {
+          type: String,
+          value: ''
+        }
+      };
+    }
+  }]);
+
+  function AppExampleEditor() {
+    _classCallCheck(this, AppExampleEditor);
+
+    var _this = _possibleConstructorReturn(this, (AppExampleEditor.__proto__ || Object.getPrototypeOf(AppExampleEditor)).call(this));
+
+    _this._updatePanelHeight = _this._updatePanelHeight.bind(_this);
+    return _this;
+  }
+
+  _createClass(AppExampleEditor, [{
+    key: "attachedCallback",
+    value: function attachedCallback() {
+      _get(AppExampleEditor.prototype.__proto__ || Object.getPrototypeOf(AppExampleEditor.prototype), "attachedCallback", this).call(this);
+      window.addEventListener('resize', this._updatePanelHeight);
+    }
+  }, {
+    key: "dettachedCallback",
+    value: function dettachedCallback() {
+      _get(AppExampleEditor.prototype.__proto__ || Object.getPrototypeOf(AppExampleEditor.prototype), "dettachedCallback", this).call(this);
+      window.removeEventListener('resize', this._updatePanelHeight);
+    }
+
+    /**
+     * @method toggle
+     * @description toggle visibility of main panel
+     */
+
+  }, {
+    key: "toggle",
+    value: function toggle() {
+      this.open = !this.open;
+    }
+
+    /**
+     * @method _onOpenChange
+     * @description fired from property observer.  called when open value changes
+     */
+
+  }, {
+    key: "_onOpenChange",
+    value: function _onOpenChange() {
+      this._updatePanelHeight();
+    }
+
+    /**
+     * @method _updatePanelHeight
+     * @description make sure main panel is set to correct height
+     */
+
+  }, {
+    key: "_updatePanelHeight",
+    value: function _updatePanelHeight() {
+      if (!this.open) this.$.panel.style.display = 'none';else this.$.panel.style.display = 'block';
+    }
+
+    /**
+     * @method _onFileUpdate
+     * @description via PackageInterface, called whenever a file is updated
+     * 
+     * @param {Object} e 
+     */
+
+  }, {
+    key: "_onFileUpdate",
+    value: function _onFileUpdate(e) {
+      if (e.payload.dir !== this.directory) return;
+      this._updatePanelHeight();
+    }
+
+    /**
+     * @method _onExampleNameChange
+     * @description fired from the name input on-change event
+     */
+
+  }, {
+    key: "_onExampleNameChange",
+    value: function () {
+      var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+        var _this2 = this;
+
+        var src, dst, packageId, helpTxt;
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                src = this.label;
+                dst = this._cleanLabelName(this.$.name.value);
+                packageId = this._getSelectedPackageId().id;
+
+
+                this.$.name.disabled = true;
+                helpTxt = this.$.name.help;
+
+                this.$.name.help = 'Renaming example ...';
+                this.disabled = true;
+
+                _context.prev = 7;
+                _context.next = 10;
+                return this._moveExampleDirectory(packageId, src, dst);
+
+              case 10:
+
+                // remove all old files
+                ['input', 'transform', 'output'].forEach(function (id) {
+                  _this2.$[id].removeByBasePath("/examples/" + src);
+                });
+                _context.next = 15;
+                break;
+
+              case 13:
+                _context.prev = 13;
+                _context.t0 = _context["catch"](7);
+
+              case 15:
+
+                this.disabled = false;
+                this.$.name.disabled = false;
+                this.$.name.help = helpTxt;
+                this.label = dst;
+
+              case 19:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this, [[7, 13]]);
+      }));
+
+      function _onExampleNameChange() {
+        return _ref.apply(this, arguments);
+      }
+
+      return _onExampleNameChange;
+    }()
+  }, {
+    key: "_onDeleteClicked",
+    value: function () {
+      var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                try {
+                  this._deleteExampleDirectory(packageId, this.label);
+                } catch (e) {
+                  // noop?
+                }
+
+                this.fire('example-deleted', { label: this.label });
+
+              case 2:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      function _onDeleteClicked() {
+        return _ref2.apply(this, arguments);
+      }
+
+      return _onDeleteClicked;
+    }()
+  }, {
+    key: "_onLabelChange",
+    value: function _onLabelChange() {
+      this.$.name.value = this.label;
+      this.directory = '/examples/' + this.label;
+      this.inputDir = this.directory + '/input';
+      this.outputDir = this.directory + '/output';
+      this.transfromDir = this.directory + '/transform';
+    }
+  }, {
+    key: "_cleanLabelName",
+    value: function _cleanLabelName(txt) {
+      return txt.toLowerCase().replace(/( |-)/g, '_').replace(/\W/g, '');
+    }
+  }]);
+
+  return AppExampleEditor;
+}(Mixin(_polymerElement.Element).with(EventInterface, _PackageInterface2.default));
+
+exports.default = AppExampleEditor;
+
+
+customElements.define('app-example-editor', AppExampleEditor);
+
+/***/ }),
+/* 530 */
+/***/ (function(module, exports) {
+
+module.exports = "<style include=\"shared-styles\">\n  :host {\n    margin: 10px 0;\n    display: block;\n  }\n\n  h3 {\n    flex: 1;\n    margin : 0;\n    padding : 5px;\n    border-bottom: 1px solid var(--dark-background-color);\n  }\n\n  #toggle {\n    display: flex;\n    align-items: center;\n  }\n\n  #toggle:hover {\n    color: var(--default-secondary-color);\n    cursor: pointer;\n  }\n\n  #toggle iron-icon {\n    transform: rotate(0);\n    transition: transform 250ms ease-out;\n    will-change: transfrom;\n  }\n\n  #toggle[open] iron-icon {\n    transform: rotate(90deg);\n  }\n\n  @keyframes spin {\n    from {\n      transform: scale(0.9);\n      opacity: 0.3;\n    }\n    to {\n      transform: scale(1);\n      opacity: 1;\n    }\n  }\n  #panel {\n    animation: spin 250ms ease-out;\n    /* overflow: hidden; */\n    /* height: 0; */\n    /* transition: height 250ms linear; */\n  }\n\n  [not-visible] {\n    visibility: hidden;\n  }\n\n  #reveal {\n    padding: 15px 0 15px 25px;\n  }\n\n  .manager-label {\n    margin-top: 15px;\n  }\n\n</style>\n\n<div id=\"toggle\" open$=\"[[open]]\" on-click=\"toggle\">\n  <iron-icon icon=\"chevron-right\"></iron-icon>\n  <h3>[[label]]</h3>\n</div>\n\n<div id=\"panel\" open$=\"[[open]]\">\n  <div id=\"reveal\">\n    <app-text-input \n      id=\"name\" \n      label=\"Example Name\" \n      on-change=\"_onExampleNameChange\"\n      help=\"Set or change the examples name\">\n    </app-text-input>\n\n    <div not-visible$=\"[[disabled]]\">\n      <div class=\"manager-label\">Input</div>\n      <app-file-manager\n        id=\"input\" \n        color=\"blue\"\n        directory=\"[[inputDir]]\">\n        <div slot=\"help\">Input spectra for this example (csv).</div>\n      </app-file-manager>\n      \n      <div class=\"manager-label\">Transform</div>\n      <app-file-manager \n        id=\"transform\"\n        color=\"blue\" \n        directory=\"[[transfromDir]]\">\n        <div slot=\"help\">Optional transform code to apply to spectra.  Required if your input spectra\n          needs to be manipulated before being passed to model source code.\n        </div>\n      </app-file-manager>\n      \n      <div class=\"manager-label\">Output</div>\n      <app-file-manager \n        id=\"output\"\n        color=\"blue\" \n        directory=\"[[outputDir]]\">\n        <div slot=\"help\">\n          Model output (csv).  This file should exactly match the output from the model\n          given the provided example input and optional transform.\n        </div>\n      </app-file-manager>\n\n    </div>\n  </div>\n</div>";
+
+/***/ }),
+/* 531 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _polymerElement = __webpack_require__(2);
+
+var _appReleases = __webpack_require__(532);
+
+var _appReleases2 = _interopRequireDefault(_appReleases);
+
+var _PackageInterface = __webpack_require__(35);
+
+var _PackageInterface2 = _interopRequireDefault(_PackageInterface);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var AppReleases = function (_Mixin$with) {
+  _inherits(AppReleases, _Mixin$with);
+
+  function AppReleases() {
+    _classCallCheck(this, AppReleases);
+
+    return _possibleConstructorReturn(this, (AppReleases.__proto__ || Object.getPrototypeOf(AppReleases)).apply(this, arguments));
+  }
+
+  _createClass(AppReleases, [{
+    key: "_tmp",
+    value: function _tmp() {
+      console.log(this.package);
+    }
+  }, {
+    key: "_toggleCreate",
+
+
+    /**
+     * @method _toggleCreate
+     * @description called from top right create/cancel buttons
+     */
+    value: function _toggleCreate() {
+      this.creating = !this.creating;
+
+      if (this.creating) {
+        this.$.description.value = '';
+        this._render();
+      }
+    }
+
+    /**
+     * @method showList
+     * @description show the releases list
+     */
+
+  }, {
+    key: "showList",
+    value: function showList() {
+      this.creating = false;
+    }
+
+    /**
+     * @method _onReleasesUpdate
+     * @description called from releases property observer
+     */
+
+  }, {
+    key: "_onReleasesUpdate",
+    value: function _onReleasesUpdate() {
+      var index = this.releases.length - 1;
+      if (index === -1) {
+        this.release = '';
+        this._render();
+        return;
+      }
+
+      this.releases[index].latest = true;
+      this.releasesInverse = this.releases.slice().reverse();
+
+      this.release = this.releases[index].name;
+      this._render();
+      this.patch++;
+    }
+
+    /**
+     * @method _render
+     * @description called whenever the release string updates, set the input fields
+     */
+
+  }, {
+    key: "_render",
+    value: function _render() {
+      if (!this.release) {
+        this.major = 0;
+        this.minor = 0;
+        this.patch = 1;
+        return;
+      }
+
+      var parts = this.release.replace(/^v/, '').split('.');
+      if (parts.length < 3) return;
+
+      this.major = parts[0];
+      this.minor = parts[1];
+      this.patch = parts[2];
+    }
+
+    /**
+     * @method _onInputChange
+     * @description called whenever a input field changes due to user input, set
+     * the release string.
+     */
+
+  }, {
+    key: "_onInputChange",
+    value: function _onInputChange() {
+      this.release = "v" + this.major + "." + this.minor + "." + this.patch;
+    }
+
+    /**
+     * @method _onCreateClicked
+     * @description called when the create button is clicked
+     */
+
+  }, {
+    key: "_onCreateClicked",
+    value: function () {
+      var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+        var info, body;
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                if (!this.release) alert('Please enter a valid release');
+
+                info = {
+                  name: "v" + this.major + "." + this.minor + "." + this.patch,
+                  description: this.$.description.value
+                };
+                _context.prev = 2;
+
+                this.saving = true;
+                _context.next = 6;
+                return this._createRelease(this.package.name, info);
+
+              case 6:
+                alert('Release ' + info.name + ' created');
+                this.showList();
+                _context.next = 16;
+                break;
+
+              case 10:
+                _context.prev = 10;
+                _context.t0 = _context["catch"](2);
+                _context.next = 14;
+                return _context.t0.details.json();
+
+              case 14:
+                body = _context.sent;
+
+                alert(body.message);
+
+              case 16:
+
+                this.saving = false;
+
+              case 17:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this, [[2, 10]]);
+      }));
+
+      function _onCreateClicked() {
+        return _ref.apply(this, arguments);
+      }
+
+      return _onCreateClicked;
+    }()
+  }, {
+    key: "major",
+    get: function get() {
+      return parseInt(this.$.major.value) || 0;
+    },
+    set: function set(val) {
+      this.$.major.value = val + '';
+    }
+  }, {
+    key: "minor",
+    get: function get() {
+      return parseInt(this.$.minor.value) || 0;
+    },
+    set: function set(val) {
+      this.$.minor.value = val + '';
+    }
+  }, {
+    key: "patch",
+    get: function get() {
+      return parseInt(this.$.patch.value) || 0;
+    },
+    set: function set(val) {
+      this.$.patch.value = val + '';
+    }
+  }], [{
+    key: "template",
+    get: function get() {
+      return _appReleases2.default;
+    }
+  }, {
+    key: "properties",
+    get: function get() {
+      return {
+        releases: {
+          type: Array,
+          value: function value() {
+            return [];
+          },
+          observer: '_onReleasesUpdate'
+        },
+        releasesInverse: {
+          type: Array,
+          value: function value() {
+            return [];
+          }
+        },
+        package: {
+          type: Object,
+          value: function value() {},
+          observer: '_tmp'
+        },
+        creating: {
+          type: Boolean,
+          value: false
+        },
+        saving: {
+          type: Boolean,
+          value: false
+        },
+        release: {
+          type: String,
+          value: ''
+        }
+      };
+    }
+  }]);
+
+  return AppReleases;
+}(Mixin(_polymerElement.Element).with(EventInterface, _PackageInterface2.default));
+
+exports.default = AppReleases;
+
+
+customElements.define('app-releases', AppReleases);
+
+/***/ }),
+/* 532 */
+/***/ (function(module, exports) {
+
+module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n\n  .layout {\n    display: flex;\n    align-items: flex-end;\n  }\n\n  .layout input {\n    width: 100%;\n  }\n\n  .period {\n    font-size: 40px;\n  }\n\n  paper-button {\n    font-size: 14px;\n    color: var(--light-secondary-color);\n  }\n</style>\n\n<h2 class=\"uheader lightblue\" style=\"display:flex; align-items: center\">\n  <div style=\"flex:1\">Releases</div>\n  <div>\n    <paper-button hidden$=\"[[creating]]\" on-click=\"_toggleCreate\"><iron-icon icon=\"add\"></iron-icon> Create</paper-button>\n    <paper-button hidden$=\"[[!creating]]\" on-click=\"_toggleCreate\">Cancel</paper-button>\n  </div>\n</h2>\n\n<div hidden$=\"[[!creating]]\">\n  <div class=\"layout\">\n    <div>\n      <div>Major</div>\n      <input type=\"number\" id=\"major\" placeholder=\"1\" on-change=\"_onInputChange\" />\n    </div>\n    <div class=\"period\">.</div>\n    <div>\n      <div>Minor</div>\n      <input type=\"number\" id=\"minor\" placeholder=\"0\" on-change=\"_onInputChange\" />\n    </div>\n    <div class=\"period\">.</div>\n    <div>\n      <div>Patch</div>\n      <input type=\"number\" id=\"patch\" placeholder=\"0\" on-change=\"_onInputChange\" />\n    </div>\n  </div>\n  <div>\n    <input type=\"text\" placeholder=\"Release description\" id=\"description\" style=\"width: 100%\" />\n  </div>\n\n  <div style=\"text-align: right\">\n    <a href=\"https://semver.org/\" target=\"_blank\">Versioning Help</a>\n  </div>\n  <div><paper-button on-click=\"_onCreateClicked\" disabled$=\"[[saving]]\">Create Release</paper-button></div>\n</div>\n\n<div hidden$=\"[[creating]]\">\n  <div><a href=\"[[package.htmlUrl]]/releases\" target=\"_blank\">View on GitHub</a></div>\n  <template is=\"dom-repeat\" items=\"[[releasesInverse]]\">\n    <div>\n      <h4>[[item.name]]</h4>\n      <div>[[item.body]]</div>\n      <div>Published [[item.publishedAt]]</div>\n      <div><a href$=\"[[item.zipballUrl]]\">Download</a></div>\n    </div>\n  </template>\n</div>\n";
+
+/***/ }),
+/* 533 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -47672,17 +48199,17 @@ var IronRangeBehavior = exports.IronRangeBehavior = {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _polymerElement = __webpack_require__(4);
+var _polymerElement = __webpack_require__(2);
 
-var _appPackageSearch = __webpack_require__(529);
+var _appPackageSearch = __webpack_require__(534);
 
 var _appPackageSearch2 = _interopRequireDefault(_appPackageSearch);
 
-__webpack_require__(530);
+__webpack_require__(535);
 
-__webpack_require__(534);
+__webpack_require__(539);
 
-__webpack_require__(538);
+__webpack_require__(543);
 
 var _SearchInterface = __webpack_require__(52);
 
@@ -47789,13 +48316,13 @@ var AppPackageSearch = function (_Mixin$with) {
 customElements.define('app-package-search', AppPackageSearch);
 
 /***/ }),
-/* 529 */
+/* 534 */
 /***/ (function(module, exports) {
 
 module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n\n  .layout {\n    display: flex;\n    justify-content: center;\n  }\n\n  .inner-layout {\n    background-color: white;\n    display: flex;\n    width: 100%;\n    max-width: 1200px;\n    padding: 20px;\n    margin-top: 20px;\n  }\n\n  app-filters-panel {\n    width: 100%;\n    max-width: 300px;\n  }\n</style>\n\n<app-search-header></app-search-header>\n\n<div class=\"layout\">\n  <div class=\"inner-layout\">\n    <app-filters-panel></app-filters-panel>\n    <app-search-results-panel style=\"flex:1\"></app-search-results-panel>\n  </div>\n</div>\n\n";
 
 /***/ }),
-/* 530 */
+/* 535 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -47807,9 +48334,9 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _polymerElement = __webpack_require__(4);
+var _polymerElement = __webpack_require__(2);
 
-var _appSearchHeader = __webpack_require__(531);
+var _appSearchHeader = __webpack_require__(536);
 
 var _appSearchHeader2 = _interopRequireDefault(_appSearchHeader);
 
@@ -47821,7 +48348,7 @@ var _SearchInterface = __webpack_require__(52);
 
 var _SearchInterface2 = _interopRequireDefault(_SearchInterface);
 
-__webpack_require__(532);
+__webpack_require__(537);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -47915,13 +48442,13 @@ exports.default = AppSearchHeader;
 customElements.define('app-search-header', AppSearchHeader);
 
 /***/ }),
-/* 531 */
+/* 536 */
 /***/ (function(module, exports) {
 
 module.exports = "<style>\n  :host {\n    display: block;\n    background-color: var(--text-primary-color);\n  }\n  .root {\n    display: flex;\n    justify-content: center;\n  }\n  input {\n    display: block;\n    width: 100%;\n    padding: 5px;\n    font-size: 26px;\n    margin: 15px 0;\n    height: 42px;\n    background: transparent;\n    color: var(--inverse-text-color);\n    border: 1px solid var(--inverse-text-color);\n    box-sizing: border-box;\n  }\n  button {\n    margin: 15px 0;\n    color : var(--inverse-text-color);\n    background: transparent;\n    height: 42px;\n    padding: 0 15px;\n    border-right: 1px solid var(--inverse-text-color);\n    border-top: 1px solid var(--inverse-text-color);\n    border-bottom: 1px solid var(--inverse-text-color);\n    border-left: none;\n    border-radius: 0;\n  }\n</style>\n\n<div class=\"root\">\n  <div style=\"flex:.66\">\n    <input type=\"text\" id=\"input\" on-keypress=\"_onKeyPress\"/>\n  </div>\n  <div>\n    <button on-click=\"_onButtonClick\">\n      <iron-icon icon=\"search\"></iron-icon>\n    </button>\n  </div>\n</div>\n\n<div class=\"root\">\n<app-active-filters-panel style=\"flex:.66\"></app-active-filters-panel>\n</div>";
 
 /***/ }),
-/* 532 */
+/* 537 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -47933,9 +48460,9 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _polymerElement = __webpack_require__(4);
+var _polymerElement = __webpack_require__(2);
 
-var _appActiveFiltersPanel = __webpack_require__(533);
+var _appActiveFiltersPanel = __webpack_require__(538);
 
 var _appActiveFiltersPanel2 = _interopRequireDefault(_appActiveFiltersPanel);
 
@@ -48018,13 +48545,13 @@ exports.default = AppActiveFiltersPanel;
 customElements.define('app-active-filters-panel', AppActiveFiltersPanel);
 
 /***/ }),
-/* 533 */
+/* 538 */
 /***/ (function(module, exports) {
 
 module.exports = "<style>\n  :host {\n    display: block;\n  }\n\n  @keyframes show-button {\n    0%   { opacity: 0; transform: scale(0) }\n    100% { opacity: 1; transform: scale(1) }\n  }\n  paper-button {\n    color: var(--inverse-text-color);\n    border: 1px solid var(--inverse-text-color);\n    border-radius: 0;\n    padding: 4px;\n    font-size: 14px;\n\n    animation: show-button 300ms ease-out;\n  }\n\n  [has-filters] {\n    margin-bottom: 15px;\n  }\n\n  .btn-layout {\n    display: flex;\n    align-items: center;\n  }\n</style>\n\n<div has-filters$=\"[[hasFilters]]\"> \n  <template is=\"dom-repeat\" items=\"[[filters]]\">\n    <paper-button index$=\"[[index]]\" on-click=\"_onRemoveFilterClicked\">\n      <div class=\"btn-layout\">\n        <iron-icon icon=\"close\"></iron-icon>\n        <span>[[item.key]]: [[item.value]]</span>\n      </div>\n    </paper-button>\n  </template>\n</div>";
 
 /***/ }),
-/* 534 */
+/* 539 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48036,9 +48563,9 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _polymerElement = __webpack_require__(4);
+var _polymerElement = __webpack_require__(2);
 
-var _appFiltersPanel = __webpack_require__(535);
+var _appFiltersPanel = __webpack_require__(540);
 
 var _appFiltersPanel2 = _interopRequireDefault(_appFiltersPanel);
 
@@ -48046,7 +48573,7 @@ var _SearchInterface = __webpack_require__(52);
 
 var _SearchInterface2 = _interopRequireDefault(_SearchInterface);
 
-__webpack_require__(536);
+__webpack_require__(541);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -48125,13 +48652,13 @@ exports.default = AppFiltersPanel;
 customElements.define('app-filters-panel', AppFiltersPanel);
 
 /***/ }),
-/* 535 */
+/* 540 */
 /***/ (function(module, exports) {
 
 module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n  .title {\n    display: flex;\n    align-items: center;\n  }\n  .title h2 {\n    flex: 1;\n  }\n  .clear-filters {\n    display: none;\n  }\n  .clear-filters[active] {\n    display: inline-block;\n  }\n</style>\n\n<div class=\"title\">\n  <h2>Filters</h2>\n  <button class=\"clear-filters\">Clear Filters</button>\n</div>\n\n<div hidden$=\"[[hasFilters]]\">\n  No additional filters for current search\n</div>\n\n<template is=\"dom-repeat\" items=\"[[filters]]\">\n  <app-filter-panel filter=\"[[item]]\"></app-filter-panel>\n</template>";
 
 /***/ }),
-/* 536 */
+/* 541 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48143,9 +48670,9 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _polymerElement = __webpack_require__(4);
+var _polymerElement = __webpack_require__(2);
 
-var _appFilterPanel = __webpack_require__(537);
+var _appFilterPanel = __webpack_require__(542);
 
 var _appFilterPanel2 = _interopRequireDefault(_appFilterPanel);
 
@@ -48220,13 +48747,13 @@ exports.default = AppFilterPanel;
 customElements.define('app-filter-panel', AppFilterPanel);
 
 /***/ }),
-/* 537 */
+/* 542 */
 /***/ (function(module, exports) {
 
 module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n  a {\n    cursor: pointer;\n    color: var(--default-primary-color);\n  }\n</style>\n\n\n<div><b>[[filter.key]]</b></div>\n\n<template is=\"dom-repeat\" items=\"[[filter.values]]\">\n  <div><a on-click=\"_onFilterClicked\" filter$=\"[[item.filter]]\">[[item.filter]] ([[item.count]])</a></div>\n</template>\n";
 
 /***/ }),
-/* 538 */
+/* 543 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48238,9 +48765,9 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _polymerElement = __webpack_require__(4);
+var _polymerElement = __webpack_require__(2);
 
-var _appSearchResultsPanel = __webpack_require__(539);
+var _appSearchResultsPanel = __webpack_require__(544);
 
 var _appSearchResultsPanel2 = _interopRequireDefault(_appSearchResultsPanel);
 
@@ -48248,7 +48775,7 @@ var _SearchInterface = __webpack_require__(52);
 
 var _SearchInterface2 = _interopRequireDefault(_SearchInterface);
 
-__webpack_require__(540);
+__webpack_require__(545);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -48329,13 +48856,13 @@ exports.default = AppSearchResultsPanel;
 customElements.define('app-search-results-panel', AppSearchResultsPanel);
 
 /***/ }),
-/* 539 */
+/* 544 */
 /***/ (function(module, exports) {
 
 module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n    padding: 10px;\n    min-height: 500px;\n  }\n\n  .no-match {\n    text-align: center;\n    padding-top: 50px;\n  }\n</style>\n\n<div class=\"no-match\" hidden$=\"[[hasResults]]\">\n  No packages match your current search.\n</div>\n\n<div>\n  <template is=\"dom-repeat\" items=\"[[results]]\">\n    <app-search-result item=\"[[item]]\"></app-search-result>\n  </template>\n</div>";
 
 /***/ }),
-/* 540 */
+/* 545 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48347,9 +48874,9 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _polymerElement = __webpack_require__(4);
+var _polymerElement = __webpack_require__(2);
 
-var _appSearchResult = __webpack_require__(541);
+var _appSearchResult = __webpack_require__(546);
 
 var _appSearchResult2 = _interopRequireDefault(_appSearchResult);
 
@@ -48396,13 +48923,13 @@ exports.default = AppSearchResult;
 customElements.define('app-search-result', AppSearchResult);
 
 /***/ }),
-/* 541 */
+/* 546 */
 /***/ (function(module, exports) {
 
 module.exports = "<style>\n  :host {\n    display: block;\n    border-bottom: 1px solid var(--default-background-color);\n  }\n\n  a {\n    color: var(--default-primary-color);\n    text-decoration: none;\n  }\n</style>\n\n<h2><a href$=\"/package/[[item.id]]\">[[item.name]]</a></h2>\n<div>[[item.overview]]</div>";
 
 /***/ }),
-/* 542 */
+/* 547 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48414,9 +48941,9 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _polymerElement = __webpack_require__(4);
+var _polymerElement = __webpack_require__(2);
 
-var _appHome = __webpack_require__(543);
+var _appHome = __webpack_require__(548);
 
 var _appHome2 = _interopRequireDefault(_appHome);
 
@@ -48489,13 +49016,13 @@ exports.default = AppHome;
 customElements.define('app-home', AppHome);
 
 /***/ }),
-/* 543 */
+/* 548 */
 /***/ (function(module, exports) {
 
 module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n \n  .root {\n    display: flex;\n    justify-content: center;\n  }\n  .root > div {\n    margin-top: 20px;\n    padding: 40px;\n    background-color: white;\n    width: 100%;\n    max-width: 1200px;\n    min-height: 600px;\n  }\n\n  .row {\n    display: flex;\n  }\n  .row > * {\n    flex : 1;\n  }\n</style>\n\n<app-search-header></app-search-header>\n\n\n<div class=\"root\">\n  <h1>Ecological Spectral Model Library</h1>\n</div>\n\n<div class=\"root\">\n  <div>\n\n    <div class=\"row\" style=\"margin-bottom: 35px\">\n      <div>\n        <h2 class=\"uheader blue\">Top Organizations</h2>\n        <div>UW EnSpec </div>\n        <div>University of Utah</div>\n        <div>Foundational Datasets</div>\n        <div>The Remote Sensing Laboratory</div>\n        <div>University of California Santa Barbara</div>\n      </div>\n      <div>\n        <h2 class=\"uheader green\">Top Keywords</h2>\n        <div>nitrogen </div>\n        <div>lma</div>\n        <div>carbon</div>\n        <div>lignin</div>\n        <div>reflectance</div>\n      </div>\n      <div>\n        <h2 class=\"uheader lightblue\">Top Themes</h2>\n        <div>ecology</div>\n        <div>biochemistry</div>\n        <div>agriculture</div>\n        <div>forest</div>\n        <div>physiology</div>\n      </div>\n    </div>\n    \n    \n\n    <h2 class=\"dark\">Package Management</h2>\n    <div hidden$=\"[[!loggedIn]]\"><a href=\"/create\">Create Package</a></div>\n    <div hidden$=\"[[loggedIn]]\"><a href=\"/account\">Login to Create Package</a></div>\n  </div>\n</div>";
 
 /***/ }),
-/* 544 */
+/* 549 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48507,9 +49034,9 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _polymerElement = __webpack_require__(4);
+var _polymerElement = __webpack_require__(2);
 
-var _appLandingPage = __webpack_require__(545);
+var _appLandingPage = __webpack_require__(550);
 
 var _appLandingPage2 = _interopRequireDefault(_appLandingPage);
 
@@ -48521,7 +49048,7 @@ var _AuthInterface = __webpack_require__(59);
 
 var _AuthInterface2 = _interopRequireDefault(_AuthInterface);
 
-var _PackageInterface = __webpack_require__(40);
+var _PackageInterface = __webpack_require__(35);
 
 var _PackageInterface2 = _interopRequireDefault(_PackageInterface);
 
@@ -48756,13 +49283,13 @@ exports.default = AppLandingPage;
 customElements.define('app-landing-page', AppLandingPage);
 
 /***/ }),
-/* 545 */
+/* 550 */
 /***/ (function(module, exports) {
 
 module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n\n  .container > * {\n    background-color: white;\n    padding: 40px;\n  }\n\n  .overview {\n    color: var(--secondary-text-color);\n  }\n\n  .install {\n    color: var(--secondary-text-color);\n    font-family: monospace;\n    font-size: 14px;\n  }\n\n  .layout {\n    display: flex;\n  }\n\n  .layout .main {\n    padding-right: 40px;\n    flex: 1;\n  }\n  \n  h2.padded {\n    padding-top: 40px;\n  }\n  \n  #readme {\n    margin-top: 40px;\n  }\n</style>\n\n<h2 style=\"text-align: center\">[[package.name]]</h2>\n\n<div class=\"container\">\n\n  <div class=\"layout\">\n    <div class=\"main\">\n      <div class=\"overview\">[[package.overview]]</div>\n      <app-markdown id=\"readme\"></app-markdown>\n    </div>\n    \n    <div style=\"width: 300px\">\n      <div class=\"install\">\n        <iron-icon icon=\"chevron-right\"></iron-icon>ecosml download [[package.name]]\n      </div>\n      <div style=\"padding-bottom: 20px\"><a>Help</a></div>\n      \n      <h2 class=\"uheader dark\">Current Release</h2>\n      <div style=\"padding-bottom: 20px\" hidden$=\"[[!release]]\">\n        <div><a href$=\"[[release.downloadUrl]]\">[[release.name]]</a></div>\n        <div>[[release.description]]</div>\n      </div>\n      <div style=\"padding-bottom: 20px\" hidden$=\"[[release]]\">\n        No releases available\n      </div>\n\n      <h2 class=\"uheader blue\">Access</h2>\n      <div hidden$=\"[[!release]]\"><a href$=\"[[release.downloadUrl]]\">Download Current Release</a></div>\n      <div hidden$=\"[[!release]]\"><a href$=\"[[package.htmlUrl]]/releases\" target=\"_blank\">All Releases</a></div>\n      <div><a href$=\"[[package.htmlUrl]]\" target=\"_blank\">GitHub</a></div>\n\n      <div hidden$=\"[[!package.theme]]\">\n        <h2 class=\"uheader green padded\">Theme</h2>\n        <div hidden$=\"[[!package.theme]]\">Theme: <a href$=\"[[themeLink]]\">[[package.theme]]</a></div>\n        <div hidden$=\"[[!package.family]]\">Family: <a href$=\"[[familyLink]]\">[[package.family]]</a></div>\n        <div hidden$=\"[[!package.specific]]\">Specific: <a href$=\"[[specificLink]]\">[[package.specific]]</a></div>\n      </div>\n\n      <div hidden$=\"[[!package.keywords]]\">\n        <h2 class=\"uheader lightblue padded\">Keywords</h2>\n        <div id=\"keywords\"></div>\n      </div>\n\n      <div hidden$=\"[[!userHasWriteAccess]]\">\n        <h2 class=\"uheader dark padded\">Admin</h2>\n        <div><a href$=\"/edit/[[package.id]]\">Edit Package</a></div>\n      </div>\n    </div>\n  </div>\n\n</div>";
 
 /***/ }),
-/* 546 */
+/* 551 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48774,9 +49301,9 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _polymerElement = __webpack_require__(4);
+var _polymerElement = __webpack_require__(2);
 
-var _appUserAccount = __webpack_require__(547);
+var _appUserAccount = __webpack_require__(552);
 
 var _appUserAccount2 = _interopRequireDefault(_appUserAccount);
 
@@ -48786,7 +49313,7 @@ var _AuthInterface2 = _interopRequireDefault(_AuthInterface);
 
 __webpack_require__(192);
 
-__webpack_require__(548);
+__webpack_require__(553);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -48866,13 +49393,13 @@ exports.default = AppUserAccount;
 customElements.define('app-user-account', AppUserAccount);
 
 /***/ }),
-/* 547 */
+/* 552 */
 /***/ (function(module, exports) {
 
 module.exports = "<style include=\"shared-styles\">\n  :host {\n    display : block\n  }\n</style>\n\n<iron-pages selected=\"[[view]]\" attr-for-selected=\"id\">\n  <app-login id=\"login\"></app-login>\n  <div id=\"account\">\n    <h2>Hello [[username]]</h2>\n    <div><paper-button on-click=\"_logout\">Logout</paper-button></div>\n  </div>\n</iron-pages>\n";
 
 /***/ }),
-/* 548 */
+/* 553 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48884,9 +49411,9 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _polymerElement = __webpack_require__(4);
+var _polymerElement = __webpack_require__(2);
 
-var _appLogin = __webpack_require__(549);
+var _appLogin = __webpack_require__(554);
 
 var _appLogin2 = _interopRequireDefault(_appLogin);
 
@@ -49010,13 +49537,13 @@ exports.default = AppLogin;
 customElements.define('app-login', AppLogin);
 
 /***/ }),
-/* 549 */
+/* 554 */
 /***/ (function(module, exports) {
 
 module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n  .root {\n    display: flex;\n    justify-content: center;\n    flex-direction: column;\n    align-items: center;\n  }\n  .root > div {\n    margin-top: 20px;\n    padding: 40px;\n    background-color: white;\n  }\n  paper-button {\n    color: var(--default-primary-color);\n  }\n</style>\n\n<div class=\"root\">\n  <div>\n    <h2 class=\"uheader green\">Login</h2>\n\n    <div style=\"margin-top:30px\">\n      <app-text-input id=\"username\" label=\"Username\"></app-text-input>\n      <app-text-input id=\"password\" label=\"Password\" type=\"password\" on-keyup=\"_onPassKeyUp\"></app-text-input>\n    </div>\n\n    <div style=\"margin-top:20px\">\n      <paper-button on-click=\"_attemptLogin\">Login</paper-button>\n    </div>\n  </div>\n</div>";
 
 /***/ }),
-/* 550 */
+/* 555 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49028,9 +49555,9 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _polymerElement = __webpack_require__(4);
+var _polymerElement = __webpack_require__(2);
 
-var _appAuthIcon = __webpack_require__(551);
+var _appAuthIcon = __webpack_require__(556);
 
 var _appAuthIcon2 = _interopRequireDefault(_appAuthIcon);
 
@@ -49109,13 +49636,13 @@ exports.default = AppAuthIcon;
 customElements.define('app-auth-icon', AppAuthIcon);
 
 /***/ }),
-/* 551 */
+/* 556 */
 /***/ (function(module, exports) {
 
 module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: inline-block;\n  }\n  a {\n    text-decoration: none;\n  }\n  paper-icon-button {\n    color: var(--inverse-text-color);\n  }\n</style>\n\n<div hidden$=\"[[loggedIn]]\">\n  <a href=\"/account\" inverse>\n    <iron-icon icon=\"perm-identity\"></iron-icon>\n  </a>\n</div>\n<div style=\"display: flex; align-items:center\" hidden$=\"[[!loggedIn]]\">\n  <a href=\"/account\" inverse>\n    <iron-icon icon=\"account-circle\"></iron-icon> [[username]]</a>\n  </a>\n  <paper-icon-button icon=\"exit-to-app\" on-click=\"_logout\"></paper-icon-button>\n</div>";
 
 /***/ }),
-/* 552 */
+/* 557 */
 /***/ (function(module, exports) {
 
 module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n\n  .header {\n    display: flex;\n    align-items: center;\n    background: var(--default-primary-color);\n    padding: 10px;\n  }\n  .header [main-title] {\n    flex: 1;\n    font-size: 22px;\n  }\n  .header [main-title] small {\n    font-size: 14px;\n  }\n\n  paper-material {\n    background: white;\n    display: block;\n    padding: 10px;\n    margin: 10px;\n  }\n\n  [icon=\"menu\"], [main-title] {\n    color: var(--inverse-text-color);\n  }\n</style>\n\n<div class=\"header\">\n  <!-- <paper-icon-button icon=\"menu\" on-click=\"toggleDrawer\"></paper-icon-button> -->\n  <div main-title>EcoSML <small>Ecological Spectral Model Library</small></div>\n  <a href=\"/\" inverse><paper-icon-button icon=\"home\"></paper-icon-button></a>\n  <app-auth-icon></app-auth-icon>\n</div>\n<!-- <app-drawer id=\"drawer\" swipe-open></app-drawer> -->\n\n<app-route app-routes=\"[[appRoutes]]\"></app-route>\n\n<iron-pages selected=\"[[page]]\" attr-for-selected=\"id\">\n  <app-home id=\"home\"></app-home>\n  <app-package-metadata-editor id=\"edit\"></app-package-metadata-editor>\n  <app-package-search id=\"search\"></app-package-search>\n  <app-landing-page id=\"package\"></app-landing-page>\n  <app-user-account id=\"account\"></app-user-account>\n</iron-pages>\n\n\n";

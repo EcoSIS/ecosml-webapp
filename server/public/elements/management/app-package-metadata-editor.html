@@ -23,10 +23,6 @@
     --paper-toast-color: var(--inverse-text-color);
   }
 
-  iron-pages > * {
-    padding: 40px;
-    background: white;
-  }
 
   paper-tabs {
     --paper-tabs-selection-bar-color: var(--default-primary-color);
@@ -76,10 +72,10 @@
     </paper-tabs>
 
     <iron-pages selected="[[selectedSection]]" attr-for-selected="id">
-      <app-basic-metadata id="basic" creating="[[creating]]" on-change="_onDataChange"></app-basic-metadata>
-      <app-details-metadata id="details" on-change="_onDataChange"></app-details-metadata>
-      <app-files id="files"></app-files>
-      <app-releases id="release"></app-releases>
+      <app-basic-metadata id="basic" class="main-panel" creating="[[creating]]" on-change="_onDataChange"></app-basic-metadata>
+      <app-details-metadata id="details" class="main-panel" on-change="_onDataChange"></app-details-metadata>
+      <app-files id="files" class="main-panel"></app-files>
+      <app-releases id="release" class="main-panel"></app-releases>
     </iron-pages>
   </div>
 </div>

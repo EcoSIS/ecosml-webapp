@@ -80,6 +80,12 @@
         width: 100%;
       }
 
+      .main-panel {
+        background-color: white;
+        padding: 40px;
+        margin: 5px;
+      }
+
       a, a:visited {
         color: var(--default-primary-color);
       }
@@ -110,6 +116,18 @@
       }
       h2.uheader.dark, h2.uheader[color="dark"] {
         border-bottom-color: var(--text-primary-color);
+      }
+
+      @media(max-width: 750px) {
+        .main-panel {
+          padding: 25px;
+        }
+      }
+
+      @media(max-width: 600px) {
+        .main-panel {
+          padding: 15px;
+        }
       }
     </style>
   </template>

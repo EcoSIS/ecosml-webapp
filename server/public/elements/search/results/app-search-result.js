@@ -11,9 +11,29 @@ export default class AppSearchResult extends PolymerElement {
     return {
       item : {
         type : Object,
-        value : () => {}
+        value : () => {},
+        observer : '_onItemUpdate'
+      },
+
+      latestRelease : {
+        type : String,
+        value : ''
       }
     }
+  }
+
+  /**
+   * @method _onItemUpdate
+   * @description called when item property updates
+   */
+  _onItemUpdate() {
+    if( !this.item ) return;
+
+    if( this.item.releases.length === 0 ) {
+      return this.latestRelease = 'No releases';
+    }
+
+    this.latestRelease = this.item.releases[this.item.releases.length-1].name;
   }
 
 }

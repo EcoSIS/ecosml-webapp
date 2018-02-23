@@ -136,7 +136,7 @@ export default class AppLandingPage extends Mixin(PolymerElement)
 
   render() {
     if( !this.package ) return;
-    this.$.readme.show(this.package.renderedDescription);
+    this.$.readme.render(this.package.description);
   }
 
 }

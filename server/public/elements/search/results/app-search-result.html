@@ -1,14 +1,49 @@
-<style>
+<style include="shared-styles">
   :host {
     display: block;
-    border-bottom: 1px solid var(--default-background-color);
+    padding-bottom: 50px;
+  }
+
+  h2 {
+    display: flex;
+  }
+
+  h2 a {
+    display: block;
+    flex: 1;
   }
 
   a {
-    color: var(--default-primary-color);
+    color: var(--text-primary-color);
     text-decoration: none;
+  }
+
+  a:hover, a:hover:visited  {
+    color: var(--light-secondary-color);
+  }
+
+  a:visited {
+    color: var(--text-primary-color);
+  }
+
+  .help {
+    margin-top: 5px;
+    font-size: 16px;
+  }
+
+  .org {
+    font-size: 14px;
+    align-self: flex-end;
+    color: var(--light-secondary-color);
   }
 </style>
 
-<h2><a href$="/package/[[item.id]]">[[item.name]]</a></h2>
+<h2 class="uheader lightblue">
+  <a href$="/package/[[item.id]]">[[item.name]]</a>
+  <div class="org">[[item.organization]]</div>
+</h2>
 <div>[[item.overview]]</div>
+<div>
+  <iron-icon icon="editor:linear-scale"></iron-icon>
+  <span class="help">[[latestRelease]]</span>
+</div>

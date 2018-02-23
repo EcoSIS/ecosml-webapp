@@ -17,6 +17,7 @@ import "@polymer/paper-icon-button/paper-icon-button"
 import "@polymer/paper-button/paper-button"
 import "@polymer/iron-icons/iron-icons"
 import "@polymer/iron-icons/social-icons"
+import "@polymer/iron-icons/editor-icons"
 import "@polymer/polymer/lib/elements/custom-style"
 import "@polymer/paper-material/paper-material"
 import "@polymer/iron-pages/iron-pages"
@@ -58,6 +59,10 @@ export class EcoSMLApp extends Mixin(PolymerElement)
       firstLoad : {
         type : Boolean,
         value : true
+      },
+      searchHeader : {
+        type : Boolean,
+        value : false
       }
     }
   }
@@ -80,6 +85,12 @@ export class EcoSMLApp extends Mixin(PolymerElement)
       if( e.location.path.length > 1 ) {
         this._setSelectedPackageId(e.location.path[1]);
       }
+    }
+
+    if( page === 'search' || page === 'package' ) {
+      this.searchHeader = true;
+    } else {
+      this.searchHeader = false;
     }
     
     window.scrollTo(0, 0);

@@ -11,12 +11,6 @@
     max-width: 800px;
   }
 
-  .container > div > div {
-    background: white;
-    margin: 20px;
-    padding: 20px;
-  }
-
   .break {
     margin-top: 40px;
   }
@@ -32,7 +26,7 @@
   <div id="account">
     <div class="container">
       <div>
-          <div style="display:flex">
+          <div class="main-panel" style="display:flex">
             <div>
               <app-user-icon size="64" active></app-user-icon>
             </div>
@@ -64,7 +58,7 @@
                 </div>
                 <div>
                   <template is="dom-repeat" items="[[organizations]]">
-                    <div><a href="https://data.ecosis.org/organization/[[item.name]]" target="_blank">[[item.displayName]]</a></div>
+                    <div style="margin: 8px 5px"><a href="https://data.ecosis.org/organization/[[item.name]]" target="_blank">[[item.displayName]]</a></div>
                   </template>
                 </div>
 
@@ -73,7 +67,7 @@
                 </div>
                 <div>
                   <template is="dom-repeat" items="[[ownerPackages]]">
-                    <div><a href="/edit/[[item.id]]" >[[item.name]]</a> <a href="/package/[[item.id]]">View</a></div>
+                    <div style="margin: 8px 5px"><a href="/edit/[[item.id]]" >[[item.name]]</a> - [[item.overview]]</div>
                   </template>
                 </div>
 

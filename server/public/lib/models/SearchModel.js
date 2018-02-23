@@ -161,6 +161,14 @@ class SearchModel extends BaseModel {
   search(query) {
     return this.service.search(query || this.getQuery());
   }
+
+  getOwnerPackages(owner) {
+    let query = this.getEmptyQuery();
+    query.filters.push({owner});
+    query.limit = 1000;
+
+    return this.service.getOwnerPackages(query);
+  }
 }
 
 module.exports = new SearchModel();

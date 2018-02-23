@@ -3,6 +3,7 @@
     display: block;
   }
   .root {
+    margin-top: 50px;
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -12,19 +13,30 @@
     margin-top: 20px;
     padding: 40px;
     background-color: white;
+    max-width: 390px;
   }
   paper-button {
-    color: var(--default-primary-color);
+    background-color: var(--default-primary-color);
+    color: var(--inverse-text-color);
   }
 </style>
 
 <div class="root">
   <div>
     <h2 class="uheader green">Login</h2>
-
-    <div style="margin-top:30px">
+    <div class="help">
+      Login with your <a href="https://data.ecosis.org" target="_blank">EcoSIS</a> account.  If you don't 
+      have a EcoSIS account you can create one 
+      <a href="https://data.ecosis.org/user/register">here.</a>
+    </div>
+    <div style="margin:40px 0">
       <app-text-input id="username" label="Username"></app-text-input>
       <app-text-input id="password" label="Password" type="password" on-keyup="_onPassKeyUp"></app-text-input>
+    </div>
+
+    <div class="help" style="text-align: right">
+      <div><a href="https://data.ecosis.org/user/reset">Reset Password</a></div>
+      <div><a href="https://data.ecosis.org/user/register">Create Account</a></div>
     </div>
 
     <div style="margin-top:20px">

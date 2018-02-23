@@ -2,12 +2,14 @@ import {Element as PolymerElement} from "@polymer/polymer/polymer-element"
 import template from "./app-user-account.html"
 
 import AuthInterface from "../interfaces/AuthInterface"
+import SearchInterface from "../interfaces/SearchInterface"
+
 import "@polymer/iron-pages/iron-pages"
 
 import "./app-login"
 
 export default class AppUserAccount extends Mixin(PolymerElement)
-  .with(EventInterface, AuthInterface) {
+  .with(EventInterface, AuthInterface, SearchInterface) {
 
   static get template() {
     return template;
@@ -26,6 +28,11 @@ export default class AppUserAccount extends Mixin(PolymerElement)
       username : {
         type : String,
         value : ''
+      },
+
+      organizations : {
+        type : Array,
+        value : () => []
       }
     }
   }
@@ -47,11 +54,22 @@ export default class AppUserAccount extends Mixin(PolymerElement)
       this.loggedIn = true;
       this.view = 'account';
       this.username = e.username;
+      this._renderOwnerPackages();
     } else {
       this.loggedIn = false;
       this.view = 'login';
       this.username = '';
     }
+  }
+
+  async _renderOwnerPackages() {
+    let resp = await this._getOwnerPackages(this.username);
+    this.ownerPackages = resp.body.results;
+  }
+
+  _onOrgsUpdate(e) {
+    if( e.state !== 'loaded' ) return;
+    this.organizations = e.payload;
   }
 
 }

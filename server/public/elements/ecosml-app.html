@@ -3,19 +3,7 @@
     display: block;
   }
 
-  .header {
-    display: flex;
-    align-items: center;
-    background: var(--default-primary-color);
-    padding: 10px;
-  }
-  .header [main-title] {
-    flex: 1;
-    font-size: 22px;
-  }
-  .header [main-title] small {
-    font-size: 14px;
-  }
+
 
   paper-material {
     background: white;
@@ -24,21 +12,13 @@
     margin: 10px;
   }
 
-  [icon="menu"], [main-title] {
-    color: var(--inverse-text-color);
-  }
+
 </style>
 
-<div class="header">
-  <!-- <paper-icon-button icon="menu" on-click="toggleDrawer"></paper-icon-button> -->
-  <div main-title>EcoSML <small>Ecological Spectral Model Library</small></div>
-  <a href="/" inverse><paper-icon-button icon="home"></paper-icon-button></a>
-  <app-auth-icon></app-auth-icon>
-</div>
-<!-- <app-drawer id="drawer" swipe-open></app-drawer> -->
+
+<app-header></app-header>
 
 <app-route app-routes="[[appRoutes]]"></app-route>
-
 <iron-pages selected="[[page]]" attr-for-selected="id">
   <app-home id="home"></app-home>
   <app-package-metadata-editor id="edit"></app-package-metadata-editor>
@@ -46,5 +26,4 @@
   <app-landing-page id="package"></app-landing-page>
   <app-user-account id="account"></app-user-account>
 </iron-pages>
-
 

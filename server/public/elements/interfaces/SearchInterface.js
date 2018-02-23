@@ -42,4 +42,8 @@ module.exports = subclass =>
     _getEmptySearchQuery() {
       return this.SearchModel.getEmptyQuery();
     }
+
+    _getOwnerPackages(owner) {
+      return this.SearchModel.getOwnerPackages(owner);
+    }
   }

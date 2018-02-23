@@ -2,12 +2,87 @@
   :host {
     display : block
   }
+
+  .container {
+    margin-top: 50px;
+  }
+
+  .container > div {
+    max-width: 800px;
+  }
+
+  .container > div > div {
+    background: white;
+    margin: 20px;
+    padding: 20px;
+  }
+
+  .break {
+    margin-top: 40px;
+  }
+
+  paper-button {
+    font-size: 14px;
+    color: var(--default-primary-color);
+  }
 </style>
 
 <iron-pages selected="[[view]]" attr-for-selected="id">
   <app-login id="login"></app-login>
   <div id="account">
-    <h2>Hello [[username]]</h2>
-    <div><paper-button on-click="_logout">Logout</paper-button></div>
+    <div class="container">
+      <div>
+          <div style="display:flex">
+            <div>
+              <app-user-icon size="64" active></app-user-icon>
+            </div>
+            <div style="flex: 1; padding-left: 20px;">
+                <h2 class="uheader green" style="display:flex; align-items:center">
+                  <div style="flex:1">User: [[username]]</div>
+                  <paper-button on-click="_logout">Logout</paper-button>
+                </h2>
+
+                <div class="break">
+                  <a href="https://data.ecosis.org/user/login">Manage My Account on EcoSIS</a>
+                </div>
+                <div class="help">
+                  All EcoSML accounts are managed through EcoSIS.  To edit your profile or change
+                  your password, simply login to EcoSIS and edit your account.
+                </div>
+
+                <div class="break">
+                  <a href="https://data.ecosis.org/user/login">Manage My Organizations on EcoSIS</a>
+                </div>
+                <div class="help">
+                  Just like accounts all EcoSML organizations are managed through EcoSIS.  To create a new 
+                  organization or manage an existing organization, simply login to EcoSIS then click
+                  'My Organizations'.
+                </div>
+
+                <div class="break">
+                  <h2 class="uheader lightblue">My Organizations</h2>
+                </div>
+                <div>
+                  <template is="dom-repeat" items="[[organizations]]">
+                    <div><a href="https://data.ecosis.org/organization/[[item.name]]" target="_blank">[[item.displayName]]</a></div>
+                  </template>
+                </div>
+
+                <div class="break">
+                  <h2 class="uheader blue">My Packages</h2>
+                </div>
+                <div>
+                  <template is="dom-repeat" items="[[ownerPackages]]">
+                    <div><a href="/edit/[[item.id]]" >[[item.name]]</a> <a href="/package/[[item.id]]">View</a></div>
+                  </template>
+                </div>
+
+            </div>
+          </div>
+      </div>
+      
+    </div>
+
+    
   </div>
 </iron-pages>

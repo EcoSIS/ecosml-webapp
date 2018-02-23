@@ -46,6 +46,17 @@ class SearchService extends BaseService {
   _isCurrentSearch(id) {
     return (id === this.currentSearchId);
   }
+
+  async getOwnerPackages(query) {
+    return this.request({
+      url : this.baseUrl,
+      fetchOptions : {
+        method : 'POST',
+        body  : query
+      },
+      json : true
+    });
+  }
 }
 
 module.exports = new SearchService();

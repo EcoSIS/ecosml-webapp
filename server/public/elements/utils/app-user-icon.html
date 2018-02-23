@@ -1,0 +1,22 @@
+<style>
+  :host {
+    display: inline-block;
+  }
+  
+  iron-icon {
+    display: inline-block;
+    border-radius: var(--user-icon-size);
+    --iron-icon-height: var(--user-icon-size);
+    --iron-icon-width: var(--user-icon-size);
+    color: white;
+    border: 4px solid transparent;
+  }
+
+  iron-icon[active] {
+    background-color: var(--light-primary-color);
+    border: 4px solid var(--light-primary-color);
+  }
+
+</style>
+
+<iron-icon icon="social:person" active$="[[active]]"></iron-icon>

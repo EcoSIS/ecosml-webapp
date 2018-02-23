@@ -1,0 +1,107 @@
+<style include="shared-styles">
+  :host {
+    display: block;
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    background: var(--default-primary-color);
+    padding: 10px;
+  }
+  
+  .header [main-title] {
+    flex: 1;
+    font-size: 22px;
+  }
+
+  .header [main-title] small {
+    font-size: 14px;
+  }
+
+  [icon="menu"], [main-title] {
+    color: var(--inverse-text-color);
+  }
+
+  paper-icon-button {
+    color: var(--inverse-text-color);
+  }
+
+  @keyframes show {
+    0%   { opacity: .5; transform: scale(.9) }
+    100% { opacity: 1; transform: scale(1) }
+  }
+
+  #menu {
+    position: absolute;
+    top: 50px;
+    right : 0;
+    background: var(--light-primary-color);
+    color: var(--default-background-color);
+    white-space: nowrap;
+    animation: show 250ms ease-out;
+    z-index: 1000;
+    border-radius: 0 0 6px 6px;
+  }
+
+  #menu a {
+    color: var(--default-background-color);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--default-background-color);
+    padding: 15px;
+    cursor: pointer;
+  }
+
+  #menu a:hover {
+    color: white;
+    /* background-color: var(--default-primary-color); */
+  }
+
+  #menu a:hover iron-icon {
+    transform: scale(1.5);
+  }
+
+  #menu a iron-icon {
+    transform: scale(1);
+    transition: transform 200ms ease-out;
+    margin-right: 15px;
+  }
+</style>
+
+<div class="header">
+  <div main-title>EcoSML <small>Ecological Spectral Model Library</small></div>
+  <app-auth-icon></app-auth-icon>
+  <div style="position:relative; padding-left: 15px">
+    <paper-icon-button inverse icon="more-vert" on-click="_onMenuIconClicked"></paper-icon-button>
+    
+    <div id="menu" on-click="_onMenuClicked" hidden$="[[!menuActive]]">
+      <a href="/" >
+        <iron-icon icon="home"></iron-icon> 
+        <span>Home</span>
+      </a>
+      <a href="/search" >
+        <iron-icon icon="search"></iron-icon> 
+        <span>Search</span>
+      </a>
+      <a href="/create" hidden$="[[!loggedIn]]">
+        <iron-icon icon="add"></iron-icon> 
+        <span>Create Package</span>
+      </a>
+      <a href="/account" hidden$="[[!loggedIn]]">
+        <iron-icon icon="social:person"></iron-icon> 
+        <span>My Account</span>
+      </a>
+      <a on-click="_logout" hidden$="[[!loggedIn]]">
+        <iron-icon icon="exit-to-app"></iron-icon> 
+        <span>Logout</span>
+      </a>
+      <a href="/account" hidden$="[[loggedIn]]">
+        <iron-icon icon="social:person"></iron-icon> 
+        <span>Login</span>
+      </a>
+    </div>
+  </div>
+</div>
+

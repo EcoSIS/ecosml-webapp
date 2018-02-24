@@ -11,6 +11,9 @@
   }
 </style>
 
+
+<app-search-pagination text-mode total-results="45"></app-search-pagination>
+
 <div class="no-match" hidden$="[[hasResults]]">
   No packages match your current search.
 </div>
@@ -20,3 +23,5 @@
     <app-search-result item="[[item]]"></app-search-result>
   </template>
 </div>
+
+<app-search-pagination></app-search-pagination>

@@ -46,9 +46,11 @@ function map() {
 
 
     if( typeof values == 'string' ) {
+      if( values === '' ) continue;
       item[filterNames[i]][values] = 1;
     } else if ( Array.isArray(values) ) {
       for( j = 0; j < values.length; j++ ) {
+        if( values[j] === '' ) continue;
         item[filterNames[i]][values[j]] = 1;
         if( j == MAX_FILTERS ) break;
       }

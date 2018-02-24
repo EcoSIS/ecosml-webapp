@@ -1,0 +1,71 @@
+<style>
+  :host {
+    display: block;
+  }
+  #root {
+    display: flex;
+    align-items: center;
+  }
+  .ellipsis {
+    display: none;
+  }
+  paper-icon-button {
+    color: var(--cork-color, --default-primary-color);
+  }
+  paper-icon-button[disabled] {
+      color: var(--cork-disabled-color, var(--disabled-color, #ccc));
+  }
+  a {
+    color: var(--cork-color, --default-primary-color);
+    cursor: pointer;
+    text-align: center;
+    min-width: 20px;
+    border-radius: 25px;
+    display: inline-block;
+    padding: 5px;
+    margin: 0 3px;
+    font-size: 14px;
+    line-height: 20px;
+  }
+  a:hover {
+    background: var(--cork-background-color-light, var(--light-background-color, #eee));
+  }
+  a[selected] {
+    background: var(--cork-background-color, var(--medium-background-color, #ccc));
+    color: white;
+  }
+  [hidden] {
+    display: none;
+  }
+  .text-display {
+    font-style: italic;
+  }
+</style>
+
+<div id="root">
+  <paper-icon-button disabled$="[[firstPage]]" icon="arrow-back" on-click="previous"></paper-icon-button>
+
+  <div style="flex:1"></div>
+
+  <div hidden$="[[loading]]">
+    <div hidden$="[[!textMode]]" class="text-display">[[textDisplay]]</div>
+  </div>
+
+  <div hidden$="[[textMode]]">
+    <a selected$="[[firstPage]]" on-click="_selectPage">1</a>
+    <a id="startEllipsis" class="ellipsis" on-click="previousSection">...</a>
+
+    <template is="dom-repeat" items="[[pages]]">
+      <a selected$="[[item.selected]]" on-click="_selectPage">[[item.index]]</a>
+    </template>
+
+    <a id="stopEllipsis" class="ellipsis" on-click="nextSection">...</a>
+    <a id="lastPage" selected$="[[lastPage]]" on-click="_selectPage">[[lastPageIndex]]</a>
+  </div>
+
+  <div style="flex:1"></div>
+
+  <paper-icon-button disabled$="[[lastPage]]" icon="arrow-forward" on-click="next"></paper-icon-button>
+</div>
+
+  

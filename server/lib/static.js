@@ -14,7 +14,8 @@ module.exports = function(app) {
     getConfig : (req, res) => {
       return {
         user : req.session.username || null,
-        appRoutes : config.server.appRoutes
+        appRoutes : config.server.appRoutes,
+        ecosisDataHost : config.ecosis.host 
       }
     }
   });

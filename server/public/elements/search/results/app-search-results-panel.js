@@ -2,6 +2,7 @@ import {Element as PolymerElement} from "@polymer/polymer/polymer-element"
 import template from "./app-search-results-panel.html"
 import SearchInterface from "../../interfaces/SearchInterface"
 import "./app-search-result"
+import "../app-search-pagination"
 
 export default class AppSearchResultsPanel extends Mixin(PolymerElement)
   .with(EventInterface, SearchInterface) {

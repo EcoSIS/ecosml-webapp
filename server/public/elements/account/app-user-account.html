@@ -37,7 +37,7 @@
                 </h2>
 
                 <div class="break">
-                  <a href="https://data.ecosis.org/user/login">Manage My Account on EcoSIS</a>
+                  <a href="[[ecosisHost]]/user/login">Manage My Account on EcoSIS</a>
                 </div>
                 <div class="help">
                   All EcoSML accounts are managed through EcoSIS.  To edit your profile or change
@@ -45,7 +45,7 @@
                 </div>
 
                 <div class="break">
-                  <a href="https://data.ecosis.org/user/login">Manage My Organizations on EcoSIS</a>
+                  <a href="[[ecosisHost]]/user/login">Manage My Organizations on EcoSIS</a>
                 </div>
                 <div class="help">
                   Just like accounts all EcoSML organizations are managed through EcoSIS.  To create a new 
@@ -58,7 +58,7 @@
                 </div>
                 <div>
                   <template is="dom-repeat" items="[[organizations]]">
-                    <div style="margin: 8px 5px"><a href="https://data.ecosis.org/organization/[[item.name]]" target="_blank">[[item.displayName]]</a></div>
+                    <div style="margin: 8px 5px"><a href="[[ecosisHost]]/organization/[[item.name]]" target="_blank">[[item.displayName]]</a></div>
                   </template>
                 </div>
 

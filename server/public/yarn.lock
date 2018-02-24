@@ -319,6 +319,10 @@ clipboard@^1.7.1:
     select "^1.1.2"
     tiny-emitter "^2.0.0"
 
+cork-pagination@cork-elements/cork-pagination:
+  version "0.0.0"
+  resolved "https://codeload.github.com/cork-elements/cork-pagination/tar.gz/001da33bd8c14869312fba62cda4abc8ff3dbb5f"
+
 decode-uri-component@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/decode-uri-component/-/decode-uri-component-0.2.0.tgz#eb3913333458775cb84cd1a1fae062106bb87545"

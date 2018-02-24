@@ -1,9 +1,11 @@
 import {Element as PolymerElement} from "@polymer/polymer/polymer-element"
 
 import template from "./app-package-search.html"
+
 import "./app-search-header"
 import "./filters/app-filters-panel"
 import "./results/app-search-results-panel"
+
 import SearchInterface from "../interfaces/SearchInterface"
 import AppStateInterface from "../interfaces/AppStateInterface"
 

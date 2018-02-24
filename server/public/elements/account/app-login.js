@@ -12,7 +12,10 @@ export default class AppLogin extends Mixin(PolymerElement)
 
   static get properties() {
     return {
-      
+      ecosisHost : {
+        type : String,
+        value : APP_CONFIG.ecosisDataHost
+      }
     }
   }
 

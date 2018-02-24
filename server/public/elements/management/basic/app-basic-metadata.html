@@ -3,12 +3,21 @@
     display: block;
   }
 
-  h2.uheader.break {
+  h2.uheader.break, h2.uheader[break] {
     margin-top: var(--form-break-margin);
   }
 
   app-text-input {
     display: block;
+  }
+
+  app-org-input, app-text-input {
+    margin-top: 15px
+  }
+
+  .delete {
+    margin-top: 75px;
+    text-align: right;
   }
 </style>
 
@@ -19,7 +28,7 @@
   hidden$="[[!creating]]">
 </app-text-input>
 
-<h2 class="uheader green break" hidden$="[[!creating]]">Package Overview</h2>
+<h2 class="uheader lightblue" break$="[[creating]]">Package Overview</h2>
 <div class="help">One sentance summary of package</div>
 <app-text-input 
   id="overview"
@@ -27,10 +36,10 @@
   placeholder="Overview (Short Description)">
 </app-text-input>
 
-<h2 class="uheader lightblue break">Organization</h2>
-<div class="help">The <a href="https://data.ecosis.org" target="_blank">EcoSIS</a> organization this package belongs to, 
+<h2 class="uheader green break">Organization</h2>
+<div class="help">The <a href="https://ecosis.org" target="_blank">EcoSIS</a> organization this package belongs to, 
   all members will have access. If you need to create or edit an organization, do so via 
-  <a href="https://data.ecosis.org/organization" target="_blank">EcoSIS organization management.</a>
+  <a href="[[ecosisHost]]/organization" target="_blank">EcoSIS organization management.</a>
 </div>
 <app-org-input id="organization" on-change="_onInputChange"></app-org-input>
 
@@ -42,6 +51,6 @@
   </paper-button>
 </div>
 
-<div hidden$="[[creating]]">
+<div hidden$="[[creating]]" class="delete">
   <paper-button on-click="_onDeleteBtnClicked">Delete Package</paper-button>
 </div>

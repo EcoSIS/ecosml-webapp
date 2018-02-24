@@ -15,6 +15,10 @@ export default class AppFilterPanel extends Mixin(PolymerElement)
         type : Object,
         value : () => {},
         observer : '_onFilterUpdate'
+      },
+      hasFilters : {
+        type : Boolean,
+        value : false
       }
     }
   }
@@ -25,6 +29,8 @@ export default class AppFilterPanel extends Mixin(PolymerElement)
   }
 
   _onFilterUpdate() {
+    if( !this.filter ) return;
+    this.hasFilters = (this.filter.values.length > 0);
     // console.log(this.filter);
   }
 

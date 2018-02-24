@@ -23,6 +23,11 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
       creating : {
         type : Boolean,
         value : false
+      },
+
+      ecosisHost : {
+        type : String,
+        value : APP_CONFIG.ecosisDataHost
       }
     }
   }

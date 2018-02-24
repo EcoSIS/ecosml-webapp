@@ -33,6 +33,11 @@ export default class AppUserAccount extends Mixin(PolymerElement)
       organizations : {
         type : Array,
         value : () => []
+      },
+
+      ecosisHost : {
+        type : String,
+        value : APP_CONFIG.ecosisDataHost
       }
     }
   }

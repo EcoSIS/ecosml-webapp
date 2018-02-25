@@ -54,7 +54,7 @@ export class EcoSMLApp extends Mixin(PolymerElement)
       },
       page : {
         type : String,
-        value : 'home'
+        value : ''
       },
       firstLoad : {
         type : Boolean,
@@ -87,7 +87,7 @@ export class EcoSMLApp extends Mixin(PolymerElement)
       }
     }
 
-    if( page === 'search' || page === 'package' ) {
+    if( page === 'search' || page === 'package' || page === 'home' ) {
       this.searchHeader = true;
     } else {
       this.searchHeader = false;

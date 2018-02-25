@@ -7,12 +7,21 @@
 
   .no-match {
     text-align: center;
-    padding-top: 50px;
+  }
+
+  app-search-pagination[text-mode] {
+    margin-bottom: 30px;
   }
 </style>
 
 
-<app-search-pagination text-mode total-results="45"></app-search-pagination>
+<app-search-pagination 
+  text-mode 
+  items-per-page="[[itemsPerPage]]"
+  current-index="[[currentIndex]]"
+  total-results="[[total]]"
+  on-nav="_onPaginationNav">
+</app-search-pagination>
 
 <div class="no-match" hidden$="[[hasResults]]">
   No packages match your current search.
@@ -24,4 +33,10 @@
   </template>
 </div>
 
-<app-search-pagination></app-search-pagination>
+<app-search-pagination 
+  hidden$="[[!hasResults]]"
+  items-per-page="[[itemsPerPage]]"
+  current-index="[[currentIndex]]"
+  total-results="[[total]]"
+  on-nav="_onPaginationNav">
+</app-search-pagination>

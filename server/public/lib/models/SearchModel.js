@@ -46,6 +46,8 @@ class SearchModel extends BaseModel {
    * @returns {String} url slug for query
    */
   toUrl(query) {
+    if( !query ) query = this.getQuery();
+
     return '/search/'+[
       encode(query.text || ''),
       encode(query.filters ? JSON.stringify(query.filters) : ''),

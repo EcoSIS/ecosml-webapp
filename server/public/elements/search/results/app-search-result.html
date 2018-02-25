@@ -14,16 +14,16 @@
   }
 
   a {
-    color: var(--text-primary-color);
+    color: var(--default-primary-color);
     text-decoration: none;
   }
 
   a:hover, a:hover:visited  {
-    color: var(--light-secondary-color);
+    color: var(--light-primary-color);
   }
 
   a:visited {
-    color: var(--text-primary-color);
+    color: var(--default-primary-color);
   }
 
   .help {
@@ -34,11 +34,11 @@
   .org {
     font-size: 14px;
     align-self: flex-end;
-    color: var(--light-secondary-color);
+    color: var(--default-primary-color);
   }
 </style>
 
-<h2 class="uheader lightblue">
+<h2 class="uheader green">
   <a href$="/package/[[item.id]]">[[item.name]]</a>
   <div class="org">[[item.organization]]</div>
 </h2>

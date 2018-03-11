@@ -16,11 +16,11 @@ class PackageService extends BaseService {
    * @description create a new package
    * 
    * @param {String} name name of package 
-   * @param {String} description one sentence overview description
+   * @param {String} overview one sentence overview description
    * @param {String} organization package organization
    */
-  async create(name, description, organization) {
-    let payload = {name, description, organization};
+  async create(name, overview, organization) {
+    let payload = {name, overview, organization};
 
     return this.request({
       url : this.baseUrl,

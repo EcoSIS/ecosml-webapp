@@ -36,7 +36,7 @@ class PackageModel {
    * 
    * @param {Object} pkg package to create
    * @param {String} pkg.name package name
-   * @param {String} pkg.description package short description
+   * @param {String} pkg.overview package short description
    * @param {String} pkg.organization package owner org
    * @param {String} pkg.owner package owner
    */
@@ -53,6 +53,10 @@ class PackageModel {
     githubRepo.auto_init = true;
     githubRepo.license_template = config.github.default_license;
     githubRepo.homepage = 'https://ecosml.org/package/'+ecosmlId;
+
+    // ecosis overview === github description
+    githubRepo.description = githubRepo.overview;
+    delete githubRepo.overview;
 
     let {response, body} = await github.createRepository(githubRepo);
     this.checkStatus(response, 201);

@@ -19,7 +19,6 @@ const schemas = {
 function validate(schema, instance) {
   schemaImpl = schemas[schema];
   if( !schemaImpl ) throw new Error('Unknown schema: '+schema);
-
   v.validate(instance, schemaImpl, {throwError: true})
 }
 

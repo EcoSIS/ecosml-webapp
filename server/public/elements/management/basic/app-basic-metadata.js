@@ -3,11 +3,12 @@ import template from "./app-basic-metadata.html"
 
 import "./app-org-input"
 import PackageInterface from "../../interfaces/PackageInterface"
+import AppStateInterface from "../../interfaces/AppStateInterface"
 
 const VALUES = ['name', 'overview', 'organization'];
 
 export default class AppBasicMetadata extends Mixin(PolymerElement)
-  .with(EventInterface, PackageInterface) {
+  .with(EventInterface, AppStateInterface, PackageInterface) {
 
   static get template() {
     return template;
@@ -30,6 +31,11 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
         value : APP_CONFIG.ecosisDataHost
       }
     }
+  }
+
+  constructor() {
+    super();
+    this.active = true;
   }
 
   get name() {

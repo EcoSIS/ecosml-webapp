@@ -31,6 +31,9 @@
       },
       "specific" : {
         "type" : "string"
+      },
+      "language" : {
+        "type" : "string"
       }
     },
     "additionalProperties": false,

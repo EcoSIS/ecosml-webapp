@@ -5,7 +5,7 @@ import "./app-org-input"
 import PackageInterface from "../../interfaces/PackageInterface"
 import AppStateInterface from "../../interfaces/AppStateInterface"
 
-const VALUES = ['name', 'overview', 'organization'];
+const VALUES = ['name', 'overview', 'organization', 'language'];
 
 export default class AppBasicMetadata extends Mixin(PolymerElement)
   .with(EventInterface, AppStateInterface, PackageInterface) {
@@ -54,6 +54,14 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
     this.$.overview.value = value || '';
   }
 
+  get language() {
+    return this.$.language.value;
+  }
+
+  set language(value) {
+    this.$.language.value = value || '';
+  }
+
   get organization() {
     return this.$.organization.value;
   }
@@ -70,6 +78,7 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
     this.name = '';
     this.overview = '';
     this.organization = '';
+    this.language = '';
   }
 
   /**
@@ -133,7 +142,7 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
     }
 
     try {
-      await this._createPackage(data.name, data.overview, data.organization);
+      await this._createPackage(data.name, data.overview, data.organization, data.language);
     } catch(e) {
       alert('Failed to create package: '+e.message);
     }

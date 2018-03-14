@@ -43,6 +43,17 @@
 </div>
 <app-org-input id="organization" on-change="_onInputChange"></app-org-input>
 
+<h2 class="uheader green break">Language</h2>
+<div class="help">Which programming language is this package written in?  Currently 
+<a href="https://www.python.org/" target="_blank">Python</a> and <a href="https://www.r-project.org/" target="_blank">R</a> 
+will auto build native package files for installation from Github.</div>
+<select id="languages">
+  <option></option>
+  <option value="python">Python</option>
+  <option value="r">R</option>
+  <option value="other">Other</option>
+</select>
+
 <div style="text-align: right">
   <paper-button 
     hidden$="[[!creating]]" 

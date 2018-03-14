@@ -10,6 +10,8 @@ const uuid = require('uuid');
 const utils = require('../lib/utils')
 const markdown = require('../lib/markdown');
 const schema = require('../lib/schema');
+const templates = require('../templates');
+const layouts = require('../lib/package-layout');
 
 const METADATA_FILENAME = 'ecosml-metadata.json';
 
@@ -66,6 +68,9 @@ class PackageModel {
 
     await mongo.insertPackage(pkg);
     await git.clone(pkg.name);
+
+    let layout = this._getPackageLayout(pkg.language);
+    await layout.ensureLayout(pkg);
 
     // write and commit ecosis-metadata.json file
     await this.writeMetadataFile(pkg);
@@ -125,9 +130,19 @@ class PackageModel {
 
     gpkg = Object.assign(gpkg, update);
 
+    // if we changed layout, revert to basic layout
+    if( gpkg.language && gpkg.language !== pkg.language ) {
+      let layout = this._getPackageLayout(gpkg.language);
+      await layout.undoLayout(pkg);
+    }
+
     // now save changes in mongo
     await mongo.updatePackage(pkg.name, gpkg);
     pkg = await mongo.getPackage(pkg.name);
+
+    // ensure our current language package layout is in place
+    let layout = this._getPackageLayout(pkg.language);
+    await layout.ensureLayout(pkg);
 
     // write and commit ecosis-metadata.json file or other changes
     await this.writeMetadataFile(pkg);
@@ -437,6 +452,19 @@ class PackageModel {
     await fs.move(src, dst);
 
     return this.commit(pkg.name, `Renaming example: ${srcName} to ${dstName}`);
+  }
+
+  /**
+   * @method _getPackageLayout
+   * @description get a package layout for a specific language
+   * 
+   * @param {String} language language for package
+   * 
+   * @returns {Object}
+   */
+  _getPackageLayout(language = 'basic') {
+    if( layouts[language] ) return layouts;
+    return layouts.basic;
   }
 
   /**

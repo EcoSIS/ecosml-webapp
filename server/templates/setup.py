@@ -12,7 +12,12 @@ setup(
     license = "MIT",
     keywords = "{{keywords}}",
     url = "{{url}}",
-    packages=['{{name}}'],
+    packages=[
+        '{{name}}',
+        '{{name}}.coefficients',
+        '{{name}}.examples',
+        '{{name}}.main'
+    ],
     long_description=read('README.md'),
     classifiers=[
         "License :: OSI Approved :: MIT License",

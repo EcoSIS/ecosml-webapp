@@ -2,8 +2,8 @@
 class PackageLayout {
 
   constructor() {
-    this.COEFFIENTS_DIR_NAME = 'coeffients';
-    this.EXAMPLES_DIR_NAME = 'EXAMPLES';
+    this.COEFFIENTS_DIR_NAME = 'coefficients';
+    this.EXAMPLES_DIR_NAME = 'examples';
     this.PAPERS_DIR_NAME = 'papers';
     this.MAIN_DIR_NAME = 'main';
   }

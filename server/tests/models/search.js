@@ -1,10 +1,10 @@
 const assert = require('assert');
 const path = require('path');
 const fs = require('fs');
-const packageModel = require('../../server/models/PackageModel');
-const model = require('../../server/models/SearchModel');
-const mongo = require('../../server/lib/mongo');
-const git = require('../../server/lib/git');
+const packageModel = require('../../models/PackageModel');
+const model = require('../../models/SearchModel');
+const mongo = require('../../lib/mongo');
+const git = require('../../lib/git');
 
 let pkg = {
   name : 'Unit-Test-Package',

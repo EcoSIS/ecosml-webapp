@@ -1,5 +1,4 @@
-server/node_modules
-server/public/node_modules
+node_modules
 server/public/webcomponentsjs
 server/public/bundle.js
 server/uploads

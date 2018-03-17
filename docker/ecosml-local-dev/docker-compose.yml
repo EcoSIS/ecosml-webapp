@@ -6,7 +6,6 @@ services:
     build: ../../server
     volumes:
       - ../../server:/server
-      - ../../tests:/server-tests
       - ../secrets.json:/server/secrets.json
     ports:
       - 3000:3000

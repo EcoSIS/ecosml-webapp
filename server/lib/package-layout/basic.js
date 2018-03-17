@@ -3,7 +3,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const PackageLayout = require('./base');
 
-class PythonPackageLayout extends PackageLayout {
+class BasicPackageLayout extends PackageLayout {
 
   async ensureLayout(pkg) {
     let exampleDir = this.getExamplesDir(pkg.name);
@@ -31,7 +31,7 @@ class PythonPackageLayout extends PackageLayout {
 
   getExamplesDir(pkgName) {
     let rootDir = git.getRepoPath(pkgName);
-    return path.join(rootDir, this.MAIN_DIR_NAME);
+    return path.join(rootDir, this.EXAMPLES_DIR_NAME);
   }
 
   getMainDir(pkgName) {
@@ -51,4 +51,4 @@ class PythonPackageLayout extends PackageLayout {
 
 }
 
-module.exports = new PythonPackageLayout();
+module.exports = new BasicPackageLayout();

@@ -1,5 +1,5 @@
 const assert = require('assert');
-const mongo = require('../../server/lib/mongo');
+const mongo = require('../../lib/mongo');
 
 let package = {
   name : 'Unit-Test-Package',

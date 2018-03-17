@@ -1,5 +1,5 @@
 const assert = require('assert');
-const github = require('../../server/lib/github');
+const github = require('../../lib/github');
 
 let repo = {
   name : 'Unit-Test-Repo',

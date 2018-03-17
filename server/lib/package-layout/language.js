@@ -7,24 +7,21 @@ class LanguagePackageLayout extends PackageLayout {
     let coeffDir = basicLayout.getCoeffientsDir(pkg.name);
     if( fs.existsSync(coeffDir) ) {
       await fs.move(coeffDir, this.getCoeffientsDir(pkg.name));
-    } else {
-      await fs.mkdirs(this.getCoeffientsDir(pkg.name));
     }
+    await fs.mkdirs(this.getCoeffientsDir(pkg.name));
 
     let exampleDir = basicLayout.getExamplesDir(pkg.name);
     if( fs.existsSync(exampleDir) ) {
       await fs.move(exampleDir, this.getExamplesDir(pkg.name));
-    } else {
-      await fs.mkdirs(this.getExamplesDir(pkg.name));
     }
+    await fs.mkdirs(this.getExamplesDir(pkg.name));
 
     let mainDir = basicLayout.getMainDir(pkg.name);
     if( fs.existsSync(mainDir) ) {
       await fs.move(mainDir, this.getMainDir(pkg.name));
-    } else {
-      await fs.mkdirs(this.getMainDir(pkg.name));
     }
-
+    await fs.mkdirs(this.getMainDir(pkg.name));
+    
     await basicLayout.ensurePapersDir(pkg.name);
   }
 
@@ -41,10 +38,22 @@ class LanguagePackageLayout extends PackageLayout {
 
     let mainDir = this.getMainDir(pkg.name);
     if( fs.existsSync(mainDir) ) {
-      await fs.move(mainDir, this.getMainDir(pkg.name));
+      await fs.move(mainDir, basicLayout.getMainDir(pkg.name));
     }
 
-    await basicLayout.ensureLayout();
+    await basicLayout.ensureLayout(pkg);
+  }
+
+  getExamplesDir(pkgName) {
+    return basicLayout.getExamplesDir(pkgName);
+  }
+
+  getMainDir(pkgName) {
+    return basicLayout.getMainDir(pkgName);
+  }
+
+  getCoeffientsDir(pkgName) {
+    return basicLayout.getCoeffientsDir(pkgName);
   }
 }
 

@@ -57,7 +57,8 @@ module.exports = {
               overview : 5,
               desciption : 2
             },
-            name: "TextIndex"
+            name: "TextIndex",
+            language_override : "_lang"
           }
         },
         {

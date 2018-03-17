@@ -98,6 +98,15 @@ export default class AppLandingPage extends Mixin(PolymerElement)
     if( inOrg ) {
       this.userHasWriteAccess = true;
     }
+
+    let children = this.$.install.children;
+    for( var i = 0; i < children.length; i++ ) {
+      children[i].style.display = 'none';
+    }
+    if( this.$.install[`install-${this.package.language}`] ) {
+      this.$.install[`install-${this.package.language}`].style.display = 'block';
+    }
+
   }
 
   /**

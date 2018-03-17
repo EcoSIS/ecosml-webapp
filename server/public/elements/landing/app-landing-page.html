@@ -15,6 +15,12 @@
     font-size: 14px;
   }
 
+  .install .script {
+    margin: 15px 0;
+    overflow: auto;
+    white-space: nowrap;
+  }
+
   .layout {
     display: flex;
   }
@@ -46,10 +52,15 @@
         </div>
         
         <div style="width: 300px">
-          <div class="install">
-            <iron-icon icon="chevron-right"></iron-icon>ecosml download [[package.name]]
+          <div id="install" class="install">
+            <div id="install-python">
+              <div>Language: Python</div>
+              <div>Install via <a href="https://pip.pypa.io/en/stable/" target="_blank">pip.</a></div>
+              <div class="script">
+                  <iron-icon icon="chevron-right"></iron-icon>pip install git+https://github.com/ecosml-dev/[[package.name]]
+              </div>
+            </div>
           </div>
-          <div style="padding-bottom: 20px"><a>Help</a></div>
           
           <h2 class="uheader dark">Current Release</h2>
           <div style="padding-bottom: 20px" hidden$="[[!release]]">

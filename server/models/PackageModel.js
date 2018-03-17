@@ -99,8 +99,12 @@ class PackageModel {
     pkg = await this.get(pkg);
     schema.validate('update', update);
 
-    // First update readme if it changed via git
+    // first get in sync
     await git.resetHEAD(pkg.name);
+    await git.clean(pkg.name);
+    await git.pull(pkg.name);
+
+    // First update readme if it changed via git
     if( update.description && pkg.description !== update.description ) {
       let README = path.join(git.getRepoPath(pkg.name), 'README.md');
       await fs.writeFile(README, update.description || '');
@@ -463,7 +467,7 @@ class PackageModel {
    * @returns {Object}
    */
   _getPackageLayout(language = 'basic') {
-    if( layouts[language] ) return layouts;
+    if( layouts[language] ) return layouts[language];
     return layouts.basic;
   }
 

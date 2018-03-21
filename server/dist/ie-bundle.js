@@ -42637,7 +42637,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var VALUES = ['name', 'overview', 'organization'];
+var VALUES = ['name', 'overview', 'organization', 'language'];
 
 var AppBasicMetadata = function (_Mixin$with) {
   _inherits(AppBasicMetadata, _Mixin$with);
@@ -42690,6 +42690,7 @@ var AppBasicMetadata = function (_Mixin$with) {
       this.name = '';
       this.overview = '';
       this.organization = '';
+      this.language = '';
     }
 
     /**
@@ -42793,7 +42794,7 @@ var AppBasicMetadata = function (_Mixin$with) {
               case 7:
                 _context.prev = 7;
                 _context.next = 10;
-                return this._createPackage(data.name, data.overview, data.organization);
+                return this._createPackage(data.name, data.overview, data.organization, data.language);
 
               case 10:
                 _context.next = 15;
@@ -42859,6 +42860,14 @@ var AppBasicMetadata = function (_Mixin$with) {
       this.$.overview.value = value || '';
     }
   }, {
+    key: "language",
+    get: function get() {
+      return this.$.language.value;
+    },
+    set: function set(value) {
+      this.$.language.value = value || '';
+    }
+  }, {
     key: "organization",
     get: function get() {
       return this.$.organization.value;
@@ -42880,7 +42889,7 @@ customElements.define('app-basic-metadata', AppBasicMetadata);
 /* 496 */
 /***/ (function(module, exports) {
 
-module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n\n  h2.uheader.break, h2.uheader[break] {\n    margin-top: var(--form-break-margin);\n  }\n\n  app-text-input {\n    display: block;\n  }\n\n  app-org-input, app-text-input {\n    margin-top: 15px\n  }\n\n  .delete {\n    margin-top: 75px;\n    text-align: right;\n  }\n</style>\n\n<h2 class=\"uheader blue\" hidden$=\"[[!creating]]\">Package Name</h2>\n<app-text-input  \n  id=\"name\" \n  on-change=\"_updateNamePreview\"\n  hidden$=\"[[!creating]]\">\n</app-text-input>\n\n<h2 class=\"uheader lightblue\" break$=\"[[creating]]\">Package Overview</h2>\n<div class=\"help\">One sentance summary of package</div>\n<app-text-input \n  id=\"overview\"\n  on-change=\"_onInputChange\"\n  placeholder=\"Overview (Short Description)\">\n</app-text-input>\n\n<h2 class=\"uheader green break\">Organization</h2>\n<div class=\"help\">The <a href=\"https://ecosis.org\" target=\"_blank\">EcoSIS</a> organization this package belongs to, \n  all members will have access. If you need to create or edit an organization, do so via \n  <a href=\"[[ecosisHost]]/organization\" target=\"_blank\">EcoSIS organization management.</a>\n</div>\n<app-org-input id=\"organization\" on-change=\"_onInputChange\"></app-org-input>\n\n<div style=\"text-align: right\">\n  <paper-button \n    hidden$=\"[[!creating]]\" \n    id=\"createBtn\"\n    on-click=\"_onCreateBtnClicked\">Create\n  </paper-button>\n</div>\n\n<div hidden$=\"[[creating]]\" class=\"delete\">\n  <paper-button on-click=\"_onDeleteBtnClicked\">Delete Package</paper-button>\n</div>";
+module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n\n  h2.uheader.break, h2.uheader[break] {\n    margin-top: var(--form-break-margin);\n  }\n\n  app-text-input {\n    display: block;\n  }\n\n  app-org-input, app-text-input {\n    margin-top: 15px\n  }\n\n  .delete {\n    margin-top: 75px;\n    text-align: right;\n  }\n</style>\n\n<h2 class=\"uheader blue\" hidden$=\"[[!creating]]\">Package Name</h2>\n<app-text-input  \n  id=\"name\" \n  on-change=\"_updateNamePreview\"\n  hidden$=\"[[!creating]]\">\n</app-text-input>\n\n<h2 class=\"uheader lightblue\" break$=\"[[creating]]\">Package Overview</h2>\n<div class=\"help\">One sentance summary of package</div>\n<app-text-input \n  id=\"overview\"\n  on-change=\"_onInputChange\"\n  placeholder=\"Overview (Short Description)\">\n</app-text-input>\n\n<h2 class=\"uheader green break\">Organization</h2>\n<div class=\"help\">The <a href=\"https://ecosis.org\" target=\"_blank\">EcoSIS</a> organization this package belongs to, \n  all members will have access. If you need to create or edit an organization, do so via \n  <a href=\"[[ecosisHost]]/organization\" target=\"_blank\">EcoSIS organization management.</a>\n</div>\n<app-org-input id=\"organization\" on-change=\"_onInputChange\"></app-org-input>\n\n<h2 class=\"uheader green break\">Language</h2>\n<div class=\"help\">Which programming language is this package written in?  Currently \n<a href=\"https://www.python.org/\" target=\"_blank\">Python</a> and <a href=\"https://www.r-project.org/\" target=\"_blank\">R</a> \nwill auto build native package files for installation from Github.</div>\n<select id=\"language\" on-change=\"_onInputChange\">\n  <option></option>\n  <option value=\"python\">Python</option>\n  <option value=\"r\">R</option>\n  <option value=\"other\">Other</option>\n</select>\n\n<div style=\"text-align: right\">\n  <paper-button \n    hidden$=\"[[!creating]]\" \n    id=\"createBtn\"\n    on-click=\"_onCreateBtnClicked\">Create\n  </paper-button>\n</div>\n\n<div hidden$=\"[[creating]]\" class=\"delete\">\n  <paper-button on-click=\"_onDeleteBtnClicked\">Delete Package</paper-button>\n</div>";
 
 /***/ }),
 /* 497 */
@@ -47566,7 +47575,7 @@ var AppLandingPage = function (_Mixin$with) {
       var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(e) {
         var _this2 = this;
 
-        var pkgWrapper, r, orgs, inOrg;
+        var pkgWrapper, r, orgs, inOrg, children, i;
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -47641,7 +47650,16 @@ var AppLandingPage = function (_Mixin$with) {
                   this.userHasWriteAccess = true;
                 }
 
-              case 21:
+                children = this.$.install.children;
+
+                for (i = 0; i < children.length; i++) {
+                  children[i].style.display = 'none';
+                }
+                if (this.$.install["install-" + this.package.language]) {
+                  this.$.install["install-" + this.package.language].style.display = 'block';
+                }
+
+              case 24:
               case "end":
                 return _context.stop();
             }
@@ -47715,7 +47733,7 @@ customElements.define('app-landing-page', AppLandingPage);
 /* 547 */
 /***/ (function(module, exports) {
 
-module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n\n  .overview {\n    color: var(--light-primary-color);\n    border-left: 2px solid var(--light-primary-color);\n    padding: 5px 10px;\n  }\n\n  .install {\n    color: var(--secondary-text-color);\n    font-family: monospace;\n    font-size: 14px;\n  }\n\n  .layout {\n    display: flex;\n  }\n\n  .layout .main {\n    padding-right: 40px;\n    flex: 1;\n  }\n  \n  h2.padded {\n    padding-top: 40px;\n  }\n  \n  #readme {\n    margin-top: 40px;\n  }\n</style>\n\n<h2 style=\"text-align: center\">[[package.name]]</h2>\n\n\n<div class=\"container\">\n  <div>\n    <div class=\"main-panel\">\n      <div class=\"layout\">\n        <div class=\"main\">\n          <div class=\"overview\">[[package.overview]]</div>\n          <app-markdown id=\"readme\"></app-markdown>\n        </div>\n        \n        <div style=\"width: 300px\">\n          <div class=\"install\">\n            <iron-icon icon=\"chevron-right\"></iron-icon>ecosml download [[package.name]]\n          </div>\n          <div style=\"padding-bottom: 20px\"><a>Help</a></div>\n          \n          <h2 class=\"uheader dark\">Current Release</h2>\n          <div style=\"padding-bottom: 20px\" hidden$=\"[[!release]]\">\n            <div><a href$=\"[[release.downloadUrl]]\">[[release.name]]</a></div>\n            <div>[[release.description]]</div>\n          </div>\n          <div style=\"padding-bottom: 20px\" hidden$=\"[[release]]\">\n            No releases available\n          </div>\n\n          <h2 class=\"uheader blue\">Access</h2>\n          <div hidden$=\"[[!release]]\"><a href$=\"[[release.downloadUrl]]\">Download Current Release</a></div>\n          <div hidden$=\"[[!release]]\"><a href$=\"[[package.htmlUrl]]/releases\" target=\"_blank\">All Releases</a></div>\n          <div><a href$=\"[[package.htmlUrl]]\" target=\"_blank\">GitHub</a></div>\n\n          <div hidden$=\"[[!package.theme]]\">\n            <h2 class=\"uheader green padded\">Theme</h2>\n            <div hidden$=\"[[!package.theme]]\">Theme: <a href$=\"[[themeLink]]\">[[package.theme]]</a></div>\n            <div hidden$=\"[[!package.family]]\">Family: <a href$=\"[[familyLink]]\">[[package.family]]</a></div>\n            <div hidden$=\"[[!package.specific]]\">Specific: <a href$=\"[[specificLink]]\">[[package.specific]]</a></div>\n          </div>\n\n          <div hidden$=\"[[!package.keywords]]\">\n            <h2 class=\"uheader lightblue padded\">Keywords</h2>\n            <div id=\"keywords\"></div>\n          </div>\n\n          <div hidden$=\"[[!userHasWriteAccess]]\">\n            <h2 class=\"uheader dark padded\">Admin</h2>\n            <div><a href$=\"/edit/[[package.id]]\">Edit Package</a></div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>";
+module.exports = "<style include=\"shared-styles\">\n  :host {\n    display: block;\n  }\n\n  .overview {\n    color: var(--light-primary-color);\n    border-left: 2px solid var(--light-primary-color);\n    padding: 5px 10px;\n  }\n\n  .install {\n    color: var(--secondary-text-color);\n    font-family: monospace;\n    font-size: 14px;\n  }\n\n  .install .script {\n    margin: 15px 0;\n    overflow: auto;\n    white-space: nowrap;\n  }\n\n  .layout {\n    display: flex;\n  }\n\n  .layout .main {\n    padding-right: 40px;\n    flex: 1;\n  }\n  \n  h2.padded {\n    padding-top: 40px;\n  }\n  \n  #readme {\n    margin-top: 40px;\n  }\n</style>\n\n<h2 style=\"text-align: center\">[[package.name]]</h2>\n\n\n<div class=\"container\">\n  <div>\n    <div class=\"main-panel\">\n      <div class=\"layout\">\n        <div class=\"main\">\n          <div class=\"overview\">[[package.overview]]</div>\n          <app-markdown id=\"readme\"></app-markdown>\n        </div>\n        \n        <div style=\"width: 300px\">\n          <div id=\"install\" class=\"install\">\n            <div id=\"install-python\">\n              <div>Language: Python</div>\n              <div>Install via <a href=\"https://pip.pypa.io/en/stable/\" target=\"_blank\">pip.</a></div>\n              <div class=\"script\">\n                  <iron-icon icon=\"chevron-right\"></iron-icon>pip install git+https://github.com/ecosml-dev/[[package.name]]\n              </div>\n            </div>\n          </div>\n          \n          <h2 class=\"uheader dark\">Current Release</h2>\n          <div style=\"padding-bottom: 20px\" hidden$=\"[[!release]]\">\n            <div><a href$=\"[[release.downloadUrl]]\">[[release.name]]</a></div>\n            <div>[[release.description]]</div>\n          </div>\n          <div style=\"padding-bottom: 20px\" hidden$=\"[[release]]\">\n            No releases available\n          </div>\n\n          <h2 class=\"uheader blue\">Access</h2>\n          <div hidden$=\"[[!release]]\"><a href$=\"[[release.downloadUrl]]\">Download Current Release</a></div>\n          <div hidden$=\"[[!release]]\"><a href$=\"[[package.htmlUrl]]/releases\" target=\"_blank\">All Releases</a></div>\n          <div><a href$=\"[[package.htmlUrl]]\" target=\"_blank\">GitHub</a></div>\n\n          <div hidden$=\"[[!package.theme]]\">\n            <h2 class=\"uheader green padded\">Theme</h2>\n            <div hidden$=\"[[!package.theme]]\">Theme: <a href$=\"[[themeLink]]\">[[package.theme]]</a></div>\n            <div hidden$=\"[[!package.family]]\">Family: <a href$=\"[[familyLink]]\">[[package.family]]</a></div>\n            <div hidden$=\"[[!package.specific]]\">Specific: <a href$=\"[[specificLink]]\">[[package.specific]]</a></div>\n          </div>\n\n          <div hidden$=\"[[!package.keywords]]\">\n            <h2 class=\"uheader lightblue padded\">Keywords</h2>\n            <div id=\"keywords\"></div>\n          </div>\n\n          <div hidden$=\"[[!userHasWriteAccess]]\">\n            <h2 class=\"uheader dark padded\">Admin</h2>\n            <div><a href$=\"/edit/[[package.id]]\">Edit Package</a></div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>";
 
 /***/ }),
 /* 548 */

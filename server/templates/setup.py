@@ -14,10 +14,11 @@ setup(
     url = "{{url}}",
     packages=[
         '{{name}}',
-        '{{name}}.coefficients',
-        '{{name}}.examples',
         '{{name}}.main'
     ],
+    package_data={
+      '{{name}}' : ['coefficients/*']
+    },
     long_description=read('README.md'),
     classifiers=[
         "License :: OSI Approved :: MIT License",

@@ -32,6 +32,7 @@ class AppUtils {
       family : repo.family,
       specific : repo.specific,
       organization : repo.organization,
+      language : repo.language,
       owner : repo.owner
     }
   }

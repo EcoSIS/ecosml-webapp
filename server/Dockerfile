@@ -12,6 +12,7 @@ COPY ./index.js /server/
 COPY ./controllers /server/controllers
 COPY ./lib /server/lib
 COPY ./models /server/models
+COPY ./templates /server/templates
 
 RUN cd server && npm install
 RUN npm install -g mocha

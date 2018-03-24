@@ -48,6 +48,10 @@ class LanguagePackageLayout extends PackageLayout {
     return basicLayout.getExamplesDir(pkgName);
   }
 
+  getPapersDir(pkgName) {
+    return basicLayout.getPapersDir(pkgName);
+  }
+
   getMainDir(pkgName) {
     return basicLayout.getMainDir(pkgName);
   }

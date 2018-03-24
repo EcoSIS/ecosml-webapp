@@ -202,9 +202,12 @@ class PackageModel {
     // update repo path
     await git.resetHEAD(pkg.name);
 
-    // get full repo path name
-    let packagepath = git.getRepoPath(pkg.name);
-    let baseFileDir = path.join(packagepath, this._sanitizePath(file.dir));
+    // if this is the main or coeffients directory, move files to correct location
+    let dir = this._sanitizePath(file.dir);
+    let pkgLayout = this._getPackageLayout(pkg.language);
+    let baseFileDir = pkgLayout.genericToAbsLangPath(dir, pkg);
+
+    await _initExampleDir(dir, pkg);
 
     await fs.mkdirs(baseFileDir);
 
@@ -220,11 +223,11 @@ class PackageModel {
       await fs.move(file.tmpFile, repoFilePath);
     }
 
-    // TODO: uncomment when working
     await this.commit(pkg.name, file.message || 'Updating package file');
   
     return this._getFileInfo(
-      path.join(file.dir, file.filename)
+      path.join(file.dir, file.filename),
+      pkg
     );
   }
 
@@ -241,12 +244,13 @@ class PackageModel {
     pkg = await this.get(pkg);
     filepath = this._sanitizePath(filepath);
 
+    // get full repo path name
+    filepath = this._sanitizePath(filepath);
+    let pkgLayout = this._getPackageLayout(pkg.language);
+    let repoFilePath = pkgLayout.genericToAbsLangPath(filepath, pkg);
+
     // update repo path
     await git.resetHEAD(pkg.name);
-
-    // get full repo path name
-    let packagepath = git.getRepoPath(pkg.name);
-    let repoFilePath = path.join(packagepath, filepath);
 
     if( !fs.existsSync(repoFilePath) ) {
       throw new Error('Package file does not exist: '+filepath);
@@ -389,10 +393,10 @@ class PackageModel {
     pkg = await this.get(pkg);
 
     let dir = await git.ensureDir(pkg.name);
-    return this._walkPackage(dir, dir);
+    return this._walkPackage(dir, dir, [], pkg);
   }
 
-  async _walkPackage(root, dir, filelist = []) {
+  async _walkPackage(root, dir, filelist = [], pkg) {
     let files = await fs.readdir(dir);
 
     for( let i = 0; i < files.length; i++ ) {
@@ -402,14 +406,34 @@ class PackageModel {
 
       let isDir = (await fs.statSync(file)).isDirectory();
       if( isDir ) {
-        await this._walkPackage(root, file, filelist);
+        await this._walkPackage(root, file, filelist, pkg);
       } else {
-        let info = this._getFileInfo(file.replace(new RegExp('^'+root), ''));
+        let info = this._getFileInfo(file.replace(new RegExp('^'+root), ''), pkg);
         filelist.push(info);
       }
     }
 
     return filelist;
+  }
+
+  /**
+   * @method _initExampleDir
+   * @description if this is the first file being added to an 
+   * example, run the init scripts
+   * 
+   * 
+   **/    
+  async _initExampleDir(dir, pkg) {
+    dir = dir.replace(/^\//, '').split('/');
+    if( dir.length < 2 ) return;
+    let exampleName = dir[1];
+    dir = dir.splice(0, 2).join('/');
+    dir = path.join(git.getRepoPath(pkg.name), dir);
+
+    if( !fs.existsSync(path) ) {
+      let pkgLayout = this._getPackageLayout(pkg.language);
+      await pkgLayout.ensureExampleLayout(pkg.name, exampleName);
+    }
   }
 
   /**
@@ -479,9 +503,12 @@ class PackageModel {
    * 
    * @return {Object}
    */
-  _getFileInfo(filepath) {
+  _getFileInfo(filepath, pkg) {
+    let pkgLayout = this._getPackageLayout(pkg.language);
+
     let info = path.parse(filepath);
     info.filename = info.base;
+    info.dir = pkgLayout.langPathToGeneric(info.dir, pkg);
     delete info.root;
     delete info.base;
     return info;

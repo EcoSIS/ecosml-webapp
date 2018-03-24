@@ -21,32 +21,40 @@ describe('Package Layout', function() {
     await fs.remove(p);
   });
 
-  it(`should create a basic package layout`, async () => {
+  it(`should create a python package layout`, async () => {
     await layout.python.ensureLayout(pkg);
 
     let dir = layout.python.getPackageRootDir(pkg.name);
     assert.equal(fs.existsSync(path.join(dir, '__init__.py')), true);
-    assert.equal(fs.existsSync(path.join(dir, layout.python.EXAMPLES_DIR_NAME, '__init__.py')), true);
     assert.equal(fs.existsSync(path.join(dir, layout.python.COEFFIENTS_DIR_NAME, '__init__.py')), true);
     assert.equal(fs.existsSync(path.join(dir, layout.python.MAIN_DIR_NAME, '__init__.py')), true);
     assert.equal(fs.existsSync(path.join(git.getRepoPath(pkg.name), layout.python.PAPERS_DIR_NAME)), true);
   });
 
+  it(`should create a example python package layout`, async () => {
+    await layout.python.ensureExampleLayout(pkg.name, 'unit-test-example');
+
+    let exDir = path.join(layout.python.getExamplesDir(pkg.name), 'unit-test-example');
+
+    assert.equal(fs.existsSync(path.join(exDir, 'test.py')), true);
+    assert.equal(fs.existsSync(path.join(exDir, layout.python.EXAMPLE_DIRS.TRANSFORM, '__init__.py')), true);
+    assert.equal(fs.existsSync(path.join(exDir, layout.python.EXAMPLE_DIRS.TRANSFORM, 'ecosml_transform_utils.py')), true);
+  });
+
   it(`should add tmp files for testing`, async () => {
     await layout.python.ensureLayout(pkg);
-
-    let dir = layout.python.getPackageRootDir(pkg.name);
     
-    await fs.writeFile(path.join(dir, 'tmp'), '');
-    await fs.writeFile(path.join(dir, layout.python.EXAMPLES_DIR_NAME, 'tmp'), 'example')
-    await fs.writeFile(path.join(dir, layout.python.COEFFIENTS_DIR_NAME, 'tmp'), 'coeffients')
-    await fs.writeFile(path.join(dir, layout.python.MAIN_DIR_NAME, 'tmp'), 'main')
-    await fs.writeFile(path.join(git.getRepoPath(pkg.name), layout.python.PAPERS_DIR_NAME, 'tmp'), 'papers')
+    await fs.writeFile(path.join(layout.python.getRootDir(pkg.name), 'tmp'), '');
+    await fs.writeFile(path.join(layout.python.getExamplesDir(pkg.name), 'tmp'), 'example')
+    await fs.writeFile(path.join(layout.python.getCoeffientsDir(pkg.name), 'tmp'), 'coeffients')
+    await fs.writeFile(path.join(layout.python.getMainDir(pkg.name), 'tmp'), 'main')
+    await fs.writeFile(path.join(layout.python.getPapersDir(pkg.name), 'tmp'), 'papers')
 
+    let dir = layout.python.getRootDir(pkg.name);
     assert.equal(fs.existsSync(path.join(dir, layout.python.EXAMPLES_DIR_NAME, 'tmp')), true);
-    assert.equal(fs.existsSync(path.join(dir, layout.python.COEFFIENTS_DIR_NAME, 'tmp')), true);
-    assert.equal(fs.existsSync(path.join(dir, layout.python.MAIN_DIR_NAME, 'tmp')), true);
-    assert.equal(fs.existsSync(path.join(git.getRepoPath(pkg.name), layout.python.PAPERS_DIR_NAME, 'tmp')), true);
+    assert.equal(fs.existsSync(path.join(dir, layout.python.getPackageDirName(pkg.name), layout.python.COEFFIENTS_DIR_NAME, 'tmp')), true);
+    assert.equal(fs.existsSync(path.join(dir, layout.python.getPackageDirName(pkg.name), layout.python.MAIN_DIR_NAME, 'tmp')), true);
+    assert.equal(fs.existsSync(path.join(dir, layout.python.PAPERS_DIR_NAME, 'tmp')), true);
   });
 
   it(`should convert python layout to basic layout`, async () => {
@@ -63,13 +71,12 @@ describe('Package Layout', function() {
     await layout.python.ensureLayout(pkg);
 
     let dir = layout.python.getPackageRootDir(pkg.name);
-    assert.equal(fs.existsSync(path.join(dir, layout.python.EXAMPLES_DIR_NAME, 'tmp')), true);
+    assert.equal(fs.existsSync(path.join(git.getRepoPath(pkg.name), layout.python.EXAMPLES_DIR_NAME, 'tmp')), true);
     assert.equal(fs.existsSync(path.join(dir, layout.python.COEFFIENTS_DIR_NAME, 'tmp')), true);
     assert.equal(fs.existsSync(path.join(dir, layout.python.MAIN_DIR_NAME, 'tmp')), true);
     assert.equal(fs.existsSync(path.join(git.getRepoPath(pkg.name), layout.python.PAPERS_DIR_NAME, 'tmp')), true);
 
     assert.equal(fs.existsSync(path.join(dir, '__init__.py')), true);
-    assert.equal(fs.existsSync(path.join(dir, layout.python.EXAMPLES_DIR_NAME, '__init__.py')), true);
     assert.equal(fs.existsSync(path.join(dir, layout.python.COEFFIENTS_DIR_NAME, '__init__.py')), true);
     assert.equal(fs.existsSync(path.join(dir, layout.python.MAIN_DIR_NAME, '__init__.py')), true);
   });
@@ -79,7 +86,7 @@ describe('Package Layout', function() {
     await layout.r.ensureLayout(pkg);
 
     let dir = layout.r.getPackageRootDir(pkg.name);
-    assert.equal(fs.existsSync(path.join(dir, layout.python.EXAMPLES_DIR_NAME, 'tmp')), true);
+    assert.equal(fs.existsSync(path.join(git.getRepoPath(pkg.name), layout.python.EXAMPLES_DIR_NAME, 'tmp')), true);
     assert.equal(fs.existsSync(path.join(dir, layout.python.COEFFIENTS_DIR_NAME, 'tmp')), true);
     assert.equal(fs.existsSync(path.join(dir, layout.python.MAIN_DIR_NAME, 'tmp')), true);
     assert.equal(fs.existsSync(path.join(git.getRepoPath(pkg.name), layout.python.PAPERS_DIR_NAME, 'tmp')), true);
@@ -89,7 +96,7 @@ describe('Package Layout', function() {
     await layout.r.undoLayout(pkg);
 
     let dir = git.getRepoPath(pkg.name);
-    assert.equal(fs.existsSync(path.join(dir, layout.python.EXAMPLES_DIR_NAME, 'tmp')), true);
+    assert.equal(fs.existsSync(path.join(git.getRepoPath(pkg.name), layout.python.EXAMPLES_DIR_NAME, 'tmp')), true);
     assert.equal(fs.existsSync(path.join(dir, layout.python.COEFFIENTS_DIR_NAME, 'tmp')), true);
     assert.equal(fs.existsSync(path.join(dir, layout.python.MAIN_DIR_NAME, 'tmp')), true);
     assert.equal(fs.existsSync(path.join(git.getRepoPath(pkg.name), layout.python.PAPERS_DIR_NAME, 'tmp')), true);

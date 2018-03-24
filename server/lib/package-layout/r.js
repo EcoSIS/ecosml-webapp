@@ -8,19 +8,19 @@ class RPackageLayout extends LanguageLayout {
   async undoLayout(pkg) {
     await super.undoLayout(pkg);
 
-    let pkgPath = path.join(git.getRepoPath(pkg.name), 'R');
+    let pkgPath = path.join(git.getRepoPath(pkg.name), this.getPackageDirName());
     if( fs.existsSync(pkgPath) ) {
       await fs.remove(pkgPath);
     }
   }
 
-  getPackageRootDir(pkgName) {
-    let rootDir = git.getRepoPath(pkgName);
-    return path.join(rootDir, 'R');
+  getPackageDirName() {
+    return 'R';
   }
 
-  getExamplesDir(pkgName) {
-    return path.join(this.getPackageRootDir(pkgName), this.EXAMPLES_DIR_NAME);
+  getPackageRootDir(pkgName) {
+    let rootDir = git.getRepoPath(pkgName);
+    return path.join(rootDir, this.getPackageDirName());
   }
 
   getMainDir(pkgName) {

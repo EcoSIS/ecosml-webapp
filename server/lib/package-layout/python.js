@@ -22,9 +22,6 @@ class PythonPackageLayout extends LanguageLayout {
     let pInit = path.join(this.getPackageRootDir(pkg.name), '__init__.py');
     if( !fs.existsSync(pInit) ) await fs.writeFile(pInit, '');
 
-    let exInit = path.join(this.getExamplesDir(pkg.name), '__init__.py');
-    if( !fs.existsSync(exInit) ) await fs.writeFile(exInit, '');
-
     let coInit = path.join(this.getCoeffientsDir(pkg.name), '__init__.py');
     if( !fs.existsSync(coInit) ) await fs.writeFile(coInit, '');
     
@@ -38,7 +35,7 @@ class PythonPackageLayout extends LanguageLayout {
     
     // add setup.py
     let setuppy = templates('setup.py', {
-      name : this.getPyName(pkg.name),
+      name : this.getPackageDirName(pkg.name),
       version : version,
       author : pkg.owner,
       overview : pkg.overview,
@@ -47,15 +44,24 @@ class PythonPackageLayout extends LanguageLayout {
     });
     let setupPath = path.join(git.getRepoPath(pkg.name), 'setup.py');
     await fs.writeFile(setupPath, setuppy);
+
+    // setup examples
+    let examplesDir = this.getExamplesDir(pkg.name);
+    if( fs.existsSync(examplesDir) ) {
+      let files = await fs.readdir(examplesDir);
+      for( var i = 0; i < files.length; i++ ) {
+        if( !fs.statSync(path.join(examplesDir, files[i])).isDirectory() ) {
+          continue;
+        }
+        await this.ensureExampleLayout(pkg.name, files[i]);
+      }
+    }
   }
 
   async undoLayout(pkg) {
     await super.undoLayout(pkg);
 
     // remove __init__.py files
-    let exInit = path.join(super.getExamplesDir(pkg.name), '__init__.py');
-    if( fs.existsSync(exInit) ) await fs.unlink(exInit);
-
     let coInit = path.join(super.getCoeffientsDir(pkg.name), '__init__.py');
     if( fs.existsSync(coInit) ) await fs.unlink(coInit);
     
@@ -67,23 +73,72 @@ class PythonPackageLayout extends LanguageLayout {
       await fs.unlink(setupPath);
     }
 
-    let pkgPath = path.join(git.getRepoPath(pkg.name), pkg.name);
+    let pkgPath = this.getPackageRootDir(pkg.name);
     if( fs.existsSync(pkgPath) ) {
       await fs.remove(pkgPath);
     }
+
+    // cleanup examples
+    let examplesDir = this.getExamplesDir(pkg.name);
+    if( fs.existsSync(examplesDir) ) {
+      let files = await fs.readdir(examplesDir);
+
+      for( var i = 0; i < files.length; i++ ) {
+        if( !fs.statSync(path.join(examplesDir, files[i])).isDirectory() ) {
+          continue;
+        }
+        await this.undoExampleLayout(pkg.name, files[i]);
+      }
+    }
   }
 
-  getPyName(pkgName) {
+  async ensureExampleLayout(pkgName, exampleName) {
+    let rootDir = this.getExamplesDir(pkgName);
+    rootDir = path.join(rootDir, exampleName);
+    
+    if( !fs.existsSync(rootDir) ) await fs.mkdirs(rootDir);
+    
+    for( var key in this.EXAMPLE_DIRS ) {
+      await fs.mkdirs(path.join(rootDir, this.EXAMPLE_DIRS[key]));
+    }
+
+    // create the transform __init__.py file so it can be treated as a module
+    let tInit = path.join(rootDir, this.EXAMPLE_DIRS.TRANSFORM, '__init__.py');
+    await fs.writeFile(tInit, '');
+
+    // add the tranform helper library
+    let utilspy = templates('ecosml_transform_utils.py');
+    let utilsPath = path.join(rootDir, this.EXAMPLE_DIRS.TRANSFORM, 'ecosml_transform_utils.py');
+    await fs.writeFile(utilsPath, utilspy);
+
+    // add the example test py file
+    let testpy = templates('test.py', {
+      name : this.getPackageDirName(pkgName)
+    });
+    let testPath = path.join(rootDir, 'test.py');
+    await fs.writeFile(testPath, testpy);
+  }
+
+  async undoExampleLayout(pkgName, exampleName) {
+    let rootDir = this.getExamplesDir(pkgName);
+    rootDir = path.join(rootDir, exampleName);
+    
+    // remove the transform __init__.py file
+    let tInit = path.join(rootDir, this.EXAMPLE_DIRS.TRANSFORM, '__init__.py');
+    if( fs.existsSync(tInit) ) await fs.unlink(tInit);
+
+    // remove the tranform helper library
+    let utilsPath = path.join(rootDir, this.EXAMPLE_DIRS.TRANSFORM, 'ecosml_transform_utils.py');
+    if( fs.existsSync(utilsPath) ) await fs.unlink(utilsPath);
+  }
+
+  getPackageDirName(pkgName) {
     return pkgName.replace(/-/g, '_');
   }
 
   getPackageRootDir(pkgName) {
     let rootDir = git.getRepoPath(pkgName);
-    return path.join(rootDir, this.getPyName(pkgName));
-  }
-
-  getExamplesDir(pkgName) {
-    return path.join(this.getPackageRootDir(pkgName), this.EXAMPLES_DIR_NAME);
+    return path.join(rootDir, this.getPackageDirName(pkgName));
   }
 
   getMainDir(pkgName) {

@@ -29,6 +29,14 @@ class BasicPackageLayout extends PackageLayout {
     }
   }
 
+  getPackageDirName() {
+    return '';
+  }
+
+  getPackageRootDir(pkgName) {
+    return git.getRepoPath(pkgName);
+  }
+
   getExamplesDir(pkgName) {
     let rootDir = git.getRepoPath(pkgName);
     return path.join(rootDir, this.EXAMPLES_DIR_NAME);

@@ -47,12 +47,24 @@ export default class AppExampleEditor extends Mixin(PolymerElement)
       transformDir : {
         type : String,
         value : ''
+      },
+
+      creating : {
+        type : Boolean,
+        value : false
+      },
+
+      language : {
+        type : String,
+        value : '',
+        observer : '_onLanguageUpdate'
       }
     }
   }
 
   constructor() {
     super();
+    this.active = true;
     this._updatePanelHeight = this._updatePanelHeight.bind(this);
   }
 
@@ -98,7 +110,10 @@ export default class AppExampleEditor extends Mixin(PolymerElement)
    * @param {Object} e 
    */
   _onFileUpdate(e) {
-    if( e.payload.dir !== this.directory ) return;
+    if( e.payload.dir.indexOf(this.directory) !== 0 ) return;
+    console.log(e.payload.dir, this.directory);
+    
+    this.creating = false;
     this._updatePanelHeight();
   }
 
@@ -107,6 +122,10 @@ export default class AppExampleEditor extends Mixin(PolymerElement)
    * @description fired from the name input on-change event
    */
   async _onExampleNameChange() {
+    if( this.creating ) {
+      return this.label = this._cleanLabelName(this.$.name.value);
+    }
+
     let src = this.label;
     let dst = this._cleanLabelName(this.$.name.value);
     let packageId = this._getSelectedPackageId().id;
@@ -126,8 +145,6 @@ export default class AppExampleEditor extends Mixin(PolymerElement)
     } catch(e) {
       // noop?
     }
-
-
 
     this.disabled = false;
     this.$.name.disabled = false;
@@ -151,6 +168,20 @@ export default class AppExampleEditor extends Mixin(PolymerElement)
     this.inputDir = this.directory+'/input';
     this.outputDir = this.directory+'/output';
     this.transfromDir = this.directory+'/transform';
+  }
+
+  /**
+   * @method _onLanguageUpdate
+   * @description called when the language property updates.  Used to hide/show
+   * file uploads that are tied to a specific language.
+   */
+  _onLanguageUpdate() {
+    let eles = this.shadowRoot.querySelectorAll('.language');
+    for( var i = 0; i < eles.length; i++ ) eles[i].style.display = 'none';
+    if( !this.language ) return;
+
+    eles = this.shadowRoot.querySelectorAll(`.language.${this.language}`);
+    for( var i = 0; i < eles.length; i++ ) eles[i].style.display = 'block';
   }
 
   _cleanLabelName(txt) {

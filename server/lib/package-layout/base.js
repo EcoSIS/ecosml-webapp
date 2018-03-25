@@ -18,17 +18,17 @@ class PackageLayout {
 
   genericToAbsLangPath(gPath, pkg) {
     gPath = gPath.replace(/^\//, '').split('/');
-    if( !gPath.length ) return this.getRootDir(pkgName);
+    if( !gPath.length ) return this.getRootDir(pkg.name);
 
     if( gPath[0] === this.COEFFIENTS_DIR_NAME ) {
       gPath.splice(0, 1);
-      return path.join(this.getCoeffientsDir(), gPath.join('/'));
+      return path.join(this.getCoeffientsDir(pkg.name), gPath.join('/'));
     } else if( gPath[0] === this.MAIN_DIR_NAME ) {
       gPath.splice(0, 1);
-      return path.join(this.getMainDir(), gPath.join('/'));
+      return path.join(this.getMainDir(pkg.name), gPath.join('/'));
     }
 
-    return path.join(this.getRootDir(pkgName), gPath.join('/'));
+    return path.join(this.getRootDir(pkg.name), gPath.join('/'));
   }
 
   langPathToGeneric(lPath, pkg) {

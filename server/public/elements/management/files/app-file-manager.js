@@ -21,6 +21,10 @@ export default class AppFileManager extends Mixin(PolymerElement)
         type : String,
         value : ''
       },
+      singleFile : {
+        type : String,
+        value : ''
+      },
       label : {
         type : String,
         value : ''
@@ -70,6 +74,7 @@ export default class AppFileManager extends Mixin(PolymerElement)
    */
   _onFileUpdate(e) {
     if( e.payload.dir !== this.directory ) return;
+    if( this.singleFile && e.payload.filename !==  this.singleFile ) return;
     if( e.state === 'deleted' ) return this._onFileRemoved(e.payload);
 
     this._addFile(e.payload);
@@ -128,8 +133,8 @@ export default class AppFileManager extends Mixin(PolymerElement)
     let files = e.dataTransfer ? e.dataTransfer.files : e.target.files; // FileList object.
     [].slice.call(files).forEach(file => this._addFile({
       file,
-      id : this._getFileId(this.directory, file.name),
-      filename : file.name,
+      id : this._getFileId(this.directory, this.singleFile || file.name),
+      filename : this.singleFile || file.name,
       dir : this.directory,
       message : '',
       packageId : this.currentPackageId,

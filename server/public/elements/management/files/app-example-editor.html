@@ -77,10 +77,21 @@
     </app-text-input>
 
     <div not-visible$="[[disabled]]">
+      <div class="manager-label">test.py</div>
+      <app-file-manager 
+        id="test"
+        class="language python"
+        single-file="test.py"
+        directory="[[directory]]">
+        <div slot="help">
+          test.py file used for unit testings this example.  When provided this file will
+          be used to validate this package.
+        </div>
+      </app-file-manager>
+
       <div class="manager-label">Input</div>
       <app-file-manager
         id="input" 
-        color="blue"
         directory="[[inputDir]]">
         <div slot="help">Input spectra for this example (csv).</div>
       </app-file-manager>
@@ -88,7 +99,6 @@
       <div class="manager-label">Transform</div>
       <app-file-manager 
         id="transform"
-        color="blue" 
         directory="[[transfromDir]]">
         <div slot="help">Optional transform code to apply to spectra.  Required if your input spectra
           needs to be manipulated before being passed to model source code.
@@ -98,7 +108,6 @@
       <div class="manager-label">Output</div>
       <app-file-manager 
         id="output"
-        color="blue" 
         directory="[[outputDir]]">
         <div slot="help">
           Model output (csv).  This file should exactly match the output from the model

@@ -21,6 +21,11 @@ export default class AppFiles extends PolymerElement {
       examples : {
         type : Array,
         value : () => []
+      },
+
+      language : {
+        type : String,
+        value : ''
       }
     }
   }

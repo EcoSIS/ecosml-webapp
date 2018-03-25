@@ -45,6 +45,20 @@ class PythonPackageLayout extends LanguageLayout {
     let setupPath = path.join(git.getRepoPath(pkg.name), 'setup.py');
     await fs.writeFile(setupPath, setuppy);
 
+    // add requirements
+    let reqFilePath = path.join(this.getRootDir(pkg.name), 'requirements.txt');
+    if( !fs.existsSync(reqFilePath) ) {
+      let reqFile = templates('requirements.txt');
+      await fs.writeFile(reqFilePath, reqFile);
+    }
+
+    // add model utils
+    let utilFilePath = path.join(this.getMainDir(pkg.name), 'ecosml_model_utils.py');
+    if( !fs.existsSync(utilFilePath) ) {
+      let utilFile = templates('ecosml_model_utils.py');
+      await fs.writeFile(utilFilePath, utilFile);
+    }
+
     // setup examples
     let examplesDir = this.getExamplesDir(pkg.name);
     if( fs.existsSync(examplesDir) ) {

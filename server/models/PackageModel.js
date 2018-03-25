@@ -207,7 +207,7 @@ class PackageModel {
     let pkgLayout = this._getPackageLayout(pkg.language);
     let baseFileDir = pkgLayout.genericToAbsLangPath(dir, pkg);
 
-    await _initExampleDir(dir, pkg);
+    await this._initExampleDir(dir, pkg);
 
     await fs.mkdirs(baseFileDir);
 

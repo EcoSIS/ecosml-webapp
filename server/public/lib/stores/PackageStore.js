@@ -5,6 +5,10 @@ class PackageStore extends BaseStore {
   constructor() {
     super();
 
+    this.ignoreFiles = [
+      '__init__.py'
+    ];
+
     this.data = {
       selectedPackageId : '',
       // single state objects
@@ -158,7 +162,9 @@ class PackageStore extends BaseStore {
   }
 
   onFilesLoaded(packageId, files = []) {
-    files.forEach(file => this.onFileLoaded(packageId, file));
+    files = files
+      .filter(file => this.ignoreFiles.indexOf(file.filename) === -1)
+      .forEach(file => this.onFileLoaded(packageId, file));
   }
 
   onFileLoaded(packageId, file) {

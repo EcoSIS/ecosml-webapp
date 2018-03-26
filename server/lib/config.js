@@ -95,6 +95,8 @@ module.exports = {
     default_license : 'mit'
   },
 
+  travisCi : secrets.travisCi,
+
   git : {
     name : 'EcoSML Admin',
     email : 'admin@ecosml.org'

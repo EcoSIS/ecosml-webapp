@@ -12,6 +12,7 @@ const markdown = require('../lib/markdown');
 const schema = require('../lib/schema');
 const templates = require('../templates');
 const layouts = require('../lib/package-layout');
+const travis = require('../models/PackageTestModel');
 
 const METADATA_FILENAME = 'ecosml-metadata.json';
 
@@ -75,6 +76,8 @@ class PackageModel {
     // write and commit ecosis-metadata.json file
     await this.writeMetadataFile(pkg);
     await this.commit(pkg.name, 'Updating package metadata');
+
+    await travis.initRepo(pkg.name);
 
     return pkg;
   }

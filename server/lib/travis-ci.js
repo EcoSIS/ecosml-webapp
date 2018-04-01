@@ -148,6 +148,21 @@ class TravisCi {
     });
   }
 
+    /**
+   * @method syncRepositories
+   * @description https://developer.travis-ci.org/resource/user#sync
+   * 
+   * @param {String} repoName
+   * 
+   * @returns {Promise}
+   */
+  syncRepositories(username) {
+    return this.request({
+      method : 'POST',
+      uri : `/user/${username||ORG}/sync`
+    });
+  }
+
   request(options) {
     options.uri = `${API_ROOT}${options.uri}`;
   

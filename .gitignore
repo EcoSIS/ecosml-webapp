@@ -4,4 +4,6 @@ server/public/bundle.js
 server/uploads
 .env
 secrets.json
+key.json
 gitdata
+cloud-functions-emulator.log

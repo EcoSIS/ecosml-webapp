@@ -1,11 +1,17 @@
 module.exports = {
   travis : {
-    collectionPrefix : 'travis'
+    collection : 'travis'
   },
   ecosis : {
-    collectionPrefix : 'ecosis'
+    collections : {
+      users : 'ecosis-users',
+      orgs : 'ecosis-orgs'
+    }
   },
   github : {
-    collectionPrefix : 'github'
+    collection : {
+      commits : 'github-commits',
+      teams : 'github-teams'
+    }
   }
 }

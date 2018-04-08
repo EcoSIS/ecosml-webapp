@@ -7,3 +7,4 @@ secrets.json
 key.json
 gitdata
 cloud-functions-emulator.log
+firebase-debug.log

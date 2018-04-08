@@ -1,4 +1,5 @@
 module.exports = {
+  envs : ['local', 'dev', 'prod'],
   travis : {
     collection : 'travis'
   },
@@ -9,9 +10,10 @@ module.exports = {
     }
   },
   github : {
-    collection : {
-      commits : 'github-commits',
+    collections : {
+      commits : 'github-commit-events',
       teams : 'github-teams'
-    }
+    },
+    ignoreUsers : ['ecosml-admin']
   }
 }

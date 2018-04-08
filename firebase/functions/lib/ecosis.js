@@ -10,7 +10,7 @@ module.exports = (env, req, resp) => {
   // TODO: verify token
 
   let body = msg.body || {};
-  let collection = config.ecosis.collectionPrefix+'-'+env;
+  let collection = config.ecosis.collections.orgs+'-'+env;
 
   if( msg.body.deleted ) {
     return admin

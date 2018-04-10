@@ -6,13 +6,15 @@ services:
     build: ../../server
     volumes:
       - ../../server:/server
-      - ../secrets.json:/server/secrets.json
+      - ../google-key.json:/server/google-key.json
+      - ../secrets.js:/server/secrets.js
     ports:
       - 3000:3000
     environment:
       - JWT_SECRET=${JWT_SECRET}
       - ECOSIS_HOST=${ECOSIS_HOST}
       - GITHUB_ORG=ecosml-dev
+      - FIRESTORE_ENV=local
     command: tail -f /dev/null
 
   redis:

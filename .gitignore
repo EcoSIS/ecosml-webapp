@@ -3,8 +3,10 @@ server/public/webcomponentsjs
 server/public/bundle.js
 server/uploads
 .env
+secrets.js
 secrets.json
 key.json
+google-key.json
 gitdata
 cloud-functions-emulator.log
 firebase-debug.log

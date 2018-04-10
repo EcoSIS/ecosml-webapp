@@ -3,6 +3,7 @@ const path = require('path');
 const secrets = require('../secrets');
 
 const mongoHost = env.MONGO_HOST || 'mongo';
+const firebaseEnv = env.FIREBASE_ENV || 'local';
 
 module.exports = {
 
@@ -26,6 +27,7 @@ module.exports = {
       secret : env.SESSION_SECRET || 'not set'
     },
 
+    // place all SPA base route names here
     appRoutes : ['package', 'search', 'edit', 
     'create', 'account']
   },
@@ -100,6 +102,30 @@ module.exports = {
   git : {
     name : 'EcoSML Admin',
     email : 'admin@ecosml.org'
+  },
+
+  firebase : {
+    key : secrets.google,
+    collections : {
+      githubCommits : 'github-commit-events-'+firebaseEnv,
+      githubTeams : 'github-teams-'+firebaseEnv,
+      travis : 'travis-'+firebaseEnv,
+      ecosisUsers : 'ecosis-users-'+firebaseEnv,
+      ecosisOrgs : 'ecosis-orgs-'+firebaseEnv
+    }
+  },
+
+  cloudFunctions : {
+    envs : {
+      dev : 'Dev',
+      prod : 'Prod',
+      local : 'Local'
+    },
+    baseUrls : {
+      githubWebhook : 'https://us-central1-ecosis-prod.cloudfunctions.net/githubWebhook',
+      travisBuild : 'https://us-central1-ecosis-prod.cloudfunctions.net/travisBuild',
+      ecosisSync : 'https://us-central1-ecosis-prod.cloudfunctions.net/ecosisSync'
+    }
   }
 
 }

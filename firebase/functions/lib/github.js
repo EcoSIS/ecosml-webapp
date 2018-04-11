@@ -1,10 +1,18 @@
 const admin = require('firebase-admin');
 const config = require('./config');
+const crypto = require('crypto');
 
 const REMOTE_ATTR = ['base_ref', 'compare', 'head_commit', 'sender', 'organization']
 
 module.exports = (env, req, resp) => {
-  let msg = JSON.parse(req.rawBody || '{}');
+  let body = req.rawBody;
+  let sha1 = req.get('X-Hub-Signature').replace(/^sha1=/, '');
+
+  if( !validRequest(body, sha1) ) {
+    return resp.status(401).send();
+  }
+
+  let msg = JSON.parse(body || '{}');
 
   let event = req.get('X-GitHub-Event');
   let collection = '';
@@ -108,4 +116,10 @@ function cleanCommitMsg(msg) {
   }
   
   return msg;
+}
+
+function validRequest(body, sha1) {
+  let hash = crypto.createHmac('sha1', config.secrets.ecosml.secret);
+  hash.update(body);
+  return  hash.digest('hex') === sha1;
 }

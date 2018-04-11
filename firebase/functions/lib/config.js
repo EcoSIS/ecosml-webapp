@@ -1,5 +1,6 @@
 module.exports = {
   envs : ['local', 'dev', 'prod'],
+  secrets : require("../secrets"),
   travis : {
     collection : 'travis'
   },

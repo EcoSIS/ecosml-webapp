@@ -1,5 +1,6 @@
 const admin = require('firebase-admin');
 const config = require('./config');
+const jwt = require('jsonwebtoken');
 
 const REMOTE_ATTR = ['extras', 'groups', 'num_followers', 
 'package_count', 'revision_id', 'tags', '']
@@ -52,4 +53,8 @@ function cleanMsg(msg) {
   }
   
   return msg;
+}
+
+function verifyRequest(token) {
+  return jwt.verify(token, config.secrets.ecosml.secret)
 }

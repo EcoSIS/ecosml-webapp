@@ -36,11 +36,21 @@ module.exports = {
     host : env.ECOSIS_HOST || 'http://localhost:5000'
   },
 
+  redis : {
+    host : 'redis',
+    prefixes : {
+      org : 'org',
+      auth : 'auth',
+      admin : 'admin'
+    }
+  }
+
   mongodb : {
     host : mongoHost,
     url : `mongodb://${mongoHost}:27017/ecosml`,
     collections : {
-      package : 'package'
+      package : 'package',
+      githubTeam : 'github-team'
     },
     filters : ['keywords', 'theme', 'family', 'specific'],
     indexes : {
@@ -105,6 +115,7 @@ module.exports = {
   },
 
   firebase : {
+    env : firebaseEnv,
     key : secrets.google,
     collections : {
       githubCommits : 'github-commit-events-'+firebaseEnv,

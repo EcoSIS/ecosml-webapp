@@ -132,6 +132,16 @@ class TravisCi {
   requestBuild(repoName, options = {}) {
     let id = encodeURIComponent(`${options.org||ORG}/${repoName}`);
 
+    if( !options.config ) options.config = {};
+    if( !options.config.notifications ) options.config.notifications = {};
+    if( !options.config.notifications.webhooks ) {
+      options.config.notifications.webhooks = config.cloudFunctions.baseUrls.travisBuild + 
+                                              config.cloudFunctions.envs[config.firebase.env];
+    }
+    console.log(options.config);
+
+    Logger.info(`Request repository ${id} ci testing with webhook: ${options.config.notifications.webhooks}`);
+
     return this.request({
       method : 'POST',
       uri : `/repo/${id}/requests`,
@@ -148,7 +158,7 @@ class TravisCi {
     });
   }
 
-    /**
+  /**
    * @method syncRepositories
    * @description https://developer.travis-ci.org/resource/user#sync
    * 

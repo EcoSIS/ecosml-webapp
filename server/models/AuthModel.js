@@ -1,20 +1,13 @@
 const ckan = require('../lib/ckan');
 const config = require('../lib/config');
 const Logger = require('../lib/logger');
-const redis = require('redis');
+const redis = require('../lib/redis');
 const request = require('request');
 const mongo = require('../lib/mongo');
-const {promisify} = require('util');
-
-const redisMethods = ['get', 'del', 'keys', 'set', 'exists', 'flushdb'];
 
 class AuthModel {
 
-  constructor() {
-    this.REDIS_ORG_PREFIX = 'org';
-    this.REDIS_AUTH_PREFIX = 'auth';
-    this.REDIS_ADMIN_PREFIX = 'admin';
-    
+  constructor() {    
     this.READ_ROLES = {
       member : true
     };
@@ -23,12 +16,6 @@ class AuthModel {
       admin : true,
       editor : true
     };
-
-    this.client = redis.createClient({host: 'redis'});
-
-    redisMethods.forEach(method => {
-      this.client[method] = promisify(this.client[method]).bind(this.client)
-    });
   }
 
   /**
@@ -42,92 +29,6 @@ class AuthModel {
    */
   login(username, password) {
     return ckan.login(username, password);
-  }
-
-  /**
-   * @method reload
-   * @description reload redis.  this clears sessions as well.
-   * 
-   * @returns {Promise}
-   */
-  async reload() {
-    // make sure we have access to ecosis before we flush
-    let orgNames = await ckan.listOrganizations();
-    let orgs = [];
-
-    // now flush
-    let keys = await this.client.keys(`${this.REDIS_ORG_PREFIX}-*`);
-    keys = keys.concat(await this.client.keys(`${this.REDIS_AUTH_PREFIX}-*`));
-    for( var i = 0; i < keys.length; i++ ) {
-      await this.client.del(keys[i]);
-    }
-
-    for( let i = 0; i < orgNames.length; i++ ) {
-      let org = await ckan.getOrganization(orgNames[i]);
-      if( org.state !== 'active' ) continue;
-
-      let users = org.users.map(user => { return {username: user.name, role: user.capacity} });
-
-      org = {
-        id : org.id,
-        name : org.name,
-        displayName : org.display_name,
-        description : org.description,
-        logo : org.image_display_url
-      };
-
-      await this.client.set(this._createOrgRedisKey(org.name), JSON.stringify(org));
-
-      for( let j = 0; j < users.length; j++ ) {
-        let key = this._createRedisKey(org.name, users[j].username, users[j].role);
-        let data = {
-          org : org.name, 
-          user : users[j].username,
-          role : users[j].role
-        }
-        await this.client.set(key, JSON.stringify(data));
-      }
-    }
-  }
-  
-  async reloadOrg(orgName) {
-    // grab org from ecosis
-    let org = await ckan.getOrganization(orgName);
-    if( !org ) return;
-
-    // remove org keys
-    await this.client.del(this._createOrgRedisKey(orgName));
-    // find role keys to remove
-    let searchKey = this._createRedisKey(org, '*', '*');
-    let keys = await this.client.keys(searchKey);
-    for( let i = 0; i < keys.length; i++ ) {
-      await this.client.del(keys[i]);
-    }
-
-    // if org is not active, we are done
-    if( org.state !== 'active' ) return;
-
-    // create org object
-    let users = org.users;
-    org = {
-      id : org.id,
-      name : org.name,
-      displayName : org.display_name,
-      description : org.description,
-      logo : org.image_display_url
-    };
-    await this.client.set(this._createOrgRedisKey(org.name), JSON.stringify(org));
-
-    // add user roles
-    for( let j = 0; j < users.length; j++ ) {
-      let key = this._createRedisKey(org.name, users[j].name, users[j].capacity);
-      let data = {
-        org : org.name, 
-        user : users[j].username,
-        role : users[j].capacity
-      }
-      await this.client.set(key, JSON.stringify(data));
-    }
   }
 
   /**
@@ -173,7 +74,7 @@ class AuthModel {
    * @returns {Promise} resolve to boolean
    */
   isAdmin(user) {
-    return this.client.exists(`${this.REDIS_ADMIN_PREFIX}-${user}`);
+    return redis.client.exists(`${config.redis.prefixes.admin}-${user}`);
   }
 
   /**
@@ -186,8 +87,8 @@ class AuthModel {
    * @returns {Promise} resolve to boolean
    */
   async canWriteOrg(org, user) {
-    let searchKey = this._createRedisKey(org, user, '*');
-    let keys = await this.client.keys(searchKey);
+    let searchKey = redis.createAuthKey(org, user, '*');
+    let keys = await redis.client.keys(searchKey);
 
     for( var i = 0; i < keys.length; i++ ) {
       let role = keys[i].split('-').pop();
@@ -208,8 +109,8 @@ class AuthModel {
    * @returns {Promise} resolve to boolean
    */
   async canReadOrg(org, user) {
-    let searchKey = this._createRedisKey(org, user, '*');
-    let keys = await this.client.keys(searchKey);
+    let searchKey = redis.createAuthKey(org, user, '*');
+    let keys = await redis.client.keys(searchKey);
 
     for( var i = 0; i < keys.length; i++ ) {
       let role = keys[i].split('-').pop();
@@ -234,11 +135,11 @@ class AuthModel {
 
     let isAdmin = await this.isAdmin(username);
     if( isAdmin ) {
-      let searchKey = this._createOrgRedisKey('*');
-      keys = await this.client.keys(searchKey);
+      let searchKey = redis.createOrgKey('*');
+      keys = await redis.client.keys(searchKey);
 
       for( var i = 0; i < keys.length; i++ ) {
-        let org = JSON.parse(await this.client.get(keys[i]));
+        let org = JSON.parse(await redis.client.get(keys[i]));
         resp.push({
           roles : ['admin', 'site-admin'],
           name : org.name,
@@ -250,11 +151,11 @@ class AuthModel {
       return orgs;
     }
 
-    let searchKey = this._createRedisKey('*', username, '*');
-    keys = await this.client.keys(searchKey);
+    let searchKey = redis.createAuthKey('*', username, '*');
+    keys = await redis.client.keys(searchKey);
 
     for( var i = 0; i < keys.length; i++ ) {
-      let key = JSON.parse(await this.client.get(keys[i]));
+      let key = JSON.parse(await redis.client.get(keys[i]));
       if( orgs[key.org] ) orgs[key.org].push(key.role);
       else orgs[key.org] = [key.role];
     }
@@ -263,8 +164,8 @@ class AuthModel {
     keys = Object.keys(orgs);
 
     for( var i = 0; i < keys.length; i++ ) {
-      let key = this._createOrgRedisKey(keys[i]);
-      let org = JSON.parse(await this.client.get(key));
+      let key = redis.createOrgKey(keys[i]);
+      let org = JSON.parse(await redis.client.get(key));
 
       resp.push({
         roles : orgs[org.name],
@@ -275,24 +176,6 @@ class AuthModel {
     }
 
     return resp;
-  }
-
-  /**
-   * @method _createRedisKey
-   * @description create a key for org, user and role
-   * 
-   * @param {String} org
-   * @param {String} user
-   * @param {String} role
-   * 
-   * @returns {String}
-   */
-  _createRedisKey(org, user, role) {
-    return `${this.REDIS_AUTH_PREFIX}-${org}-${user}-${role}`;
-  }
-
-  _createOrgRedisKey(orgName) {
-    return `${this.REDIS_ORG_PREFIX}-${orgName}`;
   }
 
   _request(options) {

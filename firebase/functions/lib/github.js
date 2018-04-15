@@ -20,71 +20,24 @@ module.exports = (env, req, resp) => {
   if( event === 'push' ) {
     collection = config.github.collections.commits+'-'+env;
     return onCommit(collection, cleanCommitMsg(msg), req, resp);
-  } else if( event === 'team') {
+  } else if( event === 'team' || event === 'membership') {
     collection = config.github.collections.teams+'-'+env;
-    onTeamUpdate(collection, msg, resp);
-  } else if( event === 'membership' ) {
-    collection = config.github.collections.teams+'-'+env;
-    onMembershipUpdate(collection, msg, resp);
-  }
-  
-}
-
-function onMembershipUpdate(collection, msg, resp) {
-  return admin.
-    firestore()
-    .collection(collection)
-    .doc(msg.team.slug)
-    .get()
-    .then((doc) => {
-      // TODO: log this?
-      // this event is fired when team is deleted.
-      if( !doc.exists ) return;
-      let team = doc.data();
-      
-      let members = team.members || [];
-      let index = members.findIndex(member => member.login === msg.member.login);
-      
-      if( msg.action === 'added' ) {
-        if( index === -1 ) members.push(msg.member);
-      } else if( msg.action === 'removed' ) {
-        if( index > -1 ) members.splice(index, 1);
-      }
-
-      team.members = members;
-
-      return admin.
-        firestore()
-        .collection(collection)
-        .doc(msg.team.slug)
-        .set(team)
-        .then((writeResult) => {
-          return resp.json({result: `Updated team membership: ${msg.team.slug} in ${collection}.`});
-        });
-
-    })
+    return onTeamUpdate(collection, msg, resp);
+  }  
 }
 
 function onTeamUpdate(collection, msg, resp) {
-  if( msg.action === 'deleted' ) {
-    return admin.
-      firestore()
-        .collection(collection)
-        .doc(msg.team.slug)
-        .delete()
-        .then((writeResult) => {
-          return resp.json({result: `Deleted team: ${msg.team.slug} in ${collection}.`});
-        });
-  }
-
-  return admin.
-    firestore()
-      .collection(collection)
-      .doc(msg.team.slug)
-      .set(msg.team)
-      .then((writeResult) => {
-        return resp.json({result: `Updated team: ${msg.team.slug} in ${collection}.`});
-      });
+  return admin
+    .firestore()
+    .collection(collection)
+    .doc(msg.team.slug)
+    .set({
+      timestamp : Date.now(),
+      team : msg.team.slug
+    })
+    .then((writeResult) => {
+      return resp.json({result: `Set team ${msg.team.slug} update event in ${collection}.`});
+    });
 }
 
 function onCommit(collection, msg, req, resp) {

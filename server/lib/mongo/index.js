@@ -35,6 +35,11 @@ class MongoDB {
     return this.db.collection(config.mongodb.collections.package);
   }
 
+  async githubTeamCollection() {
+    await this.conn();
+    return this.db.collection(config.mongodb.collections.githubTeam);
+  }
+
   async createPackageIndexes() {
     let collection = await this.packagesCollection();
     let indexes = config.mongodb.indexes.package;
@@ -99,7 +104,7 @@ class MongoDB {
 
   async getAllPackageNames() {
     let collection = await this.packagesCollection();
-    return await collection.find({}, {name: 1, id: 1}).toArray();
+    return collection.find({}, {name: 1, id: 1}).toArray();
   }
 
   /**
@@ -108,7 +113,7 @@ class MongoDB {
    */
   async insertPackage(pkg) {
     let collection = await this.packagesCollection();
-    return await collection.update({id: pkg.id}, pkg, {upsert: true});
+    return collection.update({id: pkg.id}, pkg, {upsert: true});
   }
 
   /**
@@ -122,7 +127,7 @@ class MongoDB {
    */
   async updatePackage(packageNameOrId, data) {
     let collection = await this.packagesCollection();
-    return await collection.update({
+    return collection.update({
       $or : [
         {name: packageNameOrId},
         {id : packageNameOrId}
@@ -167,6 +172,45 @@ class MongoDB {
         {id : packageNameOrId}
       ]
     });
+  }
+
+  /**
+   * @method insertGithubTeam
+   * @description insert or update a github team
+   */
+  async insertGithubTeam(team) {
+    let collection = await this.githubTeamCollection();
+    return collection.update({id: team.id}, team, {upsert: true});
+  }
+
+  /**
+   * @method removeGithubTeam
+   * @description remove a github team by slug or id
+   * 
+   * @param {String} teamSlugOrId
+   * 
+   * @returns {Promise} resolves to mongo response
+   */
+  async removeGithubTeam(teamSlugOrId) {
+    let collection = await this.githubTeamCollection();
+    return collection.remove({
+      $or : [
+        {slug: teamSlugOrId},
+        {id : teamSlugOrId}
+      ]
+    });
+  }
+
+  /**
+   * @method getAllGithubTeamNames
+   * @description return all slug and ids for all teams in
+   * github-team collection
+   * 
+   * @return {Promise} resolves to Array
+   */
+  async getAllGithubTeamNames() {
+    let collection = await this.githubTeamCollection();
+    return collection.find({}, {slug: 1, id: 1}).toArray();
   }
 
 }

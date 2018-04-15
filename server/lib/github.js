@@ -177,6 +177,155 @@ class GithubApi {
   }
 
   /**
+   * @method listTeams
+   * @description list all teams for org
+   * https://developer.github.com/v3/teams/#list-teams
+   * 
+   * 
+   * @returns {Promise} resolves to Array
+   */
+  async listTeams() {
+    let last = false;
+    let page = 1;
+    let teams = [];
+
+    while( !last ) {
+      let {response} = await this.request({
+        uri : `/orgs/${ORG}/teams`,
+        qs : {page}
+      });
+
+      let link = parseLinkHeader(response.headers.link) || {};
+      if( !link.last ) last = true;
+
+      let results = JSON.parse(response.body);
+      if( !results.length ) last = true;
+      else teams = teams.concat(results);
+
+      page++;
+    }
+
+    return teams;
+  }
+
+  /**
+   * @method getTeam
+   * @description Get a team
+   * https://developer.github.com/v3/teams/#get-team
+   *
+   * @param {String} id team id
+   * 
+   * @returns {Promise}
+   */
+  async getTeam(id) {
+    return this.request({
+      uri : `/teams/${id}`
+    });
+  }
+
+  /**
+   * @method createTeam
+   * @description Create a team
+   * https://developer.github.com/v3/teams/#create-team
+   *
+   * @param {Object} team team payload
+   * 
+   * @returns {Promise}
+   */
+  async createTeam(team) {
+    return this.request({
+      method : 'POST',
+      uri : `/orgs/${ORG}/teams`,
+      body : JSON.stringify(team)
+    });
+  }
+
+  /**
+   * @method deleteTeam
+   * @description Create a team
+   * https://developer.github.com/v3/teams/#delete-team
+   *
+   * @param {String} id team id
+   * 
+   * @returns {Promise}
+   */
+  async deleteTeam(id) {
+    return this.request({
+      method : 'DELETE',
+      uri : `/teams/${id}`
+    });
+  }
+
+  /**
+   * @method listTeamMembers
+   * @description list all team members
+   * https://developer.github.com/v3/teams/members/#list-team-members
+   *
+   * @param {String} id team id
+   * 
+   * @returns {Promise} resolves to Array
+   */
+  async listTeamMembers(id) {
+    let last = false;
+    let page = 1;
+    let members = [];
+
+    while( !last ) {
+      let {response} = await this.request({
+        uri : `/teams/${id}/members`,
+        qs : {page}
+      });
+
+      let link = parseLinkHeader(response.headers.link) || {};
+      if( !link.last ) last = true;
+
+      let results = JSON.parse(response.body);
+      if( !results.length ) last = true;
+      else members = members.concat(results);
+
+      page++;
+    }
+
+    return members;
+  }
+
+  /**
+   * @method addTeamMember
+   * @description Add a user to a team
+   * https://developer.github.com/v3/teams/members/#add-or-update-team-membership
+   *
+   * @param {String} id team id
+   * @param {String} username github username
+   * @param {String} role github username
+   * 
+   * @returns {Promise}
+   */
+  async addTeamMember(id, username, role='member') {
+    return this.request({
+      method : 'PUT',
+      uri : `/teams/${id}/memberships/${username}`,
+      body : JSON.stringify({role})
+    });
+  }
+
+  /**
+   * @method removeTeamMember
+   * @description Remove a user from a team
+   * https://developer.github.com/v3/teams/members/#add-or-update-team-membership
+   *
+   * @param {String} id team id
+   * @param {String} username github username
+   * 
+   * @returns {Promise}
+   */
+  async removeTeamMember(id, username) {
+    return this.request({
+      method : 'DELETE',
+      uri : `/teams/${id}/memberships/${username}`
+    });
+  }
+
+  /**
    * @method getRawFile
    * @description download a file directly from github repo
    * 
@@ -212,11 +361,6 @@ class GithubApi {
    */
   request(options) {
     options.uri = `${API_ROOT}${options.uri}`;
-  
-    // set access clientId/clientSecret
-    // if( !options.qs ) options.qs = {};
-    // options.qs.client_id = GITHUB_ACCESS.clientId;
-    // options.qs.client_secret = GITHUB_ACCESS.clientSecret;
   
     // set admin authentication
     options.auth = {

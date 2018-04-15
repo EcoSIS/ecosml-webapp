@@ -50,6 +50,13 @@ class CkanApi {
     return org.users.map(user => { return {username: user.name, role: user.capacity} });
   }
 
+  /**
+   * @method login
+   * @description login via EcoSIS account using username/password
+   * 
+   * @param {String} username EcoSIS username
+   * @param {String} password EcoSIS password 
+   */
   async login(username, password) {
     let token = jwt.sign(
       {username, password}, 

@@ -1,6 +1,7 @@
 const admin = require('firebase-admin');
 const EventEmitter = require('events');
 const config = require('./config');
+const logger = require('./logger');
 const collections = config.firebase.collections;
 
 class Firebase extends EventEmitter {
@@ -22,7 +23,7 @@ class Firebase extends EventEmitter {
       .collection(collections.githubCommits)
       .onSnapshot(
         docSnapshot => this.emit('github-commit', docSnapshot), 
-        e => console.log('Encountered error listening to github commits', e)
+        e => logger.error('Encountered error listening to github commits', e)
       );
 
     // listen for travis builds
@@ -30,7 +31,15 @@ class Firebase extends EventEmitter {
       .collection(collections.travis)
       .onSnapshot(
         docSnapshot => this.emit('travis-test-complete', docSnapshot), 
-        e => console.log('Encountered error listening to travis', e)
+        e => logger.error('Encountered error listening to travis', e)
+      );
+
+    // listen for ecosis org updates
+    this.firestore
+      .collection(collections.ecosisOrgs)
+      .onSnapshot(
+        docSnapshot => this.emit('ecosis-org-update', docSnapshot), 
+        e => logger.error('Encountered error listening to travis', e)
       );
   }
 

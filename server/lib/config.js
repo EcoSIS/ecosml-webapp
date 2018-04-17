@@ -43,7 +43,7 @@ module.exports = {
       auth : 'auth',
       admin : 'admin'
     }
-  }
+  },
 
   mongodb : {
     host : mongoHost,

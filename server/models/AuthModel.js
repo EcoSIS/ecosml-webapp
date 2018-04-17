@@ -131,6 +131,7 @@ class AuthModel {
    */
   async getUserOrgs(username) {
     let orgs = {};
+    let resp = [];
     let keys;
 
     let isAdmin = await this.isAdmin(username);
@@ -148,7 +149,7 @@ class AuthModel {
         });
       }
 
-      return orgs;
+      return resp;
     }
 
     let searchKey = redis.createAuthKey('*', username, '*');
@@ -176,6 +177,19 @@ class AuthModel {
     }
 
     return resp;
+  }
+
+  async getOrgs() {
+    let orgs = [];
+    let searchKey = redis.createOrgKey('*');
+    let keys = await redis.client.keys(searchKey);
+
+    for( var i = 0; i < keys.length; i++ ) {
+      let org = JSON.parse(await redis.client.get(keys[i]));
+      orgs.push(org);
+    }
+
+    return orgs;
   }
 
   _request(options) {

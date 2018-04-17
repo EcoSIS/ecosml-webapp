@@ -1,5 +1,7 @@
 const config = require('../config');
 const redis  = require('../redis');
+const logger = require('../logger');
+const ckan = require('../ckan');
 
 class EcosisSync {
   
@@ -7,9 +9,11 @@ class EcosisSync {
    * @method syncOrgs
    * @description sync all orgs from EcoSIS
    * 
-   * @returns {Promise}
+   * @returns {Promise} resolves to Array of org names
    */
   async syncOrgs() {
+    logger.info('Syncing CKAN organizations from EcoSIS');
+
     // make sure we have access to ecosis before we flush
     let orgNames = await ckan.listOrganizations();
     let orgs = [];
@@ -24,6 +28,10 @@ class EcosisSync {
     for( let i = 0; i < orgNames.length; i++ ) {
       await this.syncOrg(orgNames[i]);
     }
+
+    logger.info(`Sync of CKAN organizations from EcoSIS complete. ${orgNames.length} orgs syncd`);
+
+    return orgNames;
   }
 
   /**
@@ -35,6 +43,8 @@ class EcosisSync {
    * @returns {Promise} 
    */
   async syncOrg(orgName) {
+    logger.info(`Syncing EcoSIS organizations ${orgName}`);
+
     // grab org from ecosis
     let org = await ckan.getOrganization(orgName);
     if( !org ) return;

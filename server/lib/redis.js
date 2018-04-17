@@ -1,4 +1,4 @@
-const config = require('../config');
+const config = require('./config');
 const redis = require('redis');
 const {promisify} = require('util');
 
@@ -16,7 +16,7 @@ class Redis {
       editor : true
     };
 
-    this.client = redis.createClient({host: config.redis});
+    this.client = redis.createClient({host: config.redis.host});
 
     redisMethods.forEach(method => {
       this.client[method] = promisify(this.client[method]).bind(this.client)

@@ -40,7 +40,7 @@ app.use(session({
 // parse application/json
 app.use(bodyParser.json());
 app.use(bodyParser.text());
-app.use(bodyParser.urlencoded())
+app.use(bodyParser.urlencoded({extended: true}));
 
 /**
  * Setup static routes for webapp
@@ -52,6 +52,11 @@ require('./lib/static')(app);
  */
 app.use('/auth', require('./controllers/auth'));
 app.use('/api', require('./controllers/api'));
+
+/**
+ * Init EcoSIS, Travis and Github event sync
+ */
+require('./lib/sync');
 
 /**
  * Start server

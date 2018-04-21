@@ -56,24 +56,4 @@ router.get('/organizations', async (req, res) => {
   res.json(orgs);
 });
 
-router.post('/webhook/organization-update', async (req, res) =>{
-  let token = req.body.token;
-  res.json({success: true});
-
-  let payload = jwt.verify(token, config.server.jwt.secret);
-
-  try {
-    await model.reloadOrg(payload.organizationId);
-    Logger.info(`Updated org from webhook notification: ${payload.organizationId}`);
-  } catch(e) {
-    Logger.error(`Error Updating org from webhook notification: ${payload.organizationId}`, e);
-  }
-  
-});
-
-if( process.argv.indexOf('--no-sync') === -1 ) {
-model.reload()
-     .catch(e => Logger.error('Falied to reload orgs from ', config.ecosis.host, e));
-}
-
 module.exports = router;

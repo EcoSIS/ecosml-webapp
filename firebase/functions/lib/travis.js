@@ -13,6 +13,7 @@ module.exports = (env, req, resp) => {
   .firestore()
   .collection(collection)
   .add({
+    timestamp : Date.now(),
     headers : req.headers,
     payload : JSON.parse(req.body.payload)
   })

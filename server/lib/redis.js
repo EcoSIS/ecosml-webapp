@@ -49,6 +49,26 @@ class Redis {
     return `${config.redis.prefixes.org}-${orgName}`;
   }
 
+  /**
+   * @method getOrgNameFromId
+   * @description given an EcoSIS org id, find the org.  Note this is not 
+   * the most efficient method, but this is only required for delete (which
+   * shouldn't happen very often) where we only have the id of an org from
+   * EcoSIS.
+   * 
+   * @param {String} orgId ecosis organization id
+   * 
+   * @returns {Promise} resolves to string or null
+   */
+  async getOrgNameFromId(orgId) {
+    let keys = await this.client.keys(this.createOrgKey('*'));
+    for( var i = 0; i < keys.length; i++ ) {
+      let org = JSON.parse(await this.client.get(keys[i]));
+      if( org.id === orgId ) return org.name;
+    }
+    return null;
+  }
+
 
 }
 

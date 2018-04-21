@@ -7,54 +7,33 @@ const REMOTE_ATTR = ['extras', 'groups', 'num_followers',
 
 
 module.exports = (env, req, resp) => {
-  let msg = JSON.parse(req.rawBody || '{}');
   // TODO: verify token
-
-  let body = msg.body || {};
-  let collection = config.ecosis.collections.orgs+'-'+env;
-
-  if( msg.body.deleted ) {
-    return admin
-      .firestore()
-      .collection(collection)
-      .doc(body.id)
-      .delete()
-      .then((writeResult) => {
-        return resp.json({result: `Removed ${body.id} from ${collection}.`});
-      });
+  if( !verifyRequest(req.get('x-ecosis-signature'), env) ) {
+    return resp.status(401).send();
   }
+
+  let msg = JSON.parse(req.rawBody || '{}');
+  let collection = config.ecosis.collections.orgs+'-'+env;
 
   return admin.
     firestore()
     .collection(collection)
-    .doc(body.id)
-    .set(body.organization)
+    .add({
+      headers : req.headers,
+      payload : msg,
+      timestamp : Date.now()
+    })
     .then((writeResult) => {
       // Send back a message that we've succesfully written the message
-      return resp.json({result: `Updated ${body.id} in ${collection}.`});
+      return resp.json({result: `Updated ${msg.id} in ${collection}.`});
     });
 }
 
-function cleanMsg(msg) {
-  REMOTE_ATTR.forEach(attr => {
-    if( msg[attr] !== undefined ) delete msg[attr];
-  });
-  
-  if( msg.users ) {
-    msg.users = msg.users.map(user => ({
-      capacity : user.capacity,
-      created : user.created,
-      sysadmin : user.sysadmin,
-      state : user.state,
-      name : user.name,
-      display_name : user.display_name,
-      fullname : user.fullname
-    }));
+function verifyRequest(token, env) {
+  try {
+   jwt.verify(token, config.secrets.ecosml.secret[env]);
+   return true;
+  } catch(e) {
+    return false;
   }
-  
-  return msg;
-}
-
-function verifyRequest(token) {
-  return jwt.verify(token, config.secrets.ecosml.secret)
 }

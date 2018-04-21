@@ -22,18 +22,19 @@ module.exports = (env, req, resp) => {
     return onCommit(collection, cleanCommitMsg(msg), req, resp);
   } else if( event === 'team' || event === 'membership') {
     collection = config.github.collections.teams+'-'+env;
-    return onTeamUpdate(collection, msg, resp);
+    return onTeamUpdate(collection, msg, req, resp);
   }  
 }
 
-function onTeamUpdate(collection, msg, resp) {
+function onTeamUpdate(collection, msg, req, resp) {
   return admin
     .firestore()
     .collection(collection)
     .doc(msg.team.slug)
     .set({
       timestamp : Date.now(),
-      team : msg.team.slug
+      headers : req.headers,
+      payload : msg.team.slug
     })
     .then((writeResult) => {
       return resp.json({result: `Set team ${msg.team.slug} update event in ${collection}.`});
@@ -48,7 +49,7 @@ function onCommit(collection, msg, req, resp) {
       timestamp : Date.now(),
       event : 'push',
       headers : req.headers,
-      body: msg
+      payload: msg
     })
     .then((writeResult) => {
       return resp.json({result: `Message with ID: ${writeResult.id} added to ${collection}.`});

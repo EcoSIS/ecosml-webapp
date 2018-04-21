@@ -2,8 +2,74 @@ const config = require('../config');
 const redis  = require('../redis');
 const logger = require('../logger');
 const ckan = require('../ckan');
+const firebase = require('../firebase');
 
 class EcosisSync {
+
+  constructor() {
+    this._init();
+  }
+
+  /**
+   * @method _init
+   * @description wire up event listern to firebase module and preform
+   * a query for sync events to make sure we didn't miss anything
+   */
+  async _init() {
+    // this is triggered on each firestore doc update
+    firebase.initEcoSISObserver(e => {
+      e.docChanges.forEach((change) => {
+        let data = firebase.getDataFromChangeDoc(change);
+        firebase.emitBuffered(data.payload.id, firebase.EVENTS.ECOSIS_ORG_UPDATE, data);
+      });
+    });
+
+    // this is triggered after a certain amount of time of method call above
+    // e is an array of buffered events
+    firebase.on(firebase.EVENTS.ECOSIS_ORG_UPDATE, e => this._onChangeEvents(e));
+  }
+
+  async _onChangeEvents(events) {
+    // we just want the last changes
+    let handled = {};
+
+    // these are ordered by timestamp, so we only handle the first
+    for( var i = 0; i < events.length; i++ ) {
+      let e = events[i];
+      if( e.fsChangeType === 'removed' ) continue; // noop
+
+      let msg = e.payload;
+
+      // we already processed a newer event for this org
+      if( handled[msg.id] ) {
+        try {
+          await firebase.ackEcoSISEvent(e.fsId);
+        } catch(error) {
+          logger.error('Failed to handle firestore ecosis sync event', e, error);
+        }
+        continue;  
+      }
+
+      if( msg.deleted ) {
+        try {
+          let orgName = await redis.getOrgNameFromId(msg.id);
+          await this.removeOrg(orgName);
+          await firebase.ackEcoSISEvent(e.fsId);
+        } catch(error) {
+          logger.error('Failed to handle firestore ecosis sync event', e, error);
+        }
+      } else {
+        try {
+          await this.syncOrg(msg.id);
+          await firebase.ackEcoSISEvent(e.fsId);
+        } catch(error) {
+          logger.error('Failed to handle firestore ecosis sync event', e, error);
+        }
+      }
+
+      handled[msg.id] = true;
+    }    
+  }
   
   /**
    * @method syncOrgs
@@ -38,26 +104,19 @@ class EcosisSync {
    * @method syncOrg
    * @description sync ecosis org to redis store
    * 
-   * @param {String} orgName EcoSIS org name
+   * @param {String} orgName EcoSIS org name or id
    * 
    * @returns {Promise} 
    */
   async syncOrg(orgName) {
-    logger.info(`Syncing EcoSIS organizations ${orgName}`);
-
     // grab org from ecosis
     let org = await ckan.getOrganization(orgName);
     if( !org ) return;
 
-    // remove org keys
-    await redis.client.del(redis.createOrgKey(orgName));
+    orgName = org.name;
+    logger.info(`Syncing EcoSIS organization ${orgName}`);
 
-    // find role keys to remove
-    let searchKey = redis.createAuthKey(org, '*', '*');
-    let keys = await redis.client.keys(searchKey);
-    for( let i = 0; i < keys.length; i++ ) {
-      await redis.client.del(keys[i]);
-    }
+    await this.removeOrg(orgName, true);
 
     // if org is not active, we are done
     if( org.state !== 'active' ) return;
@@ -78,10 +137,35 @@ class EcosisSync {
       let key = redis.createAuthKey(org.name, users[j].name, users[j].capacity);
       let data = {
         org : org.name, 
-        user : users[j].username,
+        user : users[j].name,
         role : users[j].capacity
       }
       await redis.client.set(key, JSON.stringify(data));
+    }
+  }
+
+  /**
+   * @method removeOrg
+   * @description remove org from redis
+   * 
+   * @param {String} orgName org to remove
+   * @param {Boolean} silent don't log.  used by syncOrg
+   * 
+   * @returns {Promise}
+   */
+  async removeOrg(orgName, silent=false) {
+    if( !silent ) {
+      logger.info(`Removing EcoSIS organization ${orgName}`);
+    }
+
+    // remove org keys
+    await redis.client.del(redis.createOrgKey(orgName));
+
+    // find role keys to remove
+    let searchKey = redis.createAuthKey(orgName, '*', '*');
+    let keys = await redis.client.keys(searchKey);
+    for( let i = 0; i < keys.length; i++ ) {
+      await redis.client.del(keys[i]);
     }
   }
 

@@ -20,7 +20,9 @@ services:
   redis:
     image: redis:3.2
     volumes:
-        - redis-data:/data
+      - redis-data:/data
+    ports:
+      - 6379:6379
 
   mongo:
     image: mongo:3.5

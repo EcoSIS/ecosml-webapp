@@ -8,7 +8,7 @@ module.exports = (env, req, resp) => {
   let body = req.rawBody;
   let sha1 = req.get('X-Hub-Signature').replace(/^sha1=/, '');
 
-  if( !validRequest(body, sha1) ) {
+  if( !validRequest(body, sha1, env) ) {
     return resp.status(401).send();
   }
 
@@ -22,19 +22,23 @@ module.exports = (env, req, resp) => {
     return onCommit(collection, cleanCommitMsg(msg), req, resp);
   } else if( event === 'team' || event === 'membership') {
     collection = config.github.collections.teams+'-'+env;
-    return onTeamUpdate(collection, msg, req, resp);
+    return onTeamUpdate(collection, msg, event, req, resp);
   }  
 }
 
-function onTeamUpdate(collection, msg, req, resp) {
+function onTeamUpdate(collection, msg, event, req, resp) {
   return admin
     .firestore()
     .collection(collection)
-    .doc(msg.team.slug)
-    .set({
+    .add({
       timestamp : Date.now(),
       headers : req.headers,
-      payload : msg.team.slug
+      event,
+      payload : {
+        name : msg.team.name,
+        slug : msg.team.slug,
+        id : msg.team.id
+      }
     })
     .then((writeResult) => {
       return resp.json({result: `Set team ${msg.team.slug} update event in ${collection}.`});
@@ -72,8 +76,8 @@ function cleanCommitMsg(msg) {
   return msg;
 }
 
-function validRequest(body, sha1) {
-  let hash = crypto.createHmac('sha1', config.secrets.ecosml.secret);
+function validRequest(body, sha1, env) {
+  let hash = crypto.createHmac('sha1', config.secrets.ecosml.secret[env]);
   hash.update(body);
   return  hash.digest('hex') === sha1;
 }

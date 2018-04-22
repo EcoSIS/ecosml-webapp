@@ -33,7 +33,7 @@ class Redis {
    * 
    * @returns {String}
    */
-  createAuthKey(org, user, role) {
+  createAuthKey(org='*', user='*', role='*') {
     return `${config.redis.prefixes.auth}-${org}-${user}-${role}`;
   }
 

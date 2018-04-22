@@ -241,6 +241,24 @@ class GithubApi {
   }
 
   /**
+   * @method editTeam
+   * @description Edit a team
+   * https://developer.github.com/v3/teams/#edit-team
+   *
+   * @param {String} id team id
+   * @param {Object} team team payload
+   * 
+   * @returns {Promise}
+   */
+  async editTeam(id, team) {
+    return this.request({
+      method : 'PATCH',
+      uri : `/teams/${id}`,
+      body : JSON.stringify(team)
+    });
+  }
+
+  /**
    * @method deleteTeam
    * @description Create a team
    * https://developer.github.com/v3/teams/#delete-team
@@ -287,6 +305,96 @@ class GithubApi {
     }
 
     return members;
+  }
+
+  /**
+   * @method listTeamRepos
+   * @description list all team repos
+   * https://developer.github.com/v3/teams/#list-team-repos
+   *
+   * @param {String} id team id
+   * 
+   * @returns {Promise} resolves to Array
+   */
+  async listTeamRepos(id) {
+    let last = false;
+    let page = 1;
+    let repos = [];
+
+    while( !last ) {
+      let {response} = await this.request({
+        uri : `/teams/${id}/repos`,
+        qs : {page}
+      });
+
+      let link = parseLinkHeader(response.headers.link) || {};
+      if( !link.last ) last = true;
+
+      let results = JSON.parse(response.body);
+      if( !results.length ) last = true;
+      else repos = repos.concat(results);
+
+      page++;
+    }
+
+    return repos;
+  }
+
+  /**
+   * @method addTeamRepo
+   * @description add a repo to a team
+   * https://developer.github.com/v3/teams/#add-or-update-team-repository
+   * 
+   * @param {String} id team id
+   * @param {String} repo repo name 
+   * 
+   * @returns {Promise}
+   */
+  addTeamRepo(id, repo) {
+    return this.request({
+      method : 'PUT',
+      uri : `/teams/${id}/repos/${ORG}/${repo}`,
+      headers : {
+        'Content-Length' : 0
+      }
+    });
+  }
+
+  /**
+   * @method addTeamRepo
+   * @description add a repo to a team
+   * https://developer.github.com/v3/teams/#add-or-update-team-repository
+   * 
+   * @param {String} id team id
+   * @param {String} repo repo name 
+   * 
+   * @returns {Promise}
+   */
+  addTeamRepo(id, repo) {
+    return this.request({
+      method : 'PUT',
+      uri : `/teams/${id}/repos/${ORG}/${repo}`,
+      headers : {
+        'Content-Length' : 0
+      }
+    });
+  }
+
+  /**
+   * @method removeTeamRepo
+   * @description remove a repo to a team
+   * https://developer.github.com/v3/teams/#remove-team-repository
+   * 
+   * @param {String} id team id
+   * @param {String} repo repo name 
+   * 
+   * @returns {Promise}
+   */
+  removeTeamRepo(id, repo) {
+    return this.request({
+      method : 'DELETE',
+      uri : `/teams/${id}/repos/${ORG}/${repo}`
+    });
   }
 
   /**

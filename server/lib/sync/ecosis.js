@@ -120,6 +120,7 @@ class EcosisSync {
 
     // if org is not active, we are done
     if( org.state !== 'active' ) return;
+    if( !org.is_organization ) return;
 
     // create org object
     let users = org.users;
@@ -134,10 +135,13 @@ class EcosisSync {
 
     // add user roles
     for( let j = 0; j < users.length; j++ ) {
+      if( users[j].state !== 'active' ) continue;
+
       let key = redis.createAuthKey(org.name, users[j].name, users[j].capacity);
       let data = {
         org : org.name, 
         user : users[j].name,
+        displayName : users[j].displayName,
         role : users[j].capacity
       }
       await redis.client.set(key, JSON.stringify(data));

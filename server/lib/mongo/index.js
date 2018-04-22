@@ -108,6 +108,19 @@ class MongoDB {
   }
 
   /**
+   * @method getAllOrgPackageNames
+   * @description get all package names for an org
+   * 
+   * @param {String} orgName organization name
+   * 
+   * @returns {Promise} resolves to mongo db result
+   */
+  async getAllOrgPackageNames(orgName) {
+    let collection = await this.packagesCollection();
+    return collection.find({organization: orgName}, {name: 1, id: 1}).toArray();
+  }
+
+  /**
    * @method insertPackage
    * @description insert or update a package
    */
@@ -139,7 +152,8 @@ class MongoDB {
 
   /**
    * @method getPackage
-   * @description get a package by name or id
+   * @description get a package by name or id.  id can be ecosml
+   * id or GitHub id
    * 
    * @param {String} packageNameOrId
    * @param {Object} project
@@ -151,7 +165,8 @@ class MongoDB {
     return collection.findOne({
       $or : [
         {name: packageNameOrId},
-        {id : packageNameOrId}
+        {id : packageNameOrId},
+        {githubId : packageNameOrId}
       ]
     }, projection);
   }
@@ -194,6 +209,22 @@ class MongoDB {
   async removeGithubTeam(teamSlugOrId) {
     let collection = await this.githubTeamCollection();
     return collection.remove({
+      $or : [
+        {slug: teamSlugOrId},
+        {id : teamSlugOrId}
+      ]
+    });
+  }
+
+  /**
+   * @method getGithubTeam
+   * @description get a github team by slug or id
+   * 
+   * @param {String} teamSlugOrId 
+   */
+  async getGithubTeam(teamSlugOrId) {
+    let collection = await this.githubTeamCollection();
+    return collection.findOne({
       $or : [
         {slug: teamSlugOrId},
         {id : teamSlugOrId}

@@ -7,7 +7,6 @@ const REMOTE_ATTR = ['extras', 'groups', 'num_followers',
 
 
 module.exports = (env, req, resp) => {
-  // TODO: verify token
   if( !verifyRequest(req.get('x-ecosis-signature'), env) ) {
     return resp.status(401).send();
   }

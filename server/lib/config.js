@@ -119,10 +119,10 @@ module.exports = {
     key : secrets.google,
     collections : {
       githubCommits : 'github-commit-events-'+firebaseEnv,
-      githubTeams : 'github-teams-'+firebaseEnv,
-      travis : 'travis-'+firebaseEnv,
+      githubTeams : 'github-team-events-'+firebaseEnv,
+      travis : 'travis-events-'+firebaseEnv,
       ecosisUsers : 'ecosis-users-'+firebaseEnv,
-      ecosisOrgs : 'ecosis-orgs-'+firebaseEnv
+      ecosisOrgs : 'ecosis-org-events-'+firebaseEnv
     }
   },
 

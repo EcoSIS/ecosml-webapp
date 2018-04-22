@@ -16,11 +16,12 @@ class Firebase extends EventEmitter {
     this.firestore = admin.firestore();
     this.collections = collections;
 
-    this.BUFFER_TIME = 1000;
+    this.BUFFER_TIME = 1000 * 5;
     this.bufferTimers = {};
 
     this.EVENTS = {
       GITHUB_COMMIT : 'github-commit',
+      GITHUB_TEAM_UPDATE : 'github-team-update',
       TRAVIS_TESTING_COMPLETE : 'travis-test-complete',
       ECOSIS_ORG_UPDATE : 'ecosis-org-update'
     }
@@ -60,6 +61,22 @@ class Firebase extends EventEmitter {
   }
 
   /**
+   * @method initGithubTeamObserver
+   * @description wire up the observer to the github team collection listener.  
+   * This should be called by the lib/sync/github module.
+   * 
+   * @param {Function} callback called when documents update 
+   */
+  initGithubTeamObserver(callback) {
+    this.firestore
+      .collection(collections.githubTeams)
+      .onSnapshot(
+        callback,
+        e => logger.error('Encountered error listening to ecosis firestore collection', e)
+      );
+  }
+
+  /**
    * @method initEcoSISObserver
    * @description wire up the ecosis collection listener.  This should be called
    * by the lib/sync/ecosis module.
@@ -84,7 +101,9 @@ class Firebase extends EventEmitter {
    * @param {String} event event name 
    * @param {String} data 
    */
-  emitBuffered(id, event, data) {    
+  emitBuffered(id, event, data) {
+    id = event+'-'+id;
+
     if( this.bufferTimers[id] ) {
       clearTimeout(this.bufferTimers[id].timer);
       this.bufferTimers[id].data.push(data);
@@ -159,6 +178,21 @@ class Firebase extends EventEmitter {
     logger.info('Acking EcoSIS sync event: '+docId);
     return this.firestore
       .collection(collections.ecosisOrgs)
+      .doc(docId)
+      .delete()
+  }
+
+  /**
+   * @method ackGithubTeamEvent
+   * @description after we have successfully handled a github team event,
+   * remove the doc.
+   * 
+   * @returns {Promise}
+   */
+  ackGithubTeamEvent(docId) {
+    logger.info('Acking EcoSIS sync event: '+docId);
+    return this.firestore
+      .collection(collections.githubTeams)
       .doc(docId)
       .delete()
   }

@@ -2,18 +2,18 @@ module.exports = {
   envs : ['local', 'dev', 'prod'],
   secrets : require("../secrets"),
   travis : {
-    collection : 'travis'
+    collection : 'travis-events'
   },
   ecosis : {
     collections : {
       users : 'ecosis-users',
-      orgs : 'ecosis-orgs'
+      orgs : 'ecosis-org-events'
     }
   },
   github : {
     collections : {
       commits : 'github-commit-events',
-      teams : 'github-teams'
+      teams : 'github-team-events'
     },
     ignoreUsers : ['ecosml-admin']
   }

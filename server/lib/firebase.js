@@ -26,7 +26,7 @@ class Firebase extends EventEmitter {
       ECOSIS_ORG_UPDATE : 'ecosis-org-update'
     }
 
-    // this.initObservers();
+    logger.info('Firebase env: '+config.firebase.env);
   }
 
   initObservers() {
@@ -68,11 +68,29 @@ class Firebase extends EventEmitter {
    * @param {Function} callback called when documents update 
    */
   initGithubTeamObserver(callback) {
+    logger.info(`Listening to firebase collection: ${collections.githubTeams}`);
     this.firestore
       .collection(collections.githubTeams)
       .onSnapshot(
         callback,
-        e => logger.error('Encountered error listening to ecosis firestore collection', e)
+        e => logger.error('Encountered error listening to github team firestore collection', e)
+      );
+  }
+
+  /**
+   * @method initGithubCommitObserver
+   * @description wire up the observer to the github commit collection listener.  
+   * This should be called by the PackageModel
+   * 
+   * @param {Function} callback called when documents update 
+   */
+  initGithubCommitObserver(callback) {
+    logger.info(`Listening to firebase collection: ${collections.githubCommits}`);
+    this.firestore
+      .collection(collections.githubCommits)
+      .onSnapshot(
+        callback,
+        e => logger.error('Encountered error listening to github commit firestore collection', e)
       );
   }
 
@@ -84,6 +102,7 @@ class Firebase extends EventEmitter {
    * @param {Function} callback called when documents update 
    */
   initEcoSISObserver(callback) {
+    logger.info(`Listening to firebase collection: ${collections.ecosisOrgs}`);
     this.firestore
       .collection(collections.ecosisOrgs)
       .onSnapshot(
@@ -190,9 +209,24 @@ class Firebase extends EventEmitter {
    * @returns {Promise}
    */
   ackGithubTeamEvent(docId) {
-    logger.info('Acking EcoSIS sync event: '+docId);
+    logger.info('Acking Github team event: '+docId);
     return this.firestore
       .collection(collections.githubTeams)
+      .doc(docId)
+      .delete()
+  }
+
+  /**
+   * @method ackGithubCommitEvent
+   * @description after we have successfully handled a github commit event,
+   * remove the doc.
+   * 
+   * @returns {Promise}
+   */
+  ackGithubCommitEvent(docId) {
+    logger.info('Acking Github commit event: '+docId);
+    return this.firestore
+      .collection(collections.githubCommits)
       .doc(docId)
       .delete()
   }

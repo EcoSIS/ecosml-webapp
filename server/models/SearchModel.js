@@ -98,9 +98,8 @@ class SearchModel {
    * @method recreateIndex
    * @description recreate MongoDB search indexes
    */
-  async recreateIndex() {
-    // TODO, check auth
-    return await mongo.recreatePackageIndexes();
+  recreateIndex() {
+    return mongo.recreatePackageIndexes();
   }
 
 }

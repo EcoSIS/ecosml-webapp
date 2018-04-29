@@ -361,26 +361,6 @@ class GithubApi {
   }
 
   /**
-   * @method addTeamRepo
-   * @description add a repo to a team
-   * https://developer.github.com/v3/teams/#add-or-update-team-repository
-   * 
-   * @param {String} id team id
-   * @param {String} repo repo name 
-   * 
-   * @returns {Promise}
-   */
-  addTeamRepo(id, repo) {
-    return this.request({
-      method : 'PUT',
-      uri : `/teams/${id}/repos/${ORG}/${repo}`,
-      headers : {
-        'Content-Length' : 0
-      }
-    });
-  }
-
-  /**
    * @method removeTeamRepo
    * @description remove a repo to a team
    * https://developer.github.com/v3/teams/#remove-team-repository

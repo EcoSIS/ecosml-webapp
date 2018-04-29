@@ -78,6 +78,7 @@ module.exports = {
             name: 1,
             keywords: 1,
             id: 1,
+            githubId : 1,
             private : 1,
             createdAt : 1,
             pushedAt : 1,
@@ -85,6 +86,34 @@ module.exports = {
           },
           options : {
             name: "KeywordIndex"
+          }
+        }
+      ],
+      'github-team' : [
+        {
+          index : {
+            slug: 1,
+            id: 1
+          },
+          options : {
+            name: "GithubTeamIndex"
+          }
+        },
+        {
+          index : {
+            repos : 1
+          },
+          options : {
+            name: "GithubTeamReposIndex"
+          }
+        },
+        {
+          index : {
+            'members.login' : 1,
+            'members.id' : 1
+          },
+          options : {
+            name: "GithubTeamMembersIndex"
           }
         }
       ]

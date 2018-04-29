@@ -5,10 +5,17 @@ const {URL} = require('url');
 const model = require('../models/AuthModel');
 const Logger = require('../lib/logger');
 
-router.get('/user', (req, res) => {
-  res.json({
-    user: req.session.user
-  });
+router.get('/user', async (req, res) => {
+  let user = {
+    username: req.session.username,
+    orgs : await model.getUserOrgs(req.session.username)
+  }
+
+  if( req.session.admin ) {
+    user.admin = true;
+  }
+
+  res.json(user);
 });
 
 router.get('/logout', (req, res) => {
@@ -38,8 +45,10 @@ async function login(username, password, req, res) {
       message:  result.message
     });
   }
-  
+
   req.session.username = result.username;
+  req.session.admin = await model.isAdmin(username);
+
   let orgs = await model.getUserOrgs(result.username);
 
   Logger.info(`Successful login: ${username}`);

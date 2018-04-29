@@ -77,7 +77,16 @@ class PackageModel {
     await this.writeMetadataFile(pkg);
     await this.commit(pkg.name, 'Updating package metadata');
 
+    // let travis know about the repo (sync with it)
     await travis.initRepo(pkg.name);
+
+    // add github team access
+    if( pkg.organization ) {
+      let team = mongo.getGithubTeam(pkg.organization);
+      if( team ) {
+        await github.addTeamRepo(team.id, pkg.name);
+      }
+    }
 
     return pkg;
   }
@@ -112,10 +121,27 @@ class PackageModel {
       let README = path.join(git.getRepoPath(pkg.name), 'README.md');
       await fs.writeFile(README, update.description || '');
     }
+
+    // make sure the org didn't change
+    if( update.organization && pkg.organization !== update.organization ) {
+      let newTeam = mongo.getGithubTeam(update.organization);
+      let oldTeam = mongo.getGithubTeam(pkg.organization);
+
+      if( oldTeam ) {
+        await github.removeTeamRepo(oldTeam.id, pkg.name);
+      } else {
+        logger.error(`Unable to find github team ${pkg.organization} to remove repo: ${pkg.name}`);
+      }
+
+      if( newTeam ) {
+        await github.addTeamRepo(newTeam.id, pkg.name);
+      } else {
+        logger.error(`Unable to find github team ${update.organization} to add repo: ${pkg.name}`);
+      }
+    }
     
     // update package overview in github
     let body;
-    
     if( update.overview && update.overview !== pkg.overview ) {
       let response = await github.editRepository({
         name : pkg.name,

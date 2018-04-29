@@ -1,8 +1,9 @@
 const router = require('express').Router();
 const model = require('../models/SearchModel');
 const utils = require('./utils');
+const {admin} = require('./middleware/auth');
 
-router.get('/recreateIndex', async (req, res) => {
+router.get('/recreateIndex', admin, async (req, res) => {
   try {
     let result = await model.recreateIndex();
     res.json(result);

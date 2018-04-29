@@ -5,7 +5,7 @@ const github = require('../github');
 const mongodb = require('../mongo');
 const config = require('../config');
 const utils = require('../utils');
-const Logger = require('../logger');
+const logger = require('../logger');
 const firebase = require('../firebase');
 const redis = require('../redis');
 
@@ -31,10 +31,65 @@ class GithubSync {
 
     // this is triggered after a certain amount of time of method call above
     // e is an array of buffered events
-    firebase.on(firebase.EVENTS.GITHUB_TEAM_UPDATE, e => this._onChangeEvents(e));
+    firebase.on(firebase.EVENTS.GITHUB_TEAM_UPDATE, e => this._onTeamChangeEvents(e));
+
+
+    // this is triggered on each firestore doc update
+    firebase.initGithubCommitObserver(e => {
+      e.docChanges.forEach((change) => {
+        let data = firebase.getDataFromChangeDoc(change);
+        firebase.emitBuffered(data.payload, firebase.EVENTS.GITHUB_COMMIT, data);
+      });
+    });
+
+    // this is triggered after a certain amount of time of method call above
+    // e is an array of buffered events
+    firebase.on(firebase.EVENTS.GITHUB_COMMIT, e => this._onGithubCommitEvents(e));
   }
 
-  async _onChangeEvents(events) {
+  /**
+   * @method _onGithubCommit
+   * @description called from firebase event listener.  We want to verify
+   * that no badness has been made to the ecosis-metadata file.  We might
+   * also want to run travis tests
+   * 
+   * @param {Array} events commit event list
+   */
+  async _onGithubCommitEvents(events) {
+    let handled = {};
+    
+    for( var i = 0; i < events.length; i++ ) {
+      if( events[i].fsChangeType === 'removed' ) continue; // noop
+
+      let e = events[i].payload;
+      let repoName = e.repository.name;
+
+      // ignore anything from the admin user
+      if( e.pusher.name === 'ecosml-admin' ) {
+        await firebase.ackGithubCommitEvent(events[i].fsId);
+        continue;
+      }
+      // only handle one repository commit event per batch
+      if( handled[repoName] ) {
+        await firebase.ackGithubCommitEvent(events[i].fsId);
+        continue;
+      }
+
+      let pkg = mongodb.getPackage(repoName);
+      if( pkg ) {
+        // TODO: ensure metadata file is in good order
+        // TODO: sync package from github once metadata is ok and there was a change
+        // TODO: run tests in travis
+      } else {
+        logger.warn(`Received commit event for repo ${repoName} that is not in mongo. ignoring`);
+      }
+      
+      await firebase.ackGithubCommitEvent(events[i].fsId);
+      handled[repoName] = true;
+    }
+  }
+
+  async _onTeamChangeEvents(events) {
     // we just want the last changes
     let handled = {};
 
@@ -43,10 +98,10 @@ class GithubSync {
       let e = events[i];
       if( e.fsChangeType === 'removed' ) continue; // noop
 
-      let teamSlug = e.payload;
+      let teamId = e.payload.id;
 
       // we already processed a newer event for this team
-      if( handled[teamSlug] ) {
+      if( handled[teamId] ) {
         try {
           await firebase.ackGithubTeamEvent(e.fsId);
         } catch(error) {
@@ -56,13 +111,13 @@ class GithubSync {
       }
 
       try {
-        this.syncTeamToMongo(teamSlug);
+        await this.syncTeamToMongo(teamId);
         await firebase.ackGithubTeamEvent(e.fsId);
       } catch(error) {
         logger.error('Failed to handle firestore ecosis sync event', e, error);
       }
 
-      handled[teamSlug] = true;
+      handled[teamId] = true;
     }    
   }
 
@@ -76,12 +131,12 @@ class GithubSync {
    */
   async syncAllRepos() {
     
-    Logger.info(`Starting GitHub repository sync for ${config.github.org}\n`);
+    logger.info(`Starting GitHub repository sync for ${config.github.org}\n`);
 
     let repos = await github.listRepositories();
     repos = repos.map(repo => repo.name);
 
-    Logger.log(`Syncing ${repos.length} GitHub repositories`);
+    logger.log(`Syncing ${repos.length} GitHub repositories`);
 
     for( let i = 0; i < repos.length; i++ ) {
       await this.syncRepo(repos[i]);
@@ -91,7 +146,7 @@ class GithubSync {
                .filter((pkg) => repos.indexOf(pkg.name) === -1)
                .map(pkg => pkg.name);
 
-    Logger.log('Removing the following packages found locally in EcoSML but not in GitHub', pkgs);
+    logger.log('Removing the following packages found locally in EcoSML but not in GitHub', pkgs);
     for( let i = 0; i < pkgs.length; i++ ) {
       await mongodb.removePackage(pkgs[i]);
     }
@@ -108,7 +163,7 @@ class GithubSync {
    * @return {Promise}
    */
   async syncRepo(repoName) {
-    Logger.log(`Syncing GitHub repository ${repoName}`);
+    logger.log(`Syncing GitHub repository ${repoName}`);
     let metadata;
 
     try {
@@ -131,8 +186,8 @@ class GithubSync {
       metadata.releases = releases;
 
     } catch(e) {
-      Logger.error('Failed to download metadata file for repo '+repoName+', ignoring');
-      Logger.error(e);
+      logger.error('Failed to download metadata file for repo '+repoName+', ignoring');
+      logger.error(e);
       return;
     }
 
@@ -147,11 +202,11 @@ class GithubSync {
    */
   async syncAllTeamsToMongo() {
     
-    Logger.info(`Starting GitHub team sync for ${config.github.org}\n`);
+    logger.info(`Starting GitHub team sync for ${config.github.org}\n`);
 
     let teams = await github.listTeams();
 
-    Logger.log(`Syncing ${teams.length} GitHub teams`);
+    logger.log(`Syncing ${teams.length} GitHub teams`);
 
     for( let i = 0; i < repos.length; i++ ) {
       await this.syncTeam(teams[i]);
@@ -161,7 +216,7 @@ class GithubSync {
                .filter((team) => teams.findIndex(t => team.id === t.id) === -1)
                .map(team => team.slug);
 
-    Logger.log('Removing the following github teams', removeTeams);
+    logger.log('Removing the following github teams', removeTeams);
     for( let i = 0; i < removeTeams.length; i++ ) {
       await mongodb.removeGithubTeam(removeTeams[i]);
     }
@@ -182,8 +237,18 @@ class GithubSync {
       team = JSON.parse(response.body);
     }
 
+    if( team.organization ) {
+      delete team.organization;
+    }
+
     team.members = await github.listTeamMembers(team.id);
-    team.repos = (await github.listRepositories(team.id)) || [];
+    team.members = team.members.map(member => ({
+      login : member.login,
+      id : member.id,
+      avatar_url : member.avatar_url
+    }));
+
+    team.repos = (await github.listTeamRepos(team.id)) || [];
     // just store the id, the one thing that won't change on us
     team.repos = team.repos.map(repo => repo.id);
     
@@ -216,14 +281,30 @@ class GithubSync {
     
     // create the github team
     if( team === null ) {
-      await github.createTeam({
+      let resp = await github.createTeam({
         name : org.name,
         description : org.description,
         repo_names : pkgs.map(pkg => config.github.org+'/'+pkg.name)
       });
-    
+
+      // if we failed to create team, sync to github
+      if( resp.statusCode !== 201 ) {
+        // find our team id
+        let teams = await github.listTeams();
+        team = teams.find(team => team.name === orgName);
+
+        // sync team to mongo, then refetch
+        if( team ) {
+          await this.syncTeamToMongo(team.id);
+          team = await mongodb.getGithubTeam(orgName);
+        } else {
+          return logger.error('Failed to create Github team but could not find team in Github team list:', orgName);
+        }
+      }
+    }
+
     // something changed, update the github team
-    } else if( team.name !== org.name ||
+    if( team.name !== org.name ||
         team.description !== org.description ) {
 
       await github.editTeam(team.id, {
@@ -233,12 +314,12 @@ class GithubSync {
     }
 
     // make sure package permissions are correct
-    if( team !== null ) {
+    if( team !== null || teamCreateResp ) {
       if( !team.repos ) team.repos = [];
 
       // check all packages have permissions
       for( var i = 0; i < pkgs.length; i++ ) {
-        let index = team.repos.findIndex(repoId => repoId === pkgs[i].id);
+        let index = team.repos.findIndex(repoId => repoId === pkgs[i].githubId);
         if( index === -1 ) {
           await github.addTeamRepo(team.id, pkgs[i].name);
         }
@@ -246,7 +327,7 @@ class GithubSync {
 
       // make sure invalid packages are removed
       for( var i = 0; i < team.repos.length; i++ ) {
-        let index = pkgs.findIndex(pkg => pkg.id === team.repos[i]);
+        let index = pkgs.findIndex(pkg => pkg.githubId === team.repos[i]);
         if( index === -1 ) {
           // grab current package name from mongo
           let pkg = await mongodb.getPackage(team.repos[i]);
@@ -254,8 +335,6 @@ class GithubSync {
         }
       }
     }
-
-
 
     // TODO: make sure all teams members (if provided github id) are in sync
   }

@@ -73,8 +73,32 @@ class AuthModel {
    * 
    * @returns {Promise} resolve to boolean
    */
-  isAdmin(user) {
-    return redis.client.exists(`${config.redis.prefixes.admin}-${user}`);
+  isAdmin(username) {
+    return redis.client.exists(`${config.redis.prefixes.admin}-${username}`);
+  }
+
+  /**
+   * @method setAdmin
+   * @description Set site admin
+   * 
+   * @param {String} username user you want to set
+   * 
+   * @returns {Promise} resolve to boolean
+   */
+  setAdmin(username) {
+    return redis.client.set(`${config.redis.prefixes.admin}-${username}`, true);
+  }
+
+  /**
+   * @method removeAdmin
+   * @description Remove site admin
+   * 
+   * @param {String} username user you want to remove
+   * 
+   * @returns {Promise} resolve to boolean
+   */
+  removeAdmin(username) {
+    return redis.client.del(`${config.redis.prefixes.admin}-${username}`);
   }
 
   /**
@@ -161,7 +185,7 @@ class AuthModel {
       else orgs[key.org] = [key.role];
     }
 
-    let resp = [];
+    resp = [];
     keys = Object.keys(orgs);
 
     for( var i = 0; i < keys.length; i++ ) {

@@ -73,6 +73,25 @@ class MongoDB {
     return results;
   }
 
+  async recreateGithubTeamIndexes() {
+    let collection = await this.githubTeamCollection();
+    let indexes = config.mongodb.indexes['github-team'];
+
+    let results = [];
+    for( var i = 0; i < indexes.length; i++ ) {
+      let index = indexes[i];
+
+      try {
+        await collection.dropIndex(index.options.name);
+      } catch(e) {}
+
+      let result = await collection.createIndex(index.index, index.options);
+      results.push(result);
+    }
+
+    return results;
+  }
+
   /**
    * @method search
    */
@@ -117,7 +136,7 @@ class MongoDB {
    */
   async getAllOrgPackageNames(orgName) {
     let collection = await this.packagesCollection();
-    return collection.find({organization: orgName}, {name: 1, id: 1}).toArray();
+    return collection.find({organization: orgName}, {name: 1, id: 1, githubId: 1}).toArray();
   }
 
   /**

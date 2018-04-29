@@ -11,8 +11,10 @@ class DataSync {
    * @returns {Promise}
    */
   async syncAll() {
+    // YOU MUST DO THIS FIRST!
+    await github.syncAllRepos();
+    // syncing orgs to github teams expect repos in mongodb
     await this.syncOrgs();
-    return github.syncAllRepos();
   }
 
   /**

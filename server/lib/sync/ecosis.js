@@ -2,7 +2,9 @@ const config = require('../config');
 const redis  = require('../redis');
 const logger = require('../logger');
 const ckan = require('../ckan');
+const mongo = require('../mongo')
 const firebase = require('../firebase');
+const github = require('./github');
 
 class EcosisSync {
 
@@ -146,6 +148,9 @@ class EcosisSync {
       }
       await redis.client.set(key, JSON.stringify(data));
     }
+
+    // finally sync to Github team
+    await github.syncEcoSISOrgToTeam(org.name);
   }
 
   /**

@@ -14,7 +14,7 @@ services:
       - JWT_SECRET=${JWT_SECRET}
       - ECOSIS_HOST=${ECOSIS_HOST}
       - GITHUB_ORG=ecosml-dev
-      - FIRESTORE_ENV=local
+      - FIREBASE_ENV=dev
     command: tail -f /dev/null
 
   redis:

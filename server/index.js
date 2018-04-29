@@ -62,5 +62,5 @@ require('./lib/sync');
  * Start server
  */
 app.listen(config.server.port, () => {
-  console.log(`Server ready on port ${config.server.port}`);
+  logger.info(`Server ready on port ${config.server.port}`);
 });

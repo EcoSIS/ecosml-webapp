@@ -144,10 +144,8 @@ export default class AppReleases extends Mixin(PolymerElement)
    * @description called when the create button is clicked
    */
   async _onCreateClicked() {
-    if( !this.release ) alert('Please enter a valid release');
-
     let info = {
-      name : `v${this.major}.${this.minor}.${this.patch}`,
+      name : `v${this.major||0}.${this.minor||0}.${this.patch||0}`,
       description : this.$.description.value
     }
 

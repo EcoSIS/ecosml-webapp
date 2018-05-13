@@ -136,7 +136,7 @@ class GithubSync {
     let repos = await github.listRepositories();
     repos = repos.map(repo => repo.name);
 
-    logger.log(`Syncing ${repos.length} GitHub repositories`);
+    logger.info(`Syncing ${repos.length} GitHub repositories`);
 
     for( let i = 0; i < repos.length; i++ ) {
       await this.syncRepo(repos[i]);
@@ -146,7 +146,7 @@ class GithubSync {
                .filter((pkg) => repos.indexOf(pkg.name) === -1)
                .map(pkg => pkg.name);
 
-    logger.log('Removing the following packages found locally in EcoSML but not in GitHub', pkgs);
+    logger.info('Removing the following packages found locally in EcoSML but not in GitHub', pkgs);
     for( let i = 0; i < pkgs.length; i++ ) {
       await mongodb.removePackage(pkgs[i]);
     }
@@ -163,7 +163,7 @@ class GithubSync {
    * @return {Promise}
    */
   async syncRepo(repoName) {
-    logger.log(`Syncing GitHub repository ${repoName}`);
+    logger.info(`Syncing GitHub repository ${repoName}`);
     let metadata;
 
     try {
@@ -206,7 +206,7 @@ class GithubSync {
 
     let teams = await github.listTeams();
 
-    logger.log(`Syncing ${teams.length} GitHub teams`);
+    logger.info(`Syncing ${teams.length} GitHub teams`);
 
     for( let i = 0; i < repos.length; i++ ) {
       await this.syncTeam(teams[i]);
@@ -216,7 +216,7 @@ class GithubSync {
                .filter((team) => teams.findIndex(t => team.id === t.id) === -1)
                .map(team => team.slug);
 
-    logger.log('Removing the following github teams', removeTeams);
+    logger.info('Removing the following github teams', removeTeams);
     for( let i = 0; i < removeTeams.length; i++ ) {
       await mongodb.removeGithubTeam(removeTeams[i]);
     }

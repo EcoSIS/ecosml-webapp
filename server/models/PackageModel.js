@@ -317,9 +317,8 @@ class PackageModel {
    * @param {Boolean} data.draft
    * @param {Boolean} data.prerelease
    */
-  async createRelease(id, data) {
+  async createRelease(pkg, data) {
     pkg = await this.get(pkg);
-
 
     if( !data.name ) throw new AppError('Release name required', AppError.ERROR_CODES.MISSING_ATTRIBUTE);
     if( !data.description ) throw new AppError('Release description required', AppError.ERROR_CODES.MISSING_ATTRIBUTE);
@@ -339,6 +338,14 @@ class PackageModel {
 
     // create release on github
     let {response} = await github.createRelease(pkg.name, release);
+    if( response.statusCode !== 201 ) {
+      let body = JSON.parse(response.body);
+      if( body.errors && body.errors.length ) {
+        if( body.errors[0].code === 'already_exists' ) {
+          throw new AppError('Release already exists', AppError.ERROR_CODES.BAD_API_RESPONSE);
+        }
+      }
+    }
     this.checkStatus(response, 201);
     response = JSON.parse(response.body);
     
@@ -354,7 +361,7 @@ class PackageModel {
     pkg.releases = releases;
 
     // save release data
-    await mongo.updatePackage(id, {releases});
+    await mongo.updatePackage(pkg.name, {releases});
     return pkg;
   }
 

@@ -209,7 +209,7 @@ class GithubSync {
     logger.info(`Syncing ${teams.length} GitHub teams`);
 
     for( let i = 0; i < teams.length; i++ ) {
-      await this.syncTeam(teams[i]);
+      await this.syncTeamToMongo(teams[i]);
     }
 
     let removeTeams = (await mongodb.getAllGithubTeamNames())

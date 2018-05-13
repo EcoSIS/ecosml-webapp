@@ -25,7 +25,7 @@ class DataSync {
    * @returns {Promise}
    */
   async syncOrgs() {
-    await github.syncAllTeams();
+    await github.syncAllTeamsToMongo();
     return ecosis.syncOrgs();
   }
 

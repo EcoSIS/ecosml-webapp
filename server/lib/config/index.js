@@ -1,6 +1,6 @@
 const env = process.env;
 const path = require('path');
-const secrets = require('../secrets');
+const secrets = require('../../secrets');
 
 const mongoHost = env.MONGO_HOST || 'mongo';
 const firebaseEnv = env.FIREBASE_ENV || 'local';
@@ -52,72 +52,8 @@ module.exports = {
       package : 'package',
       githubTeam : 'github-team'
     },
-    filters : ['keywords', 'theme', 'family', 'specific'],
-    indexes : {
-      package : [
-        {
-          index : {
-            name: "text",
-            desciption : "text",
-            keywords: "text",
-            overview: "text"
-          },
-          options : {
-            weights: {
-              name: 10,
-              keywords: 8,
-              overview : 5,
-              desciption : 2
-            },
-            name: "TextIndex",
-            language_override : "_lang"
-          }
-        },
-        {
-          index : {
-            name: 1,
-            keywords: 1,
-            id: 1,
-            githubId : 1,
-            private : 1,
-            createdAt : 1,
-            pushedAt : 1,
-            createdAt : 1
-          },
-          options : {
-            name: "KeywordIndex"
-          }
-        }
-      ],
-      'github-team' : [
-        {
-          index : {
-            slug: 1,
-            id: 1
-          },
-          options : {
-            name: "GithubTeamIndex"
-          }
-        },
-        {
-          index : {
-            repos : 1
-          },
-          options : {
-            name: "GithubTeamReposIndex"
-          }
-        },
-        {
-          index : {
-            'members.login' : 1,
-            'members.id' : 1
-          },
-          options : {
-            name: "GithubTeamMembersIndex"
-          }
-        }
-      ]
-    }
+    filters : ['keywords', 'theme', 'family', 'specific', 'language'],
+    indexes : require('./mongo-indexes')
   },
 
   // control which attributes are allowed to post

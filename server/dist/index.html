@@ -4,34 +4,8 @@
     <title>EcoSML - Spectral Model Library</title>
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=no">
 
-    <!-- Everyone -->
-    <script src="/webcomponentsjs/webcomponents-loader.js"></script>
-    
-    
-    <script>
-      function importScript(src, asModule) {
-        var script = document.createElement('script');
-        script.src = src;
-        if( asModule ) script.type = 'module';
-        document.head.appendChild(script);
-      }
-    </script>
-
-    <script type="module">
-      importScript('/bundle.js');
-    </script>
-    <script nomodule>
-      importScript('/webcomponentsjs/custom-elements-es5-adapter.js');
-      importScript('/ie-bundle.js');
-    </script>
-    
-    <!-- modern browser -->
-    <!-- <script type="module" src="/bundle.js"></script> -->
-
-    <!-- IE Code -->
-    <!-- <script nomodule src="/webcomponentsjs/custom-elements-es5-adapter"></script> -->
-    <!-- <script nomodule src="/ie-bundle.js"></script> -->
-
+    <script src="/loader/loader.js"></script>
+     
     <style>
       body {
         margin: 0;
@@ -42,9 +16,6 @@
   </head>
 
   <body>
-
-      
-
     <ecosml-app></ecosml-app>
   </body>
 </html>

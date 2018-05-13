@@ -195,10 +195,9 @@ class Firebase extends EventEmitter {
    */
   ackEcoSISEvent(docId) {
     logger.info('Acking EcoSIS sync event: '+docId);
-    return this.firestore
+    return this._deleteFirestoreDoc(this.firestore
       .collection(collections.ecosisOrgs)
-      .doc(docId)
-      .delete()
+      .doc(docId));
   }
 
   /**
@@ -210,10 +209,9 @@ class Firebase extends EventEmitter {
    */
   ackGithubTeamEvent(docId) {
     logger.info('Acking Github team event: '+docId);
-    return this.firestore
+    return this._deleteFirestoreDoc(this.firestore
       .collection(collections.githubTeams)
-      .doc(docId)
-      .delete()
+      .doc(docId));
   }
 
   /**
@@ -225,10 +223,23 @@ class Firebase extends EventEmitter {
    */
   ackGithubCommitEvent(docId) {
     logger.info('Acking Github commit event: '+docId);
-    return this.firestore
+    return this._deleteFirestoreDoc(this.firestore
       .collection(collections.githubCommits)
-      .doc(docId)
-      .delete()
+      .doc(docId));
+  }
+
+  /**
+   * @method _deleteFirestoreDoc
+   * @description make sure the document exists before deleting
+   *
+   * @param {Object} ref firestore document reference
+   *
+   * @returns {Promise}
+   */
+  async _deleteFirestoreDoc(ref) {
+    let snapshot = await ref.get();
+    if( !snapshot.exists ) return;
+    return ref.delete();
   }
 
 

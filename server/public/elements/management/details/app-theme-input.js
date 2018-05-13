@@ -30,21 +30,43 @@ export default class AppThemeInput extends PolymerElement {
       },
       selectedTheme : {
         type : String,
-        value : ''
+        value : '',
+        observer : '_setValues'
       },
       selectedFamily : {
         type : String,
-        value : ''
+        value : '',
+        observer : '_setValues'
       },
       selectedSpecific : {
         type : String,
-        value : ''
+        value : '',
+        observer : '_setValues'
       }
     }
   }
 
-  setValues(pkg) {
-    this.selectedTheme = pkg.theme || '';
+  constructor() {
+    super();
+    this._setValuesTimes = -1;
+  }
+
+  /**
+   * @method _setValues
+   * @description bound to property observers
+   */
+  _setValues() {
+    if( this._setValuesTimer !== -1 ) {
+      clearTimeout(this._setValuesTimer);
+    }
+
+    this._setValuesTimer = setTimeout(() => {
+      this._setValuesTimer = -1;
+      this._setValuesAsync();  
+    }, 50);
+  }
+
+  _setValuesAsync() {
     this.$.theme.value = this.selectedTheme;
 
     if( this.selectedTheme ) {
@@ -55,12 +77,9 @@ export default class AppThemeInput extends PolymerElement {
       this.familyOptions = familyOptions;
     }
 
-    this.selectedFamily = pkg.family || '';
-
     if( this.selectedFamily ) {
       this.specificOptions = VOCAB[this.selectedTheme][this.selectedFamily];
     }
-    this.selectedSpecific = pkg.specific || '';
 
     // have to give dom repeat time to render :(
     requestAnimationFrame(() => {

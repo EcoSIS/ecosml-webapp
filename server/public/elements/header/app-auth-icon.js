@@ -1,4 +1,4 @@
-import {Element as PolymerElement} from "@polymer/polymer/polymer-element"
+import {PolymerElement, html} from "@polymer/polymer"
 import template from "./app-auth-icon.html"
 
 import AuthInterface from "../interfaces/AuthInterface"
@@ -7,7 +7,7 @@ export default class AppAuthIcon extends Mixin(PolymerElement)
   .with(EventInterface, AuthInterface) {
 
   static get template() {
-    return template;
+    return html([template]);
   }
 
   static get properties() {

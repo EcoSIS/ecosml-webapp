@@ -1,4 +1,4 @@
-import {Element as PolymerElement} from "@polymer/polymer/polymer-element"
+import {PolymerElement, html} from "@polymer/polymer"
 import template from "./app-details-metadata.html"
 
 import "./app-keyword-input"
@@ -11,7 +11,7 @@ export default class AppDetailsMetadata extends Mixin(PolymerElement)
   .with(EventInterface) {
 
   static get template() {
-    return template;
+    return html([template]);
   }
 
   static get properties() {
@@ -20,6 +20,11 @@ export default class AppDetailsMetadata extends Mixin(PolymerElement)
         type : Object,
         value : () => {},
         observer : '_onDataUpdate'
+      },
+      active : {
+        type : Boolean,
+        value : false,
+        observer : '_onActiveChange'
       }
     }
   }
@@ -62,6 +67,14 @@ export default class AppDetailsMetadata extends Mixin(PolymerElement)
 
   set specific(value) {
     this.$.theme.selectedFpecific = value || '';
+  }
+
+  /**
+   * @method _onActiveChange
+   * @description bound to 'active' property observer.
+   */
+  _onActiveChange() {
+    this.$.description.autoSize();
   }
 
   /**

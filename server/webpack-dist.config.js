@@ -1,63 +1,14 @@
-const path = require('path');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+let configs = require('@ucd-lib/cork-app-build').dist({
+  // root directory, all paths below will be relative to root
+  root : __dirname,
+  // path to your entry .js file
+  entry : 'public/elements/ecosml-app.js',
+  // folder where bundle.js and ie-bundle.js will be written
+  dist : 'dist',
+  // path your client (most likely installed via yarn) node_modules folder.
+  // Due to the flat:true flag of yarn, it's normally best to separate 
+  // client code/libraries from all other modules (ex: build tools such as this).
+  clientModules : 'public/node_modules'
+});
 
-var modern =  {
-    entry: './public/elements/ecosml-app.js',
-    output: {
-        filename: 'bundle.js',
-        path: path.resolve(__dirname, 'dist')
-    },
-    module : {
-        rules: [
-          {
-            test: /\.(html)$/,
-            use: {
-              loader: 'html-loader',
-              options: {
-                  attrs: false
-              }
-            }
-          },
-          {
-            test: /\.css$/,
-            use: [ 'to-string-loader', 'css-loader' ]
-          }
-        ]
-    }
-};
-
-var ie =  {
-    entry: ['babel-polyfill','./public/elements/ecosml-app.js'],
-    output: {
-        filename: 'ie-bundle.js',
-        path: path.resolve(__dirname, 'dist')
-    },
-    module : {
-      rules: [
-        {
-          test: /\.js$/,
-          use: {
-            loader: 'babel-loader',
-            options: {
-              presets: ["es2015", "stage-0"]
-            }
-          }
-        },
-        {
-          test: /\.(html)$/,
-          use: {
-            loader: 'html-loader',
-            options: {
-                attrs: false
-            }
-          }
-        },
-        {
-          test: /\.css$/,
-          use: [ 'to-string-loader', 'css-loader' ]
-        }
-      ]
-    }
-};
-
-module.exports = [modern, ie];
+module.exports = configs;

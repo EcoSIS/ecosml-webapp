@@ -5,15 +5,26 @@
   .btns {
     display: flex;
     align-items: center;
+    padding-bottom: 5px;
   }
 
   textarea {
     width: 100%;
     min-height: 200px;
+    margin: 0 !important;
   }
 
-  paper-icon-button[disabled] {
-    color: #aaa;
+  app-markdown {
+    border: 1px solid #ccc;
+    padding: 10px;
+    box-shadow: 0 0 5px #ccc inset;
+  }
+
+  paper-button {
+    color: var(--default-secondary-color);
+  }
+  paper-button[disabled] {
+    color: var(--disabled-text-color);
   }
 </style>
 
@@ -24,8 +35,14 @@
     <span hidden$="[[!previewMode]]">Preview</span>  -->
     <!-- Mode -->
   </div>
-  <paper-icon-button icon="code" disabled$="[[!previewMode]]" on-click="_toggle"></paper-icon-button>
-  <paper-icon-button icon="visibility" disabled$="[[previewMode]]" on-click="_toggle"></paper-icon-button>
+  <paper-button disabled$="[[!previewMode]]" on-click="_toggle" data="edit">
+    <iron-icon icon="code"></iron-icon>
+    &nbsp;Edit
+  </paper-button>
+  <paper-button disabled$="[[previewMode]]" on-click="_toggle" data="preview">
+    <iron-icon icon="visibility"></iron-icon>
+    &nbsp;Preview
+  </paper-button>
 </div>
 
 <iron-pages selected="[[selected]]" attr-for-selected="id">

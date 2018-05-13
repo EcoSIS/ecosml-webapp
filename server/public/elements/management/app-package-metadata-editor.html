@@ -75,7 +75,7 @@
       <paper-tab id="release">Releases</paper-tab>
     </paper-tabs>
 
-    <iron-pages selected="[[selectedSection]]" attr-for-selected="id">
+    <iron-pages selected="[[selectedSection]]" attr-for-selected="id" selected-attribute="active" >
       <app-basic-metadata id="basic" class="main-panel" creating="[[creating]]" on-change="_onDataChange"></app-basic-metadata>
       <app-details-metadata id="details" class="main-panel" on-change="_onDataChange"></app-details-metadata>
       <app-files id="files" class="main-panel" language="[[data.language]]"></app-files>

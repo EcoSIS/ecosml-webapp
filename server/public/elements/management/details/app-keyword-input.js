@@ -1,10 +1,10 @@
-import {Element as PolymerElement} from "@polymer/polymer/polymer-element"
+import {PolymerElement, html} from "@polymer/polymer"
 import template from "./app-keyword-input.html"
 
 export default class AppKeywordInput extends PolymerElement {
 
   static get template() {
-    return template;
+    return html([template]);
   }
 
   static get properties() {

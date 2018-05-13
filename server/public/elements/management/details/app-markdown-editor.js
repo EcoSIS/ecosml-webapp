@@ -1,4 +1,4 @@
-import {Element as PolymerElement} from "@polymer/polymer/polymer-element"
+import {PolymerElement, html} from "@polymer/polymer"
 import template from "./app-markdown-editor.html"
 
 import PackageInterface from "../../interfaces/PackageInterface";
@@ -8,7 +8,7 @@ export default class AppMarkdownEditor extends Mixin(PolymerElement)
   .with(EventInterface, PackageInterface) {
 
   static get template() {
-    return template;
+    return html([template]);
   }
 
   static get properties() {
@@ -35,7 +35,7 @@ export default class AppMarkdownEditor extends Mixin(PolymerElement)
 
   set value(value) {
     this.$.input.value = value;
-    this._autoSize();
+    this.autoSize();
     if( this.previewMode ) this._updatePreview();
   }
 
@@ -55,34 +55,47 @@ export default class AppMarkdownEditor extends Mixin(PolymerElement)
   }
 
   /**
-   * Called by paper-icon-button toggles
+   * @method _toggle
+   * @description bound to paper-button click event
    */
   _toggle(e) {
-    if( e.currentTarget.icon === 'code' ) {
+    if( e.currentTarget.getAttribute('data') === 'edit' ) {
       this.selected = 'input';
-      this._autoSize();
+      this.autoSize();
     } else {
-      this.$.preview.style.height = this.$.input.offsetHeight+'px';
+      // this.$.preview.style.height = this.$.input.offsetHeight+'px';
       this.selected = 'preview';
       this._updatePreview();
     }
   }
 
   /**
-   * update markdown previeew
+   * update markdown preview
    */
   async _updatePreview() {
     this.$.preview.render(this.value);
   }
 
+  /**
+   * @method _onTextAreaKeyUp
+   * @description bound to textarea keyup events
+   */
   _onTextAreaKeyUp() {
-    this._autoSize();
+    this.autoSize();
   }
 
-  _autoSize() {
+  /**
+   * @method autoSize
+   * @description ensure the input textarea has no scroll bar.  ie
+   * is same height as text
+   */
+  autoSize() {
     setTimeout(() => {
       this.$.input.style.height = (this.$.input.scrollHeight) + 'px';
     }, 0);
+    setTimeout(() => {
+      this.$.input.style.height = (this.$.input.scrollHeight) + 'px';
+    }, 100);
   }
 
 

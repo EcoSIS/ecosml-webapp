@@ -1,4 +1,4 @@
-import {Element as PolymerElement} from "@polymer/polymer/polymer-element"
+import {PolymerElement, html} from "@polymer/polymer"
 
 import template from "./app-package-search.html"
 
@@ -14,7 +14,7 @@ class AppPackageSearch extends Mixin(PolymerElement)
       .with(EventInterface, AppStateInterface, SearchInterface) {
 
   static get template() {
-    return template;
+    return html([template]);
   }
 
   static get properties() {

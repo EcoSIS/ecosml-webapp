@@ -1,4 +1,4 @@
-import {Element as PolymerElement} from "@polymer/polymer/polymer-element"
+import {PolymerElement, html} from "@polymer/polymer"
 import template from "./app-basic-metadata.html"
 
 import "./app-org-input"
@@ -11,7 +11,7 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
   .with(EventInterface, AppStateInterface, PackageInterface) {
 
   static get template() {
-    return template;
+    return html([template]);
   }
 
   static get properties() {

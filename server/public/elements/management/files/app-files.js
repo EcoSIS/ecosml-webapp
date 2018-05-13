@@ -1,4 +1,4 @@
-import {Element as PolymerElement} from "@polymer/polymer/polymer-element"
+import {PolymerElement, html} from "@polymer/polymer"
 import template from "./app-files.html"
 
 import "./app-file-manager"
@@ -7,7 +7,7 @@ import "./app-example-editor"
 export default class AppFiles extends PolymerElement {
 
   static get template() {
-    return template;
+    return html([template]);
   }
 
   static get properties() {

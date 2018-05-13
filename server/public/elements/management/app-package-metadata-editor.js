@@ -1,4 +1,4 @@
-import {Element as PolymerElement} from "@polymer/polymer/polymer-element"
+import {PolymerElement, html} from "@polymer/polymer"
 import "@polymer/paper-input/paper-input"
 import "@polymer/paper-input/paper-textarea"
 import "@polymer/paper-toast/paper-toast"
@@ -18,7 +18,7 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
       .with(EventInterface, AppStateInterface, PackageInterface) {
 
   static get template() {
-    return template;
+    return html([template]);
   }
 
   static get properties() {

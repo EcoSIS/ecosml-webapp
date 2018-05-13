@@ -1,9 +1,9 @@
-import {Element as PolymerElement} from "@polymer/polymer/polymer-element"
+import {PolymerElement, html} from "@polymer/polymer"
 import template from "./app-title-card.html"
 
 export class AppTitleCard extends PolymerElement {
   static get template() {
-    return template;
+    return html([template]);
   }
 }
 

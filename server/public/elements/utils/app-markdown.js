@@ -1,4 +1,4 @@
-import {Element as PolymerElement} from "@polymer/polymer/polymer-element"
+import {PolymerElement, html} from "@polymer/polymer"
 import template from "./app-markdown.html"
 
 import PackageInterface from "../interfaces/PackageInterface"
@@ -14,9 +14,11 @@ export default class AppMarkdown extends Mixin(PolymerElement)
   .with(EventInterface, PackageInterface) {
 
   static get template() {
-    return template + 
-          '<style>'+css+'</style>' +
-          '<style>'+prismCss+'</style>';
+    return html([`
+      ${template} 
+      <style>${css}</style>
+      <style>${prismCss}</style>
+    `]);
   }
 
   async render(markdown) {

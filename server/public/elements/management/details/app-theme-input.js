@@ -1,4 +1,4 @@
-import {Element as PolymerElement} from "@polymer/polymer/polymer-element"
+import {PolymerElement, html} from "@polymer/polymer"
 import template from "./app-theme-input.html"
 
 import VOCAB from "../../../lib/controlled-vocabulary"
@@ -11,7 +11,7 @@ for( let theme in VOCAB ) {
 export default class AppThemeInput extends PolymerElement {
 
   static get template() {
-    return template;
+    return html([template]);
   }
 
   static get properties() {

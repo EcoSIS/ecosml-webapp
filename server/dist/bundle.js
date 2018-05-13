@@ -13330,7 +13330,7 @@ const html = function html(strings, ...values) {
   const template = /** @type {!HTMLTemplateElement} */(document.createElement('template'));
   template.innerHTML = values.reduce((acc, v, idx) =>
     acc + htmlValue(v) + strings[idx + 1], strings[0]);
-  return template;
+  return html([template]);
 };
 /* harmony export (immutable) */ __webpack_exports__["a"] = html;
 

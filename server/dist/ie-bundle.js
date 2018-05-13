@@ -17418,7 +17418,7 @@ var html = exports.html = function html(strings) {
   template.innerHTML = values.reduce(function (acc, v, idx) {
     return acc + htmlValue(v) + strings[idx + 1];
   }, strings[0]);
-  return template;
+  return html([template]);
 };
 
 /***/ }),

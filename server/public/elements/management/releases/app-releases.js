@@ -1,4 +1,4 @@
-import {Element as PolymerElement} from "@polymer/polymer/polymer-element"
+import {PolymerElement, html} from "@polymer/polymer"
 import template from "./app-releases.html"
 
 import PackageInferface from "../../interfaces/PackageInterface"
@@ -7,7 +7,7 @@ export default class AppReleases extends Mixin(PolymerElement)
   .with(EventInterface, PackageInferface) {
 
   static get template() {
-    return template;
+    return html([template]);
   }
 
   static get properties() {

@@ -1,4 +1,4 @@
-import {Element as PolymerElement} from "@polymer/polymer/polymer-element"
+import {PolymerElement, html} from "@polymer/polymer"
 import template from "./app-user-account.html"
 
 import AuthInterface from "../interfaces/AuthInterface"
@@ -12,7 +12,7 @@ export default class AppUserAccount extends Mixin(PolymerElement)
   .with(EventInterface, AuthInterface, SearchInterface) {
 
   static get template() {
-    return template;
+    return html([template]);
   }
 
   static get properties() {

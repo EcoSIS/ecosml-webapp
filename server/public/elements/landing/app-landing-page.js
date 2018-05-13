@@ -1,4 +1,4 @@
-import {Element as PolymerElement} from "@polymer/polymer/polymer-element"
+import {PolymerElement, html} from "@polymer/polymer"
 import template from "./app-landing-page.html"
 
 import AppStateInterface from "../interfaces/AppStateInterface"
@@ -12,7 +12,7 @@ export default class AppLandingPage extends Mixin(PolymerElement)
   .with(EventInterface, AppStateInterface, PackageInterface, SearchInterface, AuthInterface) {
 
   static get template() {
-    return template;
+    return html([template]);
   }
 
   static get properties() {

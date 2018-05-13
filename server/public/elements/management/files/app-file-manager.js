@@ -1,4 +1,4 @@
-import {Element as PolymerElement} from "@polymer/polymer/polymer-element"
+import {PolymerElement, html} from "@polymer/polymer"
 import template from "./app-file-manager.html"
 
 import "./app-file-uploader"
@@ -8,7 +8,7 @@ export default class AppFileManager extends Mixin(PolymerElement)
   .with(EventInterface, PackageInterface) {
 
   static get template() {
-    return template;
+    return html([template]);
   }
 
   static get properties() {

@@ -1,4 +1,4 @@
-import {Element as PolymerElement} from "@polymer/polymer/polymer-element"
+import {PolymerElement, html} from "@polymer/polymer"
 import template from "./app-filters-panel.html"
 import SearchInterface from "../../interfaces/SearchInterface"
 import "./app-filter-panel"
@@ -7,7 +7,7 @@ export default class AppFiltersPanel extends Mixin(PolymerElement)
   .with(EventInterface, SearchInterface) {
 
   static get template() {
-    return template;
+    return html([template]);
   }
 
   static get properties() {

@@ -15,7 +15,7 @@ services:
       - ECOSIS_HOST=${ECOSIS_HOST}
       - SERVER_ASSET_DIR=dist
       - GITHUB_ORG=ecosml-dev
-      - FIRESTORE_ENV=dev
+      - FIREBASE_ENV=dev
 
   redis:
     image: redis:3.2

@@ -232,7 +232,7 @@ class GithubSync {
    * @returns {Promise} 
    */
   async syncTeamToMongo(team) {
-    if( typeof team !== 'Object' ) {
+    if( typeof team !== 'object' ) {
       let {response} = await github.getTeam(team);
       team = JSON.parse(response.body);
     }
@@ -314,7 +314,7 @@ class GithubSync {
     }
 
     // make sure package permissions are correct
-    if( team !== null || teamCreateResp ) {
+    if( team !== null ) {
       if( !team.repos ) team.repos = [];
 
       // check all packages have permissions

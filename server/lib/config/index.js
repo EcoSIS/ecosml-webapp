@@ -1,6 +1,7 @@
 const env = process.env;
 const path = require('path');
 const secrets = require('../../secrets');
+const keyPath = path.join(__dirname, '../../google-key.json');
 
 const mongoHost = env.MONGO_HOST || 'mongo';
 const firebaseEnv = env.FIREBASE_ENV || 'local';
@@ -77,6 +78,11 @@ module.exports = {
   git : {
     name : 'EcoSML Admin',
     email : 'admin@ecosml.org'
+  },
+
+  google : {
+    key : secrets.google,
+    keyPath : keyPath
   },
 
   firebase : {

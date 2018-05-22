@@ -10,6 +10,7 @@ class Firebase extends EventEmitter {
     super();
 
     admin.initializeApp({
+      databaseURL: `https://${config.firebase.key.project_id}.firebaseio.com`,
       credential: admin.credential.cert(config.firebase.key)
     });
 
@@ -27,6 +28,14 @@ class Firebase extends EventEmitter {
     }
 
     logger.info('Firebase env: '+config.firebase.env);
+
+    admin.database().ref('.info/connected').on('value', function(connectedSnap) {
+      if (connectedSnap.val() === true) {
+        logger.info('Connected to firestore');
+      } else {
+        logger.error('Lost firestore connection');
+      }
+    });
   }
 
   initObservers() {

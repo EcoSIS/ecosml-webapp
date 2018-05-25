@@ -19,6 +19,16 @@ process.on('uncaughtException', e => {
 });
 
 /**
+ * Simple HTTP logging
+ */
+app.use((req, res, next) => {
+  res.on('finish',() => {
+    logger.info(`${res.statusCode} ${req.method} ${req.protocol}/${req.httpVersion} ${req.originalUrl || req.url} ${req.get('User-Agent') || 'no-user-agent'}`);
+  });
+  next();
+});
+
+/**
  * Setup sessions
  */
 const RedisStore = require('connect-redis')(session); 

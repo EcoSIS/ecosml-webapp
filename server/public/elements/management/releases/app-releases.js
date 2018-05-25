@@ -1,5 +1,6 @@
 import {PolymerElement, html} from "@polymer/polymer"
 import template from "./app-releases.html"
+import "./app-release"
 
 import PackageInferface from "../../interfaces/PackageInterface"
 
@@ -17,14 +18,9 @@ export default class AppReleases extends Mixin(PolymerElement)
         value : () => [],
         observer : '_onReleasesUpdate'
       },
-      releasesInverse : {
-        type : Array,
-        value : () => []
-      },
       package : {
         type : Object,
-        value : () => {},
-        observer : '_tmp'
+        value : () => ({})
       },
       creating : {
         type : Boolean,
@@ -37,12 +33,24 @@ export default class AppReleases extends Mixin(PolymerElement)
       release : {
         type : String,
         value : ''
+      },
+      priorReleases : {
+        type : Array,
+        value : () => []
+      },
+      hasPriorReleases : {
+        type : Boolean,
+        value : false
+      },
+      hasCurrentRelease : {
+        type : Boolean,
+        value : false
+      },
+      currentRelease : {
+        type : Object,
+        value : null
       }
     }
-  }
-
-  _tmp() {
-    console.log(this.package);
   }
 
   get major() {
@@ -95,19 +103,31 @@ export default class AppReleases extends Mixin(PolymerElement)
    * @description called from releases property observer
    */
   _onReleasesUpdate() {
-    let index = this.releases.length-1;
-    if( index === -1 ) {
+    if( !this.releases.length ) {
       this.release = '';
+      this.priorReleases = [];
+      this.currentRelease = null;
+      this.hasCurrentRelease = false;
+      this.hasPriorReleases = false;
       this._render();
       return;
     }
 
-    this.releases[index].latest = true;
-    this.releasesInverse = this.releases.slice().reverse();
+    let releasesInverse = this.releases.slice().reverse();
 
-    this.release = this.releases[index].name;
+    this.hasCurrentRelease = true;
+    this.currentRelease = releasesInverse.shift();
+
+    if( releasesInverse.length ) {
+      this.priorReleases = releasesInverse;
+      this.hasPriorReleases = true;
+    } else {
+      this.priorReleases = [];
+      this.hasPriorReleases = false;
+    }
+
+    this.release = this.currentRelease.name;
     this._render();
-    this.patch++;
   }
 
   /**
@@ -122,12 +142,16 @@ export default class AppReleases extends Mixin(PolymerElement)
       return;
     }
 
-    let parts = this.release.replace(/^v/, '').split('.');
+    let parts = this.release
+      .replace(/^v/, '')
+      .split('.')
+      .map(r => parseInt(r));
+
     if( parts.length < 3 ) return;
 
     this.major = parts[0];
     this.minor = parts[1];
-    this.patch = parts[2];
+    this.patch = parts[2] + 1;
   }
 
   /**
@@ -149,17 +173,16 @@ export default class AppReleases extends Mixin(PolymerElement)
       description : this.$.description.value
     }
 
-    try {
-      this.saving = true;
-      await this._createRelease(this.package.name, info);
-      alert('Release '+info.name+' created');
-      this.showList();
-    } catch(e) {
-      let body = await e.details.json()
-      alert(body.message);
-    }
-
+    this.saving = true;
+    let resp = await this._createRelease(this.package.name, info);
     this.saving = false;
+    this.showList();
+
+    if( resp.state === 'error' ) {
+      alert('Error creating release: '+resp.error.message);
+    } else {
+      alert('Release '+info.name+' created');
+    }
   }
 
 }

@@ -127,7 +127,7 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
    * @method _onPackageUpdate
    * @description via package interface, called when package data updates
    */
-  _setPackageData(e) {
+  _onPackageUpdate(e) {
     if( e.state !== 'loaded' ) return;
     if( e.id !== this.packageId ) return;
     this._setPackageData(e.payload);
@@ -156,14 +156,7 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
 
     // set release info
     this.$.release.package = pkgData;
-    if( pkgData.releases && pkgData.releases.length ) {
-      let cRelease = pkgData.releases[pkgData.releases.length-1].name;
-      this.$.release.releases = pkgData.releases;
-      this.$.release.currentRelease = cRelease;
-    } else {
-      this.$.release.releases = [];
-      this.$.release.currentRelease = null;
-    }
+    this.$.release.releases = (pkgData.releases || []);
   }
 
   /**

@@ -1,0 +1,32 @@
+<style include="shared-styles">
+  :host {
+    display: block;
+  }
+  .row {
+    display: flex;
+    align-items: center;
+  }
+  .description {
+    font-style: italic;
+    flex: 1;
+  }
+</style>
+
+<div style="display:flex">
+  <div style="padding-right: 5px">
+    <iron-icon icon="editor:linear-scale"></iron-icon>
+  </div>
+  <div style="flex:1">
+    <div class="row">
+      <div style="flex:1">[[name]]</div>
+      <div>[[published]]</div>
+    </div>
+    
+    <div class="row">
+      <div class="description">[[description]]</div>
+      <div><a href$="[[zipballUrl]]">Download</a></div>
+    </div>
+  </div>
+</div>
+
+

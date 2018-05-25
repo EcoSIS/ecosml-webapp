@@ -83,8 +83,11 @@ class PackageModel extends BaseModel {
    * 
    * @returns {Promise} fetch promise
    */
-  createRelease(id, releaseInfo) {
-    return this.service.createRelease(id, releaseInfo);
+  async createRelease(id, releaseInfo) {
+    try {
+      await this.service.createRelease(id, releaseInfo);
+    } catch(e) {}
+    return this.store.data.createRelease;
   }
 
   /**

@@ -16,6 +16,18 @@
     font-size: 40px;
   }
 
+  app-release {
+    padding-bottom: 15px;
+  }
+
+  .release-header {
+    font-weight: bold;
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+    font-size: 18px;
+    border-bottom: 1px solid var(--dark-background-color);
+  }
+
   paper-button {
     font-size: 14px;
     color: var(--light-secondary-color);
@@ -59,12 +71,20 @@
 
 <div hidden$="[[creating]]">
   <div><a href="[[package.htmlUrl]]/releases" target="_blank">View on GitHub</a></div>
-  <template is="dom-repeat" items="[[releasesInverse]]">
-    <div>
-      <h4>[[item.name]]</h4>
-      <div>[[item.body]]</div>
-      <div>Published [[item.publishedAt]]</div>
-      <div><a href$="[[item.zipballUrl]]">Download</a></div>
-    </div>
-  </template>
+
+  <div hidden$="[[hasCurrentRelease]]">
+    Click create above to <b>create</b> the packages first release!
+  </div>
+
+  <div hidden$="[[!hasCurrentRelease]]" style="padding: 15px 0"> 
+    <div class="release-header">Current Release</div>
+    <app-release release="[[currentRelease]]"></app-release>
+  </div>
+  
+  <div hidden$="[[!hasPriorReleases]]">
+    <div class="release-header">Prior Releases</div>
+    <template is="dom-repeat" items="[[priorReleases]]">
+      <app-release release="[[item]]"></app-release>
+    </template>
+  </div>
 </div>

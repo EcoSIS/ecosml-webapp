@@ -16,7 +16,7 @@ module.exports = {
     loglevel : env.SERVER_LOG_LEVEL || 'debug',
 
     jwt : {
-      secret : env.JWT_SECRET || 'not set'
+      secret : env.JWT_SECRET || secrets.ecosml.secret
     },
 
     auth : {

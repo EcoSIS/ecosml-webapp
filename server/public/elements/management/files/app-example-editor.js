@@ -111,8 +111,7 @@ export default class AppExampleEditor extends Mixin(PolymerElement)
    */
   _onFileUpdate(e) {
     if( e.payload.dir.indexOf(this.directory) !== 0 ) return;
-    console.log(e.payload.dir, this.directory);
-    
+
     this.creating = false;
     this._updatePanelHeight();
   }

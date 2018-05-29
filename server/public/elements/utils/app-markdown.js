@@ -21,10 +21,21 @@ export default class AppMarkdown extends Mixin(PolymerElement)
     `]);
   }
 
-  async render(markdown) {
+  /**
+   * @method render
+   * @description render markdown content
+   * 
+   * @param {String} markdown 
+   * @param {Number} height optional 
+   */
+  async render(markdown, height) {
+    if( height ) this.style.height = height+'px'; 
+
     this.$.root.innerHTML = 'Rendering...';
     let {body} = await this._previewMarkdown(markdown);
     this.show(body);
+
+    if( height ) this.style.height = 'auto'; 
   }
 
   show(html) {

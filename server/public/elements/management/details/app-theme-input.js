@@ -42,6 +42,11 @@ export default class AppThemeInput extends PolymerElement {
         type : String,
         value : '',
         observer : '_setValues'
+      },
+      showSpecific : {
+        type : Boolean,
+        value : false,
+        computed : '_showSpecific(selectedFamily, specificOptions)'
       }
     }
   }
@@ -155,6 +160,17 @@ export default class AppThemeInput extends PolymerElement {
       specific : this.selectedSpecific
     }
     this.dispatchEvent(new CustomEvent('update', {detail: e}));
+  }
+
+  /**
+   * @method _showSpecific
+   * @description computes 'showSpecific' property
+   * 
+   * @param {Boolean} selectedFamily 
+   * @param {Array} specificOptions 
+   */
+  _showSpecific(selectedFamily, specificOptions) {
+    return (selectedFamily && specificOptions && specificOptions.length);
   }
 
 

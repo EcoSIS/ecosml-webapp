@@ -16,7 +16,7 @@
   }
 
   .install .script {
-    margin: 15px 0;
+    margin-bottom: 15px;
     overflow: auto;
     white-space: nowrap;
   }
@@ -54,11 +54,13 @@
         <div style="width: 300px">
           <div id="install" class="install">
             <div id="install-python">
-              <div>Language: Python</div>
-              <div>Install via <a href="https://pip.pypa.io/en/stable/" target="_blank">pip.</a></div>
+              <div style="margin-bottom: 15px">Language: Python</div>
+              <div>Install via <a href="https://pip.pypa.io/en/stable/" target="_blank">pip:</a></div>
               <div class="script">
                   <iron-icon icon="chevron-right"></iron-icon>pip install git+https://github.com/ecosml-dev/[[package.name]]
               </div>
+              <div>Use:</div>
+              <div>import testing_pkg_creation.model as model</div>
             </div>
           </div>
           

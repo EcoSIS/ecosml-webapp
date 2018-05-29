@@ -85,6 +85,15 @@ export default class AppLandingPage extends Mixin(PolymerElement)
     this.familyLink = this._getLink('family');
     this.specificLink = this._getLink('specific');
 
+    let children = this.$.install.children;
+    for( var i = 0; i < children.length; i++ ) {
+      children[i].style.display = 'none';
+    }
+    if( this.$[`install-${this.package.language}`] ) {
+      this.$[`install-${this.package.language}`].style.display = 'block';
+    }
+
+    // below is write access rendering
     this.userHasWriteAccess = false;
     if( !this.username ) return;
 
@@ -98,15 +107,6 @@ export default class AppLandingPage extends Mixin(PolymerElement)
     if( inOrg ) {
       this.userHasWriteAccess = true;
     }
-
-    let children = this.$.install.children;
-    for( var i = 0; i < children.length; i++ ) {
-      children[i].style.display = 'none';
-    }
-    if( this.$.install[`install-${this.package.language}`] ) {
-      this.$.install[`install-${this.package.language}`].style.display = 'block';
-    }
-
   }
 
   /**

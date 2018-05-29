@@ -63,17 +63,20 @@ export default class AppMarkdownEditor extends Mixin(PolymerElement)
       this.selected = 'input';
       this.autoSize();
     } else {
-      // this.$.preview.style.height = this.$.input.offsetHeight+'px';
+      let height = this.$.input.offsetHeight;
       this.selected = 'preview';
-      this._updatePreview();
+      this._updatePreview(height);
     }
   }
 
   /**
-   * update markdown preview
+   * @method _updatePreview
+   * @description update markdown preview
+   * 
+   * @param {Number} height optional
    */
-  async _updatePreview() {
-    this.$.preview.render(this.value);
+  async _updatePreview(height) {
+    this.$.preview.render(this.value, height);
   }
 
   /**

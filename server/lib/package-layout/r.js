@@ -27,8 +27,8 @@ class RPackageLayout extends LanguageLayout {
     return path.join(this.getPackageRootDir(pkgName), this.MAIN_DIR_NAME);
   }
 
-  getCoeffientsDir(pkgName) {
-    return path.join(this.getPackageRootDir(pkgName), this.COEFFIENTS_DIR_NAME);
+  getResourcesDir(pkgName) {
+    return path.join(this.getPackageRootDir(pkgName), this.RESOURCES_DIR_NAME);
   }
 }
 

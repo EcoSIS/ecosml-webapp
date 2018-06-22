@@ -4,11 +4,11 @@ const basicLayout = require('./basic');
 
 class LanguagePackageLayout extends PackageLayout {
   async ensureLayout(pkg) {    
-    let coeffDir = basicLayout.getCoeffientsDir(pkg.name);
-    if( fs.existsSync(coeffDir) ) {
-      await fs.move(coeffDir, this.getCoeffientsDir(pkg.name));
+    let rDir = basicLayout.getResourcesDir(pkg.name);
+    if( fs.existsSync(rDir) ) {
+      await fs.move(rDir, this.getResourcesDir(pkg.name));
     }
-    await fs.mkdirs(this.getCoeffientsDir(pkg.name));
+    await fs.mkdirs(this.getResourcesDir(pkg.name));
 
     let exampleDir = basicLayout.getExamplesDir(pkg.name);
     if( fs.existsSync(exampleDir) ) {
@@ -26,9 +26,9 @@ class LanguagePackageLayout extends PackageLayout {
   }
 
   async undoLayout(pkg) {
-    let coeffDir = this.getCoeffientsDir(pkg.name);
-    if( fs.existsSync(coeffDir) )  {
-      await fs.move(coeffDir, basicLayout.getCoeffientsDir(pkg.name));
+    let rDir = this.getResourcesDir(pkg.name);
+    if( fs.existsSync(rDir) )  {
+      await fs.move(rDir, basicLayout.getResourcesDir(pkg.name));
     } 
 
     let exampleDir = this.getExamplesDir(pkg.name);
@@ -56,8 +56,8 @@ class LanguagePackageLayout extends PackageLayout {
     return basicLayout.getMainDir(pkgName);
   }
 
-  getCoeffientsDir(pkgName) {
-    return basicLayout.getCoeffientsDir(pkgName);
+  getResourcesDir(pkgName) {
+    return basicLayout.getResourcesDir(pkgName);
   }
 }
 

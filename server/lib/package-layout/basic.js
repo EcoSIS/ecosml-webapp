@@ -16,9 +16,9 @@ class BasicPackageLayout extends PackageLayout {
       await fs.mkdirs(mainDir);
     }
 
-    let coeffientsDir = this.getCoeffientsDir(pkg.name);
-    if( !fs.existsSync(coeffientsDir) ) {
-      await fs.mkdirs(coeffientsDir);
+    let resourcesDir = this.getResourcesDir(pkg.name);
+    if( !fs.existsSync(resourcesDir) ) {
+      await fs.mkdirs(resourcesDir);
     }
   }
 
@@ -47,9 +47,9 @@ class BasicPackageLayout extends PackageLayout {
     return path.join(rootDir, this.MAIN_DIR_NAME);
   }
 
-  getCoeffientsDir(pkgName) {
+  getResourcesDir(pkgName) {
     let rootDir = git.getRepoPath(pkgName);
-    return path.join(rootDir, this.COEFFIENTS_DIR_NAME);
+    return path.join(rootDir, this.RESOURCES_DIR_NAME);
   }
 
   getPapersDir(pkgName) {

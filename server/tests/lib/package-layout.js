@@ -26,7 +26,7 @@ describe('Package Layout', function() {
 
     let dir = layout.python.getPackageRootDir(pkg.name);
     assert.equal(fs.existsSync(path.join(dir, '__init__.py')), true);
-    assert.equal(fs.existsSync(path.join(dir, layout.python.COEFFIENTS_DIR_NAME, '__init__.py')), true);
+    assert.equal(fs.existsSync(path.join(dir, layout.python.RESOURCES_DIR_NAME, '__init__.py')), true);
     assert.equal(fs.existsSync(path.join(dir, layout.python.MAIN_DIR_NAME, '__init__.py')), true);
     assert.equal(fs.existsSync(path.join(git.getRepoPath(pkg.name), layout.python.PAPERS_DIR_NAME)), true);
   });
@@ -46,13 +46,13 @@ describe('Package Layout', function() {
     
     await fs.writeFile(path.join(layout.python.getRootDir(pkg.name), 'tmp'), '');
     await fs.writeFile(path.join(layout.python.getExamplesDir(pkg.name), 'tmp'), 'example')
-    await fs.writeFile(path.join(layout.python.getCoeffientsDir(pkg.name), 'tmp'), 'coeffients')
+    await fs.writeFile(path.join(layout.python.getResourcesDir(pkg.name), 'tmp'), 'resources')
     await fs.writeFile(path.join(layout.python.getMainDir(pkg.name), 'tmp'), 'main')
     await fs.writeFile(path.join(layout.python.getPapersDir(pkg.name), 'tmp'), 'papers')
 
     let dir = layout.python.getRootDir(pkg.name);
     assert.equal(fs.existsSync(path.join(dir, layout.python.EXAMPLES_DIR_NAME, 'tmp')), true);
-    assert.equal(fs.existsSync(path.join(dir, layout.python.getPackageDirName(pkg.name), layout.python.COEFFIENTS_DIR_NAME, 'tmp')), true);
+    assert.equal(fs.existsSync(path.join(dir, layout.python.getPackageDirName(pkg.name), layout.python.RESOURCES_DIR_NAME, 'tmp')), true);
     assert.equal(fs.existsSync(path.join(dir, layout.python.getPackageDirName(pkg.name), layout.python.MAIN_DIR_NAME, 'tmp')), true);
     assert.equal(fs.existsSync(path.join(dir, layout.python.PAPERS_DIR_NAME, 'tmp')), true);
   });
@@ -62,7 +62,7 @@ describe('Package Layout', function() {
 
     let dir = git.getRepoPath(pkg.name);
     assert.equal(fs.existsSync(path.join(dir, layout.python.EXAMPLES_DIR_NAME, 'tmp')), true);
-    assert.equal(fs.existsSync(path.join(dir, layout.python.COEFFIENTS_DIR_NAME, 'tmp')), true);
+    assert.equal(fs.existsSync(path.join(dir, layout.python.RESOURCES_DIR_NAME, 'tmp')), true);
     assert.equal(fs.existsSync(path.join(dir, layout.python.MAIN_DIR_NAME, 'tmp')), true);
     assert.equal(fs.existsSync(path.join(git.getRepoPath(pkg.name), layout.python.PAPERS_DIR_NAME, 'tmp')), true);
   });
@@ -72,12 +72,12 @@ describe('Package Layout', function() {
 
     let dir = layout.python.getPackageRootDir(pkg.name);
     assert.equal(fs.existsSync(path.join(git.getRepoPath(pkg.name), layout.python.EXAMPLES_DIR_NAME, 'tmp')), true);
-    assert.equal(fs.existsSync(path.join(dir, layout.python.COEFFIENTS_DIR_NAME, 'tmp')), true);
+    assert.equal(fs.existsSync(path.join(dir, layout.python.RESOURCES_DIR_NAME, 'tmp')), true);
     assert.equal(fs.existsSync(path.join(dir, layout.python.MAIN_DIR_NAME, 'tmp')), true);
     assert.equal(fs.existsSync(path.join(git.getRepoPath(pkg.name), layout.python.PAPERS_DIR_NAME, 'tmp')), true);
 
     assert.equal(fs.existsSync(path.join(dir, '__init__.py')), true);
-    assert.equal(fs.existsSync(path.join(dir, layout.python.COEFFIENTS_DIR_NAME, '__init__.py')), true);
+    assert.equal(fs.existsSync(path.join(dir, layout.python.RESOURCES_DIR_NAME, '__init__.py')), true);
     assert.equal(fs.existsSync(path.join(dir, layout.python.MAIN_DIR_NAME, '__init__.py')), true);
   });
 
@@ -87,7 +87,7 @@ describe('Package Layout', function() {
 
     let dir = layout.r.getPackageRootDir(pkg.name);
     assert.equal(fs.existsSync(path.join(git.getRepoPath(pkg.name), layout.python.EXAMPLES_DIR_NAME, 'tmp')), true);
-    assert.equal(fs.existsSync(path.join(dir, layout.python.COEFFIENTS_DIR_NAME, 'tmp')), true);
+    assert.equal(fs.existsSync(path.join(dir, layout.python.RESOURCES_DIR_NAME, 'tmp')), true);
     assert.equal(fs.existsSync(path.join(dir, layout.python.MAIN_DIR_NAME, 'tmp')), true);
     assert.equal(fs.existsSync(path.join(git.getRepoPath(pkg.name), layout.python.PAPERS_DIR_NAME, 'tmp')), true);
   });
@@ -97,7 +97,7 @@ describe('Package Layout', function() {
 
     let dir = git.getRepoPath(pkg.name);
     assert.equal(fs.existsSync(path.join(git.getRepoPath(pkg.name), layout.python.EXAMPLES_DIR_NAME, 'tmp')), true);
-    assert.equal(fs.existsSync(path.join(dir, layout.python.COEFFIENTS_DIR_NAME, 'tmp')), true);
+    assert.equal(fs.existsSync(path.join(dir, layout.python.RESOURCES_DIR_NAME, 'tmp')), true);
     assert.equal(fs.existsSync(path.join(dir, layout.python.MAIN_DIR_NAME, 'tmp')), true);
     assert.equal(fs.existsSync(path.join(git.getRepoPath(pkg.name), layout.python.PAPERS_DIR_NAME, 'tmp')), true);
   });

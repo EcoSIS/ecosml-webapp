@@ -22,8 +22,8 @@ class PythonPackageLayout extends LanguageLayout {
     let pInit = path.join(this.getPackageRootDir(pkg.name), '__init__.py');
     if( !fs.existsSync(pInit) ) await fs.writeFile(pInit, '');
 
-    let coInit = path.join(this.getCoeffientsDir(pkg.name), '__init__.py');
-    if( !fs.existsSync(coInit) ) await fs.writeFile(coInit, '');
+    let rInit = path.join(this.getResourcesDir(pkg.name), '__init__.py');
+    if( !fs.existsSync(rInit) ) await fs.writeFile(rInit, '');
     
     let mInit = path.join(this.getMainDir(pkg.name), '__init__.py');
     if( !fs.existsSync(mInit) ) await fs.writeFile(mInit, '');
@@ -76,8 +76,8 @@ class PythonPackageLayout extends LanguageLayout {
     await super.undoLayout(pkg);
 
     // remove __init__.py files
-    let coInit = path.join(super.getCoeffientsDir(pkg.name), '__init__.py');
-    if( fs.existsSync(coInit) ) await fs.unlink(coInit);
+    let rInit = path.join(super.getResourcesDir(pkg.name), '__init__.py');
+    if( fs.existsSync(rInit) ) await fs.unlink(rInit);
     
     let mInit = path.join(super.getMainDir(pkg.name), '__init__.py');
     if( fs.existsSync(mInit) ) await fs.unlink(mInit);
@@ -159,8 +159,8 @@ class PythonPackageLayout extends LanguageLayout {
     return path.join(this.getPackageRootDir(pkgName), this.MAIN_DIR_NAME);
   }
 
-  getCoeffientsDir(pkgName) {
-    return path.join(this.getPackageRootDir(pkgName), this.COEFFIENTS_DIR_NAME);
+  getResourcesDir(pkgName) {
+    return path.join(this.getPackageRootDir(pkgName), this.RESOURCES_DIR_NAME);
   }
 }
 

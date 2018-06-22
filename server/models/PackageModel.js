@@ -231,7 +231,7 @@ class PackageModel {
     // update repo path
     await git.resetHEAD(pkg.name);
 
-    // if this is the main or coeffients directory, move files to correct location
+    // if this is the main or resources directory, move files to correct location
     let dir = this._sanitizePath(file.dir);
     let pkgLayout = this._getPackageLayout(pkg.language);
     let baseFileDir = pkgLayout.genericToAbsLangPath(dir, pkg);
@@ -429,6 +429,7 @@ class PackageModel {
     pkg = await this.get(pkg);
 
     let dir = await git.ensureDir(pkg.name);
+    console.log(dir);
     return this._walkPackage(dir, dir, [], pkg);
   }
 

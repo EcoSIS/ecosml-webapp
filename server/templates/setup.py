@@ -17,7 +17,7 @@ setup(
         '{{name}}.main'
     ],
     package_data={
-      '{{name}}' : ['coefficients/*']
+      '{{name}}' : ['resources/*']
     },
     long_description=read('README.md'),
     classifiers=[

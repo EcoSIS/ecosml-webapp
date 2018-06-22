@@ -17,7 +17,7 @@
 
 <div class="layout">
   <div>
-    <h3>Category</h3>
+    <h3 hidden$="[[hideLabels]]">Category</h3>
     <select id="theme" on-change="_onThemeSelect">
       <option></option>
       <template is="dom-repeat" items="[[themeOptions]]">
@@ -26,9 +26,9 @@
     </select>
   </div>
 
-  <div hidden$="[[!selectedTheme]]">
-    <h3>Family</h3>
-    <select on-change="_onFamilySelect" id="family">
+  <div>
+    <h3 hidden$="[[hideLabels]]">Family</h3>
+    <select on-change="_onFamilySelect" id="family" hidden$="[[!selectedTheme]]">
       <option></option>
       <template is="dom-repeat" items="[[familyOptions]]">
         <option value$="[[item]]">[[item]]</option>
@@ -36,9 +36,9 @@
     </select>
   </div>
 
-  <div hidden$="[[!showSpecific]]">
-    <h3>Specific</h3>
-    <select on-change="_onSpecificSelect" id="specific">
+  <div >
+    <h3 hidden$="[[hideLabels]]">Specific</h3>
+    <select on-change="_onSpecificSelect" id="specific" hidden$="[[!showSpecific]]">
       <option></option>
       <template is="dom-repeat" items="[[specificOptions]]">
         <option value$="[[item]]">[[item]]</option>

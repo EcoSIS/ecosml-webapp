@@ -20,13 +20,13 @@
         "items": {"type": "string"}
       },
       "theme" : {
-        "type" : "String"
+        "type" : ["array","string"]
       },
       "family" : {
-        "type" : "string"
+        "type" :  ["array","string"]
       },
       "specific" : {
-        "type" : "string"
+        "type" :  ["array","string"]
       },
       "language" : {
         "type" : "string"

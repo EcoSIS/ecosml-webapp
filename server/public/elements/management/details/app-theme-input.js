@@ -47,6 +47,15 @@ export default class AppThemeInput extends PolymerElement {
         type : Boolean,
         value : false,
         computed : '_showSpecific(selectedFamily, specificOptions)'
+      },
+      index : {
+        type : Number,
+        value : -1
+      },
+      hideLabels : {
+        type : Boolean,
+        value : false,
+        computed : '_computeHideLabels(index)'
       }
     }
   }
@@ -171,6 +180,14 @@ export default class AppThemeInput extends PolymerElement {
    */
   _showSpecific(selectedFamily, specificOptions) {
     return (selectedFamily && specificOptions && specificOptions.length);
+  }
+
+  /**
+   * @method _computeHideLabels
+   * @description bound to computed property for hideLabels
+   */
+  _computeHideLabels() {
+    return (this.index > 0);
   }
 
 

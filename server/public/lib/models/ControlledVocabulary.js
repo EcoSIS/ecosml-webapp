@@ -25,7 +25,7 @@ class ControlledVocabulary {
    * 
    * @returns {Array}
    */
-  getThemeObjectArray(package) {
+  getThemeObjectArray(pkg) {
     let resp = [];
 
     let used = {
@@ -33,9 +33,9 @@ class ControlledVocabulary {
       family : {}
     };
 
-    let specifics = this._getThemeAsArray(package, 'specific');
-    let families = this._getThemeAsArray(package, 'family');
-    let themes = this._getThemeAsArray(package, 'theme');
+    let specifics = this._getThemeAsArray(pkg, 'specific');
+    let families = this._getThemeAsArray(pkg, 'family');
+    let themes = this._getThemeAsArray(pkg, 'theme');
 
     specifics.forEach(val => {
       let family = this.specifics[val];
@@ -49,20 +49,20 @@ class ControlledVocabulary {
 
     families.forEach(val => {
       if( used.family[val] ) return;
-      let theme = this.families[family];
+      let theme = this.families[val];
       used.theme[theme] = true;
       resp.push({theme, family: val});
     });
 
     themes.forEach(val => {
-      if( used.themes[val] ) return;
+      if( used.theme[val] ) return;
       resp.push({theme: val});
     });
 
     return resp;
   }
 
-  themeObjectArrayToPacakgeArrays(themes) {
+  themeObjectArrayToPackageArrays(themes) {
     let values = {
       theme : {},
       family : {},
@@ -76,20 +76,20 @@ class ControlledVocabulary {
     });
 
     for( let key in values ) {
-      values[key] = Object.keys(value[key]);
+      values[key] = Object.keys(values[key]);
     }
 
     return values;
   } 
 
-  _getThemeAsArray(package, key) {
-    let value = package[key];
+  _getThemeAsArray(pkg, key) {
+    let value = pkg[key];
     if( !value ) return [];
     if( Array.isArray(value) ) return value;
     return [value];
   }
 
-  setTheme(package) {
+  setTheme(pkg) {
 
   }
 

@@ -1,0 +1,40 @@
+<style>
+  :host {
+    display: block;
+  }
+
+  .layout {
+    display: flex; 
+    align-items: center;
+    padding: 3px;
+  }
+
+  .rows .layout:nth-child(even) {
+    background-color: #eee;
+  }
+
+  app-theme-input {
+    flex: 1;
+  }
+</style>
+
+<div class="rows">
+  <template is="dom-repeat" items="[[themes]]">
+    <div class="layout">
+      <app-theme-input 
+        selected-theme="[[item.theme]]"
+        selected-family="[[item.family]]"
+        selected-specific="[[item.specific]]"
+        on-update="_onThemeUpdate"
+        index$="[[index]]">
+      </app-theme-input>
+      <paper-icon-button 
+        icon="delete" 
+        index$="[[index]]"
+        on-click="_onDeleteClicked">
+      </paper-icon-button>
+    </div>
+  </template>
+</div>
+
+<paper-button on-click="_onAddClicked">Add</paper-button>

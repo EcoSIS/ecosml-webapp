@@ -3,9 +3,11 @@ import template from "./app-details-metadata.html"
 
 import "./app-keyword-input"
 import "./app-markdown-editor"
-import "./app-theme-input"
+import "./app-multi-theme-input"
 
-const VALUES = ['description', 'keywords', 'theme', 'family', 'specific'];
+import controlledVocabulary from "../../../lib/models/ControlledVocabulary"
+
+const VALUES = ['description', 'keywords'];
 
 export default class AppDetailsMetadata extends Mixin(PolymerElement)
   .with(EventInterface) {
@@ -45,30 +47,6 @@ export default class AppDetailsMetadata extends Mixin(PolymerElement)
     this.$.keywords.value = value || '';
   }
 
-  get theme() {
-    return this.$.theme.selectedTheme;
-  }
-
-  set theme(value) {
-    this.$.theme.selectedTheme = value || '';
-  }
-
-  get family() {
-    return this.$.theme.selectedFamily;
-  }
-
-  set family(value) {
-    this.$.theme.selectedFamily = value || '';
-  }
-
-  get specific() {
-    return this.$.theme.selectedSpecific;
-  }
-
-  set specific(value) {
-    this.$.theme.selectedFpecific = value || '';
-  }
-
   /**
    * @method _onActiveChange
    * @description bound to 'active' property observer.
@@ -89,6 +67,11 @@ export default class AppDetailsMetadata extends Mixin(PolymerElement)
     VALUES.forEach(value => {
       data[value] = this[value];
     });
+
+    data.theme = this.theme || [];
+    data.family = this.family || [];
+    data.specific = this.specific || [];
+
     return data;
   }
 
@@ -101,6 +84,13 @@ export default class AppDetailsMetadata extends Mixin(PolymerElement)
     VALUES.forEach(value => {
       this[value] = this.data[value];
     });
+
+    this.theme = this.data.theme || [];
+    this.family = this.data.family || [];
+    this.specific = this.data.specific || [];
+
+    let themes = controlledVocabulary.getThemeObjectArray(this.data);
+    this.$.theme.themes = themes;
   }
 
   /**
@@ -113,12 +103,14 @@ export default class AppDetailsMetadata extends Mixin(PolymerElement)
 
   /**
    * @method _onThemeUpdate
-   * @description called from the app-theme-input when a value updates
+   * @description called from the app-multi-theme-input when a value updates
    */
   _onThemeUpdate(e) {
-    this.theme = e.detail.theme;
-    this.family = e.detail.family;
-    this.specific = e.detail.specific;
+    let values = controlledVocabulary.themeObjectArrayToPackageArrays(this.$.theme.themes);
+
+    this.theme = values.theme;
+    this.family = values.family;
+    this.specific = values.specific;
 
     this._onInputChange();
   }

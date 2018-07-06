@@ -66,6 +66,10 @@ export default class AppFiles extends PolymerElement {
     });
   }
 
+  _onChange(e) {
+    console.log(e);
+  }
+
 }
 
 customElements.define('app-files', AppFiles);

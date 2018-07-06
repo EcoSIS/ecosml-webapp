@@ -429,7 +429,6 @@ class PackageModel {
     pkg = await this.get(pkg);
 
     let dir = await git.ensureDir(pkg.name);
-    console.log(dir);
     return this._walkPackage(dir, dir, [], pkg);
   }
 
@@ -541,11 +540,11 @@ class PackageModel {
    * @return {Object}
    */
   _getFileInfo(filepath, pkg) {
-    let pkgLayout = this._getPackageLayout(pkg.language);
+    // let pkgLayout = this._getPackageLayout(pkg.language);
 
     let info = path.parse(filepath);
     info.filename = info.base;
-    info.dir = pkgLayout.langPathToGeneric(info.dir, pkg);
+    // info.dir = pkgLayout.langPathToGeneric(info.dir, pkg);
     delete info.root;
     delete info.base;
     return info;

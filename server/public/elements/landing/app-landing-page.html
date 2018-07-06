@@ -57,10 +57,10 @@
               <div style="margin-bottom: 15px">Language: Python</div>
               <div>Install via <a href="https://pip.pypa.io/en/stable/" target="_blank">pip:</a></div>
               <div class="script">
-                  <iron-icon icon="chevron-right"></iron-icon>pip install git+https://github.com/ecosml-dev/[[package.name]]
+                  <iron-icon icon="chevron-right"></iron-icon>pip install git+https://github.com/ecosml-dev/[[package.name]]@[[release.name]]
               </div>
               <div>Use:</div>
-              <div>import testing_pkg_creation.model as model</div>
+              <div>import [[package.name]].main as model</div>
             </div>
           </div>
           
@@ -80,9 +80,26 @@
 
           <div hidden$="[[!package.theme]]">
             <h2 class="uheader green padded">Theme</h2>
-            <div hidden$="[[!package.theme]]">Theme: <a href$="[[themeLink]]">[[package.theme]]</a></div>
-            <div hidden$="[[!package.family]]">Family: <a href$="[[familyLink]]">[[package.family]]</a></div>
-            <div hidden$="[[!package.specific]]">Specific: <a href$="[[specificLink]]">[[package.specific]]</a></div>
+            <div hidden$="[[!showThemes]]">
+              <span>Theme:</span>
+              <template is="dom-repeat" items="[[themes]]">
+                  <a href$="[[item.link]]">[[item.value]]</a>&nbsp;
+              </template>
+            </div>
+
+            <div hidden$="[[!showFamilies]]">
+              <span>Family:</span>
+              <template is="dom-repeat" items="[[families]]">
+                  <a href$="[[item.link]]">[[item.value]]</a>&nbsp;
+              </template>
+            </div>
+
+            <div hidden$="[[!showSpecifics]]">
+              <span>Specific:</span>
+              <template is="dom-repeat" items="[[specifics]]">
+                  <a href$="[[item.link]]">[[item.value]]</a>&nbsp;
+              </template>
+            </div>
           </div>
 
           <div hidden$="[[!package.keywords]]">

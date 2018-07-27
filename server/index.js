@@ -12,11 +12,8 @@ const app = express();
 /**
  * Log promise errors, uncaught exceptions
  */
-process.on('unhandledRejection', e => logger.error(e));
-process.on('uncaughtException', e => {
-  logger.error(e);
-  throw e;
-});
+process.on('unhandledRejection', e => logger.fatal(e));
+process.on('uncaughtException', e => logger.fatal(e));
 
 /**
  * Simple HTTP logging

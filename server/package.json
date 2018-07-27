@@ -31,7 +31,8 @@
     "redis": "^2.8.0",
     "request": "^2.83.0",
     "tmp": "0.0.33",
-    "uuid": "^3.1.0"
+    "uuid": "^3.1.0",
+    "version": "^0.1.2"
   },
   "devDependencies": {
     "@ucd-lib/cork-app-build": "^0.1.3",

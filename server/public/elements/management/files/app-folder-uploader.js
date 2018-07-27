@@ -2,7 +2,6 @@ import {PolymerElement, html} from "@polymer/polymer"
 import template from "./app-folder-uploader.html"
 
 import PackageInterface from "../../interfaces/PackageInterface"
-import { join } from "path";
 
 export default class AppFolderUploader extends Mixin(PolymerElement)
   .with(EventInterface, PackageInterface) {
@@ -32,6 +31,18 @@ export default class AppFolderUploader extends Mixin(PolymerElement)
 
   _onChange(e) {
     let files = [];
+
+    let f;
+    if( e.dataTransfer ) {
+      var items = e.dataTransfer.items;
+      for (var i=0; i<items.length; i++) {
+        // webkitGetAsEntry is where the magic happens
+        var item = items[i].webkitGetAsEntry();
+       console.log(item);
+      }
+      return;
+    }
+
     for( var i = 0; i < e.target.files.length; i++ ) {
       let f = e.target.files[i];
       if( this.isDotPath(f) ) continue;
@@ -50,6 +61,34 @@ export default class AppFolderUploader extends Mixin(PolymerElement)
     console.log(this.files);
     console.log(files);
     
+  }
+
+   /**
+   * @method _onDropBoxDragOver
+   * @description called when the dropbox dragover event is fired
+   */
+  _onDropBoxDragOver(e) {
+    e.stopPropagation();
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
+    this.$.dropbox.classList.add('hover');
+  }
+
+  _onDropBoxDragLeave(e) {
+    this.$.dropbox.classList.remove('hover');
+  }
+
+  /**
+   * @method _onDropBoxDrop
+   * @description called when the dropbox drop event is fired
+   */
+  _onDropBoxDrop(e) {
+    this.$.dropbox.classList.remove('hover');
+    this._onChange(e);
+  }
+
+  _onChooseClicked(e) {
+    setTimeout(() =>  this.$.fileInput.click(), 100);
   }
 
   isDotPath(file) {

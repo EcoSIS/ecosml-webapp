@@ -1,6 +1,7 @@
 import {PolymerElement, html} from "@polymer/polymer"
 import template from "./app-folder-uploader.html"
 
+import sha from "sha.js"
 import PackageInterface from "../../interfaces/PackageInterface"
 
 export default class AppFolderUploader extends Mixin(PolymerElement)
@@ -29,38 +30,71 @@ export default class AppFolderUploader extends Mixin(PolymerElement)
     this.files[(file.dir !== '/' ? file.dir + '/' : '/')+file.filename] = file;
   }
 
-  _onChange(e) {
+  async _onChange(e) {
     let files = [];
 
     let f;
     if( e.dataTransfer ) {
       var items = e.dataTransfer.items;
-      for (var i=0; i<items.length; i++) {
-        // webkitGetAsEntry is where the magic happens
-        var item = items[i].webkitGetAsEntry();
-       console.log(item);
+      if( items.length === 0 ) return;
+      await this._walkDragAndDropDir(items[0].webkitGetAsEntry(), files);
+
+      for( var i = 0; i < files.length; i++ ) {
+        let p = files[i].fullPath.replace(/^\//, '').split('/');
+        p.splice(0, 1);
+        files[i].realPath = '/'+p.join('/');
       }
-      return;
+    } else {
+      for( var i = 0; i < e.target.files.length; i++ ) {
+        let f = e.target.files[i];
+        if( this.isDotPath(f) ) continue;
+        if( this.ignoreFile(f) ) continue;
+  
+        let p = f.webkitRelativePath.split('/');
+        p.splice(0, 1);
+        f.realPath = '/'+p.join('/');
+        
+        files.push(f);
+      }
     }
 
-    for( var i = 0; i < e.target.files.length; i++ ) {
-      let f = e.target.files[i];
-      if( this.isDotPath(f) ) continue;
-      if( this.ignoreFile(f) ) continue;
+    for( var i = 0; i < files.length; i++ ) {
+      let f = files[i];
 
-      let p = f.webkitRelativePath.split('/');
-      p.splice(0, 1);
-      f.realPath = '/'+p.join('/');
+      f.file(file => {
+        var reader = new FileReader();
+        reader.onload = function(event) {
+          var binary = event.target.result;
+          console.log(sha('sha256').update(binary).digest('hex'));
+        };
+        reader.readAsBinaryString(file);
+      });
       
-      files.push(f);
 
       if( this.files[f.realPath] ) console.log('Updating: '+f.realPath);
       else console.log('Adding: '+f.realPath);
     }
-
-    console.log(this.files);
-    console.log(files);
     
+    console.log(this.files);
+    console.log(files); 
+  }
+
+
+  async _walkDragAndDropDir(item, files) {
+    if (item.isDirectory) {
+      let entries = await this._readFolder(item);
+      for( var i = 0; i < entries.length; i++ ) {
+        await this._walkDragAndDropDir(entries[i], files);
+      }
+    } else {
+      files.push(item);
+    }
+  }
+
+  _readFolder(dir) {
+    return new Promise((resolve, reject) => {
+      dir.createReader().readEntries(entries => resolve(entries));
+    });
   }
 
    /**

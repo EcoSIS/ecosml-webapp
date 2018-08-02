@@ -5,7 +5,15 @@ services:
   server:
     build: ../../server
     volumes:
-      - ../../server:/server
+      - ../../server/controllers:/server/controllers
+      - ../../server/dist:/server/dist
+      - ../../server/gitdata:/server/gitdata
+      - ../../server/lib:/server/lib
+      - ../../server/models:/server/models
+      - ../../server/public:/server/public
+      - ../../server/templates:/server/templates
+      - ../../server/tests:/server/tests
+      - ../../server/uploads:/server/uploads
       - ../google-key.json:/server/google-key.json
       - ../secrets.js:/server/secrets.js
     ports:

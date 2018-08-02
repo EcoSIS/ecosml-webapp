@@ -13,10 +13,7 @@ const app = express();
  * Log promise errors, uncaught exceptions
  */
 process.on('unhandledRejection', e => logger.error(e));
-process.on('uncaughtException', e => {
-  logger.error(e);
-  throw e;
-});
+process.on('uncaughtException', e => logger.error(e));
 
 /**
  * Simple HTTP logging

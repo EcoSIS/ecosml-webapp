@@ -12,6 +12,7 @@ const markdown = require('../lib/markdown');
 const schema = require('../lib/schema');
 const templates = require('../templates');
 const layouts = require('../lib/package-layout');
+const hash = require('../lib/hash');
 const travis = require('../models/PackageTestModel');
 
 const METADATA_FILENAME = 'ecosml-metadata.json';
@@ -445,6 +446,7 @@ class PackageModel {
         await this._walkPackage(root, file, filelist, pkg);
       } else {
         let info = this._getFileInfo(file.replace(new RegExp('^'+root), ''), pkg);
+        info.sha256 = await hash(file);
         filelist.push(info);
       }
     }

@@ -61,22 +61,43 @@ export default class AppFolderUploader extends Mixin(PolymerElement)
     for( var i = 0; i < files.length; i++ ) {
       let f = files[i];
 
-      f.file(file => {
-        var reader = new FileReader();
-        reader.onload = function(event) {
-          var binary = event.target.result;
-          console.log(sha('sha256').update(binary).digest('hex'));
-        };
-        reader.readAsBinaryString(file);
-      });
+      let blob = await this._getFileBlob(f);
+      let sha256 = await this._hash(f.name, blob);      
       
 
-      if( this.files[f.realPath] ) console.log('Updating: '+f.realPath);
-      else console.log('Adding: '+f.realPath);
+      if( this.files[f.realPath] ) {
+        if( sha256 !== this.files[f.realPath].sha256 ) console.log('Updating: '+f.realPath);
+        else console.log('No changes: ', f.realPath);
+      } else {
+        console.log('Adding: '+f.realPath);
+      }
     }
     
     console.log(this.files);
     console.log(files); 
+  }
+
+  _getFileBlob(f) {
+    // in moz, f is already a blob
+    if( !f.file ) return f;
+
+    return new Promise((resolve, reject) => {
+      f.file(
+        blob => resolve(blob),
+        e => reject(e)
+      )
+    });
+  }
+
+  _hash(name, file) {
+    return new Promise((resolve, reject) => {
+      var reader = new FileReader();
+      reader.onload = function(event) {
+        var binary = event.target.result;
+        resolve(sha('sha256').update(binary).digest('hex'));
+      };
+      reader.readAsBinaryString(file);
+    });
   }
 
 
@@ -117,6 +138,8 @@ export default class AppFolderUploader extends Mixin(PolymerElement)
    * @description called when the dropbox drop event is fired
    */
   _onDropBoxDrop(e) {
+    e.preventDefault();
+    e.stopPropagation();
     this.$.dropbox.classList.remove('hover');
     this._onChange(e);
   }

@@ -1,0 +1,42 @@
+<style>
+
+  .row {
+    display: flex;
+    align-items: center;
+  }
+
+  .file-label {
+    flex: 1;
+    text-transform: capitalize;
+  }
+
+  [change-type="added"] {
+    color: green;
+  }
+  [change-type="updated"] {
+    color: orange;
+  }
+  [change-type="removed"] {
+    color: red;
+  }
+</style>
+
+<app-popup id="popup" no-auto-move>
+  <div>
+    <paper-icon-button icon="close" on-click="_cancel"></paper-icon-button>
+  </div>
+
+  <div>
+    <template is="dom-repeat" items="[[files]]">
+      <div change-type$="[[item.changeType]]" class="row">
+        <div class="file-label">[[item.name]]</div>
+        <div class="change-label">[[item.changeType]]</div>
+      </div>
+    </template>
+  </div>
+
+  <div>
+    <paper-button on-click="_cancel">Cancel</paper-button>
+    <paper-button>Save Changes</paper-button>
+  </div>
+</app-popup>

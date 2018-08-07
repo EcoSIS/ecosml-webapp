@@ -3,6 +3,7 @@ import template from "./app-folder-uploader.html"
 
 import sha from "sha.js"
 import PackageInterface from "../../interfaces/PackageInterface"
+import "./app-file-diff"
 
 export default class AppFolderUploader extends Mixin(PolymerElement)
   .with(EventInterface, PackageInterface) {
@@ -58,23 +59,45 @@ export default class AppFolderUploader extends Mixin(PolymerElement)
       }
     }
 
+    let diff = [];
     for( var i = 0; i < files.length; i++ ) {
       let f = files[i];
 
       let blob = await this._getFileBlob(f);
       let sha256 = await this._hash(f.name, blob);      
-      
 
       if( this.files[f.realPath] ) {
-        if( sha256 !== this.files[f.realPath].sha256 ) console.log('Updating: '+f.realPath);
-        else console.log('No changes: ', f.realPath);
+        if( sha256 !== this.files[f.realPath].sha256 ) {
+          diff.push({
+            name: f.realPath,
+            changeType : 'updated'
+          });
+        }
       } else {
-        console.log('Adding: '+f.realPath);
+        diff.push({
+          name: f.realPath,
+          changeType : 'added'
+        });
       }
     }
-    
-    console.log(this.files);
-    console.log(files); 
+
+    for( var key in this.files ) {
+      let index = files.findIndex(f => f.realPath === key);
+      if( index === -1 ) {
+        diff.push({
+          name: key,
+          changeType : 'removed'
+        });
+      }
+    }
+
+    diff.sort((a, b) => {
+      if( a.name < b.name ) return 1;
+      if( a.name > b.name ) return -1;
+      return 0;
+    });
+
+    this.$.diff.show(diff);
   }
 
   _getFileBlob(f) {
@@ -108,6 +131,9 @@ export default class AppFolderUploader extends Mixin(PolymerElement)
         await this._walkDragAndDropDir(entries[i], files);
       }
     } else {
+      if( this.isDotPath(item) ) return;
+      if( this.ignoreFile(item) ) return;
+
       files.push(item);
     }
   }
@@ -151,7 +177,7 @@ export default class AppFolderUploader extends Mixin(PolymerElement)
   isDotPath(file) {
     if( file.name.charAt(0) === '.' ) return true;
     
-    let parts = file.webkitRelativePath.split('/');
+    let parts = (file.webkitRelativePath || file.fullPath).split('/');
     for( var i = 0; i < parts.length; i++ ) {
       if( parts[i].charAt(0) === '.' ) return true;
     }

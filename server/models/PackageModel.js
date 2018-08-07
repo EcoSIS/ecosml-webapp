@@ -13,7 +13,7 @@ const schema = require('../lib/schema');
 const templates = require('../templates');
 const layouts = require('../lib/package-layout');
 const hash = require('../lib/hash');
-const travis = require('../models/PackageTestModel');
+const travis = require('./PackageTestModel');
 
 const METADATA_FILENAME = 'ecosml-metadata.json';
 

@@ -113,16 +113,16 @@ export default class AppFolderUploader extends Mixin(PolymerElement)
   }
 
   _hash(name, file) {
+    console.log(file);
     return new Promise((resolve, reject) => {
       var reader = new FileReader();
-      reader.onload = function(event) {
-        var binary = event.target.result;
+      reader.onload = (event) => {
+        var binary = Buffer.from(event.target.result);
         resolve(sha('sha256').update(binary).digest('hex'));
       };
-      reader.readAsBinaryString(file);
+      reader.readAsArrayBuffer(file);
     });
   }
-
 
   async _walkDragAndDropDir(item, files) {
     if (item.isDirectory) {

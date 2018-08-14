@@ -5,9 +5,7 @@ class PackageStore extends BaseStore {
   constructor() {
     super();
 
-    this.ignoreFiles = [
-      '__init__.py'
-    ];
+    this.ignoreFiles = [];
 
     this.data = {
       selectedPackageId : '',

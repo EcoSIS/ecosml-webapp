@@ -31,10 +31,16 @@ export default class AppFolderUploader extends Mixin(PolymerElement)
     this.files[(file.dir !== '/' ? file.dir + '/' : '/')+file.filename] = file;
   }
 
+  _onSelectedPackageUpdate(payload) {
+    this.packageId = payload.id;
+  }
+
   async _onChange(e) {
     let files = [];
 
     let f;
+    
+    this.hasMetadataJson = false;
     if( e.dataTransfer ) {
       var items = e.dataTransfer.items;
       if( items.length === 0 ) return;
@@ -70,18 +76,29 @@ export default class AppFolderUploader extends Mixin(PolymerElement)
         if( sha256 !== this.files[f.realPath].sha256 ) {
           diff.push({
             name: f.realPath,
-            changeType : 'updated'
+            changeType : 'updated',
+            file: blob
           });
         }
       } else {
         diff.push({
           name: f.realPath,
-          changeType : 'added'
+          changeType : 'added',
+          file: blob
         });
       }
     }
 
     for( var key in this.files ) {
+      // mock file input object
+      let tf = {
+        name: this.files[key].filename,
+        fullPath : this.files[key].dir
+      };
+
+      if( this.ignoreFile(tf) ) continue;
+      if( this.isDotPath(tf) ) continue;
+
       let index = files.findIndex(f => f.realPath === key);
       if( index === -1 ) {
         diff.push({
@@ -91,13 +108,49 @@ export default class AppFolderUploader extends Mixin(PolymerElement)
       }
     }
 
+    if( !(await this._checkValidUpload(files, diff)) ) return;
+
     diff.sort((a, b) => {
       if( a.name < b.name ) return 1;
       if( a.name > b.name ) return -1;
       return 0;
     });
 
-    this.$.diff.show(diff);
+    this.$.diff.show(diff, this.packageId);
+  }
+
+  async _checkValidUpload(files, diff) {
+    // make sure there is a metadata.json file in the root of the directory.
+    if( !this.hasMetadataJson ) {
+      alert('No metadata.json file found in root directory, please upload the root repository directory');
+      return false;
+    }
+
+    let blob = await this._getFileBlob(this.hasMetadataJson);
+    try {
+      let metadata = JSON.parse(await this._readAsText(blob));
+      if( metadata.id !== this.packageId ) {
+        alert('You are attempting to upload the wrong repository, ecosml-metadata.json id does not match');
+        return false;
+      }
+    } catch(e) {
+      alert('Failed to parse ecosml-metadata.json file.  Please make sure it is valid JSON.');
+      return false;
+    }
+
+    let c = 0;
+    diff.forEach(d => {if( d.changeType === 'removed') c++});
+    if( c >= files.length ) {
+      if( !confirm('It appears you have moved or deleted every file in the repository. Make sure you have uploaded '+
+      ' the root of your repository. Are you sure you want to continue?' ) ) return false; 
+    }
+
+    if( diff.length === 0 ) {
+      alert('No changes found, ignoring');
+      return false;
+    }
+
+    return true;
   }
 
   _getFileBlob(f) {
@@ -113,7 +166,6 @@ export default class AppFolderUploader extends Mixin(PolymerElement)
   }
 
   _hash(name, file) {
-    console.log(file);
     return new Promise((resolve, reject) => {
       var reader = new FileReader();
       reader.onload = (event) => {
@@ -121,6 +173,16 @@ export default class AppFolderUploader extends Mixin(PolymerElement)
         resolve(sha('sha256').update(binary).digest('hex'));
       };
       reader.readAsArrayBuffer(file);
+    });
+  }
+
+  _readAsText(file) {
+    return new Promise((resolve, reject) => {
+      var reader = new FileReader();
+      reader.onload = (event) => {
+        resolve(event.target.result);
+      };
+      reader.readAsText(file);
     });
   }
 
@@ -185,6 +247,10 @@ export default class AppFolderUploader extends Mixin(PolymerElement)
   }
 
   ignoreFile(file) {
+    if( !this.hasMetadataJson && file.name === 'ecosml-metadata.json' ) {
+      this.hasMetadataJson = file;
+    }
+
     return ( this.ignore.indexOf(file.name) > -1)
   }
 

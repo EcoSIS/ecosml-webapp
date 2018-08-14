@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const path = require('path');
 const multer = require('multer');
+const fs = require('fs-extra');
 
 const uploadPath = path.join(__dirname, '..', 'uploads');
 const upload = multer({ 
@@ -65,6 +66,45 @@ router.post('/:package/createRelease', packageWriteAccess, async (req, res) => {
   } catch(e) {
     utils.handleError(res, e);
   }
+});
+
+router.post('/:package/updateFiles', packageWriteAccess, upload.any(),  async (req, res) => {
+  try {
+    if( req.files.length === 0 ) {
+      return res.status(400).send({error: true, message: 'no file provided'});
+    }
+
+    let message = req.body.message;
+    let dir = req.body.dir;
+
+    let files = [];
+    let remove = JSON.parse(req.body.remove || []);
+    for( var i = 0; i < req.files.length; i++ ) {
+      files.push({
+        repoFilePath : req.files[i].fieldname,
+        tmpFile : req.files[i].path
+      })
+    }
+
+    let response = await queue.add(
+      'updateFiles', 
+      req.ecosmlPackage.name, 
+      [req.ecosmlPackage, files, remove, message]
+    );
+
+    res.send(response);
+
+  } catch(e) {
+    utils.handleError(res, e);
+
+    // attempt to cleanup
+    for( var i = 0; i < req.files.length; i++ ) {
+      if( fs.existsSync(req.files[i].path) ) {
+        await fs.unlink(req.files[i].path);
+      }
+    }
+  }
+
 });
 
 router.post('/:package/updateFile', packageWriteAccess, upload.any(), async (req, res) => {

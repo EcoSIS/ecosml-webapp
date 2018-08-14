@@ -10,7 +10,6 @@ const fs = require('fs');
  * @returns {Promise} resolves to SHA256 hash string
  */
 module.exports = (file) => {
-  console.log(file);
   return new Promise((resolve, reject) => {
     let hash = crypto.createHash('sha256');
     

@@ -117,7 +117,7 @@ class PackageModel {
     await git.clean(pkg.name);
     await git.pull(pkg.name);
 
-    // First update readme if it changed via git
+    // update readme if it changed via git
     if( update.description && pkg.description !== update.description ) {
       let README = path.join(git.getRepoPath(pkg.name), 'README.md');
       await fs.writeFile(README, update.description || '');
@@ -259,6 +259,60 @@ class PackageModel {
       path.join(file.dir, file.filename),
       pkg
     );
+  }
+
+  /**
+   * @method updateFiles
+   * @description add, update and/or remove multiple package files
+   * 
+   * @param {Object|String} pkg package object, name or id
+   * @param {Array} updateFiles 
+   * @param {String} updateFiles[].repoFilePath
+   * @param {String} updateFiles[].tmpFile 
+   * @param {String} updateFiles[].buffer
+   * @param {Array} removeFiles file paths to remove
+   * @param {String} message
+   */
+  async updateFiles(pkg, updateFiles=[], removeFiles=[], message) {
+    pkg = await this.get(pkg);
+
+    // update repo path
+    await git.resetHEAD(pkg.name);
+
+    let result = [];
+    for( let i = 0; i < updateFiles.length; i++ ) {
+      let file = updateFiles[i];
+
+      let filePath = path.join(config.github.fsRoot, pkg.name, file.repoFilePath);
+      let baseFileDir = path.parse(filePath).dir;
+      // if this is the main or resources directory, move files to correct location
+     
+      await fs.mkdirs(baseFileDir);
+
+      if( fs.existsSync(filePath) ) {
+        await fs.unlink(filePath);
+      }
+      
+      if( file.buffer ) {
+        await fs.writeFile(filePath, file.buffer);
+      } else if( file.tmpFile ) {
+        await fs.move(file.tmpFile, filePath);
+      }
+
+      result.push(this._getFileInfo(filePath, pkg));
+    }
+
+    for( let i = 0; i < removeFiles.length; i++ ) {
+      let file = removeFiles[i];
+      let filePath = path.join(config.github.fsRoot, file.repoFilePath);
+      if( fs.existsSync(filePath) ) {
+        await fs.unlink(filePath);
+      }
+    }
+
+    await this.commit(pkg.name, message || 'Updating package files');
+  
+    return this.getFiles(pkg);
   }
 
   /**

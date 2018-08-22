@@ -159,6 +159,10 @@ class PythonPackageLayout extends LanguageLayout {
     return path.join(this.getPackageRootDir(pkgName), this.MAIN_DIR_NAME);
   }
 
+  getExamplesDir(pkgName) {
+    return path.join(this.getPackageRootDir(pkgName), this.EXAMPLES_DIR_NAME);
+  }
+
   getResourcesDir(pkgName) {
     return path.join(this.getPackageRootDir(pkgName), this.RESOURCES_DIR_NAME);
   }

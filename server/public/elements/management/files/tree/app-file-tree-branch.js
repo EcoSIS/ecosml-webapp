@@ -22,6 +22,10 @@ export default class AppFileTreeBranch extends PolymerElement {
         type : Array,
         value : () => []
       },
+      specialDirs : {
+        type : Array,
+        value : () => []
+      },
       open : {
         type : Boolean,
         value : true
@@ -43,6 +47,8 @@ export default class AppFileTreeBranch extends PolymerElement {
       directories.push(this.data.directories[key]);
     }
     this.directories = directories;
+
+    console.log(this.data);
   }
 
   toggle() {

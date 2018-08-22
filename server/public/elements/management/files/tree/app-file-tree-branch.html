@@ -1,32 +1,32 @@
 <style>
   :host {
     display: block;
-    margin-left: 15px;
+    margin-left: 25px;
   }
   .controls {
     display: flex;
     align-items: center;
-    border-bottom: 1px solid transparent;
+    /* border-bottom: 1px solid transparent; */
   }
   .controls:hover {
     font-weight: var(--font-weight-heavy);
-    border-bottom: 1px solid var(--light-secondary-color);
+    /* border-bottom: 1px solid var(--light-secondary-color); */
   }
 </style>
 
-<div class="controls">
+<div class="controls" open$="[[open]]">
   <paper-icon-button icon="folder" on-click="toggle" hidden$="[[open]]"></paper-icon-button> 
   <paper-icon-button icon="folder-open" on-click="toggle" hidden$="[[!open]]"></paper-icon-button> 
-  <div style="flex:1">[[data.name]]</div>
-  <paper-icon-button icon="add-circle-outline"></paper-icon-button>
-  <paper-icon-button icon="info-outline"></paper-icon-button>
+  <div style="flex:1; cursor: pointer" on-click="toggle" >[[data.name]]</div>
+  <!-- <paper-icon-button icon="add-circle-outline"></paper-icon-button> -->
+  <paper-icon-button icon="info-outline" hidden$="[[!data.special]]"></paper-icon-button>
 </div>
 
 <div hidden$="[[!open]]">
-  <template is="dom-repeat" items="[[directories]]">
-    <app-file-tree-branch data="[[item]]"></app-file-tree-branch>
-  </template>
   <template is="dom-repeat" items="[[files]]">
     <app-file-tree-leaf data="[[item]]"></app-file-tree-leaf>
+  </template>
+  <template is="dom-repeat" items="[[directories]]">
+    <app-file-tree-branch data="[[item]]" special-dirs="[[specialDirs]]"></app-file-tree-branch>
   </template>
 </div>

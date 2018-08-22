@@ -28,6 +28,7 @@
     "@ucd-lib/cork-app-state": "^0.1.1",
     "@ucd-lib/cork-app-utils": "2.0.4",
     "@webcomponents/webcomponentsjs": "2.0.0",
+    "bytes": "^3.0.0",
     "cork-pagination": "cork-elements/cork-pagination",
     "github-markdown-css": "^2.10.0",
     "google-charts": "^1.0.0",

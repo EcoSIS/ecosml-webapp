@@ -43,8 +43,9 @@ class PackageModel {
    * @param {String} pkg.overview package short description
    * @param {String} pkg.organization package owner org
    * @param {String} pkg.owner package owner
+   * @param {String} username optional username
    */
-  async create(pkg) {
+  async create(pkg, username) {
     logger.info(`Creating package: ${pkg.name}`);
     schema.validate('create', pkg);
 
@@ -76,7 +77,7 @@ class PackageModel {
 
     // write and commit ecosis-metadata.json file
     await this.writeMetadataFile(pkg);
-    await this.commit(pkg.name, 'Updating package metadata');
+    await this.commit(pkg.name, 'Updating package metadata', username);
 
     // let travis know about the repo (sync with it)
     await travis.initRepo(pkg.name);
@@ -106,9 +107,10 @@ class PackageModel {
    * @param {String} update.family
    * @param {String} update.specific
    * @param {String} commitMessage
+   * @param {String} username
    * @param {Boolean} refreshFromGithub preform a full refresh from Github API?
    */
-  async update(pkg, update, commitMessage, refreshFromGithub = false) {
+  async update(pkg, update, commitMessage, username, refreshFromGithub = false) {
     pkg = await this.get(pkg);
     schema.validate('update', update);
 
@@ -180,7 +182,7 @@ class PackageModel {
 
     // write and commit ecosis-metadata.json file or other changes
     await this.writeMetadataFile(pkg);
-    await this.commit(pkg.name, commitMessage || 'Updating package metadata');
+    await this.commit(pkg.name, commitMessage || 'Updating package metadata', username);
 
     return pkg;
   }
@@ -272,8 +274,9 @@ class PackageModel {
    * @param {String} updateFiles[].buffer
    * @param {Array} removeFiles file paths to remove
    * @param {String} message
+   * @param {String} username
    */
-  async updateFiles(pkg, updateFiles=[], removeFiles=[], message) {
+  async updateFiles(pkg, updateFiles=[], removeFiles=[], message, username) {
     pkg = await this.get(pkg);
 
     // update repo path
@@ -310,7 +313,7 @@ class PackageModel {
       }
     }
 
-    await this.commit(pkg.name, message || 'Updating package files');
+    await this.commit(pkg.name, message || 'Updating package files', username);
   
     return this.getFiles(pkg);
   }
@@ -452,8 +455,9 @@ class PackageModel {
    * 
    * @param {String} packageName actual package name (not id)
    * @param {String} message commit message
+   * @param {String} username
    */
-  async commit(packageName, message) {
+  async commit(packageName, message, username) {
     let changes = await git.currentChangesCount(packageName);
     if( changes === 0 ) {
       logger.debug(`Package ${packageName} committing: told to commit, but no changes have been made`);
@@ -464,8 +468,8 @@ class PackageModel {
     
     var {stdout, stderr} = await git.addAll(packageName);
     logger.debug(`Package ${packageName} add --all`, stdout, stderr);
-    
-    var {stdout, stderr} = await git.commit(packageName, message);
+
+    var {stdout, stderr} = await git.commit(packageName, message, username);
     logger.debug(`Package ${packageName} commit`, stdout, stderr);
 
     var {stdout, stderr} = await git.push(packageName);
@@ -499,13 +503,28 @@ class PackageModel {
       if( isDir ) {
         await this._walkPackage(root, file, filelist, pkg);
       } else {
-        let info = this._getFileInfo(file.replace(new RegExp('^'+root), ''), pkg);
+        let repoPath = file.replace(new RegExp('^'+root), '');
+        let info = this._getFileInfo(repoPath, pkg);
         info.sha256 = await hash(file);
+        info.size = fs.statSync(file).size;
         filelist.push(info);
       }
     }
 
     return filelist;
+  }
+
+  async getLayoutFolders(pkg) {
+    pkg = await this.get(pkg);
+    let layout = this._getPackageLayout(pkg.language);
+    let re = new RegExp('^'+path.join(config.github.fsRoot, pkg.name));
+
+    return {
+      papers : '/papers',
+      examples : layout.getExamplesDir(pkg.name).replace(re, ''),
+      main : layout.getMainDir(pkg.name).replace(re, ''),
+      resources : layout.getResourcesDir(pkg.name).replace(re, '')
+    }
   }
 
   /**

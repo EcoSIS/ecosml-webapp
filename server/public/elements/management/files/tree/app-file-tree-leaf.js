@@ -1,5 +1,6 @@
 import {PolymerElement, html} from "@polymer/polymer"
 import template from "./app-file-tree-leaf.html"
+import bytes from "bytes"
 
 export default class AppFileTreeLeaf extends PolymerElement {
 
@@ -12,8 +13,18 @@ export default class AppFileTreeLeaf extends PolymerElement {
       data : {
         type : Object,
         value : null
+      },
+      bytes : {
+        type : String,
+        value : '',
+        computed : '_computeBytes(data)'
       }
     }
+  }
+
+  _computeBytes(data) {
+    if( !data ) return '0';
+    return bytes(data.size);
   }
 
 }

@@ -93,7 +93,7 @@ class PackageService extends BaseService {
   async getFiles(packageId) {
     return this.request({
       url : `${this.baseUrl}/${packageId}/files`,
-      onLoad : result => this.store.onFilesLoaded(packageId, result.body.files)
+      onLoad : result => this.store.onFilesLoaded(packageId, result.body.files, result.body.specialDirs)
     });
   }
 

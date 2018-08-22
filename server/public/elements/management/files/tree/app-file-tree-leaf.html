@@ -1,7 +1,9 @@
 <style>
   :host {
     display: block;
-    margin-left: 15px;
+    margin-left: 20px;
+    padding-left: 20px;
+    border-left: 1px solid var(--secondary-text-color);
     font-size: 14px;
   }
   .layout {
@@ -11,7 +13,5 @@
 
 <div class="layout">
   <div style="flex:1">[[data.filename]]</div>
-  <div>
-    -
-  </div>
+  <div>[[bytes]]</div>
 </div>

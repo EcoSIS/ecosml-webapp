@@ -16,6 +16,7 @@ class PackageStore extends BaseStore {
       createRelease : {},
 
       files : {},
+      specialDirs : {},
       fileUploadStatus : {},
 
       byId : {}
@@ -29,7 +30,8 @@ class PackageStore extends BaseStore {
       'DELETE_PACKAGE_UPDATE' : 'delete-package-update',
       'CREATE_PACKAGE_RELEASE_UPDATE' : 'create-package-release-update',
       'FILE_UPDATE' : 'file-update',
-      'UPLOAD_FILE_STATUS_UPDATE' : 'upload-file-status-update'
+      'UPLOAD_FILE_STATUS_UPDATE' : 'upload-file-status-update',
+      'SPECIAL_DIRS_UPDATE' : 'special-dirs-update'
     }
   }
 
@@ -159,10 +161,19 @@ class PackageStore extends BaseStore {
     this._setFileState(packageId, state);
   }
 
-  onFilesLoaded(packageId, files = []) {
+  onFilesLoaded(packageId, files = [], specialDirs) {
+    this.data.specialDirs = {
+      state : this.STATE.LOADED,
+      packageId,
+      payload : specialDirs
+    }
+    this.emit(this.events.SPECIAL_DIRS_UPDATE, this.data.specialDirs);
+
     files = files
       .filter(file => this.ignoreFiles.indexOf(file.filename) === -1)
-      .forEach(file => this.onFileLoaded(packageId, file));
+      .forEach(file => {
+        this.onFileLoaded(packageId, file);
+      });
   }
 
   onFileLoaded(packageId, file) {

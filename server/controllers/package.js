@@ -18,7 +18,7 @@ router.post('/', packageWriteAccess, async (req, res) => {
   pkg.owner = req.session.username;
 
   try {
-    pkg = await model.create(pkg);
+    pkg = await model.create(pkg, req.session.username);
     res.status(201).json(pkg);
   } catch(e) {
     utils.handleError(res, e);
@@ -41,7 +41,7 @@ router.patch('/:package', packageWriteAccess, async(req, res) => {
     let package = await queue.add(
       'update', 
       req.ecosmlPackage.name, 
-      [req.ecosmlPackage, req.body.update, req.body.message]
+      [req.ecosmlPackage, req.body.update, req.body.message, req.session.username]
     );
     
     res.json(package);
@@ -89,7 +89,7 @@ router.post('/:package/updateFiles', packageWriteAccess, upload.any(),  async (r
     let response = await queue.add(
       'updateFiles', 
       req.ecosmlPackage.name, 
-      [req.ecosmlPackage, files, remove, message]
+      [req.ecosmlPackage, files, remove, message, req.session.username]
     );
 
     res.send(response);
@@ -161,7 +161,8 @@ router.get('/:package/files', packageReadAccess, async (req, res) => {
     let files = await model.getFiles(req.ecosmlPackage);
     res.json({
       package: req.ecosmlPackage.name,
-      files : files
+      files : files,
+      specialDirs : await model.getLayoutFolders(req.ecosmlPackage)
     });
   } catch(e) {
     utils.handleError(res, e);

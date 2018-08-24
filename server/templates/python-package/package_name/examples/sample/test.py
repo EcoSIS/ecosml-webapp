@@ -31,7 +31,7 @@ class TestPackage(unittest.TestCase):
     self.spectra = load('ExampleInputSpectra.csv')
 
   def test_model(self):
-    # Assert your transform fuction workers
+    # Assert your transform fuction worker
     # TODO: uncomment if you have a transform for this example
     # self.spectra = transform(self.spectra)
     # TODO: rename to normalized spectra example file in output folder

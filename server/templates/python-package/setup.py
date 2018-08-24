@@ -6,6 +6,7 @@ def read(fname):
 
 setup(
     name = "{{name}}",
+    # update version whenever you create a new release
     version = "{{version}}",
     author = "{{author}}",
     description = ("{{overview}}"),

@@ -308,7 +308,7 @@ class PackageModel {
 
     for( let i = 0; i < removeFiles.length; i++ ) {
       let file = removeFiles[i];
-      let filePath = path.join(config.github.fsRoot, file.repoFilePath);
+      let filePath = path.join(config.github.fsRoot, pkg.name, file);
       if( fs.existsSync(filePath) ) {
         await fs.unlink(filePath);
       }

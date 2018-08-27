@@ -69,7 +69,7 @@ module.exports = {
   github : {
     access : secrets.github,
     org : env.GITHUB_ORG || 'ecosml-dev',
-    fsRoot : env.GITHUB_FS_ROOT || path.join(__dirname, '..', 'gitdata'),
+    fsRoot : env.GITHUB_FS_ROOT || path.resolve(__dirname, '..', '..', 'gitdata'),
     default_license : 'mit'
   },
 

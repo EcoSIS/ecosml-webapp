@@ -33,6 +33,7 @@ export default class AppFolderUploader extends Mixin(PolymerElement)
 
   _onSelectedPackageUpdate(payload) {
     this.packageId = payload.id;
+    this.files = {};
   }
 
   async _onChange(e) {

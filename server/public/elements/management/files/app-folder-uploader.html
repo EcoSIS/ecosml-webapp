@@ -38,6 +38,7 @@
     transform: scale(1);
     font-size: 14px;
     color : var(--secondary-text-color);
+    padding-left : 10px;
   }
 
   #dropbox.hover {
@@ -71,7 +72,7 @@
   <div class="layout">
     <div>
       <input type="file" webkitdirectory directory multiple id="fileInput" on-change="_onChange" />
-      <paper-button on-click="_onChooseClicked">Choose File</paper-button>
+      <paper-button on-click="_onChooseClicked">Choose Folder</paper-button>
     </div>
     <div class="droplabel">
       Drag and drop root directory here

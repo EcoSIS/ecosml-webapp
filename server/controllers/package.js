@@ -70,7 +70,8 @@ router.post('/:package/createRelease', packageWriteAccess, async (req, res) => {
 
 router.post('/:package/updateFiles', packageWriteAccess, upload.any(),  async (req, res) => {
   try {
-    if( req.files.length === 0 ) {
+    let remove = JSON.parse(req.body.remove || '[]');
+    if( req.files.length === 0 && remove.length === 0) {
       return res.status(400).send({error: true, message: 'no file provided'});
     }
 
@@ -78,7 +79,6 @@ router.post('/:package/updateFiles', packageWriteAccess, upload.any(),  async (r
     let dir = req.body.dir;
 
     let files = [];
-    let remove = JSON.parse(req.body.remove || []);
     for( var i = 0; i < req.files.length; i++ ) {
       files.push({
         repoFilePath : req.files[i].fieldname,

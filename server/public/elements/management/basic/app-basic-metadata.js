@@ -85,7 +85,6 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
 
   ready() {
     super.ready();
-    this.$.created.open();
   }
 
   /**

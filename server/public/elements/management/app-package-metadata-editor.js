@@ -36,8 +36,8 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
 
       selectedSection : {
         type : String,
-        // value : 'basic'
-        value : 'files'
+        value : 'basic'
+        // value : 'files'
       },
 
       // package schema object

@@ -8,14 +8,15 @@ const TEMPLATE_ROOT = path.join(__dirname, '..', '..', 'templates', 'python-pack
 module.exports = async function(pkg) {
   let pythonName = pkg.name.replace(/-/g, '_');
   let rootDir = path.join(config.github.fsRoot, pkg.name);
-  
+  await fs.mkdirp(rootDir);
+
   // copy template package
   let files = await fs.readdir(TEMPLATE_ROOT);
   for( let file of files ) {
     if( file.charAt(0) === '.' ) continue;
 
     let toFile = file;
-    if( file === 'package_name' ) file = pythonName;
+    if( file === 'package_name' ) toFile = pythonName;
 
     await fs.copy(
       path.join(TEMPLATE_ROOT, file), 
@@ -25,7 +26,7 @@ module.exports = async function(pkg) {
 
   // fill in setup.py
   let setup = path.join(rootDir, 'setup.py');
-  template(setup, {
+  await template(setup, {
     name : pythonName,
     author : pkg.owner,
     overview : pkg.overview || '',
@@ -34,6 +35,6 @@ module.exports = async function(pkg) {
   });
 
   // fill in sample test
-  let setup = path.join(rootDir, pkgn.name, pythonName, 'examples', 'sample', 'test.py');
-  template(setup, {name : pythonName});
+  // setup = path.join(rootDir, pythonName, 'examples', 'sample', 'test.py');
+  // await template(setup, {name : pythonName});
 }

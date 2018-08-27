@@ -3,6 +3,11 @@
     display: block;
     margin-left: 25px;
   }
+
+  :host(#root) {
+    margin-left: 0px;
+  }
+
   .controls {
     display: flex;
     align-items: center;
@@ -18,8 +23,9 @@
   <paper-icon-button icon="folder" on-click="toggle" hidden$="[[open]]"></paper-icon-button> 
   <paper-icon-button icon="folder-open" on-click="toggle" hidden$="[[!open]]"></paper-icon-button> 
   <div style="flex:1; cursor: pointer" on-click="toggle" >[[data.name]]</div>
-  <!-- <paper-icon-button icon="add-circle-outline"></paper-icon-button> -->
-  <paper-icon-button icon="info-outline" hidden$="[[!data.special]]"></paper-icon-button>
+
+  <!-- TODO: add back in after alpha release -->
+  <!-- <paper-icon-button icon="info-outline" hidden$="[[!data.special]]"></paper-icon-button> -->
 </div>
 
 <div hidden$="[[!open]]">

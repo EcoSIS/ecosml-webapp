@@ -44,6 +44,7 @@ class PackageStore extends BaseStore {
 
   setCreatePackageSuccess(payload) {
     this._setCreatePackageState({payload, state: this.STATE.LOADED});
+    this.setSelectedPackageId(payload.id);
   }
 
   setCreatePackageError(error) {

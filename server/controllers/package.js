@@ -53,7 +53,7 @@ router.patch('/:package', packageWriteAccess, async(req, res) => {
 router.delete('/:package', packageWriteAccess, async (req, res) => {
   try {  
     await model.delete(req.ecosmlPackage);
-    res.status(204);
+    res.status(204).send();
   } catch(e) {
     utils.handleError(res, e);
   }

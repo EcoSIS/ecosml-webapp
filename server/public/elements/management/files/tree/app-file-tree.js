@@ -38,6 +38,15 @@ export default class AppFileTree extends Mixin(PolymerElement)
     this.specialDirs = e.payload;
   }
 
+  _onSelectedPackageUpdate() {
+    this.data = {
+      name : '/',
+      files : {},
+      directories : {}
+    };
+    this._onUpdate();
+  }
+
   /**
    * @method _onFileUpdate
    * @description via PackageInterface, called whenever a file is updated
@@ -83,6 +92,7 @@ export default class AppFileTree extends Mixin(PolymerElement)
     }
 
     this.updateTimer = setTimeout(() => {
+      console.log('file update render');
       this.updateTimer = -1;
       this._onUpdate();
     }, 100);

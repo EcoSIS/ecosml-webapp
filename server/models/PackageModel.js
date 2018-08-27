@@ -10,7 +10,7 @@ const uuid = require('uuid');
 const utils = require('../lib/utils')
 const markdown = require('../lib/markdown');
 const schema = require('../lib/schema');
-const templates = require('../templates');
+const initPackage = require('../lib/init-package');
 const layouts = require('../lib/package-layout');
 const hash = require('../lib/hash');
 const travis = require('./PackageTestModel');
@@ -72,8 +72,9 @@ class PackageModel {
     await mongo.insertPackage(pkg);
     await git.clone(pkg.name);
 
-    let layout = this._getPackageLayout(pkg.language);
-    await layout.ensureLayout(pkg);
+    // let layout = this._getPackageLayout(pkg.language);
+    // await layout.ensureLayout(pkg);
+    await initPackage(pkg);
 
     // write and commit ecosis-metadata.json file
     await this.writeMetadataFile(pkg);
@@ -354,7 +355,7 @@ class PackageModel {
   async delete(pkg) {
     pkg = await this.get(pkg);
 
-    logger.info(`Deleting package: ${pkg.names}`);
+    logger.info(`Deleting package: ${pkg.name}`);
 
     let {response} = await github.deleteRepository(pkg.name);
     

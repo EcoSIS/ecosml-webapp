@@ -47,8 +47,6 @@ export default class AppFileTreeBranch extends PolymerElement {
       directories.push(this.data.directories[key]);
     }
     this.directories = directories;
-
-    console.log(this.data);
   }
 
   toggle() {

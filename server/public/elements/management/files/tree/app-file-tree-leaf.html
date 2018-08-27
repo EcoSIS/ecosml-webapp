@@ -6,12 +6,19 @@
     border-left: 1px solid var(--secondary-text-color);
     font-size: 14px;
   }
+  .layout:hover {
+    font-weight: bold;
+  }
   .layout {
     display: flex;
+  }
+  .bytes {
+    color: var(--secondary-text-color);
+    font-size: 14px;
   }
 </style>
 
 <div class="layout">
   <div style="flex:1">[[data.filename]]</div>
-  <div>[[bytes]]</div>
+  <div class="bytes">[[bytes]]</div>
 </div>

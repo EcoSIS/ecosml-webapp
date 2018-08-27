@@ -103,7 +103,7 @@ class PackageService extends BaseService {
       fetchOptions : {
         method : 'DELETE'
       },
-      onLoading : request => this.store.setDeletingPackage(request, payload),
+      onLoading : request => this.store.setDeletingPackage(request, packageId),
       onLoad : result => this.store.setDeletePackageSuccess(result.body),
       onError : error => this.store.setDeletePackageError(error)
     });

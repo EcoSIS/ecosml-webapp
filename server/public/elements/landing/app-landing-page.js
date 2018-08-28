@@ -81,9 +81,16 @@ export default class AppLandingPage extends Mixin(PolymerElement)
       this.releases = null;
     }
 
-    this.themeLink = this._getLink('theme');
-    this.familyLink = this._getLink('family');
-    this.specificLink = this._getLink('specific');
+    this.themes = this._createThemeLinks('theme');
+    this.families = this._createThemeLinks('family');
+    this.specifics = this._createThemeLinks('specific');
+    this.showThemes = (this.themes.length > 0);
+    this.showFamilies = (this.families.length > 0);
+    this.showSpecifics = (this.specifics.length > 0);
+
+    // this.themeLink = this._getLink('theme');
+    // this.familyLink = this._getLink('family');
+    // this.specificLink = this._getLink('specific');
 
     let children = this.$.install.children;
     for( var i = 0; i < children.length; i++ ) {
@@ -141,6 +148,19 @@ export default class AppLandingPage extends Mixin(PolymerElement)
     }
 
     return this._searchQueryToUrl(query);
+  }
+
+  _createThemeLinks(attr) {
+    let values = this.package[attr];
+    if( !values ) return [];
+    if( !Array.isArray(values) ) values = [values];
+
+    return values.map(val => {
+      return {
+        value : val,
+        link : this._getLink(attr, val)
+      }
+    })
   }
 
   render() {

@@ -19,6 +19,9 @@
       "description" : {
         "type" : "string"
       },
+      "website" : {
+        "type" : ["array","string"]
+      },
       "keywords" : {
         "type" : "array",
         "items": {"type": "string"}

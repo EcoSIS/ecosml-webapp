@@ -1,0 +1,43 @@
+<style include="shared-styles">
+  :host {
+    display: none;
+  }
+
+  :host([active]) {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,.5);
+    overflow-x: hidden;
+    overflow-y: auto;
+    z-index: 10000;
+  }
+
+  .modal {
+    max-width: 600px;
+    margin: 30px auto;
+  }
+
+  .modal-inner {
+    box-shadow: 0 0 10px black;
+    padding: 10px;
+    background-color: white;
+    margin: 0 15px;
+  }
+
+  @media(min-width: 768px) {
+    .modal {
+      padding: 20px;
+    }
+  }
+</style>
+
+<div class="modal">
+  <div class="modal-inner">
+    <slot></slot>
+  </div>
+</div>
+

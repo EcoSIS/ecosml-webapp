@@ -2,6 +2,8 @@ import {PolymerElement, html} from "@polymer/polymer"
 import template from "./app-file-manager.html"
 
 import "./app-file-uploader"
+import "./tree/app-file-tree"
+import "./app-folder-uploader"
 import PackageInterface from "../../interfaces/PackageInterface"
 
 export default class AppFileManager extends Mixin(PolymerElement)

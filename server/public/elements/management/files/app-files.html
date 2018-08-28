@@ -28,6 +28,20 @@
   }
 </style>
 
+<div>
+  <a href$="https://github.com/ecosml-dev/[[packageName]]/archive/master.zip">
+    <iron-icon icon="archive"></iron-icon> Download Package Files
+  </a>
+</div>
+
+<h2 style="margin-bottom: 5px">Sync Changes</h2>
+<div style="margin-bottom: 15px">Upload root package directory to sync all changes to repository.</div>
+<div>
+  <app-folder-uploader></app-folder-uploader>
+</div>
+
+<app-file-tree style="margin-top: 35px"></app-file-tree>
+<!--
 <app-file-manager 
   label="Resources" 
   directory="/resources"
@@ -88,3 +102,4 @@
     open="[[item.isNew]]">
   </app-example-editor>
 </template>
+-->

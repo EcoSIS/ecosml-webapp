@@ -132,9 +132,10 @@ class GitCli {
    * 
    * @returns {Promise} 
    */
-  async commit(repoName, message) {
+  async commit(repoName, message, username) {
     let dir = await this.ensureDir(repoName);
-    return this.exec(`commit -m "${message}"`, {cwd: dir});
+    if( username ) username = `--author="${username} <>"`;
+    return this.exec(`commit ${username} -m "${message}"`, {cwd: dir});
   }
 
   /**

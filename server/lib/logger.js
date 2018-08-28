@@ -6,7 +6,7 @@ let streams = [];
 if( !global.testing && !global.quiteLogging ) {
   streams.push({stream: process.stdout});
 
-
+try {
   // create bunyan logger for stackdriver
   let loggingBunyan = new LoggingBunyan({
     projectId: config.google.key.project_id,
@@ -16,13 +16,19 @@ if( !global.testing && !global.quiteLogging ) {
 
   // add new logger stream
   streams.push(loggingBunyan.stream());
+} catch(e) {
+  console.log(1, e);
+}
 }
 
+try {
+  let logger = bunyan.createLogger({
+    name: 'server',
+    level: config.server.loglevel || 'info',
+    streams: streams
+  });
 
-let logger = bunyan.createLogger({
-  name: 'server',
-  level: config.server.loglevel || 'info',
-  streams: streams
-});
-
-module.exports = logger;
+  module.exports = logger;
+} catch(e) {
+  console.log(2,e);
+}

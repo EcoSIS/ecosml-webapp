@@ -78,7 +78,7 @@
     <iron-pages selected="[[selectedSection]]" attr-for-selected="id" selected-attribute="active" >
       <app-basic-metadata id="basic" class="main-panel" creating="[[creating]]" on-change="_onDataChange"></app-basic-metadata>
       <app-details-metadata id="details" class="main-panel" on-change="_onDataChange"></app-details-metadata>
-      <app-files id="files" class="main-panel" language="[[data.language]]"></app-files>
+      <app-files id="files" class="main-panel" package-name="[[data.name]]" language="[[data.language]]"></app-files>
       <app-releases id="release" class="main-panel"></app-releases>
     </iron-pages>
   </div>

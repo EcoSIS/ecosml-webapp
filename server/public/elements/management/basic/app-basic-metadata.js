@@ -2,6 +2,7 @@ import {PolymerElement, html} from "@polymer/polymer"
 import template from "./app-basic-metadata.html"
 
 import "./app-org-input"
+import "./app-created-popup"
 import PackageInterface from "../../interfaces/PackageInterface"
 import AppStateInterface from "../../interfaces/AppStateInterface"
 
@@ -25,6 +26,10 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
         type : Boolean,
         value : false
       },
+      deleting : {
+        type : Boolean,
+        value : false
+      },
 
       ecosisHost : {
         type : String,
@@ -39,7 +44,7 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
   }
 
   get name() {
-    return this.$.name.value;
+    return this.$ ? this.$.name.value : '';
   }
 
   set name(value) {
@@ -68,6 +73,18 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
 
   set organization(value) {
     this.$.organization.value = value || '';
+  }
+
+  get keywords() {
+    return this.$.keywords.value;
+  }
+
+  set keywords(value) {
+    this.$.keywords.value = value || '';
+  }
+
+  ready() {
+    super.ready();
   }
 
   /**
@@ -102,6 +119,8 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
    */
   _onDataUpdate() {
     if( !this.data ) return;
+    this.packageId = this.data.id;
+    this.packageName = this.data.name;
     VALUES.forEach(value => {
       this[value] = this.data[value];
     });
@@ -143,12 +162,29 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
 
     try {
       await this._createPackage(data.name, data.overview, data.organization, data.language);
+      this.$.created.open();
     } catch(e) {
       alert('Failed to create package: '+e.message);
     }
   }
 
-    /**
+  /**
+   * @method _onDeleteBtnClicked
+   * @description function fired when the delete button is clicked
+   */
+  async _onDeleteBtnClicked() {
+    if( !confirm('Are you sure you want to delete package '+this.packageName+' and all it\s contents?') ) return;
+    if( !confirm('Are you really sure you want to delete '+this.packageName+'?') ) return;
+
+    this.deleting = true;
+    await this._deletePackage(this.packageId); 
+    this.deleting = false;
+
+    window.location = '/account';
+    // window.location.reload();
+  }
+
+  /**
    * @method _onCreatePackageUpdate
    * @description via PackageInterface, Fired when create package state updates
    */

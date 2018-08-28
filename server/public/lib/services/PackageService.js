@@ -93,7 +93,7 @@ class PackageService extends BaseService {
   async getFiles(packageId) {
     return this.request({
       url : `${this.baseUrl}/${packageId}/files`,
-      onLoad : result => this.store.onFilesLoaded(packageId, result.body.files)
+      onLoad : result => this.store.onFilesLoaded(packageId, result.body.files, result.body.specialDirs)
     });
   }
 
@@ -103,7 +103,7 @@ class PackageService extends BaseService {
       fetchOptions : {
         method : 'DELETE'
       },
-      onLoading : request => this.store.setDeletingPackage(request, payload),
+      onLoading : request => this.store.setDeletingPackage(request, packageId),
       onLoad : result => this.store.setDeletePackageSuccess(result.body),
       onError : error => this.store.setDeletePackageError(error)
     });

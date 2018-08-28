@@ -100,16 +100,6 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
   }
 
   /**
-   * @method _onDeleteBtnClicked
-   * @description function fired when the delete button is clicked
-   */
-  _onDeleteBtnClicked() {
-    if( !confirm('Are you sure you want to delete this package and all it\s contents?') ) return;
-    if( !confirm('Are you really sure?') ) return;
-    this._deletePackage(this.packageId); 
-  }
-
-  /**
    * @method _fetchAndUpdatePackage
    * @description called when app state updates
    */

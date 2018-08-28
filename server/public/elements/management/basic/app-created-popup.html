@@ -1,0 +1,82 @@
+<style include="shared-styles">
+
+  a {
+    color: var(--default-primary-color);
+    text-decoration: none;
+  }
+
+  .steps {
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+  }
+
+  .steps .number {
+    height: 32px;
+    width: 32px;
+    border-radius: 18px;
+    background-color: var(--secondary-text-color);
+    color: white;
+    font-size: 22px;
+    text-align: center;
+    margin: 10px;
+  }
+
+  .steps .text {
+    flex: 1;
+  }
+</style>
+
+
+
+<app-popup id="popup" no-auto-move>
+  <div style="padding: 10px">
+    <div style="display:flex; align-items: center; margin-bottom: 40px">
+      <h2 style="flex: 1; margin: 0">Package Created!</h2>
+      <paper-icon-button icon="close" on-click="_cancel"></paper-icon-button>
+    </div>
+
+    <div class="steps">
+      <div class="number">1</div>
+      <div class="text">
+        Click below to download the package files and get started! <br />
+        <a href="https://github.com/ecosml-dev/[[name]]/archive/master.zip">
+          <iron-icon icon="archive"></iron-icon> Download package files
+        </a>
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="number">2</div>
+      <div class="text">
+        Locally add / update your model code, resources and papers.
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="number">3</div>
+      <div class="text">
+        Use the <b>Files</b> tab to sync changes back to EcoSML.
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="number">4</div>
+      <div class="text">
+        Use the <b>Details</b> tab to add model documentation, keywords and themes.
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="number">5</div>
+      <div class="text">
+        Use the <b>Releases</b> tab to create a versioned release of the model 
+        allowing the package show in search.
+      </div>
+    </div>
+
+    <div style="margin-top: 30px; text-align: right">
+      <paper-button on-click="_cancel">Close</paper-button>
+    </div>
+  </div>
+</app-popup>

@@ -39,14 +39,6 @@ export default class AppDetailsMetadata extends Mixin(PolymerElement)
     this.$.description.value = value || '';
   }
 
-  get keywords() {
-    return this.$.keywords.value;
-  }
-
-  set keywords(value) {
-    this.$.keywords.value = value || '';
-  }
-
   /**
    * @method _onActiveChange
    * @description bound to 'active' property observer.

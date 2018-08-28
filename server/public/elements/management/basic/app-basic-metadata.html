@@ -21,6 +21,8 @@
   }
 </style>
 
+<app-created-popup id="created" name="[[name]]"></app-created-popup>
+
 <h2 class="uheader blue" hidden$="[[!creating]]">Package Name</h2>
 <app-text-input  
   id="name" 
@@ -63,5 +65,5 @@ will auto build native package files for installation from Github.</div>
 </div>
 
 <div hidden$="[[creating]]" class="delete">
-  <paper-button on-click="_onDeleteBtnClicked">Delete Package</paper-button>
+  <paper-button on-click="_onDeleteBtnClicked" disabled$="[[deleting]]">Delete Package</paper-button>
 </div>

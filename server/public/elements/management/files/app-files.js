@@ -26,6 +26,11 @@ export default class AppFiles extends PolymerElement {
       language : {
         type : String,
         value : ''
+      },
+
+      packageName : {
+        type : String,
+        value : ''
       }
     }
   }
@@ -52,6 +57,7 @@ export default class AppFiles extends PolymerElement {
       });
     });
   }
+  
 
   /**
    * @method _onCreateExampleClicked
@@ -64,6 +70,10 @@ export default class AppFiles extends PolymerElement {
       label : 'package_example_'+len,
       isNew : true
     });
+  }
+
+  _onChange(e) {
+    console.log(e);
   }
 
 }

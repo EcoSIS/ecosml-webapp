@@ -10,9 +10,10 @@ const uuid = require('uuid');
 const utils = require('../lib/utils')
 const markdown = require('../lib/markdown');
 const schema = require('../lib/schema');
-const templates = require('../templates');
+const initPackage = require('../lib/init-package');
 const layouts = require('../lib/package-layout');
-const travis = require('../models/PackageTestModel');
+const hash = require('../lib/hash');
+const travis = require('./PackageTestModel');
 
 const METADATA_FILENAME = 'ecosml-metadata.json';
 
@@ -42,8 +43,9 @@ class PackageModel {
    * @param {String} pkg.overview package short description
    * @param {String} pkg.organization package owner org
    * @param {String} pkg.owner package owner
+   * @param {String} username optional username
    */
-  async create(pkg) {
+  async create(pkg, username) {
     logger.info(`Creating package: ${pkg.name}`);
     schema.validate('create', pkg);
 
@@ -70,12 +72,13 @@ class PackageModel {
     await mongo.insertPackage(pkg);
     await git.clone(pkg.name);
 
-    let layout = this._getPackageLayout(pkg.language);
-    await layout.ensureLayout(pkg);
+    // let layout = this._getPackageLayout(pkg.language);
+    // await layout.ensureLayout(pkg);
+    await initPackage(pkg);
 
     // write and commit ecosis-metadata.json file
     await this.writeMetadataFile(pkg);
-    await this.commit(pkg.name, 'Updating package metadata');
+    await this.commit(pkg.name, 'Updating package metadata', username);
 
     // let travis know about the repo (sync with it)
     await travis.initRepo(pkg.name);
@@ -105,9 +108,10 @@ class PackageModel {
    * @param {String} update.family
    * @param {String} update.specific
    * @param {String} commitMessage
+   * @param {String} username
    * @param {Boolean} refreshFromGithub preform a full refresh from Github API?
    */
-  async update(pkg, update, commitMessage, refreshFromGithub = false) {
+  async update(pkg, update, commitMessage, username, refreshFromGithub = false) {
     pkg = await this.get(pkg);
     schema.validate('update', update);
 
@@ -116,7 +120,7 @@ class PackageModel {
     await git.clean(pkg.name);
     await git.pull(pkg.name);
 
-    // First update readme if it changed via git
+    // update readme if it changed via git
     if( update.description && pkg.description !== update.description ) {
       let README = path.join(git.getRepoPath(pkg.name), 'README.md');
       await fs.writeFile(README, update.description || '');
@@ -179,7 +183,7 @@ class PackageModel {
 
     // write and commit ecosis-metadata.json file or other changes
     await this.writeMetadataFile(pkg);
-    await this.commit(pkg.name, commitMessage || 'Updating package metadata');
+    await this.commit(pkg.name, commitMessage || 'Updating package metadata', username);
 
     return pkg;
   }
@@ -261,6 +265,61 @@ class PackageModel {
   }
 
   /**
+   * @method updateFiles
+   * @description add, update and/or remove multiple package files
+   * 
+   * @param {Object|String} pkg package object, name or id
+   * @param {Array} updateFiles 
+   * @param {String} updateFiles[].repoFilePath
+   * @param {String} updateFiles[].tmpFile 
+   * @param {String} updateFiles[].buffer
+   * @param {Array} removeFiles file paths to remove
+   * @param {String} message
+   * @param {String} username
+   */
+  async updateFiles(pkg, updateFiles=[], removeFiles=[], message, username) {
+    pkg = await this.get(pkg);
+
+    // update repo path
+    await git.resetHEAD(pkg.name);
+
+    let result = [];
+    for( let i = 0; i < updateFiles.length; i++ ) {
+      let file = updateFiles[i];
+
+      let filePath = path.join(config.github.fsRoot, pkg.name, file.repoFilePath);
+      let baseFileDir = path.parse(filePath).dir;
+      // if this is the main or resources directory, move files to correct location
+     
+      await fs.mkdirs(baseFileDir);
+
+      if( fs.existsSync(filePath) ) {
+        await fs.unlink(filePath);
+      }
+      
+      if( file.buffer ) {
+        await fs.writeFile(filePath, file.buffer);
+      } else if( file.tmpFile ) {
+        await fs.move(file.tmpFile, filePath);
+      }
+
+      result.push(this._getFileInfo(filePath, pkg));
+    }
+
+    for( let i = 0; i < removeFiles.length; i++ ) {
+      let file = removeFiles[i];
+      let filePath = path.join(config.github.fsRoot, pkg.name, file);
+      if( fs.existsSync(filePath) ) {
+        await fs.unlink(filePath);
+      }
+    }
+
+    await this.commit(pkg.name, message || 'Updating package files', username);
+  
+    return this.getFiles(pkg);
+  }
+
+  /**
    * @method deleteFile
    * @description delete a package file
    * 
@@ -296,7 +355,7 @@ class PackageModel {
   async delete(pkg) {
     pkg = await this.get(pkg);
 
-    logger.info(`Deleting package: ${pkg.names}`);
+    logger.info(`Deleting package: ${pkg.name}`);
 
     let {response} = await github.deleteRepository(pkg.name);
     
@@ -397,8 +456,9 @@ class PackageModel {
    * 
    * @param {String} packageName actual package name (not id)
    * @param {String} message commit message
+   * @param {String} username
    */
-  async commit(packageName, message) {
+  async commit(packageName, message, username) {
     let changes = await git.currentChangesCount(packageName);
     if( changes === 0 ) {
       logger.debug(`Package ${packageName} committing: told to commit, but no changes have been made`);
@@ -409,8 +469,8 @@ class PackageModel {
     
     var {stdout, stderr} = await git.addAll(packageName);
     logger.debug(`Package ${packageName} add --all`, stdout, stderr);
-    
-    var {stdout, stderr} = await git.commit(packageName, message);
+
+    var {stdout, stderr} = await git.commit(packageName, message, username);
     logger.debug(`Package ${packageName} commit`, stdout, stderr);
 
     var {stdout, stderr} = await git.push(packageName);
@@ -429,7 +489,6 @@ class PackageModel {
     pkg = await this.get(pkg);
 
     let dir = await git.ensureDir(pkg.name);
-    console.log(dir);
     return this._walkPackage(dir, dir, [], pkg);
   }
 
@@ -445,12 +504,28 @@ class PackageModel {
       if( isDir ) {
         await this._walkPackage(root, file, filelist, pkg);
       } else {
-        let info = this._getFileInfo(file.replace(new RegExp('^'+root), ''), pkg);
+        let repoPath = file.replace(new RegExp('^'+root), '');
+        let info = this._getFileInfo(repoPath, pkg);
+        info.sha256 = await hash(file);
+        info.size = fs.statSync(file).size;
         filelist.push(info);
       }
     }
 
     return filelist;
+  }
+
+  async getLayoutFolders(pkg) {
+    pkg = await this.get(pkg);
+    let layout = this._getPackageLayout(pkg.language);
+    let re = new RegExp('^'+path.join(config.github.fsRoot, pkg.name));
+
+    return {
+      papers : '/papers',
+      examples : layout.getExamplesDir(pkg.name).replace(re, ''),
+      main : layout.getMainDir(pkg.name).replace(re, ''),
+      resources : layout.getResourcesDir(pkg.name).replace(re, '')
+    }
   }
 
   /**
@@ -541,11 +616,11 @@ class PackageModel {
    * @return {Object}
    */
   _getFileInfo(filepath, pkg) {
-    let pkgLayout = this._getPackageLayout(pkg.language);
+    // let pkgLayout = this._getPackageLayout(pkg.language);
 
     let info = path.parse(filepath);
     info.filename = info.base;
-    info.dir = pkgLayout.langPathToGeneric(info.dir, pkg);
+    // info.dir = pkgLayout.langPathToGeneric(info.dir, pkg);
     delete info.root;
     delete info.base;
     return info;

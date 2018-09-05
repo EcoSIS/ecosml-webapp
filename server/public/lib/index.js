@@ -2,6 +2,7 @@ export default {
   AppStateModel : require('./models/AppStateModel'),
   PackageModel : require('./models/PackageModel'),
   SearchModel : require('./models/SearchModel'),
+  StatsModel : require('./models/StatsModel'),
   AuthModel : require('./models/AuthModel'),
   vocabulary : require('./controlled-vocabulary')
 }

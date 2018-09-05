@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const mongo = require('../lib/mongo');
 const utils = require('./utils');
-
+const redis = require('../lib/redis');
 
 router.get('/', async (req, res) => {
   try {
@@ -9,6 +9,11 @@ router.get('/', async (req, res) => {
     for( let key in result ) {
       result[key] = limit(result[key]);
     }
+
+    for( let org of result.organizations ) {
+      org.displayName = await redis.getOrgDisplayNameFromName(org.key);
+    }
+
     res.json(result);
   } catch(e) {
     utils.handleError(res, e);

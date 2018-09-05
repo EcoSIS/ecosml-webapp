@@ -24,6 +24,26 @@
     padding: 10px;
   }
 
+  .stat {
+    display: flex;
+    align-items: center;
+  }
+
+  .stat .label {
+    flex: 1;
+  }
+
+  .stat .count {
+    padding: 5px;
+    margin: 3px;
+    height: 22px;
+    width: 22px;
+    text-align: center;
+
+    border-radius: 24px;
+    background-color: var(--dark-background-color);
+  }
+
   @media(max-width: 750px) {
     .row {
       display: block;
@@ -51,27 +71,36 @@
     <div class="row">
       <div>
         <h2 class="uheader blue">Top Organizations</h2>
-        <div>UW EnSpec </div>
-        <div>University of Utah</div>
-        <div>Foundational Datasets</div>
-        <div>The Remote Sensing Laboratory</div>
-        <div>University of California Santa Barbara</div>
+        <dom-repeat items="[[stats.organizations]]">
+          <template>
+            <div class="stat">
+              <div class="label"><a href$="[[item.link]]">[[item.displayName]]</a></div>
+              <div class="count">[[item.count]]</div>
+            </div>
+          </template>
+        </dom-repeat>
       </div>
       <div>
         <h2 class="uheader green">Top Keywords</h2>
-        <div>nitrogen </div>
-        <div>lma</div>
-        <div>carbon</div>
-        <div>lignin</div>
-        <div>reflectance</div>
+        <dom-repeat items="[[stats.keywords]]">
+          <template>
+            <div class="stat">
+              <div class="label"><a href$="[[item.link]]">[[item.key]]</a></div>
+              <div class="count">[[item.count]]</div>
+            </div>
+          </template>
+        </dom-repeat>
       </div>
       <div>
         <h2 class="uheader lightblue">Top Themes</h2>
-        <div>ecology</div>
-        <div>biochemistry</div>
-        <div>agriculture</div>
-        <div>forest</div>
-        <div>physiology</div>
+        <dom-repeat items="[[stats.themes]]">
+          <template>
+            <div class="stat">
+              <div class="label"><a href$="[[item.link]]">[[item.key]]</a></div>
+              <div class="count">[[item.count]]</div>
+            </div>
+          </template>
+        </dom-repeat>
       </div>
     </div>
     

@@ -18,13 +18,25 @@ export default class AppActiveFiltersPanel extends Mixin(PolymerElement)
       hasFilters : {
         type : Boolean,
         value : false
+      },
+      isSearch : {
+        type : Boolean,
+        value : false
       }
     }
   }
 
   constructor() {
     super();
-    this.active = true;
+    this._injectModel('AppStateModel');
+  }
+
+  _onAppStateUpdate(e) {
+    if( e.location.path.length && e.location.path[0] === 'search' ) {
+      this.isSearch = true;
+      return;
+    }
+    this.isSearch = false;
   }
 
   _onSearchPackagesUpdate(e) {

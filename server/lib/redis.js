@@ -69,6 +69,18 @@ class Redis {
     return null;
   }
 
+  /**
+   * @method getOrgDisplayNameFromName
+   * @description given then org short name, return the org display name
+   * 
+   * @return {Promise} resolves to String
+   */
+  async getOrgDisplayNameFromName(orgName) {
+    let result = await this.client.get(this.createOrgKey(orgName));
+    if( !result ) return '';
+    return JSON.parse(result).displayName;
+  }
+
 
 }
 

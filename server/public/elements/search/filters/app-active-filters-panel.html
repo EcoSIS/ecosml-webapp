@@ -27,7 +27,7 @@
   }
 </style>
 
-<div has-filters$="[[hasFilters]]"> 
+<div has-filters$="[[hasFilters]]" hidden$="[[!isSearch]]"> 
   <template is="dom-repeat" items="[[filters]]">
     <paper-button index$="[[index]]" on-click="_onRemoveFilterClicked">
       <div class="btn-layout">

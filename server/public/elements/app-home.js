@@ -1,10 +1,9 @@
 import {PolymerElement, html} from "@polymer/polymer"
+import "@polymer/polymer/lib/elements/dom-repeat"
 import template from "./app-home.html"
 
-import AuthInterface from "./interfaces/AuthInterface"
-
 export default class AppHome extends Mixin(PolymerElement)
-  .with(EventInterface, AuthInterface) {
+  .with(EventInterface) {
 
   static get template() {
     return html([template]);
@@ -15,13 +14,51 @@ export default class AppHome extends Mixin(PolymerElement)
       loggedIn : {
         type : Boolean,
         value : false
+      },
+      stats : {
+        type : Object,
+        value : () => {
+          return {
+            organizations : [],
+            themes : [],
+            keywords : []
+          }
+        }
       }
     }
   }
 
   constructor() {
     super();
-    this.active = true;
+    this._injectModel('StatsModel');
+    this._injectModel('AuthModel');
+    this._injectModel('SearchModel');
+  }
+
+  async ready() {
+    super.ready();
+    let response = await this.StatsModel.get();
+    let stats = response.payload;
+
+    stats.organizations = stats.organizations.map(org => {
+      let query = this.SearchModel.getEmptyQuery();
+      this.SearchModel.appendFilter('organization', org.key, query);
+      return Object.assign({}, org, {link: this.SearchModel.toUrl(query)})
+    });
+
+    stats.keywords = stats.keywords.map(keyword => {
+      let query = this.SearchModel.getEmptyQuery();
+      this.SearchModel.appendFilter('keywords', keyword.key, query);
+      return Object.assign({}, keyword, {link: this.SearchModel.toUrl(query)})
+    });
+
+    stats.themes = stats.themes.map(theme => {
+      let query = this.SearchModel.getEmptyQuery();
+      this.SearchModel.appendFilter('theme', theme.key, query);
+      return Object.assign({}, theme, {link: this.SearchModel.toUrl(query)})
+    });
+
+    this.stats = stats;
   }
 
   /**

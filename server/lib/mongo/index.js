@@ -1,7 +1,8 @@
 const mongodb = require('mongodb');
 const logger = require('../logger');
 const config = require('../config');
-const mapReduce = require('./mapReduce');
+const queryMapReduce = require('./query-map-reduce');
+const statusMapReduce = require('./stats-map-reduce');
 
 class MongoDB {
 
@@ -33,6 +34,11 @@ class MongoDB {
   async packagesCollection() {
     await this.conn();
     return this.db.collection(config.mongodb.collections.package);
+  }
+
+  async getStatsCollection() {
+    await this.conn();
+    return this.db.collection(config.mongodb.collections.stats);
   }
 
   async githubTeamCollection() {
@@ -111,7 +117,7 @@ class MongoDB {
                     .sort(sort)
                     .toArray();
     
-    let filters = await mapReduce(collection, query);
+    let filters = await queryMapReduce(collection, query);
     if( filters.length == 0 ) filters = {};
     else filters = filters[0].value;
 
@@ -145,7 +151,9 @@ class MongoDB {
    */
   async insertPackage(pkg) {
     let collection = await this.packagesCollection();
-    return collection.update({id: pkg.id}, pkg, {upsert: true});
+    let result = collection.update({id: pkg.id}, pkg, {upsert: true});
+    this.updateStats(); // don't wait for this
+    return result;
   }
 
   /**
@@ -159,7 +167,7 @@ class MongoDB {
    */
   async updatePackage(packageNameOrId, data) {
     let collection = await this.packagesCollection();
-    return collection.update({
+    let result = await collection.update({
       $or : [
         {name: packageNameOrId},
         {id : packageNameOrId}
@@ -167,6 +175,10 @@ class MongoDB {
     }, {
       $set: data
     });
+
+    this.updateStats(); // don't wait for this
+
+    return result
   }
 
   /**
@@ -200,12 +212,16 @@ class MongoDB {
    */
   async removePackage(packageNameOrId) {
     let collection = await this.packagesCollection();
-    return collection.remove({
+    let result = await collection.remove({
       $or : [
         {name: packageNameOrId},
         {id : packageNameOrId}
       ]
     });
+
+    this.updateStats(); // don't wait for this
+
+    return result;
   }
 
   /**
@@ -261,6 +277,29 @@ class MongoDB {
   async getAllGithubTeamNames() {
     let collection = await this.githubTeamCollection();
     return collection.find({}, {slug: 1, id: 1}).toArray();
+  }
+
+  /**
+   * @method updateStats
+   * @description update stats via mapreduce. Should be called
+   * any time package updates
+   * 
+   * @return {Promise}
+   */
+  async updateStats() {
+    let collection = await this.packagesCollection();
+    return statusMapReduce(collection);
+  }
+
+  /**
+   * @method getStats
+   * @description get all stats in stats collection
+   * 
+   * @return {Promise} resolve to array
+   */
+  async getStats() {
+    let collection = await this.getStatsCollection();
+    return collection.find({}).toArray();
   }
 
 }

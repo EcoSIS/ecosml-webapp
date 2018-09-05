@@ -51,7 +51,8 @@ module.exports = {
     url : `mongodb://${mongoHost}:27017/ecosml`,
     collections : {
       package : 'package',
-      githubTeam : 'github-team'
+      githubTeam : 'github-team',
+      stats : 'stats'
     },
     filters : ['keywords', 'theme', 'family', 'specific', 'language'],
     indexes : require('./mongo-indexes')

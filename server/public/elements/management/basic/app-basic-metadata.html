@@ -30,7 +30,10 @@
 <app-created-popup id="created" name="[[name]]"></app-created-popup>
 
 <div class="basic-header" hidden$="[[creating]]">
-  <div hidden$="[[!hasRelease]]">Search Landing page: <a href$="/package/[[packageId]]">/package/[[packageId]]</a></div>
+  <div hidden$="[[!hasRelease]]">
+    <div>View in Search: <a href$="/package/[[packageId]]">/package/[[packageId]]</a></div>
+    <div>View in GitHub: <a href$="[[data.htmlUrl]]">[[data.htmlUrl]]</a></div>
+  </div>
   <div hidden$="[[hasRelease]]">
     <iron-icon icon="warning" style="vertical-align: text-bottom"></iron-icon> Warning, your package will not show up in search
     until you create a release.  Click the <b>Release</b> tab to create one.

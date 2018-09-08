@@ -76,7 +76,7 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
     let page = e.location.path[0];
 
     if( page === 'edit' && e.location.path.length > 0 ) {
-      if( this.packageId === e.location.path[1] ) return;
+      // if( this.packageId === e.location.path[1] ) return;
       this.packageId = e.location.path[1];
       this._fetchAndUpdatePackage( e.location.path[1] );
     } else if( page === 'create' ) {
@@ -104,23 +104,13 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
    * @description called when app state updates
    */
   async _fetchAndUpdatePackage(pkgId) {
+    this.packageId = pkgId;
     try {
       let pkg = await this._getPackage(pkgId);
       this._setPackageData(pkg.payload);
     } catch(e) {
-      console.error(e);
       return alert('Failed to fetch package '+pkgId+': '+e.message);
     }
-  }
-
-  /**
-   * @method _onPackageUpdate
-   * @description via package interface, called when package data updates
-   */
-  _onPackageUpdate(e) {
-    if( e.state !== 'loaded' ) return;
-    if( e.id !== this.packageId ) return;
-    this._setPackageData(e.payload);
   }
 
   /**

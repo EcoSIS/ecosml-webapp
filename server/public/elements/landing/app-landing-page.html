@@ -37,6 +37,12 @@
   #readme {
     margin-top: 40px;
   }
+
+  .script-input {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 5px 0;
+  }
 </style>
 
 <h2 style="text-align: center">[[package.name]]</h2>
@@ -57,10 +63,8 @@
               <div style="margin-bottom: 15px">Language: Python</div>
               <div>Install via <a href="https://pip.pypa.io/en/stable/" target="_blank">pip:</a></div>
               <div class="script">
-                  <iron-icon icon="chevron-right"></iron-icon>pip install git+https://github.com/ecosml-dev/[[package.name]]@[[release.name]]
+                <input type="text" class="script-input" value="pip install git+https://github.com/ecosml-dev/[[package.name]]@[[release.name]]" />
               </div>
-              <div>Use:</div>
-              <div>import [[package.name]].main as model</div>
             </div>
           </div>
           

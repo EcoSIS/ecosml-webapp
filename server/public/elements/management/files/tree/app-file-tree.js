@@ -92,7 +92,6 @@ export default class AppFileTree extends Mixin(PolymerElement)
     }
 
     this.updateTimer = setTimeout(() => {
-      console.log('file update render');
       this.updateTimer = -1;
       this._onUpdate();
     }, 100);

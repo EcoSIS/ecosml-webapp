@@ -93,6 +93,7 @@ async function packageReadAccess(req, res, next) {
 
 module.exports = {
   sendError,
+  authenticated,
   packageReadAccess,
   packageWriteAccess,
   admin

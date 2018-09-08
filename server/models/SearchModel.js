@@ -6,6 +6,27 @@ const utils = require('../lib/utils');
 class SearchModel {
 
   /**
+   * @method publicSearch
+   * @description Search for packages, ensures release count is greater than 0
+   * 
+   * @param {Object} query standard mongodb query 
+   * @param {String} query.text text search
+   * @param {Array} query.filters mongodb filters array
+   * @param {Number} query.offset query offset 
+   * @param {Number} query.limit query limit 
+   * @param {Object} query.sort standard mongodb sort object 
+   * @param {Object} query.projection standard mongodb projection object
+   * 
+   * @returns {Promise} mongodb query promise, resolves to array
+   */
+  async publicSearch(query) {
+    if( !query.filters ) query.filters = [];
+    query.filters.push({releaseCount: {$gt: 0}});
+    query.filters.push({private: false});
+    return this.search(query);
+  }
+
+  /**
    * @method search
    * @description Search for packages
    * 
@@ -89,6 +110,8 @@ class SearchModel {
       let metadata = utils.ecosmlToMetadataFile(JSON.parse(response.body));
       repo = Object.assign(metadata, repo);
     }
+
+    repo.releaseCount = (repo.releases || []).length;
 
     await mongo.insertPackage(repo);
     return repo;

@@ -166,9 +166,7 @@ class SearchModel extends BaseModel {
 
   getOwnerPackages(owner) {
     let query = this.getEmptyQuery();
-    query.filters.push({owner});
     query.limit = 1000;
-
     return this.service.getOwnerPackages(query);
   }
 }

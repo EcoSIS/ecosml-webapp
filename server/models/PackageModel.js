@@ -67,6 +67,7 @@ class PackageModel {
     this.checkStatus(response, 201);
 
     pkg = Object.assign(pkg, utils.githubRepoToEcosml(body));
+    pkg.releaseCount = 0;
     pkg.id = ecosmlId;
 
     await mongo.insertPackage(pkg);
@@ -172,6 +173,9 @@ class PackageModel {
       let layout = this._getPackageLayout(gpkg.language);
       await layout.undoLayout(pkg);
     }
+
+    // make sure release count is correct
+    pkg.releaseCount = (pkg.releases || []).length;
 
     // now save changes in mongo
     await mongo.updatePackage(pkg.name, gpkg);
@@ -411,16 +415,15 @@ class PackageModel {
     // clean up some stuff we don't care about
     response = utils.githubReleaseToEcosml(response);
 
-    let releases = [];
-    if( pkg.releases ) {
-      releases = pkg.releases;
-    }
-    
+
+    let releases = pkg.releases || [];
     releases.push(response);
     pkg.releases = releases;
 
+    let releaseCount = releases.length; 
+
     // save release data
-    await mongo.updatePackage(pkg.name, {releases});
+    await mongo.updatePackage(pkg.name, {releases, releaseCount});
     return pkg;
   }
 

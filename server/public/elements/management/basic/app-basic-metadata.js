@@ -34,6 +34,11 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
       ecosisHost : {
         type : String,
         value : APP_CONFIG.ecosisDataHost
+      },
+
+      hasRelease : {
+        type : Boolean,
+        value : false
       }
     }
   }
@@ -124,6 +129,8 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
     VALUES.forEach(value => {
       this[value] = this.data[value];
     });
+
+    this.hasRelease = (this.data.releaseCount > 0);
   }
 
   /**

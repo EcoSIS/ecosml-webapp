@@ -19,9 +19,23 @@
     margin-top: 75px;
     text-align: right;
   }
+
+  .basic-header {
+    padding-bottom: 25px;
+    font-size: 14px;
+    color: var(--secondary-text-color);
+  }
 </style>
 
 <app-created-popup id="created" name="[[name]]"></app-created-popup>
+
+<div class="basic-header" hidden$="[[creating]]">
+  <div hidden$="[[!hasRelease]]">Search Landing page: <a href$="/package/[[packageId]]">/package/[[packageId]]</a></div>
+  <div hidden$="[[hasRelease]]">
+    <iron-icon icon="warning" style="vertical-align: text-bottom"></iron-icon> Warning, your package will not show up in search
+    until you create a release.  Click the <b>Release</b> tab to create one.
+  </div>
+</div>
 
 <h2 class="uheader blue" hidden$="[[!creating]]">Package Name</h2>
 <app-text-input  

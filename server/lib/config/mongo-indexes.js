@@ -20,6 +20,14 @@ module.exports = {
     },
     {
       index : {
+        releaseCount: 1
+      },
+      options : {
+        name : 'ReleaseCountIndex'
+      }
+    },
+    {
+      index : {
         keywords: 1
       },
       options : {

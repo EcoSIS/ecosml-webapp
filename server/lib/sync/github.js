@@ -184,6 +184,7 @@ class GithubSync {
         return 0;
       });
       metadata.releases = releases;
+      metadata.releaseCount = (releases || []).length;
 
     } catch(e) {
       logger.error('Failed to download metadata file for repo '+repoName+', ignoring');

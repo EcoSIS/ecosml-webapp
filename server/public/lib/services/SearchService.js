@@ -49,7 +49,7 @@ class SearchService extends BaseService {
 
   async getOwnerPackages(query) {
     return this.request({
-      url : this.baseUrl,
+      url : this.baseUrl+'/owner',
       fetchOptions : {
         method : 'POST',
         body  : query

@@ -68,6 +68,9 @@ export default class AppUserAccount extends Mixin(PolymerElement)
   }
 
   async _renderOwnerPackages() {
+    if( this.renderedOwner === this.username ) return;
+    this.renderedOwner = this.username;
+
     let resp = await this._getOwnerPackages(this.username);
     this.ownerPackages = resp.body.results;
   }

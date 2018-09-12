@@ -5,6 +5,7 @@ const keyPath = path.join(__dirname, '../../google-key.json');
 
 const mongoHost = env.MONGO_HOST || 'mongo';
 const firebaseEnv = env.FIREBASE_ENV || 'local';
+const clientEnv = env.CLIENT_ENV || 'dev';
 
 module.exports = {
 
@@ -12,8 +13,9 @@ module.exports = {
     port : env.SERVER_PORT || '3000',
     url : env.SERVER_URL || 'http://localhost:3000',
     label : env.SERVER_LABEL || 'EcoSML', // used for auth redirect
-    assets : env.SERVER_ASSET_DIR || 'public',
+    assets : (clientEnv === 'prod') ? 'dist' : 'public',
     loglevel : env.SERVER_LOG_LEVEL || 'debug',
+    clientEnv,
 
     jwt : {
       secret : env.JWT_SECRET || secrets.ecosml.secret
@@ -30,7 +32,7 @@ module.exports = {
 
     // place all SPA base route names here
     appRoutes : ['package', 'search', 'edit', 
-    'create', 'account']
+    'create', 'account', 'about']
   },
 
   ecosis : {

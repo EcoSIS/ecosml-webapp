@@ -26,13 +26,13 @@ export default class AppHeader extends Mixin(PolymerElement)
     }
   }
 
-  constructor() {
-    super();
-    this.active = true;
-  }
-
   ready() {
     super.ready();
+
+    if( APP_CONFIG.env.client === 'dev' ) {
+      this.$.titleExtra.innerHTML = 'Sandbox';
+    }
+
     window.addEventListener('click', () => this.hideMenu());
   }
 

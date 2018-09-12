@@ -14,6 +14,7 @@ services:
       - ../../server/templates:/server/templates
       - ../../server/tests:/server/tests
       - ../../server/uploads:/server/uploads
+      - ../../server/index.js:/server/index.js
       - ../google-key.json:/server/google-key.json
       - ../secrets.js:/server/secrets.js
     ports:

@@ -52,7 +52,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 /**
  * Setup static routes for webapp
  **/
-require('./lib/static')(app);
+require('./controllers/static')(app);
 
 /**
  * Setup Controllers

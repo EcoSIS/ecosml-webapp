@@ -13,7 +13,8 @@ module.exports = {
     port : env.SERVER_PORT || '3000',
     url : env.SERVER_URL || 'http://localhost:3000',
     label : env.SERVER_LABEL || 'EcoSML', // used for auth redirect
-    assets : (clientEnv === 'prod') ? 'dist' : 'public',
+    // assets : (clientEnv === 'prod') ? 'dist' : 'public',
+    assets : env.SERVER_ASSET_DIR || 'public',
     loglevel : env.SERVER_LOG_LEVEL || 'debug',
     clientEnv,
 

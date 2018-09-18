@@ -24,6 +24,10 @@ export default class AppHome extends Mixin(PolymerElement)
             keywords : []
           }
         }
+      },
+      sandbox : {
+        type : Boolean,
+        value : true
       }
     }
   }
@@ -37,6 +41,12 @@ export default class AppHome extends Mixin(PolymerElement)
 
   async ready() {
     super.ready();
+
+    if( APP_CONFIG.env.client === 'dev' ) {
+      this.$.titleExtra.innerHTML = ' - Sandbox';
+      this.sandbox = true;
+    }
+
     let response = await this.StatsModel.get();
     let stats = response.payload;
 

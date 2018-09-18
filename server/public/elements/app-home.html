@@ -7,6 +7,9 @@
     display: flex;
     justify-content: center;
   }
+  .root.column {
+    flex-direction: column;
+  }
   .root > div {
     margin-top: 20px;
     width: 100%;
@@ -61,8 +64,14 @@
   }
 </style>
 
-<div class="root">
-  <h1>Ecological Spectral Model Library</h1>
+<div class="root column" style="text-align: center">
+  <h1>Ecological Spectral Model Library <span id="titleExtra"></span></h1>
+  <p hidden$="[[!sandbox]]">
+    <iron-icon icon="warning" style="vertical-align: bottom"></iron-icon> 
+    This is the development server for 
+    <a href="https://ecosml.org">ecosml.org</a>. You can use this 
+    server to learn about how to use the EcoSML model management tools.
+  </p>
 </div>
 
 <div class="root">

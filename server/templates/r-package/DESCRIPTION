@@ -1,0 +1,10 @@
+Package: {{packageName}}
+Title: {{title}}
+Version: {{version}}
+Authors@R: person("{{firstname}}", "{{lastname}}", email = "{{email}}",
+                  role = c("aut", "cre"))
+Description: {{description}}
+Depends: R (>= 3.1.0)
+License: MIT
+LazyData: true
+RoxygenNote: 6.1.0

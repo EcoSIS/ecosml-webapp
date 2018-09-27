@@ -42,6 +42,7 @@
     width: 100%;
     box-sizing: border-box;
     margin: 5px 0;
+    display: block;
   }
 </style>
 
@@ -60,12 +61,26 @@
         <div style="width: 300px">
           <div id="install" class="install">
             <div id="install-python">
-              <div style="margin-bottom: 15px">Language: Python</div>
+              <div style="margin-bottom: 15px">Language: <a href="https://www.python.org/" target="_blank">Python</a></div>
               <div>Install via <a href="https://pip.pypa.io/en/stable/" target="_blank">pip:</a></div>
               <div class="script">
                 <input type="text" class="script-input" value="pip install git+https://github.com/ecosml-dev/[[package.name]]@[[release.name]]" />
               </div>
             </div>
+
+            <div id="install-r">
+              <div style="margin-bottom: 15px">Language: R</div>
+              <div>Install via devtools:</a></div>
+              <div class="script">
+                <input type="text" class="script-input" value='install.packages("devtools\")' />
+                <input type="text" class="script-input" value="library(devtools)" />
+                <input type="text" class="script-input" value='install_github("ecosml/[[package.name]]", ref="[[release.name]")' />
+                <input type="text" class="script-input" value="library([[package.name]])" />
+              </div>
+            </div>
+
+            <div>*Note: It is up to individual package maintainers to follow standard practices for 
+              language package management compatibility.</div>
           </div>
           
           <h2 class="uheader dark">Current Release</h2>

@@ -3,7 +3,7 @@ version: '2'
 services:
 
   server:
-    build: ../../server
+    image: ecosis/ecosml-webapp:prod
     volumes:
       - git-data:/server/gitdata
       - ../google-key.json:/server/google-key.json

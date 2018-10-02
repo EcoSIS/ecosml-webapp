@@ -28,6 +28,10 @@ export default class AppHome extends Mixin(PolymerElement)
       sandbox : {
         type : Boolean,
         value : true
+      },
+      gitenv : {
+        type : Object,
+        value : () => APP_CONFIG.env.git
       }
     }
   }

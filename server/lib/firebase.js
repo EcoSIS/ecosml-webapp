@@ -15,6 +15,7 @@ class Firebase extends EventEmitter {
     });
 
     this.firestore = admin.firestore();
+    this.firestore.settings({timestampsInSnapshots: true})
     this.collections = collections;
 
     this.BUFFER_TIME = 1000 * 5;

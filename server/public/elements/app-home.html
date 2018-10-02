@@ -47,6 +47,12 @@
     background-color: var(--dark-background-color);
   }
 
+  .gitinfo {
+    padding: 10px;
+    font-size: 11px;
+    color: #999;
+  }
+
   @media(max-width: 750px) {
     .row {
       display: block;
@@ -119,4 +125,10 @@
     <div hidden$="[[!loggedIn]]"><a href="/create">Create Package</a></div>
     <div hidden$="[[loggedIn]]"><a href="/account">Login to Create Package</a></div>
   </div>
+</div>
+
+<div hidden$="[[!sandbox]]" class="gitinfo">
+  <div>Branch: [[gitenv.branch]]</div>
+  <div>Tag: [[gitenv.tag]]</div>
+  <div>Commit: [[gitenv.commit]]</div>
 </div>

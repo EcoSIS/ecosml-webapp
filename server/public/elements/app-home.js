@@ -48,6 +48,7 @@ export default class AppHome extends Mixin(PolymerElement)
 
     if( APP_CONFIG.env.client === 'dev' ) {
       this.$.titleExtra.innerHTML = ' - Sandbox';
+      document.title = document.title+' Sandbox'
       this.sandbox = true;
     }
 

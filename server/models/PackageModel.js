@@ -57,7 +57,7 @@ class PackageModel {
     delete githubRepo.owner;
     githubRepo.auto_init = true;
     githubRepo.license_template = config.github.default_license;
-    githubRepo.homepage = 'https://ecosml.org/package/'+ecosmlId;
+    githubRepo.homepage = config.github.homepageRoot+ecosmlId;
 
     // ecosis overview === github description
     githubRepo.description = githubRepo.overview;

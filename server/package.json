@@ -8,7 +8,8 @@
     "build": "webpack --config webpack.config.js",
     "watch": "webpack --watch",
     "dist": "./build.sh",
-    "docker-build" : "cd ../docker && ./build.sh"
+    "docker-build" : "cd ../docker && ./build.sh",
+    "docker-push" : "cd ../docker && ./push.sh"
   },
   "author": "",
   "license": "ISC",

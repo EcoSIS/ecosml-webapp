@@ -74,7 +74,8 @@ module.exports = {
     access : secrets.github,
     org : env.GITHUB_ORG || 'ecosml-dev',
     fsRoot : env.GITHUB_FS_ROOT || path.resolve(__dirname, '..', '..', 'gitdata'),
-    default_license : 'mit'
+    default_license : 'mit',
+    homepageRoot : clientEnv === 'dev' ? 'https://dev.ecosml.org/package/' : 'https://ecosml.org/package/',
   },
 
   travisCi : secrets.travisCi,

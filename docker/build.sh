@@ -9,5 +9,5 @@ COMMIT=$(git log  -1 | sed -n 1p | sed -E "s/commit//g" | sed -E "s/ //g")
 
 echo "{\"tag\":\"${TAG}\",\"branch\":\"${BRANCH}\",\"commit\":\"${COMMIT}\"}" > gitinfo.json
 
-
+echo "building ecosis/ecosml-webapp:${BRANCH}"
 docker build -t ecosis/ecosml-webapp:${BRANCH} .

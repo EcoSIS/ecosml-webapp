@@ -91,7 +91,7 @@
   <div style="position:relative; padding-left: 15px">
     <paper-icon-button inverse icon="more-vert" on-click="_onMenuIconClicked"></paper-icon-button>
     
-    <div id="menu" on-click="_onMenuClicked" hidden$="[[!menuActive]]">
+    <div id="menu" hidden$="[[!menuActive]]">
       <a href="/" >
         <iron-icon icon="home"></iron-icon> 
         <span>Home</span>
@@ -107,6 +107,10 @@
       <a href="/account" hidden$="[[!loggedIn]]">
         <iron-icon icon="social:person"></iron-icon> 
         <span>My Account</span>
+      </a>
+      <a href="https://github.com/EcoSIS/ecosml-webapp/issues/new/choose" target="_blank">
+        <iron-icon icon="bug-report"></iron-icon> 
+        <span>Report Issue</span>
       </a>
       <a href="/about" >
         <iron-icon icon="info"></iron-icon> 

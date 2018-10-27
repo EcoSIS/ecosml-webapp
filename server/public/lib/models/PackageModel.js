@@ -27,8 +27,8 @@ class PackageModel extends BaseModel {
    * @param {String} language package programming language
    * @returns {Promise} fetch promise
    */
-  async create(name, overview, organization, language) {
-    return this.service.create(name, overview, organization, language);
+  async create(name, overview, organization, language, packageType) {
+    return this.service.create(name, overview, organization, language, packageType);
   }
 
   /**
@@ -178,6 +178,23 @@ class PackageModel extends BaseModel {
   async deleteExample(packageId, name) {
     await this.service.deleteExample(packageId, name);
     return this.getFiles(packageId);
+  }
+
+  /**
+   * @method isNameAvailable
+   * @description is package name available
+   * 
+   * @param {String} packageName
+   * 
+   * @returns {Promise} resolves to Boolean
+   */
+  async isNameAvailable(packageName) {
+    try {
+      let {body} = await this.service.isNameAvailable(packageName);
+      return body.isAvailable;
+    } catch(e) {
+      console.error(e);
+    }
   }
 
   /**

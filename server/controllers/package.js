@@ -68,6 +68,18 @@ router.post('/:package/createRelease', packageWriteAccess, async (req, res) => {
   }
 });
 
+router.get('/available/:package', async(req, res) => {
+  try {
+    let isAvailable = await model.isNameAvailable(req.params.package);
+    res.json({
+      isAvailable,
+      packageName: req.params.package
+    });
+  } catch(e) {
+    utils.handleError(res, e);
+  }
+});
+
 router.post('/:package/updateFiles', packageWriteAccess, upload.any(),  async (req, res) => {
   try {
     let remove = JSON.parse(req.body.remove || '[]');
@@ -169,34 +181,34 @@ router.get('/:package/files', packageReadAccess, async (req, res) => {
   }
 });
 
-router.move('/:package/example/:name', packageWriteAccess, async (req, res) => {
-  try {
-    // await model.moveExample(req.ecosmlPackage, req.params.name, req.body);
-    await queue.add(
-      'moveExample', 
-      req.ecosmlPackage.name, 
-      [req.ecosmlPackage, req.params.name, req.body]
-    );
+// router.move('/:package/example/:name', packageWriteAccess, async (req, res) => {
+//   try {
+//     // await model.moveExample(req.ecosmlPackage, req.params.name, req.body);
+//     await queue.add(
+//       'moveExample', 
+//       req.ecosmlPackage.name, 
+//       [req.ecosmlPackage, req.params.name, req.body]
+//     );
 
-    res.json({success: true});
-  } catch(e) {
-    utils.handleError(res, e);
-  }
-});
+//     res.json({success: true});
+//   } catch(e) {
+//     utils.handleError(res, e);
+//   }
+// });
 
-router.delete('/:package/example/:name', packageWriteAccess, async (req, res) => {
-  try {
-    // await model.deleteExample(req.ecosmlPackage, req.params.name);
-    await queue.add(
-      'deleteExample', 
-      req.ecosmlPackage.name, 
-      [req.ecosmlPackage, req.params.name]
-    );
+// router.delete('/:package/example/:name', packageWriteAccess, async (req, res) => {
+//   try {
+//     // await model.deleteExample(req.ecosmlPackage, req.params.name);
+//     await queue.add(
+//       'deleteExample', 
+//       req.ecosmlPackage.name, 
+//       [req.ecosmlPackage, req.params.name]
+//     );
 
-    res.json({success: true});
-  } catch(e) {
-    utils.handleError(res, e);
-  }
-});
+//     res.json({success: true});
+//   } catch(e) {
+//     utils.handleError(res, e);
+//   }
+// });
 
 module.exports = router;

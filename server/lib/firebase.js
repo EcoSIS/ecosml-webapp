@@ -34,7 +34,7 @@ class Firebase extends EventEmitter {
       if (connectedSnap.val() === true) {
         logger.info('Connected to firestore');
       } else {
-        logger.error('Lost firestore connection');
+        logger.fatal('Lost firestore connection');
       }
     });
   }

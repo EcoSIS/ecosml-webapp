@@ -2,11 +2,11 @@
 # yarn lockfile v1
 
 
-"@babel/polyfill@^7.0.0-beta.46":
-  version "7.0.0-beta.46"
-  resolved "https://registry.yarnpkg.com/@babel/polyfill/-/polyfill-7.0.0-beta.46.tgz#5a4203a3abee8ddfb80afd3cf6f5ff1391750695"
+"@babel/polyfill@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/polyfill/-/polyfill-7.0.0.tgz#c8ff65c9ec3be6a1ba10113ebd40e8750fb90bff"
   dependencies:
-    core-js "^2.5.3"
+    core-js "^2.5.7"
     regenerator-runtime "^0.11.1"
 
 "@polymer/app-layout@^3.0.0-pre.19":
@@ -290,12 +290,12 @@
   dependencies:
     "@webcomponents/shadycss" "^1.2.0"
 
-"@ucd-lib/cork-app-load@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@ucd-lib/cork-app-load/-/cork-app-load-0.0.3.tgz#13e01c1e5e7cc9449b50654a360110c567dd3708"
+"@ucd-lib/cork-app-load@^0.1.3":
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/@ucd-lib/cork-app-load/-/cork-app-load-0.1.3.tgz#8ee1233e678e71d1a924be6bac0e8f466c013f82"
   dependencies:
-    "@babel/polyfill" "^7.0.0-beta.46"
-    "@webcomponents/webcomponentsjs" "^2.0.0"
+    "@babel/polyfill" "^7.0.0"
+    "@webcomponents/webcomponentsjs" "^2.1.3"
 
 "@ucd-lib/cork-app-state@^0.1.1":
   version "0.1.1"
@@ -306,7 +306,7 @@
     "@ucd-lib/cork-app-utils" "^2.0.3"
     query-string "^5.0.1"
 
-"@ucd-lib/cork-app-utils@^2.0.3", "@ucd-lib/cork-app-utils@^4.1.1":
+"@ucd-lib/cork-app-utils@4.1.1", "@ucd-lib/cork-app-utils@^2.0.3", "@ucd-lib/cork-app-utils@^4.1.1":
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/@ucd-lib/cork-app-utils/-/cork-app-utils-4.1.1.tgz#30b9370ae0531a62615a788f5b8fb427439f5e90"
   dependencies:
@@ -318,9 +318,9 @@
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/@webcomponents/shadycss/-/shadycss-1.2.1.tgz#6e4a88534657807c8398b4bc196d0ca492182d54"
 
-"@webcomponents/webcomponentsjs@2.0.0", "@webcomponents/webcomponentsjs@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@webcomponents/webcomponentsjs/-/webcomponentsjs-2.0.0.tgz#166e7489b9ce66f5c082a3360120cb27505f762f"
+"@webcomponents/webcomponentsjs@2.0.0", "@webcomponents/webcomponentsjs@^2.1.3":
+  version "2.1.3"
+  resolved "https://registry.yarnpkg.com/@webcomponents/webcomponentsjs/-/webcomponentsjs-2.1.3.tgz#f7430c6efe52ab06f69d219fddd32afd2758f683"
 
 abbrev@1:
   version "1.1.1"
@@ -338,9 +338,9 @@ clipboard@^2.0.0:
     select "^1.1.2"
     tiny-emitter "^2.0.0"
 
-core-js@^2.5.3:
-  version "2.5.6"
-  resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.5.6.tgz#0fe6d45bf3cac3ac364a9d72de7576f4eb221b9d"
+core-js@^2.5.7:
+  version "2.5.7"
+  resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.5.7.tgz#f972608ff0cead68b841a16a932d0b183791814e"
 
 cork-pagination@cork-elements/cork-pagination:
   version "2.1.1"

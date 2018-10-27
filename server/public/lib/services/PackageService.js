@@ -20,8 +20,9 @@ class PackageService extends BaseService {
    * @param {String} organization package organization
    * @param {String} language package programming language
    */
-  async create(name, overview, organization, language) {
-    let payload = {name, overview, organization, language};
+  async create(name, overview, organization, language, packageType) {
+    let payload = {name, overview, organization, language, packageType};
+    console.log(payload)
 
     return this.request({
       url : this.baseUrl,
@@ -154,6 +155,12 @@ class PackageService extends BaseService {
       // onLoading : request => this.store.setFileDeleteStart(request, packageId, file),
       onLoad : result => this.store.setFileDeleteSuccess(result.body, packageId, file),
       onError : error => this.store.onFileError(packageId, file, error)
+    });
+  }
+
+  isNameAvailable(packageName) {
+    return this.request({
+      url : `${this.baseUrl}/available/${packageName}`
     });
   }
 

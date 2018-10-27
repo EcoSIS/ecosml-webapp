@@ -168,22 +168,12 @@ class PackageModel {
 
     gpkg = Object.assign(gpkg, update);
 
-    // if we changed layout, revert to basic layout
-    if( gpkg.language && gpkg.language !== pkg.language ) {
-      let layout = this._getPackageLayout(gpkg.language);
-      await layout.undoLayout(pkg);
-    }
-
     // make sure release count is correct
     pkg.releaseCount = (pkg.releases || []).length;
 
     // now save changes in mongo
     await mongo.updatePackage(pkg.name, gpkg);
     pkg = await mongo.getPackage(pkg.name);
-
-    // ensure our current language package layout is in place
-    let layout = this._getPackageLayout(pkg.language);
-    await layout.ensureLayout(pkg);
 
     // write and commit ecosis-metadata.json file or other changes
     await this.writeMetadataFile(pkg);
@@ -595,6 +585,18 @@ class PackageModel {
     await fs.move(src, dst);
 
     return this.commit(pkg.name, `Renaming example: ${srcName} to ${dstName}`);
+  }
+
+  /**
+   * @method isNameAvailable
+   * @description is a package name available
+   * 
+   * @param {String} packageName package name
+   * 
+   * @returns {Promise} resolves to Boolean
+   */
+  isNameAvailable(packageName) {
+    return github.isRepoNameAvailable(packageName);
   }
 
   /**

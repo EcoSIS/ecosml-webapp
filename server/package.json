@@ -8,15 +8,15 @@
     "build": "webpack --config webpack.config.js",
     "watch": "webpack --watch",
     "dist": "./build.sh",
-    "docker-build" : "cd ../docker && ./build.sh",
-    "docker-push" : "cd ../docker && ./push.sh"
+    "docker-build": "cd ../docker && ./build.sh",
+    "docker-push": "cd ../docker && ./push.sh"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@google-cloud/logging-bunyan": "^0.8.2",
+    "@google-cloud/logging-bunyan": "^0.8.4",
     "@ucd-lib/cork-app-build": "^0.1.3",
-    "@ucd-lib/spa-router-middleware": "0.0.1",
+    "@ucd-lib/spa-router-middleware": "^0.1.0",
     "body-parser": "^1.18.2",
     "bunyan": "^1.8.12",
     "connect-redis": "^3.3.2",

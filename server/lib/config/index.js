@@ -7,15 +7,17 @@ const mongoHost = env.MONGO_HOST || 'mongo';
 const firebaseEnv = env.FIREBASE_ENV || 'local';
 const clientEnv = env.CLIENT_ENV || 'dev';
 
+let assetsDir = (clientEnv === 'prod') ? 'dist' : 'public';
+let clientPackage = require(`../../${assetsDir}/package.json`);
+
 module.exports = {
 
   server : {
     port : env.SERVER_PORT || '3000',
     url : env.SERVER_URL || 'http://localhost:3000',
     label : env.SERVER_LABEL || 'EcoSML', // used for auth redirect
-    // assets : (clientEnv === 'prod') ? 'dist' : 'public',
     assets : env.SERVER_ASSET_DIR || 'public',
-    loglevel : env.SERVER_LOG_LEVEL || 'debug',
+    loglevel : env.SERVER_LOG_LEVEL || 'info',
     clientEnv,
 
     jwt : {
@@ -34,6 +36,14 @@ module.exports = {
     // place all SPA base route names here
     appRoutes : ['package', 'search', 'edit', 
     'create', 'account', 'about']
+  },
+
+  client : {
+    env : clientEnv,
+    versions : {
+      bundle : clientPackage.version,
+      loader : clientPackage.dependencies['@ucd-lib/cork-app-load'].replace(/^\D/, '')
+    }
   },
 
   ecosis : {

@@ -11,7 +11,6 @@ const utils = require('../lib/utils')
 const markdown = require('../lib/markdown');
 const schema = require('../lib/schema');
 const initPackage = require('../lib/init-package');
-const layouts = require('../lib/package-layout');
 const hash = require('../lib/hash');
 const travis = require('./PackageTestModel');
 
@@ -73,8 +72,6 @@ class PackageModel {
     await mongo.insertPackage(pkg);
     await git.clone(pkg.name);
 
-    // let layout = this._getPackageLayout(pkg.language);
-    // await layout.ensureLayout(pkg);
     await initPackage(pkg);
 
     // write and commit ecosis-metadata.json file
@@ -213,60 +210,14 @@ class PackageModel {
   }
 
   /**
-   * @method addFile
-   * @description add file to package
-   * 
-   * @param {Object|String} pkg package object, name or id
-   * @param {Object} file 
-   * @param {String} file.filename
-   * @param {String} file.tmpFile 
-   * @param {String} file.dir
-   * @param {String} file.message
-   */
-  async addFile(pkg, file) {
-    pkg = await this.get(pkg);
-
-    // update repo path
-    await git.resetHEAD(pkg.name);
-
-    // if this is the main or resources directory, move files to correct location
-    let dir = this._sanitizePath(file.dir);
-    let pkgLayout = this._getPackageLayout(pkg.language);
-    let baseFileDir = pkgLayout.genericToAbsLangPath(dir, pkg);
-
-    await this._initExampleDir(dir, pkg);
-
-    await fs.mkdirs(baseFileDir);
-
-    let repoFilePath = path.join(baseFileDir, file.filename);
-
-    if( fs.existsSync(repoFilePath) ) {
-      await fs.unlink(repoFilePath);
-    }
-    
-    if( file.buffer ) {
-      await fs.writeFile(repoFilePath, file.buffer);
-    } else if( file.tmpFile ) {
-      await fs.move(file.tmpFile, repoFilePath);
-    }
-
-    await this.commit(pkg.name, file.message || 'Updating package file');
-  
-    return this._getFileInfo(
-      path.join(file.dir, file.filename),
-      pkg
-    );
-  }
-
-  /**
    * @method updateFiles
-   * @description add, update and/or remove multiple package files
+   * @description add, update and/or remove multiple package files.  
    * 
    * @param {Object|String} pkg package object, name or id
    * @param {Array} updateFiles 
    * @param {String} updateFiles[].repoFilePath
-   * @param {String} updateFiles[].tmpFile 
-   * @param {String} updateFiles[].buffer
+   * @param {String} updateFiles[].tmpFile either current path or use buffer option
+   * @param {String} updateFiles[].buffer use if tmp file path not provided
    * @param {Array} removeFiles file paths to remove
    * @param {String} message
    * @param {String} username
@@ -311,35 +262,6 @@ class PackageModel {
     await this.commit(pkg.name, message || 'Updating package files', username);
   
     return this.getFiles(pkg);
-  }
-
-  /**
-   * @method deleteFile
-   * @description delete a package file
-   * 
-   * @param {*} pkg package object, id or name
-   * @param {String} filepath path to file in repo 
-   * 
-   * @returns {Promise}
-   */
-  async deleteFile(pkg, filepath) {
-    pkg = await this.get(pkg);
-    filepath = this._sanitizePath(filepath);
-
-    // get full repo path name
-    filepath = this._sanitizePath(filepath);
-    let pkgLayout = this._getPackageLayout(pkg.language);
-    let repoFilePath = pkgLayout.genericToAbsLangPath(filepath, pkg);
-
-    // update repo path
-    await git.resetHEAD(pkg.name);
-
-    if( !fs.existsSync(repoFilePath) ) {
-      throw new Error('Package file does not exist: '+filepath);
-    }
-
-    await fs.unlink(repoFilePath);
-    await this.commit(pkg.name, 'Removing package file');
   }
 
   /**
@@ -508,85 +430,6 @@ class PackageModel {
     return filelist;
   }
 
-  async getLayoutFolders(pkg) {
-    pkg = await this.get(pkg);
-    let layout = this._getPackageLayout(pkg.language);
-    let re = new RegExp('^'+path.join(config.github.fsRoot, pkg.name));
-
-    return {
-      papers : '/papers',
-      examples : layout.getExamplesDir(pkg.name).replace(re, ''),
-      main : layout.getMainDir(pkg.name).replace(re, ''),
-      resources : layout.getResourcesDir(pkg.name).replace(re, '')
-    }
-  }
-
-  /**
-   * @method _initExampleDir
-   * @description if this is the first file being added to an 
-   * example, run the init scripts
-   * 
-   * 
-   **/    
-  async _initExampleDir(dir, pkg) {
-    dir = dir.replace(/^\//, '').split('/');
-    if( dir.length < 2 ) return;
-    let exampleName = dir[1];
-    dir = dir.splice(0, 2).join('/');
-    dir = path.join(git.getRepoPath(pkg.name), dir);
-
-    if( !fs.existsSync(path) ) {
-      let pkgLayout = this._getPackageLayout(pkg.language);
-      await pkgLayout.ensureExampleLayout(pkg.name, exampleName);
-    }
-  }
-
-  /**
-   * @method deleteExample
-   * @description move examples
-   */
-  async deleteExample(pkg, name) {
-    let dir = await git.ensureDir(pkg.name);
-    name = this._sanitizeExampleName(name);
-    dir = path.join(dir, 'examples', name);
-
-    if( !fs.existsSync(dir) ) {
-      throw new Error('Example directory does not exist: '+path.join('examples', name));
-    }
-    
-    await fs.remove(dir);
-
-    return this.commit(pkg.name, `Deleting example ${name}`);
-  }
-
-  /**
-   * @method moveExample
-   * @description move examples
-   */
-  async moveExample(pkg, src, dst) {
-    let dir = await git.ensureDir(pkg.name);
-
-    let srcName = src;
-    let dstName = dst;
-
-    src = this._sanitizeExampleName(src);
-    dst = this._sanitizeExampleName(dst);
-
-    src = path.join(dir, 'examples', src);
-    dst = path.join(dir, 'examples', dst);
-
-    if( !fs.existsSync(src) ) {
-      throw new Error('Source directory does not exist: '+path.join('examples', src));
-    }
-    if( fs.existsSync(dst) ) {
-      throw new Error('Destination directory already exists: '+path.join('examples', dst));
-    }
-
-    await fs.move(src, dst);
-
-    return this.commit(pkg.name, `Renaming example: ${srcName} to ${dstName}`);
-  }
-
   /**
    * @method isNameAvailable
    * @description is a package name available
@@ -600,19 +443,6 @@ class PackageModel {
   }
 
   /**
-   * @method _getPackageLayout
-   * @description get a package layout for a specific language
-   * 
-   * @param {String} language language for package
-   * 
-   * @returns {Object}
-   */
-  _getPackageLayout(language = 'basic') {
-    if( layouts[language] ) return layouts[language];
-    return layouts.basic;
-  }
-
-  /**
    * @method _getFileInfo
    * @description parse file info from file path
    * 
@@ -621,11 +451,8 @@ class PackageModel {
    * @return {Object}
    */
   _getFileInfo(filepath, pkg) {
-    // let pkgLayout = this._getPackageLayout(pkg.language);
-
     let info = path.parse(filepath);
     info.filename = info.base;
-    // info.dir = pkgLayout.langPathToGeneric(info.dir, pkg);
     delete info.root;
     delete info.base;
     return info;

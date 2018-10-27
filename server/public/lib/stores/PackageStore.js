@@ -188,17 +188,6 @@ class PackageStore extends BaseStore {
     this._setFileState(packageId, state);
   }
 
-  setFileDeleteSuccess(result, packageId, file) {
-    file.id = this._createFileId(file);
-    let state = {
-      id : file.id,
-      packageId : packageId,
-      payload : file, 
-      state : this.STATE.DELETED
-    }
-    this._setFileState(packageId, state);
-  }
-
   onFileError(packageId, file, error) {
     file.id = this._createFileId(file);
     let state = {

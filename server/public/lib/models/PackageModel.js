@@ -91,56 +91,6 @@ class PackageModel extends BaseModel {
   }
 
   /**
-   * @method uploadFile
-   * @description add a file to a repository
-   * 
-   * @param {Object} options
-   * @param {String} options.packageId id of package to add file
-   * @param {Object} options.file reference to file from form element
-   * @param {String} options.dir path to place file in repo
-   * @param {String} options.message message for commit
-   * 
-   * @returns {Promise}
-   */
-  uploadFile(options) {
-    options.uploadId = uuid.v4();
-    options.dir = options.dir || '/';
-    return this.service.uploadFile(options);
-  }
-
-  /**
-   * @method cancelFileUpload
-   * @description cancel a file upload.  Options should be the same object
-   * passed to the uploadFile method.  The actual xhr element will have been
-   * attached and will be aborted
-   * 
-   * @param {Object} options 
-   */
-  cancelFileUpload(options) {
-    if( !options.xhr ) throw new Error('Upload object has no xhr to cancel');
-    options.xhr.abort();
-    
-    let file = {
-      filename : options.file.filename,
-      dir : options.dir
-    }
-    this.store.setFileUploadCancelled(options.packageId, file);
-  }
-
-  /**
-   * @method deleteFile
-   * @description delete a file
-   * 
-   * @param {String} packageId id of package
-   * @param {String} file file object
-   * 
-   * @returns {Promise}
-   */
-  deleteFile(packageId, file) {
-    return this.service.deleteFile(packageId, file);
-  }
-
-  /**
    * @method getFiles
    * @description get package files
    * 
@@ -149,35 +99,6 @@ class PackageModel extends BaseModel {
   async getFiles(packageId) {
     await this.service.getFiles(packageId);
     return this.store.getFiles(packageId);
-  }
-
-  /**
-   * @method moveExample
-   * @description move (rename) example directory
-   * 
-   * @param {String} packageId
-   * @param {String} src current example directory name
-   * @param {String} dst new example directory name
-   * 
-   * @returns {Promise}
-   */
-  async moveExample(packageId, src, dst) {
-    await this.service.moveExample(packageId, src, dst);
-    return this.getFiles(packageId);
-  }
-
-  /**
-   * @method deleteExample
-   * @description delete example directory
-   * 
-   * @param {String} packageId
-   * @param {String} name example directory to delete
-   * 
-   * @returns {Promise}
-   */
-  async deleteExample(packageId, name) {
-    await this.service.deleteExample(packageId, name);
-    return this.getFiles(packageId);
   }
 
   /**

@@ -124,8 +124,7 @@ router.get('/:package/files', packageReadAccess, async (req, res) => {
     let files = await model.getFiles(req.ecosmlPackage);
     res.json({
       package: req.ecosmlPackage.name,
-      files : files,
-      specialDirs : await model.getLayoutFolders(req.ecosmlPackage)
+      files : files
     });
   } catch(e) {
     utils.handleError(res, e);

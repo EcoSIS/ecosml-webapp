@@ -45,6 +45,10 @@ export default class AppLandingPage extends Mixin(PolymerElement)
       userHasWriteAccess : {
         type : Boolean,
         value : false
+      },
+      isPackageModule : {
+        type : Boolean,
+        value : false
       }
     }
   }
@@ -87,6 +91,7 @@ export default class AppLandingPage extends Mixin(PolymerElement)
     this.showThemes = (this.themes.length > 0);
     this.showFamilies = (this.families.length > 0);
     this.showSpecifics = (this.specifics.length > 0);
+    this.isPackageModule = (this.package.packageType === 'package') ? true : false;
 
     // this.themeLink = this._getLink('theme');
     // this.familyLink = this._getLink('family');

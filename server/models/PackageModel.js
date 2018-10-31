@@ -10,7 +10,7 @@ const uuid = require('uuid');
 const utils = require('../lib/utils')
 const markdown = require('../lib/markdown');
 const schema = require('../lib/schema');
-const initPackage = require('../lib/init-package');
+const initPackage = require('../lib/init-package-files');
 const hash = require('../lib/hash');
 const travis = require('./PackageTestModel');
 

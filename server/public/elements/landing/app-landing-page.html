@@ -62,24 +62,28 @@
           <div id="install" class="install">
             <div id="install-python">
               <div style="margin-bottom: 15px">Language: <a href="https://www.python.org/" target="_blank">Python</a></div>
-              <div>Install via <a href="https://pip.pypa.io/en/stable/" target="_blank">pip:</a></div>
-              <div class="script">
-                <input type="text" class="script-input" value="pip install git+https://github.com/ecosml-dev/[[package.name]]@[[release.name]]" />
+              <div hidden$="[[!isPackageModule]]">
+                <div>Install via <a href="https://pip.pypa.io/en/stable/" target="_blank">pip:</a></div>
+                <div class="script">
+                  <input type="text" class="script-input" value="pip install git+https://github.com/ecosml-dev/[[package.name]]@[[release.name]]" />
+                </div>
               </div>
             </div>
 
             <div id="install-r">
-              <div style="margin-bottom: 15px">Language: R</div>
-              <div>Install via devtools:</a></div>
-              <div class="script">
-                <input type="text" class="script-input" value='install.packages("devtools\")' />
-                <input type="text" class="script-input" value="library(devtools)" />
-                <input type="text" class="script-input" value='install_github("ecosml/[[package.name]]", ref="[[release.name]")' />
-                <input type="text" class="script-input" value="library([[package.name]])" />
+              <div style="margin-bottom: 15px">Language: <a href="https://www.r-project.org/" target="_blank">R</a></div>
+              <div hidden$="[[!isPackageModule]]">
+                <div>Install via <a href="https://cran.r-project.org/web/packages/githubinstall/vignettes/githubinstall.html" target="_blank">devtools:</a></div>
+                <div class="script">
+                  <input type="text" class="script-input" value='install.packages("devtools")' />
+                  <input type="text" class="script-input" value="library(devtools)" />
+                  <input type="text" class="script-input" value='install_github("ecosml/[[package.name]]", ref="[[release.name]")' />
+                  <input type="text" class="script-input" value="library([[package.name]])" />
+                </div>
               </div>
             </div>
 
-            <div>*Note: It is up to individual package maintainers to follow standard practices for 
+            <div hidden$="[[!isPackageModule]]">*Note: It is up to individual package maintainers to follow standard practices for 
               language package management compatibility.</div>
           </div>
           
@@ -88,6 +92,8 @@
             <div><a href$="[[release.downloadUrl]]">[[release.name]]</a></div>
             <div>[[release.description]]</div>
           </div>
+
+          <!-- This should never show -->
           <div style="padding-bottom: 20px" hidden$="[[release]]">
             No releases available
           </div>

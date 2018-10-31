@@ -39,10 +39,12 @@ class PackageModel extends BaseModel {
    * @returns {Promise} fetch promise
    */
   async get(id) {
-    this.service.get(id);
+    let state = this.store.data.byId[id];
 
-    if( this.store.data.byId[id].state === this.store.STATE.LOADING ) {
-      await this.store.data.byId[id].request;
+    if( state && state.request ) {
+      await state.request;
+    } else {
+      await this.service.get(id);
     }
     
     return this.store.data.byId[id];
@@ -97,7 +99,14 @@ class PackageModel extends BaseModel {
    * @param {String} packageId
    */
   async getFiles(packageId) {
-    await this.service.getFiles(packageId);
+    let state = this.store.getFiles(packageId);
+
+    if( state && state.request ) {
+      await state.request;
+    } else {
+      await this.service.getFiles(packageId);
+    }
+    
     return this.store.getFiles(packageId);
   }
 

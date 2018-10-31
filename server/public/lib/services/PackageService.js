@@ -84,7 +84,6 @@ class PackageService extends BaseService {
   async get(packageId) {
     return this.request({
       url : `${this.baseUrl}/${packageId}`,
-      checkCached : () => this.store.data.byId[packageId],
       onLoading : request => this.store.setGetPackageLoading(packageId, request),
       onLoad : result => this.store.setGetPackageSuccess(packageId, result.body),
       onError : error => this.store.setGetPackageError(packageId, error)
@@ -94,7 +93,7 @@ class PackageService extends BaseService {
   async getFiles(packageId) {    
     return this.request({
       url : `${this.baseUrl}/${packageId}/files`,
-      onLoad : result => this.store.onFilesLoaded(packageId, result.body.files, result.body.specialDirs)
+      onLoad : result => this.store.onFilesLoaded(packageId, result.body.files)
     });
   }
 

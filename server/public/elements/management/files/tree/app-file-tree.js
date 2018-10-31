@@ -29,15 +29,6 @@ export default class AppFileTree extends Mixin(PolymerElement)
     this.updateTimer = -1;
   }
 
-  /**
-   * @method _onFileUpdate
-   * @description via PackageInterface, called whenever files load.   This fires before
-   * file events
-   */
-  _onSpecialDirsUpdate(e) {
-    this.specialDirs = e.payload;
-  }
-
   _onSelectedPackageUpdate() {
     this.data = {
       name : '/',
@@ -69,15 +60,6 @@ export default class AppFileTree extends Mixin(PolymerElement)
             files : {},
             directories : {}
           };
-
-          for( var key in this.specialDirs ) {
-            if( this.specialDirs[key] === e.payload.dir ) {
-              path.directories[name].special = true;
-              path.directories[name].specialType = key;
-              break;
-            }
-          }
-
         }
         path = path.directories[name];
       });
@@ -98,7 +80,6 @@ export default class AppFileTree extends Mixin(PolymerElement)
   }
 
   _onUpdate() {
-    this.data.specialDirs = this.specialDirs;
     this.$.root.data = Object.assign({}, this.data);
   }
 

@@ -22,10 +22,6 @@ export default class AppFileTreeBranch extends PolymerElement {
         type : Array,
         value : () => []
       },
-      specialDirs : {
-        type : Array,
-        value : () => []
-      },
       open : {
         type : Boolean,
         value : true

@@ -13,7 +13,7 @@ services:
     environment:
       - JWT_SECRET=${JWT_SECRET}
       - ECOSIS_HOST=${ECOSIS_HOST}
-      - CLIENT_ENV=prod
+      - SERVER_ASSET_DIR=dist
       - GITHUB_ORG=ecosml-dev
       - FIREBASE_ENV=dev
 

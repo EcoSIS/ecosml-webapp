@@ -5,7 +5,9 @@ const keyPath = path.join(__dirname, '../../google-key.json');
 
 const mongoHost = env.MONGO_HOST || 'mongo';
 const firebaseEnv = env.FIREBASE_ENV || 'local';
+const serverEnv = env.SERVER_ENV || 'dev';
 const clientEnv = env.CLIENT_ENV || 'dev';
+
 
 let assetsDir = (clientEnv === 'prod') ? 'dist' : 'public';
 let clientPackage = require(`../../${assetsDir}/package.json`);
@@ -19,6 +21,7 @@ module.exports = {
     assets : env.SERVER_ASSET_DIR || 'public',
     loglevel : env.SERVER_LOG_LEVEL || 'info',
     clientEnv,
+    serverEnv,
 
     jwt : {
       secret : env.JWT_SECRET || secrets.ecosml.secret
@@ -85,7 +88,7 @@ module.exports = {
     org : env.GITHUB_ORG || 'ecosml-dev',
     fsRoot : env.GITHUB_FS_ROOT || path.resolve(__dirname, '..', '..', 'gitdata'),
     default_license : 'mit',
-    homepageRoot : clientEnv === 'dev' ? 'https://dev.ecosml.org/package/' : 'https://ecosml.org/package/',
+    homepageRoot : serverEnv === 'dev' ? 'https://dev.ecosml.org/package/' : 'https://ecosml.org/package/',
   },
 
   travisCi : secrets.travisCi,

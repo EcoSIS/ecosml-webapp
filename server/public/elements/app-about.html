@@ -17,27 +17,42 @@
 <div class="root">
     <div class="main-panel">
       <h2>About</h2>
-      <div><a href="https://cce.nasa.gov/cgi-bin/cce/cce_profile.pl?project_group_id=3766">EcoSIS Toolkit abstract</a></div>
+      <p>EcoSML is part of the <a href="https://cce.nasa.gov/cgi-bin/cce/cce_profile.pl?project_group_id=3766" target="_blank">EcoSIS Toolkit</a>, 
+        which is funded by NASA’s Earth Science Technology Office ESTO) 
+        through the Advanced Information Systems Technology (AIST) Program (Grant Number: 80NSSC17K0244).</p>
 
-      <p>EcoSML.org is part of the EcoSIS Toolkit. Currently under development, EcoSML 
-        is planned to be a database of models for retrieving ecologically-relevant 
-        information from field spectroscopy data and hyperspectral imagery.</p>
+      <p>The EcoSIS Toolkit is an extension of <a href="https://ecosis.org" target="_blank">EcoSIS.org</a>, 
+        which is online open-source database of ecologically 
+        oriented spectral measurements and associated metadata such as leaf or plant morphological and chemical 
+        measurements. EcoSIS is a repository to store your spectral data for distribution to the larger scientific 
+        community, as required by granting agencies and journals. EcoSIS enables data discovery and integration 
+        across datasets through a web-based search or an API. EcoSIS provides contributors with a DOI to enable 
+        long-term archiving and accessibility.</p>
 
-      <p>Researchers will provide details and resources to create model packages 
-        that include coefficients, error parameters, demonstration data, and code. 
-        Users will be able to browse models, explore example code, and test outputs. 
-        Model packages will be installable via common package managers like Python's 
-        PyPI/pip, as well as R's CRAN.</p>
-        <p>Initially, EcoSML will accommodate model forms including Partial Least Squares 
-        Regression and Gaussian Process Models, and will be expanded to accept other 
-        model formats in the future.</p>
+      <p>EcoSML.org is part of the EcoSIS Toolkit. EcoSML stand for the EcoSIS Spectral Model Library. One of the 
+        major uses of spectral data such as you might find in EcoSIS is the development of spectral models to 
+        predict vegetation traits such as leaf mass per area, chlorophyll content, water content or nitrogen 
+        concentration.  <b>EcoSML is meant to be a repository for the spectral models that people use to 
+        predict variables of interest from spectral data</b> (spectral data can include image, canopy  (proximal) 
+        or leaf level data). EcoSML provides both coefficients (e.g., for models built using partial least-squares 
+        regression, PLSR) and code needed by users to apply a spectral model to their data.</p>
 
-      <div>EcoSML has two major objectives:</div>
+      <p>Researchers provide details and resources to create model packages that include coefficients, error parameters, 
+        demonstration data, and code. Users will be able to browse models, explore example code, and test outputs. Model 
+        packages will be installable via common package managers like Python's PyPI/pip, as well as R's CRAN.</p>
+
+      <p>
+          EcoSML accommodates any model forms that can be imbedded in code. At present this includes PLSR and Gaussian 
+          Process Models, and will be expanded to accept other model formats.
+      </p>
+
+      <div>EcoSML’s primary objectives:</div>
       <ul>
-        <li>Serve as a widely-accessible online repository where researchers can offer 
-          spectroscopy-derived models to the science community</li>
-        <li>provide a robust API that allows direct links with EcoSIS.org, and desktop 
-          software like SpecDAL, HyTools, or other custom open-source software</li>
+        <li>Serve as a widely-accessible online repository where researchers can offer spectroscopy-derived models to 
+          the science community</li>
+        <li>Provide a robust API that allows direct links with EcoSIS.org, and various open-source software or 
+          desktop softwares users may have.
+          </li>
       </ul>
 
       <div style="text-align: center">
@@ -49,7 +64,6 @@
         <li><b>PI</b> <a target="_blank" href="https://forestandwildlifeecology.wisc.edu/people/faculty-and-staff/philip-townsend/">Philip Townsend</a></li>
         <li><b>Project Manager</b> Erin Wagner</li>
         <li><b>Lead Developer</b> <a target="_blank" href="https://github.com/jrmerz">Justin Merz</a></li>
-        <li><b>Project Manager (Original)</b> Clayton Kingdon</li>
       </ul>
     </div>
 </div>

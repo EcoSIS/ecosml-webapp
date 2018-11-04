@@ -9,9 +9,9 @@ let info = {};
 if( !global.testing && !global.quiteLogging ) {
   streams.push({stream: process.stdout});
 
-  let projectId = config.google.key;
+  let projectId;
   if( config.google.key ) {
-    projectId = config.google.key.projectId;
+    projectId = config.google.key.project_id;
   }
 
   if( projectId && config.google.keyPath ) {

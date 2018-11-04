@@ -50,43 +50,58 @@ class PackageModel {
 
     let ecosmlId = uuid.v4();
 
-    // create Github API Request
-    let githubRepo = Object.assign({}, pkg);
-    delete githubRepo.organization;
-    delete githubRepo.owner;
-    githubRepo.auto_init = true;
-    githubRepo.license_template = config.github.default_license;
-    githubRepo.homepage = config.github.homepageRoot+ecosmlId;
+    if( pkg.source === 'registered' ) {
+      let {release, overview, description} = await this.getRegisteredRepoProperties(pkg.name);
+      if( release ) {
+        pkg.releases = [release];
+        pkg.releaseCount = 1;
+      }
+      pkg.overview = overview;
+      pkg.description = description;
+    } else {
+      // create Github API Request
+      let githubRepo = Object.assign({}, pkg);
+      delete githubRepo.organization;
+      delete githubRepo.owner;
+      githubRepo.auto_init = true;
+      githubRepo.license_template = config.github.default_license;
+      githubRepo.homepage = config.github.homepageRoot+ecosmlId;
 
-    // ecosis overview === github description
-    githubRepo.description = githubRepo.overview;
-    delete githubRepo.overview;
+      // ecosis overview === github description
+      githubRepo.description = githubRepo.overview;
+      delete githubRepo.overview;
 
-    let {response, body} = await github.createRepository(githubRepo);
-    this.checkStatus(response, 201);
+      let {response, body} = await github.createRepository(githubRepo);
+      this.checkStatus(response, 201);
 
-    pkg = Object.assign(pkg, utils.githubRepoToEcosml(body));
-    pkg.releaseCount = 0;
+      pkg = Object.assign(pkg, utils.githubRepoToEcosml(body));
+      pkg.releaseCount = 0;
+    }
+
     pkg.id = ecosmlId;
 
     await mongo.insertPackage(pkg);
-    await git.clone(pkg.name);
+    
+    if( pkg.source === 'managed' ) {
+      await git.clone(pkg.name);
+      await initPackage(pkg);
 
-    await initPackage(pkg);
+      // write and commit ecosis-metadata.json file
+      await this.writeMetadataFile(pkg);
+      await this.commit(pkg.name, 'Updating package metadata', username);
 
-    // write and commit ecosis-metadata.json file
-    await this.writeMetadataFile(pkg);
-    await this.commit(pkg.name, 'Updating package metadata', username);
+      // let travis know about the repo (sync with it)
+      await travis.initRepo(pkg.name);
 
-    // let travis know about the repo (sync with it)
-    await travis.initRepo(pkg.name);
-
-    // add github team access
-    if( pkg.organization ) {
-      let team = mongo.getGithubTeam(pkg.organization);
-      if( team ) {
-        await github.addTeamRepo(team.id, pkg.name);
+      // add github team access
+      if( pkg.organization ) {
+        let team = mongo.getGithubTeam(pkg.organization);
+        if( team ) {
+          await github.addTeamRepo(team.id, pkg.name);
+        }
       }
+    } else {
+      // write to backup repo
     }
 
     return pkg;
@@ -207,6 +222,22 @@ class PackageModel {
     }
 
     return pkgObj;
+  }
+
+  /**
+   * @method getRegisteredRepoProperties
+   * @description get a registered repositories properties that are stored in the repository
+   * metadata
+   * 
+   * @param {String} repoName
+   * 
+   * @returns {Promise} resolves to object
+   */
+  async getRegisteredRepoProperties(repoName) {
+    let release = await github.latestRelease(repoName);
+    let overview = await github.overview(repoName);
+    let description = await github.readme(repoName);
+    return {release, overview, description};
   }
 
   /**

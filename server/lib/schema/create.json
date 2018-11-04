@@ -6,6 +6,10 @@
         "type" : "string",
         "format" : "packageName"
       },
+      "source": {
+        "type": "string",
+        "enum" : ["registered", "managed"]
+      },
       "organization": {
         "type" : "string"
       },
@@ -44,5 +48,5 @@
       }
     },
     "additionalProperties": false,
-    "required": ["name", "organization", "overview", "owner", "packageType", "language"]
+    "required": ["name", "source", "organization", "overview", "owner", "packageType", "language"]
   }

@@ -5,6 +5,10 @@
       "name": {
         "type": "string"
       },
+      "source": {
+        "type": "string",
+        "enum" : ["registered", "managed"]
+      },
       "organization": {
         "type": "string"
       },

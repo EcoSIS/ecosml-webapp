@@ -1,6 +1,7 @@
 const config = require('./config');
 const request = require('request');
 const Logger = require('./logger');
+const {JSDOM} = require('jsdom');
 const parseLinkHeader = require('parse-link-header');
 
 const ORG = config.github.org;
@@ -195,6 +196,82 @@ class GithubApi {
       method : 'DELETE',
       uri : `/repos/${ORG}/${repoName}/releases/${releaseId}`
     });
+  }
+
+  /**
+   * @method latestRelease
+   * @description return the latest release tag name.  Note, this
+   * call does not burn a API request.
+   * 
+   * @param {String} repoName 
+   * 
+   * @returns {Promise} resolves to null or string
+   */
+  async latestRelease(repoName) {
+    var {repoName, org} = this.getRepoNameAndOrg(repoName);
+
+    let {response} = await this.requestRaw({
+      uri : `https://github.com/${org}/${repoName}/releases/latest`,
+      followRedirect : false
+    });
+
+    if( response.statusCode !== 302 ) {
+      throw new Error(`Unknown repository: ${org}/${repoName}`)
+    }
+
+    let url = response.headers.location.replace(/.*releases\/?/, '');
+    if( !url ) return null;
+
+    let tag = url.replace(/.*tag\//, '');
+    return {
+      body : '',
+      htmlUrl: `https://github.com/${org}/${repoName}/releases/tag/${tag}`,
+      name : tag,
+      tagName : tag,
+      tarballUrl : `https://api.github.com/repos/${org}/${repoName}/tarball/${tag}`,
+      zipballUrl: `https://api.github.com/repos/${org}/${repoName}/zipball/${tag}`
+    }
+  }
+
+  /**
+   * @method readme
+   * @description load the readme text from repository.  This call
+   * does not burn a API request.
+   * 
+   * @param {String} repoName
+   * 
+   * @returns {Promise} resolves to String 
+   */
+  async readme(repoName) {
+    let {response} = await this.getRawFile(repoName, 'README.md');
+    if( response.statusCode === 200 ) return response.body;
+    
+    ({response} = await this.getRawFile(repoName, 'README'));
+    if( response.statusCode === 200 ) return response.body;
+
+    return '';
+  }
+
+  async overview(repoName) {
+    var {repoName, org} = this.getRepoNameAndOrg(repoName);
+
+    let {response} = await this.requestRaw({
+      uri : `https://github.com/${org}/${repoName}`,
+      followRedirect : false
+    });
+
+    if( response.statusCode !== 200 ) {
+      throw new Error(`Unknown repository: ${org}/${repoName}`)
+    }
+
+    const dom = new JSDOM(response.body);
+    let ele = dom.window.document.querySelector('[itemscope][itemtype="http://schema.org/SoftwareSourceCode"] [itemprop="about"]');
+    if( !ele ) {
+      Logger.error(`CSS query failed to find repo overview for: ${org}/${repoName}`);
+      return '';
+    } 
+
+    return ele.innerHTML.trim();
   }
 
   /**
@@ -445,8 +522,10 @@ class GithubApi {
    * @returns {Promise} resolves to http response
    */
   getRawFile(repoName, filePath, branch = 'master') {
+    var {repoName, org} = this.getRepoNameAndOrg(repoName);
+
     let options = {
-      uri : `${RAW_ROOT}/${ORG}/${repoName}/${branch}/${filePath}`,
+      uri : `${RAW_ROOT}/${org}/${repoName}/${branch}/${filePath}`,
       headers : {
         'User-Agent' : 'EcoSML Webapp'
       }
@@ -459,6 +538,27 @@ class GithubApi {
         resolve({response, body});
       });
     });
+  }
+
+  /**
+   * @method getRepoNameAndOrg
+   * @description given a repository name, split out org from repo name
+   * if it contains one, otherwise return default org.
+   * 
+   * @param {String} repoName
+   * 
+   * @returns {Object}
+   */
+  getRepoNameAndOrg(repoName) {
+    let org = {};
+    if( repoName.indexOf('/') > -1 ) {
+      repoName = repoName.split('/');
+      org = repoName[0];
+      repoName = repoName[1];
+    } else {
+      org = ORG;
+    }
+    return {repoName, org};
   }
 
   /**
@@ -497,6 +597,19 @@ class GithubApi {
           Logger.warn('Less that '+response.headers['x-ratelimit-remaining']+' GitHub requests remaining.  Resets in '+resets+'min');
         }
 
+        resolve({response, body});
+      });
+    });
+  }
+
+  requestRaw(options) {    
+    return new Promise((resolve, reject) => {
+      request(options, (error, response, body) => {
+        if( error ) {
+          Logger.error(`GitHub request error: ${options.method || 'GET'} ${options.uri}`, error);
+          return reject(error);
+        }
+        Logger.info(`GitHub request: ${options.method || 'GET'} ${options.uri}`);
         resolve({response, body});
       });
     });

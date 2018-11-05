@@ -1,3 +1,4 @@
+const config = require('./config');
 
 class AppUtils {
 
@@ -83,6 +84,27 @@ class AppUtils {
     }
 
     return ecosmlRepo;
+  }
+
+  /**
+   * @method getRepoNameAndOrg
+   * @description given a repository name, split out org from repo name
+   * if it contains one, otherwise return default org.
+   * 
+   * @param {String} repoName
+   * 
+   * @returns {Object}
+   */
+  getRepoNameAndOrg(repoName) {
+    let org;
+    if( repoName.indexOf('/') > -1 ) {
+      repoName = repoName.split('/');
+      org = repoName[0];
+      repoName = repoName[1];
+    } else {
+      org = config.github.org;
+    }
+    return {repoName, org};
   }
 
 }

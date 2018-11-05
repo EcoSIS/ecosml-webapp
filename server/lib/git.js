@@ -1,18 +1,22 @@
 const { exec } = require('child_process');
 const fs = require('fs-extra');
 const config = require('./config');
+const utils = require('./utils');
 const path = require('path');
 const GITHUB_ACCESS = config.github.access;
 
 const ROOT = config.github.fsRoot;
-const ORG = config.github.org;
-const BASE_URL = `https://${GITHUB_ACCESS.username}:${GITHUB_ACCESS.token}@github.com/${ORG}/`;
+const BASE_URL = `https://${GITHUB_ACCESS.username}:${GITHUB_ACCESS.token}@github.com/`;
 
 if( !fs.existsSync(ROOT) ) {
   fs.mkdirpSync(ROOT);
 }
 
 class GitCli {
+
+  constructor() {
+    this.rootDir = ROOT;
+  }
 
   /**
    * @method initConfig
@@ -32,9 +36,10 @@ class GitCli {
    * @return {Promise}
    */
   async clone(repoName) {
+    var {repoName, org} = utils.getRepoNameAndOrg(repoName);
     await this.removeRepositoryFromDisk(repoName);
-    let url = BASE_URL+repoName;
-    await this.exec(`clone ${url}`, {cwd: ROOT});
+    let url = BASE_URL+'/'+org+'/'+repoName;
+    await this.exec(`clone ${url}`, {cwd: this.getRepoPath(repoName)});
   }
 
     /**
@@ -46,7 +51,7 @@ class GitCli {
    * @return {Promise}
    */
   async ensureDir(repoName) {
-    let dir = path.join(ROOT, repoName);
+    let dir = this.getRepoPath(repoName);
     if( !fs.existsSync(dir) ) {
       await this.clone(repoName);
     }
@@ -61,7 +66,8 @@ class GitCli {
    * @returns {String} full path 
    */
   getRepoPath(repoName) {
-    return path.join(ROOT, repoName);
+    var {repoName, org} = utils.getRepoNameAndOrg(repoName);
+    return path.join(ROOT, org, repoName);
   }
 
   /**
@@ -158,7 +164,8 @@ class GitCli {
    * @returns {Promise} 
    */
   async removeRepositoryFromDisk(repoName) {
-    let dir = path.join(ROOT, repoName);
+    var {repoName, org} = utils.getRepoNameAndOrg(repoName);
+    let dir = path.join(ROOT, org, repoName);
     if( fs.existsSync(dir) ) {
       await fs.remove(dir);
     }

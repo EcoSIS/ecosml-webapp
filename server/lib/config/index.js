@@ -75,13 +75,13 @@ module.exports = {
   },
 
   // control which attributes are allowed to post
-  schemaFilter : {
-    // required attributes for creating package
-    REQUIRED_CREATE : ['name', 'description', 'owner', 'organization'],
-    // attributes that are allowed to be updated
-    UPDATE_ATTRIBUTES : ['name', 'description', 'overview', 'theme', 'organization',
-      'family', 'specific', 'keywords']
-  },
+  // schemaFilter : {
+  //   // required attributes for creating package
+  //   REQUIRED_CREATE : ['name', 'description', 'owner', 'organization'],
+  //   // attributes that are allowed to be updated
+  //   UPDATE_ATTRIBUTES : ['name', 'description', 'overview', 'theme', 'organization',
+  //     'family', 'specific', 'keywords']
+  // },
 
   github : {
     access : secrets.github,
@@ -89,6 +89,14 @@ module.exports = {
     fsRoot : env.GITHUB_FS_ROOT || path.resolve(__dirname, '..', '..', 'gitdata'),
     default_license : 'mit',
     homepageRoot : serverEnv === 'dev' ? 'https://dev.ecosml.org/package/' : 'https://ecosml.org/package/',
+    
+
+    // backups for registered repositories
+    registeredRepositories : {
+      file : (serverEnv === 'dev' ? 'production' : 'development') + '-respositories.json',
+      repoName : 'EcoSIS/ecosml-registered-repositories',
+      removeAttributes : ['description', 'overview', 'releases']
+    }
   },
 
   travisCi : secrets.travisCi,

@@ -1,6 +1,7 @@
 const config = require('./config');
 const request = require('request');
 const Logger = require('./logger');
+const utils = require('./utils');
 const {JSDOM} = require('jsdom');
 const parseLinkHeader = require('parse-link-header');
 
@@ -208,7 +209,7 @@ class GithubApi {
    * @returns {Promise} resolves to null or string
    */
   async latestRelease(repoName) {
-    var {repoName, org} = this.getRepoNameAndOrg(repoName);
+    var {repoName, org} = utils.getRepoNameAndOrg(repoName);
 
     let {response} = await this.requestRaw({
       uri : `https://github.com/${org}/${repoName}/releases/latest`,
@@ -253,7 +254,7 @@ class GithubApi {
   }
 
   async overview(repoName) {
-    var {repoName, org} = this.getRepoNameAndOrg(repoName);
+    var {repoName, org} = utils.getRepoNameAndOrg(repoName);
 
     let {response} = await this.requestRaw({
       uri : `https://github.com/${org}/${repoName}`,
@@ -522,7 +523,7 @@ class GithubApi {
    * @returns {Promise} resolves to http response
    */
   getRawFile(repoName, filePath, branch = 'master') {
-    var {repoName, org} = this.getRepoNameAndOrg(repoName);
+    var {repoName, org} = utils.getRepoNameAndOrg(repoName);
 
     let options = {
       uri : `${RAW_ROOT}/${org}/${repoName}/${branch}/${filePath}`,
@@ -538,27 +539,6 @@ class GithubApi {
         resolve({response, body});
       });
     });
-  }
-
-  /**
-   * @method getRepoNameAndOrg
-   * @description given a repository name, split out org from repo name
-   * if it contains one, otherwise return default org.
-   * 
-   * @param {String} repoName
-   * 
-   * @returns {Object}
-   */
-  getRepoNameAndOrg(repoName) {
-    let org = {};
-    if( repoName.indexOf('/') > -1 ) {
-      repoName = repoName.split('/');
-      org = repoName[0];
-      repoName = repoName[1];
-    } else {
-      org = ORG;
-    }
-    return {repoName, org};
   }
 
   /**

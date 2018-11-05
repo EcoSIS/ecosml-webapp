@@ -423,7 +423,7 @@ class PackageModel {
     logger.debug(`Package ${packageName} push`, stdout, stderr);
   }
 
-    /**
+  /**
    * @method getFiles
    * @description get all files for this repository
    * 

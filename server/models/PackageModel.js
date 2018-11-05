@@ -13,6 +13,7 @@ const schema = require('../lib/schema');
 const initPackage = require('../lib/init-package-files');
 const hash = require('../lib/hash');
 const travis = require('./PackageTestModel');
+const registeredRepositories = require('../lib/registered-repositories');
 
 const METADATA_FILENAME = 'ecosml-metadata.json';
 
@@ -51,6 +52,7 @@ class PackageModel {
     let ecosmlId = uuid.v4();
 
     if( pkg.source === 'registered' ) {
+      // this will throw an unknown repo error
       let {release, overview, description} = await this.getRegisteredRepoProperties(pkg.name);
       if( release ) {
         pkg.releases = [release];
@@ -58,7 +60,7 @@ class PackageModel {
       }
       pkg.overview = overview;
       pkg.description = description;
-    } else {
+    } else if( pkg.source === 'managed' ) {
       // create Github API Request
       let githubRepo = Object.assign({}, pkg);
       delete githubRepo.organization;
@@ -100,8 +102,9 @@ class PackageModel {
           await github.addTeamRepo(team.id, pkg.name);
         }
       }
-    } else {
-      // write to backup repo
+    } else if( pkg.source === 'registered' ) {
+      // write to backup repo, don't need to await on this...
+      registeredRepositories.update(pkg);
     }
 
     return pkg;
@@ -128,68 +131,86 @@ class PackageModel {
     pkg = await this.get(pkg);
     schema.validate('update', update);
 
-    // first get in sync
-    await git.resetHEAD(pkg.name);
-    await git.clean(pkg.name);
-    await git.pull(pkg.name);
+    if( !pkg.source ) pkg.source = 'managed';
 
-    // update readme if it changed via git
-    if( update.description && pkg.description !== update.description ) {
-      let README = path.join(git.getRepoPath(pkg.name), 'README.md');
-      await fs.writeFile(README, update.description || '');
-    }
+    if( pkgs.source === 'managed' ) {
+      // first get in sync
+      await git.resetHEAD(pkg.name);
+      await git.clean(pkg.name);
+      await git.pull(pkg.name);
 
-    // make sure the org didn't change
-    if( update.organization && pkg.organization !== update.organization ) {
-      let newTeam = mongo.getGithubTeam(update.organization);
-      let oldTeam = mongo.getGithubTeam(pkg.organization);
-
-      if( oldTeam ) {
-        await github.removeTeamRepo(oldTeam.id, pkg.name);
-      } else {
-        logger.error(`Unable to find github team ${pkg.organization} to remove repo: ${pkg.name}`);
+      // update readme if it changed via git
+      if( update.description && pkg.description !== update.description ) {
+        let README = path.join(git.getRepoPath(pkg.name), 'README.md');
+        await fs.writeFile(README, update.description || '');
       }
 
-      if( newTeam ) {
-        await github.addTeamRepo(newTeam.id, pkg.name);
-      } else {
-        logger.error(`Unable to find github team ${update.organization} to add repo: ${pkg.name}`);
-      }
-    }
-    
-    // update package overview in github
-    let body;
-    if( update.overview && update.overview !== pkg.overview ) {
-      let response = await github.editRepository({
-        name : pkg.name,
-        description : update.overview
-      });
-      body = response.body;
-    }
+      // make sure the org didn't change
+      if( update.organization && pkg.organization !== update.organization ) {
+        let newTeam = mongo.getGithubTeam(update.organization);
+        let oldTeam = mongo.getGithubTeam(pkg.organization);
 
-    let gpkg = {};
+        if( oldTeam ) {
+          await github.removeTeamRepo(oldTeam.id, pkg.name);
+        } else {
+          logger.error(`Unable to find github team ${pkg.organization} to remove repo: ${pkg.name}`);
+        }
+
+        if( newTeam ) {
+          await github.addTeamRepo(newTeam.id, pkg.name);
+        } else {
+          logger.error(`Unable to find github team ${update.organization} to add repo: ${pkg.name}`);
+        }
+      }
       
-    // grab current github api repo state if we didn't update
-    if( refreshFromGithub ) {
-      if( !body ) {
-        let response = await github.getRepository(pkg.name);
+      // update package overview in github
+      let body;
+      if( update.overview && update.overview !== pkg.overview ) {
+        let response = await github.editRepository({
+          name : pkg.name,
+          description : update.overview
+        });
         body = response.body;
       }
-      gpkg = utils.githubRepoToEcosml(body);
+
+      let gpkg = {};
+        
+      // grab current github api repo state if we didn't update
+      if( refreshFromGithub ) {
+        if( !body ) {
+          let response = await github.getRepository(pkg.name);
+          body = response.body;
+        }
+        gpkg = utils.githubRepoToEcosml(body);
+      }
+
+      gpkg = Object.assign(gpkg, update);
+
+      // make sure release count is correct
+      pkg.releaseCount = (pkg.releases || []).length;
+    } else if ( pkg.source === 'registered' ) {
+      // this will throw an unknown repo error
+      let {release, overview, description} = await this.getRegisteredRepoProperties(pkg.name);
+      if( release ) {
+        pkg.releases = [release];
+        pkg.releaseCount = 1;
+      }
+      pkg.overview = overview;
+      pkg.description = description;
     }
 
-    gpkg = Object.assign(gpkg, update);
-
-    // make sure release count is correct
-    pkg.releaseCount = (pkg.releases || []).length;
 
     // now save changes in mongo
     await mongo.updatePackage(pkg.name, gpkg);
     pkg = await mongo.getPackage(pkg.name);
 
-    // write and commit ecosis-metadata.json file or other changes
-    await this.writeMetadataFile(pkg);
-    await this.commit(pkg.name, commitMessage || 'Updating package metadata', username);
+    if( pkgs.source === 'managed' ) {
+      // write and commit ecosis-metadata.json file or other changes
+      await this.writeMetadataFile(pkg);
+      await this.commit(pkg.name, commitMessage || 'Updating package metadata', username);
+    } else {
+      registeredRepositories.update(pkg);
+    }
 
     return pkg;
   }
@@ -256,6 +277,10 @@ class PackageModel {
   async updateFiles(pkg, updateFiles=[], removeFiles=[], message, username) {
     pkg = await this.get(pkg);
 
+    if( pkg.source !== 'managed' ) {
+      throw new Error(`${pkg.name} is not a managed repository`);
+    }
+
     // update repo path
     await git.resetHEAD(pkg.name);
 
@@ -304,9 +329,10 @@ class PackageModel {
 
     logger.info(`Deleting package: ${pkg.name}`);
 
-    let {response} = await github.deleteRepository(pkg.name);
-    
-    this.checkStatus(response, 204);
+    if( pkg.source === 'managed') {
+      let {response} = await github.deleteRepository(pkg.name);
+      this.checkStatus(response, 204);
+    }
 
     await mongo.removePackage(pkg.name);
     await git.removeRepositoryFromDisk(pkg.name);
@@ -325,6 +351,9 @@ class PackageModel {
    */
   async createRelease(pkg, data) {
     pkg = await this.get(pkg);
+    if( pkg.source !== 'managed' ) {
+      throw new Error(`${pkg.name} is not a managed repository`);
+    }
 
     if( !data.name ) throw new AppError('Release name required', AppError.ERROR_CODES.MISSING_ATTRIBUTE);
     if( !data.description ) throw new AppError('Release description required', AppError.ERROR_CODES.MISSING_ATTRIBUTE);
@@ -433,6 +462,10 @@ class PackageModel {
    */
   async getFiles(pkg) {
     pkg = await this.get(pkg);
+
+    if( pkg.source !== 'managed' ) {
+      throw new Error(`${pkg.name} is not a managed repository`);
+    }
 
     let dir = await git.ensureDir(pkg.name);
     return this._walkPackage(dir, dir, [], pkg);

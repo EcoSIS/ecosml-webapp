@@ -22,10 +22,17 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
         value : () => {},
         observer : '_onDataUpdate'
       },
+
+      selectingSource : {
+        type : Boolean,
+        value : false
+      },
+
       creating : {
         type : Boolean,
         value : false
       },
+
       deleting : {
         type : Boolean,
         value : false

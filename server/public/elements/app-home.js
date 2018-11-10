@@ -27,7 +27,7 @@ export default class AppHome extends Mixin(PolymerElement)
       },
       sandbox : {
         type : Boolean,
-        value : true
+        value : false
       },
       gitenv : {
         type : Object,

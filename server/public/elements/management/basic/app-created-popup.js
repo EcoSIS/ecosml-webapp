@@ -3,6 +3,19 @@ import template from "./app-created-popup.html"
 
 export default class AppCreatedPopup extends PolymerElement {
 
+  static get properties() {
+    return {
+      githubOrg : {
+        type : String,
+        value : APP_CONFIG.env.github
+      },
+      name : {
+        type : String,
+        value : ''
+      }
+    }
+  }
+
   static get template() {
     return html([template]);
   }

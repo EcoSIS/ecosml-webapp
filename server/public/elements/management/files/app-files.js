@@ -17,6 +17,11 @@ export default class AppFiles extends PolymerElement {
         value : () => {},
         observer : '_onFilesUpdate'
       },
+      
+      githubOrg : {
+        type : String,
+        value : APP_CONFIG.env.github
+      },
 
       examples : {
         type : Array,

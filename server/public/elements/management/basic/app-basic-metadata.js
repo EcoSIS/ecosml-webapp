@@ -6,7 +6,7 @@ import "./app-created-popup"
 import PackageInterface from "../../interfaces/PackageInterface"
 import AppStateInterface from "../../interfaces/AppStateInterface"
 
-const VALUES = ['name', 'overview', 'organization', 'language'];
+const VALUES = ['name', 'overview', 'organization', 'language', 'packageType'];
 
 export default class AppBasicMetadata extends Mixin(PolymerElement)
   .with(EventInterface, AppStateInterface, PackageInterface) {
@@ -72,6 +72,19 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
     this.$.language.value = value || '';
   }
 
+  get packageType() {
+    if( this.$.packageInput.checked ) return 'package';
+    else return 'standalone';
+  }
+
+  set packageType(value) {
+    this.$.packageInput.removeAttribute('checked');
+    this.$.standaloneInput.removeAttribute('checked');
+
+    if( value === 'package' ) this.$.packageInput.setAttribute('checked', 'checked');
+    else this.$.standaloneInput.setAttribute('checked', 'checked');
+  }
+
   get organization() {
     return this.$.organization.value;
   }
@@ -90,6 +103,7 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
 
   ready() {
     super.ready();
+    this._checkNameAvailableTimer = -1;
   }
 
   /**
@@ -101,6 +115,7 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
     this.overview = '';
     this.organization = '';
     this.language = '';
+    this.packageType = '';
   }
 
   /**
@@ -138,8 +153,45 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
    * @description Fired from name input
    */
   _updateNamePreview() {
-    this.name = this.$.name.value.toLowerCase().replace(/ /g, '-').replace(/[^a-zA-Z0-9_-]/g, '');
+    this.name = this._getCleanName();
     this._onInputChange();
+  }
+
+  _getCleanName() {
+    return this.$.name.value.toLowerCase().replace(/ /g, '-').replace(/[^a-zA-Z0-9_-]/g, '');
+  }
+
+  _onNameInputKeyUp() {
+    this._checkNameAvailable();
+  }
+
+  _checkNameAvailable() {
+    this.$.nameMessage.innerHTML = this._getCleanName()+': Checking...';
+    this.$.nameMessage.className = '';
+
+    if( this._checkNameAvailableTimer !== -1 ) {
+      clearTimeout(this._checkNameAvailableTimer);
+    }
+
+    this._checkNameAvailableTimer = setTimeout(async () => {
+      this._checkNameAvailableTimer = -1;
+
+      let name = this._getCleanName();
+      if( !name ) {
+        this.$.nameMessage.innerHTML = '';
+        return;
+      }
+
+      this.nameAvailable = await this.PackageModel.isNameAvailable(name);
+      
+      if( this.nameAvailable ) {
+        this.$.nameMessage.innerHTML = this._getCleanName()+': Available';
+        this.$.nameMessage.className = 'ok';
+      } else {
+        this.$.nameMessage.innerHTML = this._getCleanName()+': Unavailable';
+        this.$.nameMessage.className = 'error';
+      }
+    }, 300);
   }
 
   /**
@@ -157,6 +209,9 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
   async _onCreateBtnClicked() {
     let data = this.getValues();
 
+    if( !this.nameAvailable ) {
+      return alert('Name is not available');
+    }
     if( data.name.length < 4 ) {
       return alert('Name must be at least 4 characters');
     }
@@ -166,9 +221,12 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
     if( !data.organization) {
       return alert('Please select an organization');
     }
+    if( !data.packageType ) {
+      return alert('Please select a package type');
+    }
 
     try {
-      await this._createPackage(data.name, data.overview, data.organization, data.language);
+      await this._createPackage(data.name, data.overview, data.organization, data.language, data.packageType);
       this.$.created.open();
     } catch(e) {
       alert('Failed to create package: '+e.message);

@@ -15,6 +15,7 @@ class Firebase extends EventEmitter {
     });
 
     this.firestore = admin.firestore();
+    this.firestore.settings({timestampsInSnapshots: true})
     this.collections = collections;
 
     this.BUFFER_TIME = 1000 * 5;
@@ -33,7 +34,7 @@ class Firebase extends EventEmitter {
       if (connectedSnap.val() === true) {
         logger.info('Connected to firestore');
       } else {
-        logger.error('Lost firestore connection');
+        logger.fatal('Lost firestore connection');
       }
     });
   }

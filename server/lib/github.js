@@ -10,6 +10,27 @@ const ACCEPT_MIME_TYPE = 'application/vnd.github.v3+json'
 const GITHUB_ACCESS = config.github.access;
 
 class GithubApi {
+
+  /**
+   * @method isRepoNameAvailable
+   * @description check is a respository name is available.  This method uses
+   * a HEAD request to the repo root page so it does not burn up a API request.
+   * 
+   * @param {String} name repository name to check
+   * 
+   * @returns {Promise} resolves to {Boolean}
+   */
+  isRepoNameAvailable(name) {
+    return new Promise((resolve, reject) => {
+      request({
+        uri : `https://github.com/${ORG}/${name}`,
+        method : 'HEAD'
+      }, (error, response) => {
+        if( error ) reject(error);
+        else resolve(response.statusCode === 200 ? false : true)
+      });
+    });
+  }
   
   /**
    * @method listRepositories

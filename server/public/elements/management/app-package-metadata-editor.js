@@ -106,10 +106,15 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
   async _fetchAndUpdatePackage(pkgId) {
     this.packageId = pkgId;
     try {
-      let pkg = await this._getPackage(pkgId);
-      this._setPackageData(pkg.payload);
+      await this._getPackage(pkgId);
     } catch(e) {
       return alert('Failed to fetch package '+pkgId+': '+e.message);
+    }
+  }
+
+  _onPackageUpdate(e) {
+    if( e.state === 'loaded' && e.payload.id === this.packageId ) {
+      this._setPackageData(e.payload);
     }
   }
 

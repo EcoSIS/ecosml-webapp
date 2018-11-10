@@ -68,6 +68,18 @@ router.post('/:package/createRelease', packageWriteAccess, async (req, res) => {
   }
 });
 
+router.get('/available/:package', async(req, res) => {
+  try {
+    let isAvailable = await model.isNameAvailable(req.params.package);
+    res.json({
+      isAvailable,
+      packageName: req.params.package
+    });
+  } catch(e) {
+    utils.handleError(res, e);
+  }
+});
+
 router.post('/:package/updateFiles', packageWriteAccess, upload.any(),  async (req, res) => {
   try {
     let remove = JSON.parse(req.body.remove || '[]');
@@ -107,93 +119,13 @@ router.post('/:package/updateFiles', packageWriteAccess, upload.any(),  async (r
 
 });
 
-router.post('/:package/updateFile', packageWriteAccess, upload.any(), async (req, res) => {
-  if( req.files.length === 0 ) {
-    return res.status(400).send({error: true, message: 'no file provided'});
-  }
-
-  let message = req.body.message;
-  let dir = req.body.dir;
-  var file = req.files[0];
-
-  let data = {
-    filename : file.originalname,
-    tmpFile : file.path,
-    dir, message
-  }
-  
-  try {
-    // queue replaces:
-    // let response = await model.addFile(req.ecosmlPackage, data);
-    let response = await queue.add(
-      'addFile', 
-      req.ecosmlPackage.name, 
-      [req.ecosmlPackage, data]
-    );
-
-    res.send(response);
-  } catch(e) {
-    utils.handleError(res, e);
-  }
-});
-
-router.delete('/:package/file/*', packageWriteAccess, async (req, res) => {
-  let file = req.url.replace('/'+req.params.package+'/file', '');
-  file = decodeURI(file);
-
-  try {
-    // queue replaces:
-    // await model.deleteFile(req.ecosmlPackage, file);
-    await queue.add(
-      'deleteFile', 
-      req.ecosmlPackage.name, 
-      [req.ecosmlPackage, file]
-    );
-    
-    res.status(204).send();
-  } catch(e) {
-    utils.handleError(res, e);
-  }
-});
-
 router.get('/:package/files', packageReadAccess, async (req, res) => {
   try {
     let files = await model.getFiles(req.ecosmlPackage);
     res.json({
       package: req.ecosmlPackage.name,
-      files : files,
-      specialDirs : await model.getLayoutFolders(req.ecosmlPackage)
+      files : files
     });
-  } catch(e) {
-    utils.handleError(res, e);
-  }
-});
-
-router.move('/:package/example/:name', packageWriteAccess, async (req, res) => {
-  try {
-    // await model.moveExample(req.ecosmlPackage, req.params.name, req.body);
-    await queue.add(
-      'moveExample', 
-      req.ecosmlPackage.name, 
-      [req.ecosmlPackage, req.params.name, req.body]
-    );
-
-    res.json({success: true});
-  } catch(e) {
-    utils.handleError(res, e);
-  }
-});
-
-router.delete('/:package/example/:name', packageWriteAccess, async (req, res) => {
-  try {
-    // await model.deleteExample(req.ecosmlPackage, req.params.name);
-    await queue.add(
-      'deleteExample', 
-      req.ecosmlPackage.name, 
-      [req.ecosmlPackage, req.params.name]
-    );
-
-    res.json({success: true});
   } catch(e) {
     utils.handleError(res, e);
   }

@@ -65,6 +65,14 @@ module.exports = {
       options : {
         name: "LanguageIndex"
       }
+    },
+    {
+      index : {
+        packageType: 1
+      },
+      options : {
+        name: "PackageTypeIndex"
+      }
     }
 
   ],

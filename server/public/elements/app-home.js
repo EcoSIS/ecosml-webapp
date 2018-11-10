@@ -28,6 +28,10 @@ export default class AppHome extends Mixin(PolymerElement)
       sandbox : {
         type : Boolean,
         value : true
+      },
+      gitenv : {
+        type : Object,
+        value : () => APP_CONFIG.env.git
       }
     }
   }
@@ -42,8 +46,9 @@ export default class AppHome extends Mixin(PolymerElement)
   async ready() {
     super.ready();
 
-    if( APP_CONFIG.env.client === 'dev' ) {
+    if( APP_CONFIG.env.git.branch !== 'master' ) {
       this.$.titleExtra.innerHTML = ' - Sandbox';
+      document.title = document.title+' Sandbox'
       this.sandbox = true;
     }
 

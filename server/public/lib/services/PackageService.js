@@ -20,8 +20,9 @@ class PackageService extends BaseService {
    * @param {String} organization package organization
    * @param {String} language package programming language
    */
-  async create(name, overview, organization, language) {
-    let payload = {name, overview, organization, language};
+  async create(name, overview, organization, language, packageType) {
+    let payload = {name, overview, organization, language, packageType};
+    console.log(payload)
 
     return this.request({
       url : this.baseUrl,
@@ -83,7 +84,6 @@ class PackageService extends BaseService {
   async get(packageId) {
     return this.request({
       url : `${this.baseUrl}/${packageId}`,
-      checkCached : () => this.store.data.byId[packageId],
       onLoading : request => this.store.setGetPackageLoading(packageId, request),
       onLoad : result => this.store.setGetPackageSuccess(packageId, result.body),
       onError : error => this.store.setGetPackageError(packageId, error)
@@ -93,7 +93,7 @@ class PackageService extends BaseService {
   async getFiles(packageId) {    
     return this.request({
       url : `${this.baseUrl}/${packageId}/files`,
-      onLoad : result => this.store.onFilesLoaded(packageId, result.body.files, result.body.specialDirs)
+      onLoad : result => this.store.onFilesLoaded(packageId, result.body.files)
     });
   }
 
@@ -109,51 +109,9 @@ class PackageService extends BaseService {
     });
   }
 
-
-  /**
-   * 
-   */
-  uploadFile(options) {
-    options.url = `${this.baseUrl}/${options.packageId}/updateFile`;
-    return new Promise(async (resolve, reject) => {
-      
-      options.onProgress = (e) => this.store.onFileUploadProgress(options.uploadId, e);
-
-      let file = {
-        filename : options.file.name,
-        dir : options.dir
-      }
-      this.store.onFileUploadStart(options.packageId, file);
-
-      try {
-        let file = await upload(options);
-        this.store.onFileLoaded(options.packageId, file);
-        resolve(file);
-      } catch(e) {
-        this.store.onFileError(options.packageId, file, e);
-        reject(e);
-      }
-    });
-  }
-
-  /**
-   * 
-   * @param {String} packageId 
-   * @param {String} file 
-   */
-  deleteFile(packageId, file) {
-    let sep = '';
-    if( !file.dir.match(/\/^/) ) sep = '/';
-    let filepath = file.dir+sep+encodeURI(file.filename);
-
+  isNameAvailable(packageName) {
     return this.request({
-      url : `${this.baseUrl}/${packageId}/file${filepath}`,
-      fetchOptions : {
-        method : 'DELETE'
-      },
-      // onLoading : request => this.store.setFileDeleteStart(request, packageId, file),
-      onLoad : result => this.store.setFileDeleteSuccess(result.body, packageId, file),
-      onError : error => this.store.onFileError(packageId, file, error)
+      url : `${this.baseUrl}/available/${packageName}`
     });
   }
 

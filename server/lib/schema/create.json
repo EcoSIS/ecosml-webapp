@@ -37,8 +37,12 @@
       },
       "language" : {
         "type" : "string"
+      },
+      "packageType" : {
+        "type" : "string",
+        "enum" : ["standalone", "package"]
       }
     },
     "additionalProperties": false,
-    "required": ["name", "organization", "overview", "owner"]
+    "required": ["name", "organization", "overview", "owner", "packageType", "language"]
   }

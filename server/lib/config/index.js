@@ -5,7 +5,12 @@ const keyPath = path.join(__dirname, '../../google-key.json');
 
 const mongoHost = env.MONGO_HOST || 'mongo';
 const firebaseEnv = env.FIREBASE_ENV || 'local';
+const serverEnv = env.SERVER_ENV || 'dev';
 const clientEnv = env.CLIENT_ENV || 'dev';
+
+
+let assetsDir = (clientEnv === 'prod') ? 'dist' : 'public';
+let clientPackage = require(`../../${assetsDir}/package.json`);
 
 module.exports = {
 
@@ -13,10 +18,10 @@ module.exports = {
     port : env.SERVER_PORT || '3000',
     url : env.SERVER_URL || 'http://localhost:3000',
     label : env.SERVER_LABEL || 'EcoSML', // used for auth redirect
-    // assets : (clientEnv === 'prod') ? 'dist' : 'public',
-    assets : env.SERVER_ASSET_DIR || 'public',
-    loglevel : env.SERVER_LOG_LEVEL || 'debug',
+    assets : assetsDir,
+    loglevel : env.SERVER_LOG_LEVEL || 'info',
     clientEnv,
+    serverEnv,
 
     jwt : {
       secret : env.JWT_SECRET || secrets.ecosml.secret
@@ -34,6 +39,14 @@ module.exports = {
     // place all SPA base route names here
     appRoutes : ['package', 'search', 'edit', 
     'create', 'account', 'about']
+  },
+
+  client : {
+    env : clientEnv,
+    versions : {
+      bundle : clientPackage.version,
+      loader : clientPackage.dependencies['@ucd-lib/cork-app-load'].replace(/^\D/, '')
+    }
   },
 
   ecosis : {
@@ -74,7 +87,8 @@ module.exports = {
     access : secrets.github,
     org : env.GITHUB_ORG || 'ecosml-dev',
     fsRoot : env.GITHUB_FS_ROOT || path.resolve(__dirname, '..', '..', 'gitdata'),
-    default_license : 'mit'
+    default_license : 'mit',
+    homepageRoot : serverEnv === 'dev' ? 'https://dev.ecosml.org/package/' : 'https://ecosml.org/package/',
   },
 
   travisCi : secrets.travisCi,

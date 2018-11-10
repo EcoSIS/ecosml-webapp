@@ -23,9 +23,6 @@
   <paper-icon-button icon="folder" on-click="toggle" hidden$="[[open]]"></paper-icon-button> 
   <paper-icon-button icon="folder-open" on-click="toggle" hidden$="[[!open]]"></paper-icon-button> 
   <div style="flex:1; cursor: pointer" on-click="toggle" >[[data.name]]</div>
-
-  <!-- TODO: add back in after alpha release -->
-  <!-- <paper-icon-button icon="info-outline" hidden$="[[!data.special]]"></paper-icon-button> -->
 </div>
 
 <div hidden$="[[!open]]">
@@ -33,6 +30,6 @@
     <app-file-tree-leaf data="[[item]]"></app-file-tree-leaf>
   </template>
   <template is="dom-repeat" items="[[directories]]">
-    <app-file-tree-branch data="[[item]]" special-dirs="[[specialDirs]]"></app-file-tree-branch>
+    <app-file-tree-branch data="[[item]]"></app-file-tree-branch>
   </template>
 </div>

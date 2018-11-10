@@ -25,6 +25,19 @@
     font-size: 14px;
     color: var(--secondary-text-color);
   }
+
+  .radio {
+    margin : 10px 0 0 5px;
+  }
+
+  #nameMessage.ok {
+    color: var(--color-green);
+  }
+
+  #nameMessage.error {
+    color: var(--color-red);
+  }
+
 </style>
 
 <app-created-popup id="created" name="[[name]]"></app-created-popup>
@@ -44,8 +57,10 @@
 <app-text-input  
   id="name" 
   on-change="_updateNamePreview"
+  on-keyup="_onNameInputKeyUp"
   hidden$="[[!creating]]">
 </app-text-input>
+<div id="nameMessage" hidden$="[[!creating]]"></div>
 
 <h2 class="uheader lightblue" break$="[[creating]]">Package Overview</h2>
 <div class="help">One sentance summary of package</div>
@@ -63,15 +78,29 @@
 <app-org-input id="organization" on-change="_onInputChange"></app-org-input>
 
 <h2 class="uheader green break">Language</h2>
-<div class="help">Which programming language is this package written in?  Currently 
-<a href="https://www.python.org/" target="_blank">Python</a> and <a href="https://www.r-project.org/" target="_blank">R</a> 
-will auto build native package files for installation from Github.</div>
+<div class="help">Which programming language is this package written in?</div>
 <select id="language" on-change="_onInputChange">
   <option></option>
   <option value="python">Python</option>
   <option value="r">R</option>
   <option value="other">Other</option>
 </select>
+
+<h2 class="uheader green break">Distributed Software Package?</h2>
+<div class="help">Is this a distributable software package that is meant to be used by other applications (ie what you would install
+  through <a href="https://pypi.org/project/pip/" target="_blank">Python/PIP</a>, <a href="https://cran.r-project.org/" target="_blank">R/CRAN</a>,
+   <a href="https://www.npmjs.com/" target="_blank">NodeJS/NPM</a>, <a href="https://en.wikipedia.org/wiki/List_of_software_package_management_systems#Application-level_Dependency_managers" target="_blank">etc</a>) or is
+  this a standalone software application?  Currently <a href="https://www.python.org/" target="_blank">Python</a> and 
+  <a href="https://www.r-project.org/" target="_blank">R</a> packages will auto build sample native package files for installation from Github.
+</div>
+  
+<div class="radio">
+  <input id="packageInput" type="radio" name="software-package" value="package" on-change="_onInputChange"/> 
+  <label for="packageInput">Software Package</label></div>
+<div class="radio">
+  <input id="standaloneInput" type="radio" name="software-package" value="standalone" on-change="_onInputChange"/> 
+  <label for="standaloneInput">Standalone Software</label>
+</div>
 
 <div style="text-align: right">
   <paper-button 

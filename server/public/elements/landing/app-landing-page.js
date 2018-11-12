@@ -42,6 +42,10 @@ export default class AppLandingPage extends Mixin(PolymerElement)
         type : String,
         value : ''
       },
+      githubOrg : {
+        type : String,
+        value : APP_CONFIG.env.github
+      },
       userHasWriteAccess : {
         type : Boolean,
         value : false

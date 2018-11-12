@@ -24,7 +24,7 @@ module.exports = {
     serverEnv,
 
     jwt : {
-      secret : env.JWT_SECRET || secrets.ecosml.secret
+      secret : env.JWT_SECRET || secrets.ecosml[serverEnv].secret
     },
 
     auth : {

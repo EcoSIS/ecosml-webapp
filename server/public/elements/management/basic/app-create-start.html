@@ -1,0 +1,79 @@
+<style>
+  :host {
+    display: block;
+  }
+
+  h2 {
+    margin-top: 0;
+    margin-bottom: 10px;
+  }
+
+  .description {
+    color: var(--secondary-text-color);
+  }
+
+  .radio-layout {
+    display: flex;
+    margin-top: 10px;
+  }
+
+  .radio-layout label {
+    font-weight: bold;
+    padding: 10px 0;
+    display: block;
+  }
+
+  input[type="radio"] {
+    margin: 15px;
+  }
+</style>
+
+
+<h2>Select Repository Type</h2>
+<div class="description">
+  You have to option to create a EcoSML Managed Package or if you
+  already have a GitHub repostory you can create a Registered Package.
+</div>
+
+<div class="radio-layout">
+  <input 
+    type="radio" 
+    id="repositoryTypeManaged" 
+    name="repository-type" 
+    value="managed"
+    on-change="_onSourceRadioChange" /> 
+  <div>
+    <div>
+        <label for="repositoryTypeManaged">EcoSML Managed Repository</label>
+    </div>
+    <div>
+      Recommended for users who are new to source code management (<a href="https://git-scm.com/" target="_blank">git</a>).  
+      Managed repositories are easy to create and provide a simple interface for updating code.  The 
+      repository will be hosted in the 
+      <a href="https://github.com/[[githubOrg]]" target="_blank">EcoSML GitHub organization</a>.
+    </div>
+  </div>
+</div>
+
+<div class="radio-layout">
+  <input 
+    type="radio" 
+    name="repository-type" 
+    id="repositoryTypeRegistered" 
+    value="registered" 
+    on-change="_onSourceRadioChange" /> 
+  <div>
+    <div>
+      <label for="repositoryTypeRegistered">Registered Repository</label>
+    </div>
+    <div>
+        Recommended for users who: have experince with git, want to host
+        the repository in their own GitHub organization or already have a GitHub repository.
+        You will provide EcoSML the url to your existing GitHub repository on the next screen.
+      </div>
+  </div>
+</div>
+
+<div style="text-align: right">
+  <paper-button disabled$="[[!hasSourceSet]]" on-click="_onNextBtnClicked">Next</paper-button>
+</div>

@@ -8,7 +8,6 @@ const firebaseEnv = env.FIREBASE_ENV || 'local';
 const serverEnv = env.SERVER_ENV || 'dev';
 const clientEnv = env.CLIENT_ENV || 'dev';
 
-
 let assetsDir = (clientEnv === 'prod') ? 'dist' : 'public';
 let clientPackage = require(`../../${assetsDir}/package.json`);
 
@@ -24,7 +23,7 @@ module.exports = {
     serverEnv,
 
     jwt : {
-      secret : env.JWT_SECRET || secrets.ecosml[serverEnv].secret
+      secret : env.JWT_SECRET || secrets.ecosml.secret[serverEnv]
     },
 
     auth : {

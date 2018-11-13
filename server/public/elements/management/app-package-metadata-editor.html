@@ -68,14 +68,16 @@
       [[currentAction]] Package<span hidden$="[[creating]]">: [[name]]</span>
     </h1>
 
-    <paper-tabs id="tabs" hidden$="[[creating]]" selected="{{selectedSection}}" attr-for-selected="id">
+    <paper-tabs id="tabs" selected="{{selectedSection}}" attr-for-selected="id">
+      <paper-tab id="source" hidden$="[[!creating]]">Getting Started</paper-tab>
       <paper-tab id="basic">Basic Information</paper-tab>
-      <paper-tab id="details">Details</paper-tab>
-      <paper-tab id="files">Files</paper-tab>
-      <paper-tab id="release">Releases</paper-tab>
+      <paper-tab id="details" hidden$="[[creating]]">Details</paper-tab>
+      <paper-tab id="files" hidden$="[[creating]]">Files</paper-tab>
+      <paper-tab id="release" hidden$="[[creating]]">Releases</paper-tab>
     </paper-tabs>
 
     <iron-pages selected="[[selectedSection]]" attr-for-selected="id" selected-attribute="active" >
+      <app-create-start id="source" class="main-panel" on-change="_onDataChange" on-next-tab="_onCreateStartNextTab"></app-create-start>
       <app-basic-metadata id="basic" class="main-panel" creating="[[creating]]" on-change="_onDataChange"></app-basic-metadata>
       <app-details-metadata id="details" class="main-panel" on-change="_onDataChange"></app-details-metadata>
       <app-files id="files" class="main-panel" package-name="[[data.name]]" language="[[data.language]]"></app-files>

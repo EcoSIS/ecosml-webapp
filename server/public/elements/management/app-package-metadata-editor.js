@@ -9,6 +9,7 @@ import PackageInterface from "../interfaces/PackageInterface"
 import AppStateInterface from "../interfaces/AppStateInterface"
 
 import "./app-text-input"
+import "./basic/app-create-start"
 import "./basic/app-basic-metadata"
 import "./details/app-details-metadata"
 import "./files/app-files"
@@ -57,7 +58,10 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
 
   constructor() {
     super();
-    this.active = true;
+
+    this._injectModel('PackageEditor');
+
+
     this._autoUpdateTimer = -1;
     this.schema = this._getPackageSchema();
   }
@@ -80,23 +84,36 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
       this.packageId = e.location.path[1];
       this._fetchAndUpdatePackage( e.location.path[1] );
     } else if( page === 'create' ) {
-      this.createPackage();
+      this.PackageEditor.reset();
     }
 
     setTimeout(() => this.$.tabs.notifyResize(), 25);
   }
 
-  /**
-   * @method createPackage
-   * @description Reset UI to create a new package
-   */
-  createPackage() {
-    this.currentAction = 'Create';
-    this.creating = true;
-    this.selectedSection = 'basic';
-    this.name = '';
-    this.packageId = '';
-    this.$.basic.reset();
+  _onPackageEditorDataUpdate(e) {
+    this.packageId = e.payload.id || '';
+    this.packageName = e.payload.name || '';
+    this.creating = e.state === 'create' ? true : false;
+
+    if( this.lastState !== e.state ) {
+      if( e.state === 'create' ) {
+        this.selectedSection = 'source';
+        this.currentAction = 'Create';
+      } else if( e.state === 'edit' ) {
+        this.selectedSection = 'basic';
+        this.currentAction = 'Update';
+        this.$.commitMsg.value = '';
+
+        // get and set files
+        //this.$.files.files = await this._getPackageFiles(pkgData.id);
+
+        // set release info
+        // this.$.release.package = pkgData;
+        // this.$.release.releases = (pkgData.releases || []);
+      }
+
+      this.lastState = e.state;
+    }
   }
 
   /**
@@ -106,42 +123,12 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
   async _fetchAndUpdatePackage(pkgId) {
     this.packageId = pkgId;
     try {
-      await this._getPackage(pkgId);
+      let e = await this._getPackage(pkgId);
+      this.PackageEditor.setEditStartStateData(e.payload);
+      this.PackageEditor.setData(e.payload, {state: 'edit'});
     } catch(e) {
       return alert('Failed to fetch package '+pkgId+': '+e.message);
     }
-  }
-
-  _onPackageUpdate(e) {
-    if( e.state === 'loaded' && e.payload.id === this.packageId ) {
-      this._setPackageData(e.payload);
-    }
-  }
-
-  /**
-   * @method _setPackageData
-   * @description update UI from package data
-   * 
-   * @param {Object} pkgData package to render
-   */
-  async _setPackageData(pkgData) {
-    this.currentAction = 'Update';
-    this.creating = false;
-    this.$.commitMsg.value = '';
-    this.packageId = pkgData.id;
-    this.name = pkgData.name;
-    this.data = pkgData;
-
-    // set basic metadata inputs
-    this.$.basic.data = pkgData;
-    this.$.details.data = pkgData;
-
-    // get and set files
-    this.$.files.files = await this._getPackageFiles(pkgData.id);
-
-    // set release info
-    this.$.release.package = pkgData;
-    this.$.release.releases = (pkgData.releases || []);
   }
 
   /**
@@ -193,6 +180,15 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
       this.$.savingMsg.style.display = 'none';
       alert('Failed to save package data :( '+e.error.message);
     }
+  }
+
+  /**
+   * @method _onCreateStartNextTab
+   * @description bound to app-create-start next-tab event.  Called when the
+   * tab should be set to 'basic'.
+   */
+  _onCreateStartNextTab() {
+    this.selectedSection = 'basic';
   }
 
   _valueToArray(value) {

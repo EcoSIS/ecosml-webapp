@@ -54,22 +54,37 @@
   </div>
 </div>
 
-<h2 class="uheader blue" hidden$="[[!creating]]">Package Name</h2>
-<app-text-input  
-  id="name" 
-  on-change="_updateNamePreview"
-  on-keyup="_onNameInputKeyUp"
-  hidden$="[[!creating]]">
-</app-text-input>
-<div id="nameMessage" hidden$="[[!creating]]"></div>
+<div hidden$="[[!isManagedSource]]" >
+  <h2 class="uheader blue" hidden$="[[!creating]]">Package Name</h2>
+  <app-text-input  
+    id="name" 
+    on-change="_updateNamePreview"
+    on-keyup="_onNameInputKeyUp"
+    hidden$="[[!creating]]">
+  </app-text-input>
+  <div id="nameMessage" hidden$="[[!creating]]"></div>
+</div>
 
-<h2 class="uheader lightblue" break$="[[creating]]">Package Overview</h2>
-<div class="help">One sentance summary of package</div>
-<app-text-input 
-  id="overview"
-  on-change="_onInputChange"
-  placeholder="Overview (Short Description)">
-</app-text-input>
+<div hidden$="[[isManagedSource]]" >
+  <h2 class="uheader blue" hidden$="[[!creating]]">Repository Url</h2>
+  <app-text-input  
+    id="url" 
+    on-change="_checkUrl"
+    on-keyup="_checkUrl"
+    hidden$="[[!creating]]">
+  </app-text-input>
+  <div id="urlMessage" hidden$="[[!creating]]"></div>
+</div>
+
+<div hidden$="[[!isManagedSource]]">
+  <h2 class="uheader lightblue" break$="[[creating]]">Package Overview</h2>
+  <div class="help">One sentance summary of package</div>
+  <app-text-input 
+    id="overview"
+    on-change="_onInputChange"
+    placeholder="Overview (Short Description)">
+  </app-text-input>
+</div>
 
 <h2 class="uheader green break">Organization</h2>
 <div class="help">The <a href="https://ecosis.org" target="_blank">EcoSIS</a> organization this package belongs to, 
@@ -91,8 +106,8 @@
 <div class="help">Is this a distributable software package that is meant to be used by other applications (ie what you would install
   through <a href="https://pypi.org/project/pip/" target="_blank">Python/PIP</a>, <a href="https://cran.r-project.org/" target="_blank">R/CRAN</a>,
    <a href="https://www.npmjs.com/" target="_blank">NodeJS/NPM</a>, <a href="https://en.wikipedia.org/wiki/List_of_software_package_management_systems#Application-level_Dependency_managers" target="_blank">etc</a>) or is
-  this a standalone software application?  Currently <a href="https://www.python.org/" target="_blank">Python</a> and 
-  <a href="https://www.r-project.org/" target="_blank">R</a> packages will auto build sample native package files for installation from Github.
+  this a standalone software application?  <span hidden$="[[!isManagedSource]]">Currently <a href="https://www.python.org/" target="_blank">Python</a> and 
+  <a href="https://www.r-project.org/" target="_blank">R</a> packages will auto build sample native package files for installation from Github.</span>
 </div>
   
 <div class="radio">

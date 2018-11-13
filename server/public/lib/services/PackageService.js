@@ -1,7 +1,5 @@
 const {BaseService} = require('@ucd-lib/cork-app-utils');
 const PackageStore = require('../stores/PackageStore');
-const upload = require('../upload');
-const uuid = require('uuid');
 
 class PackageService extends BaseService {
 
@@ -109,31 +107,26 @@ class PackageService extends BaseService {
     });
   }
 
-  isNameAvailable(packageName) {
-    return this.request({
-      url : `${this.baseUrl}/available/${packageName}`
-    });
-  }
+  // moveExample(packageId, src, dst) {
+  //   return this.request({
+  //     url : `${this.baseUrl}/${packageId}/example/${src}`,
+  //     fetchOptions : {
+  //       method : 'MOVE',
+  //       body : dst
+  //     }
+  //   });
+  // }
 
-  moveExample(packageId, src, dst) {
-    return this.request({
-      url : `${this.baseUrl}/${packageId}/example/${src}`,
-      fetchOptions : {
-        method : 'MOVE',
-        body : dst
-      }
-    });
-  }
+  // deleteExample(packageId, name) {
+  //   return this.request({
+  //     url : `${this.baseUrl}/${packageId}/example/${name}`,
+  //     fetchOptions : {
+  //       method : 'DELETE'
+  //     }
+  //   });
+  // }
 
-  deleteExample(packageId, name) {
-    return this.request({
-      url : `${this.baseUrl}/${packageId}/example/${name}`,
-      fetchOptions : {
-        method : 'DELETE'
-      }
-    });
-  }
-
+  // TODO: move to package editor service?
   previewMarkdown(markdown) {
     return this.request({
       url : `/api/markdown`,

@@ -2,7 +2,6 @@ const {BaseModel} = require('@ucd-lib/cork-app-utils');
 const PackageService = require('../services/PackageService');
 const PackageStore = require('../stores/PackageStore');
 const PackageSchema = require('../schema').package;
-const uuid = require('uuid');
 
 class PackageModel extends BaseModel {
 
@@ -108,23 +107,6 @@ class PackageModel extends BaseModel {
     }
     
     return this.store.getFiles(packageId);
-  }
-
-  /**
-   * @method isNameAvailable
-   * @description is package name available
-   * 
-   * @param {String} packageName
-   * 
-   * @returns {Promise} resolves to Boolean
-   */
-  async isNameAvailable(packageName) {
-    try {
-      let {body} = await this.service.isNameAvailable(packageName);
-      return body.isAvailable;
-    } catch(e) {
-      console.error(e);
-    }
   }
 
   /**

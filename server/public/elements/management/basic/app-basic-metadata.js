@@ -17,13 +17,7 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
 
   static get properties() {
     return {
-      data : {
-        type : Object,
-        value : () => {},
-        observer : '_onDataUpdate'
-      },
-
-      selectingSource : {
+      isManagedSource : {
         type : Boolean,
         value : false
       },
@@ -53,13 +47,24 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
   constructor() {
     super();
     this.active = true;
+
+    this._injectModel('PackageEditor');
   }
 
   get name() {
-    return this.$ ? this.$.name.value : '';
+    // safety check, only applies to name...
+    if( !this.$ ) return '';
+
+    if( this.editorData && this.editorData.source === 'registered') {
+      return this.$.url.value || '';
+    }
+    return this.$.name.value || '';
   }
 
   set name(value) {
+    if( this.editorData && this.editorData.source === 'registered') {
+      this.$.url.value || '';
+    }
     this.$.name.value = value || '';
   }
 
@@ -113,16 +118,23 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
     this._checkNameAvailableTimer = -1;
   }
 
-  /**
-   * @method reset
-   * @description clear all inputs
-   */
-  reset() {
-    this.name = '';
-    this.overview = '';
-    this.organization = '';
-    this.language = '';
-    this.packageType = '';
+  _onPackageEditorDataUpdate(e) {
+    this.packageId = e.payload.id || '';
+    this.packageName = e.payload.name || '';
+
+    // always needs to be set before loop below so
+    // name setter knows to set URL or NAME input
+    this.editorData = e.payload;
+
+    for( let value of VALUES ) {
+      this[value] = e.payload[value];
+    }
+
+    console.log(e.payload);
+
+    this.isManagedSource = (e.payload.source === 'registered') ? false : true;
+    this.creating = e.state === 'create' ? true : false;
+    this.hasRelease = (e.payload.releaseCount && e.payload.releaseCount > 0) ? true : false;
   }
 
   /**
@@ -138,21 +150,6 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
       data[value] = this[value];
     });
     return data;
-  }
-
-  /**
-   * @method _onDataUpdate
-   * @description called when data property updates
-   */
-  _onDataUpdate() {
-    if( !this.data ) return;
-    this.packageId = this.data.id;
-    this.packageName = this.data.name;
-    VALUES.forEach(value => {
-      this[value] = this.data[value];
-    });
-
-    this.hasRelease = (this.data.releaseCount > 0);
   }
 
   /**
@@ -189,7 +186,7 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
         return;
       }
 
-      this.nameAvailable = await this.PackageModel.isNameAvailable(name);
+      this.nameAvailable = await this.PackageEditor.isNameAvailable(name);
       
       if( this.nameAvailable ) {
         this.$.nameMessage.innerHTML = this._getCleanName()+': Available';
@@ -206,7 +203,7 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
    * @description called when any input changes
    */
   _onInputChange() {
-    this.fire('change');
+    this.PackageEditor.setData(this.getValues());
   }
 
   /**
@@ -214,15 +211,15 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
    * @description function fired when the create button is clicked
    */
   async _onCreateBtnClicked() {
-    let data = this.getValues();
+    let data = this.PackageEditor.getData();
 
     if( !this.nameAvailable ) {
       return alert('Name is not available');
     }
-    if( data.name.length < 4 ) {
+    if( (data.name || '').length < 4 ) {
       return alert('Name must be at least 4 characters');
     }
-    if( data.overview.length < 15 ) {
+    if( (data.overview || '').length < 15 ) {
       return alert('Please provide a longer overview');
     }
     if( !data.organization) {

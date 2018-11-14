@@ -2,11 +2,10 @@ import {PolymerElement, html} from "@polymer/polymer"
 import template from "./app-folder-uploader.html"
 
 import sha from "sha.js"
-import PackageInterface from "../../interfaces/PackageInterface"
 import "./app-file-diff"
 
 export default class AppFolderUploader extends Mixin(PolymerElement)
-  .with(EventInterface, PackageInterface) {
+  .with(EventInterface) {
 
   static get template() {
     return html([template]);
@@ -20,8 +19,9 @@ export default class AppFolderUploader extends Mixin(PolymerElement)
 
   constructor() {
     super();
-    this.active = true;
     this.files = {};
+
+    this._injectModel('PackageModel');
 
     this.ignore = ['ecosml-metadata.json']
   }

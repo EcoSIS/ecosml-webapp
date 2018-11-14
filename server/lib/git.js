@@ -6,7 +6,7 @@ const path = require('path');
 const GITHUB_ACCESS = config.github.access;
 
 const ROOT = config.github.fsRoot;
-const BASE_URL = `https://${GITHUB_ACCESS.username}:${GITHUB_ACCESS.token}@github.com/`;
+const BASE_URL = `https://${GITHUB_ACCESS.username}:${GITHUB_ACCESS.token}@github.com`;
 
 if( !fs.existsSync(ROOT) ) {
   fs.mkdirpSync(ROOT);
@@ -39,7 +39,8 @@ class GitCli {
     var {repoName, org} = utils.getRepoNameAndOrg(repoName);
     await this.removeRepositoryFromDisk(repoName);
     let url = BASE_URL+'/'+org+'/'+repoName;
-    await this.exec(`clone ${url}`, {cwd: this.getRepoPath(repoName)});
+    let orgDir = path.join(ROOT, org);
+    await this.exec(`clone ${url}`, {cwd: orgDir});
   }
 
     /**
@@ -52,6 +53,12 @@ class GitCli {
    */
   async ensureDir(repoName) {
     let dir = this.getRepoPath(repoName);
+
+    let orgDir = path.resolve(dir, '..');
+    if( !fs.existsSync(orgDir) ) {
+      await fs.mkdirp(orgDir);
+    }
+
     if( !fs.existsSync(dir) ) {
       await this.clone(repoName);
     }

@@ -25,6 +25,7 @@
     "express-session": "^1.15.6",
     "firebase-admin": "^5.13.1",
     "fs-extra": "^4.0.2",
+    "jsdom": "^13.0.0",
     "jsonschema": "^1.2.2",
     "jsonwebtoken": "^8.1.0",
     "mongodb": "^2.2.33",

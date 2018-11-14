@@ -1,12 +1,10 @@
 import {PolymerElement, html} from "@polymer/polymer"
+import template from "./app-package-metadata-editor.html"
+
 import "@polymer/paper-input/paper-input"
 import "@polymer/paper-input/paper-textarea"
 import "@polymer/paper-toast/paper-toast"
 import "@polymer/paper-tabs/paper-tabs"
-
-import template from "./app-package-metadata-editor.html"
-import PackageInterface from "../interfaces/PackageInterface"
-import AppStateInterface from "../interfaces/AppStateInterface"
 
 import "./app-text-input"
 import "./basic/app-create-start"
@@ -16,7 +14,7 @@ import "./files/app-files"
 import "./releases/app-releases"
 
 class AppPackageMetadataEditor extends Mixin(PolymerElement)
-      .with(EventInterface, AppStateInterface, PackageInterface) {
+      .with(EventInterface) {
 
   static get template() {
     return html([template]);
@@ -59,11 +57,11 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
   constructor() {
     super();
 
-    this._injectModel('PackageEditor');
+    this._injectModel('PackageEditor', 'AppStateModel','PackageModel');
 
 
     this._autoUpdateTimer = -1;
-    this.schema = this._getPackageSchema();
+    this.schema = this.PackageModel.schema;
   }
 
   _onAppStateUpdate(e) {
@@ -114,6 +112,14 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
 
       this.lastState = e.state;
     }
+
+    if( e.state === 'edit' && this.PackageEditor.hasDataChanged() ) {
+      this.$.unsavedMsg.style.display = 'block';
+      this.$.savingMsg.style.display = 'none';
+      this.$.savingToast.open();
+    } else {
+      this.$.savingToast.close();
+    }
   }
 
   /**
@@ -123,48 +129,27 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
   async _fetchAndUpdatePackage(pkgId) {
     this.packageId = pkgId;
     try {
-      let e = await this._getPackage(pkgId);
+      let e = await this.PackageModel.get(pkgId);
       this.PackageEditor.setEditStartStateData(e.payload);
       this.PackageEditor.setData(e.payload, {state: 'edit'});
+    
+      this.$.files.files = await this.PackageModel.getFiles(pkgId);
     } catch(e) {
       return alert('Failed to fetch package '+pkgId+': '+e.message);
     }
   }
 
   /**
-   * @method _onDataChange
-   * @description Fired when input elements update
-   */  
-  _onDataChange() {
-    if( this.creating ) return;
-
-    let unsavedData = Object.assign(
-      this.$.basic.getValues(),
-      this.$.details.getValues()
-    );
-
-    let tmp = {};
-    for( var key in unsavedData ) {
-      tmp[key] = this.data[key] || (key === 'keywords' ? [] : '');
-    }
-
-    if( JSON.stringify(tmp) === JSON.stringify(unsavedData) ) {
-      this.$.savingToast.close();
-      return;
-    }
-
-    this.$.unsavedMsg.style.display = 'block';
-    this.$.savingMsg.style.display = 'none';
-    this.$.savingToast.open();
-  }
-
+   * @method _onSaveChangesClicked
+   * @description bound to save btn click event
+   */
   _onSaveChangesClicked() {
     let unsavedData = Object.assign(
       this.$.basic.getValues(),
       this.$.details.getValues()
     );
 
-    this._updatePackage(this.packageId, unsavedData, this.$.commitMsg.value);
+    this.PackageModel.update(this.packageId, unsavedData, this.$.commitMsg.value);
   }
 
   _onEditPackageUpdate(e) {
@@ -175,6 +160,8 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
       this.unsavedData = null;
       this.$.savingToast.close();
       this.$.savedToast.open();
+      this.PackageEditor.setEditStartStateData(e.payload);
+      this.PackageEditor.setData(e.payload, {state: 'edit'});
     } else if( e.state === 'error' ) {
       this.$.unsavedMsg.style.display = 'block';
       this.$.savingMsg.style.display = 'none';

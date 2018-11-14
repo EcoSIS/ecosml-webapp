@@ -32,6 +32,7 @@ import "./landing/app-landing-page"
 import "./account/app-user-account"
 import "./header/app-header"
 import "./utils/app-user-icon"
+import "./utils/app-popup"
 
 // element imports
 import AppStateInterface from "./interfaces/AppStateInterface"

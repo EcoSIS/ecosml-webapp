@@ -29,77 +29,22 @@
 </style>
 
 <div>
-  <a href$="https://github.com/[[githubOrg]]/[[packageName]]/archive/master.zip">
+  <a href$="[[editorData.htmlUrl]]/archive/master.zip">
     <iron-icon icon="archive"></iron-icon> Download Package Files
   </a>
 </div>
 
-<h2 style="margin-bottom: 5px">Sync Changes</h2>
-<div style="margin-bottom: 15px">Upload root package directory to sync all changes to repository.</div>
-<div>
-  <app-folder-uploader></app-folder-uploader>
+<div hidden$="[[isManagedSource]]">
+  This is not a EcoSML Managed Package.  Make edits to your files
+  on your <a href="[[editorData.htmlUrl]]" target="_blank">GitHub Repository</a> via git.
 </div>
 
-<app-file-tree style="margin-top: 35px"></app-file-tree>
-<!--
-<app-file-manager 
-  label="Resources" 
-  directory="/resources"
-  color="lightblue">
-  <div slot="help">Upload model resources.  These should be in CSV format.</div>
-</app-file-manager>
-
-<app-file-manager 
-  label="Source" 
-  directory="/main"
-  color="green">
-  <div slot="help">Upload model source code.</div>
-</app-file-manager>
-
-<app-file-manager 
-  label="Papers" 
-  directory="/papers"
-  color="dark">
-  <div slot="help" class="help">Upload any published work or additional documentation you wish
-    to have associated with this package.  Can't provide the papers directly?  Feel 
-    free to upload a simple text file with links to journal article(s).
+<div hidden$="[[!isManagedSource]]">
+  <h2 style="margin-bottom: 5px">Sync Changes</h2>
+  <div style="margin-bottom: 15px">Upload root package directory to sync all changes to repository.</div>
+  <div>
+    <app-folder-uploader></app-folder-uploader>
   </div>
-</app-file-manager>
 
-
-<h2 class="examples uheader blue">
-  <div>Examples</div>
-  <paper-button on-click="_onCreateExampleClicked">
-    <iron-icon icon="add"></iron-icon> Create
-  </paper-button>
-</h2>
-
-<div class="help">
-  Given a small (less than 100) sample
-  of spectra and optional transform the model should produce the exact output file provided.
-  Examples provide two very important features.:
-  
-  <ul>
-    <li>
-        The example code will be tested and if the provided spectra input matches the 
-        provided model output the package will be given a 
-        <span style="color:green">Verified</span> status.
-    </li>
-    <li>
-        Examples are a great way for others to learn about the model and see it in action.  
-        A quality example can go a long way to showing others how they can use the model 
-        for their own purposes.
-    </li>
-  </ul>
+  <app-file-tree style="margin-top: 35px"></app-file-tree>
 </div>
-
-<template is="dom-repeat" items="[[examples]]">
-  <app-example-editor 
-    label="[[item.label]]" 
-    directory="[[item.directory]]"
-    language="[[language]]"
-    creating="[[item.isNew]]"
-    open="[[item.isNew]]">
-  </app-example-editor>
-</template>
--->

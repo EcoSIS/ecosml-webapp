@@ -131,9 +131,13 @@ class PackageModel {
     pkg = await this.get(pkg);
     schema.validate('update', update);
 
+    // default
     if( !pkg.source ) pkg.source = 'managed';
+    if( !update.source ) update.source = 'managed';
 
-    if( pkgs.source === 'managed' ) {
+    let gpkg = {};
+
+    if( pkg.source === 'managed' ) {
       // first get in sync
       await git.resetHEAD(pkg.name);
       await git.clean(pkg.name);
@@ -172,8 +176,6 @@ class PackageModel {
         });
         body = response.body;
       }
-
-      let gpkg = {};
         
       // grab current github api repo state if we didn't update
       if( refreshFromGithub ) {
@@ -192,11 +194,16 @@ class PackageModel {
       // this will throw an unknown repo error
       let {release, overview, description} = await this.getRegisteredRepoProperties(pkg.name);
       if( release ) {
-        pkg.releases = [release];
-        pkg.releaseCount = 1;
+        update.releases = [release];
+        update.releaseCount = 1;
+      } else {
+        update.releases = [];
+        update.releaseCount = 0;
       }
-      pkg.overview = overview;
-      pkg.description = description;
+      update.overview = overview;
+      update.description = description;
+
+      gpkg = Object.assign(gpkg, update);
     }
 
 
@@ -204,7 +211,7 @@ class PackageModel {
     await mongo.updatePackage(pkg.name, gpkg);
     pkg = await mongo.getPackage(pkg.name);
 
-    if( pkgs.source === 'managed' ) {
+    if( pkg.source === 'managed' ) {
       // write and commit ecosis-metadata.json file or other changes
       await this.writeMetadataFile(pkg);
       await this.commit(pkg.name, commitMessage || 'Updating package metadata', username);
@@ -240,6 +247,11 @@ class PackageModel {
       pkgObj.renderedDescription = await markdown(pkgObj.description);
     } else {
       pkgObj.renderedDescription = '';
+    }
+
+    // default
+    if( !pkgObj.source ) {
+      pkgObj.source = 'managed';
     }
 
     return pkgObj;

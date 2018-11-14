@@ -49,6 +49,10 @@ class PackageEditor extends BaseModel {
     this.store.setEditStartStateData(data);
   }
 
+  hasDataChanged() {
+    return this.store.hasDataChanged();
+  }
+
   getData() {
     return this.store.data.package.payload;
   }

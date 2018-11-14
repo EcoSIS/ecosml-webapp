@@ -18,11 +18,6 @@ export default class AppDetailsMetadata extends Mixin(PolymerElement)
 
   static get properties() {
     return {
-      data : {
-        type : Object,
-        value : () => {},
-        observer : '_onDataUpdate'
-      },
       active : {
         type : Boolean,
         value : false,
@@ -47,12 +42,40 @@ export default class AppDetailsMetadata extends Mixin(PolymerElement)
     this.$.keywords.value = value || [];
   }
 
+  constructor() {
+    super();
+    this._injectModel('PackageEditor');
+  }
+
   /**
    * @method _onActiveChange
    * @description bound to 'active' property observer.
    */
   _onActiveChange() {
     this.$.description.autoSize();
+  }
+
+  /**
+   * @method _onPackageEditorDataUpdate
+   * @description bound to PackageEditor event
+   * 
+   * @param {Object} e event 
+   */
+  _onPackageEditorDataUpdate(e) {
+    this.packageId = e.payload.id || '';
+    this.packageName = e.payload.name || '';
+    this.editorData = e.payload;
+
+    for( let value of VALUES ) {
+      this[value] = e.payload[value];
+    }
+
+    this.theme = e.payload.theme || [];
+    this.family = e.payload.family || [];
+    this.specific = e.payload.specific || [];
+
+    let themes = controlledVocabulary.getThemeObjectArray(e.payload);
+    this.$.theme.themes = themes;
   }
 
   /**
@@ -76,29 +99,11 @@ export default class AppDetailsMetadata extends Mixin(PolymerElement)
   }
 
   /**
-   * @method _onDataUpdate
-   * @description called when data property updates
-   */
-  _onDataUpdate() {
-    if( !this.data ) return;
-    VALUES.forEach(value => {
-      this[value] = this.data[value];
-    });
-
-    this.theme = this.data.theme || [];
-    this.family = this.data.family || [];
-    this.specific = this.data.specific || [];
-
-    let themes = controlledVocabulary.getThemeObjectArray(this.data);
-    this.$.theme.themes = themes;
-  }
-
-  /**
    * @method _onInputChange
    * @description called when any input changes
    */
   _onInputChange() {
-    this.fire('change');
+    this.PackageEditor.setData(this.getValues());
   }
 
   /**

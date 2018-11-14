@@ -28,8 +28,37 @@ class PackageEditorStore extends BaseStore {
     });
   }
 
+  /**
+   * @method setEditStartStateData
+   * 
+   * @param {*} data 
+   */
   setEditStartStateData(data) {
     this.data.startState = clone(data);
+  }
+
+  /**
+   * @method hasDataChanged
+   * @description is there any difference between
+   * data.package.payload and startState
+   * 
+   * @returns {Boolean}
+   */
+  hasDataChanged() {
+    let states = [this.data.package.payload, this.data.startState]
+      .map(state => {
+        state = clone(state);
+        for( let key in state ) {
+          if( Array.isArray(state[key]) && state[key].length === 0) {
+            delete state[key];
+          } else if ( state[key] === '' ) {
+            delete state[key];
+          }
+        }
+        return state;
+      });
+
+    return this.stateChanged(states[0], states[1]);
   }
 
   /**
@@ -50,7 +79,7 @@ class PackageEditorStore extends BaseStore {
     }
 
     if( opts.merge ) {
-      newState.payload = Object.assign({}, this.data.package.state.payload, data);
+      newState.payload = Object.assign({}, this.data.package.payload, data);
     } else {
       newState.payload = data;
     }

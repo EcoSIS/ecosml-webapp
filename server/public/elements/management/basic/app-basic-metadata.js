@@ -118,6 +118,12 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
     this._checkNameAvailableTimer = -1;
   }
 
+  /**
+   * @method _onPackageEditorDataUpdate
+   * @description bound to PackageEditor event
+   * 
+   * @param {Object} e event 
+   */
   _onPackageEditorDataUpdate(e) {
     this.packageId = e.payload.id || '';
     this.packageName = e.payload.name || '';
@@ -129,8 +135,6 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
     for( let value of VALUES ) {
       this[value] = e.payload[value];
     }
-
-    console.log(e.payload);
 
     this.isManagedSource = (e.payload.source === 'registered') ? false : true;
     this.creating = e.state === 'create' ? true : false;

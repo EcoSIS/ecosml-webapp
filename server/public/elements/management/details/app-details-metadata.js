@@ -66,6 +66,7 @@ export default class AppDetailsMetadata extends Mixin(PolymerElement)
     this.packageName = e.payload.name || '';
     this.editorData = e.payload;
 
+    this.$.description.pkgName = this.packageName;
     for( let value of VALUES ) {
       this[value] = e.payload[value];
     }

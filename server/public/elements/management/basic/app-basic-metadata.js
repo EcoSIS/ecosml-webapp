@@ -68,6 +68,7 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
   }
 
   get overview() {
+    if( !this.$ ) return '';
     return this.$.overview.value;
   }
 
@@ -89,11 +90,8 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
   }
 
   set packageType(value) {
-    this.$.packageInput.removeAttribute('checked');
-    this.$.standaloneInput.removeAttribute('checked');
-
-    if( value === 'package' ) this.$.packageInput.setAttribute('checked', 'checked');
-    else this.$.standaloneInput.setAttribute('checked', 'checked');
+    if( value === 'package' ) this.$.packageInput.checked = true;
+    else this.$.standaloneInput.checked = true;
   }
 
   get organization() {

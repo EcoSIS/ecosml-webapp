@@ -122,8 +122,8 @@ class PackageModel extends BaseModel {
    * 
    * @returns {Promise} resolves to html string
    */
-  previewMarkdown(markdown) {
-    return this.service.previewMarkdown(markdown);
+  previewMarkdown(markdown, pkgName) {
+    return this.service.previewMarkdown(markdown, pkgName);
   }
 
   /**

@@ -32,7 +32,6 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
         value : 'Create'
       },
 
-
       selectedSection : {
         type : String,
         value : 'basic'
@@ -47,6 +46,11 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
 
       // used for displaying package name
       name : {
+        type : String,
+        value : ''
+      },
+
+      repoType : {
         type : String,
         value : ''
       }
@@ -104,10 +108,6 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
 
         // get and set files
         //this.$.files.files = await this._getPackageFiles(pkgData.id);
-
-        // set release info
-        // this.$.release.package = pkgData;
-        // this.$.release.releases = (pkgData.releases || []);
       }
 
       this.lastState = e.state;
@@ -132,8 +132,13 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
       let e = await this.PackageModel.get(pkgId);
       this.PackageEditor.setEditStartStateData(e.payload);
       this.PackageEditor.setData(e.payload, {state: 'edit'});
-    
-      this.$.files.files = await this.PackageModel.getFiles(pkgId);
+      
+      if( e.payload.source === 'managed' ) {
+        this.$.files.files = await this.PackageModel.getFiles(pkgId);
+        this.repoType = 'EcoSML Managed Repository';
+      } else if( e.payload.source === 'registered' ) {
+        this.repoType = 'Registered Repository';
+      } 
     } catch(e) {
       return alert('Failed to fetch package '+pkgId+': '+e.message);
     }

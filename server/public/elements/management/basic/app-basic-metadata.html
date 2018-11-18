@@ -42,7 +42,6 @@
 
 <app-created-popup id="created" name="[[name]]"></app-created-popup>
 
-
 <div class="basic-header" hidden$="[[creating]]">
   <div hidden$="[[!hasRelease]]">
     <div>View in Search: <a href$="/package/[[packageId]]">/package/[[packageId]]</a></div>
@@ -50,41 +49,60 @@
   </div>
   <div hidden$="[[hasRelease]]">
     <iron-icon icon="warning" style="vertical-align: text-bottom"></iron-icon> Warning, your package will not show up in search
-    until you create a release.  Click the <b>Release</b> tab to create one.
+    until you create a release.  <span hidden$="[[!isManagedSource]]" >Click the <b>Release</b> tab to create one.</span>
   </div>
 </div>
 
-<div hidden$="[[!isManagedSource]]" >
-  <h2 class="uheader blue" hidden$="[[!creating]]">Package Name</h2>
-  <app-text-input  
-    id="name" 
-    on-change="_updateNamePreview"
-    on-keyup="_onNameInputKeyUp"
-    hidden$="[[!creating]]">
-  </app-text-input>
-  <div id="nameMessage" hidden$="[[!creating]]"></div>
+<div hidden$="[[creating]]">
+  <div hidden$="[[isManagedSource]]" >
+    <h2 class="uheader blue">Sync</h2>
+    <div style="display:flex; margin-bottom: 35px;">
+      <div><paper-button style="white-space: nowrap">Sync Repository</paper-button></div>
+      <div class="help">Synchronize the repository overview, README and releases from GitHub.  This process happens
+        nightly, but you can request data be synchronized right now as well.
+      </div>
+    </div>
+  </div>
 </div>
 
-<div hidden$="[[isManagedSource]]" >
-  <h2 class="uheader blue" hidden$="[[!creating]]">Repository Url</h2>
-  <div class="help">Provide a full url to the GitHub repository or the Organization/Repository path name</div>
-  <app-text-input  
-    id="url" 
-    on-change="_checkUrl"
-    on-keyup="_checkUrl"
-    hidden$="[[!creating]]">
-  </app-text-input>
-  <div id="urlMessage" hidden$="[[!creating]]"></div>
+<div hidden$="[[!creating]]">
+  <div hidden$="[[!isManagedSource]]" >
+    <h2 class="uheader blue" hidden$="[[!creating]]">Package Name</h2>
+    <app-text-input  
+      id="name" 
+      on-change="_updateNamePreview"
+      on-keyup="_onNameInputKeyUp"
+      hidden$="[[!creating]]">
+    </app-text-input>
+    <div id="nameMessage" hidden$="[[!creating]]"></div>
+  </div>
 </div>
 
+<div hidden$="[[!creating]]">
+  <div hidden$="[[isManagedSource]]" >
+    <h2 class="uheader blue" hidden$="[[!creating]]">Repository Url</h2>
+    <div class="help">Provide a full url to the GitHub repository or the Organization/Repository path name</div>
+    <app-text-input  
+      id="url" 
+      on-change="_checkUrl"
+      on-keyup="_checkUrl"
+      hidden$="[[!creating]]">
+    </app-text-input>
+    <div id="urlMessage" hidden$="[[!creating]]"></div>
+  </div>
+</div>
+
+<h2 class="uheader lightblue" break$="[[creating]]">Package Overview</h2>
 <div hidden$="[[!isManagedSource]]">
-  <h2 class="uheader lightblue" break$="[[creating]]">Package Overview</h2>
   <div class="help">One sentance summary of package</div>
   <app-text-input 
     id="overview"
     on-change="_onInputChange"
     placeholder="Overview (Short Description)">
   </app-text-input>
+</div>
+<div hidden$="[[isManagedSource]]">
+  [[overview]]
 </div>
 
 <h2 class="uheader green break">Organization</h2>

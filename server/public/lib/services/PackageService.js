@@ -127,9 +127,9 @@ class PackageService extends BaseService {
   // }
 
   // TODO: move to package editor service?
-  previewMarkdown(markdown) {
+  previewMarkdown(markdown, pkgName) {
     return this.request({
-      url : `/api/markdown`,
+      url : `/api/markdown/${pkgName}`,
       fetchOptions : {
         method : 'POST',
         headers : {

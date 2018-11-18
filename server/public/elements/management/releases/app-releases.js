@@ -15,8 +15,7 @@ export default class AppReleases extends Mixin(PolymerElement)
     return {
       releases : {
         type : Array,
-        value : () => [],
-        observer : '_onReleasesUpdate'
+        value : () => []
       },
       package : {
         type : Object,
@@ -49,6 +48,10 @@ export default class AppReleases extends Mixin(PolymerElement)
       currentRelease : {
         type : Object,
         value : null
+      },
+      isManagedSource : {
+        type : Boolean,
+        value : false
       }
     }
   }
@@ -77,32 +80,23 @@ export default class AppReleases extends Mixin(PolymerElement)
     this.$.patch.value = val+'';
   }
 
-  /**
-   * @method _toggleCreate
-   * @description called from top right create/cancel buttons
-   */
-  _toggleCreate() {
-    this.creating = !this.creating;
-
-    if( this.creating ) {
-      this.$.description.value = '';
-      this._render();
-    }
+  constructor() {
+    super();
+    this._injectModel('PackageEditor');
   }
 
   /**
-   * @method showList
-   * @description show the releases list
+   * @method _onPackageEditorDataUpdate
+   * @description bound to PackageEditor event
+   * 
+   * @param {Object} e event 
    */
-  showList() {
-    this.creating = false;
-  }
+  _onPackageEditorDataUpdate(e) {
+    this.editorData = e.payload;
+    this.isManagedSource = (e.payload.source === 'registered') ? false : true;
+    this.releases = (e.payload.releases || []);
+    this.pkg = e.payload;
 
-  /**
-   * @method _onReleasesUpdate
-   * @description called from releases property observer
-   */
-  _onReleasesUpdate() {
     if( !this.releases.length ) {
       this.release = '';
       this.priorReleases = [];
@@ -128,6 +122,32 @@ export default class AppReleases extends Mixin(PolymerElement)
 
     this.release = this.currentRelease.name;
     this._render();
+  }
+
+  /**
+   * @method _toggleCreate
+   * @description called from top right create/cancel buttons
+   */
+  _toggleCreate() {
+    if( !this.isManagedSource ) {
+      window.open(`${this.pkg.htmlUrl}/releases/new`, '_blank');
+      return;
+    }
+
+    this.creating = !this.creating;
+
+    if( this.creating ) {
+      this.$.description.value = '';
+      this._render();
+    }
+  }
+
+  /**
+   * @method showList
+   * @description show the releases list
+   */
+  showList() {
+    this.creating = false;
   }
 
   /**

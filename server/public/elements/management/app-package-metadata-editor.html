@@ -23,13 +23,21 @@
     --paper-toast-color: var(--inverse-text-color);
   }
 
-
   paper-tabs {
     --paper-tabs-selection-bar-color: var(--default-primary-color);
   }
 
   paper-tab {
     --paper-tab-ink: var(--default-primary-color);
+  }
+
+  h1 {
+    margin-bottom: 5px;
+  }
+
+  .repo-type {
+    color: var(--secondary-text-color);
+    margin-bottom: 15px;
   }
 
   #commitMsg {
@@ -64,9 +72,13 @@
 
 <div class="container">
   <div class="narrow-container">
-    <h1>
-      [[currentAction]] Package<span hidden$="[[creating]]">: [[name]]</span>
-    </h1>
+    <h1 hidden$="[[!creating]]">[[currentAction]] Package</h1>
+    <div hidden$="[[creating]]">
+      <h1>[[packageName]]</h1>
+      <div class="repo-type">[[repoType]]</div>
+    </div>
+
+    
 
     <paper-tabs id="tabs" selected="{{selectedSection}}" attr-for-selected="id">
       <paper-tab id="source" hidden$="[[!creating]]">Getting Started</paper-tab>

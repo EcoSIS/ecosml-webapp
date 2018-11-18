@@ -13,6 +13,15 @@ import "prismjs/components/prism-r"
 export default class AppMarkdown extends Mixin(PolymerElement)
   .with(EventInterface, PackageInterface) {
 
+  static get properties() {
+    return {
+      pkgName : {
+        type : String,
+        value : '',
+      }
+    }
+  }
+
   static get template() {
     return html([`
       ${template} 
@@ -32,7 +41,7 @@ export default class AppMarkdown extends Mixin(PolymerElement)
     if( height ) this.style.height = height+'px'; 
 
     this.$.root.innerHTML = 'Rendering...';
-    let {body} = await this._previewMarkdown(markdown);
+    let {body} = await this.PackageModel.previewMarkdown(markdown, this.pkgName);
     this.show(body);
 
     if( height ) this.style.height = 'auto'; 

@@ -59,6 +59,7 @@ class PackageModel {
       }
       pkg.overview = overview;
       pkg.description = description;
+      pkg.htmlUrl = 'https://github.com/'+pkg.name;
 
       schema.validate('create', pkg);
     } else if( pkg.source === 'managed' ) {
@@ -247,7 +248,7 @@ class PackageModel {
     if( !pkgObj ) throw new Error('Unknown package: '+pkg);
 
     if( pkgObj.description && renderMarkdown ) {
-      pkgObj.renderedDescription = await markdown(pkgObj.description);
+      pkgObj.renderedDescription = await markdown(pkgObj.description, pkgObj.name);
     } else {
       pkgObj.renderedDescription = '';
     }

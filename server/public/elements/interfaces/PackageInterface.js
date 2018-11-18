@@ -27,10 +27,6 @@ module.exports = subclass =>
       return this.PackageModel.createRelease(pkg, releaseInfo);
     }
 
-    _previewMarkdown(markdown) {
-      return this.PackageModel.previewMarkdown(markdown);
-    }
-
     _uploadFile(options) {
       return this.PackageModel.uploadFile(options);
     }

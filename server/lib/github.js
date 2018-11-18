@@ -19,13 +19,14 @@ class GithubApi {
    * a HEAD request to the repo root page so it does not burn up a API request.
    * 
    * @param {String} name repository name to check
+   * @param {String} org Optional.
    * 
    * @returns {Promise} resolves to {Boolean}
    */
-  isRepoNameAvailable(name) {
+  isRepoNameAvailable(name, org) {
     return new Promise((resolve, reject) => {
       request({
-        uri : `https://github.com/${ORG}/${name}`,
+        uri : `https://github.com/${org || ORG}/${name}`,
         method : 'HEAD'
       }, (error, response) => {
         if( error ) reject(error);

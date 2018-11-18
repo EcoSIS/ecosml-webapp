@@ -5,8 +5,9 @@ import "./app-org-input"
 import "./app-created-popup"
 import PackageInterface from "../../interfaces/PackageInterface"
 import AppStateInterface from "../../interfaces/AppStateInterface"
+import AppFileTreeLeaf from "../files/tree/app-file-tree-leaf";
 
-const VALUES = ['name', 'overview', 'organization', 'language', 'packageType'];
+const VALUES = ['reponame', 'overview', 'organization', 'language', 'packageType'];
 
 export default class AppBasicMetadata extends Mixin(PolymerElement)
   .with(EventInterface, AppStateInterface, PackageInterface) {
@@ -51,17 +52,15 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
     this._injectModel('PackageEditor');
   }
 
-  get name() {
-    // safety check, only applies to name...
-    if( !this.$ ) return '';
-
+  get reponame() {
     if( this.editorData && this.editorData.source === 'registered') {
-      return this.$.url.value || '';
+      let {org, repo, valid} = this._checkValidUrl();
+      return org+'/'+repo;
     }
     return this.$.name.value || '';
   }
 
-  set name(value) {
+  set reponame(value) {
     if( this.editorData && this.editorData.source === 'registered') {
       this.$.url.value || '';
     }
@@ -116,6 +115,7 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
   ready() {
     super.ready();
     this._checkNameAvailableTimer = -1;
+    this._checkUrlTimer = -1;
   }
 
   /**
@@ -132,8 +132,15 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
     // name setter knows to set URL or NAME input
     this.editorData = e.payload;
 
+    if( e.reset ) {
+      this.$.url.value = '';
+      this.$.name.value = '';
+    }
+
     for( let value of VALUES ) {
-      this[value] = e.payload[value];
+      let key = value;
+      if(key === 'reponame') key = 'name';
+      this[key] = e.payload[value];
     }
 
     this.isManagedSource = (e.payload.source === 'registered') ? false : true;
@@ -151,24 +158,85 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
   getValues() {
     let data = {};
     VALUES.forEach(value => {
-      data[value] = this[value];
+      let key = value;
+      if(key === 'reponame') key = 'name';
+      data[key] = this[value];
     });
     return data;
   }
 
   /**
+   * @method _checkUrl
+   * @description bound to keyup and change events of url input for managed repositories
+   */
+  _checkUrl() {
+    if( this._lastCheckedUrl === this.$.url.value ) {
+      return;
+    }
+    this._lastCheckedUrl = this.$.url.value;
+
+    if( !this.$.url.value ) {
+      return this.$.urlMessage.innerHTML = '';
+    }
+
+    this._onInputChange();
+    let {org, repo, valid} = this._checkValidUrl();
+
+    if( !valid ) {
+      return this.$.urlMessage.innerHTML = 'Not a valid Github Repository Url';
+    }
+    this.$.urlMessage.innerHTML = `Checking (${org} / ${repo})...`;
+
+    if( this._checkUrlTimer === -1 ) clearTimeout(this._checkUrlTimer);
+    this._checkUrlTimer = setTimeout(() => {
+      this._checkUrlTimer = -1;
+      this._checkUrlAsync(org, repo);
+    }, 300);
+  }
+
+  _checkValidUrl() {
+    let url = this.$.url.value;
+    let path = url;
+    if( url.match(/^http/) ) {
+      path = new URL(url).pathname;
+    } else if( url.match(/github\.com/) ) {
+      path = url.replace(/.*github\.com/);
+    }
+    let [org, repo] = path.replace(/^\//, '').split('/');
+
+    return {org, repo, valid: (org && repo ? true : false)}
+  }
+
+  async _checkUrlAsync(org, repo) {
+    this.registeredUrlExists = !(await this.PackageEditor.isNameAvailable(repo, org));
+    if( !this.registeredUrlExists ) {
+      this.$.urlMessage.innerHTML = `Unable to access or invalid: ${org} / ${repo}`;
+    } else {
+      this.$.urlMessage.innerHTML = `Valid: ${org} / ${repo}`;
+    }
+  }
+
+  /**
    * @method _updateNamePreview
-   * @description Fired from name input
+   * @description Fired from change event on name input
    */
   _updateNamePreview() {
     this.name = this._getCleanName();
     this._onInputChange();
   }
 
+  /**
+   * @method _getCleanName
+   * @description strip bad characters, replace spaces with dashes
+   */
   _getCleanName() {
     return this.$.name.value.toLowerCase().replace(/ /g, '-').replace(/[^a-zA-Z0-9_-]/g, '');
   }
 
+  /**
+   * @method _onNameInputKeyUp
+   * @description bound to keyup event for repo name input
+   */
   _onNameInputKeyUp() {
     this._checkNameAvailable();
   }
@@ -217,15 +285,28 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
   async _onCreateBtnClicked() {
     let data = this.PackageEditor.getData();
 
-    if( !this.nameAvailable ) {
-      return alert('Name is not available');
+    if( !data.source ) {
+      return alert('Please select a repository type');
     }
-    if( (data.name || '').length < 4 ) {
-      return alert('Name must be at least 4 characters');
+
+    if( data.source === 'managed' ) {
+      if( !this.nameAvailable ) {
+        return alert('Name is not available');
+      }
+      if( (data.name || '').length < 4 ) {
+        return alert('Name must be at least 4 characters');
+      }
+      if( (data.overview || '').length < 15 ) {
+        return alert('Please provide a longer overview');
+      }
+    } else if( data.source === 'registered' ) {
+      if( !this.registeredUrlExists ) {
+        return alert('Invalid registered GitHub Url');
+      }
+    } else {
+      return alert('Unknown repository type: '+data.source);
     }
-    if( (data.overview || '').length < 15 ) {
-      return alert('Please provide a longer overview');
-    }
+
     if( !data.organization) {
       return alert('Please select an organization');
     }
@@ -234,8 +315,8 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
     }
 
     try {
-      await this._createPackage(data.name, data.overview, data.organization, data.language, data.packageType);
-      this.$.created.open();
+      await this.PackageModel.create(data.name, data.overview, data.organization, data.language, data.packageType, data.source);
+      if( data.source === 'managed' ) this.$.created.open();
     } catch(e) {
       alert('Failed to create package: '+e.message);
     }

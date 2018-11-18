@@ -24,6 +24,7 @@ class PackageEditorStore extends BaseStore {
   reset() {
     this._setData({
       state : 'create',
+      reset : true,
       payload : {}
     });
   }

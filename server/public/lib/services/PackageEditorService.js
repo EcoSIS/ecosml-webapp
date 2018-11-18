@@ -9,9 +9,13 @@ class PackageEditorService extends BaseService {
     this.baseUrl = '/api/package'
   }
 
-  isNameAvailable(packageName) {
+  isNameAvailable(packageName, org='') {
+    if( org ) {
+      org = '?org='+org;
+    }
+
     return this.request({
-      url : `${this.baseUrl}/available/${packageName}`
+      url : `${this.baseUrl}/available/${packageName}${org}`
     });
   }
 

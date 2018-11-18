@@ -47,7 +47,6 @@ class PackageModel {
    */
   async create(pkg, username) {
     logger.info(`Creating package: ${pkg.name}`);
-    schema.validate('create', pkg);
 
     let ecosmlId = uuid.v4();
 
@@ -60,7 +59,11 @@ class PackageModel {
       }
       pkg.overview = overview;
       pkg.description = description;
+
+      schema.validate('create', pkg);
     } else if( pkg.source === 'managed' ) {
+      schema.validate('create', pkg);
+
       // create Github API Request
       let githubRepo = Object.assign({}, pkg);
       delete githubRepo.organization;
@@ -348,6 +351,10 @@ class PackageModel {
 
     await mongo.removePackage(pkg.name);
     await git.removeRepositoryFromDisk(pkg.name);
+
+    if( pkg.source === 'registered' ) {
+      registeredRepositories.remove(pkg);
+    }
   }
 
   /**
@@ -511,11 +518,12 @@ class PackageModel {
    * @description is a package name available
    * 
    * @param {String} packageName package name
+   * @param {String} org Optional.  Defaults to EcoSML
    * 
    * @returns {Promise} resolves to Boolean
    */
-  isNameAvailable(packageName) {
-    return github.isRepoNameAvailable(packageName);
+  isNameAvailable(packageName, org) {
+    return github.isRepoNameAvailable(packageName, org);
   }
 
   /**

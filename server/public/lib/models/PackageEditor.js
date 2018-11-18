@@ -18,12 +18,13 @@ class PackageEditor extends BaseModel {
    * @description is package name available
    * 
    * @param {String} packageName
+   * @param {String} organization Optional.  defaults to EcoSML
    * 
    * @returns {Promise} resolves to Boolean
    */
-  async isNameAvailable(packageName) {
+  async isNameAvailable(packageName, organization) {
     try {
-      let {body} = await this.service.isNameAvailable(packageName);
+      let {body} = await this.service.isNameAvailable(packageName, organization);
       return body.isAvailable;
     } catch(e) {
       console.error(e);

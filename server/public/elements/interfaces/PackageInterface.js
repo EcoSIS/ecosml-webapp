@@ -15,10 +15,6 @@ module.exports = subclass =>
       return this.PackageModel.get(id);
     }
 
-    async _createPackage(name, overview, organization, language, packageType) {
-      return this.PackageModel.create(name, overview, organization, language, packageType);
-    }
-
     async _updatePackage(packageId, data, msg) {
       return this.PackageModel.update(packageId, data, msg);
     }

@@ -33,7 +33,11 @@ export default class AppCreateStart extends Mixin(PolymerElement)
    * @param {*} e 
    */
   _onPackageEditorDataUpdate(e) {
-    this.source = e.payload.source || '';
+    if( e.reset ) {
+      this.reset();
+    } else {
+      this.source = e.payload.source || '';
+    }
   }
 
   /**
@@ -42,8 +46,8 @@ export default class AppCreateStart extends Mixin(PolymerElement)
    */
   reset() {
     this.source = '';
-    this.$.repositoryTypeManaged.removeAttribute('checked');
-    this.$.repositoryTypeRegistered.removeAttribute('checked');
+    this.$.repositoryTypeManaged.checked = false;
+    this.$.repositoryTypeRegistered.checked = false;
   }
 
   /**
@@ -53,13 +57,13 @@ export default class AppCreateStart extends Mixin(PolymerElement)
   _sourceObserver() {
     this.hasSourceSet = this.source ? true : false;
 
-    this.$.repositoryTypeManaged.removeAttribute('checked');
-    this.$.repositoryTypeRegistered.removeAttribute('checked');
+    this.$.repositoryTypeManaged.checked = false;
+    this.$.repositoryTypeRegistered.checked = false;
 
     if( this.source === 'managed' ) {
-      this.$.repositoryTypeManaged.setAttribute('checked', 'checked');
+      this.$.repositoryTypeManaged.checked = true;
     } else if( this.source === 'registered' ) {
-      this.$.repositoryTypeRegistered.setAttribute('checked', 'checked');
+      this.$.repositoryTypeRegistered.checked = true;
     }
   }
 

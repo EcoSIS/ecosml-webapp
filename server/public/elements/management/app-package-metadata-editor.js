@@ -93,7 +93,7 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
     this.packageName = e.payload.name || '';
     this.creating = e.state === 'create' ? true : false;
 
-    if( this.lastState !== e.state ) {
+    if( this.lastState !== e.state || e.reset ) {
       if( e.state === 'create' ) {
         this.selectedSection = 'source';
         this.currentAction = 'Create';

@@ -17,8 +17,7 @@
         "type" : "string"
       },
       "overview" : {
-        "type": "string",
-        "format" : "packageOverview"
+        "type": "string"
       },
       "description" : {
         "type" : "string"

@@ -92,7 +92,7 @@ module.exports = {
 
     // backups for registered repositories
     registeredRepositories : {
-      file : (serverEnv === 'dev' ? 'production' : 'development') + '-respositories.json',
+      file : (serverEnv === 'prod' ? 'production' : 'development') + '-respositories.json',
       repoName : 'EcoSIS/ecosml-registered-repositories',
       removeAttributes : ['description', 'overview', 'releases']
     }

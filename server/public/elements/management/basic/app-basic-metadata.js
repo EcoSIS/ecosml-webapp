@@ -62,7 +62,7 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
 
   set reponame(value) {
     if( this.editorData && this.editorData.source === 'registered') {
-      this.$.url.value || '';
+      this.$.url.value = value || '';
     }
     this.$.name.value = value || '';
   }
@@ -135,9 +135,9 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
       this.$.name.value = '';
     }
 
-    for( let value of VALUES ) {
-      let key = value;
-      if(key === 'reponame') key = 'name';
+    for( let key of VALUES ) {
+      let value = key;
+      if(value === 'reponame') value = 'name';
       this[key] = e.payload[value];
     }
 

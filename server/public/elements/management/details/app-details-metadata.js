@@ -22,6 +22,16 @@ export default class AppDetailsMetadata extends Mixin(PolymerElement)
         type : Boolean,
         value : false,
         observer : '_onActiveChange'
+      },
+
+      isManagedSource : {
+        type : Boolean,
+        value : false
+      },
+
+      githubUrl : {
+        type : String,
+        value : ''
       }
     }
   }
@@ -77,6 +87,9 @@ export default class AppDetailsMetadata extends Mixin(PolymerElement)
 
     let themes = controlledVocabulary.getThemeObjectArray(e.payload);
     this.$.theme.themes = themes;
+
+    this.isManagedSource = (e.payload.source === 'registered') ? false : true;
+    this.githubUrl = e.payload.htmlUrl;
   }
 
   /**

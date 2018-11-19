@@ -51,19 +51,24 @@ class PackageModel {
     let ecosmlId = uuid.v4();
 
     if( pkg.source === 'registered' ) {
-      // this will throw an unknown repo error
-      let {release, overview, description} = await this.getRegisteredRepoProperties(pkg.name);
-      if( release ) {
-        pkg.releases = [release];
-        pkg.releaseCount = 1;
-      }
-      pkg.overview = overview;
-      pkg.description = description;
+      await registeredRepositories.syncProperties(pkg);
+      
+      // check things look ok
+      schema.validate('create', pkg);
+
+      // fake some of the github api properties
       pkg.htmlUrl = 'https://github.com/'+pkg.name;
 
-      schema.validate('create', pkg);
     } else if( pkg.source === 'managed' ) {
       schema.validate('create', pkg);
+
+      // ensure this repo exists and we can access
+      let {name, org} = this.getNameAndOrg(pkg.name);
+      let exists = await this.doesRepoExist(name, org);
+      if( !exists ) throw new Error('Repository does not exist: '+pkg.name);
+
+      let ePkg = await mongo.getPackage(pkg.name);
+      if( ePkg ) throw new Error('Repository already registered: '+pkg.name);
 
       // create Github API Request
       let githubRepo = Object.assign({}, pkg);
@@ -108,7 +113,7 @@ class PackageModel {
       }
     } else if( pkg.source === 'registered' ) {
       // write to backup repo, don't need to await on this...
-      registeredRepositories.update(pkg);
+      this._updateRegisteredRepo(pkg);
     }
 
     return pkg;
@@ -135,9 +140,9 @@ class PackageModel {
     pkg = await this.get(pkg);
     schema.validate('update', update);
 
-    // default
-    if( !pkg.source ) pkg.source = 'managed';
-    if( !update.source ) update.source = 'managed';
+    // don't allow user to update repo type (source)
+    update.source = pkg.source;
+    update.name = pkg.name;
 
     let gpkg = {};
 
@@ -195,32 +200,20 @@ class PackageModel {
       // make sure release count is correct
       pkg.releaseCount = (pkg.releases || []).length;
     } else if ( pkg.source === 'registered' ) {
-      // this will throw an unknown repo error
-      let {release, overview, description} = await this.getRegisteredRepoProperties(pkg.name);
-      if( release ) {
-        update.releases = [release];
-        update.releaseCount = 1;
-      } else {
-        update.releases = [];
-        update.releaseCount = 0;
-      }
-      update.overview = overview;
-      update.description = description;
-
+      await registeredRepositories.syncProperties(update);
       gpkg = Object.assign(gpkg, update);
     }
 
-
     // now save changes in mongo
-    await mongo.updatePackage(pkg.name, gpkg);
-    pkg = await mongo.getPackage(pkg.name);
+    await mongo.updatePackage(pkg.id, gpkg);
+    pkg = await mongo.getPackage(pkg.id);
 
     if( pkg.source === 'managed' ) {
       // write and commit ecosis-metadata.json file or other changes
       await this.writeMetadataFile(pkg);
       await this.commit(pkg.name, commitMessage || 'Updating package metadata', username);
     } else {
-      registeredRepositories.update(pkg);
+      this._updateRegisteredRepo(pkg);
     }
 
     return pkg;
@@ -259,22 +252,6 @@ class PackageModel {
     }
 
     return pkgObj;
-  }
-
-  /**
-   * @method getRegisteredRepoProperties
-   * @description get a registered repositories properties that are stored in the repository
-   * metadata
-   * 
-   * @param {String} repoName
-   * 
-   * @returns {Promise} resolves to object
-   */
-  async getRegisteredRepoProperties(repoName) {
-    let release = await github.latestRelease(repoName);
-    let overview = await github.overview(repoName);
-    let description = await github.readme(repoName);
-    return {release, overview, description};
   }
 
   /**
@@ -350,12 +327,35 @@ class PackageModel {
       this.checkStatus(response, 204);
     }
 
-    await mongo.removePackage(pkg.name);
+    await mongo.removePackage(pkg.id);
     await git.removeRepositoryFromDisk(pkg.name);
 
     if( pkg.source === 'registered' ) {
-      registeredRepositories.remove(pkg);
+      this._updateRegisteredRepo(pkg, true);
     }
+  }
+
+  /**
+   * @method syncRegisteredRepository
+   * @description update overview, description and release attributes from
+   * github.
+   * 
+   * @param {String|Object} pkg pkg object or string name/id 
+   */
+  async syncRegisteredRepository(pkg) {
+    pkg = await this.get(pkg);
+
+    // this will throw an unknown repo error
+    try {
+      await registeredRepositories.syncProperties(pkg);
+      await mongo.updatePackage(pkg.id, pkg);
+    } catch(e) {
+      logger.error(e);
+    }
+
+    this._updateRegisteredRepo(pkg);
+
+    return pkg;
   }
 
   /**
@@ -415,7 +415,7 @@ class PackageModel {
     let releaseCount = releases.length; 
 
     // save release data
-    await mongo.updatePackage(pkg.name, {releases, releaseCount});
+    await mongo.updatePackage(pkg.id, {releases, releaseCount});
     return pkg;
   }
 
@@ -525,6 +525,62 @@ class PackageModel {
    */
   isNameAvailable(packageName, org) {
     return github.isRepoNameAvailable(packageName, org);
+  }
+
+  /**
+   * @method isRepoNameAvailable
+   * @description does a repository exist
+   * 
+   * @param {String} packageName package name
+   * @param {String} org Optional.  Defaults to EcoSML
+   * 
+   * @returns {Promise} resolves to Boolean
+   */
+  async doesRepoExist(packageName, org) {
+    return !(github.isRepoNameAvailable(packageName, org));
+  }
+
+  /**
+   * @method getNameAndOrg
+   * @description given a package name, return the organization
+   * and repository name.
+   * 
+   * @param {String} pkgName 
+   * 
+   * @returns {Object}
+   */
+  getNameAndOrg(pkgName) {
+    if( pkgName.match('/') ) {
+      pkgName = pkgName.split('/');
+      return {
+        org : pkgName[0],
+        name : pkgName[1]
+      }
+    }
+
+    return {
+      org : config.github.org,
+      name : pkgName
+    }
+  }
+
+  /**
+   * @method _updateRegisteredRepo
+   * @description wrapper around registeredRepositories.update.  We want to catch and
+   * notify logs of errors, but we don't want to make users wait for this.  So don't
+   * await on this function call.  Will catch failure and log.
+   * 
+   * @param {Object} pkg 
+   * 
+   * @returns {Promise}
+   */
+  async _updateRegisteredRepo(pkg, remove) {
+    try {
+      if( remove ) await registeredRepositories.remove(pkg);
+      else await registeredRepositories.update(pkg);
+    } catch(e) {
+      logger.error(e);
+    }
   }
 
   /**

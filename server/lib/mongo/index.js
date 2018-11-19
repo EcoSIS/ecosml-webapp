@@ -145,6 +145,12 @@ class MongoDB {
     return collection.find({organization: orgName}, {name: 1, id: 1, githubId: 1}).toArray();
   }
 
+  async getAllRegisteredRepositoryIds() {
+    return collection
+      .find({source: 'registered'}, {name: 1, id: 1})
+      .toArray();
+  }
+
   /**
    * @method insertPackage
    * @description insert or update a package
@@ -192,6 +198,10 @@ class MongoDB {
    * @returns {Promise} resolves to mongo response
    */
   async getPackage(packageNameOrId, projection = {}) {
+    if( typeof packageNameOrId === 'object' ) {
+      packageNameOrId = packageNameOrId.id || packageNameOrId.name;
+    }
+
     let collection = await this.packagesCollection();
     return collection.findOne({
       $or : [

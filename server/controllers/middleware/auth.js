@@ -1,19 +1,50 @@
 let model = require('../../models/AuthModel');
 let packageModel = require('../../models/PackageModel');
-let mongo = require('../../lib/mongo');
+let config = require('../../lib/comnfig');
 let utils = require('../utils');
-let AppError = require('../../lib/AppError');
-
-
+let jwt = require('jsonwebtoken');
 
 function sendError(res, code, msg) {
   res.status(code);
   res.json({error: true, message: msg});
 } 
 
+function getUser(req, tryBody=false) {
+  // let token be first thing we check
+  let token = req.get('Authorization');
+  if( token ) {
+    try {
+      let user = getUserFromJwtToken(token);
+      req.session.username = user.username;
+      req.session.admin = user.admin;
+      return user;
+    } catch(e) {}
+  }
+
+  if( req.session.username ) {
+    return {
+      username : req.session.username,
+      admin : req.session.admin
+    }
+  }
+
+  if( tryBody && req.body) {
+    try {
+      let user = getUserFromJwtToken(req.body);
+      req.session.username = user.username;
+      req.session.admin = user.admin;
+      return user;
+    } catch(e) {}
+  }
+
+  return null;
+}
+
 function authenticated(req, res, next) {
-  if( !req.session.username ) {
-    sendError(res, 401, 'You must login');
+  let user = getUser(req);
+
+  if( !user ) {
+    sendError(res, 403, 'You must login');
     return false;
   }
 
@@ -21,11 +52,32 @@ function authenticated(req, res, next) {
   return true;
 }
 
+/**
+ * @function adminJwtBody
+ * @description used by post request from google cloud services to parse 
+ * provided jwt
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
+function adminJwtBody(req, res, next) {
+  let user = getUser(req, true);
+  if( !user ) return sendError(res, 401, 'You must login');
+  if( !user.admin ) return sendError(res, 403, 'Invalid login');
+  next();
+}
+
+function getUserFromJwtToken(token='') {
+  let token = token.replace(/^Bearer /, '');
+  if( !token ) throw new Error('No token provided');
+  return jwt.verify(token, config.server.jwt.secret);
+}
 
 async function admin(req, res, next) {
   if( !authenticated(req, res) ) return;
 
-  if( !req.session.username ) {
+  if( !req.session.username || !req.session.admin ) {
     return sendError(res, 401, 'Nope.');
   }
 
@@ -47,6 +99,11 @@ async function packageWriteAccess(req, res, next) {
   }
   
   req.ecosmlPackage = pkg;
+
+  // admins are good
+  if( req.session.admin ) {
+    return next();
+  }
 
   // if this is the owner, they are good
   if( pkg.owner && pkg.owner === req.session.username ) {
@@ -76,13 +133,20 @@ async function packageReadAccess(req, res, next) {
   // it's public!
   if( pkg.private !== true ) return next();
 
+  let user = getUser(req) || {};
+
+  // admins are good
+  if( user.admin ) {
+    return next();
+  }
+
   // it's the owner
-  if( pkg.owner && pkg.owner === req.session.username ) {
+  if( pkg.owner && pkg.owner === user.username ) {
     return next();
   }
   
   if( pkg.organization ) {
-    let readAccess = await model.canReadOrg(pkg.organization, pkg.owner);
+    let readAccess = await model.canReadOrg(pkg.organization, user.username);
     if( !readAccess ) {
       return sendError(res, 401, 'You do not have read access to this package');
     }
@@ -96,5 +160,6 @@ module.exports = {
   authenticated,
   packageReadAccess,
   packageWriteAccess,
+  adminJwtBody,
   admin
 }

@@ -27,12 +27,4 @@ router.get('/reg-repo/backup', admin, async (req, res) => {
  }
 });
 
-router.get('/reg-repo/sync', admin, async (req, res) => {
-  try {
-   res.json(await regRepos.syncAllPropertiesToMongo());
-  } catch(e) {
-    utils.handleError(res, e);
-  }
- });
-
 module.exports = router;

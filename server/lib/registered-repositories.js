@@ -227,7 +227,35 @@ class RegisteredRepositories {
    * @description WARNING. This completely restore MongoDB from the state of the backup repo
    */
   async restoreAll() {
-    // TODO
+    await this._reset();
+    let repos = [];
+    await this._walkAndRestore(this.repoFileRoot, repos);
+    return repos;
+  }
+
+  async _walkAndRestore(dir, repos) {
+    let files = await fs.readdir(dir);
+    for( let file of files ) {
+      // ignore . files
+      if( file.match(/^\./) ) continue;
+      file = path.resolve(dir, file);
+      
+      // insert .json files into mongodb 
+      if( path.parse(file).ext === '.json' ) {
+        let data = require(file);
+        logger.info(`Syncing Registered Repository ${data.name}`);
+        await this.syncProperties(data);
+        await mongo.insertPackage(data);
+        repos.push(data.name);
+        continue;
+      }
+      
+      // id dir, walk
+      let stat = await fs.stat(file);
+      if( stat.isDirectory() ) {
+        await this._walkAndRestore(file, repos);
+      }
+    }
   }
 
   /**

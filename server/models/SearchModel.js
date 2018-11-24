@@ -8,6 +8,7 @@ class SearchModel {
   /**
    * @method publicSearch
    * @description Search for packages, ensures release count is greater than 0
+   * and that package is public
    * 
    * @param {Object} query standard mongodb query 
    * @param {String} query.text text search

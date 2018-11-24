@@ -2,6 +2,7 @@
  * Sync a GitHub org to mongodb
  */
 const github = require('../github');
+const regRepos = require('../registered-repositories');
 const mongodb = require('../mongo');
 const config = require('../config');
 const utils = require('../utils');
@@ -141,6 +142,10 @@ class GithubSync {
     for( let i = 0; i < repos.length; i++ ) {
       await this.syncRepo(repos[i]);
     }
+
+    logger.info(`Starting GitHub repository sync for Registered Repositories\n`);
+    let regReposList = await regRepos.restoreAll();
+    repos = repos.concat(regReposList);
 
     let pkgs = (await mongodb.getAllPackageNames())
                .filter((pkg) => repos.indexOf(pkg.name) === -1)

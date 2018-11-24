@@ -41,6 +41,7 @@ class PackageEditorStore extends BaseStore {
    */
   setEditStartStateData(data) {
     this.data.startState = clone(data);
+    this.setData()
   }
 
   /**

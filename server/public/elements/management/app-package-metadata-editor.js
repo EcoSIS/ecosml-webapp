@@ -113,6 +113,7 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
       this.lastState = e.state;
     }
 
+    console.log(e);
     if( e.state === 'edit' && this.PackageEditor.hasDataChanged() ) {
       this.$.unsavedMsg.style.display = 'block';
       this.$.savingMsg.style.display = 'none';
@@ -131,7 +132,7 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
     try {
       let e = await this.PackageModel.get(pkgId);
       this.PackageEditor.setEditStartStateData(e.payload);
-      this.PackageEditor.setData(e.payload, {state: 'edit'});
+      this.PackageEditor.setData(e.payload, {state: 'edit', merge: false});
       
       if( e.payload.source === 'managed' ) {
         this.$.files.files = await this.PackageModel.getFiles(pkgId);
@@ -166,7 +167,7 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
       this.$.savingToast.close();
       this.$.savedToast.open();
       this.PackageEditor.setEditStartStateData(e.payload);
-      this.PackageEditor.setData(e.payload, {state: 'edit'});
+      this.PackageEditor.setData(e.payload, {state: 'edit', merge: false});
     } else if( e.state === 'error' ) {
       this.$.unsavedMsg.style.display = 'block';
       this.$.savingMsg.style.display = 'none';

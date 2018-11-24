@@ -1,6 +1,11 @@
 const {BaseStore} = require('@ucd-lib/cork-app-utils');
 const clone = require('clone');
 
+const IGNORE_DATA_PROPERTIES = {
+  managed : [],
+  registered : ['description', 'overview', 'releases', 'releaseCount']
+}
+
 class PackageEditorStore extends BaseStore {
 
   constructor() {
@@ -49,10 +54,14 @@ class PackageEditorStore extends BaseStore {
     let states = [this.data.package.payload, this.data.startState]
       .map(state => {
         state = clone(state);
+        let ignore = IGNORE_DATA_PROPERTIES[state.source] || [];
+
         for( let key in state ) {
           if( Array.isArray(state[key]) && state[key].length === 0) {
             delete state[key];
           } else if ( state[key] === '' ) {
+            delete state[key];
+          } else if( ignore.indexOf(key) > -1 ) {
             delete state[key];
           }
         }

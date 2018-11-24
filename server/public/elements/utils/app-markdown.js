@@ -37,11 +37,11 @@ export default class AppMarkdown extends Mixin(PolymerElement)
    * @param {String} markdown 
    * @param {Number} height optional 
    */
-  async render(markdown, height) {
+  async render(markdown, height, pkgName) {
     if( height ) this.style.height = height+'px'; 
 
     this.$.root.innerHTML = 'Rendering...';
-    let {body} = await this.PackageModel.previewMarkdown(markdown, this.pkgName);
+    let {body} = await this.PackageModel.previewMarkdown(markdown, pkgName || this.pkgName);
     this.show(body);
 
     if( height ) this.style.height = 'auto'; 

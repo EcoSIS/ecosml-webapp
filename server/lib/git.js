@@ -110,7 +110,8 @@ class GitCli {
    */
   async resetHEAD(repoName) {
     let dir = await this.ensureDir(repoName);
-    return this.exec(`reset HEAD --hard`, {cwd: dir});
+    await this.exec('fetch origin', {cwd: dir});
+    return this.exec('reset --hard origin/master', {cwd: dir});
   }
 
   /**

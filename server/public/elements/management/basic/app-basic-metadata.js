@@ -33,6 +33,11 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
         value : false
       },
 
+      syncing : {
+        type : Boolean,
+        value : false
+      },
+
       ecosisHost : {
         type : String,
         value : APP_CONFIG.ecosisDataHost
@@ -354,6 +359,23 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
     }
 
     this._setWindowLocation('/edit/'+e.payload.id);
+  }
+
+  /**
+   * @method _onSyncClicked
+   * @description bound to registered repository sync button
+   */
+  async _onSyncClicked() {
+    if( this.syncing ) return;
+    this.syncing = true;
+
+    try {
+      await this.PackageEditor.syncRegProps(this.packageId);
+    } catch(e) {
+      alert('Failed to sync repository: '+e.message);
+    }
+
+    this.syncing = false;
   }
 
 }

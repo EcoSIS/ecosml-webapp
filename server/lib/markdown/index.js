@@ -33,7 +33,7 @@ module.exports = function(markdown, repoName='') {
 
           // replace local image references with GitHub url
           let imgSrc = `https://github.com/${org}/${repoName}/raw/master`;
-          stdout = (stdout || '').replace(/<img\s+src="\./, `<img src="${imgSrc}`);
+          stdout = (stdout || '').replace(/<img\s+src="\./g, `<img src="${imgSrc}`);
 
           resolve(stdout);
         }

@@ -26,8 +26,19 @@
     color: var(--secondary-text-color);
   }
 
-  .radio {
-    margin : 10px 0 0 5px;
+  .radio-layout {
+    display: flex;
+    margin-top: 10px;
+  }
+
+  .radio-layout label {
+    font-weight: bold;
+    padding: 10px 0;
+    display: block;
+  }
+
+  input[type="radio"] {
+    margin: 15px;
   }
 
   #nameMessage.ok {
@@ -37,6 +48,12 @@
   #nameMessage.error {
     color: var(--color-red);
   }
+
+  paper-button[sync] {
+    color: white;
+    background-color: var(--default-secondary-color);
+    margin: 15px 0;
+  } 
 
 </style>
 
@@ -54,14 +71,16 @@
 </div>
 
 <div hidden$="[[creating]]">
-  <div hidden$="[[isManagedSource]]" >
+  <div hidden$="[[isManagedSource]]" style="margin-bottom: 35px">
     <h2 class="uheader blue">Sync</h2>
-    <div style="display:flex; margin-bottom: 35px;">
-      <div><paper-button style="white-space: nowrap">Sync Repository</paper-button></div>
-      <div class="help">Synchronize the repository overview, README and releases from GitHub.  This process happens
-        nightly, but you can request data be synchronized right now as well.
-      </div>
+    <div class="help">Synchronize the repository overview, README and releases from GitHub.  This process happens
+      nightly, but you can request data be synchronized right now if you wish.
     </div>
+
+    <paper-button sync style="white-space: nowrap" on-click="_onSyncClicked" hidden$="[[syncing]]">
+      <iron-icon icon="cached"></iron-icon> Sync Repository
+    </paper-button>
+    <paper-button style="white-space: nowrap" disabled hidden$="[[!syncing]]">Syncing..</paper-button>
   </div>
 </div>
 
@@ -102,7 +121,8 @@
   </app-text-input>
 </div>
 <div hidden$="[[isManagedSource]]">
-  [[overview]]
+  <div class="help" style="margin-bottom: 10px">Pulled from the repositories GitHub description.</div>
+  <div>[[overview]]</div>
 </div>
 
 <h2 class="uheader green break">Organization</h2>
@@ -122,19 +142,27 @@
 </select>
 
 <h2 class="uheader green break">Distributed Software Package?</h2>
-<div class="help">Is this a distributable software package that is meant to be used by other applications (ie what you would install
-  through <a href="https://pypi.org/project/pip/" target="_blank">Python/PIP</a>, <a href="https://cran.r-project.org/" target="_blank">R/CRAN</a>,
-   <a href="https://www.npmjs.com/" target="_blank">NodeJS/NPM</a>, <a href="https://en.wikipedia.org/wiki/List_of_software_package_management_systems#Application-level_Dependency_managers" target="_blank">etc</a>) or is
-  this a standalone software application?  <span hidden$="[[!isManagedSource]]">Currently <a href="https://www.python.org/" target="_blank">Python</a> and 
-  <a href="https://www.r-project.org/" target="_blank">R</a> packages will auto build sample native package files for installation from Github.</span>
-</div>
-  
-<div class="radio">
+
+<div class="radio-layout">
   <input id="packageInput" type="radio" name="software-package" value="package" on-change="_onInputChange"/> 
-  <label for="packageInput">Software Package</label></div>
-<div class="radio">
+  <div>
+      <label for="packageInput">Software Package</label>
+      <div>This repository is a distributable software package meant to be used by other software applications.  The package can be install via
+        the languages package management system such as; <a href="https://pypi.org/project/pip/" target="_blank">Python/PIP</a>, <a href="https://cran.r-project.org/" target="_blank">R/CRAN</a>,
+           <a href="https://www.npmjs.com/" target="_blank">NodeJS/NPM</a>, <a href="https://en.wikipedia.org/wiki/List_of_software_package_management_systems#Application-level_Dependency_managers" target="_blank">etc</a>
+      </div>.
+      <div hidden$="[[!isManagedSource]]">Currently <a href="https://www.python.org/" target="_blank">Python</a> and 
+        <a href="https://www.r-project.org/" target="_blank">R</a> packages will auto build sample native package files for installation from Github.</div>
+  </div>
+</div>
+<div class="radio-layout">
   <input id="standaloneInput" type="radio" name="software-package" value="standalone" on-change="_onInputChange"/> 
-  <label for="standaloneInput">Standalone Software</label>
+  <div>
+      <label for="standaloneInput">Standalone Software Application</label>
+      <div>This is software is not intended to be used by other projects.  The code is a final product intended for use
+        by end users.
+      </div>
+  </div>
 </div>
 
 <div style="text-align: right">
@@ -146,5 +174,7 @@
 </div>
 
 <div hidden$="[[creating]]" class="delete">
-  <paper-button on-click="_onDeleteBtnClicked" disabled$="[[deleting]]">Delete Package</paper-button>
+  <paper-button on-click="_onDeleteBtnClicked" disabled$="[[deleting]]">
+    <iron-icon icon="delete"></iron-icon> Delete Package
+  </paper-button>
 </div>

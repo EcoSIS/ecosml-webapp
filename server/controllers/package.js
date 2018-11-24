@@ -8,7 +8,7 @@ const upload = multer({
   dest: uploadPath
 });
 const model = require('../models/PackageModel');
-const queue = require('../models/PackageQueueModel')
+const queue = require('../models/PackageQueueModel');
 const {packageWriteAccess, packageReadAccess} = require('./middleware/auth');
 const utils = require('./utils');
 const AppError = require('../lib/AppError');
@@ -126,6 +126,14 @@ router.get('/:package/files', packageReadAccess, async (req, res) => {
       package: req.ecosmlPackage.name,
       files : files
     });
+  } catch(e) {
+    utils.handleError(res, e);
+  }
+});
+
+router.get('/:package/syncRegProps', packageWriteAccess, async (req, res) => {
+  try {
+    res.json(await model.syncRegisteredRepository(req.ecosmlPackage));
   } catch(e) {
     utils.handleError(res, e);
   }

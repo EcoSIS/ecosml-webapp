@@ -146,6 +146,7 @@ class MongoDB {
   }
 
   async getAllRegisteredRepositoryIds() {
+    let collection = await this.packagesCollection();
     return collection
       .find({source: 'registered'}, {name: 1, id: 1})
       .toArray();

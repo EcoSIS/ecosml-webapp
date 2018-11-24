@@ -14,6 +14,19 @@ class PackageEditor extends BaseModel {
   }
 
   /**
+   * @method syncRegProps
+   * @description sync a registered repositories properties from remote
+   * github repo.
+   * 
+   * @param {String} packageId 
+   * 
+   * @returns {Promise}
+   */
+  syncRegProps(packageId) {
+    return this.service.syncRegProps(packageId);
+  }
+
+  /**
    * @method isNameAvailable
    * @description is package name available
    * 

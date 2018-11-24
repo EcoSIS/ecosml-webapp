@@ -58,6 +58,7 @@ class PackageModel {
 
       // fake some of the github api properties
       pkg.htmlUrl = 'https://github.com/'+pkg.name;
+      pkg.private = false;
 
     } else if( pkg.source === 'managed' ) {
       schema.validate('create', pkg);
@@ -344,18 +345,11 @@ class PackageModel {
    */
   async syncRegisteredRepository(pkg) {
     pkg = await this.get(pkg);
-
-    // this will throw an unknown repo error
-    try {
-      await registeredRepositories.syncProperties(pkg);
-      await mongo.updatePackage(pkg.id, pkg);
-    } catch(e) {
-      logger.error(e);
+    if( pkg.source !== 'registered' ) {
+      throw new Error('Must be a registered repository');
     }
 
-    this._updateRegisteredRepo(pkg);
-
-    return pkg;
+    return registeredRepositories.syncPropertiesToMongo(pkg);
   }
 
   /**

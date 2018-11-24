@@ -5,84 +5,85 @@ const path = require('path');
 const clone = require('clone');
 const github = require('./github');
 const mongo = require('./mongo');
+const logger = require('./logger');
 
 class RegisteredRepositories {
 
   constructor() {
     this.config = config.github.registeredRepositories;
-    this.repoFile = path.join(git.rootDir, this.config.repoName, this.config.file);
+    this.repoFileRoot = path.join(git.rootDir, this.config.repoName, config.server.serverEnv);
     this.queue = [];
   }
 
-  async _load() {
+  _getRepoFilePath(pkg) {
+    let name = pkg.name;
+    if( name.indexOf('/') === -1 ) {
+      name = config.github.org+'/'+name;
+    }
+
+    let repoFile = path.join(this.repoFileRoot, name);
+    let repoDir = path.resolve(repoFile, '..');
+    repoFile = repoFile+'.json';
+    return {repoFile, repoDir};
+  }
+
+  async _reset() {
     await git.ensureDir(this.config.repoName);
     await git.resetHEAD(this.config.repoName);
     await git.pull(this.config.repoName);
-
-    if( fs.existsSync(this.repoFile) ) {
-      this.data = require(this.repoFile);
-    } else {
-      this.data = [];
-      await fs.writeFile(this.repoFile, '[]');
-    }
-
-    return this.data;
   }
 
-  async _updateData(pkg, remove) {
-    let found = false;
+  async _commit(pkg, remove=false) {
+    let changes = await git.currentChangesCount(this.config.repoName);
+    if( changes === 0 ) return false;
 
-    if( remove ) {
-      for( let i = 0; i < this.data.length; i++ ) {
-        if( this.data[i].id === pkg.id ) {
-          this.data.splice(i, 1);
-          break;
-        }
-      }
-    } else {
-      pkg = clone(pkg);
-      for( let attr in this.config.removeAttributes ) {
-        if( pkg[attr] ) delete pkg[attr];
-      }
+    let update = remove ? 'Removing' : 'Updating';
 
-      for( let i = 0; i < this.data.length; i++ ) {
-        if( this.data[i].id === pkg.id ) {
-          this.data[i] = pkg;
-          found = true;
-          break;
-        }
-      }
-      if( !found ) this.data.push(pkg);
+    await git.addAll(this.config.repoName);
+    await git.commit(this.config.repoName, update+' '+pkg.name);
+    await git.push(this.config.repoName);
+    return true;
+  }
+
+  async _updateRepo(pkg) {
+    let {repoFile, repoDir} = this._getRepoFilePath(pkg);
+    await fs.mkdirp(repoDir);
+
+    pkg = clone(pkg);
+    for( let attr of this.config.removeAttributes ) {
+      if( pkg[attr] ) delete pkg[attr];
     }
+
+    await fs.writeFile(repoFile, JSON.stringify(pkg, '  ', '  '));
+    return await this._commit(pkg);
+  }
+
+  async _removeRepo(pkg) {
+    let {repoFile} = this._getRepoFilePath(pkg);
+    if( fs.existsSync(repoFile) ) {
+      await fs.remove(repoFile);
+    }
+    return await this._commit(pkg, true);
   }
 
   async _update() {
     this.running = true;
     let {updates, resolve, reject} = this.queue.shift();
-    if( !Array.isArray(updates) ) {
-      updates = Array.isArray(updates);
-    }
+    if( !Array.isArray(updates) ) updates = [updates];
 
     try {
-      await this._load();
-      
-      updates.forEach(update => {
-        this._updateData(update.data, update.remove);
-      });
+      await this._reset();
 
-      await fs.writeFile(this.repoFile, JSON.stringify(this.data, '  ', '  '));
-      
-      let changes = await git.currentChangesCount(this.config.repoName);
-      if( changes === 0 ) return resolve();
+      let updated;
+      for( let update of updates ) {
+        if( update.remove ) {
+          updated = await this._removeRepo(update.data);
+        } else {
+          updated = await this._updateRepo(update.data);
+        }
+      }
 
-      let update = found ? 'Adding' : 'Updating';
-      if( remove ) update = 'Removing';
-
-      await git.addAll(this.config.repoName);
-      await git.commit(this.config.repoName, update+' '+pkg.name);
-      await git.push(this.config.repoName);
-
-      resolve();
+      resolve(updated);
     } catch(e) {
       reject(e);
     }
@@ -133,6 +134,15 @@ class RegisteredRepositories {
     });
   }
 
+  /**
+   * @method syncProperties
+   * @description load release, overview and description information from remote
+   * github repository.  Takes a package object and sets values on provided object.
+   * 
+   * @param {Object} pkg package object
+   * 
+   * @return {Promise}
+   */
   async syncProperties(pkg) {
     let {release, overview, description} = await this.getGitHubProperties(pkg.name);
 
@@ -141,7 +151,7 @@ class RegisteredRepositories {
       pkg.releases = [release];
       pkg.releaseCount = 1;
     } else {
-      pkg.releases = [release];
+      pkg.releases = [];
       pkg.releaseCount = 0;
     }
     pkg.overview = overview;
@@ -150,17 +160,74 @@ class RegisteredRepositories {
     return pkg;
   }
 
-  async syncAll() {
+  /**
+   * @method syncAllProperties
+   * @description sync all remotely stored properties to mongodb for all registered repositories
+   */
+  async syncAllPropertiesToMongo() {
     let ids = await mongo.getAllRegisteredRepositoryIds();
+    let results = [];
+
     for( let id of ids ) {
-      let pkg = await mongo.getPackage(id);
       try {
-        await this.syncProperties(pkg);
-        await this.update(pkg);
+        await this.syncPropertiesToMongo(id.id);
+        results.push({id: id.id, succes: true});
       } catch(e) {
         logger.error(e);
+        results.push({
+          id: id.id, 
+          error: true, 
+          message : e.message
+        });
       }
     }
+
+    return results;
+  }
+
+  async syncPropertiesToMongo(pkg) {
+    if( typeof pkg === 'string' ) {
+      pkg = await mongo.getPackage(pkg);
+    }
+    await this.syncProperties(pkg);
+    await mongo.updatePackage(pkg.id, pkg);
+    return pkg;
+  }
+
+  /**
+   * @method backupAll
+   * @description write all registered repository mongodb data to backup github repo
+   * 
+   * @returns {Promise} 
+   */
+  async backupAll() {
+    let ids = await mongo.getAllRegisteredRepositoryIds();
+    let results = [];
+
+    for( let id of ids ) {
+      let pkg = await mongo.getPackage(id.id);
+      try {
+        let updated = await this.update(pkg);
+        results.push({id: pkg.id, succes: true, updated});
+      } catch(e) {
+        logger.error(e);
+        results.push({
+          id: id.id, 
+          error: true, 
+          message : e.message
+        });
+      }
+    }
+
+    return results;
+  }
+
+  /**
+   * @method restoreAll
+   * @description WARNING. This completely restore MongoDB from the state of the backup repo
+   */
+  async restoreAll() {
+    // TODO
   }
 
   /**

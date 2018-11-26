@@ -1,8 +1,9 @@
-let model = require('../../models/AuthModel');
-let packageModel = require('../../models/PackageModel');
-let config = require('../../lib/comnfig');
-let utils = require('../utils');
-let jwt = require('jsonwebtoken');
+const model = require('../../models/AuthModel');
+const packageModel = require('../../models/PackageModel');
+const config = require('../../lib/config');
+const logger = require('../../lib/logger');
+const utils = require('../utils');
+const jwt = require('jsonwebtoken');
 
 function sendError(res, code, msg) {
   res.status(code);
@@ -29,8 +30,15 @@ function getUser(req, tryBody=false) {
   }
 
   if( tryBody && req.body) {
+    let body = req.body;
+    // Google Cloud Scheduler sends request as application/octet-stream
+    // so body is a buffer :/
+    if( req.body instanceof Buffer ) {
+      body = req.body.toString('utf8');
+    }
+
     try {
-      let user = getUserFromJwtToken(req.body);
+      let user = getUserFromJwtToken(body);
       req.session.username = user.username;
       req.session.admin = user.admin;
       return user;
@@ -69,7 +77,7 @@ function adminJwtBody(req, res, next) {
 }
 
 function getUserFromJwtToken(token='') {
-  let token = token.replace(/^Bearer /, '');
+  token = token.replace(/^Bearer /, '').trim();
   if( !token ) throw new Error('No token provided');
   return jwt.verify(token, config.server.jwt.secret);
 }

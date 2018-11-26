@@ -45,8 +45,9 @@ app.use(session({
  */
 
 // parse application/json
-app.use(bodyParser.json());
 app.use(bodyParser.text());
+app.use(bodyParser.raw());
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 /**

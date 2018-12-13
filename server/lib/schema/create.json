@@ -44,6 +44,12 @@
       "packageType" : {
         "type" : "string",
         "enum" : ["standalone", "package"]
+      },
+      "releases" : {
+        "type" : "array"
+      },
+      "releaseCount" : {
+        "type": "integer"
       }
     },
     "additionalProperties": false,

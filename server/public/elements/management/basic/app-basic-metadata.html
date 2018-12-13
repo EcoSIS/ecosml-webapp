@@ -11,19 +11,13 @@
     display: block;
   }
 
-  app-org-input, app-text-input {
+  app-org-input, app-text-input, select {
     margin-top: 15px
   }
 
   .delete {
     margin-top: 75px;
     text-align: right;
-  }
-
-  .basic-header {
-    padding-bottom: 25px;
-    font-size: 14px;
-    color: var(--secondary-text-color);
   }
 
   .radio-layout {
@@ -37,8 +31,15 @@
     display: block;
   }
 
+  .static-overview {
+    background-color: var(--default-background-color);
+    border: 1px solid var(--dark-background-colorr);
+    border-radius: 6px;
+    padding: 10px;
+  }
+
   input[type="radio"] {
-    margin: 15px;
+    margin: 10px 15px;
   }
 
   #nameMessage.ok {
@@ -59,28 +60,17 @@
 
 <app-created-popup id="created" name="[[name]]"></app-created-popup>
 
-<div class="basic-header" hidden$="[[creating]]">
-  <div hidden$="[[!hasRelease]]">
-    <div>View in Search: <a href$="/package/[[packageId]]">/package/[[packageId]]</a></div>
-    <div>View in GitHub: <a href$="[[editorData.htmlUrl]]">[[editorData.htmlUrl]]</a></div>
-  </div>
-  <div hidden$="[[hasRelease]]">
-    <iron-icon icon="warning" style="vertical-align: text-bottom"></iron-icon> Warning, your package will not show up in search
-    until you create a release.  <span hidden$="[[!isManagedSource]]" >Click the <b>Release</b> tab to create one.</span>
-  </div>
-</div>
-
 <div hidden$="[[creating]]">
   <div hidden$="[[isManagedSource]]" style="margin-bottom: 35px">
-    <h2 class="uheader blue">Sync</h2>
-    <div class="help">Synchronize the repository overview, README and releases from GitHub.  This process happens
-      nightly, but you can request data be synchronized right now if you wish.
-    </div>
-
+    
     <paper-button sync style="white-space: nowrap" on-click="_onSyncClicked" hidden$="[[syncing]]">
       <iron-icon icon="cached"></iron-icon> Sync Repository
     </paper-button>
     <paper-button style="white-space: nowrap" disabled hidden$="[[!syncing]]">Syncing..</paper-button>
+
+    <div class="help">Synchronize the repository overview, README and releases from GitHub.  This process happens
+      nightly, but you can request data be synchronized right now if you wish.
+    </div>
   </div>
 </div>
 
@@ -100,7 +90,6 @@
 <div hidden$="[[!creating]]">
   <div hidden$="[[isManagedSource]]" >
     <h2 class="uheader blue" hidden$="[[!creating]]">Repository Url</h2>
-    <div class="help">Provide a full url to the GitHub repository or the Organization/Repository path name</div>
     <app-text-input  
       id="url" 
       on-change="_checkUrl"
@@ -108,6 +97,7 @@
       hidden$="[[!creating]]">
     </app-text-input>
     <div id="urlMessage" hidden$="[[!creating]]"></div>
+    <div class="help">Provide a full url to the GitHub repository or the Organization/Repository path name</div>
   </div>
 </div>
 
@@ -122,7 +112,7 @@
 </div>
 <div hidden$="[[isManagedSource]]">
   <div class="help" style="margin-bottom: 10px">Pulled from the repositories GitHub description.</div>
-  <div>[[overview]]</div>
+  <div class="static-overview">[[overview]]</div>
 </div>
 
 <h2 class="uheader green break">Organization</h2>
@@ -130,11 +120,12 @@
   all members will have access. If you need to create or edit an organization, do so via 
   <a href="[[ecosisHost]]/organization" target="_blank">EcoSIS organization management.</a>
 </div>
-<app-org-input id="organization" on-change="_onInputChange"></app-org-input>
+<app-org-input id="organization" on-change="_onInputChange" style="display:block"></app-org-input>
+
 
 <h2 class="uheader green break">Language</h2>
 <div class="help">Which programming language is this package written in?</div>
-<select id="language" on-change="_onInputChange">
+<select id="language" on-change="_onInputChange" style="width:100%">
   <option></option>
   <option value="python">Python</option>
   <option value="r">R</option>
@@ -147,11 +138,11 @@
   <input id="packageInput" type="radio" name="software-package" value="package" on-change="_onInputChange"/> 
   <div>
       <label for="packageInput">Software Package</label>
-      <div>This repository is a distributable software package meant to be used by other software applications.  The package can be install via
+      <div class="help">This repository is a distributable software package meant to be used by other software applications.  The package can be install via
         the languages package management system such as; <a href="https://pypi.org/project/pip/" target="_blank">Python/PIP</a>, <a href="https://cran.r-project.org/" target="_blank">R/CRAN</a>,
            <a href="https://www.npmjs.com/" target="_blank">NodeJS/NPM</a>, <a href="https://en.wikipedia.org/wiki/List_of_software_package_management_systems#Application-level_Dependency_managers" target="_blank">etc</a>
       </div>.
-      <div hidden$="[[!isManagedSource]]">Currently <a href="https://www.python.org/" target="_blank">Python</a> and 
+      <div class="help" hidden$="[[!isManagedSource]]">Currently <a href="https://www.python.org/" target="_blank">Python</a> and 
         <a href="https://www.r-project.org/" target="_blank">R</a> packages will auto build sample native package files for installation from Github.</div>
   </div>
 </div>
@@ -159,7 +150,7 @@
   <input id="standaloneInput" type="radio" name="software-package" value="standalone" on-change="_onInputChange"/> 
   <div>
       <label for="standaloneInput">Standalone Software Application</label>
-      <div>This is software is not intended to be used by other projects.  The code is a final product intended for use
+      <div class="help">This is software is not intended to be used by other projects.  The code is a final product intended for use
         by end users.
       </div>
   </div>

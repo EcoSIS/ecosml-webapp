@@ -50,6 +50,12 @@
   .main-panel {
     margin: 0;
   }
+
+  .basic-header {
+    padding-bottom: 25px;
+    font-size: 14px;
+    color: var(--secondary-text-color);
+  }
 </style>
 
 <paper-toast id="savingToast" duration="0">
@@ -78,7 +84,16 @@
       <div class="repo-type">[[repoType]]</div>
     </div>
 
-    
+    <div class="basic-header" hidden$="[[creating]]">
+      <div hidden$="[[!hasRelease]]">
+        <div>View in Search: <a href$="/package/[[packageId]]">/package/[[packageId]]</a></div>
+        <div>View in GitHub: <a href$="[[githubHtmlUrl]]">[[githubHtmlUrl]]</a></div>
+      </div>
+      <div hidden$="[[hasRelease]]">
+        <iron-icon icon="warning" style="vertical-align: text-bottom"></iron-icon> Warning, your package will not show up in search
+        until you create a release.  <span hidden$="[[!isManagedSource]]" >Click the <b>Release</b> tab to create one.</span>
+      </div>
+    </div>
 
     <paper-tabs id="tabs" selected="{{selectedSection}}" attr-for-selected="id">
       <paper-tab id="source" hidden$="[[!creating]]">Getting Started</paper-tab>

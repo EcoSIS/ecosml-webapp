@@ -12,6 +12,7 @@ import "./basic/app-basic-metadata"
 import "./details/app-details-metadata"
 import "./files/app-files"
 import "./releases/app-releases"
+import { stringify } from "querystring";
 
 class AppPackageMetadataEditor extends Mixin(PolymerElement)
       .with(EventInterface) {
@@ -51,6 +52,16 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
       },
 
       repoType : {
+        type : String,
+        value : ''
+      },
+
+      hasRelease : {
+        type : Boolean,
+        value : false
+      },
+
+      githubHtmlUrl : {
         type : String,
         value : ''
       }
@@ -96,7 +107,9 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
     this.packageId = e.payload.id || '';
     this.packageName = e.payload.name || '';
     this.creating = e.state === 'create' ? true : false;
-
+    this.hasRelease = (e.payload.releaseCount && e.payload.releaseCount > 0) ? true : false;
+    this.githubHtmlUrl = e.payload.htmlUrl || '';
+console.log(e);
     if( this.lastState !== e.state || e.reset ) {
       if( e.state === 'create' ) {
         this.selectedSection = 'source';
@@ -113,7 +126,6 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
       this.lastState = e.state;
     }
 
-    console.log(e);
     if( e.state === 'edit' && this.PackageEditor.hasDataChanged() ) {
       this.$.unsavedMsg.style.display = 'block';
       this.$.savingMsg.style.display = 'none';

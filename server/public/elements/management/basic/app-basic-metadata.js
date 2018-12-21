@@ -182,12 +182,12 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
       return this.$.urlMessage.innerHTML = '';
     }
 
-    this._onInputChange();
     let {org, repo, valid} = this._checkValidUrl();
 
     if( !valid ) {
       return this.$.urlMessage.innerHTML = 'Not a valid Github Repository Url';
     }
+
     this.$.urlMessage.innerHTML = `Checking (${org} / ${repo})...`;
 
     if( this._checkUrlTimer === -1 ) clearTimeout(this._checkUrlTimer);
@@ -195,6 +195,11 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
       this._checkUrlTimer = -1;
       this._checkUrlAsync(org, repo);
     }, 300);
+  }
+
+  _onUrlInputChange() {
+    this._checkUrl();
+    this._onInputChange();
   }
 
   _checkValidUrl() {

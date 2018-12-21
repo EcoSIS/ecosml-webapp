@@ -45,8 +45,8 @@ export default class AppCreateStart extends Mixin(PolymerElement)
    * @description reset checkboxs and values
    */
   reset() {
-    this.source = '';
-    this.$.repositoryTypeManaged.checked = false;
+    this.source = 'managed';
+    this.$.repositoryTypeManaged.checked = true;
     this.$.repositoryTypeRegistered.checked = false;
   }
 

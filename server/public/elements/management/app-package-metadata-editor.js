@@ -109,7 +109,7 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
     this.creating = e.state === 'create' ? true : false;
     this.hasRelease = (e.payload.releaseCount && e.payload.releaseCount > 0) ? true : false;
     this.githubHtmlUrl = e.payload.htmlUrl || '';
-console.log(e);
+
     if( this.lastState !== e.state || e.reset ) {
       if( e.state === 'create' ) {
         this.selectedSection = 'source';

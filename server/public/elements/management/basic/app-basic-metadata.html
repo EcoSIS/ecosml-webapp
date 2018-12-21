@@ -92,7 +92,7 @@
     <h2 class="uheader blue" hidden$="[[!creating]]">Repository Url</h2>
     <app-text-input  
       id="url" 
-      on-change="_checkUrl"
+      on-change="_onUrlInputChange"
       on-keyup="_checkUrl"
       hidden$="[[!creating]]">
     </app-text-input>
@@ -100,6 +100,7 @@
     <div class="help">Provide a full url to the GitHub repository or the Organization/Repository path name</div>
   </div>
 </div>
+
 
 <h2 class="uheader lightblue" break$="[[creating]]">Package Overview</h2>
 <div hidden$="[[!isManagedSource]]">
@@ -112,7 +113,7 @@
 </div>
 <div hidden$="[[isManagedSource]]">
   <div class="help" style="margin-bottom: 10px">Pulled from the repositories GitHub description.</div>
-  <div class="static-overview">[[overview]]</div>
+  <div class="static-overview" hidden$="[[creating]]">[[overview]]</div>
 </div>
 
 <h2 class="uheader green break">Organization</h2>
@@ -132,16 +133,16 @@
   <option value="other">Other</option>
 </select>
 
-<h2 class="uheader green break">Distributed Software Package?</h2>
+<h2 class="uheader green break">Code Type</h2>
 
 <div class="radio-layout">
   <input id="packageInput" type="radio" name="software-package" value="package" on-change="_onInputChange"/> 
   <div>
-      <label for="packageInput">Software Package</label>
-      <div class="help">This repository is a distributable software package meant to be used by other software applications.  The package can be install via
+      <label for="packageInput">Package</label>
+      <div class="help">The code is a distributable software package meant to be installed via
         the languages package management system such as; <a href="https://pypi.org/project/pip/" target="_blank">Python/PIP</a>, <a href="https://cran.r-project.org/" target="_blank">R/CRAN</a>,
-           <a href="https://www.npmjs.com/" target="_blank">NodeJS/NPM</a>, <a href="https://en.wikipedia.org/wiki/List_of_software_package_management_systems#Application-level_Dependency_managers" target="_blank">etc</a>
-      </div>.
+           <a href="https://www.npmjs.com/" target="_blank">NodeJS/NPM</a>, <a href="https://en.wikipedia.org/wiki/List_of_software_package_management_systems#Application-level_Dependency_managers" target="_blank">etc</a>.
+      </div>
       <div class="help" hidden$="[[!isManagedSource]]">Currently <a href="https://www.python.org/" target="_blank">Python</a> and 
         <a href="https://www.r-project.org/" target="_blank">R</a> packages will auto build sample native package files for installation from Github.</div>
   </div>
@@ -149,18 +150,17 @@
 <div class="radio-layout">
   <input id="standaloneInput" type="radio" name="software-package" value="standalone" on-change="_onInputChange"/> 
   <div>
-      <label for="standaloneInput">Standalone Software Application</label>
-      <div class="help">This is software is not intended to be used by other projects.  The code is a final product intended for use
-        by end users.
+      <label for="standaloneInput">Standalone Application</label>
+      <div class="help">The code is a final product intended for use by end users.  
       </div>
   </div>
 </div>
 
-<div style="text-align: right">
+<div style="text-align: right; margin-top: 25px">
   <paper-button 
     hidden$="[[!creating]]" 
     id="createBtn"
-    on-click="_onCreateBtnClicked">Create
+    on-click="_onCreateBtnClicked"><iron-icon icon="add"></iron-icon> Create
   </paper-button>
 </div>
 

@@ -47,6 +47,7 @@ async function login(username, password, req, res) {
   }
 
   req.session.username = result.username;
+  req.session.ckanJwt = result.token;
   req.session.admin = await model.isAdmin(username);
 
   let orgs = await model.getUserOrgs(result.username);
@@ -55,6 +56,7 @@ async function login(username, password, req, res) {
   res.json({
     success: true,
     username : result.username,
+    ckanJwt : result.token,
     organizations : orgs
   });
 }

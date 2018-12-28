@@ -216,6 +216,17 @@ class AuthModel {
     return orgs;
   }
 
+  /**
+   * @method linkGithubUsername
+   * @description link github and ecosis user accounts by adding
+   * 
+   * @param {String} ecosisUsername 
+   * @param {String} githubUsername 
+   */
+  async linkGithubUsername(ecosisUsername, githubUsername) {
+    let orgs = await this.getUserOrgs(ecosisUsername);
+  }
+
   _request(options) {
     return new Promise((resolve, reject) => {
       request(options, (error, response, body) => {

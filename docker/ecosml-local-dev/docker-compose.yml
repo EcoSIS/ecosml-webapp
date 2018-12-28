@@ -20,6 +20,7 @@ services:
     ports:
       - 3000:3000
     environment:
+      - JWT_SECRET=${JWT_SECRET}
       - ECOSIS_HOST=${ECOSIS_HOST}
       - GITHUB_ORG=ecosml-dev
       - FIREBASE_ENV=dev

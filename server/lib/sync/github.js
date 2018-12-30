@@ -342,7 +342,34 @@ class GithubSync {
       }
     }
 
-    // TODO: make sure all teams members (if provided github id) are in sync
+    // make sure all teams members (if provided github id) are in sync
+    if( team !== null ) {
+      let members = await github.listTeamMembers(team.id);
+      let githubMembers = members.map(member => member.login);
+      
+      // we only care about ckanMembers we have mapped github usernames for
+      let ckanMembers = [];
+      for( let member of org.members ) {
+        let githubUsername = await redis.getGithubUsername(member.user);
+        if( !githubUsername ) continue;
+        ckanMembers.push(githubUsername);
+      }
+
+      // add members if they exist in ckan but not in github
+      for( let member of ckanMembers ) {
+        if( githubMembers.indexOf(member) === -1 ) {
+          await github.addTeamMember(team.id, member);
+        }
+      }
+
+      // remove members if they exist in github but not in ckan
+      for( let member of githubMembers ) {
+        if( ckanMembers.indexOf(member) === -1 ) {
+          await github.removeTeamMember(team.id, member);
+        }
+      }
+
+    }
   }
 
 }

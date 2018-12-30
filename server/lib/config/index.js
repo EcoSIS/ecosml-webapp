@@ -57,7 +57,8 @@ module.exports = {
     prefixes : {
       org : 'org',
       auth : 'auth',
-      admin : 'admin'
+      admin : 'admin',
+      github : 'github'
     }
   },
 

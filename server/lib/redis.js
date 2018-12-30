@@ -49,6 +49,10 @@ class Redis {
     return `${config.redis.prefixes.org}-${orgName}`;
   }
 
+  createUserGithubKey(username) {
+    return `${config.redis.prefixes.github}-${username}`
+  }
+
   /**
    * @method getOrgNameFromId
    * @description given an EcoSIS org id, find the org.  Note this is not 
@@ -81,6 +85,12 @@ class Redis {
     return JSON.parse(result).displayName;
   }
 
+  async getGithubUsername(ecosisUsername) {
+    let key = this.createUserGithubKey(ecosisUsername);
+    let githubUsername = await this.client.get(key);
+    if( !githubUsername ) return null;
+    return JSON.parse(githubUsername).username;
+  }
 
 }
 

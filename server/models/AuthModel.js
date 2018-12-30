@@ -4,6 +4,7 @@ const Logger = require('../lib/logger');
 const redis = require('../lib/redis');
 const request = require('request');
 const mongo = require('../lib/mongo');
+const github = require('../lib/github');
 
 class AuthModel {
 
@@ -224,7 +225,35 @@ class AuthModel {
    * @param {String} githubUsername 
    */
   async linkGithubUsername(ecosisUsername, githubUsername) {
-    let orgs = await this.getUserOrgs(ecosisUsername);
+    // save to ckan so we can restore
+    await ckan.setGithubInfo(githubUsername, ecosisUsername);
+
+    // save to redis
+    let key = redis.createUserGithubKey(ecosisUsername);
+    await redis.client.set(key, JSON.stringify({username: githubUsername}));
+
+    let orgs = (await this.getUserOrgs(ecosisUsername) || []);
+    for( let org of orgs ) {
+      github.addTeamMember(org.name, ecosisUsername);
+    }
+  }
+
+  async unlinkGithubUsername(ecosisUsername) {
+    let githubUsername = await redis.client.get(key);
+    if( !githubUsername ) return;
+    githubUsername = JSON.parse(githubUsername).username;
+
+    // save to ckan so we can restore
+    await ckan.setGithubInfo('', ecosisUsername);
+
+    // update to redis
+    let key = redis.createUserGithubKey(ecosisUsername);
+    await redis.client.del(key);
+
+    let orgs = (await this.getUserOrgs(ecosisUsername) || []);
+    for( let org of orgs ) {
+      github.removeTeamMember(org.name, ecosisUsername);
+    }
   }
 
   _request(options) {

@@ -73,6 +73,36 @@ class CkanApi {
     return JSON.parse(body);
   }
 
+  /**
+   * @method setGithubInfo
+   * @description set a github username for given ecosis
+   * user
+   * 
+   * @param {String} githubUsername
+   * @param {String} ecosisUsername
+   * 
+   * @returns {Promise}
+   */
+  async setGithubInfo(githubUsername, ecosisUsername) {
+    let token = jwt.sign(
+      {username: ecosisUsername}, 
+      config.server.jwt.secret, 
+      { expiresIn: 60 * 60 }
+    );
+    
+    let {body} = await this._request({
+      method : 'POST',
+      uri : HOST+'/ecosis/user/githubInfo',
+      headers : {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body : JSON.stringify({username: githubUsername})
+    });
+
+    return JSON.parse(body);
+  }
+
   _request(options) {
     return new Promise((resolve, reject) => {
       request(options, (error, response, body) => {

@@ -7,6 +7,7 @@ import SearchInterface from "../interfaces/SearchInterface"
 import "@polymer/iron-pages/iron-pages"
 
 import "./app-login"
+import { stringify } from "querystring";
 
 export default class AppUserAccount extends Mixin(PolymerElement)
   .with(EventInterface, AuthInterface, SearchInterface) {
@@ -38,6 +39,11 @@ export default class AppUserAccount extends Mixin(PolymerElement)
       ecosisHost : {
         type : String,
         value : APP_CONFIG.ecosisDataHost
+      },
+
+      githubUsername : {
+        type : String,
+        value : ''
       }
     }
   }

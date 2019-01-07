@@ -16,12 +16,16 @@ class AuthStore extends BaseStore {
       },
       organizations : {
         state : this.STATE.INIT
+      },
+      saveGithubInfo : {
+        state : this.STATE.INIT
       }
     };
 
     this.events = {
       AUTH_UPDATE : 'auth-update',
-      ORGS_UPDATE : 'orgs-update'
+      ORGS_UPDATE : 'orgs-update',
+      GITHUB_USERNAME_UPDATE : 'github-username-update'
     }
   }
 
@@ -88,6 +92,23 @@ class AuthStore extends BaseStore {
     if( !state.state ) console.warn('Setting orgs with no state');
     this.data.organizations = state;
     this.emit(this.events.ORGS_UPDATE, state);
+  }
+
+  setGithubUsernameSaving(request, username) {
+    this._setGithubState({request, payload: username, state: this.STATE.SAVING});
+  }
+
+  setGithubUsernameSaved(username) {
+    this._setGithubState({payload: username, state: this.STATE.SAVE_SUCCESS});
+  }
+
+  setGithubUsernameSaveError(error, username) {
+    this._setGithubState({error, payload: username, state: this.STATE.SAVE_ERROR});
+  }
+
+  _setGithubState(state) {
+   this.data.saveGithubInfo = state;
+    this.emit(this.events.GITHUB_USERNAME_UPDATE, state);
   }
 }
 

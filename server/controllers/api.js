@@ -6,5 +6,6 @@ router.use('/markdown', require('./markdown'));
 router.use('/sync', require('./sync'));
 router.use('/admin', require('./admin'));
 router.use('/stats', require('./stats'));
+router.use('/user', require('./user'));
 
 module.exports = router;

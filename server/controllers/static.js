@@ -2,6 +2,7 @@ const config = require('../lib/config');
 const path = require('path');
 const express = require('express');
 const gitinfo = require('../gitinfo');
+const redis = require('../lib/redis');
 const spaMiddleware = require('@ucd-lib/spa-router-middleware');
 
 /**
@@ -28,9 +29,10 @@ module.exports = function(app) {
     htmlFile : path.join(assetsDir, 'index.html'),
     isRoot : true,
     appRoutes : config.server.appRoutes,
-    getConfig : (req, res, next) => {
+    getConfig : async (req, res, next) => {
       next({
         user : req.session.username || null,
+        githubUsername : await redis.getGithubUsername(req.session.username),
         appRoutes : config.server.appRoutes,
         ecosisDataHost : config.ecosis.host,
         env : {

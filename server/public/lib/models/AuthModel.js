@@ -26,8 +26,11 @@ class AuthModel extends BaseModel {
     return this.service.login(username, password);  
   }
 
-  logout() {
-    return this.service.logout();
+  async logout() {
+    await this.service.logout();
+    if( typeof window !== undefined ) {
+      window.reload();
+    }
   }
 
   async getUserOrganizations(reload=false) {
@@ -40,6 +43,22 @@ class AuthModel extends BaseModel {
     }
 
     return this.store.data.organizations;
+  }
+
+  /**
+   * @method setGithubUsername
+   * @description set github username for user
+   * 
+   * @param {String} githubUsername 
+   * 
+   * @return {Promise}
+   */
+  async setGithubUsername(githubUsername) {
+    try {
+      await this.service.setGithubUsername(githubUsername);
+    } catch(e) {}
+
+    return this.store.data.saveGithubInfo;
   }
 
 }

@@ -25,7 +25,7 @@ class AuthService extends BaseService {
     });
   }
 
-  async logout() {
+  logout() {
     return this.request({
       url : `${this.baseUrl}/logout`,
       onLoading : request => {},
@@ -34,12 +34,26 @@ class AuthService extends BaseService {
     });
   }
 
-  async getUserOrgs() {
+  getUserOrgs() {
     return this.request({
       url : `${this.baseUrl}/organizations`,
       onLoading : request => this.store.setOrgsLoading(request),
       onLoad : result => this.store.setOrgsLoaded(result.body),
       onError : error => this.store.setOrgsError(error)
+    });
+  }
+
+  setGithubUsername(username) {
+    return this.request({
+      url : `/api/user/githubInfo`,
+      json : true,
+      fetchOptions : {
+        method : 'POST',
+        body : {username}
+      },
+      onLoading : request => this.store.setGithubUsernameSaving(request),
+      onLoad : result => this.store.setGithubUsernameSaved(result.body),
+      onError : error => this.store.setGithubUsernameSaveError(error)
     });
   }
 

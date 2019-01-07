@@ -61,10 +61,8 @@
                     make commits, cut releases or use GitHub issues via the standard GitHub UI as well as EcoSML.
                   </div>
 
-                  <app-text-input  
-                    id="githubUsername" 
-                    on-change="_updateGithubUsername">
-                  </app-text-input>
+                  <app-text-input id="githubUsername"></app-text-input>
+                  <paper-button id="updateGithubBtn" on-click="_onUpdateGithubClicked">Update</paper-button>
                 </div>
 
                 <div class="break">

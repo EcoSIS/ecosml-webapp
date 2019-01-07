@@ -49,6 +49,12 @@ class Redis {
     return `${config.redis.prefixes.org}-${orgName}`;
   }
 
+  /**
+   * @method createUserGithubKey
+   * @description 
+   * 
+   * @param {String} username 
+   */
   createUserGithubKey(username) {
     return `${config.redis.prefixes.github}-${username}`
   }
@@ -85,7 +91,17 @@ class Redis {
     return JSON.parse(result).displayName;
   }
 
+  /**
+   * @method getGithubUsername
+   * @description given a user ecosis username, return the
+   * github username is set
+   * 
+   * @param {String} ecosisUsername 
+   * 
+   * @returns {Promise}
+   */
   async getGithubUsername(ecosisUsername) {
+    if( !ecosisUsername ) return null;
     let key = this.createUserGithubKey(ecosisUsername);
     let githubUsername = await this.client.get(key);
     if( !githubUsername ) return null;

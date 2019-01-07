@@ -5,6 +5,7 @@ const redis = require('../lib/redis');
 const request = require('request');
 const mongo = require('../lib/mongo');
 const github = require('../lib/github');
+const mongodb = require('../lib/mongo');
 
 class AuthModel {
 
@@ -234,7 +235,8 @@ class AuthModel {
 
     let orgs = (await this.getUserOrgs(ecosisUsername) || []);
     for( let org of orgs ) {
-      github.addTeamMember(org.name, ecosisUsername);
+      let team = await mongodb.getGithubTeam(org.name);
+      github.addTeamMember(team.id, ecosisUsername);
     }
   }
 
@@ -252,7 +254,8 @@ class AuthModel {
 
     let orgs = (await this.getUserOrgs(ecosisUsername) || []);
     for( let org of orgs ) {
-      github.removeTeamMember(org.name, ecosisUsername);
+      let team = await mongodb.getGithubTeam(org.name);
+      github.removeTeamMember(team.id, ecosisUsername);
     }
   }
 

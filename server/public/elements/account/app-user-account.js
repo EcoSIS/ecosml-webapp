@@ -61,6 +61,7 @@ export default class AppUserAccount extends Mixin(PolymerElement)
    * @param {Object} e event payload
    */
   _onAuthUpdate(e){
+    console.log(e);
     if( e.state === 'loggedIn' ) {
       this.loggedIn = true;
       this.view = 'account';
@@ -84,6 +85,23 @@ export default class AppUserAccount extends Mixin(PolymerElement)
   _onOrgsUpdate(e) {
     if( e.state !== 'loaded' ) return;
     this.organizations = e.payload;
+  }
+
+  /**
+   * @method _onUpdateGithubClicked
+   * @description bound to click event on update github button
+   */
+  async _onUpdateGithubClicked() {
+    let username = this.$.githubUsername.value;
+    if( !username ) {
+      if( !confirm('Are you sure you want to unlink your github account?') ) return; 
+    } else {
+      if( !confirm(`Are you sure your github username is: ${username}`) ) return;
+    }
+
+    this.$.updateGithubBtn.setAttribute('disabled', 'disabled');
+    await this.AuthModel.setGithubUsername(username);
+    this.$.updateGithubBtn.removeAttribute('disabled');
   }
 
 }

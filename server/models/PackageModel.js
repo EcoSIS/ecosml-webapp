@@ -53,6 +53,14 @@ class PackageModel {
     if( pkg.source === 'registered' ) {
       await registeredRepositories.syncProperties(pkg);
       
+      // ensure this repo exists and we can access
+      let {name, org} = this.getNameAndOrg(pkg.name);
+      let exists = await this.doesRepoExist(name, org);
+      if( !exists ) throw new Error('Repository does not exist: '+pkg.name);
+
+      let ePkg = await mongo.getPackage(pkg.name);
+      if( ePkg ) throw new Error('Repository already registered: '+pkg.name);
+
       // check things look ok
       schema.validate('create', pkg);
 
@@ -62,11 +70,6 @@ class PackageModel {
 
     } else if( pkg.source === 'managed' ) {
       schema.validate('create', pkg);
-
-      // ensure this repo exists and we can access
-      let {name, org} = this.getNameAndOrg(pkg.name);
-      let exists = await this.doesRepoExist(name, org);
-      if( !exists ) throw new Error('Repository does not exist: '+pkg.name);
 
       let ePkg = await mongo.getPackage(pkg.name);
       if( ePkg ) throw new Error('Repository already registered: '+pkg.name);

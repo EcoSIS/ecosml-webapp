@@ -3,7 +3,7 @@ version: '2'
 services:
 
   server:
-    image: ecosis/ecosml-webapp:registered-repositories
+    image: ecosis/ecosml-webapp:dev
     volumes:
       - ../../server/controllers:/server/controllers
       - ../../server/dist:/server/dist

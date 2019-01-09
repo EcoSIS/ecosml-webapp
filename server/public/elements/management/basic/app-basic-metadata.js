@@ -140,15 +140,21 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
       this.$.name.value = '';
     }
 
-    for( let key of VALUES ) {
-      let value = key;
-      if(value === 'reponame') value = 'name';
-      this[key] = e.payload[value];
-    }
+    this.setValues(e.payload);
 
     this.isManagedSource = (e.payload.source === 'registered') ? false : true;
     this.creating = e.state === 'create' ? true : false;
     this.hasRelease = (e.payload.releaseCount && e.payload.releaseCount > 0) ? true : false;
+  }
+
+  setValues(data) {
+    for( let key of VALUES ) {
+      let value = key;
+      if(value === 'reponame') value = 'name';
+      // HACK: overview getter/setter not working
+      if( value === 'overview' ) this.$[key].value = data[value] || '';
+      else this[key] = data[value];
+    }
   }
 
   /**
@@ -163,7 +169,9 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
     VALUES.forEach(value => {
       let key = value;
       if(key === 'reponame') key = 'name';
-      data[key] = this[value];
+      // HACK: overview getter/setter not working
+      if( value === 'overview' ) data[key] = this.$[value].value;
+      else data[key] = this[value];
     });
     return data;
   }
@@ -304,7 +312,7 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
       if( (data.name || '').length < 4 ) {
         return alert('Name must be at least 4 characters');
       }
-      if( (data.overview || '').length < 15 ) {
+      if( (data.overview || '').length < 10 ) {
         return alert('Please provide a longer overview');
       }
     } else if( data.source === 'registered' ) {

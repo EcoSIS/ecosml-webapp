@@ -241,6 +241,8 @@ class AuthModel {
   }
 
   async unlinkGithubUsername(ecosisUsername) {
+    let key = redis.createUserGithubKey(ecosisUsername);
+
     let githubUsername = await redis.client.get(key);
     if( !githubUsername ) return;
     githubUsername = JSON.parse(githubUsername).username;
@@ -249,7 +251,6 @@ class AuthModel {
     await ckan.setGithubInfo('', ecosisUsername);
 
     // update to redis
-    let key = redis.createUserGithubKey(ecosisUsername);
     await redis.client.del(key);
 
     let orgs = (await this.getUserOrgs(ecosisUsername) || []);

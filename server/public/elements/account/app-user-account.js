@@ -54,6 +54,13 @@ export default class AppUserAccount extends Mixin(PolymerElement)
     this._onAuthUpdate(this._getAuthState());
   }
 
+  ready() {
+    super.ready();
+    if( APP_CONFIG.githubUsername ) {
+      this.$.githubUsername.value = APP_CONFIG.githubUsername;
+    }
+  }
+
   /**
    * @method _onAuthUpdate
    * @description from AuthInterface, called when auth updates

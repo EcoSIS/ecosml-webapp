@@ -1,0 +1,45 @@
+<style include="shared-styles">
+  :host {
+    display: block;
+  }
+
+  paper-button {
+    color: var(--default-primary-color);
+  }
+
+  img {
+    border-radius: 32px;
+    width: 32px;
+    height: 32px;
+    vertical-align: middle;
+  }
+
+  #revokeGithubBtn {
+    cursor: pointer;
+    font-size: 11px;
+  }
+
+  h3 {
+    margin: 0 0 5px 0;
+    border-bottom: 1px solid #eee;
+  }
+
+  .card {
+    padding: 15px;
+    margin: 15px;
+    border: 1px solid #eee;
+    border-radius: 6px;
+  }
+
+</style>
+
+<div hidden$="[[!linked]]" class="card">
+  <h3>GitHub Account</h3>
+  <div style="font-size: 18px"><img src$="[[githubAvatar]]" /> <a href$="https://github.com/[[githubUsername]]" target="_blank">[[githubUsername]]</a></div>
+  <div style="text-align: right"><a id="revokeGithubBtn" on-click="_onRevokeClicked">Revoke</a></div>
+</div>
+<div hidden$="[[linked]]">
+  <paper-button id="authorizeGithubBtn" on-click="_onAuthorizeClicked">
+    <iron-icon icon="verified-user"></iron-icon> Authorize
+  </paper-button>
+</div>

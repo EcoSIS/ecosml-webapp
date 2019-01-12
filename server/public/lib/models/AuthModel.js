@@ -53,12 +53,22 @@ class AuthModel extends BaseModel {
    * 
    * @return {Promise}
    */
-  async setGithubUsername(githubUsername) {
-    try {
-      await this.service.setGithubUsername(githubUsername);
-    } catch(e) {}
+  // async setGithubUsername(githubUsername) {
+  //   try {
+  //     await this.service.setGithubUsername(githubUsername);
+  //   } catch(e) {}
 
-    return this.store.data.saveGithubInfo;
+  //   return this.store.data.saveGithubInfo;
+  // }
+
+  authorizeGithub() {
+    if( typeof window === undefined ) return;
+    window.location = '/auth/github-authorize';
+  }
+
+  revokeGithub() {
+    if( typeof window === undefined ) return;
+    window.location = '/auth/github-revoke';
   }
 
 }

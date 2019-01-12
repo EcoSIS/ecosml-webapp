@@ -101,11 +101,26 @@ class Redis {
    * @returns {Promise}
    */
   async getGithubUsername(ecosisUsername) {
+    let info = await this.getGithubInfo();
+    if( !info ) return null;
+    return info.username;
+  }
+
+  /**
+   * @method getGithubInfo
+   * @description given a user ecosis username, return the
+   * github info
+   * 
+   * @param {String} ecosisUsername 
+   * 
+   * @returns {Promise}
+   */
+  async getGithubInfo(ecosisUsername) {
     if( !ecosisUsername ) return null;
     let key = this.createUserGithubKey(ecosisUsername);
     let githubUsername = await this.client.get(key);
     if( !githubUsername ) return null;
-    return JSON.parse(githubUsername).username;
+    return JSON.parse(githubUsername);
   }
 
 }

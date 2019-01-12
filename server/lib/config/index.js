@@ -84,6 +84,8 @@ module.exports = {
   // },
 
   github : {
+    clientId : env.GITHUB_CLIENT_ID || '',
+    clientSecret : env.GITHUB_CLIENT_SECRET || '',
     access : secrets.github,
     org : env.GITHUB_ORG || 'ecosml-dev',
     fsRoot : env.GITHUB_FS_ROOT || path.resolve(__dirname, '..', '..', 'gitdata'),

@@ -3,9 +3,11 @@ const config = require('../lib/config');
 const jwt = require('jsonwebtoken');
 const {URL} = require('url'); 
 const model = require('../models/AuthModel');
+const github = require('../lib/github');
 const Logger = require('../lib/logger');
+const {authenticated, sendError} = require('./middleware/auth');
 
-router.get('/user', async (req, res) => {
+router.get('/user', authenticated, async (req, res) => {
   let user = {
     username: req.session.username,
     orgs : await model.getUserOrgs(req.session.username)
@@ -65,6 +67,50 @@ router.get('/organizations', async (req, res) => {
   let username = req.session.username;
   let orgs = await model.getUserOrgs(username);
   res.json(orgs);
+});
+
+router.get('/github-authorize', authenticated, async (req, res) => {
+  let {url, state} = github.getOauthAuthorizeUrl();
+  
+  // save state token for later check
+  req.session.oauthStateToken = state;
+  res.redirect(url);
+});
+
+router.get('/github-oauth-callback', authenticated, async (req, res) => {
+  let code = req.query.code;
+  let state = req.query.state;
+
+  if( req.session.oauthStateToken !== state ) {
+    return sendError(res, 400, 'invalid oauth state token');
+  }
+
+  try {
+    let response = await github.getOauthAccessToken(code, state);
+    let accessToken = response.access_token;
+
+    response = await github.getAuthenticatedUser(accessToken);
+    response = JSON.parse(response.body);
+
+    await model.linkGithubUsername(
+      req.session.username,
+      response,
+      accessToken
+    );
+
+    res.redirect('/account');
+  } catch(e) {
+    sendError(res, 400, e.message);
+  }
+});
+
+router.get('/github-revoke', authenticated, async (req, res) => {
+  try {
+    await model.unlinkGithubUsername(req.session.username);
+    res.redirect('/account');
+  } catch(e) {
+    sendError(res, 400, e.message);
+  }
 });
 
 module.exports = router;

@@ -224,14 +224,19 @@ class AuthModel {
    * 
    * @param {String} ecosisUsername 
    * @param {String} githubUsername 
+   * @param {String} githubAccessToken
    */
-  async linkGithubUsername(ecosisUsername, githubUsername) {
+  async linkGithubUsername(ecosisUsername, githubUser, githubAccessToken) {
     // save to ckan so we can restore
-    await ckan.setGithubInfo(githubUsername, ecosisUsername);
+    await ckan.setGithubInfo(ecosisUsername, githubUser.login, githubAccessToken);
 
     // save to redis
     let key = redis.createUserGithubKey(ecosisUsername);
-    await redis.client.set(key, JSON.stringify({username: githubUsername}));
+    await redis.client.set(key, JSON.stringify({
+      username: githubUser.login,
+      avatarUrl : githubUser.avatar_url,
+      accessToken : githubAccessToken
+    }));
 
     let orgs = (await this.getUserOrgs(ecosisUsername) || []);
     for( let org of orgs ) {
@@ -243,12 +248,18 @@ class AuthModel {
   async unlinkGithubUsername(ecosisUsername) {
     let key = redis.createUserGithubKey(ecosisUsername);
 
-    let githubUsername = await redis.client.get(key);
-    if( !githubUsername ) return;
-    githubUsername = JSON.parse(githubUsername).username;
+    let githubInfo = await redis.client.get(key);
+    if( !githubInfo ) return;
+    githubInfo = JSON.parse(githubInfo);
+
+    // revoke token form github
+    let {response} = await github.revokeOauthAccessToken(githubInfo.accessToken);
+    if( response.statusCode !== 204 ) {
+      throw new Error(`Unable to revoke access token: ${response.statusCode} ${response.body}`);
+    }
 
     // save to ckan so we can restore
-    await ckan.setGithubInfo('', ecosisUsername);
+    await ckan.setGithubInfo(ecosisUsername, '', '');
 
     // update to redis
     await redis.client.del(key);

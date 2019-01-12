@@ -30,9 +30,14 @@ module.exports = function(app) {
     isRoot : true,
     appRoutes : config.server.appRoutes,
     getConfig : async (req, res, next) => {
+      let githubInfo = (await redis.getGithubInfo(req.session.username)) || {};
+
       next({
         user : req.session.username || null,
-        githubUsername : await redis.getGithubUsername(req.session.username),
+        github : {
+          username : githubInfo.username,
+          avatarUrl : githubInfo.avatarUrl
+        },
         appRoutes : config.server.appRoutes,
         ecosisDataHost : config.ecosis.host,
         env : {

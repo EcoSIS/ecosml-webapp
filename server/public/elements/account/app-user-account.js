@@ -7,7 +7,7 @@ import SearchInterface from "../interfaces/SearchInterface"
 import "@polymer/iron-pages/iron-pages"
 
 import "./app-login"
-import { stringify } from "querystring";
+import "./app-github-authorize"
 
 export default class AppUserAccount extends Mixin(PolymerElement)
   .with(EventInterface, AuthInterface, SearchInterface) {
@@ -39,11 +39,6 @@ export default class AppUserAccount extends Mixin(PolymerElement)
       ecosisHost : {
         type : String,
         value : APP_CONFIG.ecosisDataHost
-      },
-
-      githubUsername : {
-        type : String,
-        value : ''
       }
     }
   }
@@ -52,13 +47,6 @@ export default class AppUserAccount extends Mixin(PolymerElement)
     super();
     this.active = true;
     this._onAuthUpdate(this._getAuthState());
-  }
-
-  ready() {
-    super.ready();
-    if( APP_CONFIG.githubUsername ) {
-      this.$.githubUsername.value = APP_CONFIG.githubUsername;
-    }
   }
 
   /**
@@ -92,23 +80,6 @@ export default class AppUserAccount extends Mixin(PolymerElement)
   _onOrgsUpdate(e) {
     if( e.state !== 'loaded' ) return;
     this.organizations = e.payload;
-  }
-
-  /**
-   * @method _onUpdateGithubClicked
-   * @description bound to click event on update github button
-   */
-  async _onUpdateGithubClicked() {
-    let username = this.$.githubUsername.value;
-    if( !username ) {
-      if( !confirm('Are you sure you want to unlink your github account?') ) return; 
-    } else {
-      if( !confirm(`Are you sure your github username is: ${username}`) ) return;
-    }
-
-    this.$.updateGithubBtn.setAttribute('disabled', 'disabled');
-    await this.AuthModel.setGithubUsername(username);
-    this.$.updateGithubBtn.removeAttribute('disabled');
   }
 
 }

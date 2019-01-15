@@ -29,7 +29,7 @@ class AuthModel extends BaseModel {
   async logout() {
     await this.service.logout();
     if( typeof window !== undefined ) {
-      window.reload();
+      window.location.reload();
     }
   }
 

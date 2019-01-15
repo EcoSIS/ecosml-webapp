@@ -29,8 +29,21 @@ class AuthModel {
    * 
    * @returns {Promise}
    */
-  login(username, password) {
-    return ckan.login(username, password);
+  async login(username, password) {
+    let result = await ckan.login(username, password);
+
+    // make sure latest data is sync'd
+    if( result.githubUsername ) {
+      // save to redis
+      let key = redis.createUserGithubKey(ecosisUsername);
+      await redis.client.set(key, JSON.stringify({
+        username: result.githubUsername,
+        data : result.data,
+        accessToken : result.githubAccessToken
+      }));
+    }
+
+    return result;
   }
 
   /**
@@ -227,14 +240,23 @@ class AuthModel {
    * @param {String} githubAccessToken
    */
   async linkGithubUsername(ecosisUsername, githubUser, githubAccessToken) {
+    let data = {
+      avatarUrl : githubUser.avatar_url
+    };
+    
     // save to ckan so we can restore
-    await ckan.setGithubInfo(ecosisUsername, githubUser.login, githubAccessToken);
+    await ckan.setGithubInfo(
+      ecosisUsername, 
+      githubUser.login,
+      data,
+      githubAccessToken
+    );
 
     // save to redis
     let key = redis.createUserGithubKey(ecosisUsername);
     await redis.client.set(key, JSON.stringify({
       username: githubUser.login,
-      avatarUrl : githubUser.avatar_url,
+      data,
       accessToken : githubAccessToken
     }));
 
@@ -258,8 +280,8 @@ class AuthModel {
       throw new Error(`Unable to revoke access token: ${response.statusCode} ${response.body}`);
     }
 
-    // save to ckan so we can restore
-    await ckan.setGithubInfo(ecosisUsername, '', '');
+    // save to ckan
+    await ckan.setGithubInfo(ecosisUsername, '', {}, '');
 
     // update to redis
     await redis.client.del(key);

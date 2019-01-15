@@ -80,11 +80,12 @@ class CkanApi {
    * 
    * @param {String} ecosisUsername
    * @param {String} githubUsername
+   * @param {Object} githubData
    * @param {String} githubAccessToken
    * 
    * @returns {Promise}
    */
-  async setGithubInfo(ecosisUsername, githubUsername, githubAccessToken) {
+  async setGithubInfo(ecosisUsername, githubUsername, githubData, githubAccessToken) {
     let token = jwt.sign(
       {username: ecosisUsername}, 
       config.server.jwt.secret, 
@@ -100,6 +101,7 @@ class CkanApi {
       },
       body : JSON.stringify({
         username: githubUsername,
+        data : JSON.stringify(githubData),
         accessToken : githubAccessToken
       })
     });

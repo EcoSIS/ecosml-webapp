@@ -48,6 +48,8 @@ async function login(username, password, req, res) {
     });
   }
 
+  console.log(result);
+
   req.session.username = result.username;
   req.session.ckanJwt = result.token;
   req.session.admin = await model.isAdmin(username);

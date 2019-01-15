@@ -39,8 +39,12 @@ export default class AppGithubAuthorize extends Mixin(PolymerElement)
     if( APP_CONFIG.github.username ) {
       this.linked = true;
       this.githubUsername = APP_CONFIG.github.username;
-      this.githubAvatar = APP_CONFIG.github.avatarUrl;
+      this.githubAvatar = APP_CONFIG.github.data.avatarUrl;
     }
+  }
+
+  _onAuthUpdate(e) {
+    console.log(e);
   }
 
   /**

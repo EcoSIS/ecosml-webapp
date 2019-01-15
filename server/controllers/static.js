@@ -36,7 +36,7 @@ module.exports = function(app) {
         user : req.session.username || null,
         github : {
           username : githubInfo.username,
-          avatarUrl : githubInfo.avatarUrl
+          data : githubInfo.data
         },
         appRoutes : config.server.appRoutes,
         ecosisDataHost : config.ecosis.host,

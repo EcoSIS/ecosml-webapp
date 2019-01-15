@@ -48,21 +48,14 @@ async function login(username, password, req, res) {
     });
   }
 
-  console.log(result);
-
   req.session.username = result.username;
   req.session.ckanJwt = result.token;
   req.session.admin = await model.isAdmin(username);
 
-  let orgs = await model.getUserOrgs(result.username);
+  // let orgs = await model.getUserOrgs(result.username);
 
   Logger.info(`Successful login: ${username}`);
-  res.json({
-    success: true,
-    username : result.username,
-    ckanJwt : result.token,
-    organizations : orgs
-  });
+  res.json({success: true});
 }
 
 router.get('/organizations', async (req, res) => {

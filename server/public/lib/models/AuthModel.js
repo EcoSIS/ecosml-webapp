@@ -22,8 +22,13 @@ class AuthModel extends BaseModel {
     return this.store.data.auth;
   }
 
-  login(username, password) {
-    return this.service.login(username, password);  
+  async login(username, password) {
+    await this.service.login(username, password);
+    if( this.store.data.auth.state === 'loggedIn' ) {
+      if( typeof window !== undefined ) {
+        window.location.reload();
+      }
+    }
   }
 
   async logout() {
@@ -45,27 +50,20 @@ class AuthModel extends BaseModel {
     return this.store.data.organizations;
   }
 
+
   /**
-   * @method setGithubUsername
-   * @description set github username for user
-   * 
-   * @param {String} githubUsername 
-   * 
-   * @return {Promise}
+   * @method authorizeGithub
+   * @description walk user through GitHub Oauth flow to link EcoSML and GitHub accounts
    */
-  // async setGithubUsername(githubUsername) {
-  //   try {
-  //     await this.service.setGithubUsername(githubUsername);
-  //   } catch(e) {}
-
-  //   return this.store.data.saveGithubInfo;
-  // }
-
   authorizeGithub() {
     if( typeof window === undefined ) return;
     window.location = '/auth/github-authorize';
   }
 
+  /**
+   * @method revokeGithub
+   * @description unlink EcoSML and GitHub accounts
+   */
   revokeGithub() {
     if( typeof window === undefined ) return;
     window.location = '/auth/github-revoke';

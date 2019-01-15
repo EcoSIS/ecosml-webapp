@@ -46,17 +46,16 @@ export default class AppUserAccount extends Mixin(PolymerElement)
   constructor() {
     super();
     this.active = true;
-    this._onAuthUpdate(this._getAuthState());
+    this._setAuth(this._getAuthState());
   }
 
   /**
-   * @method _onAuthUpdate
-   * @description from AuthInterface, called when auth updates
+   * @method _setAuth
+   * @description called from constructor
    * 
-   * @param {Object} e event payload
+   * @param {Object} e auth state
    */
-  _onAuthUpdate(e){
-    console.log(e);
+  _setAuth(e){
     if( e.state === 'loggedIn' ) {
       this.loggedIn = true;
       this.view = 'account';

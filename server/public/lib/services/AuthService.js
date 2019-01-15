@@ -43,20 +43,6 @@ class AuthService extends BaseService {
     });
   }
 
-  setGithubUsername(username) {
-    return this.request({
-      url : `/api/user/githubInfo`,
-      json : true,
-      fetchOptions : {
-        method : 'POST',
-        body : {username}
-      },
-      onLoading : request => this.store.setGithubUsernameSaving(request),
-      onLoad : result => this.store.setGithubUsernameSaved(result.body),
-      onError : error => this.store.setGithubUsernameSaveError(error)
-    });
-  }
-
 }
 
 module.exports = new AuthService();

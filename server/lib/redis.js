@@ -101,7 +101,7 @@ class Redis {
    * @returns {Promise}
    */
   async getGithubUsername(ecosisUsername) {
-    let info = await this.getGithubInfo();
+    let info = await this.getGithubInfo(ecosisUsername);
     if( !info ) return null;
     return info.username;
   }

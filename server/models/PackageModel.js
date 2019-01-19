@@ -12,7 +12,7 @@ const markdown = require('../lib/markdown');
 const schema = require('../lib/schema');
 const initPackage = require('../lib/init-package-files');
 const hash = require('../lib/hash');
-const travis = require('./PackageTestModel');
+// const travis = require('./PackageTestModel');
 const registeredRepositories = require('../lib/registered-repositories');
 
 const METADATA_FILENAME = 'ecosml-metadata.json';
@@ -103,7 +103,7 @@ class PackageModel {
       await this.commit(pkg.name, 'Updating package metadata', username);
 
       // let travis know about the repo (sync with it)
-      await travis.initRepo(pkg.name);
+      // await travis.initRepo(pkg.name);
 
       // add github team access
       if( pkg.organization ) {

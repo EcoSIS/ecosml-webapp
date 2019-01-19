@@ -2,6 +2,8 @@
  * Sync a GitHub org to mongodb
  */
 const github = require('../github');
+const git = require('../git');
+const fs = require('fs-extra');
 const regRepos = require('../registered-repositories');
 const mongodb = require('../mongo');
 const config = require('../config');
@@ -9,6 +11,9 @@ const utils = require('../utils');
 const logger = require('../logger');
 const firebase = require('../firebase');
 const redis = require('../redis');
+const schema = require('../schema');
+const packageModel = require('../../models/PackageModel');
+const queue = require('../../models/PackageQueueModel');
 
 class GithubSync {
 
@@ -46,6 +51,8 @@ class GithubSync {
     // this is triggered after a certain amount of time of method call above
     // e is an array of buffered events
     firebase.on(firebase.EVENTS.GITHUB_COMMIT, e => this._onGithubCommitEvents(e));
+  
+    // TODO: what about release events?
   }
 
   /**
@@ -76,11 +83,11 @@ class GithubSync {
         continue;
       }
 
-      let pkg = mongodb.getPackage(repoName);
+      let pkg = await mongodb.getPackage(repoName);
       if( pkg ) {
+        await this._verifyPackageMetadata(pkg);
         // TODO: ensure metadata file is in good order
         // TODO: sync package from github once metadata is ok and there was a change
-        // TODO: run tests in travis
       } else {
         logger.warn(`Received commit event for repo ${repoName} that is not in mongo. ignoring`);
       }
@@ -88,6 +95,27 @@ class GithubSync {
       await firebase.ackGithubCommitEvent(events[i].fsId);
       handled[repoName] = true;
     }
+  }
+
+  async _verifyPackageMetadata(pkg) {
+    // first get in sync
+    await git.resetHEAD(pkg.name);
+    await git.clean(pkg.name);
+    await git.pull(pkg.name);
+
+    let {overview, description} = await regRepos.getGitHubProperties(pkg.name);
+    pkg.overview = overview;
+    await packageModel.writeMetadataFile(pkg);
+
+    await mongodb.updatePackage(pkg.id, {
+      description, overview
+    });
+
+    await queue.add(
+      'commit', 
+      pkg.name, 
+      [pkg.name, 'Resetting package metadata, please use EcoSML website to update metadata file']
+    );
   }
 
   async _onTeamChangeEvents(events) {
@@ -342,36 +370,8 @@ class GithubSync {
       }
     }
 
-    // make sure all teams members (if provided github id) are in sync
-    if( team !== null ) {
-      let members = await github.listTeamMembers(team.id);
-      let githubMembers = members.map(member => member.login);
-      
-      // we only care about ckanMembers we have mapped github usernames for
-      let ckanMembers = [];
-      for( let member of org.members ) {
-        let githubUsername = await redis.getGithubUsername(member.user);
-        if( !githubUsername ) continue;
-        ckanMembers.push(githubUsername);
-      }
-
-      // add members if they exist in ckan but not in github
-      for( let member of ckanMembers ) {
-        if( githubMembers.indexOf(member) === -1 ) {
-          await github.addTeamMember(team.id, member);
-        }
-      }
-
-      // remove members if they exist in github but not in ckan
-      for( let member of githubMembers ) {
-        if( ckanMembers.indexOf(member) === -1 ) {
-          await github.removeTeamMember(team.id, member);
-        }
-      }
-
-    }
+    // TODO: make sure all teams members (if provided github id) are in sync
   }
-
 }
 
 module.exports = new GithubSync();

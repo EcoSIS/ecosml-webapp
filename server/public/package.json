@@ -1,6 +1,6 @@
 {
   "name": "ecosml-webapp",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "flat": true,
   "main": "index.js",
   "license": "MIT",

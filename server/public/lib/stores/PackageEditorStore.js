@@ -30,7 +30,10 @@ class PackageEditorStore extends BaseStore {
     this._setData({
       state : 'create',
       reset : true,
-      payload : {}
+      payload : {
+        source: 'managed',
+        packageType : 'standalone'
+      }
     });
   }
 

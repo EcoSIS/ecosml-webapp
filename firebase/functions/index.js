@@ -6,6 +6,7 @@ const ecosis = require('./lib/ecosis');
 const config = require('./lib/config');
 
 admin.initializeApp();
+admin.firestore().settings({timestampsInSnapshots: true});
 
 // register endpoints for each enviornment
 config.envs.forEach(env => {

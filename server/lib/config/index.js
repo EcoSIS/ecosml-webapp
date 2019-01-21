@@ -119,6 +119,7 @@ module.exports = {
     collections : {
       githubCommits : 'github-commit-events-'+firebaseEnv,
       githubTeams : 'github-team-events-'+firebaseEnv,
+      githubReleases : 'github-release-events-'+firebaseEnv,
       travis : 'travis-events-'+firebaseEnv,
       ecosisUsers : 'ecosis-users-'+firebaseEnv,
       ecosisOrgs : 'ecosis-org-events-'+firebaseEnv

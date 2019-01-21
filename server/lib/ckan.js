@@ -109,6 +109,32 @@ class CkanApi {
     return JSON.parse(body);
   }
 
+  /**
+   * @method getAllGithubInfo
+   * @description admin call to grab all EcoSIS stored user github data and 
+   * stash locally in redis
+   * 
+   * @returns {Promise} resolves to Array
+   */
+  async getAllGithubInfo() {
+    let token = jwt.sign(
+      {username: 'ecosml-admin'}, 
+      config.server.jwt.secret, 
+      { expiresIn: 60 * 60 }
+    );
+
+    let {body} = await this._request({
+      method : 'GET',
+      uri : HOST+'/ecosis/admin/github/sync',
+      headers : {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    return JSON.parse(body);
+  }
+
   _request(options) {
     return new Promise((resolve, reject) => {
       request(options, (error, response, body) => {

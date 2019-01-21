@@ -53,6 +53,16 @@ class GithubSync {
     firebase.on(firebase.EVENTS.GITHUB_COMMIT, e => this._onGithubCommitEvents(e));
   
     // TODO: what about release events?
+    firebase.initGithubReleaseObserver(e => {
+      e.docChanges.forEach((change) => {
+        let data = firebase.getDataFromChangeDoc(change);
+        firebase.emitBuffered(data.payload, firebase.EVENTS.GITHUB_RELEASE, data);
+      });
+    });
+
+    // this is triggered after a certain amount of time of method call above
+    // e is an array of buffered events
+    firebase.on(firebase.EVENTS.GITHUB_RELEASE, e => this._onGithubReleaseEvents(e));
   }
 
   /**
@@ -143,11 +153,50 @@ class GithubSync {
         await this.syncTeamToMongo(teamId);
         await firebase.ackGithubTeamEvent(e.fsId);
       } catch(error) {
-        logger.error('Failed to handle firestore ecosis sync event', e, error);
+        logger.error('Failed to handle firestore github team sync event', e, error);
       }
 
       handled[teamId] = true;
     }    
+  }
+
+  async _onGithubReleaseEvents(events) {
+    // we just want the last changes
+    let handled = {};
+
+    // these are ordered by timestamp, so we only handle the first
+    for( var i = 0; i < events.length; i++ ) {
+      let e = events[i];
+      if( e.fsChangeType === 'removed' ) continue; // noop
+
+      if( e.payload.author === 'ecosml-admin' ) {
+        await firebase.ackGithubReleaseEvent(e.fsId);
+        continue;
+      }
+
+      let repoName = e.payload.id;
+
+      // we already processed a newer event for this team
+      if( handled[repoName] ) {
+        try {
+          await firebase.ackGithubReleaseEvent(e.fsId);
+        } catch(error) {
+          logger.error('Failed to handle firestore github release sync event', e, error);
+        }
+        continue;  
+      }
+
+      try {
+        let releaseInfo = await this._syncReleases(repoName);
+        await mongodb.updatePackage(repoName, releaseInfo);
+        await firebase.ackGithubReleaseEvent(e.fsId);
+      } catch(error) {
+        logger.error('Failed to handle firestore github release sync event', e, error);
+      }
+
+      handled[repoName] = true;
+    } 
+    
   }
 
   /**
@@ -209,15 +258,9 @@ class GithubSync {
       var {body} = await github.getRawFile(repoName, 'README.md');
       metadata.description = body;
 
-      var {body} = await github.listReleases(repoName);
-      let releases = JSON.parse(body).map(release => utils.githubReleaseToEcosml(release));
-      releases.sort((a, b) => {
-        if( a.publishedAt.getTime() < b.publishedAt.getTime() ) return -1;
-        if( a.publishedAt.getTime() > b.publishedAt.getTime() ) return 1;
-        return 0;
-      });
+      let {releases, releaseCount} = await this._syncReleases(repoName);
       metadata.releases = releases;
-      metadata.releaseCount = (releases || []).length;
+      metadata.releaseCount = releaseCount;
 
     } catch(e) {
       logger.error('Failed to download metadata file for repo '+repoName+', ignoring');
@@ -226,6 +269,21 @@ class GithubSync {
     }
 
     await mongodb.insertPackage(metadata);
+  }
+
+  async _syncReleases(repoName) {
+    var {body} = await github.listReleases(repoName);
+    let releases = JSON.parse(body).map(release => utils.githubReleaseToEcosml(release));
+    releases.sort((a, b) => {
+      if( a.publishedAt.getTime() < b.publishedAt.getTime() ) return -1;
+      if( a.publishedAt.getTime() > b.publishedAt.getTime() ) return 1;
+      return 0;
+    });
+
+    return {
+      releases : releases,
+      releaseCount : (releases || []).length
+    }
   }
 
   /**
@@ -370,7 +428,17 @@ class GithubSync {
       }
     }
 
-    // TODO: make sure all teams members (if provided github id) are in sync
+    // make sure all teams members (if provided github id) are in sync
+    for( let info of org.members ) {
+      let githubUsername = await redis.getGithubUsername(info.user);
+      if( !githubUsername ) continue;
+      try {
+        await github.addTeamMember(team.id, githubUsername);
+      } catch(e) {
+        console.error('Failed to sync github user to team: ', e, team, info, githubUsername);
+    }
+ 
+    
   }
 }
 

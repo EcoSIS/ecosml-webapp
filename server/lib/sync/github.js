@@ -250,13 +250,13 @@ class GithubSync {
 
     try {
       var {body} = await github.getRepository(repoName);
-      metadata = utils.githubRepoToEcosml(JSON.parse(body));
+      if( body ) metadata = utils.githubRepoToEcosml(JSON.parse(body));
 
       var {body} = await github.getRawFile(repoName, 'ecosml-metadata.json');
-      metadata = Object.assign(metadata, JSON.parse(body));
-      
+      if( body ) metadata = Object.assign(metadata, JSON.parse(body));
+     
       var {body} = await github.getRawFile(repoName, 'README.md');
-      metadata.description = body;
+      if( body ) metadata.description = body;
 
       let {releases, releaseCount} = await this._syncReleases(repoName);
       metadata.releases = releases;
@@ -436,6 +436,15 @@ class GithubSync {
         await github.addTeamMember(team.id, githubUsername);
       } catch(e) {
         console.error('Failed to sync github user to team: ', e, team, info, githubUsername);
+      }
+    }
+
+    // see if anybody needs to be removed
+    let orgMembers = org.members.map(m => m.user);
+    for( let member of team.members ) {
+      if( orgMembers.indexOf(member.login) === -1 ) {
+        await github.removeTeamMember(team.id, member.login);
+      }
     }
  
     

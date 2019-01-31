@@ -277,12 +277,13 @@ class PackageModel {
 
     // update repo path
     await git.resetHEAD(pkg.name);
+    let repoPath = git.getRepoPath(pkg.name);
 
     let result = [];
     for( let i = 0; i < updateFiles.length; i++ ) {
       let file = updateFiles[i];
 
-      let filePath = path.join(config.github.fsRoot, pkg.name, file.repoFilePath);
+      let filePath = path.join(repoPath, file.repoFilePath);
       let baseFileDir = path.parse(filePath).dir;
       // if this is the main or resources directory, move files to correct location
      
@@ -450,7 +451,7 @@ class PackageModel {
   async commit(packageName, message, username) {
     let changes = await git.currentChangesCount(packageName);
     if( changes === 0 ) {
-      logger.debug(`Package ${packageName} committing: told to commit, but no changes have been made`);
+      logger.warn(`Package ${packageName} committing: told to commit, but no changes have been made`);
       return;
     }
     

@@ -44,7 +44,7 @@ export default class AppGithubAuthorize extends Mixin(PolymerElement)
   }
 
   _onAuthUpdate(e) {
-    console.log(e);
+    // console.log(e);
   }
 
   /**

@@ -161,8 +161,8 @@ class PackageModel {
 
       // make sure the org didn't change
       if( update.organization && pkg.organization !== update.organization ) {
-        let newTeam = mongo.getGithubTeam(update.organization);
-        let oldTeam = mongo.getGithubTeam(pkg.organization);
+        let newTeam = await mongo.getGithubTeam(update.organization);
+        let oldTeam = await mongo.getGithubTeam(pkg.organization);
 
         if( oldTeam ) {
           await github.removeTeamRepo(oldTeam.id, pkg.name);

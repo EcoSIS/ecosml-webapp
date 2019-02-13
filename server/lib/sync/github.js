@@ -428,8 +428,18 @@ class GithubSync {
       }
     }
 
+    // filter out org.members that are of type member.  They
+    // have no equivalent role in GitHub so we can't include them.
+    // mapping is as follows:
+    //
+    // GitHub    | CKAN
+    // no access | memnber
+    // member    | editor
+    // member    | owner
+    let ckanMembers = org.members.filter(member => member.role === 'editor' || member.role === 'admin');
+
     // make sure all teams members (if provided github id) are in sync
-    for( let info of org.members ) {
+    for( let info of ckanMembers ) {
       let githubUsername = await redis.getGithubUsername(info.user);
       if( !githubUsername ) continue;
       try {

@@ -25,7 +25,7 @@ class AuthService extends BaseService {
     });
   }
 
-  async logout() {
+  logout() {
     return this.request({
       url : `${this.baseUrl}/logout`,
       onLoading : request => {},
@@ -34,7 +34,7 @@ class AuthService extends BaseService {
     });
   }
 
-  async getUserOrgs() {
+  getUserOrgs() {
     return this.request({
       url : `${this.baseUrl}/organizations`,
       onLoading : request => this.store.setOrgsLoading(request),

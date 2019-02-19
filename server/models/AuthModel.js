@@ -4,6 +4,8 @@ const Logger = require('../lib/logger');
 const redis = require('../lib/redis');
 const request = require('request');
 const mongo = require('../lib/mongo');
+const github = require('../lib/github');
+const mongodb = require('../lib/mongo');
 
 class AuthModel {
 
@@ -27,8 +29,21 @@ class AuthModel {
    * 
    * @returns {Promise}
    */
-  login(username, password) {
-    return ckan.login(username, password);
+  async login(username, password) {
+    let result = await ckan.login(username, password);
+
+    // make sure latest data is sync'd
+    if( result.githubUsername ) {
+      // save to redis
+      let key = redis.createUserGithubKey(ecosisUsername);
+      await redis.client.set(key, JSON.stringify({
+        username: result.githubUsername,
+        data : result.data,
+        accessToken : result.githubAccessToken
+      }));
+    }
+
+    return result;
   }
 
   /**
@@ -214,6 +229,93 @@ class AuthModel {
     }
 
     return orgs;
+  }
+
+  /**
+   * @method linkGithubUsername
+   * @description link github and ecosis user accounts by adding
+   * 
+   * @param {String} ecosisUsername 
+   * @param {String} githubUsername 
+   * @param {String} githubAccessToken
+   */
+  async linkGithubUsername(ecosisUsername, githubUser, githubAccessToken) {
+    let data = {
+      avatarUrl : githubUser.avatar_url
+    };
+    
+    // save to ckan so we can restore
+    await ckan.setGithubInfo(
+      ecosisUsername, 
+      githubUser.login,
+      data,
+      githubAccessToken
+    );
+
+    // save to redis
+    let key = redis.createUserGithubKey(ecosisUsername);
+    await redis.client.set(key, JSON.stringify({
+      username: githubUser.login,
+      data,
+      accessToken : githubAccessToken
+    }));
+
+    let orgs = (await this.getUserOrgs(ecosisUsername) || []);
+    for( let org of orgs ) {
+      let team = await mongodb.getGithubTeam(org.name);
+      await github.addTeamMember(team.id, ecosisUsername);
+    }
+  }
+
+  /**
+   * @method unlinkGithubUsername
+   * @description revoke user access token to github.  There is a change the user already revoked
+   * token and stored token is out of date.  In this case a redirect object will be returned with
+   * a url so the user can unlink
+   * 
+   * @param {String} ecosisUsername EcoSIS Username
+   * 
+   * @returns {Object} or null
+   */
+  async unlinkGithubUsername(ecosisUsername) {
+    let key = redis.createUserGithubKey(ecosisUsername);
+
+    let githubInfo = await redis.client.get(key);
+    if( !githubInfo ) return;
+    githubInfo = JSON.parse(githubInfo);
+
+    // revoke token form github
+    let {response} = await github.revokeOauthAccessToken(githubInfo.accessToken);
+    
+    let redirect;
+    if( response.statusCode === 404 ) {
+      redirect = {
+        message : 'Invalid token stored',
+        url : `https://github.com/settings/connections/applications/${config.github.clientId}`
+      }
+    } else if( response.statusCode !== 204 ) {
+      throw new Error(`Unable to revoke access token: ${response.statusCode} ${response.body}`);
+    }
+
+    await this.removeGithubUserAccess(ecosisUsername);
+   
+    return redirect;
+  }
+
+  async removeGithubUserAccess(ecosisUsername) {
+    let key = redis.createUserGithubKey(ecosisUsername);
+
+    // save to ckan
+    await ckan.setGithubInfo(ecosisUsername, '', {}, '');
+
+    // update to redis
+    await redis.client.del(key);
+
+    let orgs = (await this.getUserOrgs(ecosisUsername) || []);
+    for( let org of orgs ) {
+      let team = await mongodb.getGithubTeam(org.name);
+      github.removeTeamMember(team.id, ecosisUsername);
+    }
   }
 
   _request(options) {

@@ -47,6 +47,7 @@ export default class AppOrgInput extends Mixin(PolymerElement)
    */
   _onInputChange() {
     this.selectedOrg = this.$.input.value;
+    this.fire('change');
   }
 
   get value() {

@@ -3,6 +3,7 @@ const request = require('request');
 const Logger = require('./logger');
 const utils = require('./utils');
 const {JSDOM} = require('jsdom');
+const uuid = require('uuid');
 const parseLinkHeader = require('parse-link-header');
 
 const ORG = config.github.org;
@@ -64,6 +65,21 @@ class GithubApi {
     }
 
     return repos;
+  }
+
+  /**
+   * @method getAuthenticatedUser
+   * @description get user account information
+   * https://developer.github.com/v3/users/#get-the-authenticated-user
+   * 
+   * @param {String} token access token
+   * 
+   * @returns {Promise}
+   */
+  async getAuthenticatedUser(token) {
+    return this.request({
+      uri : `/user`,
+    }, token);
   }
 
   /**
@@ -450,13 +466,16 @@ class GithubApi {
    * 
    * @returns {Promise}
    */
-  addTeamRepo(id, repo) {
+  addTeamRepo(id, repo, permission='pull') {
+    let body = JSON.stringify({permission});
     return this.request({
       method : 'PUT',
       uri : `/teams/${id}/repos/${ORG}/${repo}`,
       headers : {
-        'Content-Length' : 0
-      }
+        'Content-Length' : body.length,
+        'Content-Type' : 'application/json'
+      },
+      body
     });
   }
 
@@ -543,23 +562,110 @@ class GithubApi {
   }
 
   /**
+   * @method getOauthAuthorizeUrl
+   * @description generate url and state token for authorizing user at
+   * start of oauth dance
+   * https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/#1-request-a-users-github-identity
+   * 
+   * @returns {Object} Contains url and state properties
+   */
+  getOauthAuthorizeUrl() {
+    let params = {
+      client_id : config.github.clientId,
+      redirect_uri : config.server.url+'/auth/github-oauth-callback',
+      state : uuid.v4()
+    }
+
+    let qs = [];
+    for( let key in params ) {
+      qs.push(`${key}=${encodeURIComponent(params[key])}`);
+    }
+
+    return {
+      state : params.state,
+      url : `https://github.com/login/oauth/authorize?${qs.join('&')}`
+    }
+  }
+
+  /**
+   * @method getOauthAccessToken
+   * @description given the oauth response code and state, request a access token from 
+   * github.
+   * https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/#2-users-are-redirected-back-to-your-site-by-github
+   * 
+   * @param {String} code oauth response code
+   * @param {String} state ecosml generated state token
+   * 
+   * @returns {Promise} resolves to object
+   */
+  async getOauthAccessToken(code, state) {
+    let {response} = await this.requestRaw({
+      method: 'POST',
+      uri : `https://github.com/login/oauth/access_token`,
+      headers : {
+        'Content-Type': 'application/json',
+        Accept: 'application/json'
+      },
+      body : JSON.stringify({
+        client_id : config.github.clientId,
+        client_secret : config.github.clientSecret,
+        code, state
+      })
+    });
+
+    if( response.statusCode !== 200 ) {
+      new Error(`Oauth Error: ${response.statusCode} ${response.body}`);
+    }
+
+    return JSON.parse(response.body);
+  }
+
+  /**
+   * @method revokeOauthAccessToken
+   * @description remove users access token
+   * https://developer.github.com/v3/oauth_authorizations/#revoke-an-authorization-for-an-application
+   * 
+   * @param {token} token oauth access token
+   * 
+   * @returns {Promise}
+   */
+  revokeOauthAccessToken(token) {
+    return this.requestRaw({
+      method: 'DELETE',
+      uri : `${API_ROOT}/applications/${config.github.clientId}/tokens/${token}`,
+      headers : {
+        'User-Agent' : 'EcoSML Webapp'
+      },
+      auth : {
+        user : config.github.clientId,
+        pass : config.github.clientSecret
+      }
+    });
+  }
+
+  /**
    * TODO: watch rate limiting. headers:
    * 
    * 'x-ratelimit-limit': '5000',
    * 'x-ratelimit-remaining': '4994',
    * 'x-ratelimit-reset': '1509229188',
    */
-  request(options) {
+  request(options, token) {
     options.uri = `${API_ROOT}${options.uri}`;
-  
-    // set admin authentication
-    options.auth = {
-      user: GITHUB_ACCESS.username,
-      pass: GITHUB_ACCESS.token,
-    }
-  
-    // set the API version
     if( !options.headers ) options.headers = {}
+
+    if( token ) {
+      // use user access token
+      options.headers.Authorization = `token ${token}`;
+    } else {
+      // set admin authentication
+      options.auth = {
+        user: GITHUB_ACCESS.username,
+        pass: GITHUB_ACCESS.token,
+      }
+    }
+
+    // set the API version
     options.headers.Accept = ACCEPT_MIME_TYPE;
     options.headers['User-Agent'] = 'EcoSML Webapp';
   
@@ -575,7 +681,7 @@ class GithubApi {
           let time = parseInt(response.headers['x-ratelimit-reset']);
           let resets = Math.floor((time - (Date.now()/1000)) / 60);
 
-          Logger.warn('Less that '+response.headers['x-ratelimit-remaining']+' GitHub requests remaining.  Resets in '+resets+'min');
+          Logger.warn('Less that '+response.headers['x-ratelimit-remaining']+' GitHub requests remaining for: '+(token || 'admin account')+'.  Resets in '+resets+'min');
         }
 
         resolve({response, body});

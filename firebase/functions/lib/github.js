@@ -23,6 +23,9 @@ module.exports = (env, req, resp) => {
   } else if( event === 'team' || event === 'membership') {
     collection = config.github.collections.teams+'-'+env;
     return onTeamUpdate(collection, msg, event, req, resp);
+  } else if( event === 'release') {
+    collection = config.github.collections.releases+'-'+env;
+    return onRelease(collection, msg, req, resp);
   }  
 }
 
@@ -42,6 +45,24 @@ function onTeamUpdate(collection, msg, event, req, resp) {
     })
     .then((writeResult) => {
       return resp.json({result: `Set team ${msg.team.slug} update event in ${collection}.`});
+    });
+}
+
+function onRelease(collection, msg, req, resp) {
+  return admin.
+    firestore()
+    .collection(collection)
+    .add({
+      timestamp : Date.now(),
+      event : 'release',
+      headers : req.headers,
+      payload: {
+        id : msg.repository.name,
+        author : msg.release.author.login
+      }
+    })
+    .then((writeResult) => {
+      return resp.json({result: `Message with ID: ${writeResult.id} added to ${collection}.`});
     });
 }
 

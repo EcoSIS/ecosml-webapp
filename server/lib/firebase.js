@@ -15,7 +15,7 @@ class Firebase extends EventEmitter {
     });
 
     this.firestore = admin.firestore();
-    this.firestore.settings({timestampsInSnapshots: true})
+    this.firestore.settings({timestampsInSnapshots: true});
     this.collections = collections;
 
     this.BUFFER_TIME = 1000 * 5;
@@ -23,6 +23,7 @@ class Firebase extends EventEmitter {
 
     this.EVENTS = {
       GITHUB_COMMIT : 'github-commit',
+      GITHUB_RELEASE : 'github-release',
       GITHUB_TEAM_UPDATE : 'github-team-update',
       TRAVIS_TESTING_COMPLETE : 'travis-test-complete',
       ECOSIS_ORG_UPDATE : 'ecosis-org-update'
@@ -98,6 +99,23 @@ class Firebase extends EventEmitter {
     logger.info(`Listening to firebase collection: ${collections.githubCommits}`);
     this.firestore
       .collection(collections.githubCommits)
+      .onSnapshot(
+        callback,
+        e => logger.error('Encountered error listening to github commit firestore collection', e)
+      );
+  }
+
+    /**
+   * @method initGithubReleaseObserver
+   * @description wire up the observer to the github release listener.  
+   * This should be called by the PackageModel
+   * 
+   * @param {Function} callback called when documents update 
+   */
+  initGithubReleaseObserver(callback) {
+    logger.info(`Listening to firebase collection: ${collections.githubReleases}`);
+    this.firestore
+      .collection(collections.githubReleases)
       .onSnapshot(
         callback,
         e => logger.error('Encountered error listening to github commit firestore collection', e)
@@ -221,6 +239,20 @@ class Firebase extends EventEmitter {
     logger.info('Acking Github team event: '+docId);
     return this._deleteFirestoreDoc(this.firestore
       .collection(collections.githubTeams)
+      .doc(docId));
+  }
+
+  /**
+   * @method ackGithubReleaseEvent
+   * @description after we have successfully handled a github release event,
+   * remove the doc.
+   * 
+   * @returns {Promise}
+   */
+  ackGithubReleaseEvent(docId) {
+    logger.info('Acking Github release event: '+docId);
+    return this._deleteFirestoreDoc(this.firestore
+      .collection(collections.githubReleases)
       .doc(docId));
   }
 

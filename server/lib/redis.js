@@ -50,6 +50,16 @@ class Redis {
   }
 
   /**
+   * @method createUserGithubKey
+   * @description 
+   * 
+   * @param {String} username 
+   */
+  createUserGithubKey(username) {
+    return `${config.redis.prefixes.github}-${username}`
+  }
+
+  /**
    * @method getOrgNameFromId
    * @description given an EcoSIS org id, find the org.  Note this is not 
    * the most efficient method, but this is only required for delete (which
@@ -81,6 +91,37 @@ class Redis {
     return JSON.parse(result).displayName;
   }
 
+  /**
+   * @method getGithubUsername
+   * @description given a user ecosis username, return the
+   * github username is set
+   * 
+   * @param {String} ecosisUsername 
+   * 
+   * @returns {Promise}
+   */
+  async getGithubUsername(ecosisUsername) {
+    let info = await this.getGithubInfo(ecosisUsername);
+    if( !info ) return null;
+    return info.username;
+  }
+
+  /**
+   * @method getGithubInfo
+   * @description given a user ecosis username, return the
+   * github info
+   * 
+   * @param {String} ecosisUsername 
+   * 
+   * @returns {Promise}
+   */
+  async getGithubInfo(ecosisUsername) {
+    if( !ecosisUsername ) return null;
+    let key = this.createUserGithubKey(ecosisUsername);
+    let githubUsername = await this.client.get(key);
+    if( !githubUsername ) return null;
+    return JSON.parse(githubUsername);
+  }
 
 }
 

@@ -101,8 +101,10 @@ router.get('/github-oauth-callback', authenticated, async (req, res) => {
 
 router.get('/github-revoke', authenticated, async (req, res) => {
   try {
-    await model.unlinkGithubUsername(req.session.username);
-    res.redirect('/account');
+    let result = await model.unlinkGithubUsername(req.session.username);
+    console.log(result);
+    if( result && result.url ) res.redirect(result.url);
+    else res.redirect('/account');
   } catch(e) {
     sendError(res, 400, e.message);
   }

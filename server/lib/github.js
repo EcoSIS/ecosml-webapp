@@ -466,13 +466,16 @@ class GithubApi {
    * 
    * @returns {Promise}
    */
-  addTeamRepo(id, repo) {
+  addTeamRepo(id, repo, permission='pull') {
+    let body = JSON.stringify({permission});
     return this.request({
       method : 'PUT',
       uri : `/teams/${id}/repos/${ORG}/${repo}`,
       headers : {
-        'Content-Length' : 0
-      }
+        'Content-Length' : body.length,
+        'Content-Type' : 'application/json'
+      },
+      body
     });
   }
 

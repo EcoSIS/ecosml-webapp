@@ -263,10 +263,20 @@ class AuthModel {
     let orgs = (await this.getUserOrgs(ecosisUsername) || []);
     for( let org of orgs ) {
       let team = await mongodb.getGithubTeam(org.name);
-      github.addTeamMember(team.id, ecosisUsername);
+      await github.addTeamMember(team.id, ecosisUsername);
     }
   }
 
+  /**
+   * @method unlinkGithubUsername
+   * @description revoke user access token to github.  There is a change the user already revoked
+   * token and stored token is out of date.  In this case a redirect object will be returned with
+   * a url so the user can unlink
+   * 
+   * @param {String} ecosisUsername EcoSIS Username
+   * 
+   * @returns {Object} or null
+   */
   async unlinkGithubUsername(ecosisUsername) {
     let key = redis.createUserGithubKey(ecosisUsername);
 
@@ -276,9 +286,24 @@ class AuthModel {
 
     // revoke token form github
     let {response} = await github.revokeOauthAccessToken(githubInfo.accessToken);
-    if( response.statusCode !== 204 ) {
+    
+    let redirect;
+    if( response.statusCode === 404 ) {
+      redirect = {
+        message : 'Invalid token stored',
+        url : `https://github.com/settings/connections/applications/${config.github.clientId}`
+      }
+    } else if( response.statusCode !== 204 ) {
       throw new Error(`Unable to revoke access token: ${response.statusCode} ${response.body}`);
     }
+
+    await this.removeGithubUserAccess(ecosisUsername);
+   
+    return redirect;
+  }
+
+  async removeGithubUserAccess(ecosisUsername) {
+    let key = redis.createUserGithubKey(ecosisUsername);
 
     // save to ckan
     await ckan.setGithubInfo(ecosisUsername, '', {}, '');

@@ -17,6 +17,9 @@ services:
       - SERVER_ENV=dev
       - GITHUB_ORG=ecosml-dev
       - FIREBASE_ENV=dev
+      - SERVER_URL=${SERVER_URL}
+      - GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
+      - GITHUB_CLIENT_SECRET=${GITHUB_CLIENT_SECRET}
 
   redis:
     image: redis:3.2

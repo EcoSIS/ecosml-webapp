@@ -152,7 +152,7 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
       let value = key;
       if(value === 'reponame') value = 'name';
       // HACK: overview getter/setter not working
-      if( value === 'overview' ) this.$[key].value = data[value] || '';
+      if( data.source === 'managed' && value === 'overview' ) this.$[key].value = data[value] || '';
       else this[key] = data[value];
     }
   }
@@ -170,7 +170,7 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
       let key = value;
       if(key === 'reponame') key = 'name';
       // HACK: overview getter/setter not working
-      if( value === 'overview' ) data[key] = this.$[value].value;
+      if(this.editorData.source === 'managed' && value === 'overview' ) data[key] = this.$[value].value;
       else data[key] = this[value];
     });
     return data;

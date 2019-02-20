@@ -535,7 +535,7 @@ class PackageModel {
    * @returns {Promise} resolves to Boolean
    */
   async doesRepoExist(packageName, org) {
-    return !(github.isRepoNameAvailable(packageName, org));
+    return !(await github.isRepoNameAvailable(packageName, org));
   }
 
   /**

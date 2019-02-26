@@ -2,10 +2,12 @@ import {PolymerElement, html} from "@polymer/polymer"
 import template from "./app-basic-metadata.html"
 
 import "./app-org-input"
+import "./app-overview-input"
 import "./app-created-popup"
 import PackageInterface from "../../interfaces/PackageInterface"
 import AppStateInterface from "../../interfaces/AppStateInterface"
-import AppFileTreeLeaf from "../files/tree/app-file-tree-leaf";
+
+// import AppFileTreeLeaf from "../files/tree/app-file-tree-leaf";
 
 const VALUES = ['reponame', 'overview', 'organization', 'language', 'packageType'];
 
@@ -151,9 +153,10 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
     for( let key of VALUES ) {
       let value = key;
       if(value === 'reponame') value = 'name';
+      this[key] = data[value];
       // HACK: overview getter/setter not working
-      if( data.source === 'managed' && value === 'overview' ) this.$[key].value = data[value] || '';
-      else this[key] = data[value];
+      // if( data.source === 'managed' && value === 'overview' ) this.$[key].value = data[value] || '';
+      // else this[key] = data[value];
     }
   }
 
@@ -169,9 +172,11 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
     VALUES.forEach(value => {
       let key = value;
       if(key === 'reponame') key = 'name';
+      data[key] = this[value];
+
       // HACK: overview getter/setter not working
-      if(this.editorData.source === 'managed' && value === 'overview' ) data[key] = this.$[value].value;
-      else data[key] = this[value];
+      // if(this.editorData.source === 'managed' && value === 'overview' ) data[key] = this.$[value].value;
+      // else data[key] = this[value];
     });
     return data;
   }

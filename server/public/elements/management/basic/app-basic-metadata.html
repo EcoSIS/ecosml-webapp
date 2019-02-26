@@ -31,13 +31,6 @@
     display: block;
   }
 
-  .static-overview {
-    background-color: var(--default-background-color);
-    border: 1px solid var(--dark-background-colorr);
-    border-radius: 6px;
-    padding: 10px;
-  }
-
   input[type="radio"] {
     margin: 10px 15px;
   }
@@ -103,18 +96,12 @@
 
 
 <h2 class="uheader lightblue" break$="[[creating]]">Package Overview</h2>
-<div hidden$="[[!isManagedSource]]">
-  <div class="help">One sentance summary of package</div>
-  <app-text-input 
-    id="overview"
-    on-change="_onInputChange"
-    placeholder="Overview (Short Description)">
-  </app-text-input>
-</div>
-<div hidden$="[[isManagedSource]]">
-  <div class="help" style="margin-bottom: 10px">Pulled from the repositories GitHub description.</div>
-  <div class="static-overview" hidden$="[[creating]]">[[overview]]</div>
-</div>
+<app-overview-input 
+  creating="[[creating]]"
+  is-managed-source="[[isManagedSource]]"
+  on-change="_onInputChange"
+  id="overview">
+</app-overview-input>
 
 <h2 class="uheader green break">Organization</h2>
 <div class="help">The <a href="https://ecosis.org" target="_blank">EcoSIS</a> organization this package belongs to, 

@@ -1,0 +1,29 @@
+<style>
+  :host {
+    display: block;
+  }
+
+  .static-overview {
+    background-color: var(--default-background-color);
+    border: 1px solid var(--dark-background-colorr);
+    border-radius: 6px;
+    padding: 10px;
+  }
+
+  app-text-input {
+    display: block;
+  }
+</style>
+
+<div hidden$="[[!isManagedSource]]">
+  <div class="help">One sentance summary of package</div>
+  <app-text-input 
+    id="overview"
+    on-change="_onInputChange"
+    placeholder="Overview (Short Description)">
+  </app-text-input>
+</div>
+<div hidden$="[[isManagedSource]]">
+  <div class="help" style="margin-bottom: 10px">Pulled from the repositories GitHub description.</div>
+  <div class="static-overview" hidden$="[[creating]]">[[value]]</div>
+</div>

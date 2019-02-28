@@ -4,8 +4,7 @@ const bodyParser = require('body-parser');
 
 const config = require('./lib/config');
 const logger = require('./lib/logger');
-const path = require('path');
-const fs = require('fs');
+const sitemap = require('./models/SitemapModel');
 
 const app = express();
 
@@ -60,6 +59,7 @@ require('./controllers/static')(app);
  */
 app.use('/auth', require('./controllers/auth'));
 app.use('/api', require('./controllers/api'));
+sitemap.middleware(app);
 
 /**
  * Init EcoSIS, Travis and Github event sync

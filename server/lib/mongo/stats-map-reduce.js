@@ -14,6 +14,12 @@ module.exports = (collection, query) => {
 
   let mrConfig = {
     out : config.mongodb.collections.stats,
+    query : { 
+      '$and': [ 
+        {releaseCount: {$gt: 0}},
+        {private: false} 
+      ] 
+    },
     finalize
   }
 

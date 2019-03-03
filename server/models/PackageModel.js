@@ -8,6 +8,7 @@ const path = require('path');
 const fs = require('fs-extra');
 const uuid = require('uuid');
 const utils = require('../lib/utils')
+const redis = require('../lib/redis');
 const markdown = require('../lib/markdown');
 const schema = require('../lib/schema');
 const initPackage = require('../lib/init-package-files');
@@ -144,6 +145,8 @@ class PackageModel {
     pkg = await this.get(pkg);
     schema.validate('update', update);
 
+    if( pkg.organizationInfo ) delete pkg.organizationInfo;
+
     // don't allow user to update repo type (source)
     update.source = pkg.source;
     update.name = pkg.name;
@@ -248,6 +251,11 @@ class PackageModel {
       pkgObj.renderedDescription = await markdown(pkgObj.description, pkgObj.name);
     } else {
       pkgObj.renderedDescription = '';
+    }
+
+    if( pkgObj.organization ) {
+      let info = await redis.client.get(redis.createOrgKey(pkg.organization));
+      if( info ) pkgObj.organizationInfo = JSON.parse(info);
     }
 
     // default

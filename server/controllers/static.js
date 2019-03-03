@@ -3,6 +3,9 @@ const path = require('path');
 const express = require('express');
 const gitinfo = require('../gitinfo');
 const redis = require('../lib/redis');
+const logger = require('../lib/logger');
+const pkgModel = require('../models/PackageModel');
+const jsonldTransform = require('../lib/jsonld');
 const spaMiddleware = require('@ucd-lib/spa-router-middleware');
 
 /**
@@ -48,7 +51,20 @@ module.exports = function(app) {
         }
       });
     },
-    template : (req, res, next) => next({bundle})
+    template : async (req, res, next) => {
+      let jsonld = '';
+
+      let pkg = req.originalUrl.match(/\/package\/([0-9A-Za-z-]+)/);
+      if( pkg ) {
+        try {
+          pkg = await pkgModel.get(pkg[1]);
+          jsonld = JSON.stringify(jsonldTransform(pkg), '  ', '  ');
+        } catch(e) {
+          logger.error('failed to run seo transform', e);
+        }
+      }
+      next({bundle, jsonld})
+    }
   });
 
   app.use(express.static(assetsDir));

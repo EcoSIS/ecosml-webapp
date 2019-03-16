@@ -73,6 +73,68 @@ class CkanApi {
     return JSON.parse(body);
   }
 
+  /**
+   * @method setGithubInfo
+   * @description set a github username for given ecosis
+   * user
+   * 
+   * @param {String} ecosisUsername
+   * @param {String} githubUsername
+   * @param {Object} githubData
+   * @param {String} githubAccessToken
+   * 
+   * @returns {Promise}
+   */
+  async setGithubInfo(ecosisUsername, githubUsername, githubData, githubAccessToken) {
+    let token = jwt.sign(
+      {username: ecosisUsername}, 
+      config.server.jwt.secret, 
+      { expiresIn: 60 * 60 }
+    );
+    
+    let {body} = await this._request({
+      method : 'POST',
+      uri : HOST+'/ecosis/user/githubInfo',
+      headers : {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body : JSON.stringify({
+        username: githubUsername,
+        data : JSON.stringify(githubData),
+        accessToken : githubAccessToken
+      })
+    });
+
+    return JSON.parse(body);
+  }
+
+  /**
+   * @method getAllGithubInfo
+   * @description admin call to grab all EcoSIS stored user github data and 
+   * stash locally in redis
+   * 
+   * @returns {Promise} resolves to Array
+   */
+  async getAllGithubInfo() {
+    let token = jwt.sign(
+      {username: 'ecosml-admin'}, 
+      config.server.jwt.secret, 
+      { expiresIn: 60 * 60 }
+    );
+
+    let {body} = await this._request({
+      method : 'GET',
+      uri : HOST+'/ecosis/admin/github/sync',
+      headers : {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    return JSON.parse(body);
+  }
+
   _request(options) {
     return new Promise((resolve, reject) => {
       request(options, (error, response, body) => {

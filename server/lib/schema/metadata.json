@@ -1,0 +1,59 @@
+{
+  "id": "/PackageMetadata",
+  "type": "object",
+  "properties": {
+    "id" : {
+      "type" : "string"
+    },
+    "name" : {
+      "type" : "string"
+    },
+    "source": {
+      "type": "string",
+      "enum" : ["registered", "managed"]
+    },
+    "organization": {
+      "type" : "string"
+    },
+    "private" : {
+      "type" : "boolean"
+    },
+    "owner" : {
+      "type" : "string"
+    },
+    "keywords" : {
+      "type" : "array",
+      "items": {"type": "string"}
+    },
+    "theme" : {
+      "type" : "array",
+      "items": {"type": "string"}
+    },
+    "family" : {
+      "type" : "array",
+      "items": {"type": "string"}
+    },
+    "specific" : {
+      "type" : "array",
+      "items": {"type": "string"}
+    },
+    "language" : {
+      "type" : "string"
+    },
+    "packageType" : {
+      "type" : "string",
+      "enum" : ["standalone", "package"]
+    },
+    "htmlUrl" : {
+      "type" : "string"
+    },
+    "releases" : {
+      "type" : "array"
+    },
+    "releaseCount" : {
+      "type": "integer"
+    }
+  },
+  "additionalProperties": false,
+  "required": ["name", "owner", "id", "private", "organization", "packageType", "source", "language"]
+}

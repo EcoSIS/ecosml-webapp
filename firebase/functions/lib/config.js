@@ -13,7 +13,8 @@ module.exports = {
   github : {
     collections : {
       commits : 'github-commit-events',
-      teams : 'github-team-events'
+      teams : 'github-team-events',
+      releases : 'github-release-events'
     },
     ignoreUsers : ['ecosml-admin']
   }

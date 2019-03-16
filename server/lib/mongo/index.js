@@ -2,7 +2,7 @@ const mongodb = require('mongodb');
 const logger = require('../logger');
 const config = require('../config');
 const queryMapReduce = require('./query-map-reduce');
-const statusMapReduce = require('./stats-map-reduce');
+const statsMapReduce = require('./stats-map-reduce');
 
 class MongoDB {
 
@@ -299,7 +299,7 @@ class MongoDB {
    */
   async updateStats() {
     let collection = await this.packagesCollection();
-    return statusMapReduce(collection);
+    return statsMapReduce(collection);
   }
 
   /**

@@ -21,7 +21,8 @@ class AuthStore extends BaseStore {
 
     this.events = {
       AUTH_UPDATE : 'auth-update',
-      ORGS_UPDATE : 'orgs-update'
+      ORGS_UPDATE : 'orgs-update',
+      GITHUB_USERNAME_UPDATE : 'github-username-update'
     }
   }
 

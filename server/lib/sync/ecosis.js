@@ -129,6 +129,7 @@ class EcosisSync {
     org = {
       id : org.id,
       name : org.name,
+      groups : info.groups,
       displayName : org.display_name,
       description : org.description,
       logo : org.image_display_url
@@ -151,6 +152,19 @@ class EcosisSync {
 
     // finally sync to Github team
     await github.syncEcoSISOrgToTeam(org.name);
+  }
+
+  async syncGithubData() {
+    let githubInfo = await ckan.getAllGithubInfo();
+    for( let user of githubInfo ) {
+      // save to redis
+      let key = redis.createUserGithubKey(user.user_id);
+      await redis.client.set(key, JSON.stringify({
+        username: user.github_username,
+        data : JSON.parse(user.github_data),
+        accessToken : user.github_access_token
+      }));
+    }
   }
 
   /**

@@ -2,6 +2,8 @@
  * Sync a GitHub org to mongodb
  */
 const github = require('../github');
+const git = require('../git');
+const fs = require('fs-extra');
 const regRepos = require('../registered-repositories');
 const mongodb = require('../mongo');
 const config = require('../config');
@@ -9,6 +11,9 @@ const utils = require('../utils');
 const logger = require('../logger');
 const firebase = require('../firebase');
 const redis = require('../redis');
+const schema = require('../schema');
+const packageModel = require('../../models/PackageModel');
+const queue = require('../../models/PackageQueueModel');
 
 class GithubSync {
 
@@ -46,6 +51,18 @@ class GithubSync {
     // this is triggered after a certain amount of time of method call above
     // e is an array of buffered events
     firebase.on(firebase.EVENTS.GITHUB_COMMIT, e => this._onGithubCommitEvents(e));
+  
+    // TODO: what about release events?
+    firebase.initGithubReleaseObserver(e => {
+      e.docChanges.forEach((change) => {
+        let data = firebase.getDataFromChangeDoc(change);
+        firebase.emitBuffered(data.payload, firebase.EVENTS.GITHUB_RELEASE, data);
+      });
+    });
+
+    // this is triggered after a certain amount of time of method call above
+    // e is an array of buffered events
+    firebase.on(firebase.EVENTS.GITHUB_RELEASE, e => this._onGithubReleaseEvents(e));
   }
 
   /**
@@ -76,11 +93,11 @@ class GithubSync {
         continue;
       }
 
-      let pkg = mongodb.getPackage(repoName);
+      let pkg = await mongodb.getPackage(repoName);
       if( pkg ) {
+        await this._verifyPackageMetadata(pkg);
         // TODO: ensure metadata file is in good order
         // TODO: sync package from github once metadata is ok and there was a change
-        // TODO: run tests in travis
       } else {
         logger.warn(`Received commit event for repo ${repoName} that is not in mongo. ignoring`);
       }
@@ -88,6 +105,27 @@ class GithubSync {
       await firebase.ackGithubCommitEvent(events[i].fsId);
       handled[repoName] = true;
     }
+  }
+
+  async _verifyPackageMetadata(pkg) {
+    // first get in sync
+    await git.resetHEAD(pkg.name);
+    await git.clean(pkg.name);
+    await git.pull(pkg.name);
+
+    let {overview, description} = await regRepos.getGitHubProperties(pkg.name);
+    pkg.overview = overview;
+    await packageModel.writeMetadataFile(pkg);
+
+    await mongodb.updatePackage(pkg.id, {
+      description, overview
+    });
+
+    await queue.add(
+      'commit', 
+      pkg.name, 
+      [pkg.name, 'Resetting package metadata, please use EcoSML website to update metadata file']
+    );
   }
 
   async _onTeamChangeEvents(events) {
@@ -115,11 +153,50 @@ class GithubSync {
         await this.syncTeamToMongo(teamId);
         await firebase.ackGithubTeamEvent(e.fsId);
       } catch(error) {
-        logger.error('Failed to handle firestore ecosis sync event', e, error);
+        logger.error('Failed to handle firestore github team sync event', e, error);
       }
 
       handled[teamId] = true;
     }    
+  }
+
+  async _onGithubReleaseEvents(events) {
+    // we just want the last changes
+    let handled = {};
+
+    // these are ordered by timestamp, so we only handle the first
+    for( var i = 0; i < events.length; i++ ) {
+      let e = events[i];
+      if( e.fsChangeType === 'removed' ) continue; // noop
+
+      if( e.payload.author === 'ecosml-admin' ) {
+        await firebase.ackGithubReleaseEvent(e.fsId);
+        continue;
+      }
+
+      let repoName = e.payload.id;
+
+      // we already processed a newer event for this team
+      if( handled[repoName] ) {
+        try {
+          await firebase.ackGithubReleaseEvent(e.fsId);
+        } catch(error) {
+          logger.error('Failed to handle firestore github release sync event', e, error);
+        }
+        continue;  
+      }
+
+      try {
+        let releaseInfo = await this._syncReleases(repoName);
+        await mongodb.updatePackage(repoName, releaseInfo);
+        await firebase.ackGithubReleaseEvent(e.fsId);
+      } catch(error) {
+        logger.error('Failed to handle firestore github release sync event', e, error);
+      }
+
+      handled[repoName] = true;
+    } 
+    
   }
 
   /**
@@ -173,23 +250,17 @@ class GithubSync {
 
     try {
       var {body} = await github.getRepository(repoName);
-      metadata = utils.githubRepoToEcosml(JSON.parse(body));
+      if( body ) metadata = utils.githubRepoToEcosml(JSON.parse(body));
 
       var {body} = await github.getRawFile(repoName, 'ecosml-metadata.json');
-      metadata = Object.assign(metadata, JSON.parse(body));
-      
+      if( body ) metadata = Object.assign(metadata, JSON.parse(body));
+     
       var {body} = await github.getRawFile(repoName, 'README.md');
-      metadata.description = body;
+      if( body ) metadata.description = body;
 
-      var {body} = await github.listReleases(repoName);
-      let releases = JSON.parse(body).map(release => utils.githubReleaseToEcosml(release));
-      releases.sort((a, b) => {
-        if( a.publishedAt.getTime() < b.publishedAt.getTime() ) return -1;
-        if( a.publishedAt.getTime() > b.publishedAt.getTime() ) return 1;
-        return 0;
-      });
+      let {releases, releaseCount} = await this._syncReleases(repoName);
       metadata.releases = releases;
-      metadata.releaseCount = (releases || []).length;
+      metadata.releaseCount = releaseCount;
 
     } catch(e) {
       logger.error('Failed to download metadata file for repo '+repoName+', ignoring');
@@ -198,6 +269,21 @@ class GithubSync {
     }
 
     await mongodb.insertPackage(metadata);
+  }
+
+  async _syncReleases(repoName) {
+    var {body} = await github.listReleases(repoName);
+    let releases = JSON.parse(body).map(release => utils.githubReleaseToEcosml(release));
+    releases.sort((a, b) => {
+      if( a.publishedAt.getTime() < b.publishedAt.getTime() ) return -1;
+      if( a.publishedAt.getTime() > b.publishedAt.getTime() ) return 1;
+      return 0;
+    });
+
+    return {
+      releases : releases,
+      releaseCount : (releases || []).length
+    }
   }
 
   /**
@@ -342,9 +428,37 @@ class GithubSync {
       }
     }
 
-    // TODO: make sure all teams members (if provided github id) are in sync
-  }
+    // filter out org.members that are of type member.  They
+    // have no equivalent role in GitHub so we can't include them.
+    // mapping is as follows:
+    //
+    // GitHub    | CKAN
+    // no access | memnber
+    // member    | editor
+    // member    | owner
+    let ckanMembers = org.members.filter(member => member.role === 'editor' || member.role === 'admin');
 
+    // make sure all teams members (if provided github id) are in sync
+    for( let info of ckanMembers ) {
+      let githubUsername = await redis.getGithubUsername(info.user);
+      if( !githubUsername ) continue;
+      try {
+        await github.addTeamMember(team.id, githubUsername);
+      } catch(e) {
+        console.error('Failed to sync github user to team: ', e, team, info, githubUsername);
+      }
+    }
+
+    // see if anybody needs to be removed
+    let orgMembers = org.members.map(m => m.user);
+    for( let member of team.members ) {
+      if( orgMembers.indexOf(member.login) === -1 ) {
+        await github.removeTeamMember(team.id, member.login);
+      }
+    }
+ 
+    
+  }
 }
 
 module.exports = new GithubSync();

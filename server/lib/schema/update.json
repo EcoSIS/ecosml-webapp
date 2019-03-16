@@ -41,6 +41,9 @@
       "packageType" : {
         "type" : "string",
         "enum" : ["standalone", "package"]
+      },
+      "organizationInfo" : {
+        "type" : "object"
       }
     },
     "additionalProperties": false

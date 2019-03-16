@@ -13,6 +13,8 @@ class DataSync {
   async syncAll() {
     // YOU MUST DO THIS FIRST!
     await github.syncAllRepos();
+    // add github account data.  will be used below to create teams
+    await ecosis.syncGithubData();
     // syncing orgs to github teams expect repos in mongodb
     await this.syncOrgs();
   }
@@ -25,6 +27,8 @@ class DataSync {
    * @returns {Promise}
    */
   async syncOrgs() {
+    // add github account data.  will be used below to create teams
+    await ecosis.syncGithubData();
     await github.syncAllTeamsToMongo();
     return ecosis.syncOrgs();
   }

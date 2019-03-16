@@ -57,7 +57,8 @@ module.exports = {
     prefixes : {
       org : 'org',
       auth : 'auth',
-      admin : 'admin'
+      admin : 'admin',
+      github : 'github'
     }
   },
 
@@ -83,6 +84,8 @@ module.exports = {
   // },
 
   github : {
+    clientId : env.GITHUB_CLIENT_ID || '',
+    clientSecret : env.GITHUB_CLIENT_SECRET || '',
     access : secrets.github,
     org : env.GITHUB_ORG || 'ecosml-dev',
     fsRoot : env.GITHUB_FS_ROOT || path.resolve(__dirname, '..', '..', 'gitdata'),
@@ -116,6 +119,7 @@ module.exports = {
     collections : {
       githubCommits : 'github-commit-events-'+firebaseEnv,
       githubTeams : 'github-team-events-'+firebaseEnv,
+      githubReleases : 'github-release-events-'+firebaseEnv,
       travis : 'travis-events-'+firebaseEnv,
       ecosisUsers : 'ecosis-users-'+firebaseEnv,
       ecosisOrgs : 'ecosis-org-events-'+firebaseEnv

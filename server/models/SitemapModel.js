@@ -11,6 +11,9 @@ class SitemapModel {
    */
   middleware(app) {
     let allow = 'Allow: /';
+    if( config.server.url !== 'https://ecosml.org' ) {
+      allow = 'Disallow: /';
+    }
 
     app.get(/^\/sitemap.xml/, (req, res) => this._onRequest(req, res));
     app.get('/robots.txt', (req, res) => {

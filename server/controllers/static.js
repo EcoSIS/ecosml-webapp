@@ -43,6 +43,7 @@ module.exports = function(app) {
         },
         appRoutes : config.server.appRoutes,
         ecosisDataHost : config.ecosis.host,
+        googleAnalyticsKey : config.google.analyticsKey,
         env : {
           client : config.server.clientEnv,
           github : config.github.org,

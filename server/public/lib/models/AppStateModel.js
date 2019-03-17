@@ -10,11 +10,21 @@ class AppStateModelImpl extends AppStateModel {
     this.store = AppStateStore;
 
     this.seoPackageId = '';
+    this.analyticsLocation = '';
   }
 
   async set(state) {
     this.seo(state);
+    this.analytics(state);
     super.set(state);
+  }
+
+  analytics(state) {
+    if( window.gtag === undefined ) return;
+    if( APP_CONFIG.googleAnalyticsKey === undefined ) return;
+    if( this.analyticsLocation === state.location.pathname ) return;
+    this.analyticsLocation = state.location.pathname;
+    gtag('config', APP_CONFIG.googleAnalyticsKey, {'page_path': state.location.pathname});
   }
 
   async seo(state) {

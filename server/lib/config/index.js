@@ -110,7 +110,8 @@ module.exports = {
 
   google : {
     key : secrets.google,
-    keyPath : keyPath
+    keyPath : keyPath,
+    analyticsKey : env.GOOGLE_ANALYTICS_KEY || '',
   },
 
   firebase : {

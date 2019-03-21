@@ -1,7 +1,14 @@
 const env = process.env;
 const path = require('path');
-const secrets = require('../../secrets');
+const fs = require('fs');
 const keyPath = path.join(__dirname, '../../google-key.json');
+
+let secrets = {ecosml : {
+  secret : {}
+}};
+if( fs.existsSync('../../secrets') ) {
+  secrets = require('../../secrets');
+}
 
 const mongoHost = env.MONGO_HOST || 'mongo';
 const firebaseEnv = env.FIREBASE_ENV || 'local';

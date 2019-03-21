@@ -9,6 +9,12 @@ class AppStateModelImpl extends AppStateModel {
     super();
     this.store = AppStateStore;
 
+    // check for client testing flag
+    let qs = parseQs();
+    if( qs['integration-testing'] ) {
+      window.INTEGRATION_TESTING = {};
+    }
+
     this.seoPackageId = '';
     this.analyticsLocation = '';
   }
@@ -44,6 +50,20 @@ class AppStateModelImpl extends AppStateModel {
     }
   }
 
+}
+
+function parseQs(url) {
+  if(!url) url = location.search;
+  var query = url.substr(1);
+  var result = {};
+  if( !query ) return result;
+
+  query.split("&").forEach(function(part) {
+    var item = part.split("=");
+    if( item.length > 1 ) result[item[0]] = decodeURIComponent(item[1]);
+    else result[item[0]] = true;
+  });
+  return result;
 }
 
 module.exports = new AppStateModelImpl();

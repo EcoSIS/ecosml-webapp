@@ -7,7 +7,8 @@ import "@ucd-lib/cork-app-utils"
 import "@ucd-lib/cork-app-state/elements/app-route"
 
 // import main app library
-import "../lib"
+import APP from "../lib"
+window.APP = APP;
 
 // import polymer elements
 import {PolymerElement, html} from "@polymer/polymer"

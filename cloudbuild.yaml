@@ -1,0 +1,8 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-f', 'docker/Dockerfile.cloud-build', '-t', 'cloud-build', '.']
+- name: 'cloud-build'
+  args: ['bash', 'docker/build.sh']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['tag', 'ecosis/ecosml-webapp:$BRANCH_NAME', 'gcr.io/$PROJECT_ID/ecosml-webapp:$BRANCH_NAME']
+images: ['gcr.io/$PROJECT_ID/ecosml-webapp:$BRANCH_NAME']

@@ -332,11 +332,14 @@ class MongoDB {
    * 
    * @returns {Promise}
    */
-  async setDoiRequestState(pkgId, state, username) {
+  async setDoiRequestState(pkgId, state, username, message) {
+    let history = {state, timestamp : Date.now(), admin: username};
+    if( message ) history.message = message;
+
     let collection = await mongo.getDoiCollection();
     return collection.update({
       '$set' : {state},
-      '$push' : {history : {state, timestamp : Date.now(), admin: username}},
+      '$push' : {history},
     }, {id: pkgId});
   }
 
@@ -351,6 +354,24 @@ class MongoDB {
   async getDoiRequest(pkgId) {
     let collection = await mongo.getDoiCollection();
     return collection.get({id: pkgId});
+  }
+
+  /**
+   * @method getPendingDois
+   * @description get all dois that have not been approved
+   */
+  async getPendingDois() {
+    let collection = await mongo.getDoiCollection();
+    return collection.find({state: {'$ne': config.doi.states.accepted}});
+  }
+
+  /**
+   * @method getApprovedDois
+   * @description get all dois that have been approved
+   */
+  async getApprovedDois() {
+    let collection = await mongo.getDoiCollection();
+    return collection.find({state: config.doi.states.accepted});
   }
 
   /**

@@ -1,5 +1,6 @@
 const doi = require('../lib/doi');
 const mongo = require('../lib/mongo');
+const config = require('../lib/config');
 
 class DoiModel {
 
@@ -13,7 +14,7 @@ class DoiModel {
     let existingRequest = await mongo.getDoiRequest(pkg.id);
     if( existingRequest ) throw new Error(`Package ${pkg.id} already has a doi request`);
 
-    await mongo.setDoiRequest(pkg.id, user);
+    return mongo.setDoiRequest(pkg.id, user);
   }
 
   /**
@@ -21,8 +22,8 @@ class DoiModel {
    * @description admin rejects doi request
    * 
    */
-  rejectRequest() {
-
+  rejectRequest(pkg, username) {
+    return mongo.setDoiRequestState(pkg.id,  config.doi.states.rejected, username);
   }
 
   /**
@@ -32,10 +33,9 @@ class DoiModel {
    * @param {*} pkg 
    * @param {*} message 
    */
-  requestUpdates(pkg, message) {
-
+  requestUpdates(pkg, username, message) {
+    return mongo.setDoiRequestState(pkg.id,  config.doi.states.rejected, username, message);
   }
-
 
   /**
    * @method approve
@@ -43,16 +43,22 @@ class DoiModel {
    * 
    * @param {*} pkg 
    */
-  approve(pkg) {
+  approve(pkg, username) {
+    await doi.mint(pkg);
+    await mongo.setDoiRequestState(pkg.id,  config.doi.states.accepted, username);
+  }
 
+  getIdFromDoi(doi) {
+    let collection = await mongo.getDoiCollection();
+    return collection.findOne({doi});
   }
 
   getPendingDois() {
-
+    return mongo.getPendingDois();
   }
 
   getApprovedDois() {
-
+    return mongo.getApprovedDois();
   }
 
 }

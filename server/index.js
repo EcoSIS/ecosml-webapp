@@ -50,6 +50,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 /**
+ * Setup doi resolver
+ */
+require('./controllers/doi').doiResolver(app);
+
+/**
  * Setup static routes for webapp
  **/
 require('./controllers/static')(app);

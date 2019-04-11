@@ -41,9 +41,19 @@ class MongoDB {
     return this.db.collection(config.mongodb.collections.stats);
   }
 
+  async getStatsCollection() {
+    await this.conn();
+    return this.db.collection(config.mongodb.collections.stats);
+  }
+
   async githubTeamCollection() {
     await this.conn();
     return this.db.collection(config.mongodb.collections.githubTeam);
+  }
+
+  async getDoiCollection() {
+    await this.conn();
+    return this.db.collection(config.mongodb.collections.doi);
   }
 
   async createPackageIndexes() {
@@ -288,6 +298,80 @@ class MongoDB {
   async getAllGithubTeamNames() {
     let collection = await this.githubTeamCollection();
     return collection.find({}, {slug: 1, id: 1}).toArray();
+  }
+
+  /**
+   * @method setDoiRequest
+   * @description start a doi request
+   * 
+   * @param {String} pkgId package id to request doi for
+   * @param {String} username username of requestor
+   * 
+   * @returns {Promise}
+   */
+  async setDoiRequest(pkgId, username) {
+    let collection = await mongo.getDoiCollection();
+    return collection.insert({
+      id : pkgId,
+      state : config.doi.states.pendingApproval,
+      history : [{
+        timestamp : Date.now(),
+        state: config.doi.states.pendingApproval
+      }],
+      requestedBy : username
+    });
+  }
+
+  /**
+   * @method setDoiRequestState
+   * @description update a doi request state
+   * 
+   * @param {String} pkgId package id to request doi for
+   * @param {String} state new doi state 
+   * @param {String} username admin username making update
+   * 
+   * @returns {Promise}
+   */
+  async setDoiRequestState(pkgId, state, username, message) {
+    let history = {state, timestamp : Date.now(), admin: username};
+    if( message ) history.message = message;
+
+    let collection = await mongo.getDoiCollection();
+    return collection.update({
+      '$set' : {state},
+      '$push' : {history},
+    }, {id: pkgId});
+  }
+
+  /**
+   * @method getDoiRequest
+   * @description get a doi request state
+   * 
+   * @param {String} pkgId package id
+   * 
+   * @returns {Promise} resolves to mongodb results
+   */
+  async getDoiRequest(pkgId) {
+    let collection = await mongo.getDoiCollection();
+    return collection.get({id: pkgId});
+  }
+
+  /**
+   * @method getPendingDois
+   * @description get all dois that have not been approved
+   */
+  async getPendingDois() {
+    let collection = await mongo.getDoiCollection();
+    return collection.find({state: {'$ne': config.doi.states.accepted}});
+  }
+
+  /**
+   * @method getApprovedDois
+   * @description get all dois that have been approved
+   */
+  async getApprovedDois() {
+    let collection = await mongo.getDoiCollection();
+    return collection.find({state: config.doi.states.accepted});
   }
 
   /**

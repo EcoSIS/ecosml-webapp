@@ -2,7 +2,7 @@ const {BaseStore} = require('@ucd-lib/cork-app-utils');
 const clone = require('clone');
 
 const IGNORE_DATA_PROPERTIES = {
-  managed : [],
+  managed : ['releases', 'releaseCount'],
   registered : ['description', 'overview', 'releases', 'releaseCount']
 }
 

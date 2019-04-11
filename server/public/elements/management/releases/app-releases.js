@@ -195,14 +195,15 @@ export default class AppReleases extends Mixin(PolymerElement)
 
     this.saving = true;
     this.$.create.innerHTML = 'Creating...'
-    let resp = await this._createRelease(this.package.name, info);
+    let resp = await this._createRelease(this.pkg.name, info);
     this.$.create.innerHTML = 'Create Release'
     this.saving = false;
 
     if( resp.state === 'error' ) {
       alert('Error creating release: '+resp.error.payload.message);
     } else {
-      await this._getPackage(this.package.id);
+      let e = await this._getPackage(this.pkg.id);
+      this.PackageEditor.setData(e.payload);
       this.showList();
     }
   }

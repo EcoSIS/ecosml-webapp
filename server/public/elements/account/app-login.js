@@ -21,7 +21,10 @@ export default class AppLogin extends Mixin(PolymerElement)
 
   constructor() {
     super();
-    this.active = true;
+    
+    if( window.INTEGRATION_TESTING ) {
+      window.INTEGRATION_TESTING['app-login'] = this;
+    }
   }
 
   async _attemptLogin() {

@@ -26,6 +26,7 @@ services:
       - GITHUB_CLIENT_SECRET=${GITHUB_CLIENT_SECRET}
       - GITHUB_ORG=ecosml-dev
       - FIREBASE_ENV=dev
+      - GOOGLE_ANALYTICS_KEY=${GOOGLE_ANALYTICS_KEY}
     command: tail -f /dev/null
 
   redis:

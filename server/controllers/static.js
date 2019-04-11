@@ -37,12 +37,14 @@ module.exports = function(app) {
 
       next({
         user : req.session.username || null,
+        admin : req.session.admin,
         github : {
           username : githubInfo.username,
           data : githubInfo.data
         },
         appRoutes : config.server.appRoutes,
         ecosisDataHost : config.ecosis.host,
+        googleAnalyticsKey : config.google.analyticsKey,
         env : {
           client : config.server.clientEnv,
           github : config.github.org,

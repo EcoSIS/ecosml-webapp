@@ -1,7 +1,14 @@
 const env = process.env;
 const path = require('path');
-const secrets = require('../../secrets');
+const fs = require('fs');
 const keyPath = path.join(__dirname, '../../google-key.json');
+
+let secrets = {ecosml : {
+  secret : {}
+}};
+if( fs.existsSync(path.resolve(__dirname, '../../secrets.js')) ) {
+  secrets = require('../../secrets');
+}
 
 const mongoHost = env.MONGO_HOST || 'mongo';
 const firebaseEnv = env.FIREBASE_ENV || 'local';
@@ -68,7 +75,8 @@ module.exports = {
     collections : {
       package : 'package',
       githubTeam : 'github-team',
-      stats : 'stats'
+      stats : 'stats',
+      doi : 'doi'
     },
     filters : ['keywords', 'theme', 'family', 'specific', 'language'],
     indexes : require('./mongo-indexes')
@@ -101,6 +109,24 @@ module.exports = {
     }
   },
 
+  datacite : {
+    shoulder : (serverEnv === 'prod') ? '' : '10.21232',
+    url : (serverEnv === 'prod') ? 'https://api.datacite.org/dois' : 'https://api.test.datacite.org/dois',
+    username : secrets.datacite.username,
+    password : secrets.datacite.password
+  },
+
+  doi : {
+    states : {
+      pendingApproval : 'pending-approval',
+      pendingRevision : 'pending-revision',
+      rejected : 'rejected',
+      requesting : 'requesting',
+      accepted : 'accepted',
+      applied : 'applied'
+    }
+  },
+
   travisCi : secrets.travisCi,
 
   git : {
@@ -110,7 +136,8 @@ module.exports = {
 
   google : {
     key : secrets.google,
-    keyPath : keyPath
+    keyPath : keyPath,
+    analyticsKey : env.GOOGLE_ANALYTICS_KEY || '',
   },
 
   firebase : {

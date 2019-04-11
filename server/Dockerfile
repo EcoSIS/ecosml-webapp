@@ -15,7 +15,7 @@ COPY ./models /server/models
 COPY ./templates /server/templates
 COPY ./gitinfo.json /server/
 
-RUN cd server && npm install
+RUN cd server && npm install --production
 RUN npm install -g mocha
 
 CMD node server

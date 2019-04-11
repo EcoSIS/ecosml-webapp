@@ -37,6 +37,7 @@ module.exports = function(app) {
 
       next({
         user : req.session.username || null,
+        admin : req.session.admin,
         github : {
           username : githubInfo.username,
           data : githubInfo.data

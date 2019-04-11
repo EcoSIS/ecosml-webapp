@@ -3,7 +3,7 @@ const config = require('./config');
 
 class DOI {
 
-  _mintEZ(pkg) {
+  async _mintEZ(pkg) {
     let created = new Date().getFullYear();
     if( pkg.created ) created = new Date(pkg.created).getFullYear();
 
@@ -40,7 +40,7 @@ datacite.publicationyear: ${created}`;
     }
   }
 
-  mint(pkg) {
+  async mint(pkg) {
     let created = new Date().getFullYear();
     if( pkg.created ) created = new Date(pkg.created).getFullYear();
 

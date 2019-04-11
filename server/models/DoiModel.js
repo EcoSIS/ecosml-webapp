@@ -43,12 +43,12 @@ class DoiModel {
    * 
    * @param {*} pkg 
    */
-  approve(pkg, username) {
+  async approve(pkg, username) {
     await doi.mint(pkg);
     await mongo.setDoiRequestState(pkg.id,  config.doi.states.accepted, username);
   }
 
-  getIdFromDoi(doi) {
+  async getIdFromDoi(doi) {
     let collection = await mongo.getDoiCollection();
     return collection.findOne({doi});
   }

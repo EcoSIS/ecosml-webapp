@@ -2,6 +2,7 @@ const { exec } = require('child_process');
 const fs = require('fs-extra');
 const config = require('./config');
 const utils = require('./utils');
+const logger = require('./logger');
 const path = require('path');
 const GITHUB_ACCESS = config.github.access;
 
@@ -39,7 +40,12 @@ class GitCli {
     var {repoName, org} = utils.getRepoNameAndOrg(repoName);
     await this.removeRepositoryFromDisk(repoName);
     let url = BASE_URL+'/'+org+'/'+repoName;
+
     let orgDir = path.join(ROOT, org);
+    if( !fs.existsSync(orgDir) ) {
+      await fs.mkdirp(orgDir);
+    }
+
     await this.exec(`clone ${url}`, {cwd: orgDir});
   }
 
@@ -53,12 +59,6 @@ class GitCli {
    */
   async ensureDir(repoName) {
     let dir = this.getRepoPath(repoName);
-
-    let orgDir = path.resolve(dir, '..');
-    if( !fs.existsSync(orgDir) ) {
-      await fs.mkdirp(orgDir);
-    }
-
     if( !fs.existsSync(dir) ) {
       await this.clone(repoName);
     }
@@ -189,6 +189,8 @@ class GitCli {
     cmd = 'git '+cmd;
     options.shell = '/bin/bash';
     options.maxBuffer = 100000 * 1024;
+
+    logger.info(cmd);
 
     return new Promise((resolve, reject) => {
       exec(cmd, options, (error, stdout, stderr) => {

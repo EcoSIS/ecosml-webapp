@@ -229,7 +229,9 @@ class RegisteredRepositories {
   async restoreAll() {
     await this._reset();
     let repos = [];
-    await this._walkAndRestore(this.repoFileRoot, repos);
+    if( fs.existsSync(this.repoFileRoot) ) {
+      await this._walkAndRestore(this.repoFileRoot, repos);
+    }
     return repos;
   }
 

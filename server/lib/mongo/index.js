@@ -394,7 +394,15 @@ class MongoDB {
    */
   async getStats() {
     let collection = await this.getStatsCollection();
-    return collection.find({}).toArray();
+    let results = await collection.find({}).toArray();
+    if( !results.length ) {
+      return [{value: {
+        organizations : [],
+        keywords : [],
+        themes : []
+      }}]
+    }
+    return results;
   }
 
 }

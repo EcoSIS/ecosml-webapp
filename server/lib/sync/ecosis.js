@@ -129,7 +129,7 @@ class EcosisSync {
     org = {
       id : org.id,
       name : org.name,
-      groups : info.groups,
+      groups : org.groups,
       displayName : org.display_name,
       description : org.description,
       logo : org.image_display_url

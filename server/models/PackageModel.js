@@ -31,7 +31,7 @@ class PackageModel {
         body = JSON.parse(body).message
       } catch(e) {}
 
-      throw new AppError(body, AppError.ERROR_CODES.BAD_API_RESPONSE);
+      throw new AppError(response.statusCode+': '+body, AppError.ERROR_CODES.BAD_API_RESPONSE);
     }
   }
 

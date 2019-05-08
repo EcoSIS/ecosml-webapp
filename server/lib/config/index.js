@@ -44,7 +44,7 @@ module.exports = {
 
     // place all SPA base route names here
     appRoutes : ['package', 'search', 'edit', 
-    'create', 'account', 'about']
+    'create', 'account', 'about', 'admin']
   },
 
   client : {

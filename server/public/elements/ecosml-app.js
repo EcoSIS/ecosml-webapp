@@ -31,6 +31,7 @@ import "./app-home"
 import "./app-about"
 import "./landing/app-landing-page"
 import "./account/app-user-account"
+import "./admin/app-admin"
 import "./header/app-header"
 import "./utils/app-user-icon"
 import "./utils/app-popup"
@@ -88,6 +89,13 @@ export class EcoSMLApp extends Mixin(PolymerElement)
       if( e.location.path.length > 1 ) {
         this._setSelectedPackageId(e.location.path[1]);
       }
+    }
+    if( page === 'admin' ) {
+      if( !APP_CONFIG.user ) {
+        return this.AppStateModel.locationElement.setWindowLocation('/');
+      } else if( !APP_CONFIG.admin ) {
+        return this.AppStateModel.locationElement.setWindowLocation('/');
+      } 
     }
 
     if( page === 'search' || page === 'package' || page === 'home' ) {

@@ -52,6 +52,10 @@ export default class AppReleases extends Mixin(PolymerElement)
       isManagedSource : {
         type : Boolean,
         value : false
+      },
+      packageHtmlUrl : {
+        type : String,
+        value : ''
       }
     }
   }
@@ -103,10 +107,13 @@ export default class AppReleases extends Mixin(PolymerElement)
       this.currentRelease = null;
       this.hasCurrentRelease = false;
       this.hasPriorReleases = false;
+      this.packageHtmlUrl = '';
       this._render();
       return;
     }
 
+
+    this.packageHtmlUrl = this.pkg.htmlUrl;
     let releasesInverse = this.releases.slice().reverse();
 
     this.hasCurrentRelease = true;

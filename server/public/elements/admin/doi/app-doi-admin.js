@@ -7,7 +7,7 @@ export default class AppDoiAdmin extends Mixin(LitElement)
 
   static get properties() {
     return {
-      test : {type: String}
+      items : {Array: String}
     }
   }
 
@@ -15,9 +15,9 @@ export default class AppDoiAdmin extends Mixin(LitElement)
     super();
     this.render = render.bind(this);
 
-    this._injectModel('AppStateModel');
+    this.items = [];
 
-    this.test = 'DOI Admin';
+    this._injectModel('AppStateModel');
   }
 
   _onAppStateUpdate(e) {

@@ -20,7 +20,7 @@ class EcosisSync {
   async _init() {
     // this is triggered on each firestore doc update
     firebase.initEcoSISObserver(e => {
-      e.docChanges.forEach((change) => {
+      e.docChanges().forEach((change) => {
         let data = firebase.getDataFromChangeDoc(change);
         firebase.emitBuffered(data.payload.id, firebase.EVENTS.ECOSIS_ORG_UPDATE, data);
       });

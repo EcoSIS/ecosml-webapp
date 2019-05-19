@@ -6,16 +6,17 @@ RUN apt-get install -y ruby-full
 RUN gem install commonmarker
 
 RUN mkdir server
-COPY ./dist /server/dist
 COPY ./package* /server/
+
+RUN cd server && npm install --production
+RUN npm install -g mocha
+
+COPY ./dist /server/dist
 COPY ./index.js /server/
 COPY ./controllers /server/controllers
 COPY ./lib /server/lib
 COPY ./models /server/models
 COPY ./templates /server/templates
 COPY ./gitinfo.json /server/
-
-RUN cd server && npm install --production
-RUN npm install -g mocha
 
 CMD node server

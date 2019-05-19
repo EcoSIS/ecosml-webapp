@@ -5,6 +5,7 @@ services:
   server:
     image: ecosis/ecosml-webapp:dev
     volumes:
+      - snapshot-data:/server/snapshots
       - git-data:/server/gitdata
       - ../google-key.json:/server/google-key.json
       - ../secrets.js:/server/secrets.js
@@ -37,3 +38,4 @@ volumes:
   mongo-data:
   git-data:
   redis-data:
+  snapshot-data:

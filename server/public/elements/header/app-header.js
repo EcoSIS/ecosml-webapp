@@ -27,6 +27,11 @@ export default class AppHeader extends Mixin(PolymerElement)
       sandbox : {
         type : Boolean,
         value : false
+      },
+
+      admin : {
+        type : Boolean,
+        value : false
       }
     }
   }
@@ -39,6 +44,8 @@ export default class AppHeader extends Mixin(PolymerElement)
       window.title = 'EcoSML Sandbox - Spectral Model Library';
       this.sandbox = true;
     }
+
+    this.admin = APP_CONFIG.admin;
 
     window.addEventListener('click', () => this.hideMenu());
   }

@@ -29,7 +29,7 @@ class GithubSync {
   async _init() {
     // this is triggered on each firestore doc update
     firebase.initGithubTeamObserver(e => {
-      e.docChanges.forEach((change) => {
+      e.docChanges().forEach((change) => {
         let data = firebase.getDataFromChangeDoc(change);
         firebase.emitBuffered(data.payload, firebase.EVENTS.GITHUB_TEAM_UPDATE, data);
       });
@@ -42,7 +42,7 @@ class GithubSync {
 
     // this is triggered on each firestore doc update
     firebase.initGithubCommitObserver(e => {
-      e.docChanges.forEach((change) => {
+      e.docChanges().forEach((change) => {
         let data = firebase.getDataFromChangeDoc(change);
         firebase.emitBuffered(data.payload, firebase.EVENTS.GITHUB_COMMIT, data);
       });
@@ -54,7 +54,7 @@ class GithubSync {
   
     // TODO: what about release events?
     firebase.initGithubReleaseObserver(e => {
-      e.docChanges.forEach((change) => {
+      e.docChanges().forEach((change) => {
         let data = firebase.getDataFromChangeDoc(change);
         firebase.emitBuffered(data.payload, firebase.EVENTS.GITHUB_RELEASE, data);
       });
@@ -176,7 +176,7 @@ class GithubSync {
 
       let repoName = e.payload.id;
 
-      // we already processed a newer event for this team
+      // we already processed a newer event for this release
       if( handled[repoName] ) {
         try {
           await firebase.ackGithubReleaseEvent(e.fsId);

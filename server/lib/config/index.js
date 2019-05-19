@@ -3,9 +3,13 @@ const path = require('path');
 const fs = require('fs');
 const keyPath = path.join(__dirname, '../../google-key.json');
 
-let secrets = {ecosml : {
-  secret : {}
-}};
+let secrets = {
+  ecosml : {
+    secret : {}
+  },
+  datacite : {},
+  aws : {}
+};
 if( fs.existsSync(path.resolve(__dirname, '../../secrets.js')) ) {
   secrets = require('../../secrets');
 }
@@ -110,7 +114,7 @@ module.exports = {
   },
 
   datacite : {
-    shoulder : (serverEnv === 'prod') ? '' : '10.21232',
+    shoulder : (serverEnv === 'prod') ? '10.21232' : '10.21232',
     url : (serverEnv === 'prod') ? 'https://api.datacite.org/dois' : 'https://api.test.datacite.org/dois',
     username : secrets.datacite.username,
     password : secrets.datacite.password
@@ -124,7 +128,8 @@ module.exports = {
       requesting : 'requesting',
       accepted : 'accepted',
       applied : 'applied'
-    }
+    },
+    snapshotDir : '/server/snapshots'
   },
 
   travisCi : secrets.travisCi,
@@ -132,6 +137,14 @@ module.exports = {
   git : {
     name : 'EcoSML Admin',
     email : 'admin@ecosml.org'
+  },
+
+  aws : {
+    accessKeyId : secrets.aws.accessKeyId,
+    secretAccessKey : secrets.aws.secretAccessKey,
+    bucket : {
+      doiSnapshots : (serverEnv === 'prod') ? 'ecosml-doi-snapshots-prod' : 'ecosml-doi-snapshots-dev'
+    }
   },
 
   google : {

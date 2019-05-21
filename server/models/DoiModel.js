@@ -104,6 +104,11 @@ class DoiModel {
     await mongo.setDoiRequestState(pkg.id, tag, config.doi.states.applied, username, doiNum);
   }
 
+  getSnapshotPath(pkg, tag) {
+    var {repoName, org} = utils.getRepoNameAndOrg(pkg.name);
+    return path.join(config.doi.snapshotDir, org, repoName, tag+'.zip');
+  }
+
   async getIdFromDoi(doi) {
     let collection = await mongo.getDoiCollection();
     return collection.findOne({doi});

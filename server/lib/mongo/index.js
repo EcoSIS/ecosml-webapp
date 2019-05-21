@@ -108,6 +108,32 @@ class MongoDB {
     return results;
   }
 
+  async recreateDoiIndexes() {
+    let collection = await this.getDoiCollection();
+    let indexes = config.mongodb.indexes.doi;
+
+    let results = [];
+    for( var i = 0; i < indexes.length; i++ ) {
+      let index = indexes[i];
+
+      try {
+        await collection.dropIndex(index.options.name);
+      } catch(e) {}
+
+      let result = await collection.createIndex(index.index, index.options);
+      results.push(result);
+    }
+
+    return results;
+  }
+
+  async recreateIndexes() {
+    let pkgs = await this.recreatePackageIndexes();
+    let githubTeams = await this.recreateGithubTeamIndexes();
+    let dois = await this.recreateDoiIndexes();
+    return {pkgs, githubTeams, dois};
+  }
+
   /**
    * @method search
    */
@@ -368,13 +394,21 @@ class MongoDB {
     return collection.findOne({id: pkgId, tag});
   }
 
+  async getPackageDois(pkgId) {
+    let collection = await this.getDoiCollection();
+    return collection.find(
+      {id: pkgId, state:'applied'},
+      {tag:1,doi:1,_id:0}
+    ).toArray();
+  }
+
   /**
    * @method getPendingDois
    * @description get all dois that have not been approved
    */
   async getPendingDois() {
     let collection = await this.getDoiCollection();
-    return collection.find({state: {'$ne': config.doi.states.applied}});
+    return collection.find({state: {'$ne': config.doi.states.applied}}).toArray();
   }
 
   /**
@@ -383,7 +417,7 @@ class MongoDB {
    */
   async getApprovedDois() {
     let collection = await mongo.getDoiCollection();
-    return collection.find({state: config.doi.states.applied});
+    return collection.find({state: config.doi.states.applied}).toArray();
   }
 
   /**

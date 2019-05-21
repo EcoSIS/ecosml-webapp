@@ -258,6 +258,8 @@ class PackageModel {
       if( info ) pkgObj.organizationInfo = JSON.parse(info);
     }
 
+    pkgObj.dois = await mongo.getPackageDois(pkgObj.id);
+
     // default
     if( !pkgObj.source ) {
       pkgObj.source = 'managed';

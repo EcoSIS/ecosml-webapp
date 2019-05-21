@@ -132,6 +132,13 @@
             <div id="keywords"></div>
           </div>
 
+          <div hidden$="[[!package.dois]]">
+            <h2 class="uheader lightblue padded">DOI</h2>
+            <template is="dom-repeat" items="[[package.dois]]">
+              <div><a href$="/api/doi/download/[[package.id]]/[[item.tag]]">doi:[[item.doi]]</a> for <b>[[item.tag]]</b></div>
+            </template>
+          </div>
+
           <div hidden$="[[!userHasWriteAccess]]">
             <h2 class="uheader dark padded">Admin</h2>
             <div><a href$="/edit/[[package.id]]">Edit Package</a></div>

@@ -10,6 +10,9 @@ let secrets = {
   datacite : {},
   aws : {}
 };
+
+const MOUNT_PATH = env.MOUNT_PATH || '/server';
+
 if( fs.existsSync(path.resolve(__dirname, '../../secrets.js')) ) {
   secrets = require('../../secrets');
 }
@@ -48,7 +51,7 @@ module.exports = {
 
     // place all SPA base route names here
     appRoutes : ['package', 'search', 'edit', 
-    'create', 'account', 'about', 'admin']
+    'create', 'account', 'about', 'admin'],
   },
 
   client : {
@@ -57,6 +60,12 @@ module.exports = {
       bundle : clientPackage.version,
       loader : clientPackage.dependencies['@ucd-lib/cork-app-load'].replace(/^\D/, '')
     }
+  },
+
+  backups : {
+    tmpDir : path.join(MOUNT_PATH, 'backup'),
+    bucket : 'ecosml-backups',
+    ecosisBucket : 'ecosis-backups'
   },
 
   ecosis : {
@@ -129,7 +138,7 @@ module.exports = {
       accepted : 'accepted',
       applied : 'applied'
     },
-    snapshotDir : '/server/snapshots'
+    snapshotDir : path.join(MOUNT_PATH, 'snapshots')
   },
 
   travisCi : secrets.travisCi,

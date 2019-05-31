@@ -1,8 +1,8 @@
 FROM node:8.7
 
-# install ruby and markdown library
+# install ruby and markdown library, mongodump
 RUN apt-get update
-RUN apt-get install -y ruby-full
+RUN apt-get install -y ruby-full mongodb-clients zip
 RUN gem install commonmarker
 
 RUN mkdir server

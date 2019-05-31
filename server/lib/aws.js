@@ -33,7 +33,31 @@ class AWSImpl {
         else resolve(data);
       });
     });
-    
+  }
+
+  deleteFile(bucketFilePath, bucketName) {
+    return new Promise((resolve, reject) => {
+      let params = { 
+        Bucket: bucketName, 
+        Key: bucketFilePath
+      };
+      s3.deleteObject(params, function(err, data) {
+        if (err) reject(err);
+        else resolve(data);
+      });
+    });
+  }
+
+  listFiles(bucketName) {
+    return new Promise ((resolve, reject) => {
+      let s3params = {
+        Bucket: bucketName,
+      };
+      s3.listObjectsV2 (s3params, (err, data) => {
+        if (err) return reject(err);
+        resolve(data.Contents.map(file => file.Key));
+      });
+    });
   }
 
 }

@@ -6,6 +6,18 @@ const aws = require('../lib/aws');
 
 class BackupModel {
 
+  constructor() {
+    setInterval(async () => {
+      if( new Date().getHours() !== 3 ) return;
+      try {
+        await this.run();
+      } catch(e) {
+        
+      }
+      
+    }, 1000 * 60 * 60);
+  }
+
   async run() {
     await fs.emptyDir(config.backups.tmpDir);
 

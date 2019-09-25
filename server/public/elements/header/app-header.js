@@ -69,7 +69,10 @@ export default class AppHeader extends Mixin(PolymerElement)
   _onMenuIconClicked(e) {
     e.preventDefault();
     e.stopPropagation();
-    this.toggleMenu();
+    // this.toggleMenu();
+    this.dispatchEvent(
+      new CustomEvent('open-menu')
+    );
   }
 
   /**

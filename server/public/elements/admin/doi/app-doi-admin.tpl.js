@@ -1,11 +1,10 @@
 import { html } from 'lit-element';
-import litCss from '../../styles/lit-css'
-import sharedStyles from '../../styles/shared-styles.html'
+import {litCss, sharedStylesHtml} from 'ecosis-client-commons'
 
 export default function render() { 
 return html`
 
-${litCss(sharedStyles)}
+${litCss(sharedStylesHtml)}
 <style>
   :host {
     display: block;

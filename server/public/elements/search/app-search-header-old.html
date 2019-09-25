@@ -1,0 +1,49 @@
+<style>
+  :host {
+    display: block;
+    background-color: var(--text-primary-color);
+  }
+  .root {
+    display: flex;
+    justify-content: center;
+  }
+  input {
+    display: block;
+    width: 100%;
+    padding: 5px;
+    font-size: 26px;
+    margin: 15px 0;
+    height: 42px;
+    background: transparent;
+    color: var(--inverse-text-color);
+    border: 1px solid var(--inverse-text-color);
+    box-sizing: border-box;
+  }
+  button {
+    margin: 15px 0;
+    color : var(--inverse-text-color);
+    background: transparent;
+    height: 42px;
+    padding: 0 15px;
+    border-right: 1px solid var(--inverse-text-color);
+    border-top: 1px solid var(--inverse-text-color);
+    border-bottom: 1px solid var(--inverse-text-color);
+    border-left: none;
+    border-radius: 0;
+  }
+</style>
+
+<div class="root">
+  <div style="flex:.66">
+    <input type="text" id="input" on-keypress="_onKeyPress"/>
+  </div>
+  <div>
+    <button on-click="_onButtonClick">
+      <iron-icon icon="search"></iron-icon>
+    </button>
+  </div>
+</div>
+
+<div class="root">
+<app-active-filters-panel style="flex:.66"></app-active-filters-panel>
+</div>

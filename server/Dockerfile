@@ -1,4 +1,4 @@
-FROM node:8.7
+FROM node:10
 
 # install ruby and markdown library, mongodump
 RUN apt-get update

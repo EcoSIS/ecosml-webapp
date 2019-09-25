@@ -1,28 +1,115 @@
 <style include="shared-styles">
   :host {
     display: block;
+    height: 100vh;
   }
 
-  paper-material {
+  app-search-header {
+    --light-primary-color: var(--light-secondary-color);
+  }
+
+  .menu-root {
+    height: 100%;
+    box-sizing: border-box;
+    position: relative;
+  }
+
+  .main-content {
+    will-change: transition;
+    transform: translate(0px, 0px);
+    transition: transform 250ms ease-out;
+    position: absolute;
+    top: 61px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .main-content[open-menu] {
+    transform: translate(-150px, 0px);
+  }
+
+  .menu {
+    will-change: transition;
+    transition: transform 250ms ease-out;
+    transform: translate(150px, 0px);
+    z-index: 0;
+    position: absolute;
+    top: 61px;
+    right: 0;
+    bottom: 0;
+    width: 150px;
     background: white;
-    display: block;
-    padding: 10px;
-    margin: 10px;
+    box-shadow: 0 0 5px #ccc inset;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
   }
 
+  .menu[open-menu] {
+    transform: translate(0px, 0px);
+  }
+
+  .menu a {
+    display: block;
+    text-align: center;
+    font-size: 17px;
+    margin-top: 20px;
+  }
+
+  .menu iron-icon {
+    --iron-icon-width: 32px;
+    --iron-icon-height: 32px;
+  }
+
+  .menu a span {
+    display: block;
+  }
 </style>
 
-<app-header></app-header>
-<app-search-header hidden$="[[!searchHeader]]"></app-search-header>
-
+<app-header on-open-menu="_onOpenMenu" id="header"></app-header>
 <app-route app-routes="[[appRoutes]]"></app-route>
-<iron-pages selected="[[page]]" attr-for-selected="id">
-  <app-home id="home"></app-home>
-  <app-about id="about"></app-about>
-  <app-package-metadata-editor id="edit"></app-package-metadata-editor>
-  <app-package-search id="search"></app-package-search>
-  <app-landing-page id="package"></app-landing-page>
-  <app-user-account id="account"></app-user-account>
-  <app-admin id="admin"></app-admin>
-</iron-pages>
+
+<div class="menu-root">
+  <div id="menu" class="menu" open-menu$="[[openMenu]]">
+    <a href="/" tabindex$="[[anchorTabIndex]]">
+      <div>
+        <iron-icon icon="home"></iron-icon> 
+      </div>
+      <span>Home</span>
+    </a>
+    <a href="[[lastSearchUrl]]" tabindex$="[[anchorTabIndex]]">
+      <iron-icon icon="search"></iron-icon> 
+      <span>Search</span>
+    </a>
+    <a href="https://data.ecosis.org" target="_blank" tabindex$="[[anchorTabIndex]]">
+      <iron-icon icon="create"></iron-icon> 
+      <span>Create/Edit</span>
+    </a>
+    <a href="${APP_CONFIG.ecosmlUrl}" target="_blank" tabindex$="[[anchorTabIndex]]">
+      <iron-icon icon="code"></iron-icon> 
+      <span>Models</span>
+    </a>
+    <a href="https://github.com/CSTARS/ecosis/issues/new" target="_blank" tabindex$="[[anchorTabIndex]]">
+      <iron-icon icon="bug-report"></iron-icon> 
+      <span>Report Issue</span>
+    </a>
+  </div>
+  <div class="main-content" open-menu$="[[openMenu]]">
+    <app-search-header></app-search-header>
+    <iron-pages selected="[[page]]" attr-for-selected="id">
+      <app-home id="home"></app-home>
+      <app-about id="about"></app-about>
+      <app-package-metadata-editor id="edit"></app-package-metadata-editor>
+      <app-package-search id="search"></app-package-search>
+      <app-landing-page id="package"></app-landing-page>
+      <app-user-account id="account"></app-user-account>
+      <app-admin id="admin"></app-admin>
+    </iron-pages>
+  </div>
+</div>
 

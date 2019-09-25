@@ -1,7 +1,7 @@
 import {PolymerElement, html} from "@polymer/polymer"
 import template from "./app-filters-panel.html"
 import SearchInterface from "../../interfaces/SearchInterface"
-import "./app-filter-panel"
+// import "./app-filter-panel"
 
 export default class AppFiltersPanel extends Mixin(PolymerElement)
   .with(EventInterface, SearchInterface) {

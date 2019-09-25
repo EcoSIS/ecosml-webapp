@@ -1,6 +1,5 @@
 // import styles
-import "./styles/style-properties"
-import "./styles/shared-styles"
+import "ecosis-client-commons"
 
 // import app framework
 import "@ucd-lib/cork-app-utils"
@@ -34,7 +33,7 @@ import "./account/app-user-account"
 import "./admin/app-admin"
 import "./header/app-header"
 import "./utils/app-user-icon"
-import "./utils/app-popup"
+// import "./utils/app-popup"
 
 // element imports
 import AppStateInterface from "./interfaces/AppStateInterface"
@@ -67,6 +66,10 @@ export class EcoSMLApp extends Mixin(PolymerElement)
       searchHeader : {
         type : Boolean,
         value : false
+      },
+      openMenu : {
+        type : Boolean,
+        value : false
       }
     }
   }
@@ -74,6 +77,17 @@ export class EcoSMLApp extends Mixin(PolymerElement)
   constructor() {
     super();
     this.active = true;
+
+    window.addEventListener('click', e => {
+      if( !this.openMenu ) return;
+      if( !e.composedPath ) {
+        return console.warn('Browser does not support event.path');
+      }
+      if( e.composedPath().indexOf(this.$.menu) > -1) return;
+      if( e.composedPath().indexOf(this.$.header) > -1) return;
+      this.openMenu = false;
+    });
+
   }
 
   toggleDrawer() {
@@ -106,6 +120,10 @@ export class EcoSMLApp extends Mixin(PolymerElement)
     
     window.scrollTo(0, 0);
     this.page = page;
+  }
+
+  _onOpenMenu() {
+    this.openMenu = !this.openMenu;
   }
 }
 

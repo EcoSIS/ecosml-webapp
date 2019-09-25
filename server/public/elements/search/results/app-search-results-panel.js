@@ -5,7 +5,7 @@ import SearchInterface from "../../interfaces/SearchInterface"
 import AppStateInterface from "../../interfaces/AppStateInterface"
 
 import "./app-search-result"
-import "../app-search-pagination"
+// import "../app-search-pagination"
 
 export default class AppSearchResultsPanel extends Mixin(PolymerElement)
   .with(EventInterface, SearchInterface, AppStateInterface) {

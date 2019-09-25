@@ -12,6 +12,12 @@ class PackageModel extends BaseModel {
 
     this.store = PackageStore;
     this.service = PackageService;
+
+    this.EventBus.on('app-state-update', e => {
+      if( e.page === 'package' ) {
+        this.get(e.location.path[1]);
+      }
+    });
       
     this.register('PackageModel');
   }

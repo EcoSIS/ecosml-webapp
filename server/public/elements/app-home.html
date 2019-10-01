@@ -2,25 +2,26 @@
   :host {
     display: block;
   }
- 
-  .stat {
+
+  /* .root {
     display: flex;
-    align-items: center;
+    justify-content: center;
+  } */
+
+  .stat-row {
+    padding: 3px;
+    display: flex;
   }
 
-  .stat .label {
+  .stat-row > div:first-child {
     flex: 1;
   }
-
-  .stat .count {
-    padding: 5px;
-    margin: 3px;
-    height: 22px;
-    width: 22px;
-    text-align: center;
-
-    border-radius: 24px;
-    background-color: var(--dark-background-color);
+ 
+  .count-label {
+    background: #eee;
+    border-radius: 20px;
+    padding: 1px 5px;
+    font-size: 13px;
   }
 
   .gitinfo {
@@ -58,19 +59,22 @@
   }
 </style>
 
-<div class="root column" style="text-align: center">
-  <h1>Ecological Spectral Model Library <span id="titleExtra"></span></h1>
-  <p hidden$="[[!sandbox]]">
-    <iron-icon icon="warning" style="vertical-align: bottom"></iron-icon> 
-    This is the development server for 
-    <a href="https://ecosml.org">ecosml.org</a>. You can use this 
-    server to learn about how to use the EcoSML model management tools.
-  </p>
-  <p hidden$="[[sandbox]]">
-    <iron-icon icon="warning" style="vertical-align: bottom"></iron-icon> 
-    This is an early Alpha of EcoSML. Please report any bugs or issues you have 
-    <a href="https://github.com/EcoSIS/ecosml-webapp/issues/new/choose" target="_blank">here.</a>
-  </p>
+<div class="root">
+  <div style="padding: 15px; text-align: center">
+    <h1 style="margin-bottom: 0">Ecological Spectral Model Library <span id="titleExtra"></span></h1>
+    <div>Welcome to the EcoSML, a useful tool for finding spectral models.</div>
+    <p hidden$="[[!sandbox]]">
+      <iron-icon icon="warning" style="vertical-align: bottom"></iron-icon> 
+      This is the development server for 
+      <a href="https://ecosml.org">ecosml.org</a>. You can use this 
+      server to learn about how to use the EcoSML model management tools.
+    </p>
+    <p hidden$="[[sandbox]]">
+      <iron-icon icon="warning" style="vertical-align: bottom"></iron-icon> 
+      This is an early Alpha of EcoSML. Please report any bugs or issues you have 
+      <a href="https://github.com/EcoSIS/ecosml-webapp/issues/new/choose" target="_blank">here.</a>
+    </p>
+  </div>
 </div>
 
 <div class="root">
@@ -81,9 +85,9 @@
         <h2 class="uheader blue">Top Organizations</h2>
         <dom-repeat items="[[stats.organizations]]">
           <template>
-            <div class="stat">
-              <div class="label"><a href$="[[item.link]]">[[item.displayName]]</a></div>
-              <div class="count">[[item.count]]</div>
+            <div class="stat-row">
+              <div><a href$="[[item.link]]">[[item.displayName]]</a></div>
+              <div class="count-label">[[item.count]]</div>
             </div>
           </template>
         </dom-repeat>
@@ -92,9 +96,9 @@
         <h2 class="uheader green">Top Keywords</h2>
         <dom-repeat items="[[stats.keywords]]">
           <template>
-            <div class="stat">
-              <div class="label"><a href$="[[item.link]]">[[item.key]]</a></div>
-              <div class="count">[[item.count]]</div>
+            <div class="stat-row">
+              <div><a href$="[[item.link]]">[[item.key]]</a></div>
+              <div class="count-label">[[item.count]]</div>
             </div>
           </template>
         </dom-repeat>
@@ -103,9 +107,9 @@
         <h2 class="uheader lightblue">Top Themes</h2>
         <dom-repeat items="[[stats.themes]]">
           <template>
-            <div class="stat">
-              <div class="label"><a href$="[[item.link]]">[[item.key]]</a></div>
-              <div class="count">[[item.count]]</div>
+            <div class="stat-row">
+              <div><a href$="[[item.link]]">[[item.key]]</a></div>
+              <div class="count-label">[[item.count]]</div>
             </div>
           </template>
         </dom-repeat>

@@ -14,12 +14,31 @@ class AppPackageSearch extends Mixin(PolymerElement)
   }
 
   static get properties() {
-    return {}
+    return {
+      mobileFiltersOpen : {
+        type : Boolean,
+        value : false
+      }
+    }
   }
 
   constructor() {
     super();
     this.active = true;
+
+    window.addEventListener('resize', () => {
+      let w = window.innerWidth;
+      if( this.mobileFiltersOpen && w > 768 ) this.mobileFiltersOpen = false;
+    });
+  }
+
+  /**
+   * @method _toggleMobileFilters
+   * @description bound to click events on filter button.  toggles to mobile 
+   * filter state
+   */
+  _toggleMobileFilters() {
+    this.mobileFiltersOpen = !this.mobileFiltersOpen;
   }
 
 }

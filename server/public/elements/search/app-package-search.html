@@ -5,26 +5,166 @@
 
   .layout {
     display: flex;
-    justify-content: center;
+    position: relative;
   }
 
-  .inner-layout {
+  .filters-border {
+    border-radius: 0 3px 3px 0;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+  }
+
+  .filters-title {
     display: flex;
-    width: 100%;
-    max-width: 1200px;
-    margin-top: 20px;
+    padding: 16px;
+    align-items: center;
+    font-weight: bold;
   }
 
-  app-filters-panel {
-    width: 30%;
-    max-width: 300px;
+  .filters-title paper-icon-button {
+    display: none;
+    color: var(--text-primary-color);
+  }
+
+  .filters-toggle {
+    padding: 10px;
+    display: none;
+  }
+
+  iron-icon[icon="filter-list"] {
+    vertical-align: text-bottom;
+  }
+
+  .location-label {
+    cursor: pointer;
+    display: flex;
+    color: var(--default-primary-color);
+    padding: 10px 0;
+    font-weight: bold;
+    position: relative;
+    background-color: white;
+    padding-left: 15px;
+    border-radius: 0 0 3px 0;
+    min-width: 250px;
+  }
+
+  .no-results {
+    padding: 50px;
+    text-align: center;
+  }
+
+  .api-link {
+    text-align: center;
+    color: var(--secondary-text-color);
+    padding: 10px;
+    font-size: 12px;
+  }
+  .api-link a {
+    color: var(--secondary-text-color);
+  }
+
+  @keyframes slidein {
+    from {
+      left: -260px;
+    }
+    to {
+      left: 0px;
+    }
+  }
+
+  @keyframes fadein {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @media(max-width: 768px) {
+    .filters {
+      animation: 300ms slidein;
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      overflow-y: auto;
+      background-color: var(--default-background-color);
+      z-index: 1000;
+    }
+
+    .filters-border {
+      border: none;
+      border-radius: 0;
+    }
+
+    .filters-background {
+      animation: 300ms fadein;
+      display: none;
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      bottom: 0;
+      background-color: rgba(0,0,0,0.5);
+      z-index: 999;
+    }
+
+    .filters[open] {
+      display: block;
+    }
+
+    .filters-background[open] {
+      display: block;
+    }
+
+    .filters-title {
+      background-color: white;
+    }
+
+    .filters-title paper-icon-button {
+      display: inline-block;
+    }
+
+    .filters-toggle {
+      display: flex;
+    }
   }
 </style>
 
 <div class="layout">
-  <div class="inner-layout main-panel">
-    <app-filters-panel></app-filters-panel>
-    <app-search-results-panel style="flex:1"></app-search-results-panel>
+  <div class="filters-background" open$="[[mobileFiltersOpen]]"></div>
+  <div class="filters" open$="[[mobileFiltersOpen]]">
+    <div class="filters-title">
+      <div style="flex: 1"><iron-icon icon="filter-list"></iron-icon> Filters</div>
+      <paper-icon-button on-click="_toggleMobileFilters" icon="close"></paper-icon-button>
+    </div>
+
+    <div class="filters-border">
+      <app-filters-panel></app-filters-panel>
+    </div>
+  </div>
+
+  <div style="flex: 1; max-width: 1150px;">
+    <div class="filters-toggle">
+      <a on-click="[[_toggleMobileFilters]]"><iron-icon icon="filter-list"></iron-icon>  Filters</a>
+    </div>
+    <app-search-results-panel></app-search-results-panel>
   </div>
 </div>
 
+<div class="root">
+    <div style="padding: 75px 15px 40px 15px">
+      <div itemtype="http://schema.org/Organization" itemprop="provider">
+        <h2 itemprop="name" style="margin-bottom: 0px">EcoSML</h2>
+        <div class="help-block" style="margin-bottom: 0px" itemprop="description">Ecosystem Spectral Model Library</div>
+        <div>
+          <a href="https://ecosml.org" itemprop="url" highlight>https://ecosml.org</a> |
+          <a href="mailto:info@ecosis.org" itemprop="email" highlight>info@ecosis.org</a> |
+          <a href="mailto:help@ecosis.org" highlight>help@ecosis.org</a>
+        </div>
+      </div>
+    </div>
+  </div>

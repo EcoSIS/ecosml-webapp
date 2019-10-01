@@ -73,10 +73,14 @@ class SearchModel extends BaseModel {
    */
   fromUrl(url) {
     if( typeof url === 'string' ) {
-      url = url.split('/');
+      url = url.replace(/^\//, '').split('/');
     }
 
     let urlParts = url.slice(0);
+    if( urlParts.length && urlParts[0] === 'search' ) {
+      urlParts.shift();
+    }
+
     let query = this.getEmptyQuery();
 
     let i = 0;

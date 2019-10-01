@@ -2,10 +2,11 @@
   :host {
     display: block;
     height: 100vh;
-  }
-
-  app-search-header {
-    --light-primary-color: var(--light-secondary-color);
+    --default-primary-color: #2286c3;
+    --primary-color: var(--default-primary-color);
+    --light-primary-color: #64b5f6;
+    --default-secondary-color: #00867d;
+    --light-secondary-color: #4db6ac;
   }
 
   .menu-root {
@@ -82,19 +83,31 @@
       </div>
       <span>Home</span>
     </a>
-    <a href="[[lastSearchUrl]]" tabindex$="[[anchorTabIndex]]">
+    <a href="/search" tabindex$="[[anchorTabIndex]]">
       <iron-icon icon="search"></iron-icon> 
       <span>Search</span>
     </a>
-    <a href="https://data.ecosis.org" target="_blank" tabindex$="[[anchorTabIndex]]">
+    <a href="/create" hidden$="[[!loggedIn]]" tabindex$="[[anchorTabIndex]]">
       <iron-icon icon="create"></iron-icon> 
       <span>Create/Edit</span>
     </a>
-    <a href="${APP_CONFIG.ecosmlUrl}" target="_blank" tabindex$="[[anchorTabIndex]]">
-      <iron-icon icon="code"></iron-icon> 
-      <span>Models</span>
+    <a href="/account" hidden$="[[!loggedIn]]"  tabindex$="[[anchorTabIndex]]">
+      <iron-icon icon="social:person"></iron-icon> 
+      <span>My Account</span>
     </a>
-    <a href="https://github.com/CSTARS/ecosis/issues/new" target="_blank" tabindex$="[[anchorTabIndex]]">
+    <a href="/auth/logout" hidden$="[[!loggedIn]]"  tabindex$="[[anchorTabIndex]]">
+      <iron-icon icon="exit-to-app"></iron-icon> 
+      <span>Logout</span>
+    </a>
+    <a href="/login" hidden$="[[loggedIn]]" tabindex$="[[anchorTabIndex]]">
+      <iron-icon icon="social:person"></iron-icon> 
+      <span>Login</span>
+    </a>
+    <a href="[[APP_CONFIG.ecosisUrl]]" target="_blank" tabindex$="[[anchorTabIndex]]">
+      <iron-icon icon="timeline"></iron-icon> 
+      <span>Spectra</span>
+    </a>
+    <a href="https://github.com/EcoSIS/ecosml-webapp/issues/new/choose" target="_blank" tabindex$="[[anchorTabIndex]]">
       <iron-icon icon="bug-report"></iron-icon> 
       <span>Report Issue</span>
     </a>

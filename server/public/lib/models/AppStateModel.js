@@ -20,6 +20,30 @@ class AppStateModelImpl extends AppStateModel {
   }
 
   async set(state) {
+    if( state.location &&
+      state.location.path &&
+      state.location.path.length ) {
+      state.page = state.location.path[0]; 
+    }
+
+    if( !state.page ) state.page = 'home';
+
+    if( state.page === 'create' ) state.page = 'edit';
+    if( (state.page === 'edit' || state.page === 'package') &&
+        state.location.path.length > 1 ) {
+      state.selectedPackageId = e.location.path[1];
+    } else {
+      state.selectedPackageId = '';
+    }
+
+    if( state.page === 'admin' ) {
+      if( !APP_CONFIG.user ) {
+        return this.setLocation('/');
+      } else if( !APP_CONFIG.admin ) {
+        return this.setLocation('/');
+      } 
+    }
+
     this.seo(state);
     this.analytics(state);
     super.set(state);

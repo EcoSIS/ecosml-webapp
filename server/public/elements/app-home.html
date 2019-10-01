@@ -3,30 +3,6 @@
     display: block;
   }
  
-  .root {
-    display: flex;
-    justify-content: center;
-  }
-  .root.column {
-    flex-direction: column;
-  }
-  .root > div {
-    margin-top: 20px;
-    width: 100%;
-    max-width: 1200px;
-    min-height: 600px;
-  }
-
-  .row {
-    display: flex;
-    margin-bottom: 35px;
-  }
-
-  .row > * {
-    flex : 1;
-    padding: 10px;
-  }
-
   .stat {
     display: flex;
     align-items: center;
@@ -55,9 +31,6 @@
 
   footer {
     display: flex;
-    margin-top: 200px;
-    padding-top: 25px;
-    border-top: 1px solid var(--dark-background-color);
   }
 
   footer > div {
@@ -138,13 +111,32 @@
         </dom-repeat>
       </div>
     </div>
-    
+  </div>
+</div>
+
+
+<div class="root">
+  <div class="main-panel">
+    <div class="row">
+      <div>
+        <h2 class="uheader blue">Contribute!</h2>
+        <div hidden$="[[!loggedIn]]"><a href="/create">Create Package</a></div>
+        <div hidden$="[[loggedIn]]"><a href="/account">Login to Create Package</a></div>
+      </div>
+      <div>
+        <h2 class="uheader lightblue">Spectral Data</h2>
+        <div>Looking for spectral data? 
+          Check out <a href="https://ecosis.org">ecosis.org</a>.
+        </div>
+      </div>
+    </div>
     
 
-    <h2 class="uheader dark">Package Management</h2>
-    <div hidden$="[[!loggedIn]]"><a href="/create">Create Package</a></div>
-    <div hidden$="[[loggedIn]]"><a href="/account">Login to Create Package</a></div>
+  </div>
+</div>
 
+<div class="root">
+  <div class="main-panel">
     <footer>
       <div style="padding-right: 5px">
         <div style="display:flex; align-items: center">

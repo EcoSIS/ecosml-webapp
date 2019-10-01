@@ -70,6 +70,10 @@ export class EcoSMLApp extends Mixin(PolymerElement)
       openMenu : {
         type : Boolean,
         value : false
+      },
+      loggedIn : {
+        type : Boolean,
+        value : false
       }
     }
   }
@@ -88,6 +92,7 @@ export class EcoSMLApp extends Mixin(PolymerElement)
       this.openMenu = false;
     });
 
+    this._injectModel('AuthModel');
   }
 
   toggleDrawer() {
@@ -95,35 +100,35 @@ export class EcoSMLApp extends Mixin(PolymerElement)
   }
 
   _onAppStateUpdate(e) {
-    let page = e.location.path[0] || 'home';
-    if( page === this.page ) return;
+    if( e.page === this.page ) return;
 
-    if( page === 'create' ) page = 'edit';
-    if( page === 'edit' || page === 'package' ) {
-      if( e.location.path.length > 1 ) {
-        this._setSelectedPackageId(e.location.path[1]);
-      }
-    }
-    if( page === 'admin' ) {
-      if( !APP_CONFIG.user ) {
-        return this.AppStateModel.locationElement.setWindowLocation('/');
-      } else if( !APP_CONFIG.admin ) {
-        return this.AppStateModel.locationElement.setWindowLocation('/');
-      } 
-    }
-
-    if( page === 'search' || page === 'package' || page === 'home' ) {
+    if( e.page === 'search' || e.page === 'package' || e.page === 'home' ) {
       this.searchHeader = true;
     } else {
       this.searchHeader = false;
     }
     
     window.scrollTo(0, 0);
-    this.page = page;
+    this.page = e.page;
+    this.openMenu = false;
   }
 
   _onOpenMenu() {
     this.openMenu = !this.openMenu;
+  }
+
+    /**
+   * @method _onAuthUpdate
+   * @description from AuthInterface, called when auth updates
+   * 
+   * @param {Object} e event payload
+   */
+  _onAuthUpdate(e) {
+    if( e.state === 'loggedIn' ) {
+      this.loggedIn = true;
+    } else {
+      this.loggedIn = false;
+    }
   }
 }
 

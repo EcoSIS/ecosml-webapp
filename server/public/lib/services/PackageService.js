@@ -136,7 +136,10 @@ class PackageService extends BaseService {
           'Content-Type' : 'text/plain'
         },
         body : markdown
-      }
+      },
+      onLoading : request => this.store.setMarkdownLoading(pkgName, request),
+      onLoad : result => this.store.setMarkdownLoaded(pkgName, result.body),
+      onError : error => this.store.setMarkdownError(pkgName, error)
     });
   }
 }

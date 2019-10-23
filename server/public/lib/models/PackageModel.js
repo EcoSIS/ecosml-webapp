@@ -116,7 +116,7 @@ class PackageModel extends BaseModel {
     } else {
       await this.service.getFiles(packageId);
     }
-    
+
     return this.store.getFiles(packageId);
   }
 
@@ -128,8 +128,16 @@ class PackageModel extends BaseModel {
    * 
    * @returns {Promise} resolves to html string
    */
-  previewMarkdown(markdown, pkgName) {
-    return this.service.previewMarkdown(markdown, pkgName);
+  async previewMarkdown(markdown, pkgName) {
+    let state = this.store.data.markdown[pkgName] || {};
+
+    if( state.state === 'loading' ) {
+      await state.request;
+    } else if( state.state !== 'loaded' ) {
+      await this.service.previewMarkdown(markdown, pkgName);
+    }
+
+    return this.store.data.markdown[pkgName];
   }
 
   /**

@@ -31,7 +31,7 @@ class AppStateModelImpl extends AppStateModel {
     if( state.page === 'create' ) state.page = 'edit';
     if( (state.page === 'edit' || state.page === 'package') &&
         state.location.path.length > 1 ) {
-      state.selectedPackageId = e.location.path[1];
+      state.selectedPackageId = state.location.path[1];
     } else {
       state.selectedPackageId = '';
     }

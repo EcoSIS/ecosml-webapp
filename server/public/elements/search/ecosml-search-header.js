@@ -19,7 +19,7 @@ export default class EcosmlSearchHeader extends Mixin(LitElement)
     this.filters = [];
     this.text = '';
 
-    this._injectModel('AppStateModel', 'PackageModel');
+    this._injectModel('AppStateModel', 'PackageModel', 'SearchModel');
   }
 
 
@@ -53,7 +53,6 @@ export default class EcosmlSearchHeader extends Mixin(LitElement)
     this.AppStateModel.setLocation(this.SearchModel.toUrl(query));
   }
 
-
   /**
    * @method _onSearchPackagesUpdate
    * @description bound to SearchModel search-packages-update event
@@ -61,8 +60,9 @@ export default class EcosmlSearchHeader extends Mixin(LitElement)
    * @param {Object} e 
    */
   _onSearchPackagesUpdate(e) {
-    this.text = e.metadata.query.text;
-    this.filters = e.metadata.query.filters.map(filter => {
+    if( e.state !== 'loaded' ) return;
+    this.text = e.query.text;
+    this.filters = e.query.filters.map(filter => {
       let key = Object.keys(filter);
       if( key.length === 0 ) return filter; // badness
 

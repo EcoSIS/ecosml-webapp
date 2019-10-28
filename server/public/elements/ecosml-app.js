@@ -75,6 +75,10 @@ export class EcoSMLApp extends Mixin(PolymerElement)
       loggedIn : {
         type : Boolean,
         value : false
+      },
+      ecosisHost : {
+        type : String,
+        value : () => APP_CONFIG.ecosis.host
       }
     }
   }

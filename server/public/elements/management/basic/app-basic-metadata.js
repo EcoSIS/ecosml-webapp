@@ -40,9 +40,9 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
         value : false
       },
 
-      ecosisHost : {
+      ecosisDataHost : {
         type : String,
-        value : APP_CONFIG.ecosisDataHost
+        value : APP_CONFIG.ecosis.dataHost
       },
 
       hasRelease : {

@@ -25,6 +25,10 @@ export default class AppHome extends Mixin(PolymerElement)
           }
         }
       },
+      ecosisHost : {
+        type : String,
+        value : () => APP_CONFIG.ecosis.host
+      },
       sandbox : {
         type : Boolean,
         value : false

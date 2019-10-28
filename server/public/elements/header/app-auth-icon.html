@@ -22,7 +22,7 @@
 </style>
 
 <a href="/account" inverse>
-  <app-user-icon active$="[[loggedIn]]"></app-user-icon> 
+  <app-user-icon active$="[[loggedIn]]" invert></app-user-icon> 
   <span hidden$="[[loggedIn]]">Login</span>
   <span hidden$="[[!loggedIn]]"><span id="welcome">Welcome,</span> [[username]]</span> 
 </a>

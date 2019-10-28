@@ -14,7 +14,8 @@ return html`
   .filters="${this.filters}"
   @keyup="${this._onInputKeyup}"
   @text-search="${this._onTextSearch}"
-  @remove-filter="${this._onRemoveFilter}">
+  @remove-filter="${this._onRemoveFilter}"
+  placeholder="Search Models">
 </app-search-header>
 
 `;}

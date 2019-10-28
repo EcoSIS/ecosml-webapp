@@ -69,7 +69,8 @@ module.exports = {
   },
 
   ecosis : {
-    host : env.ECOSIS_HOST || 'http://localhost:5000'
+    host : env.ECOSIS_HOST || 'http://localhost:3000',
+    dataHost : env.ECOSIS_DATA_HOST || 'http://localhost:5000'
   },
 
   redis : {

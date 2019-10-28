@@ -11,13 +11,14 @@
     display: flex;
     align-items: center;
     background: rgb(34,134,195);
-background: linear-gradient(90deg, rgba(34,134,195,1) 0%, rgba(34,134,195,1) 15%, rgba(100,181,246,1) 100%);
+    background: linear-gradient(
+      90deg, 
+      var(--default-primary-color) 0%, 
+      var(--default-primary-color) 15%, 
+      var(--light-primary-color) 100%
+    );
     padding: 10px;
   }
-
-  /* .header[sandbox] {
-    background: var(--default-secondary-color);
-  } */
 
   .header [main-title] {
     flex: 1;
@@ -36,49 +37,6 @@ background: linear-gradient(90deg, rgba(34,134,195,1) 0%, rgba(34,134,195,1) 15%
     color: var(--inverse-text-color);
   }
 
-  /* @keyframes show {
-    0%   { opacity: .5; transform: scale(.9) }
-    100% { opacity: 1; transform: scale(1) }
-  }
-
-  #menu {
-    position: absolute;
-    top: 50px;
-    right : 0;
-    background: var(--light-primary-color);
-    color: var(--default-background-color);
-    white-space: nowrap;
-    animation: show 250ms ease-out;
-    z-index: 1000;
-    border-radius: 0 0 6px 6px;
-    min-width: 150px;
-  }
-
-  #menu a {
-    color: var(--default-background-color);
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    border-bottom: 1px solid var(--default-background-color);
-    padding: 15px;
-    cursor: pointer;
-  }
-
-  #menu a:hover {
-    color: white;
-    
-  }
-
-  #menu a:hover iron-icon {
-    transform: scale(1.5);
-  }
-
-  #menu a iron-icon {
-    transform: scale(1);
-    transition: transform 200ms ease-out;
-    margin-right: 15px;
-  } */
-
   @media(max-width: 768px) {
     [main-title] small {
       display: none;
@@ -95,45 +53,6 @@ background: linear-gradient(90deg, rgba(34,134,195,1) 0%, rgba(34,134,195,1) 15%
   <app-auth-icon></app-auth-icon>
   <div style="position:relative; padding-left: 15px">
     <paper-icon-button inverse icon="more-vert" on-click="_onMenuIconClicked"></paper-icon-button>
-    
-    <div id="menu" hidden$="[[!menuActive]]">
-      <a href="/" >
-        <iron-icon icon="home"></iron-icon> 
-        <span>Home</span>
-      </a>
-      <a href="/search" >
-        <iron-icon icon="search"></iron-icon> 
-        <span>Search</span>
-      </a>
-      <a href="/create" hidden$="[[!loggedIn]]">
-        <iron-icon icon="add"></iron-icon> 
-        <span>Create Package</span>
-      </a>
-      <a href="/account" hidden$="[[!loggedIn]]">
-        <iron-icon icon="social:person"></iron-icon> 
-        <span>My Account</span>
-      </a>
-      <a href="https://github.com/EcoSIS/ecosml-webapp/issues/new/choose" target="_blank">
-        <iron-icon icon="bug-report"></iron-icon> 
-        <span>Report Issue</span>
-      </a>
-      <a href="/about" >
-        <iron-icon icon="info"></iron-icon> 
-        <span>About</span>
-      </a>
-      <a href="/admin" hidden$="[[!admin]]">
-        <iron-icon icon="gavel"></iron-icon> 
-        <span>Admin</span>
-      </a>
-      <a href="/account" hidden$="[[loggedIn]]">
-        <iron-icon icon="social:person"></iron-icon> 
-        <span>Login</span>
-      </a>
-      <a on-click="_logout" hidden$="[[!loggedIn]]">
-        <iron-icon icon="exit-to-app"></iron-icon> 
-        <span>Logout</span>
-      </a>
-    </div>
   </div>
 </div>
 

@@ -12,6 +12,16 @@
     border: 4px solid transparent;
   }
 
+  iron-icon[active] {
+    background-color: var(--default-primary-color);
+    border: 4px solid var(--default-primary-color);
+  }
+
+  :host([invert]) iron-icon[active] {
+    background-color: transparent;
+    border: none;
+  }
+
 </style>
 
 <iron-icon icon="social:person" active$="[[active]]"></iron-icon>

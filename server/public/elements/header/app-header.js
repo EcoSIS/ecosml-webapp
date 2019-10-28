@@ -75,34 +75,6 @@ export default class AppHeader extends Mixin(PolymerElement)
     );
   }
 
-  /**
-   * @method _onMenuClicked
-   * @description called when the menu div is clicked.  Don't let 
-   * the event propogate to the main window.
-   * 
-   * @param {Object} e html click event
-   */
-  // _onMenuClicked(e) {
-  //   e.preventDefault();
-  //   e.stopPropagation();
-  // }
-
-  /**
-   * @method toggleMenu
-   * @description toggle the main menu
-   */
-  toggleMenu() {
-    this.menuActive = !this.menuActive;
-  }
-
-  /**
-   * @method toggleMenu
-   * @description hide the main menu
-   */
-  hideMenu() {
-    this.menuActive = false;
-  }
-
 }
 
 customElements.define('app-header', AppHeader);

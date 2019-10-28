@@ -2,9 +2,11 @@
   :host {
     display: block;
     height: 100vh;
-    --default-primary-color: #2286c3;
+    /* --default-primary-color: #2286c3; */
+    --default-primary-color: #0478af;
     --primary-color: var(--default-primary-color);
-    --light-primary-color: #64b5f6;
+    /* --light-primary-color: #64b5f6; */
+    --light-primary-color: #47a9f9;
     --default-secondary-color: #00867d;
     --light-secondary-color: #4db6ac;
   }
@@ -89,7 +91,7 @@
     </a>
     <a href="/create" hidden$="[[!loggedIn]]" tabindex$="[[anchorTabIndex]]">
       <iron-icon icon="create"></iron-icon> 
-      <span>Create/Edit</span>
+      <span>Create</span>
     </a>
     <a href="/account" hidden$="[[!loggedIn]]"  tabindex$="[[anchorTabIndex]]">
       <iron-icon icon="social:person"></iron-icon> 
@@ -99,11 +101,11 @@
       <iron-icon icon="exit-to-app"></iron-icon> 
       <span>Logout</span>
     </a>
-    <a href="/login" hidden$="[[loggedIn]]" tabindex$="[[anchorTabIndex]]">
+    <a href="/account" hidden$="[[loggedIn]]" tabindex$="[[anchorTabIndex]]">
       <iron-icon icon="social:person"></iron-icon> 
       <span>Login</span>
     </a>
-    <a href="[[APP_CONFIG.ecosisUrl]]" target="_blank" tabindex$="[[anchorTabIndex]]">
+    <a href="[[ecosisHost]]" target="_blank" tabindex$="[[anchorTabIndex]]">
       <iron-icon icon="timeline"></iron-icon> 
       <span>Spectra</span>
     </a>

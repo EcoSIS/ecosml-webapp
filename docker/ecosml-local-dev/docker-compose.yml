@@ -23,6 +23,7 @@ services:
     environment:
       - JWT_SECRET=${JWT_SECRET}
       - ECOSIS_HOST=${ECOSIS_HOST}
+      - ECOSIS_DATA_HOST=${ECOSIS_DATA_HOST}
       - GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
       - GITHUB_CLIENT_SECRET=${GITHUB_CLIENT_SECRET}
       - GITHUB_ORG=ecosml-dev

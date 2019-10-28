@@ -37,7 +37,7 @@ export default class EcosmlSearchHeader extends Mixin(LitElement)
    */
   _onTextSearch(e) {
     let query = this.SearchModel.getQuery();
-    this.SearchModel.setText(text, query);
+    this.SearchModel.setText(e.detail, query);
     this.SearchModel.setOffset(0, query);
     this.AppStateModel.setLocation(this.SearchModel.toUrl(query));
   }

@@ -50,6 +50,7 @@ module.exports = function(app) {
         googleAnalyticsKey : config.google.analyticsKey,
         env : {
           client : config.server.clientEnv,
+          server : config.server.serverEnv,
           github : config.github.org,
           firebase : config.firebase.env,
           git : gitinfo

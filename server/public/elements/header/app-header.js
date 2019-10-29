@@ -39,7 +39,7 @@ export default class AppHeader extends Mixin(PolymerElement)
   ready() {
     super.ready();
 
-    if( APP_CONFIG.env.client !== 'prod' ) {
+    if( APP_CONFIG.env.server !== 'prod' ) {
       this.$.titleExtra.innerHTML = 'Sandbox';
       window.title = 'EcoSML Sandbox - Spectral Model Library';
       this.sandbox = true;

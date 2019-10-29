@@ -50,7 +50,7 @@ export default class AppHome extends Mixin(PolymerElement)
   async ready() {
     super.ready();
 
-    if( APP_CONFIG.env.git.branch !== 'master' ) {
+    if( APP_CONFIG.env.client !== 'prod' ) {
       this.$.titleExtra.innerHTML = ' - Sandbox';
       document.title = document.title+' Sandbox'
       this.sandbox = true;

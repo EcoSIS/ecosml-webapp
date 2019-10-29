@@ -42,6 +42,10 @@
     margin-top: 0;
   }
 
+  .alpha-msg, .sandbox-msg {
+    color: var(--default-primary-color);
+  }
+
   @media(max-width: 750px) {
     .row {
       display: block;
@@ -63,16 +67,16 @@
   <div style="padding: 15px; text-align: center">
     <h1 style="margin-bottom: 0">Ecological Spectral Model Library <span id="titleExtra"></span></h1>
     <div>Welcome to the EcoSML, a useful tool for finding spectral models.</div>
-    <p hidden$="[[!sandbox]]">
+    <p hidden$="[[!sandbox]]" class="sandbox-msg">
       <iron-icon icon="warning" style="vertical-align: bottom"></iron-icon> 
       This is the development server for 
-      <a href="https://ecosml.org">ecosml.org</a>. You can use this 
+      <a href="https://ecosml.org" highlight style="text-decoration: underline;">ecosml.org</a>. You can use this 
       server to learn about how to use the EcoSML model management tools.
     </p>
-    <p hidden$="[[sandbox]]">
+    <p class="alpha-msg">
       <iron-icon icon="warning" style="vertical-align: bottom"></iron-icon> 
-      This is an early Alpha of EcoSML. Please report any bugs or issues you have 
-      <a href="https://github.com/EcoSIS/ecosml-webapp/issues/new/choose" target="_blank">here.</a>
+      This is an Alpha version of EcoSML. Please report any bugs or issues you have 
+      <a href="https://github.com/EcoSIS/ecosml-webapp/issues/new/choose" target="_blank" highlight style="text-decoration: underline;">here.</a>
     </p>
   </div>
 </div>

@@ -11,6 +11,7 @@ module.exports = function(markdown, repoName='') {
     tmp.file(async (err, tmpFilePath, fd, cleanup) => {
       if( err ) return reject(err);
 
+      markdown = markdown.replace(/[^\x00-\x7F]/g, '');
       await fs.writeFile(tmpFilePath, markdown);
 
       let options = {

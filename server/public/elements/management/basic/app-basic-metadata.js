@@ -121,6 +121,7 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
     super.ready();
     this._checkNameAvailableTimer = -1;
     this._checkUrlTimer = -1;
+
   }
 
   /**

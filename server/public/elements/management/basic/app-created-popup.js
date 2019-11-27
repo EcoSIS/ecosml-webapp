@@ -22,12 +22,13 @@ export default class AppCreatedPopup extends PolymerElement {
 
   connectedCallback() {
     super.connectedCallback();
+    console.log(this.githubOrg);
 
-    if( !this._init ) {
-      this._init = true;
-      (this.parentElement || this.parentNode).removeChild(this);
-      document.body.appendChild(this);
-    }
+    // if( !this._init ) {
+    //   this._init = true;
+    //   (this.parentElement || this.parentNode).removeChild(this);
+    //   document.body.appendChild(this);
+    // }
   }
 
   _cancel() {
@@ -35,11 +36,12 @@ export default class AppCreatedPopup extends PolymerElement {
   }
 
   close() {
-    this.$.popup.close();
+    this.dispatchEvent(new CustomEvent('close'));
+    // this.$.popup.close();
   }
 
   open() {
-    this.$.popup.open();
+    // this.$.popup.open();
   }
 
 }

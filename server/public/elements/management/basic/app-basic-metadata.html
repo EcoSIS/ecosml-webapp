@@ -51,7 +51,9 @@
 
 </style>
 
-<app-created-popup id="created" name="[[name]]"></app-created-popup>
+<app-popup id="created" title="Package Created!">
+  <app-created-popup name="[[name]]"></app-created-popup>
+</app-popup>
 
 <div hidden$="[[creating]]">
   <div hidden$="[[isManagedSource]]" style="margin-bottom: 35px">

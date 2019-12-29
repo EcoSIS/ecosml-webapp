@@ -40,7 +40,8 @@ class SearchModel extends BaseModel {
       text : '',
       filters : [],
       sort : null,
-      limit : 10,
+      // limit : 10,
+      limit : 5,
       offset : 0
     }
   }
@@ -98,7 +99,8 @@ class SearchModel extends BaseModel {
           query.sort = part || null;
           break;
         case 3:
-          query.limit = part ? parseInt(part) : 10;
+          // query.limit = part ? parseInt(part) : 10;
+          query.limit = part ? parseInt(part) : 5;
           break;
         case 4:
           query.offset = part ? parseInt(part) : 0;
@@ -118,27 +120,32 @@ class SearchModel extends BaseModel {
   }
 
   setOffset(offset, query) {
+    if( !query ) query = this.getQuery();
     query.offset = offset;
     return query;
   }
 
   setLimit(limit, query) {
+    if( !query ) query = this.getQuery();
     query.limit = limit;
     return query;
   }
 
   setText(text, query) {
+    if( !query ) query = this.getQuery();
     query.text = text;
     return query;
   }
 
   appendFilter(key, value, query) {
+    if( !query ) query = this.getQuery();
     if( this._hasFilter(query.filters, key, value) ) return;
     query.filters.push({[key] : value});
     return query;
   }
 
   removeFilter(key, value, query) {
+    if( !query ) query = this.getQuery();
     let filters = query.filters;
 
     for( var i = filters.length-1; i >= 0; i-- ) {

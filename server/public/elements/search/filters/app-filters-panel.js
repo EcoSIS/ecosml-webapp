@@ -56,6 +56,7 @@ export default class AppFiltersPanel extends Mixin(PolymerElement)
     e = e.detail;
     let query = this.SearchModel.getQuery();
     this.SearchModel.appendFilter(e.filter, e.value.filter, query);
+    this.SearchModel.setOffset(0, query);
     this.AppStateModel.setLocation(this.SearchModel.toUrl(query));
   }
 }

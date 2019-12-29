@@ -43,10 +43,14 @@ module.exports = function(app) {
           data : githubInfo.data
         },
         appRoutes : config.server.appRoutes,
-        ecosisDataHost : config.ecosis.host,
+        ecosis : {
+          host : config.ecosis.host,
+          dataHost : config.ecosis.dataHost
+        },
         googleAnalyticsKey : config.google.analyticsKey,
         env : {
           client : config.server.clientEnv,
+          server : config.server.serverEnv,
           github : config.github.org,
           firebase : config.firebase.env,
           git : gitinfo

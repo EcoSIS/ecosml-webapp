@@ -1,10 +1,8 @@
 import {PolymerElement, html} from "@polymer/polymer"
 import template from "./app-filters-panel.html"
-import SearchInterface from "../../interfaces/SearchInterface"
-import "./app-filter-panel"
 
 export default class AppFiltersPanel extends Mixin(PolymerElement)
-  .with(EventInterface, SearchInterface) {
+  .with(EventInterface) {
 
   static get template() {
     return html([template]);
@@ -26,6 +24,8 @@ export default class AppFiltersPanel extends Mixin(PolymerElement)
   constructor() {
     super();
     this.active = true;
+
+    this._injectModel('SearchModel', 'AppStateModel');
   }
 
   /**
@@ -40,12 +40,23 @@ export default class AppFiltersPanel extends Mixin(PolymerElement)
     for( var key in filters ) {
       arr.push({
         key : key,
-        values : filters[key]
+        label : key,
+        values : filters[key].map(f => {
+          f.label = f.filter;
+          return f;
+        })
       });
     }
 
     this.filters = arr;
     this.hasFilters = (this.filters.length > 0);
+  }
+
+  _onFilterSelected(e) {
+    e = e.detail;
+    let query = this.SearchModel.getQuery();
+    this.SearchModel.appendFilter(e.filter, e.value.filter, query);
+    this.AppStateModel.setLocation(this.SearchModel.toUrl(query));
   }
 }
 

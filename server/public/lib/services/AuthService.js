@@ -38,7 +38,16 @@ class AuthService extends BaseService {
     return this.request({
       url : `${this.baseUrl}/organizations`,
       onLoading : request => this.store.setOrgsLoading(request),
-      onLoad : result => this.store.setOrgsLoaded(result.body),
+      onLoad : result => {
+        if( result.body ) {
+          result.body.sort((a, b) => {
+            if( a.displayName.toLowerCase() < b.displayName.toLowerCase() ) return -1;
+            if( a.displayName.toLowerCase() > b.displayName.toLowerCase() ) return 1;
+            return 0;
+          })
+        }
+        this.store.setOrgsLoaded(result.body)
+      },
       onError : error => this.store.setOrgsError(error)
     });
   }

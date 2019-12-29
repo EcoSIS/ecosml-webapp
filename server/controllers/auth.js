@@ -22,7 +22,7 @@ router.get('/user', authenticated, async (req, res) => {
 
 router.get('/logout', (req, res) => {
   req.session.destroy();
-  res.json({success: true});
+  res.redirect('/');
 });
 
 router.post('/login', (req, res) => {

@@ -18,10 +18,13 @@ class PackageStore extends BaseStore {
       files : {},
       fileUploadStatus : {},
 
-      byId : {}
+      byId : {},
+
+      markdown : {}
     }
 
     this.events = {
+      'PACKAGE_MARKDOWN_UPDATE' : 'package-markdown-update',
       'SELECTED_PACKAGE_UPDATE' : 'selected-package-update',
       'PACKAGE_UPDATE' : 'package-update',
       'CREATE_PACKAGE_UPDATE' : 'create-package-update',
@@ -31,6 +34,26 @@ class PackageStore extends BaseStore {
       'FILE_UPDATE' : 'file-update',
       'UPLOAD_FILE_STATUS_UPDATE' : 'upload-file-status-update'
     }
+  }
+
+  /**
+   * markdown
+   */
+  setMarkdownLoading(id, request) {
+    this._setMarkdownState({id, request, state: this.STATE.LOADING});
+  }
+
+  setMarkdownLoaded(id, payload) {
+    this._setMarkdownState({id, payload, state: this.STATE.LOADED});
+  }
+
+  setMarkdownError(id, error) {
+    this._setMarkdownState({id, error, state: this.STATE.ERROR});
+  }
+
+  _setMarkdownState(state) {
+    this.data.markdown[state.id] = state;
+    this.emit(this.events.PACKAGE_MARKDOWN_UPDATE, state);
   }
 
   /**

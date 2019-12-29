@@ -27,6 +27,11 @@ export default class AppHeader extends Mixin(PolymerElement)
       sandbox : {
         type : Boolean,
         value : false
+      },
+
+      admin : {
+        type : Boolean,
+        value : false
       }
     }
   }
@@ -34,13 +39,15 @@ export default class AppHeader extends Mixin(PolymerElement)
   ready() {
     super.ready();
 
-    if( APP_CONFIG.env.git.branch !== 'master' ) {
+    if( APP_CONFIG.env.server !== 'prod' ) {
       this.$.titleExtra.innerHTML = 'Sandbox';
       window.title = 'EcoSML Sandbox - Spectral Model Library';
       this.sandbox = true;
     }
 
-    window.addEventListener('click', () => this.hideMenu());
+    this.admin = APP_CONFIG.admin;
+
+    // window.addEventListener('click', () => this.hideMenu());
   }
 
   /**
@@ -62,35 +69,10 @@ export default class AppHeader extends Mixin(PolymerElement)
   _onMenuIconClicked(e) {
     e.preventDefault();
     e.stopPropagation();
-    this.toggleMenu();
-  }
-
-  /**
-   * @method _onMenuClicked
-   * @description called when the menu div is clicked.  Don't let 
-   * the event propogate to the main window.
-   * 
-   * @param {Object} e html click event
-   */
-  // _onMenuClicked(e) {
-  //   e.preventDefault();
-  //   e.stopPropagation();
-  // }
-
-  /**
-   * @method toggleMenu
-   * @description toggle the main menu
-   */
-  toggleMenu() {
-    this.menuActive = !this.menuActive;
-  }
-
-  /**
-   * @method toggleMenu
-   * @description hide the main menu
-   */
-  hideMenu() {
-    this.menuActive = false;
+    // this.toggleMenu();
+    this.dispatchEvent(
+      new CustomEvent('open-menu')
+    );
   }
 
 }

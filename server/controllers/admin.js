@@ -5,9 +5,7 @@ const utils = require('./utils');
 const regRepos = require('../lib/registered-repositories');
 
 router.get('/recreate-indexes', admin, async (req, res) => {
-  let pkgs = await mongo.recreatePackageIndexes();
-  let githubTeams = await mongo.recreateGithubTeamIndexes();
-  res.json({pkgs, githubTeams});
+  res.json(await mongo.recreateIndexes());
 });
 
 router.get('/recreate-stats', admin, async(req, res) => {

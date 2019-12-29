@@ -25,6 +25,10 @@ export default class AppHome extends Mixin(PolymerElement)
           }
         }
       },
+      ecosisHost : {
+        type : String,
+        value : () => APP_CONFIG.ecosis.host
+      },
       sandbox : {
         type : Boolean,
         value : false
@@ -46,7 +50,7 @@ export default class AppHome extends Mixin(PolymerElement)
   async ready() {
     super.ready();
 
-    if( APP_CONFIG.env.git.branch !== 'master' ) {
+    if( APP_CONFIG.env.server !== 'prod' ) {
       this.$.titleExtra.innerHTML = ' - Sandbox';
       document.title = document.title+' Sandbox'
       this.sandbox = true;

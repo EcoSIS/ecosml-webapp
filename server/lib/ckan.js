@@ -3,7 +3,7 @@ const Logger = require('./logger');
 const config = require('./config');
 const jwt = require('jsonwebtoken');
 
-const HOST = config.ecosis.host;
+const HOST = config.ecosis.dataHost;
 
 class CkanApi {
 

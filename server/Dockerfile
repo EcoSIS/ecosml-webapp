@@ -1,17 +1,17 @@
 FROM node:12
 
-# install ruby and markdown library
+# install ruby and markdown library, mongodump
 RUN apt-get update
-RUN apt-get install -y ruby-full
-#RUN gem install "rubygems-update:<3.0.0" --no-document
-#RUN update_rubygems
+RUN apt-get install -y ruby-full mongodb-clients zip
 RUN gem install commonmarker
 
 RUN npm install -g mocha
 
 RUN mkdir server
 COPY ./package* /server/
+
 RUN cd server && npm install --production
+RUN npm install -g mocha
 
 COPY ./dist /server/dist
 COPY ./index.js /server/

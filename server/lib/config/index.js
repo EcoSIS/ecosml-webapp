@@ -3,9 +3,16 @@ const path = require('path');
 const fs = require('fs');
 const keyPath = path.join(__dirname, '../../google-key.json');
 
-let secrets = {ecosml : {
-  secret : {}
-}};
+let secrets = {
+  ecosml : {
+    secret : {}
+  },
+  datacite : {},
+  aws : {}
+};
+
+const MOUNT_PATH = env.MOUNT_PATH || '/server';
+
 if( fs.existsSync(path.resolve(__dirname, '../../secrets.js')) ) {
   secrets = require('../../secrets');
 }
@@ -44,7 +51,7 @@ module.exports = {
 
     // place all SPA base route names here
     appRoutes : ['package', 'search', 'edit', 
-    'create', 'account', 'about']
+    'create', 'account', 'about', 'admin'],
   },
 
   client : {
@@ -55,8 +62,15 @@ module.exports = {
     }
   },
 
+  backups : {
+    tmpDir : path.join(MOUNT_PATH, 'backup'),
+    bucket : 'ecosml-backups',
+    ecosisBucket : 'ecosis-backups'
+  },
+
   ecosis : {
-    host : env.ECOSIS_HOST || 'http://localhost:5000'
+    host : env.ECOSIS_HOST || 'http://localhost:3000',
+    dataHost : env.ECOSIS_DATA_HOST || 'http://localhost:5000'
   },
 
   redis : {
@@ -110,7 +124,7 @@ module.exports = {
   },
 
   datacite : {
-    shoulder : (serverEnv === 'prod') ? '' : '10.21232',
+    shoulder : (serverEnv === 'prod') ? '10.21232' : '10.21232',
     url : (serverEnv === 'prod') ? 'https://api.datacite.org/dois' : 'https://api.test.datacite.org/dois',
     username : secrets.datacite.username,
     password : secrets.datacite.password
@@ -124,7 +138,8 @@ module.exports = {
       requesting : 'requesting',
       accepted : 'accepted',
       applied : 'applied'
-    }
+    },
+    snapshotDir : path.join(MOUNT_PATH, 'snapshots')
   },
 
   travisCi : secrets.travisCi,
@@ -132,6 +147,14 @@ module.exports = {
   git : {
     name : 'EcoSML Admin',
     email : 'admin@ecosml.org'
+  },
+
+  aws : {
+    accessKeyId : secrets.aws.accessKeyId,
+    secretAccessKey : secrets.aws.secretAccessKey,
+    bucket : {
+      doiSnapshots : (serverEnv === 'prod') ? 'ecosml-doi-snapshots-prod' : 'ecosml-doi-snapshots-dev'
+    }
   },
 
   google : {

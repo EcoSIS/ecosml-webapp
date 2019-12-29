@@ -1,6 +1,5 @@
 // import styles
-import "./styles/style-properties"
-import "./styles/shared-styles"
+import "ecosis-client-commons"
 
 // import app framework
 import "@ucd-lib/cork-app-utils"
@@ -27,13 +26,15 @@ import "@polymer/iron-pages/iron-pages"
 import "./utils/app-title-card"
 import "./management/app-package-metadata-editor"
 import "./search/app-package-search"
+import "./search/ecosml-search-header"
 import "./app-home"
 import "./app-about"
 import "./landing/app-landing-page"
 import "./account/app-user-account"
+import "./admin/app-admin"
 import "./header/app-header"
 import "./utils/app-user-icon"
-import "./utils/app-popup"
+// import "./utils/app-popup"
 
 // element imports
 import AppStateInterface from "./interfaces/AppStateInterface"
@@ -66,6 +67,18 @@ export class EcoSMLApp extends Mixin(PolymerElement)
       searchHeader : {
         type : Boolean,
         value : false
+      },
+      openMenu : {
+        type : Boolean,
+        value : false
+      },
+      loggedIn : {
+        type : Boolean,
+        value : false
+      },
+      ecosisHost : {
+        type : String,
+        value : () => APP_CONFIG.ecosis.host
       }
     }
   }
@@ -73,6 +86,18 @@ export class EcoSMLApp extends Mixin(PolymerElement)
   constructor() {
     super();
     this.active = true;
+
+    window.addEventListener('click', e => {
+      if( !this.openMenu ) return;
+      if( !e.composedPath ) {
+        return console.warn('Browser does not support event.path');
+      }
+      if( e.composedPath().indexOf(this.$.menu) > -1) return;
+      if( e.composedPath().indexOf(this.$.header) > -1) return;
+      this.openMenu = false;
+    });
+
+    this._injectModel('AuthModel');
   }
 
   toggleDrawer() {
@@ -80,24 +105,35 @@ export class EcoSMLApp extends Mixin(PolymerElement)
   }
 
   _onAppStateUpdate(e) {
-    let page = e.location.path[0] || 'home';
-    if( page === this.page ) return;
+    if( e.page === this.page ) return;
 
-    if( page === 'create' ) page = 'edit';
-    if( page === 'edit' || page === 'package' ) {
-      if( e.location.path.length > 1 ) {
-        this._setSelectedPackageId(e.location.path[1]);
-      }
-    }
-
-    if( page === 'search' || page === 'package' || page === 'home' ) {
+    if( e.page === 'search' || e.page === 'package' || e.page === 'home' ) {
       this.searchHeader = true;
     } else {
       this.searchHeader = false;
     }
     
     window.scrollTo(0, 0);
-    this.page = page;
+    this.page = e.page;
+    this.openMenu = false;
+  }
+
+  _onOpenMenu() {
+    this.openMenu = !this.openMenu;
+  }
+
+    /**
+   * @method _onAuthUpdate
+   * @description from AuthInterface, called when auth updates
+   * 
+   * @param {Object} e event payload
+   */
+  _onAuthUpdate(e) {
+    if( e.state === 'loggedIn' ) {
+      this.loggedIn = true;
+    } else {
+      this.loggedIn = false;
+    }
   }
 }
 

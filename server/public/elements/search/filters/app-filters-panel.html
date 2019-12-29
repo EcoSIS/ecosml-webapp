@@ -20,7 +20,6 @@
 </style>
 
 <div class="title">
-  <h2>Filters</h2>
   <button class="clear-filters">Clear Filters</button>
 </div>
 
@@ -29,5 +28,10 @@
 </div>
 
 <template is="dom-repeat" items="[[filters]]">
-  <app-filter-panel filter="[[item]]"></app-filter-panel>
+  <app-filter-panel 
+    on-item-selected="_onFilterSelected"
+    filter="[[item.key]]"
+    label="[[item.label]]"
+    values="[[item.values]]">
+  </app-filter-panel>
 </template>

@@ -88,8 +88,9 @@ class AuthModel {
    * 
    * @returns {Promise} resolve to boolean
    */
-  isAdmin(username) {
-    return redis.client.exists(`${config.redis.prefixes.admin}-${username}`);
+  async isAdmin(username) {
+    let exists = await redis.client.exists(`${config.redis.prefixes.admin}-${username}`);
+    return exists === 1 ? true : false;
   }
 
   /**

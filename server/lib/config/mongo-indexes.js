@@ -103,5 +103,24 @@ module.exports = {
         name: "GithubTeamMembersIndex"
       }
     }
+  ],
+  doi : [
+    {
+      index : {
+        'id' : 1,
+        'tag' : 1
+      },
+      options : {
+        name: "DoiLookupIndex"
+      }
+    },
+    {
+      index : {
+        'state' : 1
+      },
+      options : {
+        name: "DoiStateIndex"
+      }
+    }
   ]
 }

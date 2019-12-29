@@ -13,8 +13,13 @@
   }
 
   iron-icon[active] {
-    background-color: var(--light-primary-color);
-    border: 4px solid var(--light-primary-color);
+    background-color: var(--default-primary-color);
+    border: 4px solid var(--default-primary-color);
+  }
+
+  :host([invert]) iron-icon[active] {
+    background-color: transparent;
+    border: none;
   }
 
 </style>

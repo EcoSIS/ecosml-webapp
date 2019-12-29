@@ -25,6 +25,12 @@ class SearchModel extends BaseModel {
 
     this.store = SearchStore;
     this.service = SearchService;
+
+    this.EventBus.on('app-state-update', e => {
+      if( e.page === 'search' ) {
+        this.search(this.fromUrl(window.location.pathname));
+      }
+    });
       
     this.register('SearchModel');
   }
@@ -62,13 +68,19 @@ class SearchModel extends BaseModel {
    * @description convert url slug to query
    * 
    * @param {String} url  
+   * 
+   * @return {Object}
    */
   fromUrl(url) {
     if( typeof url === 'string' ) {
-      url = url.split('/');
+      url = url.replace(/^\//, '').split('/');
     }
 
     let urlParts = url.slice(0);
+    if( urlParts.length && urlParts[0] === 'search' ) {
+      urlParts.shift();
+    }
+
     let query = this.getEmptyQuery();
 
     let i = 0;
@@ -100,41 +112,33 @@ class SearchModel extends BaseModel {
   }
 
   getQuery() {
-    if( !this.store.getSearchQuery() ) {
-      this.store.setSearchQuery(this.getEmptyQuery());
-    }
     let q = this.store.getSearchQuery();
-    if( q.fromUrl ) delete q.fromUrl;
+    if( !q ) return this.getEmptyQuery();
     return q;
   }
 
   setOffset(offset, query) {
-    if( !query ) query = this.getQuery();
     query.offset = offset;
     return query;
   }
 
   setLimit(limit, query) {
-    if( !query ) query = this.getQuery();
     query.limit = limit;
     return query;
   }
 
   setText(text, query) {
-    if( !query ) query = this.getQuery();
     query.text = text;
     return query;
   }
 
   appendFilter(key, value, query) {
-    if( !query ) query = this.getQuery();
     if( this._hasFilter(query.filters, key, value) ) return;
     query.filters.push({[key] : value});
     return query;
   }
 
   removeFilter(key, value, query) {
-    if( !query ) query = this.getQuery();
     let filters = query.filters;
 
     for( var i = filters.length-1; i >= 0; i-- ) {
@@ -161,7 +165,7 @@ class SearchModel extends BaseModel {
   }
 
   search(query) {
-    return this.service.search(query || this.getQuery());
+    return this.service.search(query);
   }
 
   getOwnerPackages(owner) {

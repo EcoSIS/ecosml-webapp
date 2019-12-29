@@ -2,49 +2,26 @@
   :host {
     display: block;
   }
- 
-  .root {
+
+  /* .root {
     display: flex;
     justify-content: center;
-  }
-  .root.column {
-    flex-direction: column;
-  }
-  .root > div {
-    margin-top: 20px;
-    width: 100%;
-    max-width: 1200px;
-    min-height: 600px;
-  }
+  } */
 
-  .row {
+  .stat-row {
+    padding: 3px;
     display: flex;
-    margin-bottom: 35px;
   }
 
-  .row > * {
-    flex : 1;
-    padding: 10px;
-  }
-
-  .stat {
-    display: flex;
-    align-items: center;
-  }
-
-  .stat .label {
+  .stat-row > div:first-child {
     flex: 1;
   }
-
-  .stat .count {
-    padding: 5px;
-    margin: 3px;
-    height: 22px;
-    width: 22px;
-    text-align: center;
-
-    border-radius: 24px;
-    background-color: var(--dark-background-color);
+ 
+  .count-label {
+    background: #eee;
+    border-radius: 20px;
+    padding: 1px 5px;
+    font-size: 13px;
   }
 
   .gitinfo {
@@ -55,9 +32,6 @@
 
   footer {
     display: flex;
-    margin-top: 200px;
-    padding-top: 25px;
-    border-top: 1px solid var(--dark-background-color);
   }
 
   footer > div {
@@ -66,6 +40,10 @@
 
   footer h2 {
     margin-top: 0;
+  }
+
+  .alpha-msg, .sandbox-msg {
+    color: var(--default-primary-color);
   }
 
   @media(max-width: 750px) {
@@ -85,19 +63,22 @@
   }
 </style>
 
-<div class="root column" style="text-align: center">
-  <h1>Ecological Spectral Model Library <span id="titleExtra"></span></h1>
-  <p hidden$="[[!sandbox]]">
-    <iron-icon icon="warning" style="vertical-align: bottom"></iron-icon> 
-    This is the development server for 
-    <a href="https://ecosml.org">ecosml.org</a>. You can use this 
-    server to learn about how to use the EcoSML model management tools.
-  </p>
-  <p hidden$="[[sandbox]]">
-    <iron-icon icon="warning" style="vertical-align: bottom"></iron-icon> 
-    This is an early Alpha of EcoSML. Please report any bugs or issues you have 
-    <a href="https://github.com/EcoSIS/ecosml-webapp/issues/new/choose" target="_blank">here.</a>
-  </p>
+<div class="root">
+  <div style="padding: 15px; text-align: center">
+    <h1 style="margin-bottom: 0">Ecological Spectral Model Library <span id="titleExtra"></span></h1>
+    <div>Welcome to the EcoSML, a useful tool for finding spectral models.</div>
+    <p hidden$="[[!sandbox]]" class="sandbox-msg">
+      <iron-icon icon="warning" style="vertical-align: bottom"></iron-icon> 
+      This is the development server for 
+      <a href="https://ecosml.org" highlight style="text-decoration: underline;">ecosml.org</a>. You can use this 
+      server to learn about how to use the EcoSML model management tools.
+    </p>
+    <p class="alpha-msg">
+      <iron-icon icon="warning" style="vertical-align: bottom"></iron-icon> 
+      This is an Alpha version of EcoSML. Please report any bugs or issues you have 
+      <a href="https://github.com/EcoSIS/ecosml-webapp/issues/new/choose" target="_blank" highlight style="text-decoration: underline;">here.</a>
+    </p>
+  </div>
 </div>
 
 <div class="root">
@@ -108,9 +89,9 @@
         <h2 class="uheader blue">Top Organizations</h2>
         <dom-repeat items="[[stats.organizations]]">
           <template>
-            <div class="stat">
-              <div class="label"><a href$="[[item.link]]">[[item.displayName]]</a></div>
-              <div class="count">[[item.count]]</div>
+            <div class="stat-row">
+              <div><a href$="[[item.link]]">[[item.displayName]]</a></div>
+              <div class="count-label">[[item.count]]</div>
             </div>
           </template>
         </dom-repeat>
@@ -119,9 +100,9 @@
         <h2 class="uheader green">Top Keywords</h2>
         <dom-repeat items="[[stats.keywords]]">
           <template>
-            <div class="stat">
-              <div class="label"><a href$="[[item.link]]">[[item.key]]</a></div>
-              <div class="count">[[item.count]]</div>
+            <div class="stat-row">
+              <div><a href$="[[item.link]]">[[item.key]]</a></div>
+              <div class="count-label">[[item.count]]</div>
             </div>
           </template>
         </dom-repeat>
@@ -130,21 +111,40 @@
         <h2 class="uheader lightblue">Top Themes</h2>
         <dom-repeat items="[[stats.themes]]">
           <template>
-            <div class="stat">
-              <div class="label"><a href$="[[item.link]]">[[item.key]]</a></div>
-              <div class="count">[[item.count]]</div>
+            <div class="stat-row">
+              <div><a href$="[[item.link]]">[[item.key]]</a></div>
+              <div class="count-label">[[item.count]]</div>
             </div>
           </template>
         </dom-repeat>
       </div>
     </div>
-    
+  </div>
+</div>
+
+
+<div class="root">
+  <div class="main-panel">
+    <div class="row">
+      <div>
+        <h2 class="uheader lightgreen">Contribute!</h2>
+        <div hidden$="[[!loggedIn]]"><a href="/create">Create Package</a></div>
+        <div hidden$="[[loggedIn]]"><a href="/account">Login to Create Package</a></div>
+      </div>
+      <div>
+        <h2 class="uheader blue">Spectral Data</h2>
+        <div>Looking for spectral data? 
+          Check out <a href$="[[ecosisHost]]">[[ecosisHost]]</a>.
+        </div>
+      </div>
+    </div>
     
 
-    <h2 class="uheader dark">Package Management</h2>
-    <div hidden$="[[!loggedIn]]"><a href="/create">Create Package</a></div>
-    <div hidden$="[[loggedIn]]"><a href="/account">Login to Create Package</a></div>
+  </div>
+</div>
 
+<div class="root">
+  <div class="main-panel">
     <footer>
       <div style="padding-right: 5px">
         <div style="display:flex; align-items: center">

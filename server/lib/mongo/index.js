@@ -108,6 +108,32 @@ class MongoDB {
     return results;
   }
 
+  async recreateDoiIndexes() {
+    let collection = await this.getDoiCollection();
+    let indexes = config.mongodb.indexes.doi;
+
+    let results = [];
+    for( var i = 0; i < indexes.length; i++ ) {
+      let index = indexes[i];
+
+      try {
+        await collection.dropIndex(index.options.name);
+      } catch(e) {}
+
+      let result = await collection.createIndex(index.index, index.options);
+      results.push(result);
+    }
+
+    return results;
+  }
+
+  async recreateIndexes() {
+    let pkgs = await this.recreatePackageIndexes();
+    let githubTeams = await this.recreateGithubTeamIndexes();
+    let dois = await this.recreateDoiIndexes();
+    return {pkgs, githubTeams, dois};
+  }
+
   /**
    * @method search
    */
@@ -305,14 +331,16 @@ class MongoDB {
    * @description start a doi request
    * 
    * @param {String} pkgId package id to request doi for
+   * @param {String} tag version name
    * @param {String} username username of requestor
    * 
    * @returns {Promise}
    */
-  async setDoiRequest(pkgId, username) {
-    let collection = await mongo.getDoiCollection();
+  async setDoiRequest(pkgId, tag, username) {
+    let collection = await this.getDoiCollection();
     return collection.insert({
       id : pkgId,
+      tag,
       state : config.doi.states.pendingApproval,
       history : [{
         timestamp : Date.now(),
@@ -327,20 +355,29 @@ class MongoDB {
    * @description update a doi request state
    * 
    * @param {String} pkgId package id to request doi for
+   * @param {String} tag version name
    * @param {String} state new doi state 
    * @param {String} username admin username making update
    * 
    * @returns {Promise}
    */
-  async setDoiRequestState(pkgId, state, username, message) {
+  async setDoiRequestState(pkgId, tag, state, username, message) {
     let history = {state, timestamp : Date.now(), admin: username};
-    if( message ) history.message = message;
 
-    let collection = await mongo.getDoiCollection();
-    return collection.update({
+    let update = {
       '$set' : {state},
       '$push' : {history},
-    }, {id: pkgId});
+    };
+
+    if( state === config.doi.states.applied ) {
+      if( !message ) throw new Error(`Doi set to ${config.doi.states.applied} but no DOI provided`);
+      update['$set'].doi = message;
+    } else if( message ) {
+      history.message = message;
+    }
+
+    let collection = await this.getDoiCollection();
+    return collection.update({id: pkgId, tag}, update);
   }
 
   /**
@@ -348,12 +385,21 @@ class MongoDB {
    * @description get a doi request state
    * 
    * @param {String} pkgId package id
+   * @param {String} tag version name
    * 
    * @returns {Promise} resolves to mongodb results
    */
-  async getDoiRequest(pkgId) {
-    let collection = await mongo.getDoiCollection();
-    return collection.get({id: pkgId});
+  async getDoiRequest(pkgId, tag) {
+    let collection = await this.getDoiCollection();
+    return collection.findOne({id: pkgId, tag});
+  }
+
+  async getPackageDois(pkgId) {
+    let collection = await this.getDoiCollection();
+    return collection.find(
+      {id: pkgId, state:'applied'},
+      {tag:1,doi:1,_id:0}
+    ).toArray();
   }
 
   /**
@@ -361,8 +407,8 @@ class MongoDB {
    * @description get all dois that have not been approved
    */
   async getPendingDois() {
-    let collection = await mongo.getDoiCollection();
-    return collection.find({state: {'$ne': config.doi.states.accepted}});
+    let collection = await this.getDoiCollection();
+    return collection.find({state: {'$ne': config.doi.states.applied}}).toArray();
   }
 
   /**
@@ -371,7 +417,7 @@ class MongoDB {
    */
   async getApprovedDois() {
     let collection = await mongo.getDoiCollection();
-    return collection.find({state: config.doi.states.accepted});
+    return collection.find({state: config.doi.states.applied}).toArray();
   }
 
   /**

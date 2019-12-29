@@ -8,10 +8,6 @@
   .no-match {
     text-align: center;
   }
-
-  app-search-pagination[text-mode] {
-    margin-bottom: 30px;
-  }
 </style>
 
 
@@ -27,7 +23,7 @@
   No packages match your current search.
 </div>
 
-<div>
+<div class="main-panel">
   <template is="dom-repeat" items="[[results]]">
     <app-search-result item="[[item]]"></app-search-result>
   </template>

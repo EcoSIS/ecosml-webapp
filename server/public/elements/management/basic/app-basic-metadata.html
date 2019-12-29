@@ -45,13 +45,15 @@
 
   paper-button[sync] {
     color: white;
-    background-color: var(--default-secondary-color);
+    background-color: var(--default-primary-color);
     margin: 15px 0;
   } 
 
 </style>
 
-<app-created-popup id="created" name="[[name]]"></app-created-popup>
+<app-popup id="created" title="Package Created!">
+  <app-created-popup name="[[name]]"></app-created-popup>
+</app-popup>
 
 <div hidden$="[[creating]]">
   <div hidden$="[[isManagedSource]]" style="margin-bottom: 35px">
@@ -106,7 +108,7 @@
 <h2 class="uheader green break">Organization</h2>
 <div class="help">The <a href="https://ecosis.org" target="_blank">EcoSIS</a> organization this package belongs to, 
   all members will have access. If you need to create or edit an organization, do so via 
-  <a href="[[ecosisHost]]/organization" target="_blank">EcoSIS organization management.</a>
+  <a href="[[ecosisDataHost]]/organization" target="_blank">EcoSIS organization management.</a>
 </div>
 <app-org-input id="organization" on-change="_onInputChange" style="display:block"></app-org-input>
 

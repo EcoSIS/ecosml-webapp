@@ -1,4 +1,6 @@
 const config = require('./config');
+const fs = require('fs');
+const path = require('path');
 const request = require('request');
 const Logger = require('./logger');
 const utils = require('./utils');
@@ -249,6 +251,56 @@ class GithubApi {
       tarballUrl : `https://api.github.com/repos/${org}/${repoName}/tarball/${tag}`,
       zipballUrl: `https://api.github.com/repos/${org}/${repoName}/zipball/${tag}`
     }
+  }
+
+  /**
+   * @method getReleaseSnapshot
+   * @description download a release zip or tarball for a given repo and tag
+   * 
+   * @param {String} repoName name of repository, can include org in path
+   * @param {String} tag tag name of release
+   * @param {String} downloadPath path to download file to
+   * @param {String} type zip or tar. defaults to zip.
+   * 
+   * @returns {Promise} resolves to full path to download (including filename)
+   */
+  getReleaseSnapshot(repoName, tag, downloadPath, type='zip') {
+    if( type === 'zip' ) type = 'zipball';
+    else if( type === 'tar' ) type = 'tarball';
+    else throw new Error('Unknown snapshot type: '+type);
+
+    var {repoName, org} = utils.getRepoNameAndOrg(repoName);
+
+    let options = {
+      uri : `https://api.github.com/repos/${org}/${repoName}/${type}/${tag}`,
+      headers : {
+        'User-Agent' : 'EcoSML Webapp'
+      }
+    }
+
+    return new Promise((resolve, reject) => {
+      request.get(options)
+        .on('response', res => {
+          if( res.statusCode !== 200 ) {
+            return reject(res);
+          }
+
+          let filename = res.headers['content-disposition']
+            .split(';')
+            .map(p => p.replace(/ /g, ''))
+            .filter(p => p.match(/^filename=/i))[0]
+            .replace(/^filename=/i, '');
+
+          downloadPath = path.join(downloadPath, filename);
+
+          let wstream = fs.createWriteStream(downloadPath)
+            .on('close', () => resolve(downloadPath))
+            .on('error', e => reject(e));
+
+          res.pipe(wstream);
+        })
+        .on('error', e => reject(e));
+    });
   }
 
   /**

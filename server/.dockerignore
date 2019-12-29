@@ -1,4 +1,5 @@
+node_modules/*
+gitdata/*
+uploads
 .git
-node_modules
 tests
-gitdata

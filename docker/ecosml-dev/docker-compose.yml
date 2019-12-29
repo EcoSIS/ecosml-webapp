@@ -5,6 +5,7 @@ services:
   server:
     image: ecosis/ecosml-webapp:dev
     volumes:
+      - snapshot-data:/server/snapshots
       - git-data:/server/gitdata
       - ../google-key.json:/server/google-key.json
       - ../secrets.js:/server/secrets.js
@@ -13,6 +14,7 @@ services:
     environment:
       - JWT_SECRET=${JWT_SECRET}
       - ECOSIS_HOST=${ECOSIS_HOST}
+      - ECOSIS_DATA_HOST=${ECOSIS_DATA_HOST}
       - CLIENT_ENV=prod
       - SERVER_ENV=dev
       - GITHUB_ORG=ecosml-dev
@@ -37,3 +39,4 @@ volumes:
   mongo-data:
   git-data:
   redis-data:
+  snapshot-data:

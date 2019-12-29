@@ -1,7 +1,7 @@
 import {PolymerElement, html} from "@polymer/polymer"
 import template from "./app-file-diff.html"
 
-import "../../utils/app-popup"
+// import "../../utils/app-popup"
 import PackageModel from "../../../lib/models/PackageModel"
 
 export default class AppFileDiff extends PolymerElement {

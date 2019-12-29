@@ -176,7 +176,7 @@ class GithubSync {
 
       let repoName = e.payload.id;
 
-      // we already processed a newer event for this team
+      // we already processed a newer event for this release
       if( handled[repoName] ) {
         try {
           await firebase.ackGithubReleaseEvent(e.fsId);

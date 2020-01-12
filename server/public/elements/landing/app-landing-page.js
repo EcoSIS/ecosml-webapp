@@ -53,6 +53,10 @@ export default class AppLandingPage extends Mixin(PolymerElement)
       isPackageModule : {
         type : Boolean,
         value : false
+      },
+      lastSearch : {
+        type : String,
+        value : '/search'
       }
     }
   }
@@ -68,7 +72,11 @@ export default class AppLandingPage extends Mixin(PolymerElement)
    * @description from AppStateInterface, called when app state updates
    */
   async _onAppStateUpdate(e) {
-    if( e.location.path[0] !== 'package' ) return;
+    if( e.page === 'search' ) {
+      this.lastSearch = e.location.fullpath;
+    }
+
+    if( e.page !== 'package' ) return;
     let pkgWrapper = await this._getPackage(e.location.path[1]);
     this.package = pkgWrapper.payload;
 

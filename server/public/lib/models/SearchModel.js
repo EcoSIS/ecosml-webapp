@@ -40,8 +40,8 @@ class SearchModel extends BaseModel {
       text : '',
       filters : [],
       sort : null,
-      // limit : 10,
-      limit : 5,
+      limit : 10,
+      // limit : 5,
       offset : 0
     }
   }
@@ -99,8 +99,8 @@ class SearchModel extends BaseModel {
           query.sort = part || null;
           break;
         case 3:
-          // query.limit = part ? parseInt(part) : 10;
-          query.limit = part ? parseInt(part) : 5;
+          query.limit = part ? parseInt(part) : 10;
+          // query.limit = part ? parseInt(part) : 5;
           break;
         case 4:
           query.offset = part ? parseInt(part) : 0;

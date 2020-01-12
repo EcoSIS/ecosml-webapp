@@ -25,6 +25,14 @@
     font-size: 22px;
   }
 
+  .header [main-title] a {
+    color: white;
+  }
+  .header [main-title] a:visited {
+    color: white;
+  }
+
+
   .header [main-title] small {
     font-size: 14px;
   }
@@ -46,9 +54,10 @@
 
 <div class="header" sandbox$="[[sandbox]]">
   <div main-title>
-    EcoSML 
+    <a href="/">EcoSML 
     <span id="titleExtra"></span> 
     <small>Ecological Spectral Model Library</small>
+    </a>
   </div>
   <app-auth-icon></app-auth-icon>
   <div style="position:relative; padding-left: 15px">

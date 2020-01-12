@@ -57,6 +57,14 @@ export default class AppLandingPage extends Mixin(PolymerElement)
       lastSearch : {
         type : String,
         value : '/search'
+      },
+      hasDois : {
+        type : Boolean,
+        value : false
+      },
+      hasKeywords : {
+        type : Boolean,
+        value : false
       }
     }
   }
@@ -79,6 +87,7 @@ export default class AppLandingPage extends Mixin(PolymerElement)
     if( e.page !== 'package' ) return;
     let pkgWrapper = await this._getPackage(e.location.path[1]);
     this.package = pkgWrapper.payload;
+    console.log(this.package);
 
     if( this.package.keywords ) {
       this.$.keywords.innerHTML = this.package.keywords.map(keyword => {
@@ -104,6 +113,9 @@ export default class AppLandingPage extends Mixin(PolymerElement)
     this.showFamilies = (this.families.length > 0);
     this.showSpecifics = (this.specifics.length > 0);
     this.isPackageModule = (this.package.packageType === 'package') ? true : false;
+
+    this.hasDois = (this.package.dois || []).length > 0;
+    this.hasKeywords = (this.package.keywords || []).length > 0;
 
     // this.themeLink = this._getLink('theme');
     // this.familyLink = this._getLink('family');

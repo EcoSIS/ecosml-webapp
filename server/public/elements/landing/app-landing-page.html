@@ -177,12 +177,12 @@
             </div>
           </div>
 
-          <div hidden$="[[!package.keywords]]">
+          <div hidden$="[[!hasKeywords]]">
             <h2 class="uheader lightblue padded">Keywords</h2>
             <div id="keywords"></div>
           </div>
 
-          <div hidden$="[[!package.dois]]">
+          <div hidden$="[[!hasDois]]">
             <h2 class="uheader lightblue padded">DOI</h2>
             <template is="dom-repeat" items="[[package.dois]]">
               <div><a href$="/api/doi/download/[[package.id]]/[[item.tag]]">doi:[[item.doi]]</a> for <b>[[item.tag]]</b></div>

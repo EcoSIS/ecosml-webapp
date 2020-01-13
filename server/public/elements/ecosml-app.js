@@ -79,6 +79,10 @@ export class EcoSMLApp extends Mixin(PolymerElement)
       ecosisHost : {
         type : String,
         value : () => APP_CONFIG.ecosis.host
+      },
+      admin : {
+        type : Boolean,
+        value : false
       }
     }
   }
@@ -96,6 +100,8 @@ export class EcoSMLApp extends Mixin(PolymerElement)
       if( e.composedPath().indexOf(this.$.header) > -1) return;
       this.openMenu = false;
     });
+
+    this.admin = APP_CONFIG.admin;
 
     this._injectModel('AuthModel');
   }

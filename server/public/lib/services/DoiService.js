@@ -9,6 +9,20 @@ class DoiService extends BaseService {
     this.baseUrl = '/api/doi';
   }
 
+  /**
+   * @method get
+   * 
+   * @param {String} id package id
+   */
+  get(id) {
+    return this.request({
+      url : this.baseUrl+'/pending/'+id,
+      onLoading : request => this.store.setGetDoiLoading(request, id),
+      onLoaded : result => this.store.setGetDoiLoaded(JSON.parse(result.body), id),
+      onError : e => this.store.setGetDoiError(e, id)
+    })
+  }
+
   search(type, text) {
     return this.request({
       url : this.baseUrl+'/search',

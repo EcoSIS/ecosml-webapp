@@ -146,6 +146,9 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
       this.PackageEditor.setEditStartStateData(e.payload);
       this.PackageEditor.setData(e.payload, {state: 'edit', merge: false});
       
+      e = await this.DoiModel.get(pkgId);
+      this.PackageEditor.setDoi(e.payload);
+      
       if( e.payload.source === 'managed' ) {
         this.$.files.files = await this.PackageModel.getFiles(pkgId);
         this.repoType = 'EcoSML Managed Repository';

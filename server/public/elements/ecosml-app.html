@@ -104,6 +104,10 @@
       <iron-icon icon="social:person"></iron-icon> 
       <span>My Account</span>
     </a>
+    <a href="/admin" hidden$="[[!admin]]"  tabindex$="[[anchorTabIndex]]">
+      <iron-icon icon="build"></iron-icon> 
+      <span>Admin</span>
+    </a>
     <a href="/auth/logout" hidden$="[[!loggedIn]]"  tabindex$="[[anchorTabIndex]]">
       <iron-icon icon="exit-to-app"></iron-icon> 
       <span>Logout</span>

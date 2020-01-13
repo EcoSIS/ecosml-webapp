@@ -12,6 +12,15 @@ class DoiModel extends BaseModel {
       
     this.register('DoiModel');
   }
+
+  /**
+   * @method get
+   * 
+   * @param {String} id package id 
+   */
+  get(id) {
+    this.service.get(id);
+  }
 }
 
 module.exports = DoiModel;

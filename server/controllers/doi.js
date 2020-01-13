@@ -6,8 +6,7 @@ const {admin, packageWriteAccess, packageReadAccess} = require('./middleware/aut
 
 const DOI_REGEX = /(ark|doi):\/?[a-zA-Z0-9\.]+\/[a-zA-Z0-9\.]+/;
 
-
-router.get('/request/:package/:version', packageWriteAccess, async (req, res) => {
+router.post('/request/:package/:version', packageWriteAccess, async (req, res) => {
   let pkg = req.ecosmlPackage;
   let version = req.params.version;
 
@@ -70,7 +69,7 @@ router.get('/search', admin, async (req, res) => {
   }
 });
 
-router.put('/pending', admin, async(req, res) => {
+router.get('/pending', admin, async(req, res) => {
   try {
     res.json(await model.getPendingDois());
   } catch(e) {
@@ -78,7 +77,15 @@ router.put('/pending', admin, async(req, res) => {
   }
 });
 
-router.put('/approved', admin, async(req, res) => {
+router.get('/pending/:package', packageWriteAccess, async(req, res) => {
+  try {
+    res.json(await model.getDoiRequest(req.ecosmlPackage.id));
+  } catch(e) {
+    utils.handleError(res, e);
+  }
+});
+
+router.get('/approved', admin, async(req, res) => {
   try {
     res.json(await model.getApprovedDois());
   } catch(e) {

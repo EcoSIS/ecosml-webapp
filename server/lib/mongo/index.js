@@ -391,7 +391,12 @@ class MongoDB {
    */
   async getDoiRequest(pkgId, tag) {
     let collection = await this.getDoiCollection();
-    return collection.findOne({id: pkgId, tag});
+    let query = {id: pkgId};
+    if( tag ) {
+      query.tag = tag;
+      return collection.findOne(query);
+    }
+    return collection.find(query).toArray();
   }
 
   async getPackageDois(pkgId) {

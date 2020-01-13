@@ -18,10 +18,14 @@ class DoiModel {
    * @param {Object} pkg 
    */
   async request(pkg={}, tag='', user) {
+    if( typeof pkg === 'string' ) {
+      pkg = await mongo.getPackage(pkg);
+    }
+
     logger.info('user requesting doi', pkg.id, tag, user);
 
     let existingRequest = await mongo.getDoiRequest(pkg.id, tag);
-    if( existingRequest ) throw new Error(`Package ${pkg.id} already has a doi request`);
+    if( existingRequest ) throw new Error(`Package ${pkg.id} tag ${tag} already has a doi request`);
 
     let release = (pkg.releases || []).find(r => r.name === tag);
     if( !release ) throw new Error(`Package ${pkg.id} has not release: ${tag}`);
@@ -36,7 +40,11 @@ class DoiModel {
    * @description admin rejects doi request
    * 
    */
-  rejectRequest(pkg, tag, username) {
+  async rejectRequest(pkg, tag, username) {
+    if( typeof pkg === 'string' ) {
+      pkg = await mongo.getPackage(pkg);
+    }
+
     logger.info('admin rejecting doi request', pkg.id, tag, username);
     return mongo.setDoiRequestState(pkg.id, tag, config.doi.states.rejected, username);
   }
@@ -112,6 +120,10 @@ class DoiModel {
   async getIdFromDoi(doi) {
     let collection = await mongo.getDoiCollection();
     return collection.findOne({doi});
+  }
+
+  getDoiRequest(pkgId, tag) {
+    return mongo.getDoiRequest(pkgId, tag);
   }
 
   getPendingDois() {

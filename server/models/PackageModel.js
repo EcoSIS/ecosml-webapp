@@ -258,7 +258,9 @@ class PackageModel {
       if( info ) pkgObj.organizationInfo = JSON.parse(info);
     }
 
-    pkgObj.dois = await mongo.getPackageDois(pkgObj.id);
+    // this only gets the applied/minted dois
+    // use the DoiModel for pending/requesting dois
+    pkgObj.dois = await mongo.getAppliedPackageDois(pkgObj.id);
 
     // default
     if( !pkgObj.source ) {

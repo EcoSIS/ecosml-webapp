@@ -35,13 +35,35 @@ class AWSImpl {
     });
   }
 
+  /**
+   * @method downloadFile
+   * @description download file from S3 bucket
+   * https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#getObject-property
+   * 
+   * @param {String} filePath path to put local file
+   * @param {String} bucketName name of S3 bucket to download from
+   * @param {String} bucketFilePath path within the bucket to download file
+   */
+  downloadFile(filePath, bucketName, bucketFilePath) {
+    return new Promise((resolve, reject) => {
+      this.s3.getObject({
+        Bucket: bucketName,
+        Key: bucketFilePath
+      }, (err, data) => {
+        if( err ) return reject(err);
+        fs.writeFileSync(filePath, data.Body.toString());
+        resolve();
+      });
+    });
+  };
+
   deleteFile(bucketFilePath, bucketName) {
     return new Promise((resolve, reject) => {
       let params = { 
         Bucket: bucketName, 
         Key: bucketFilePath
       };
-      s3.deleteObject(params, function(err, data) {
+      this.s3.deleteObject(params, function(err, data) {
         if (err) reject(err);
         else resolve(data);
       });
@@ -53,7 +75,7 @@ class AWSImpl {
       let s3params = {
         Bucket: bucketName,
       };
-      s3.listObjectsV2 (s3params, (err, data) => {
+      this.s3.listObjectsV2 (s3params, (err, data) => {
         if (err) return reject(err);
         resolve(data.Contents.map(file => file.Key));
       });

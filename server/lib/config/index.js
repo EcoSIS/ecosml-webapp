@@ -64,7 +64,8 @@ module.exports = {
 
   backups : {
     tmpDir : path.join(MOUNT_PATH, 'backup'),
-    bucket : 'ecosml-backups',
+    tmpRestoreDir : path.join(MOUNT_PATH, 'backup-restore'),
+    bucket : env.BACKUP_ENV === 'prod' ? 'ecosml-backups' : 'ecosml-'+(env.BACKUP_ENV || 'local')+'-backups',
     ecosisBucket : 'ecosis-backups'
   },
 
@@ -85,6 +86,7 @@ module.exports = {
 
   mongodb : {
     host : mongoHost,
+    database : 'ecosml',
     url : `mongodb://${mongoHost}:27017/ecosml`,
     collections : {
       package : 'package',
@@ -110,7 +112,7 @@ module.exports = {
     clientSecret : env.GITHUB_CLIENT_SECRET || '',
     access : secrets.github,
     org : env.GITHUB_ORG || 'ecosml-dev',
-    fsRoot : env.GITHUB_FS_ROOT || path.resolve(__dirname, '..', '..', 'gitdata'),
+    fsRoot : path.join(MOUNT_PATH, 'gitdata'),
     default_license : 'mit',
     homepageRoot : serverEnv === 'dev' ? 'https://dev.ecosml.org/package/' : 'https://ecosml.org/package/',
     
@@ -152,9 +154,6 @@ module.exports = {
   aws : {
     accessKeyId : secrets.aws.accessKeyId,
     secretAccessKey : secrets.aws.secretAccessKey,
-    bucket : {
-      doiSnapshots : (serverEnv === 'prod') ? 'ecosml-doi-snapshots-prod' : 'ecosml-doi-snapshots-dev'
-    }
   },
 
   google : {
@@ -170,7 +169,7 @@ module.exports = {
       githubCommits : 'github-commit-events-'+firebaseEnv,
       githubTeams : 'github-team-events-'+firebaseEnv,
       githubReleases : 'github-release-events-'+firebaseEnv,
-      travis : 'travis-events-'+firebaseEnv,
+      // travis : 'travis-events-'+firebaseEnv,
       ecosisUsers : 'ecosis-users-'+firebaseEnv,
       ecosisOrgs : 'ecosis-org-events-'+firebaseEnv
     }
@@ -184,7 +183,7 @@ module.exports = {
     },
     baseUrls : {
       githubWebhook : 'https://us-central1-ecosis-prod.cloudfunctions.net/githubWebhook',
-      travisBuild : 'https://us-central1-ecosis-prod.cloudfunctions.net/travisBuild',
+      // travisBuild : 'https://us-central1-ecosis-prod.cloudfunctions.net/travisBuild',
       ecosisSync : 'https://us-central1-ecosis-prod.cloudfunctions.net/ecosisSync'
     }
   }

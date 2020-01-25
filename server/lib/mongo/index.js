@@ -399,7 +399,13 @@ class MongoDB {
     return collection.find(query).toArray();
   }
 
-  async getPackageDois(pkgId) {
+  /**
+   * @method getAppliedPackageDois
+   * @description get the applied dois for a package
+   * 
+   * @param {String} pkgId 
+   */
+  async getAppliedPackageDois(pkgId) {
     let collection = await this.getDoiCollection();
     return collection.find(
       {id: pkgId, state:'applied'},

@@ -21,6 +21,8 @@ class DoiModel extends BaseModel {
   get(id) {
     this.service.get(id);
   }
+
+  
 }
 
 module.exports = DoiModel;

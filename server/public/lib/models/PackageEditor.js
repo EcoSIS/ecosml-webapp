@@ -59,6 +59,10 @@ class PackageEditor extends BaseModel {
     this.store.setData(data, opts);
   }
 
+  setDoiData(data) {
+    this.store.setDoiData(data);
+  }
+
   setEditStartStateData(data) {
     this.store.setEditStartStateData(data);
   }

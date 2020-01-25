@@ -147,7 +147,7 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
       this.PackageEditor.setData(e.payload, {state: 'edit', merge: false});
       
       e = await this.DoiModel.get(pkgId);
-      this.PackageEditor.setDoi(e.payload);
+      this.PackageEditor.setDoiData(e.payload);
       
       if( e.payload.source === 'managed' ) {
         this.$.files.files = await this.PackageModel.getFiles(pkgId);

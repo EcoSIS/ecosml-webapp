@@ -1,11 +1,13 @@
 const router = require('express').Router();
 const model = require('../models/DoiModel');
+const mongo = require('../lib/mongo');
+const config = require('../lib/config');
 const utils = require('./utils');
 const fs = require('fs-extra');
 const path = require('path');
 const {admin, packageWriteAccess, packageReadAccess} = require('./middleware/auth');
 
-const DOI_REGEX = /(ark|doi):\/?[a-zA-Z0-9\.]+\/[a-zA-Z0-9\.]+/;
+const DOI_REGEX = new RegExp(`((ark|doi):)?${config.doi.shoulder}/[a-zA-Z0-9\.]+`);
 
 router.post('/request/:package/:version', packageWriteAccess, async (req, res) => {
   let pkg = req.ecosmlPackage;
@@ -111,24 +113,28 @@ router.get('/download/:package/:tag', packageReadAccess, async (req, res) => {
  * Resolve doi requests with 302 redirect
  */
 function doiResolver(app) {
-  app.get(/^\/(ark|doi):.*/, handleDoiRequest);
+  app.get(/^\/(doi):.*/, handleDoiRequest);
+  app.get(new RegExp('^'+config.doi.shoulder+'.*'), handleDoiRequest);
+  app.get(/^\/package\/(doi):.*/, handleDoiRequest);
+  app.get(new RegExp('^\/package\/'+config.doi.shoulder+'.*'), handleDoiRequest);
 }
 
 async function handleDoiRequest(req, res) {
   // split apart id, type and suffix from url
   let info = req.url.split(DOI_REGEX);
+
   info = {
     doi : req.url.match(DOI_REGEX)[0].replace(/^(ark|doi):/, ''),
     type : info[1],
     suffix : info[2]
   }
 
-  let id = await model.getIdFromDoi(info.doi);
-  if( id === null ) {
+  let pkg = await mongo.getPackage(info.doi);
+  if( pkg === null ) {
     return res.status(404).send(`Unknown ${info.type} identifier: ${info.doi}`);
   }
 
-  return res.redirect('/package/'+id);
+  return res.redirect('/package/'+pkg.name);
 }
 
 module.exports = {router, doiResolver};

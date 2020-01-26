@@ -30,8 +30,11 @@ class AppStateModelImpl extends AppStateModel {
 
     if( state.page === 'create' ) state.page = 'edit';
     if( (state.page === 'edit' || state.page === 'package') &&
-        state.location.path.length > 1 ) {
+      state.location.path.length > 1 ) {
       state.selectedPackageId = state.location.path[1];
+      if( state.location.path.length > 2 ) {
+        state.selectedPackageId += '/'+state.location.path[2];
+      }
     } else {
       state.selectedPackageId = '';
     }
@@ -58,14 +61,13 @@ class AppStateModelImpl extends AppStateModel {
   }
 
   async seo(state) {
-    let p = state.location.path || [];
+    let p = state.selectedPackageId;
 
-    if( p.length >= 2 && p[0] === 'package' ) {
-      
-      if( p[1] !== this.seoPackageId ) {
-        let pkg = await PackageModel.get(p[1]);
+    if( p ) {
+      if( p !== this.seoPackageId ) {
+        let pkg = await PackageModel.get(p);
         pkg = JSON.stringify(jsonldTransform(pkg.payload), '  ', '  ');
-        this.seoPackageId = p[1];
+        this.seoPackageId = p;
         document.querySelector('#jsonld').innerHTML = pkg;
       }
     } else {

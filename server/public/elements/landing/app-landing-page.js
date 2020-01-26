@@ -65,6 +65,10 @@ export default class AppLandingPage extends Mixin(PolymerElement)
       hasKeywords : {
         type : Boolean,
         value : false
+      },
+      origin : {
+        type : String,
+        value : false
       }
     }
   }
@@ -72,6 +76,7 @@ export default class AppLandingPage extends Mixin(PolymerElement)
   constructor() {
     super();
     this.active = true;
+    this.origin = window.location.origin;
     this._onAuthUpdate(this._getAuthState());
   }
 

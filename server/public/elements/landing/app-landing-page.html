@@ -71,6 +71,11 @@
     display: none;
   }
 
+  paper-icon-button {
+    background: var(--default-secondary-color);
+    border-radius: 24px;
+  }
+
   @media (max-width: 900px) {
     .main.large {
       display: none;
@@ -84,7 +89,8 @@
     }
 
     .info-panel {
-      width: auto
+      width: auto;
+      margin-bottom: 30px;
     }
   }
 </style>
@@ -185,7 +191,11 @@
           <div hidden$="[[!hasDois]]">
             <h2 class="uheader lightblue padded">DOI</h2>
             <template is="dom-repeat" items="[[package.dois]]">
-              <div><a href$="/api/doi/download/[[package.id]]/[[item.tag]]">doi:[[item.doi]]</a> for <b>[[item.tag]]</b></div>
+              <div>
+                <a href$="/api/doi/download/[[package.id]]/[[item.tag]]"><paper-icon-button icon="file-download"></paper-icon-button></a>
+                &nbsp;
+                <a href$="[[origin]]/doi:[[item.doi]]" style="font-weight: bold;">doi:[[item.doi]]</a> for release <b>[[item.tag]]</b>
+              </div>
             </template>
           </div>
 

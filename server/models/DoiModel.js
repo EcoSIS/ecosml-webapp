@@ -104,9 +104,20 @@ class DoiModel {
     await mongo.setDoiRequestState(pkg.id, tag, config.doi.states.applied, username, doiNum);
   }
 
-  getSnapshotPath(pkg, tag) {
-    var {repoName, org} = utils.getRepoNameAndOrg(pkg.name);
-    return path.join(config.doi.snapshotDir, org, repoName, tag+'.zip');
+  /**
+   * @method getSnapshotPath
+   * @description get a snapshot (zip) that we have downloaded from github / repo
+   * at the time of minting.
+   * 
+   * @param {Object} pkg package object
+   * @param {String} tag 
+   */
+  async getSnapshotPath(pkg, tag) {
+    let collection = await mongo.getDoiCollection();
+    let doi = await collection.findOne({id: pkg.id, tag});
+    if( !doi ) throw new Error(`Unknown doi for: ${pkg.id} ${tag}`);
+
+    return path.join(config.doi.snapshotDir, doi.snapshot);
   }
 
   async getIdFromDoi(doi) {

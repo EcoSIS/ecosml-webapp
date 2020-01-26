@@ -226,17 +226,30 @@ class MongoDB {
 
   /**
    * @method getPackage
-   * @description get a package by name or id.  id can be ecosml
+   * @description get a package by name, id or DOI.  id can be ecosml
    * id or GitHub id
    * 
-   * @param {String} packageNameOrId
+   * @param {String|Object} packageNameOrId  
    * @param {Object} project
    * 
    * @returns {Promise} resolves to mongo response
    */
   async getPackage(packageNameOrId, projection = {}) {
+    if( !packageNameOrId ) throw new Error('Package name or id required');
+
     if( typeof packageNameOrId === 'object' ) {
       packageNameOrId = packageNameOrId.id || packageNameOrId.name;
+    }
+
+    if( packageNameOrId.match(new RegExp('^'+config.doi.shoulder)) || 
+        packageNameOrId.match(/^doi:/) ) {
+
+      let doiCollection = await this.getDoiCollection();
+      packageNameOrId = packageNameOrId.replace(/^doi:/, '');
+      let result = await doiCollection.findOne({doi: packageNameOrId}, {id: 1});
+      if( !result ) return null;
+
+      packageNameOrId = result.id;
     }
 
     let collection = await this.packagesCollection();

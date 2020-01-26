@@ -2,6 +2,7 @@ const router = require('express').Router();
 const model = require('../models/DoiModel');
 const utils = require('./utils');
 const fs = require('fs-extra');
+const path = require('path');
 const {admin, packageWriteAccess, packageReadAccess} = require('./middleware/auth');
 
 const DOI_REGEX = /(ark|doi):\/?[a-zA-Z0-9\.]+\/[a-zA-Z0-9\.]+/;
@@ -93,13 +94,13 @@ router.get('/approved', admin, async(req, res) => {
   }
 });
 
-router.get('/download/:package/:tag', packageReadAccess, async(req, res) => {
+router.get('/download/:package/:tag', packageReadAccess, async (req, res) => {
   try {
-    let sPath = model.getSnapshotPath(req.ecosmlPackage, req.params.tag);
-    let name = req.ecosmlPackage.name.replace(/.*\//, '');
+    let sPath = await model.getSnapshotPath(req.ecosmlPackage, req.params.tag);
+    let filename = path.parse(sPath).base;
 
     res.set('Content-Type', 'application/zip');
-    res.set('Content-Disposition', `attachment; filename="${name}-${req.params.tag}.zip"`);
+    res.set('Content-Disposition', `attachment; filename="${filename}"`);
     fs.createReadStream(sPath).pipe(res);
   } catch(e) {
     utils.handleError(res, e);

@@ -56,7 +56,7 @@ datacite.publicationyear: ${created}`;
     let created = new Date().getFullYear();
     if( pkg.created ) created = new Date(pkg.created).getFullYear();
 
-    let doi = config.datacite.shoulder+'/'+shortid();
+    let doi = config.doi.shoulder+'/'+shortid();
 
     let body = {
       data: {

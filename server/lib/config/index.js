@@ -126,13 +126,13 @@ module.exports = {
   },
 
   datacite : {
-    shoulder : (serverEnv === 'prod') ? '10.21232' : '10.21232',
     url : (serverEnv === 'prod') ? 'https://api.datacite.org/dois' : 'https://api.test.datacite.org/dois',
     username : secrets.datacite.username,
     password : secrets.datacite.password
   },
 
   doi : {
+    shoulder : (serverEnv === 'prod') ? '10.21232' : '10.21232',
     states : {
       pendingApproval : 'pending-approval',
       pendingRevision : 'pending-revision',

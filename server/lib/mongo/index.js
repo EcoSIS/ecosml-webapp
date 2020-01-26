@@ -333,10 +333,11 @@ class MongoDB {
    * @param {String} pkgId package id to request doi for
    * @param {String} tag version name
    * @param {String} username username of requestor
+   * @param {String} snapshot filename of code snapshot
    * 
    * @returns {Promise}
    */
-  async setDoiRequest(pkgId, tag, username) {
+  async setDoiRequest(pkgId, tag, username, snapshot) {
     let collection = await this.getDoiCollection();
     return collection.insert({
       id : pkgId,
@@ -344,8 +345,10 @@ class MongoDB {
       state : config.doi.states.pendingApproval,
       history : [{
         timestamp : Date.now(),
-        state: config.doi.states.pendingApproval
+        state: config.doi.states.pendingApproval,
+        requestedBy : username
       }],
+      snapshot,
       requestedBy : username
     });
   }
@@ -358,10 +361,12 @@ class MongoDB {
    * @param {String} tag version name
    * @param {String} state new doi state 
    * @param {String} username admin username making update
+   * @param {String} message either a custom message or the DOI # if state is applied
+   * @param {String} snapshot name of doi snapshot
    * 
    * @returns {Promise}
    */
-  async setDoiRequestState(pkgId, tag, state, username, message) {
+  async setDoiRequestState(pkgId, tag, state, username, message, snapshot) {
     let history = {state, timestamp : Date.now(), admin: username};
 
     let update = {
@@ -374,6 +379,10 @@ class MongoDB {
       update['$set'].doi = message;
     } else if( message ) {
       history.message = message;
+    }
+
+    if( snapshot ) {
+      update.snapshot = snapshot;
     }
 
     let collection = await this.getDoiCollection();

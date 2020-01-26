@@ -7,6 +7,7 @@ services:
     volumes:
       - snapshot-data:/server/snapshots
       - git-data:/server/gitdata
+      - storage:/storage
       - ../google-key.json:/server/google-key.json
       - ../secrets.js:/server/secrets.js
     ports:
@@ -39,3 +40,4 @@ volumes:
   git-data:
   redis-data:
   snapshot-data:
+  storage:

@@ -9,6 +9,7 @@ services:
       - git-data:/server/gitdata
       - ../google-key.json:/server/google-key.json
       - ../secrets.js:/server/secrets.js
+      - storage:/storage
     ports:
       - 3001:3000
     environment:
@@ -40,3 +41,4 @@ volumes:
   git-data:
   redis-data:
   snapshot-data:
+  storage:

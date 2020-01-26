@@ -18,6 +18,7 @@ services:
       - ../../server/index.js:/server/index.js
       - ../google-key.json:/server/google-key.json
       - ../secrets.js:/server/secrets.js
+      - storage:/storage
     ports:
       - 3000:3000
     environment:
@@ -49,3 +50,4 @@ volumes:
   mongo-data:
   redis-data:
   snapshot-data:
+  storage:

@@ -11,7 +11,7 @@ let secrets = {
   aws : {}
 };
 
-const MOUNT_PATH = env.MOUNT_PATH || '/server';
+const MOUNT_PATH = env.MOUNT_PATH || '/storage';
 
 if( fs.existsSync(path.resolve(__dirname, '../../secrets.js')) ) {
   secrets = require('../../secrets');

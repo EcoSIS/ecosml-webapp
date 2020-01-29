@@ -120,6 +120,69 @@ class DoiModel {
     return path.join(config.doi.snapshotDir, doi.snapshot);
   }
 
+  /**
+   * @method searchDois
+   * @descriptions search dois based on package test or doi state
+   * 
+   * @param {Object} options
+   * @param {String} options.text limit by package text
+   * @param {String} options.state limit by doi state
+   * @param {String}
+   */
+  async searchDois(options={}) {
+    let agg = [];
+    if( !options.limit ) options.limit = 10;
+
+    if( options.text ) {
+      agg.push({ $match : 
+        { $text: { $search: options.text} }
+      });
+    }
+
+    agg.push({
+      $lookup:
+         {
+           from: "doi",
+           localField : "id",
+           foreignField : "id",
+           as: "dois"
+       }
+    });
+
+    agg.push({$match : 
+      {'dois.0' : {$exists: true}} 
+    });
+
+    if( options.state ) {
+      agg.push({$match : 
+        { 'dois.state' : options.state } 
+      });
+    }
+
+    if( options.offset ) {
+      agg.push({$skip: options.skip});
+    }
+
+    agg.push({$limit: options.limit});
+
+    let collection = await mongo.packagesCollection();
+    let result = await collection.aggregate(agg).toArray();
+    
+    let dois = [];
+    result.forEach(pkg => {
+      pkg.dois.forEach(doi => {
+        doi.package = {
+          name : pkg.name,
+          overview : pkg.overview
+        }
+
+        dois.push(doi);
+      });
+    });
+
+    return dois;
+  }
+
   async getIdFromDoi(doi) {
     let collection = await mongo.getDoiCollection();
     return collection.findOne({doi});

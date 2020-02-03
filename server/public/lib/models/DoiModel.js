@@ -9,7 +9,7 @@ class DoiModel extends BaseModel {
 
     this.store = DoiStore;
     this.service = DoiService;
-      
+
     this.register('DoiModel');
   }
 
@@ -22,7 +22,16 @@ class DoiModel extends BaseModel {
     this.service.get(id);
   }
 
+  async search(type, text) {
+    try {
+      await this.service.search(type, text);
+    } catch(e) {
+      console.error(e);
+    }
+    return this.store.data.search;
+  }
+
   
 }
 
-module.exports = DoiModel;
+module.exports = new DoiModel();

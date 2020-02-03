@@ -17,11 +17,24 @@ export default class AppDoiAdmin extends Mixin(LitElement)
 
     this.items = [];
 
-    this._injectModel('AppStateModel');
+    this._injectModel('AppStateModel', 'DoiModel');
   }
 
-  _onAppStateUpdate(e) {
-    console.log(e);
+  _onSearchClicked() {
+    this.search();
+  }
+
+  _onKeyup(e) {
+    if( e.which !== 13 ) return;
+    this.search();
+  }
+
+  async search() {
+    let text = this.shadowRoot.querySelector('#text-filter').value;
+    let type = this.shadowRoot.querySelector('#type-input').value;
+    if( type === 'All' ) type = '';
+    let results = await this.DoiModel.search(type, text);
+    this.items = results.payload || [];
   }
 
 }

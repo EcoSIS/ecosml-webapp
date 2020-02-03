@@ -6,7 +6,10 @@ class DoiStore extends BaseStore {
     super();
 
     this.data = {
-      dois : {}
+      dois : {},
+      search : {
+        state : this.STATE.INIT
+      }
     };
     this.events = {
       GET_DOI_UPDATE : 'get-doi-update'
@@ -38,6 +41,24 @@ class DoiStore extends BaseStore {
     this.data.dois[state.id] = state;
     this.emit(this.events.GET_DOI_UPDATE, state);
   }
+
+  setSearchLoading(request, query) {
+    this._setSearchState({request, query, state: this.STATE.LOADING});
+  }
+
+  setSearchLoaded(payload, query) {
+    this._setSearchState({payload, query, state: this.STATE.LOADED});
+  }
+
+  setSearchError(error, query) {
+    this._setSearchState({error, query, state: this.STATE.ERROR});
+  }
+
+  _setSearchState(state) {
+    this.data.search = state;
+    this.emit(this.events.SEARCH_PACKAGES_UPDATE, this.data.search);
+  }
 }
+
 
 module.exports = new DoiStore();

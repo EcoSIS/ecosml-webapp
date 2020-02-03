@@ -66,7 +66,7 @@ router.get('/search', admin, async (req, res) => {
   let text = req.query.text || '';
 
   try {
-    res.json(await model.searchDois({type, text}));
+    res.json(await model.searchDois({state:type, text}));
   } catch(e) {
     utils.handleError(res, e);
   }

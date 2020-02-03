@@ -32,18 +32,22 @@ ${litCss(sharedStylesHtml)}
 
 <div class="filter-layout">
   <div>
-    <select style="width:150px">
-      <option></option>
-      <option value="pending">Pending Approval</option>
-      <option value="revision">Denied, Waiting For Revision</option>
-      <option value="creating">Approved, Waiting for DOI</option>
-      <option value="created">Approved, DOI Assigned</option>
+    <select id="type-input" style="width:150px">
+      <option>All</option>
+      <option value="pending-approval">Pending Approval</option>
+      <option value="pending-revision">Waiting For Revision</option>
+      <option value="applied">Approved, DOI Assigned</option>
+      <option value="accepted">Approved, Waiting for DOI</option>
+      <option value="requesting">Approved, Requesting DOI</option>
+      <option value="rejected">Rejected</option>
     </select>
   </div>
 
   <div class="input-layout">
-    <input type="text" id="text-filter" placeholder="Search" />
+    <input type="text" id="text-filter" placeholder="Search" @keyup="${this._onKeyup}" />
   </div>
+
+  <button @click="${this._onSearchClicked}">Search</button>
 </div>
 
 <table>
@@ -51,12 +55,21 @@ ${litCss(sharedStylesHtml)}
     <th>Repository</th>
     <th>Status</th>
     <th>DOI</th>
+    <th>History</th>
   </tr>
   ${this.items.map(result => {
     return html`<tr>
-      <td><a href="${result.url}" target="_blank">${result.name}</a></td>
-      <td>${result.status}</td>
+      <td>
+        <div><a href="/package/${result.package.name}" target="_blank">${result.package.name} ${result.tag}</a></div>
+        <div>${result.package.overview}</div>
+      </td>
+      <td>${result.state}</td>
       <td>${result.doi}</td>
+      <td>
+      ${result.history.map(item => html`
+        <div>${item.admin || result.requestedBy} ${item.state} ${new Date(item.timestamp).toISOString()}</div>
+      `)}
+      </td>
     </tr>`
   })}
 </table>

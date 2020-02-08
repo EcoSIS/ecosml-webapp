@@ -1,13 +1,16 @@
 import { LitElement } from 'lit-element';
 import render from "./app-doi-admin.tpl.js"
 
+import "./app-doi-edit-panel"
 
 export default class AppDoiAdmin extends Mixin(LitElement)
   .with(LitCorkUtils) {
 
   static get properties() {
     return {
-      items : {Array: String}
+      items : {type: Array},
+      active : {type: Boolean},
+      panel : {type: String}
     }
   }
 
@@ -16,8 +19,17 @@ export default class AppDoiAdmin extends Mixin(LitElement)
     this.render = render.bind(this);
 
     this.items = [];
+    this.active = false;
+    this.panel = 'search';
 
     this._injectModel('AppStateModel', 'DoiModel');
+  }
+
+  updated(props) {
+    if( props.has('active') && !this.firstRender ) {
+      this.firstRender = true;
+      this.search();
+    }
   }
 
   _onSearchClicked() {
@@ -35,6 +47,12 @@ export default class AppDoiAdmin extends Mixin(LitElement)
     if( type === 'All' ) type = '';
     let results = await this.DoiModel.search(type, text);
     this.items = results.payload || [];
+  }
+
+  _onEditClicked(e) {
+    let index = parseInt(e.currentTarget.getAttribute('index'));
+    this.shadowRoot.querySelector('app-doi-edit-panel').data = this.items[index];
+    this.panel = 'edit';
   }
 
 }

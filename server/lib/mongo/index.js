@@ -350,7 +350,7 @@ class MongoDB {
    * 
    * @returns {Promise}
    */
-  async setDoiRequest(pkgId, tag, username, snapshot) {
+  async setDoiRequest(pkgId, tag, username, email, snapshot) {
     let collection = await this.getDoiCollection();
     return collection.insert({
       id : pkgId,
@@ -359,7 +359,8 @@ class MongoDB {
       history : [{
         timestamp : Date.now(),
         state: config.doi.states.pendingApproval,
-        requestedBy : username
+        requestedBy : username,
+        requestedByEmail : email
       }],
       snapshot,
       requestedBy : username

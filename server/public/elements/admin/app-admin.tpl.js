@@ -10,7 +10,7 @@ return html`
   }
 </style>  
 
-<iron-pages .selected="${this.subPage}" attr-for-selected="id">
+<iron-pages .selected="${this.subPage}" attr-for-selected="id" selected-attribute="active">
   <app-doi-admin id="doi"></app-doi-admin>
 </iron-pages>
 

@@ -14,15 +14,15 @@ class DoiModel {
    * 
    * @param {Object} pkg 
    */
-  async request(pkg={}, tag='', user) {
+  async request(pkg={}, tag='', user, email) {
     if( typeof pkg === 'string' ) {
       pkg = await mongo.getPackage(pkg);
     }
 
-    logger.info('user requesting doi', pkg.id, tag, user);
+    logger.info('user requesting doi', pkg.id, tag, user, email);
 
     let existingRequest = await mongo.getDoiRequest(pkg.id, tag);
-    if( existingRequest && existingRequest.state !== config.doi.states.rejected ) {
+    if( existingRequest && existingRequest.state !== config.doi.states.canceled ) {
       throw new Error(`Package ${pkg.id} tag ${tag} already has a doi request`);
     }
 
@@ -36,21 +36,21 @@ class DoiModel {
     let file = await github.getReleaseSnapshot(pkg.name, tag, config.doi.snapshotDir);
     let filename = path.parse(file).base;
 
-    return mongo.setDoiRequest(pkg.id, tag, user, filename);
+    return mongo.setDoiRequest(pkg.id, tag, user, email, filename);
   }
 
   /**
-   * @method rejectRequest
-   * @description admin rejects doi request
+   * @method canceledRequest
+   * @description user or cancels doi request
    * 
    */
-  async rejectRequest(pkg, tag, username) {
+  async canceledRequest(pkg, tag, username) {
     if( typeof pkg === 'string' ) {
       pkg = await mongo.getPackage(pkg);
     }
 
-    logger.info('admin rejecting doi request', pkg.id, tag, username);
-    return mongo.setDoiRequestState(pkg.id, tag, config.doi.states.rejected, username);
+    logger.info('canceling doi request', pkg.id, tag, username);
+    return mongo.setDoiRequestState(pkg.id, tag, config.doi.states.canceled, username);
   }
 
   /**

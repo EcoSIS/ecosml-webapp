@@ -136,7 +136,7 @@ module.exports = {
     states : {
       pendingApproval : 'pending-approval',
       pendingRevision : 'pending-revision',
-      rejected : 'rejected',
+      canceled : 'canceled',
       requesting : 'requesting',
       accepted : 'accepted',
       applied : 'applied'

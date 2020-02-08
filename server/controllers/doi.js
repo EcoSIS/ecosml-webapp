@@ -19,7 +19,24 @@ router.post('/request/:package/:version', packageWriteAccess, async (req, res) =
   }
 
   try {
-    await model.request(pkg, version, req.session.username);
+    await model.request(pkg, version, req.session.username, req.session.email);
+    res.json({success: true});
+  } catch(e) {
+    utils.handleError(res, e);
+  }
+});
+
+router.post('/cancel/:package/:version', packageWriteAccess, async (req, res) => {
+  let pkg = req.ecosmlPackage;
+  let version = req.params.version;
+
+  let release = (pkg.releases || []).find(release => release.name === version);
+  if( !release ) {
+    return utils.handleError(res, new Error('Unknown package version: '+version));
+  }
+
+  try {
+    await model.canceledRequest(pkg, version, req.session.username);
     res.json({success: true});
   } catch(e) {
     utils.handleError(res, e);

@@ -47,6 +47,17 @@ ${litCss(sharedStylesHtml)}
   paper-icon-button {
     color: var(--default-primary-color);
   }
+
+  button {
+    margin: 15px 0;
+    color: white;
+    background: var(--light-primary-color);
+    border: 1px solid var(--light-primary-color);
+    height: 36px;
+    padding: 0 15px;
+    border-left: none;
+    border-radius: 0;
+  }
 </style>  
 
 <h2>Admin DOI</h2>
@@ -69,7 +80,7 @@ ${litCss(sharedStylesHtml)}
       </div>
 
       <div class="input-layout">
-        <input type="text" id="text-filter" placeholder="Search" @keyup="${this._onKeyup}" />
+        <input type="text" id="text-filter" placeholder="Search Text" @keyup="${this._onKeyup}" />
       </div>
 
       <button @click="${this._onSearchClicked}">Search</button>
@@ -104,7 +115,7 @@ ${litCss(sharedStylesHtml)}
   </div>
 
   <div panel="edit">
-    <app-doi-edit-panel></app-doi-edit-panel>
+    <app-doi-edit-panel @back="${this._onEditPanelBack}"></app-doi-edit-panel>
   </div>
 </iron-pages>
 `;}

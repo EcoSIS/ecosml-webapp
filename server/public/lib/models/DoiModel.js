@@ -18,8 +18,9 @@ class DoiModel extends BaseModel {
    * 
    * @param {String} id package id 
    */
-  get(id) {
-    this.service.get(id);
+  async get(id) {
+    await this.service.get(id);
+    return this.store.data.dois[id];
   }
 
   async search(type, text) {
@@ -31,7 +32,19 @@ class DoiModel extends BaseModel {
     return this.store.data.search;
   }
 
-  
+  async updateState(action, doi, message) {
+    if( action === 'request-revision' ) {
+      await this.service.update(doi, message);
+    } else if( action === 'approve' ) {
+      await this.service.approve(doi);
+    } else if( action === 'cancel' ) {
+      await this.service.cancel(doi, message);
+    } else {
+      throw new Error('Unknown DOI action: '+action);
+    }
+
+    return this.store.data.dois[doi.id];
+  }
 }
 
 module.exports = new DoiModel();

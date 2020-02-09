@@ -21,15 +21,10 @@ services:
       - storage:/storage
     ports:
       - 3000:3000
+    env_file: '.env'
     environment:
-      - JWT_SECRET=${JWT_SECRET}
-      - ECOSIS_HOST=${ECOSIS_HOST}
-      - ECOSIS_DATA_HOST=${ECOSIS_DATA_HOST}
-      - GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
-      - GITHUB_CLIENT_SECRET=${GITHUB_CLIENT_SECRET}
       - GITHUB_ORG=ecosml-dev
       - FIREBASE_ENV=dev
-      - GOOGLE_ANALYTICS_KEY=${GOOGLE_ANALYTICS_KEY}
     command: tail -f /dev/null
 
   redis:

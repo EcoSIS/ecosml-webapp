@@ -17,9 +17,9 @@ class DoiService extends BaseService {
    */
   get(id) {
     return this.request({
-      url : this.baseUrl+'/pending/'+id,
+      url : this.baseUrl+'/all/'+id,
       onLoading : request => this.store.setGetDoiLoading(request, id),
-      onLoad : result => this.store.setGetDoiLoaded(JSON.parse(result.body), id),
+      onLoad : result => this.store.setGetDoiLoaded(result.body, id),
       onError : e => this.store.setGetDoiError(e, id)
     })
   }
@@ -36,6 +36,43 @@ class DoiService extends BaseService {
       onLoading : request => this.store.setSearchLoading(request, {type, text}),
       onLoad : result => this.store.setSearchLoaded(result.body, {type, text}),
       onError : e => this.store.setSearchError(e, {type, text})
+    });
+  }
+
+  cancel(doi) {
+    return this.request({
+      url : `${this.baseUrl}/request/${doi.package.name}/${doi.tag}/cancel`,
+      fetchOptions : {
+        method : 'PUT'
+      },
+      onLoading : request => this.store.setDoiSaving(request, 'cancel', doi),
+      onLoad : result => this.store.setDoiSaved(result.body),
+      onError : e => this.store.setDoiSaveError(e, 'cancel', doi)
+    });
+  }
+
+  update(doi, msg) {
+    return this.request({
+      url : `${this.baseUrl}/request/${doi.package.name}/${doi.tag}/update`,
+      fetchOptions : {
+        method : 'PUT',
+        body : msg || ''
+      },
+      onLoading : request => this.store.setDoiSaving(request, 'update', doi),
+      onLoad : result => this.store.setDoiSaved(result.body),
+      onError : e => this.store.setDoiSaveError(e, 'update', doi)
+    });
+  }
+
+  approve(doi) {
+    return this.request({
+      url : `${this.baseUrl}/request/${doi.package.name}/${doi.tag}/approve`,
+      fetchOptions : {
+        method : 'PUT'
+      },
+      onLoading : request => this.store.setDoiSaving(request, 'approve', doi),
+      onLoad : result => this.store.setDoiSaved(result.body),
+      onError : e => this.store.setDoiSaveError(e, 'approve', doi)
     });
   }
 

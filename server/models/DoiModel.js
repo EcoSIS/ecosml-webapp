@@ -36,21 +36,23 @@ class DoiModel {
     let file = await github.getReleaseSnapshot(pkg.name, tag, config.doi.snapshotDir);
     let filename = path.parse(file).base;
 
-    return mongo.setDoiRequest(pkg.id, tag, user, email, filename);
+    await mongo.setDoiRequest(pkg.id, tag, user, email, filename);
+    return mongo.getDoiRequest(pkg.id, tag);
   }
 
   /**
-   * @method canceledRequest
+   * @method cancelRequest
    * @description user or cancels doi request
    * 
    */
-  async canceledRequest(pkg, tag, username) {
+  async cancelRequest(pkg, tag, username) {
     if( typeof pkg === 'string' ) {
       pkg = await mongo.getPackage(pkg);
     }
 
     logger.info('canceling doi request', pkg.id, tag, username);
-    return mongo.setDoiRequestState(pkg.id, tag, config.doi.states.canceled, username);
+    await mongo.setDoiRequestState(pkg.id, tag, config.doi.states.canceled, username);
+    return mongo.getDoiRequest(pkg.id, tag);
   }
 
   /**
@@ -60,9 +62,10 @@ class DoiModel {
    * @param {*} pkg 
    * @param {*} message 
    */
-  requestUpdates(pkg, tag, username, message) {
+  async requestUpdates(pkg, tag, username, message) {
     logger.info('admin requesting updates to doi request', pkg.id, tag, username);
-    return mongo.setDoiRequestState(pkg.id, tag, config.doi.states.pendingRevision, username, message);
+    await mongo.setDoiRequestState(pkg.id, tag, config.doi.states.pendingRevision, username, message);
+    return mongo.getDoiRequest(pkg.id, tag);
   }
 
   /**
@@ -82,8 +85,9 @@ class DoiModel {
       throw new Error(`Package release already has a doi ${pkg.id} ${tag}`)
     }
 
-    if( existingRequest.state !== config.doi.states.pendingApproval ) {
-      throw new Error(`DOI request is not in pending-approval state: ${pkg.id} ${tag}, state=${existingRequest.state}`);
+    if( existingRequest.state !== config.doi.states.pendingApproval &&
+        existingRequest.state !== config.doi.states.pendingRevision ) {
+      throw new Error(`DOI request is not in pending-approval or pending-revision state: ${pkg.id} ${tag}, state=${existingRequest.state}`);
     }
 
     let release = (pkg.releases || []).find(r => r.name === tag);
@@ -102,6 +106,8 @@ class DoiModel {
 
     logger.info('setting final doi state', pkg.id, tag);
     await mongo.setDoiRequestState(pkg.id, tag, config.doi.states.applied, username, doiNum);
+
+    return mongo.getDoiRequest(pkg.id, tag);
   }
 
   /**
@@ -176,7 +182,14 @@ class DoiModel {
           overview : pkg.overview
         }
 
-        dois.push(doi);
+        if( options.state ) {
+          if( options.state === doi.state ) {
+            dois.push(doi);
+          }
+        } else {
+          dois.push(doi);
+        }
+
       });
     });
 
@@ -188,8 +201,14 @@ class DoiModel {
     return collection.findOne({doi});
   }
 
-  getDoiRequest(pkgId, tag) {
-    return mongo.getDoiRequest(pkgId, tag);
+  async getIdFromDoi(doi) {
+    let collection = await mongo.getDoiCollection();
+    return collection.findOne({doi});
+  }
+
+  async getPackageDois(pkgId) {
+    let collection = await mongo.getDoiCollection();
+    return collection.find({id: pkgId}).toArray();
   }
 
   getPendingDois() {

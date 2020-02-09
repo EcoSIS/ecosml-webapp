@@ -55,6 +55,23 @@ export default class AppDoiAdmin extends Mixin(LitElement)
     this.panel = 'edit';
   }
 
+  _onDoiUpdate(e) {
+    if( e.state !== 'loaded' ) return;
+
+    let index = this.items.findIndex(item => item.id === e.id && item.tag === e.payload.tag);
+    if( index === -1 ) return;
+
+    this.items[index].history = e.payload.history;
+    this.items[index].state = e.payload.state;
+    this.items[index].doi = e.payload.doi;
+
+    this.requestUpdate();
+  }
+
+  _onEditPanelBack() {
+    this.panel = 'search';
+  }
+
 }
 
 customElements.define('app-doi-admin', AppDoiAdmin);

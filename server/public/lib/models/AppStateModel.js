@@ -2,6 +2,7 @@ const {AppStateModel} = require('@ucd-lib/cork-app-state');
 var AppStateStore = require('../stores/AppStateStore');
 const PackageModel = require('../models/PackageModel');
 const jsonldTransform = require('../../../lib/jsonld');
+const clone = require('clone');
 
 class AppStateModelImpl extends AppStateModel {
 
@@ -66,7 +67,7 @@ class AppStateModelImpl extends AppStateModel {
     if( p ) {
       if( p !== this.seoPackageId ) {
         let pkg = await PackageModel.get(p);
-        pkg = JSON.stringify(jsonldTransform(pkg.payload), '  ', '  ');
+        pkg = JSON.stringify(jsonldTransform(clone(pkg.payload)), '  ', '  ');
         this.seoPackageId = p;
         document.querySelector('#jsonld').innerHTML = pkg;
       }

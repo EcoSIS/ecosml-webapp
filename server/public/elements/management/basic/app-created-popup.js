@@ -22,7 +22,6 @@ export default class AppCreatedPopup extends PolymerElement {
 
   connectedCallback() {
     super.connectedCallback();
-    console.log(this.githubOrg);
 
     // if( !this._init ) {
     //   this._init = true;

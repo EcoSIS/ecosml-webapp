@@ -16,7 +16,8 @@ class PackageEditorStore extends BaseStore {
     this.data = {
       package : {
         payload : {},
-        state : ''
+        state : '',
+        dois : []
       },
       startState : {}
     }
@@ -33,8 +34,14 @@ class PackageEditorStore extends BaseStore {
       payload : {
         source: 'managed',
         packageType : 'standalone'
-      }
+      },
+      dois : []
     });
+  }
+
+  setDoiData(data) {
+    this.data.package.dois = data;
+    this.emit(this.events.PACKAGE_EDITOR_DATA_UPDATE, this.data.package);
   }
 
   /**

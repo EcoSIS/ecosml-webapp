@@ -105,6 +105,7 @@
       <paper-tab id="details" hidden$="[[creating]]">Details</paper-tab>
       <paper-tab id="files" hidden$="[[creating]]">Files</paper-tab>
       <paper-tab id="release" hidden$="[[creating]]">Releases</paper-tab>
+      <paper-tab id="doi" hidden$="[[creating]]">DOI</paper-tab>
     </paper-tabs>
 
     <iron-pages selected="[[selectedSection]]" attr-for-selected="id" selected-attribute="active" >
@@ -113,6 +114,7 @@
       <app-details-metadata id="details" class="main-panel" on-change="_onDataChange"></app-details-metadata>
       <app-files id="files" class="main-panel" package-name="[[data.name]]" language="[[data.language]]"></app-files>
       <app-releases id="release" class="main-panel"></app-releases>
+      <app-doi-request id="doi" class="main-panel"></app-doi-request>
     </iron-pages>
   </div>
 </div>

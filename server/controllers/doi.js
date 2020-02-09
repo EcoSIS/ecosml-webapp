@@ -26,53 +26,38 @@ router.post('/request/:package/:version', packageWriteAccess, async (req, res) =
   }
 });
 
-router.post('/cancel/:package/:version', packageWriteAccess, async (req, res) => {
+router.put('/request/:package/:version/cancel', admin, packageWriteAccess, async(req, res) => {
   let pkg = req.ecosmlPackage;
   let version = req.params.version;
 
-  let release = (pkg.releases || []).find(release => release.name === version);
-  if( !release ) {
-    return utils.handleError(res, new Error('Unknown package version: '+version));
-  }
-
   try {
-    await model.canceledRequest(pkg, version, req.session.username);
-    res.json({success: true});
+    res.json(await model.cancelRequest(pkg, version, req.session.username));
   } catch(e) {
     utils.handleError(res, e);
   }
 });
 
-router.put('/request/:package/:version/reject', admin, async(req, res) => {
+router.put('/request/:package/:version/update', admin, packageWriteAccess, async(req, res) => {
   let pkg = req.ecosmlPackage;
-  let release = (pkg.releases || []).find(release => release.name === version);
-
-  try {
-    await model.rejectRequest(pkg, req.session.username);
-    res.json({success: true});
-  } catch(e) {
-    utils.handleError(res, e);
-  }
-});
-
-router.put('/request/:package/update', admin, async(req, res) => {
-  let pkg = req.ecosmlPackage;
+  let version = req.params.version;
   let msg = req.body;
+  if( typeof msg === 'object' && Object.keys(msg).length === 0 ) {
+    msg = '';
+  }
 
   try {
-    await model.requestUpdates(pkg, req.session.username, msg);
-    res.json({success: true});
+    res.json(await model.requestUpdates(pkg, version, req.session.username, msg));
   } catch(e) {
     utils.handleError(res, e);
   }
 });
 
-router.put('/request/:package/approve', admin, async(req, res) => {
+router.put('/request/:package/:version/approve', admin, packageWriteAccess, async(req, res) => {
   let pkg = req.ecosmlPackage;
+  let version = req.params.version;
 
   try {
-    await model.requestUpdates(pkg, req.session.username);
-    res.json({success: true});
+    res.json(await model.mint(pkg, version, req.session.username));
   } catch(e) {
     utils.handleError(res, e);
   }
@@ -97,9 +82,9 @@ router.get('/pending', admin, async(req, res) => {
   }
 });
 
-router.get('/pending/:package', packageWriteAccess, async(req, res) => {
+router.get('/all/:package', packageWriteAccess, async(req, res) => {
   try {
-    res.json(await model.getDoiRequest(req.ecosmlPackage.id));
+    res.json(await model.getPackageDois(req.ecosmlPackage.id));
   } catch(e) {
     utils.handleError(res, e);
   }

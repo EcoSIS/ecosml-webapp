@@ -228,6 +228,7 @@ class GithubApi {
    * @returns {Promise} resolves to null or string
    */
   async latestRelease(repoName) {
+    let fullRepoName = repoName;
     var {repoName, org} = utils.getRepoNameAndOrg(repoName);
 
     let {response} = await this.requestRaw({
@@ -248,9 +249,19 @@ class GithubApi {
       htmlUrl: `https://github.com/${org}/${repoName}/releases/tag/${tag}`,
       name : tag,
       tagName : tag,
-      tarballUrl : `https://api.github.com/repos/${org}/${repoName}/tarball/${tag}`,
-      zipballUrl: `https://api.github.com/repos/${org}/${repoName}/zipball/${tag}`
+      tarballUrl : this.getReleaseSnapshotUrl(fullRepoName, tag, 'tar'),
+      zipballUrl: this.getReleaseSnapshotUrl(fullRepoName, tag, 'zip')
     }
+  }
+
+  getReleaseSnapshotUrl(repoName, tag, type='zip') {
+    var {repoName, org} = utils.getRepoNameAndOrg(repoName);
+    // so it's supposed to be this:
+    // return `https://api.github.com/repos/${org}/${repoName}/zipball/${tag}`
+    // but that is returning the latest master(?) snapshot.  It doesn't make sense
+    // below seems to work
+
+    return `https://github.com/${org}/${repoName}/archive/${tag}.${type}`;
   }
 
   /**
@@ -269,14 +280,14 @@ class GithubApi {
     else if( type === 'tar' ) type = 'tarball';
     else throw new Error('Unknown snapshot type: '+type);
 
-    var {repoName, org} = utils.getRepoNameAndOrg(repoName);
-
     let options = {
-      uri : `https://api.github.com/repos/${org}/${repoName}/${type}/${tag}`,
+      uri : this.getReleaseSnapshotUrl(repoName, tag, 'zip'),
       headers : {
         'User-Agent' : 'EcoSML Webapp'
       }
     }
+
+    var {repoName, org} = utils.getRepoNameAndOrg(repoName);
 
     return new Promise((resolve, reject) => {
       request.get(options)
@@ -290,6 +301,10 @@ class GithubApi {
             .map(p => p.replace(/ /g, ''))
             .filter(p => p.match(/^filename=/i))[0]
             .replace(/^filename=/i, '');
+
+          if( !filename.match(org) ) {
+            filename = org+'-'+filename;
+          }
 
           downloadPath = path.join(downloadPath, filename);
 

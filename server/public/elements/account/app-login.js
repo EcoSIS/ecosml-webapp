@@ -34,6 +34,7 @@ export default class AppLogin extends Mixin(PolymerElement)
     try {
       await this._login(username, password);
     } catch(e) {
+      console.error(e);
       alert(e.details.message);
     }
   }

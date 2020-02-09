@@ -15,30 +15,54 @@ ${litCss(sharedStylesHtml)}
   }
   table {
     width: 100%;
+    border-collapse: collapse;
+  }
+  table tr[even] {
+    background-color: #f8f8f8;
+  }
+  table td {
+    padding: 5px;
+  }
+
+  button {
+    margin: 15px 0;
+    color: white;
+    background: var(--light-primary-color);
+    border: 1px solid var(--light-primary-color);
+    height: 36px;
+    padding: 0 15px;
+    border-left: none;
+    border-radius: 0;
   }
 </style>  
 
 
 <div class="main-panel">
-  <h2><a href="/package/${this.data.package.name}" target="_blank">${this.data.package.name}</a></h2>
+  <h2 style="margin-top:0"><a href="/package/${this.data.package.name}" target="_blank">${this.data.package.name}</a></h2>
   <div>${this.data.tag}</div>
   <div class="help">${this.data.package.overview}</div>
 
   <h3><b>Current State:</b> ${this.data.state}</h3>
   <div class="layout" ?hidden="${!this.showUpdate}">
-    <select id="type-input" style="width:150px">
+    Action: 
+    <select id="state-input" style="width:150px" @change="${this._onStateInputChange}">
       <option></option>
-      <option value="pending-revision">Request Revision</option>
-      <option value="requesting">Approve</option>
-      <option value="canceled">Cancel</option>
+      <option value="request-revision">Request Revision</option>
+      <option value="approve">Approve</option>
+      <option value="cancel">Cancel</option>
     </select>
-    <button @click="${this._updateState}">Update</button>
+    <button @click="${this._onUpdateStateClicked}">Update</button>
+  </div>
+
+  <div ?hidden="${!this.showMessageInput}">
+    <h2>Message</h2>
+    <textarea id="message-input"></textarea>
   </div>
 
   <div class="sub-heading">History</div>
   <table>
-  ${this.data.history.map(item => html`
-    <tr>
+  ${this.data.history.map((item, index) => html`
+    <tr ?even="${index % 2 === 0}">
       <td>
         ${item.admin || this.data.requestedBy}
         ${item.requestedByEmail || ''}
@@ -46,13 +70,22 @@ ${litCss(sharedStylesHtml)}
       <td>${item.state}</td>
       <td>${new Date(item.timestamp).toISOString().replace(/T.*/, '')}</td>
     </tr>
+    <tr ?hidden="${!item.message}" ?even="${index % 2 === 0}">
+      <td colspan="3">${item.message}</td>
+    </tr>
   `)}
   </table>
 
-  <div ?hidden="${this.data.doi}">
+  <div ?hidden="${!this.data.doi}">
     <div class="sub-heading">DOI</div>
     <div>${this.data.doi}</div>
   </div>
+</div>
+
+<div style="margin: 25px">
+  <a @click="${this.back}">
+    <iron-icon icon="arrow-back"></iron-icon> Back
+  </a>
 </div>
 
 `;}

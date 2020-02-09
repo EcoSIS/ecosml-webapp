@@ -12,32 +12,58 @@ class DoiStore extends BaseStore {
       }
     };
     this.events = {
-      GET_DOI_UPDATE : 'get-doi-update'
+      GET_DOI_UPDATE : 'doi-update'
     }
   }
 
   setGetDoiLoading(request, id) {
-    this._setGetDoiState({
+    this._setDoiState({
       id, request,
       state : this.STATE.LOADING
     })
   }
 
   setGetDoiLoaded(payload, id) {
-    this._setGetDoiState({
+    this._setDoiState({
       id, payload,
-      state : this.STATE.LOADING
+      state : this.STATE.LOADED
     })
   }
 
   setGetDoiError(error, id) {
-    this._setGetDoiState({
+    this._setDoiState({
       id, error,
       state : this.STATE.ERROR
     })
   }
 
-  _setGetDoiState(state) {
+  setDoiSaving(request, action, doi) {
+    this._setDoiState({
+      id : doi.id,
+      request, action,
+      payload : doi,
+      state : this.STATE.SAVING
+    })
+  }
+
+  setDoiSaved(doi) {
+    this._setDoiState({
+      id : doi.id,
+      payload : doi,
+      state : this.STATE.LOADED
+    });
+  }
+
+  setDoiSaveError(error, action, doi) {
+    this._setDoiState({
+      id : doi.id,
+      payload : doi,
+      error, action,
+      state : this.STATE.SAVE_ERROR
+    });
+  }
+
+  _setDoiState(state) {
     this.data.dois[state.id] = state;
     this.emit(this.events.GET_DOI_UPDATE, state);
   }

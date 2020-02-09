@@ -12,7 +12,7 @@ import "./basic/app-basic-metadata"
 import "./details/app-details-metadata"
 import "./files/app-files"
 import "./releases/app-releases"
-import { stringify } from "querystring";
+import "./dois/app-doi-request"
 
 class AppPackageMetadataEditor extends Mixin(PolymerElement)
       .with(EventInterface) {
@@ -72,7 +72,7 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
   constructor() {
     super();
 
-    this._injectModel('PackageEditor', 'AppStateModel','PackageModel');
+    this._injectModel('PackageEditor', 'AppStateModel','PackageModel', 'DoiModel');
 
 
     this._autoUpdateTimer = -1;
@@ -156,6 +156,7 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
         this.repoType = 'Registered Repository';
       } 
     } catch(e) {
+      console.error(e);
       return alert('Failed to fetch package '+pkgId+': '+e.message);
     }
   }

@@ -1,6 +1,6 @@
 import { LitElement } from 'lit-element';
 import render from "./app-doi-request.tpl.js"
-
+import clone from "clone"
 
 export default class AppDoiRequest extends Mixin(LitElement)
   .with(LitCorkUtils) {
@@ -36,9 +36,10 @@ export default class AppDoiRequest extends Mixin(LitElement)
     this.hasRelease = e.payload.releases.length > 0;
     if( !this.hasRelease ) return this.reset();
 
+    e.dois = e.dois.filter(doi => doi.state !== 'canceled')
 
-    this.minted = e.dois.filter(doi => doi.state === 'applied');
-    this.inProgress = e.dois.filter(doi => doi.state !== 'applied');
+    this.minted = e.dois.filter(doi => doi.state === 'applied').map(this._transform);
+    this.inProgress = e.dois.filter(doi => doi.state !== 'applied').map(this._transform);
     this.available = e.payload.releases.filter(release => {
       return (e.dois.findIndex(doi => doi.tag === release.tagName) === -1);
     });
@@ -49,7 +50,11 @@ export default class AppDoiRequest extends Mixin(LitElement)
     // 
   }
 
-
+  _transform(doi) {
+    doi = clone(doi);
+    doi.currentStateInfo = doi.history[doi.history.length-1];
+    return doi;
+  }
 
 }
 

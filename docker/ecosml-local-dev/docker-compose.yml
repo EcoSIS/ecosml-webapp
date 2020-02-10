@@ -5,7 +5,6 @@ services:
   server:
     image: ecosis/ecosml-webapp:dev
     volumes:
-      - snapshot-data:/server/snapshots
       - ../../server/controllers:/server/controllers
       - ../../server/dist:/server/dist
       - ../../server/gitdata:/server/gitdata

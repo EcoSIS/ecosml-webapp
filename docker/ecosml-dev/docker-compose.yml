@@ -5,26 +5,18 @@ services:
   server:
     image: ecosis/ecosml-webapp:dev
     volumes:
-      - snapshot-data:/server/snapshots
       - git-data:/server/gitdata
       - ../google-key.json:/server/google-key.json
       - ../secrets.js:/server/secrets.js
       - storage:/storage
     ports:
       - 3001:3000
+    env_file: '.env'
     environment:
-      - JWT_SECRET=${JWT_SECRET}
-      - ECOSIS_HOST=${ECOSIS_HOST}
-      - ECOSIS_DATA_HOST=${ECOSIS_DATA_HOST}
       - CLIENT_ENV=prod
       - SERVER_ENV=dev
       - GITHUB_ORG=ecosml-dev
       - FIREBASE_ENV=dev
-      - SERVER_URL=${SERVER_URL}
-      - GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
-      - GITHUB_CLIENT_SECRET=${GITHUB_CLIENT_SECRET}
-      - GOOGLE_ANALYTICS_KEY=${GOOGLE_ANALYTICS_KEY}
-
 
   redis:
     image: redis:3.2

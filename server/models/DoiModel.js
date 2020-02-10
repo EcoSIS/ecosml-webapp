@@ -36,7 +36,19 @@ class DoiModel {
     let file = await github.getReleaseSnapshot(pkg.name, tag, config.doi.snapshotDir);
     let filename = path.parse(file).base;
 
-    await mongo.setDoiRequest(pkg.id, tag, user, email, filename);
+    if( existingRequest && existingRequest.state === config.doi.states.canceled ) {
+      await mongo.setDoiRequestState({
+        pkgId: pkg.id, 
+        tag, 
+        state: config.doi.states.pendingApproval, 
+        username: user, 
+        email, 
+        snapshot: filename
+      });
+    } else {
+      await mongo.setDoiRequest(pkg.id, tag, user, email, filename);
+    }
+
     return mongo.getDoiRequest(pkg.id, tag);
   }
 
@@ -51,7 +63,12 @@ class DoiModel {
     }
 
     logger.info('canceling doi request', pkg.id, tag, username);
-    await mongo.setDoiRequestState(pkg.id, tag, config.doi.states.canceled, username);
+    await mongo.setDoiRequestState({
+      pkgId: pkg.id, 
+      tag, 
+      state: config.doi.states.canceled, 
+      username
+    });
     return mongo.getDoiRequest(pkg.id, tag);
   }
 
@@ -64,7 +81,13 @@ class DoiModel {
    */
   async requestUpdates(pkg, tag, username, message) {
     logger.info('admin requesting updates to doi request', pkg.id, tag, username);
-    await mongo.setDoiRequestState(pkg.id, tag, config.doi.states.pendingRevision, username, message);
+    await mongo.setDoiRequestState({
+      pkgId: pkg.id, 
+      tag, 
+      state: config.doi.states.pendingRevision, 
+      admin: username, 
+      message
+    });
     return mongo.getDoiRequest(pkg.id, tag);
   }
 
@@ -94,7 +117,12 @@ class DoiModel {
     if( !release ) throw new Error(`Package ${pkg.id} has not release: ${tag}`);
 
     // set that it has been accepted
-    await mongo.setDoiRequestState(pkg.id, tag, config.doi.states.accepted, username);
+    await mongo.setDoiRequestState({
+      pkgId: pkg.id, 
+      tag, 
+      state: config.doi.states.accepted, 
+      admin: username
+    });
 
     // download snapshot.  will be stored in S3 backup for safe keeping
     logger.info('downloading code snapshot', pkg.id, tag);
@@ -105,7 +133,13 @@ class DoiModel {
     let doiNum = await doi.mint(pkg, tag);
 
     logger.info('setting final doi state', pkg.id, tag);
-    await mongo.setDoiRequestState(pkg.id, tag, config.doi.states.applied, username, doiNum);
+    await mongo.setDoiRequestState({
+      pkgId: pkg.id, 
+      tag, 
+      state: config.doi.states.applied, 
+      admin: username, 
+      doi: doiNum
+    });
 
     return mongo.getDoiRequest(pkg.id, tag);
   }

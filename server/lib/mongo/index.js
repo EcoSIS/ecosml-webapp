@@ -371,36 +371,62 @@ class MongoDB {
    * @method setDoiRequestState
    * @description update a doi request state
    * 
-   * @param {String} pkgId package id to request doi for
-   * @param {String} tag version name
-   * @param {String} state new doi state 
-   * @param {String} username admin username making update
-   * @param {String} message either a custom message or the DOI # if state is applied
-   * @param {String} snapshot name of doi snapshot
+   * @param {Object} update update object
+   * @param {String} update.pkgId package id to request doi for
+   * @param {String} update.tag version name
+   * @param {String} update.state new doi state 
+   * @param {String} update.doi doi # to be applied
+   * @param {String} update.username username making update
+   * @param {String} update.email email of user making update
+   * @param {String} update.admin admin username making update
+   * @param {String} update.message either a custom message or the DOI # if state is applied
+   * @param {String} update.snapshot name of doi snapshot
    * 
    * @returns {Promise}
    */
-  async setDoiRequestState(pkgId, tag, state, username, message, snapshot) {
-    let history = {state, timestamp : Date.now(), admin: username};
+  async setDoiRequestState(update) {
+    let history = Object.assign({}, update);
+    delete history.pkgId;
+    delete history.tag;
+    history.timestamp = Date.now();
 
-    let update = {
-      '$set' : {state},
+    let query = {
+      '$set' : {
+        state : update.state
+      },
       '$push' : {history},
     };
 
-    if( state === config.doi.states.applied ) {
-      if( !message ) throw new Error(`Doi set to ${config.doi.states.applied} but no DOI provided`);
-      update['$set'].doi = message;
-    } else if( message ) {
-      history.message = message;
+    if( update.username ) {
+      query['$set'].requestedBy = update.username;
+      history.requestedBy = history.username;
+      delete history.username;
+
+      if( update.email ) {
+        query['$set'].requestedByEmail = update.email;
+        history.requestedByEmail = history.email;
+        delete history.email;
+      }
+
+    } else if( update.admin ) {
+      query['$set'].admin = update.admin;
+    } else {
+      throw new Error('Doi state update requires a admin username or user username');
     }
 
-    if( snapshot ) {
-      update.snapshot = snapshot;
+    if( update.state === config.doi.states.applied ) {
+      if( !update.doi ) throw new Error(`Doi set to ${config.doi.states.applied} but no DOI provided`);
+      query['$set'].doi = update.doi;
+    }
+    if( update.snapshot ) {
+      query['$set'].snapshot = update.snapshot;
+    }
+    if( update.message ) {
+      query['$set'].message = update.message;
     }
 
     let collection = await this.getDoiCollection();
-    return collection.update({id: pkgId, tag}, update);
+    return collection.update({id: update.pkgId, tag: update.tag}, query);
   }
 
   /**

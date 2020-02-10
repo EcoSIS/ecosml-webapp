@@ -39,6 +39,18 @@ class DoiService extends BaseService {
     });
   }
 
+  requestDoi(packageId, tag) {
+    return this.request({
+      url : `${this.baseUrl}/request/${packageId}/${tag}`,
+      fetchOptions : {
+        method : 'POST'
+      },
+      onLoading : request => this.store.setDoiSaving(request, 'request', {id: packageId, tag}),
+      onLoad : result => this.store.setDoiSaved(result.body),
+      onError : e => this.store.setDoiSaveError(e, 'request', {id: packageId, tag})
+    });
+  }
+
   cancel(doi) {
     return this.request({
       url : `${this.baseUrl}/request/${doi.package.name}/${doi.tag}/cancel`,

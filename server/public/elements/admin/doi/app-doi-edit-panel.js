@@ -47,14 +47,17 @@ export default class AppDoiEditPanel extends Mixin(LitElement)
    * 
    * @param {Object} e 
    */
-  _onUpdateStateClicked(e) {
+  async _onUpdateStateClicked(e) {
     let action = this.shadowRoot.querySelector('#state-input').value;
     if( action === '' ) return;
-    console.log(action);
-    return;
 
     if( !confirm('Are you sure you want to set this DOI request to: '+action) ) return;
-    this.setDoiState(action, this.shadowRoot.querySelector('#message-input').value);
+    await this.setDoiState(action, this.shadowRoot.querySelector('#message-input').value);
+
+
+    this.shadowRoot.querySelector('#message-input').value = '';
+    this.shadowRoot.querySelector('#state-input').value = '';
+    this.showMessageInput = false;
   }
 
   /**

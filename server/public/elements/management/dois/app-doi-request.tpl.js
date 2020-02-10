@@ -35,18 +35,18 @@ ${litCss(sharedStylesHtml)}
   <h2>Request DOI</h2>
   <div>
     Select Tag:
-    <select>
+    <select id="new-doi-input">
       ${this.available.map(item => html`
         <option value="${item.tagName}">${item.tagName}</option>
       `)}
     </select>
   </div>
-  <div><button>Make Request</button></div>
+  <div><button @click="${this._onMakeRequestClicked}">Make Request</button></div>
 </div>
 
 <div ?hidden="${!this.inProgress.length}">
   <h2>In Progress</h2>
-  ${this.inProgress.map(item => html`
+  ${this.inProgress.map((item, index) => html`
     <div>
       <div>
         <h4 style="margin-bottom: 0">${item.tag}</h4>
@@ -58,7 +58,7 @@ ${litCss(sharedStylesHtml)}
         </div>
       </div>
       <div>
-        <button>Cancel Request</button>
+        <button index="${index}" @click="${this._onCancelClicked}">Cancel Request</button>
       </div>
     </div>
   `)}

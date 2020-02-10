@@ -49,7 +49,7 @@ ${litCss(sharedStylesHtml)}
       <option></option>
       <option value="request-revision">Request Revision</option>
       <option value="approve">Approve</option>
-      <option value="cancel">Cancel</option>
+      <!-- <option value="cancel">Cancel</option> -->
     </select>
     <button @click="${this._onUpdateStateClicked}">Update</button>
   </div>

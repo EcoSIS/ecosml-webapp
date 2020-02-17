@@ -8,12 +8,15 @@ const aws = require('../lib/aws');
 class BackupModel {
 
   constructor() {
+    fs.mkdirpSync(config.backups.tmpDir);
+    fs.mkdirpSync(config.backups.tmpRestoreDir);
+
     setInterval(async () => {
       if( new Date().getHours() !== 3 ) return;
       try {
         await this.run();
       } catch(e) {
-        
+        logger.error('Failed to run backup', e);
       }
       
     }, 1000 * 60 * 60);
@@ -47,6 +50,10 @@ class BackupModel {
     logger.info('Uploading backup to S3: '+config.backups.bucket+'/'+filename);
     await this._upload(filepath, filename);
     await this.clean(filename);
+
+    logger.info('Cleaning up tmp backup files for: '+filename);
+    await fs.remove(path.join(config.backups.tmpDir, 'mongodump'));
+    await fs.remove(path.join(config.backups.tmpDir, filename));
 
     logger.info('Backup complete for: '+filename);
   }
@@ -115,6 +122,7 @@ class BackupModel {
   }
 
   async clean(filename) {
+    logger.info('Backup running cleanup: ', (filename || 'all'));
     let date = new Date();
     let keep = [];
     if( filename ) keep.push(filename);
@@ -136,6 +144,7 @@ class BackupModel {
     let currentBackups = await aws.listFiles(config.backups.bucket);
     for( let file of currentBackups ) {
       if( keep.indexOf(file) === -1 ) {
+        logger.info('Backup cleanup removing: ', file, 'from', config.backups.bucket);
         await aws.deleteFile(file, config.backups.bucket);
       }
     }
@@ -187,8 +196,4 @@ class BackupModel {
   }
 }
 
-// module.exports = new BackupModel();
-(async function() {
-  let model = new BackupModel();
-  await model.clean();
-})();
+module.exports = new BackupModel();

@@ -5,10 +5,13 @@ const config = require('./config');
 class AWSImpl {
 
   constructor() {
-    this.s3 = new AWS.S3({
-      accessKeyId: config.aws.accessKeyId,
-      secretAccessKey: config.aws.secretAccessKey
-    });
+    let options = {};
+    if( config.aws && config.aws.accessKeyId ) {
+      options.accessKeyId = config.aws.accessKeyId;
+      options.secretAccessKey = config.aws.secretAccessKey;
+    }
+
+    this.s3 = new AWS.S3(options);
   }
 
   /**

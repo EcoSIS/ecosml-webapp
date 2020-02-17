@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const config = require('./lib/config');
 const logger = require('./lib/logger');
 const sitemap = require('./models/SitemapModel');
+const backup = require('./models/BackupModel');
 
 const app = express();
 
@@ -70,6 +71,17 @@ sitemap.middleware(app);
  * Init EcoSIS, Travis and Github event sync
  */
 require('./lib/sync');
+
+/**
+ * Init backup model, run a cleaning
+ */
+setTimeout(async () => {
+  try {
+    await model.clean();
+  } catch(e) {
+    logger.error('failed initial backup cleaning: ', e);
+  }
+}, 1000*30);
 
 /**
  * Start server

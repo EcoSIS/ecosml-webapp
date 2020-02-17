@@ -13,7 +13,6 @@ services:
       - 3001:3000
     env_file: '.env'
     environment:
-      - CLIENT_ENV=prod
       - SERVER_ENV=dev
       - GITHUB_ORG=ecosml-dev
       - FIREBASE_ENV=dev

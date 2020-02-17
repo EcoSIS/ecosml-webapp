@@ -151,10 +151,7 @@ module.exports = {
     email : 'admin@ecosml.org'
   },
 
-  aws : {
-    accessKeyId : secrets.aws.accessKeyId,
-    secretAccessKey : secrets.aws.secretAccessKey,
-  },
+  aws : secrets.aws ? secrets.aws : null,
 
   google : {
     key : secrets.google,

@@ -13,6 +13,9 @@ COPY ./package* /server/
 RUN cd server && npm install --production
 RUN npm install -g mocha
 
+# for live dev on server
+COPY ./public /server/public
+
 COPY ./dist /server/dist
 COPY ./index.js /server/
 COPY ./controllers /server/controllers

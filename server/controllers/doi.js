@@ -13,7 +13,7 @@ router.post('/request/:package/:version', packageWriteAccess, async (req, res) =
   let pkg = req.ecosmlPackage;
   let version = req.params.version;
 
-  let release = (pkg.releases || []).find(release => release.name === version);
+  let release = (pkg.releases || []).find(release => release.tagName === version);
   if( !release ) {
     return utils.handleError(res, new Error('Unknown package version: '+version));
   }

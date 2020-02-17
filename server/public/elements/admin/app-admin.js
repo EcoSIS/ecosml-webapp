@@ -19,8 +19,11 @@ export default class AppAdmin extends Mixin(LitElement)
 
     this._injectModel('AppStateModel');
 
-    // static for now
-    this.subPage = 'doi';
+    this.subPage = '';
+  }
+
+  _onAppStateUpdate(e) {
+    this.subPage = e.page === 'admin' ? 'doi' : '';
   }
 
 }

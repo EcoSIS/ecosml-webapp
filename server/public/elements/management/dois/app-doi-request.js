@@ -30,21 +30,20 @@ export default class AppDoiRequest extends Mixin(LitElement)
 
   _onPackageEditorDataUpdate(e) {
     if( e.state !== 'edit' ) return;
-    if( !e.dois ) return this.reset();
-    if( e.dois.length === 0 ) return this.reset();
+    this.reset();
+    let dois = e.dois || [];
 
     this.packageId = e.payload.id;
     this.package = e.payload;
 
     this.hasRelease = e.payload.releases.length > 0;
-    if( !this.hasRelease ) return this.reset();
 
-    e.dois = e.dois.filter(doi => doi.state !== 'canceled')
+    dois = dois.filter(doi => doi.state !== 'canceled')
 
-    this.minted = e.dois.filter(doi => doi.state === 'applied').map(doi => this._transform(doi));
-    this.inProgress = e.dois.filter(doi => doi.state !== 'applied').map(doi => this._transform(doi));
+    this.minted = dois.filter(doi => doi.state === 'applied').map(doi => this._transform(doi));
+    this.inProgress = dois.filter(doi => doi.state !== 'applied').map(doi => this._transform(doi));
     this.available = e.payload.releases.filter(release => {
-      return (e.dois.findIndex(doi => doi.tag === release.tagName) === -1);
+      return (dois.findIndex(doi => doi.tag === release.tagName) === -1);
     });
   }
 
@@ -63,7 +62,11 @@ export default class AppDoiRequest extends Mixin(LitElement)
   async _onMakeRequestClicked() {
     let tag = this.shadowRoot.querySelector('#new-doi-input').value;
     if( !confirm('Are you sure you want request a DOI for: '+tag) ) return;
-    await this.DoiModel.requestDoi(this.packageId, tag);
+    try {
+      await this.DoiModel.requestDoi(this.packageId, tag);
+    } catch(e) {
+      alert('DOI Request Failed: '+(e.payload ? e.payload.message : e.message));
+    }
     await this._updateData();
   }
 
@@ -71,7 +74,11 @@ export default class AppDoiRequest extends Mixin(LitElement)
     let index = parseInt(e.currentTarget.getAttribute('index'));
     let doi = this.inProgress[index];
     if( !confirm('Are you sure you want cancel DOI request for: '+doi.tag) ) return;
-    await this.DoiModel.updateState('cancel', doi);
+    try {  
+      await this.DoiModel.updateState('cancel', doi);
+    } catch(e) {
+      alert('DOI Request Failed: '+(e.payload ? e.payload.message : e.message));
+    }
     await this._updateData();
   }
 

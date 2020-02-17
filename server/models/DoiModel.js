@@ -2,11 +2,15 @@ const doi = require('../lib/doi');
 const mongo = require('../lib/mongo');
 const config = require('../lib/config');
 const github = require('../lib/github');
-const utils = require('../lib/utils');
-const path = require('path')
+const path = require('path');
+const fs = require('fs-extra');
 const logger = require('../lib/logger');
 
 class DoiModel {
+
+  constructor() {
+    fs.mkdirpSync(config.doi.snapshotDir);
+  }
 
   /**
    * @method request
@@ -26,7 +30,7 @@ class DoiModel {
       throw new Error(`Package ${pkg.id} tag ${tag} already has a doi request`);
     }
 
-    let release = (pkg.releases || []).find(r => r.name === tag);
+    let release = (pkg.releases || []).find(r => r.tagName === tag);
     if( !release ) throw new Error(`Package ${pkg.id} has not release: ${tag}`);
 
     if( !user ) throw new Error('You must provide a username of person making DOI request');
@@ -113,7 +117,7 @@ class DoiModel {
       throw new Error(`DOI request is not in pending-approval or pending-revision state: ${pkg.id} ${tag}, state=${existingRequest.state}`);
     }
 
-    let release = (pkg.releases || []).find(r => r.name === tag);
+    let release = (pkg.releases || []).find(r => r.tagName === tag);
     if( !release ) throw new Error(`Package ${pkg.id} has not release: ${tag}`);
 
     // set that it has been accepted

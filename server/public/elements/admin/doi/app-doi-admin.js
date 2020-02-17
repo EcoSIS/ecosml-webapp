@@ -9,7 +9,6 @@ export default class AppDoiAdmin extends Mixin(LitElement)
   static get properties() {
     return {
       items : {type: Array},
-      active : {type: Boolean},
       panel : {type: String}
     }
   }
@@ -19,14 +18,13 @@ export default class AppDoiAdmin extends Mixin(LitElement)
     this.render = render.bind(this);
 
     this.items = [];
-    this.active = false;
     this.panel = 'search';
 
     this._injectModel('AppStateModel', 'DoiModel');
   }
 
-  updated(props) {
-    if( props.has('active') && !this.firstRender ) {
+  _onAppStateUpdate(e) {
+    if( e.page === 'admin' && !this.firstRender ) {
       this.firstRender = true;
       this.search();
     }

@@ -115,8 +115,9 @@ router.get('/download/:package/:tag', packageReadAccess, async (req, res) => {
  * Resolve doi requests with 302 redirect
  */
 function doiResolver(app) {
+  console.log(config.doi.shoulder, new RegExp('^'+config.doi.shoulder+'.*'));
   app.get(/^\/(doi):.*/, handleDoiRequest);
-  app.get(new RegExp('^'+config.doi.shoulder+'.*'), handleDoiRequest);
+  app.get(new RegExp('^\/'+config.doi.shoulder+'.*'), handleDoiRequest);
   app.get(/^\/package\/(doi):.*/, handleDoiRequest);
   app.get(new RegExp('^\/package\/'+config.doi.shoulder+'.*'), handleDoiRequest);
 }
@@ -135,8 +136,9 @@ async function handleDoiRequest(req, res) {
   if( pkg === null ) {
     return res.status(404).send(`Unknown ${info.type} identifier: ${info.doi}`);
   }
+  let doi = await mongo.getDoi(info.doi);
 
-  return res.redirect('/package/'+pkg.name);
+  return res.redirect('/package/'+pkg.name+'?doi-tag='+encodeURIComponent(doi.tag));
 }
 
 module.exports = {router, doiResolver};

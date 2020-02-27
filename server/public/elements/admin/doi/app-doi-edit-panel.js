@@ -73,7 +73,10 @@ export default class AppDoiEditPanel extends Mixin(LitElement)
       return alert(state.error.message);
     }
 
-    this.data.history = state.payload.history;
+    let history = [... state.payload.history];
+    history.sort((a, b) => a.timestamp < b.timestamp ? 1 : -1);
+    this.data.history = history;
+    
     this.data.state = state.payload.state;
     this.data.doi = state.payload.doi;
     

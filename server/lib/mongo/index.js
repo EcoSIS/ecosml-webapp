@@ -472,6 +472,18 @@ class MongoDB {
   }
 
   /**
+   * @method getDoi
+   * @description get a doi object from a doi string id
+   * 
+   * @param {String} doi identifier
+   */
+  async getDoi(doi) {
+    doi = doi.replace(/^doi:/, '');
+    let collection = await this.getDoiCollection();
+    return collection.findOne({doi});
+  }
+
+  /**
    * @method getApprovedDois
    * @description get all dois that have been approved
    */

@@ -67,7 +67,7 @@ ${litCss(sharedStylesHtml)}
 <div ?hidden="${!this.minted.length}">
   <h2>Applied</h2>
   ${this.minted.map(item => html`
-    <div><b>${item.tag}:</b> ${item.doi}</div>
+    <div><b>${item.tag}:</b> <a href="${this.host}/${item.doi}">doi:${item.doi}</a></div>
   `)}
 </div>
 

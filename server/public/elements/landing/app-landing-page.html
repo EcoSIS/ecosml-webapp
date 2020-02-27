@@ -71,6 +71,20 @@
     display: none;
   }
 
+  .doi-layout {
+    display: flex;
+    align-items: center;
+    padding: 3px;
+    margin: 3px;
+    border: 1px solid transparent;
+  }
+
+  .doi-layout[doi-active] {
+    border: 1px solid #e7f35a;
+    background-color: #f9fbe5;
+    border-radius: 6px;
+  }
+
   paper-icon-button {
     background: var(--default-secondary-color);
     border-radius: 24px;
@@ -190,11 +204,22 @@
 
           <div hidden$="[[!hasDois]]">
             <h2 class="uheader lightblue padded">DOI</h2>
-            <template is="dom-repeat" items="[[package.dois]]">
-              <div>
-                <a href$="/api/doi/download/[[package.id]]/[[item.tag]]"><paper-icon-button icon="file-download"></paper-icon-button></a>
+            <template is="dom-repeat" items="[[dois]]">
+              <div class="doi-layout" doi-active$="[[item.active]]">
+                <div style="padding: 6px">
+                  <a href$="/api/doi/download/[[package.id]]/[[item.tag]]">
+                    <paper-icon-button icon="file-download"></paper-icon-button>
+                  </a>
+                </div>
+                <div>
+                  <div><b>[[item.tag]]</b></div>
+                  <div>
+                    <a href$="[[origin]]/doi:[[item.doi]]">[[item.doi]]</a>
+                  </div>
+                </div>
+                
                 &nbsp;
-                <a href$="[[origin]]/doi:[[item.doi]]" style="font-weight: bold;">doi:[[item.doi]]</a> for release <b>[[item.tag]]</b>
+                 
               </div>
             </template>
           </div>

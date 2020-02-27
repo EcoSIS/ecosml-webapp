@@ -35,6 +35,7 @@ export default class AppDoiAdmin extends Mixin(LitElement)
   }
 
   _onKeyup(e) {
+    console.log('here')
     if( e.which !== 13 ) return;
     this.search();
   }
@@ -44,7 +45,12 @@ export default class AppDoiAdmin extends Mixin(LitElement)
     let type = this.shadowRoot.querySelector('#type-input').value;
     if( type === 'All' ) type = '';
     let results = await this.DoiModel.search(type, text);
-    this.items = results.payload || [];
+
+    this.items = (results.payload || []).map(item => {
+      item.history = [... item.history];
+      item.history.sort((a, b) => a.timestamp < b.timestamp ? 1 : -1);
+      return item;
+    })
   }
 
   _onEditClicked(e) {
@@ -59,7 +65,10 @@ export default class AppDoiAdmin extends Mixin(LitElement)
     let index = this.items.findIndex(item => item.id === e.id && item.tag === e.payload.tag);
     if( index === -1 ) return;
 
-    this.items[index].history = e.payload.history;
+    let history = [... item.history];
+    history.sort((a, b) => a.timestamp < b.timestamp ? 1 : -1);
+    this.items[index].history = history;
+    
     this.items[index].state = e.payload.state;
     this.items[index].doi = e.payload.doi;
 

@@ -34,6 +34,10 @@ ${litCss(sharedStylesHtml)}
     border-left: none;
     border-radius: 0;
   }
+
+  span.pre {
+    font-weight: bold;
+  }
 </style>  
 
 
@@ -59,19 +63,25 @@ ${litCss(sharedStylesHtml)}
     <textarea id="message-input"></textarea>
   </div>
 
-  <div class="sub-heading">History</div>
+  <div class="sub-heading" style="margin-bottom: 15px">History</div>
   <table>
   ${this.data.history.map((item, index) => html`
     <tr ?even="${index % 2 === 0}">
       <td>
-        ${item.admin || this.data.requestedBy}
-        ${item.requestedByEmail || ''}
+        <div>
+          <span class="pre">${item.admin ? 'Admin' : 'Requested By'}:</span> ${item.admin || this.data.requestedBy}
+        </div>
+        <div ?hidden="${!item.requestedByEmail}">
+          <span class="pre">Email:</span> ${item.requestedByEmail || ''}
+        </div>
       </td>
       <td>${item.state}</td>
-      <td>${new Date(item.timestamp).toISOString().replace(/T.*/, '')}</td>
+      <td>${new Date(item.timestamp).toISOString().split('T').join(' ')}</td>
     </tr>
     <tr ?hidden="${!item.message}" ?even="${index % 2 === 0}">
-      <td colspan="3">${item.message}</td>
+      <td colspan="3">
+        <span class="pre">Message:</span> ${item.message}
+      </td>
     </tr>
   `)}
   </table>

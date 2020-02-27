@@ -10,7 +10,8 @@ export default class AppDoiRequest extends Mixin(LitElement)
       available : {type: Array},
       inProgress : {type: Array},
       minted : {type: Array},
-      hasRelease : {type: Boolean}
+      hasRelease : {type: Boolean},
+      host : {type: String}
     }
   }
 
@@ -18,6 +19,7 @@ export default class AppDoiRequest extends Mixin(LitElement)
     super();
     this.render = render.bind(this);
     this.reset();
+    this.host = window.location.origin;
     this._injectModel('PackageEditor', 'DoiModel');
   }
 

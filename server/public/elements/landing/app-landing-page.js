@@ -54,6 +54,10 @@ export default class AppLandingPage extends Mixin(PolymerElement)
         type : Boolean,
         value : false
       },
+      dois : {
+        type : Array,
+        value : []
+      },
       lastSearch : {
         type : String,
         value : '/search'
@@ -80,6 +84,10 @@ export default class AppLandingPage extends Mixin(PolymerElement)
     this._onAuthUpdate(this._getAuthState());
   }
 
+  reset() {
+    this.package = {};
+  }
+
   /**
    * @method _onAppStateUpdate
    * @description from AppStateInterface, called when app state updates
@@ -88,11 +96,16 @@ export default class AppLandingPage extends Mixin(PolymerElement)
     if( e.page === 'search' ) {
       this.lastSearch = e.location.fullpath;
     }
+    if( e.page !== 'package' || !e.selectedPackageId ) return;
+    if( this.selectedPackageId === e.selectedPackageId ) return;
 
-    if( e.page !== 'package' ) return;
-    let pkgWrapper = await this._getPackage(e.location.path[1]);
+    this.selectedPackageId = e.selectedPackageId;
+    let pkgWrapper = await this._getPackage(e.selectedPackageId);
+
+    if( this.selectedPackageId !== pkgWrapper.payload.id && 
+      this.selectedPackageId !== pkgWrapper.payload.name ) return;
+
     this.package = pkgWrapper.payload;
-    console.log(this.package);
 
     if( this.package.keywords ) {
       this.$.keywords.innerHTML = this.package.keywords.map(keyword => {
@@ -120,6 +133,12 @@ export default class AppLandingPage extends Mixin(PolymerElement)
     this.isPackageModule = (this.package.packageType === 'package') ? true : false;
 
     this.hasDois = (this.package.dois || []).length > 0;
+    this.dois = (this.package.dois || []).map(doi => {
+      doi = Object.assign({}, doi);
+      doi.active = (e.location.query['doi-tag'] === doi.tag);
+      return doi;
+    });
+
     this.hasKeywords = (this.package.keywords || []).length > 0;
 
     // this.themeLink = this._getLink('theme');

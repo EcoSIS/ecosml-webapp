@@ -108,6 +108,7 @@ module.exports = {
   // },
 
   github : {
+    host : 'https://github.com',
     clientId : env.GITHUB_CLIENT_ID || '',
     clientSecret : env.GITHUB_CLIENT_SECRET || '',
     access : secrets.github,
@@ -115,7 +116,6 @@ module.exports = {
     fsRoot : path.join(MOUNT_PATH, 'gitdata'),
     default_license : 'mit',
     homepageRoot : serverEnv === 'dev' ? 'https://dev.ecosml.org/package/' : 'https://ecosml.org/package/',
-    
 
     // backups for registered repositories
     registeredRepositories : {
@@ -123,6 +123,11 @@ module.exports = {
       repoName : 'EcoSIS/ecosml-registered-repositories',
       removeAttributes : ['_id', 'description', 'overview', 'releases']
     }
+  },
+
+  gitlab : {
+    host : 'https://gitlab.com',
+    apiRoot : '/api/v4'
   },
 
   datacite : {

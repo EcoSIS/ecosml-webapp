@@ -1,5 +1,6 @@
 const git = require('../lib/git');
 const github = require('../lib/github');
+const repository = require('../lib/repository');
 const mongo = require('../lib/mongo');
 const logger = require('../lib/logger');
 const config = require('../lib/config');
@@ -56,7 +57,7 @@ class PackageModel {
       
       // ensure this repo exists and we can access
       let {name, org} = this.getNameAndOrg(pkg.name);
-      let exists = await this.doesRepoExist(name, org);
+      let exists = await repository.exists(pkg.host, name, org);
       if( !exists ) throw new Error('Repository does not exist: '+pkg.name);
 
       let ePkg = await mongo.getPackage(pkg.name);
@@ -66,7 +67,7 @@ class PackageModel {
       schema.validate('create', pkg);
 
       // fake some of the github api properties
-      pkg.htmlUrl = 'https://github.com/'+pkg.name;
+      pkg.htmlUrl = repository.getHost()+'/'+pkg.name;
       pkg.private = false;
 
     } else if( pkg.source === 'managed' ) {
@@ -535,19 +536,6 @@ class PackageModel {
    */
   isNameAvailable(packageName, org) {
     return github.isRepoNameAvailable(packageName, org);
-  }
-
-  /**
-   * @method isRepoNameAvailable
-   * @description does a repository exist
-   * 
-   * @param {String} packageName package name
-   * @param {String} org Optional.  Defaults to EcoSML
-   * 
-   * @returns {Promise} resolves to Boolean
-   */
-  async doesRepoExist(packageName, org) {
-    return !(await github.isRepoNameAvailable(packageName, org));
   }
 
   /**

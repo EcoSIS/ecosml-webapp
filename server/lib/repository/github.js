@@ -9,9 +9,9 @@ const uuid = require('uuid');
 const parseLinkHeader = require('parse-link-header');
 
 const ORG = config.github.org;
-const RAW_ROOT = 'https://raw.githubusercontent.com';
-const API_ROOT = 'https://api.github.com';
-const ACCEPT_MIME_TYPE = 'application/vnd.github.v3+json'
+const RAW_ROOT = config.github.rawHost;
+const API_ROOT = config.github.apiHost;
+const ACCEPT_MIME_TYPE = config.github.acceptMimeType;
 const GITHUB_ACCESS = config.github.access;
 
 class GithubApi {
@@ -225,7 +225,7 @@ class GithubApi {
    * 
    * @param {String} repoName 
    * 
-   * @returns {Promise} resolves to null or string
+   * @returns {Promise} resolves to null or tag object
    */
   async latestRelease(repoName) {
     let fullRepoName = repoName;
@@ -337,6 +337,15 @@ class GithubApi {
     return '';
   }
 
+  /**
+   * @method overview
+   * @description load the package overview text.  Note, this parses from
+   * standard HTML request so does not take a API hit.
+   * 
+   * @param {String} packageName 
+   * 
+   * @returns {Promise} resolves to string
+   */
   async overview(repoName) {
     var {repoName, org} = utils.getRepoNameAndOrg(repoName);
 
@@ -352,7 +361,7 @@ class GithubApi {
     const dom = new JSDOM(response.body);
     let ele = dom.window.document.querySelector('[itemscope][itemtype="http://schema.org/SoftwareSourceCode"] [itemprop="about"]');
     if( !ele ) {
-      Logger.error(`CSS query failed to find repo overview for: ${org}/${repoName}`);
+      Logger.error(`CSS query failed to find github repo overview for: ${org}/${repoName}`);
       return '';
     } 
 

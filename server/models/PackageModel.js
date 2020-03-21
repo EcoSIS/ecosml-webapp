@@ -119,7 +119,7 @@ class PackageModel {
       }
     } else if( pkg.source === 'registered' ) {
       // write to backup repo, don't need to await on this...
-      this._updateRegisteredRepo(pkg);
+      // this._updateRegisteredRepo(pkg);
     }
 
     return pkg;
@@ -221,7 +221,7 @@ class PackageModel {
       await this.writeMetadataFile(pkg);
       await this.commit(pkg.name, commitMessage || 'Updating package metadata', username);
     } else {
-      this._updateRegisteredRepo(pkg);
+      // this._updateRegisteredRepo(pkg);
     }
 
     return pkg;
@@ -348,9 +348,9 @@ class PackageModel {
     await mongo.removePackage(pkg.id);
     await git.removeRepositoryFromDisk(pkg.name);
 
-    if( pkg.source === 'registered' ) {
-      this._updateRegisteredRepo(pkg, true);
-    }
+    // if( pkg.source === 'registered' ) {
+    //   this._updateRegisteredRepo(pkg, true);
+    // }
   }
 
   /**
@@ -572,14 +572,14 @@ class PackageModel {
    * 
    * @returns {Promise}
    */
-  async _updateRegisteredRepo(pkg, remove) {
-    try {
-      if( remove ) await registeredRepositories.remove(pkg);
-      else await registeredRepositories.update(pkg);
-    } catch(e) {
-      logger.error(e);
-    }
-  }
+  // async _updateRegisteredRepo(pkg, remove) {
+  //   try {
+  //     if( remove ) await registeredRepositories.remove(pkg);
+  //     else await registeredRepositories.update(pkg);
+  //   } catch(e) {
+  //     logger.error(e);
+  //   }
+  // }
 
   /**
    * @method _getFileInfo

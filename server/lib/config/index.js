@@ -117,12 +117,16 @@ module.exports = {
     default_license : 'mit',
     homepageRoot : serverEnv === 'dev' ? 'https://dev.ecosml.org/package/' : 'https://ecosml.org/package/',
 
+    rawHost : 'https://raw.githubusercontent.com',
+    apiHost : 'https://api.github.com',
+    acceptMimeType : 'application/vnd.github.v3+json'
+
     // backups for registered repositories
-    registeredRepositories : {
-      file : (serverEnv === 'prod' ? 'production' : 'development') + '-respositories.json',
-      repoName : 'EcoSIS/ecosml-registered-repositories',
-      removeAttributes : ['_id', 'description', 'overview', 'releases']
-    }
+    // registeredRepositories : {
+    //   file : (serverEnv === 'prod' ? 'production' : 'development') + '-respositories.json',
+    //   repoName : 'EcoSIS/ecosml-registered-repositories',
+    //   removeAttributes : ['_id', 'description', 'overview', 'releases']
+    // }
   },
 
   gitlab : {

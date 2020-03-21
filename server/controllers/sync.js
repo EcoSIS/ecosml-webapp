@@ -23,14 +23,14 @@ router.get('/repo/:name', admin, async (req, res) => {
   }
 });
 
-router.get('/reg-repos', adminJwtBody, SyncRegRepos);
-router.post('/reg-repos', adminJwtBody, SyncRegRepos);
-async function SyncRegRepos(req, res) {
-  try {
-   res.json(await regRepos.syncAllPropertiesToMongo());
-  } catch(e) {
-    utils.handleError(res, e);
-  }
-}
+// router.get('/reg-repos', adminJwtBody, SyncRegRepos);
+// router.post('/reg-repos', adminJwtBody, SyncRegRepos);
+// async function SyncRegRepos(req, res) {
+//   try {
+//    res.json(await regRepos.syncAllPropertiesToMongo());
+//   } catch(e) {
+//     utils.handleError(res, e);
+//   }
+// }
 
 module.exports = router;

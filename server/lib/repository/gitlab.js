@@ -1,5 +1,7 @@
 const fetch = require('node-fetch');
-const config = require('../config')
+const config = require('../config');
+const utils = require('../utils');
+const {JSDOM} = require('jsdom');
 
 class Gitlab {
 
@@ -23,6 +25,115 @@ class Gitlab {
       {method: 'head'}
     );
     return resp.ok;
+  }
+
+  /**
+   * @method readme
+   * @description load the readme text from repository.  This call
+   * does not burn a API request.
+   * 
+   * @param {String} repoName
+   * 
+   * @returns {Promise} resolves to String 
+   */
+  async readme(repoName) {
+    let {response} = await this.getRawFile(repoName, 'README.md');
+    if( response.statusCode === 200 ) return response.body;
+    
+    ({response} = await this.getRawFile(repoName, 'README'));
+    if( response.statusCode === 200 ) return response.body;
+
+    return '';
+  }
+
+  /**
+   * @method getRawFile
+   * @description download a file directly from github repo
+   * 
+   * @param {String} repoName name of repository
+   * @param {String} filePath full path to file in repo
+   * @param {String} branch optional. defaults to 'master'
+   * 
+   * @returns {Promise} resolves to http response
+   */
+  getRawFile(repoName, filePath, branch = 'master') {
+    var {repoName, org} = utils.getRepoNameAndOrg(repoName);
+
+    let uri = `${config.gitlab.host}/${org}/${repoName}/-/raw/${branch}/${filePath}`;
+    let response = await fetch(
+      uri,
+      {'User-Agent' : 'EcoSML Webapp'}
+    );
+
+    Logger.info(`Raw GitLab request: GET ${options.uri}`);
+    return {response, body: await response.text()};
+  }
+
+  async overview(repoName) {
+    var {repoName, org} = utils.getRepoNameAndOrg(repoName);
+
+    let response = await fetch(
+      `${config.gitlab.host}/${org}/${repoName}`,
+      {redirect : manual}
+    );
+
+    if( response.state !== 200 ) {
+      throw new Error(`Unknown repository: ${org}/${repoName}`)
+    }
+
+    const dom = new JSDOM(await response.text());
+    let ele = dom.window.document.querySelector('.home-panel-description-markdown p');
+    if( !ele ) {
+      Logger.error(`CSS query failed to find gitlab repo overview for: ${org}/${repoName}`);
+      return '';
+    } 
+
+    return ele.innerHTML.trim();
+  }
+
+    /**
+   * @method latestRelease
+   * @description return the latest release tag name.  Note, this
+   * call does not burn a API request.
+   * 
+   * @param {String} repoName 
+   * 
+   * @returns {Promise} resolves to null or tag object
+   */
+  latestRelease(repoName) {
+    let fullRepoName = repoName;
+    var {repoName, org} = utils.getRepoNameAndOrg(repoName);
+
+    let response = await fetch(
+      `${config.gitlab.host}/${org}/${repoName}/-/tags`,
+      {redirect : manual}
+    );
+
+    if( response.state !== 200 ) {
+      throw new Error(`Unknown repository: ${org}/${repoName}`)
+    }
+
+    const dom = new JSDOM(await response.text());
+    let ele = dom.window.document.querySelector('.content-list li:first-child .item-title');
+    if( !ele ) {
+      Logger.error(`CSS query failed to find gitlab repo overview for: ${org}/${repoName}`);
+      return '';
+    }
+
+    let tag = ele.innerHTML;
+    return {
+      body : '',
+      htmlUrl: ele.getAttribute('href'),
+      name : tag,
+      tagName : tag,
+      tarballUrl : this.getReleaseSnapshotUrl(fullRepoName, tag, 'tar'),
+      zipballUrl: this.getReleaseSnapshotUrl(fullRepoName, tag, 'zip')
+    }
+  }
+
+  getReleaseSnapshotUrl(repoName, tag, type='zip') {
+    var {repoName, org} = utils.getRepoNameAndOrg(repoName);
+    return `https://github.com/${org}/${repoName}/-/archive/${tag}/${repoName}-${tag}.${type}`;
   }
 
 }

@@ -47,6 +47,62 @@ class Repository {
     throw new Error('Unknown host: '+host);
   }
 
+  /**
+   * @method readme
+   * @description load the readme text from repository.  This call
+   * does not burn a API request.
+   * 
+   * @param {String} repoName
+   * 
+   * @returns {Promise} resolves to String 
+   */
+  readme(host, packageName) {
+    if( host === this.HOSTS.GITHUB ) {
+      return github.readme(packageName);
+    } else if ( host === this.HOSTS.GITLAB ) {
+      return gitlab.readme(packageName);
+    }
+    throw new Error('Unknown host: '+host);
+  }
+
+  /**
+   * @method overview
+   * @description load the package overview text.  Note, this parses from
+   * standard HTML request so does not take a API hit.
+   * 
+   * @param {String} host 
+   * @param {String} packageName 
+   * 
+   * @returns {Promise} resolves to string
+   */
+  overview(host, packageName) {
+    if( host === this.HOSTS.GITHUB ) {
+      return github.readme(packageName);
+    } else if ( host === this.HOSTS.GITLAB ) {
+      return gitlab.readme(packageName);
+    }
+    throw new Error('Unknown host: '+host);
+  }
+
+  /**
+   * @method latestRelease
+   * @description return the latest release tag name.  Note, this
+   * call does not burn a API request.
+   * 
+   * @param {String} host
+   * @param {String} repoName 
+   * 
+   * @returns {Promise} resolves to null or tag object
+   */
+  async latestRelease(host, packageName) {
+    if( host === this.HOSTS.GITHUB ) {
+      return github.latestRelease(packageName);
+    } else if ( host === this.HOSTS.GITLAB ) {
+      return gitlab.latestRelease(packageName);
+    }
+    throw new Error('Unknown host: '+host);
+  }
+
 }
 
 module.exports = new Repository();

@@ -115,7 +115,6 @@ router.get('/download/:package/:tag', packageReadAccess, async (req, res) => {
  * Resolve doi requests with 302 redirect
  */
 function doiResolver(app) {
-  console.log(config.doi.shoulder, new RegExp('^'+config.doi.shoulder+'.*'));
   app.get(/^\/(doi):.*/, handleDoiRequest);
   app.get(new RegExp('^\/'+config.doi.shoulder+'.*'), handleDoiRequest);
   app.get(/^\/package\/(doi):.*/, handleDoiRequest);

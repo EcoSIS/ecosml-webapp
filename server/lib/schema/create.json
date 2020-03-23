@@ -10,6 +10,10 @@
         "type": "string",
         "enum" : ["registered", "managed"]
       },
+      "host" : {
+        "type" : "string",
+        "enum" : ["github", "gitlab"]
+      },
       "organization": {
         "type" : "string"
       },

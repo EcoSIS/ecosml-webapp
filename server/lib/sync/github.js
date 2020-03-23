@@ -1,7 +1,7 @@
 /**
  * Sync a GitHub org to mongodb
  */
-const github = require('../github');
+const github = require('../repository/github');
 const git = require('../git');
 const fs = require('fs-extra');
 const regRepos = require('../registered-repositories');

@@ -56,7 +56,7 @@ class Gitlab {
    * 
    * @returns {Promise} resolves to http response
    */
-  getRawFile(repoName, filePath, branch = 'master') {
+  async getRawFile(repoName, filePath, branch = 'master') {
     var {repoName, org} = utils.getRepoNameAndOrg(repoName);
 
     let uri = `${config.gitlab.host}/${org}/${repoName}/-/raw/${branch}/${filePath}`;
@@ -100,7 +100,7 @@ class Gitlab {
    * 
    * @returns {Promise} resolves to null or tag object
    */
-  latestRelease(repoName) {
+  async latestRelease(repoName) {
     let fullRepoName = repoName;
     var {repoName, org} = utils.getRepoNameAndOrg(repoName);
 

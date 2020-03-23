@@ -63,7 +63,7 @@
     </paper-button>
     <paper-button style="white-space: nowrap" disabled hidden$="[[!syncing]]">Syncing..</paper-button>
 
-    <div class="help">Synchronize the repository overview, README and releases from GitHub.  This process happens
+    <div class="help">Synchronize the repository overview, README and releases from the repository host.  This process happens
       nightly, but you can request data be synchronized right now if you wish.
     </div>
   </div>
@@ -92,7 +92,9 @@
       hidden$="[[!creating]]">
     </app-text-input>
     <div id="urlMessage" hidden$="[[!creating]]"></div>
-    <div class="help">Provide a full url to the GitHub repository or the Organization/Repository path name</div>
+    <div class="help">Provide a full url to the repository.  Currently url must point to a public
+      <a href="https://github.com" target="_blank">GitHub</a> or <a href="https://gitlab.com" target="_blank">GitLab</a> repository.
+    </div>
   </div>
 </div>
 
@@ -133,7 +135,7 @@
            <a href="https://www.npmjs.com/" target="_blank">NodeJS/NPM</a>, <a href="https://en.wikipedia.org/wiki/List_of_software_package_management_systems#Application-level_Dependency_managers" target="_blank">etc</a>.
       </div>
       <div class="help" hidden$="[[!isManagedSource]]">Currently <a href="https://www.python.org/" target="_blank">Python</a> and 
-        <a href="https://www.r-project.org/" target="_blank">R</a> packages will auto build sample native package files for installation from Github.</div>
+        <a href="https://www.r-project.org/" target="_blank">R</a> packages will auto build sample native package files for installation from the repository host.</div>
   </div>
 </div>
 <div class="radio-layout">

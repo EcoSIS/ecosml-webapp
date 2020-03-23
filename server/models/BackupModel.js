@@ -3,6 +3,7 @@ const path = require('path');
 const config = require('../lib/config');
 const logger = require('../lib/logger');
 const {exec} = require('child_process');
+const mongo = require('../lib/mongo');
 const aws = require('../lib/aws');
 
 class BackupModel {
@@ -70,10 +71,9 @@ class BackupModel {
       let currentBackups = await aws.listFiles(config.backups.bucket);
       currentBackups = currentBackups.map(file => {
         let [date, year, month, day] = file.match(/(\d{4})-(\d{2})-(\d{2})/)
-        return new Date(parseInt(year), parseInt(month), parseInt(day));
+        return new Date(parseInt(year), parseInt(month)-1, parseInt(day));
       });
-      currentBackups.sort();
-
+      currentBackups.sort((a,b) => (a.getTime() > b.getTime()) ? -1 : 1);
       if( currentBackups.length === 0 ) {
         throw new Error('No backups found and no date provided');
       }
@@ -105,7 +105,9 @@ class BackupModel {
     }
 
     logger.info('Running mongo restore on: '+path.join(config.backups.tmpRestoreDir, 'mongodump'));
-    await this._mongorestore(path.join(config.backups.tmpRestoreDir, 'mongodump'));
+    let {stdout, stderr} = await this._mongorestore(path.join(config.backups.tmpRestoreDir, 'mongodump'));
+    if( stderr ) logger.error(stderr);
+    logger.info(stdout);
 
     logger.info('Backup complete for '+filename);
   }
@@ -172,8 +174,17 @@ class BackupModel {
     return this.exec(cmd);
   }
 
-  _mongorestore(file) {
-    let cmd = `mongorestore --host ${config.mongodb.host} --db ${config.mongodb.database} ${file}`;
+  async _mongorestore(file) {
+    let col = await mongo.packagesCollection();
+    await col.remove({});
+    col = await mongo.getStatsCollection();
+    await col.remove({});
+    col = await mongo.githubTeamCollection();
+    await col.remove({});
+    col = await mongo.getDoiCollection();
+    await col.remove({});
+
+    let cmd = `mongorestore --host ${config.mongodb.host} ${file}`;
     return this.exec(cmd);
   }
 

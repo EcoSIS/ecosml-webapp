@@ -41,11 +41,6 @@ class MongoDB {
     return this.db.collection(config.mongodb.collections.stats);
   }
 
-  async getStatsCollection() {
-    await this.conn();
-    return this.db.collection(config.mongodb.collections.stats);
-  }
-
   async githubTeamCollection() {
     await this.conn();
     return this.db.collection(config.mongodb.collections.githubTeam);

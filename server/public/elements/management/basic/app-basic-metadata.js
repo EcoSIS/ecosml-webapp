@@ -9,7 +9,7 @@ import AppStateInterface from "../../interfaces/AppStateInterface"
 
 // import AppFileTreeLeaf from "../files/tree/app-file-tree-leaf";
 
-const VALUES = ['reponame', 'overview', 'organization', 'language', 'packageType'];
+const VALUES = ['reponame', 'overview', 'organization', 'language', 'packageType', 'host'];
 
 export default class AppBasicMetadata extends Mixin(PolymerElement)
   .with(EventInterface, AppStateInterface, PackageInterface) {
@@ -72,6 +72,14 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
       this.$.url.value = value || '';
     }
     this.$.name.value = value || '';
+  }
+
+  get host() {
+    if( this.editorData && this.editorData.source === 'registered') {
+      let {org, repo, host, valid} = this._checkValidUrl();
+      return host;
+    }
+    return this.$.host.value || '';
   }
 
   get overview() {
@@ -152,9 +160,14 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
 
   setValues(data) {
     for( let key of VALUES ) {
+      if( key === 'host' ) continue;
       let value = key;
-      if(value === 'reponame') value = 'name';
-      this[key] = data[value];
+      if(value === 'reponame') {
+        this.name = (data.host ? `https://${data.host}.com/` : '') + data.reponame;
+      } else {
+        this[key] = data[value];
+      }
+      
       // HACK: overview getter/setter not working
       // if( data.source === 'managed' && value === 'overview' ) this.$[key].value = data[value] || '';
       // else this[key] = data[value];
@@ -196,10 +209,10 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
       return this.$.urlMessage.innerHTML = '';
     }
 
-    let {org, repo, valid} = this._checkValidUrl();
+    let {org, repo, host, valid} = this._checkValidUrl();
 
     if( !valid ) {
-      return this.$.urlMessage.innerHTML = 'Not a valid Github Repository Url';
+      return this.$.urlMessage.innerHTML = 'Not a valid Git Repository Url';
     }
 
     this.$.urlMessage.innerHTML = `Checking (${org} / ${repo})...`;
@@ -207,7 +220,7 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
     if( this._checkUrlTimer === -1 ) clearTimeout(this._checkUrlTimer);
     this._checkUrlTimer = setTimeout(() => {
       this._checkUrlTimer = -1;
-      this._checkUrlAsync(org, repo);
+      this._checkUrlAsync(host, org, repo);
     }, 300);
   }
 
@@ -218,23 +231,27 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
 
   _checkValidUrl() {
     let url = this.$.url.value;
-    let path = url;
-    if( url.match(/^http/) ) {
-      path = new URL(url).pathname;
-    } else if( url.match(/github\.com/) ) {
-      path = url.replace(/.*github\.com/);
-    }
-    let [org, repo] = path.replace(/^\//, '').split('/');
 
-    return {org, repo, valid: (org && repo ? true : false)}
+    try {
+      url = new URL(url);
+    } catch(e) {
+      return {org:'', repo:'', host:'', valid: false}
+    }
+
+    let [org, repo] = url.pathname.replace(/^\//, '').split('/');
+
+    return {org, repo, 
+      host: url.host.replace(/\..*/, ''), 
+      valid: (org && repo ? true : false)
+    }
   }
 
-  async _checkUrlAsync(org, repo) {
-    this.registeredUrlExists = !(await this.PackageEditor.isNameAvailable(repo, org));
+  async _checkUrlAsync(host, org, repo) {
+    this.registeredUrlExists = !(await this.PackageEditor.isNameAvailable(host, repo, org));
     if( !this.registeredUrlExists ) {
-      this.$.urlMessage.innerHTML = `Unable to access or invalid: ${org} / ${repo}`;
+      this.$.urlMessage.innerHTML = `Unable to access or invalid ${host}: ${org} / ${repo}`;
     } else {
-      this.$.urlMessage.innerHTML = `Valid: ${org} / ${repo}`;
+      this.$.urlMessage.innerHTML = `Valid ${host}: ${org} / ${repo}`;
     }
   }
 
@@ -337,7 +354,7 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
     }
 
     try {
-      await this.PackageModel.create(data.name, data.overview, data.organization, data.language, data.packageType, data.source);
+      await this.PackageModel.create(data.host, data.name, data.overview, data.organization, data.language, data.packageType, data.source);
       if( data.source === 'managed' ) this.$.created.open();
     } catch(e) {
       alert('Failed to create package: '+e.message);

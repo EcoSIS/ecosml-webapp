@@ -4,7 +4,7 @@ const Logger = require('../lib/logger');
 const redis = require('../lib/redis');
 const request = require('request');
 const mongo = require('../lib/mongo');
-const github = require('../lib/github');
+const github = require('../lib/repository/github');
 const mongodb = require('../lib/mongo');
 
 class AuthModel {

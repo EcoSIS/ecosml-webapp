@@ -68,11 +68,12 @@ router.post('/:package/createRelease', packageWriteAccess, async (req, res) => {
   }
 });
 
-router.get('/available/:package', async(req, res) => {
+router.get('/available/:host/:package', async(req, res) => {
   try {
-    let isAvailable = await model.isNameAvailable(req.params.package, req.query.org);
+    let isAvailable = await model.isNameAvailable(req.params.host, req.params.package, req.query.org);
     res.json({
       isAvailable,
+      host: req.params.host,
       packageName: req.params.package
     });
   } catch(e) {

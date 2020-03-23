@@ -1,5 +1,5 @@
 const mongo = require('../lib/mongo');
-const github = require('../lib/github');
+const github = require('../lib/repository/github');
 const logger = require('../lib/logger');
 const utils = require('../lib/utils');
 

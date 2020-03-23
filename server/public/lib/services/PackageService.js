@@ -14,12 +14,13 @@ class PackageService extends BaseService {
    * @description create a new package
    * 
    * @param {String} name name of package 
+   * @param {String} host
    * @param {String} overview one sentence overview description
    * @param {String} organization package organization
    * @param {String} language package programming language
    */
-  async create(name, overview, organization, language, packageType, source) {
-    let payload = {name, overview, organization, language, packageType, source};
+  async create(name, host, overview, organization, language, packageType, source) {
+    let payload = {name, host, overview, organization, language, packageType, source};
     console.log(payload);
 
     return this.request({

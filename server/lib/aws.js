@@ -54,7 +54,7 @@ class AWSImpl {
         Key: bucketFilePath
       }, (err, data) => {
         if( err ) return reject(err);
-        fs.writeFileSync(filePath, data.Body.toString());
+        fs.writeFileSync(filePath, data.Body);
         resolve();
       });
     });

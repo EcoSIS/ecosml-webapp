@@ -3,7 +3,7 @@ const config = require('./config');
 const fs = require('fs-extra');
 const path = require('path');
 const clone = require('clone');
-const github = require('./github');
+const repository = require('./repository');
 const mongo = require('./mongo');
 const logger = require('./logger');
 
@@ -144,7 +144,7 @@ class RegisteredRepositories {
    * @return {Promise}
    */
   async syncProperties(pkg) {
-    let {release, overview, description} = await this.getGitHubProperties(pkg.name);
+    let {release, overview, description} = await this.getProperties(pkg.host, pkg.name);
 
     // add properties stored in github repo
     if( release ) {
@@ -261,18 +261,19 @@ class RegisteredRepositories {
   // }
 
   /**
-   * @method getGitHubProperties
+   * @method getProperties
    * @description get a registered repositories properties that are stored in the repository
-   * metadata (in GitHub)
+   * metadata
    * 
+   * @param {String} host
    * @param {String} repoName
    * 
    * @returns {Promise} resolves to object
    */
-  async getGitHubProperties(repoName) {
-    let release = await github.latestRelease(repoName);
-    let overview = await github.overview(repoName);
-    let description = await github.readme(repoName);
+  async getProperties(host, repoName) {
+    let release = await respository.latestRelease(host, repoName);
+    let overview = await respository.overview(host, repoName);
+    let description = await respository.readme(host, repoName);
     return {release, overview, description};
   }
 

@@ -3,7 +3,7 @@ const config = require('../lib/config');
 const jwt = require('jsonwebtoken');
 const {URL} = require('url'); 
 const model = require('../models/AuthModel');
-const github = require('../lib/github');
+const github = require('../lib/repository/github');
 const Logger = require('../lib/logger');
 const {authenticated, sendError} = require('./middleware/auth');
 

@@ -1,5 +1,5 @@
 const git = require('../lib/git');
-const github = require('../lib/github');
+const github = require('../lib/repository/github');
 const repository = require('../lib/repository');
 const mongo = require('../lib/mongo');
 const logger = require('../lib/logger');
@@ -54,6 +54,8 @@ class PackageModel {
 
     if( pkg.source === 'registered' ) {
       await registeredRepositories.syncProperties(pkg);
+
+      return pkg;
       
       // ensure this repo exists and we can access
       let {name, org} = this.getNameAndOrg(pkg.name);
@@ -529,13 +531,14 @@ class PackageModel {
    * @method isNameAvailable
    * @description is a package name available
    * 
+   * @param {String} host 
    * @param {String} packageName package name
    * @param {String} org Optional.  Defaults to EcoSML
    * 
    * @returns {Promise} resolves to Boolean
    */
-  isNameAvailable(packageName, org) {
-    return github.isRepoNameAvailable(packageName, org);
+  async isNameAvailable(host, packageName, org) {
+    return !(await repository.exists(host, packageName, org));
   }
 
   /**

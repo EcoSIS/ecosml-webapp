@@ -35,7 +35,6 @@ export default class AppDoiAdmin extends Mixin(LitElement)
   }
 
   _onKeyup(e) {
-    console.log('here')
     if( e.which !== 13 ) return;
     this.search();
   }

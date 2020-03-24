@@ -354,7 +354,7 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
     }
 
     try {
-      await this.PackageModel.create(data.host, data.name, data.overview, data.organization, data.language, data.packageType, data.source);
+      await this.PackageModel.create(data.name, data.host, data.overview, data.organization, data.language, data.packageType, data.source);
       if( data.source === 'managed' ) this.$.created.open();
     } catch(e) {
       alert('Failed to create package: '+e.message);

@@ -77,9 +77,9 @@ class Repository {
    */
   overview(host, packageName) {
     if( host === this.HOSTS.GITHUB ) {
-      return github.readme(packageName);
+      return github.overview(packageName);
     } else if ( host === this.HOSTS.GITLAB ) {
-      return gitlab.readme(packageName);
+      return gitlab.overview(packageName);
     }
     throw new Error('Unknown host: '+host);
   }

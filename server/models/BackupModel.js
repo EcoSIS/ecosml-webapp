@@ -5,6 +5,7 @@ const logger = require('../lib/logger');
 const {exec} = require('child_process');
 const mongo = require('../lib/mongo');
 const aws = require('../lib/aws');
+const ecosisSync = require('../lib/sync/ecosis');
 
 class BackupModel {
 
@@ -108,6 +109,9 @@ class BackupModel {
     let {stdout, stderr} = await this._mongorestore(path.join(config.backups.tmpRestoreDir, 'mongodump'));
     if( stderr ) logger.error(stderr);
     logger.info(stdout);
+
+    await ecosisSync.syncOrgs(true);
+    await ecosisSync.syncGithubData();
 
     logger.info('Backup complete for '+filename);
   }

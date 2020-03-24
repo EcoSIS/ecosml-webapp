@@ -2,6 +2,7 @@ const fetch = require('node-fetch');
 const config = require('../config');
 const utils = require('../utils');
 const {JSDOM} = require('jsdom');
+const logger = require('../logger');
 
 class Gitlab {
 
@@ -37,11 +38,11 @@ class Gitlab {
    * @returns {Promise} resolves to String 
    */
   async readme(repoName) {
-    let {response} = await this.getRawFile(repoName, 'README.md');
-    if( response.statusCode === 200 ) return response.body;
+    let {response, body} = await this.getRawFile(repoName, 'README.md');
+    if( response.ok ) return body;
     
-    ({response} = await this.getRawFile(repoName, 'README'));
-    if( response.statusCode === 200 ) return response.body;
+    ({response, body} = await this.getRawFile(repoName, 'README'));
+    if( response.ok ) return body;
 
     return '';
   }
@@ -65,26 +66,23 @@ class Gitlab {
       {'User-Agent' : 'EcoSML Webapp'}
     );
 
-    Logger.info(`Raw GitLab request: GET ${options.uri}`);
+    logger.info(`Raw GitLab request: GET ${uri}`);
     return {response, body: await response.text()};
   }
 
   async overview(repoName) {
     var {repoName, org} = utils.getRepoNameAndOrg(repoName);
 
-    let response = await fetch(
-      `${config.gitlab.host}/${org}/${repoName}`,
-      {redirect : manual}
-    );
+    let response = await fetch(`${config.gitlab.host}/${org}/${repoName}`);
 
-    if( response.state !== 200 ) {
+    if( response.status !== 200 ) {
       throw new Error(`Unknown repository: ${org}/${repoName}`)
     }
 
     const dom = new JSDOM(await response.text());
     let ele = dom.window.document.querySelector('.home-panel-description-markdown p');
     if( !ele ) {
-      Logger.error(`CSS query failed to find gitlab repo overview for: ${org}/${repoName}`);
+      logger.error(`CSS query failed to find gitlab repo overview for: ${org}/${repoName}`);
       return '';
     } 
 
@@ -106,17 +104,17 @@ class Gitlab {
 
     let response = await fetch(
       `${config.gitlab.host}/${org}/${repoName}/-/tags`,
-      {redirect : manual}
+      {redirect : 'manual'}
     );
 
-    if( response.state !== 200 ) {
+    if( response.status !== 200 ) {
       throw new Error(`Unknown repository: ${org}/${repoName}`)
     }
 
     const dom = new JSDOM(await response.text());
     let ele = dom.window.document.querySelector('.content-list li:first-child .item-title');
     if( !ele ) {
-      Logger.error(`CSS query failed to find gitlab repo overview for: ${org}/${repoName}`);
+      logger.error(`CSS query failed to find gitlab repo overview for: ${org}/${repoName}`);
       return '';
     }
 

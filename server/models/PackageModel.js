@@ -54,8 +54,6 @@ class PackageModel {
 
     if( pkg.source === 'registered' ) {
       await registeredRepositories.syncProperties(pkg);
-
-      return pkg;
       
       // ensure this repo exists and we can access
       let {name, org} = this.getNameAndOrg(pkg.name);
@@ -69,7 +67,7 @@ class PackageModel {
       schema.validate('create', pkg);
 
       // fake some of the github api properties
-      pkg.htmlUrl = repository.getHost()+'/'+pkg.name;
+      pkg.htmlUrl = repository.getHost(pkg.host)+'/'+pkg.name;
       pkg.private = false;
 
     } else if( pkg.source === 'managed' ) {

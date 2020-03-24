@@ -185,14 +185,14 @@ class RegisteredRepositories {
   //   return results;
   // }
 
-  // async syncPropertiesToMongo(pkg) {
-  //   if( typeof pkg === 'string' ) {
-  //     pkg = await mongo.getPackage(pkg);
-  //   }
-  //   await this.syncProperties(pkg);
-  //   await mongo.updatePackage(pkg.id, pkg);
-  //   return pkg;
-  // }
+  async syncPropertiesToMongo(pkg) {
+    if( typeof pkg === 'string' ) {
+      pkg = await mongo.getPackage(pkg);
+    }
+    await this.syncProperties(pkg);
+    await mongo.updatePackage(pkg.id, pkg);
+    return pkg;
+  }
 
   /**
    * @method backupAll
@@ -271,9 +271,9 @@ class RegisteredRepositories {
    * @returns {Promise} resolves to object
    */
   async getProperties(host, repoName) {
-    let release = await respository.latestRelease(host, repoName);
-    let overview = await respository.overview(host, repoName);
-    let description = await respository.readme(host, repoName);
+    let release = await repository.latestRelease(host, repoName);
+    let overview = await repository.overview(host, repoName);
+    let description = await repository.readme(host, repoName);
     return {release, overview, description};
   }
 

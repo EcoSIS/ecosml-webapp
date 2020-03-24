@@ -77,9 +77,12 @@ class EcosisSync {
    * @method syncOrgs
    * @description sync all orgs from EcoSIS
    * 
+   * @param {Boolean} noGithubSync do not sync data to github, redis only.
+   * defaults to false
+   * 
    * @returns {Promise} resolves to Array of org names
    */
-  async syncOrgs() {
+  async syncOrgs(noGithubSync=false) {
     logger.info('Syncing CKAN organizations from EcoSIS');
 
     // make sure we have access to ecosis before we flush
@@ -94,7 +97,7 @@ class EcosisSync {
     }
 
     for( let i = 0; i < orgNames.length; i++ ) {
-      await this.syncOrg(orgNames[i]);
+      await this.syncOrg(orgNames[i], noGithubSync);
     }
 
     logger.info(`Sync of CKAN organizations from EcoSIS complete. ${orgNames.length} orgs syncd`);
@@ -107,10 +110,12 @@ class EcosisSync {
    * @description sync ecosis org to redis store
    * 
    * @param {String} orgName EcoSIS org name or id
+   * @param {Boolean} noGithubSync do not sync data to github, redis only.
+   * defaults to false
    * 
    * @returns {Promise} 
    */
-  async syncOrg(orgName) {
+  async syncOrg(orgName, noGithubSync=false) {
     // grab org from ecosis
     let org = await ckan.getOrganization(orgName);
     if( !org ) return;
@@ -151,7 +156,9 @@ class EcosisSync {
     }
 
     // finally sync to Github team
-    await github.syncEcoSISOrgToTeam(org.name);
+    if( !noGithubSync ) {
+      await github.syncEcoSISOrgToTeam(org.name);
+    }
   }
 
   async syncGithubData() {

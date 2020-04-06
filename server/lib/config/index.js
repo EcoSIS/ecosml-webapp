@@ -62,6 +62,19 @@ module.exports = {
     }
   },
 
+  mail : {
+    config : {
+      host: "localhost",
+      port: 25,
+      secure: false, // upgrade later with STARTTLS
+      tls: {
+        rejectUnauthorized: false
+      }
+    },
+    from : 'admin@ecosml.org',
+    doiAdminList : 'admins@ecosis.org'
+  },
+
   backups : {
     tmpDir : path.join(MOUNT_PATH, 'backup'),
     tmpRestoreDir : path.join(MOUNT_PATH, 'backup-restore'),

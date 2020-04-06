@@ -1,10 +1,16 @@
 FROM node:12
 
-# install ruby and markdown library, mongodump
-RUN apt-get update
-RUN apt-get install -y ruby-full mongodb-clients zip
-RUN gem install commonmarker
+RUN echo "postfix postfix/main_mailer_type string Internet site" > /preseed.txt
+RUN echo "postfix postfix/mailname string ecosml.org" >> /preseed.txt
+RUN DEBIAN_FRONTEND=noninteractive
+RUN debconf-set-selections /preseed.txt
 
+# install ruby and markdown library, mongodump
+RUN apt-get update && \
+    apt-get install -y ruby-full mongodb-clients zip \
+    postfix mailutils
+
+RUN gem install commonmarker
 RUN npm install -g mocha
 
 RUN mkdir server

@@ -5,6 +5,7 @@ const github = require('../lib/repository/github');
 const path = require('path');
 const fs = require('fs-extra');
 const logger = require('../lib/logger');
+const mail = require('../lib/mail');
 
 class DoiModel {
 
@@ -52,6 +53,12 @@ class DoiModel {
     } else {
       await mongo.setDoiRequest(pkg.id, tag, user, email, filename);
     }
+
+    // don't wait for this
+    this.sendAdminEmail('EcoSML DOI request ('+config.server.url+') for: '+pkg.name, `
+A DOI has been requested for the model '${pkg.name}' version ${tag} by user ${user} ${email}.  You can view the model here:  ${config.server.url}/package/${pkg.id} and approve the DOI here: ${config.server.url}/admin
+
+-EcoSML Server`);
 
     return mongo.getDoiRequest(pkg.id, tag);
   }
@@ -255,6 +262,15 @@ class DoiModel {
 
   getApprovedDois() {
     return mongo.getApprovedDois();
+  }
+
+  async sendAdminEmail(subject, msg) {
+    try {
+      return await mail.send(config.mail.doiAdminList, subject, msg);
+    } catch(e) {
+      logger.error('Failed to send admin email', e);
+      return e;
+    }
   }
 
 }

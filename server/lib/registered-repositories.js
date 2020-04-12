@@ -144,12 +144,22 @@ class RegisteredRepositories {
    * @return {Promise}
    */
   async syncProperties(pkg) {
-    let {release, overview, description} = await this.getProperties(pkg.host, pkg.name);
+    let {release, releases, overview, description} = await this.getProperties(pkg.host, pkg.name);
 
     // add properties stored in github repo
-    if( release ) {
-      pkg.releases = [release];
-      pkg.releaseCount = 1;
+    if( releases ) {
+      pkg.releases = releases;
+      pkg.releaseCount = releases.length;
+
+      // insure the latest release is the last in the list
+      if( release ) {
+        let index = pkg.releases.findIndex(r => r.tag === release.tag);
+        if( index !== pkg.releaseCount-1 ) {
+          let r = pkg.releases.splice(index, 1);
+          pkg.releases.push(r[0]);
+        }
+      }
+
     } else {
       pkg.releases = [];
       pkg.releaseCount = 0;
@@ -185,9 +195,9 @@ class RegisteredRepositories {
   //   return results;
   // }
 
-  async syncPropertiesToMongo(pkg) {
+  async syncPropertiesToMongo(pkg, host) {
     if( typeof pkg === 'string' ) {
-      pkg = await mongo.getPackage(pkg);
+      pkg = await mongo.getPackage(pkg, host);
     }
     await this.syncProperties(pkg);
     await mongo.updatePackage(pkg.id, pkg);
@@ -274,7 +284,8 @@ class RegisteredRepositories {
     let release = await repository.latestRelease(host, repoName);
     let overview = await repository.overview(host, repoName);
     let description = await repository.readme(host, repoName);
-    return {release, overview, description};
+    let releases = await repository.getReleases(host, repoName);
+    return {release, releases, overview, description};
   }
 
 }

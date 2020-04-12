@@ -247,9 +247,10 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
   }
 
   async _checkUrlAsync(host, org, repo) {
-    this.registeredUrlExists = !(await this.PackageEditor.isNameAvailable(host, repo, org));
-    if( !this.registeredUrlExists ) {
-      this.$.urlMessage.innerHTML = `Unable to access or invalid ${host}: ${org} / ${repo}`;
+    let resp = await this.PackageEditor.isNameAvailable(host, repo, org);
+    this.registeredUrlValid = resp.isAvailable;
+    if( !this.registeredUrlValid ) {
+      this.$.urlMessage.innerHTML = `${resp.message} ${host}: ${org} / ${repo}`;
     } else {
       this.$.urlMessage.innerHTML = `Valid ${host}: ${org} / ${repo}`;
     }
@@ -297,8 +298,8 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
         return;
       }
 
-      this.nameAvailable = await this.PackageEditor.isNameAvailable(name);
-      
+      let resp = await this.PackageEditor.isNameAvailable(name);
+      this.nameAvailable = resp.isAvailable;
       if( this.nameAvailable ) {
         this.$.nameMessage.innerHTML = this._getCleanName()+': Available';
         this.$.nameMessage.className = 'ok';
@@ -339,8 +340,8 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
         return alert('Please provide a longer overview');
       }
     } else if( data.source === 'registered' ) {
-      if( !this.registeredUrlExists ) {
-        return alert('Invalid registered GitHub Url');
+      if( !this.registeredUrlValid ) {
+        return alert('Invalid registered url');
       }
     } else {
       return alert('Unknown repository type: '+data.source);
@@ -357,7 +358,8 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
       await this.PackageModel.create(data.name, data.host, data.overview, data.organization, data.language, data.packageType, data.source);
       if( data.source === 'managed' ) this.$.created.open();
     } catch(e) {
-      alert('Failed to create package: '+e.message);
+      console.error(e);
+      alert('Failed to create package: '+(e.payload ? e.payload.message : e.message));
     }
   }
 

@@ -131,7 +131,7 @@ class Gitlab {
 
   getReleaseSnapshotUrl(repoName, tag, type='zip') {
     var {repoName, org} = utils.getRepoNameAndOrg(repoName);
-    return `https://github.com/${org}/${repoName}/-/archive/${tag}/${repoName}-${tag}.${type}`;
+    return `https://gitlab.com/${org}/${repoName}/-/archive/${tag}/${repoName}-${tag}.${type}`;
   }
 
 }

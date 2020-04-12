@@ -153,6 +153,26 @@ class GitCli {
   }
 
   /**
+   * @method getRemoteTags
+   * @description get the tags for a remote repository
+   * 
+   * @param {String} repoUrl full http repo url
+   * 
+   * @return {Promise} resolves to array of string
+   */
+  async getRemoteTags(repoUrl) {
+    if( repoUrl.match(/\.git$/) ) repoUrl += '.git';  
+    let {stdout, stderr} = await this.exec(`ls-remote --tags ${repoUrl}`);
+
+    return  stdout.split('\n')
+      .filter(tag => tag ? true : false)
+      .map(tag => tag.split(/\t/)[1])
+      .filter(tag => tag ? true : false)
+      .map( tag => tag.replace(/.*\//, ''))
+      .filter(tag => !tag.match(/\^\{\}$/));
+  }
+
+  /**
    * @method status
    * @description repo status
    * @param {String} repoName name of repository

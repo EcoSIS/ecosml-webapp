@@ -1,6 +1,7 @@
 const github = require('./github');
 const gitlab = require('./gitlab');
 const config = require('../config');
+const git = require('../git');
 
 class Repository {
 
@@ -101,6 +102,40 @@ class Repository {
       return gitlab.latestRelease(packageName);
     }
     throw new Error('Unknown host: '+host);
+  }
+
+  /**
+   * @method getReleases
+   * @description get the full list of releases
+   * 
+   * @param {String} host 
+   * @param {String} packageName
+   * 
+   * @returns {Promise} resolves to array 
+   */
+  async getReleases(host, packageName) {
+    let htmlUrl = 'https://'+host+'.com/'+packageName;
+    let tags = await git.getRemoteTags(htmlUrl);
+    if( host === this.HOSTS.GITHUB ) {
+      tags = tags.map(tag => ({
+        body : '',
+        htmlUrl,
+        name : tag,
+        tagName : tag,
+        tarballUrl : github.getReleaseSnapshotUrl(packageName, tag, 'tar'),
+        zipballUrl: github.getReleaseSnapshotUrl(packageName, tag, 'zip')
+      }));
+    } else if ( host === this.HOSTS.GITLAB ) {
+      tags = tags.map(tag => ({
+        body : '',
+        htmlUrl,
+        name : tag,
+        tagName : tag,
+        tarballUrl : gitlab.getReleaseSnapshotUrl(packageName, tag, 'tar'),
+        zipballUrl: gitlab.getReleaseSnapshotUrl(packageName, tag, 'zip')
+      }));
+    }
+    return tags;
   }
 
 }

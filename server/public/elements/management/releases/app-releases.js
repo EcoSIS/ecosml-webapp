@@ -56,6 +56,14 @@ export default class AppReleases extends Mixin(PolymerElement)
       packageHtmlUrl : {
         type : String,
         value : ''
+      },
+      releasesUrl : {
+        type : String,
+        value : ''
+      },
+      host : {
+        type : String,
+        value : ''
       }
     }
   }
@@ -108,10 +116,13 @@ export default class AppReleases extends Mixin(PolymerElement)
       this.hasCurrentRelease = false;
       this.hasPriorReleases = false;
       this.packageHtmlUrl = '';
+      this.host = '';
       this._render();
       return;
     }
 
+    this.host = this.pkg.host || 'github';
+    this.releasesUrl = this.pkg.htmlUrl + ((this.host === 'github') ? '/releases' : '/-/tags');
 
     this.packageHtmlUrl = this.pkg.htmlUrl;
     let releasesInverse = this.releases.slice().reverse();
@@ -137,7 +148,7 @@ export default class AppReleases extends Mixin(PolymerElement)
    */
   _toggleCreate() {
     if( !this.isManagedSource ) {
-      window.open(`${this.pkg.htmlUrl}/releases/new`, '_blank');
+      window.open(`${this.releasesUrl}/new`, '_blank');
       return;
     }
 

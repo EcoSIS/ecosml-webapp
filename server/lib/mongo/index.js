@@ -199,17 +199,23 @@ class MongoDB {
    * @description update package data.  this will patch provided data.
    * 
    * @param {String} packageNameOrId package name or id
+   * @param {String} host
    * @param {Object} data package data to update
    * 
    * @returns {Promise}
    */
-  async updatePackage(packageNameOrId, data) {
+  async updatePackage(packageNameOrId, host, data) {
+    let query = [{id : packageNameOrId}];
+
+    if( typeof host === 'object' ) {
+      data = host;
+    } else {
+      query.push({name: packageNameOrId, host});
+    }
+
     let collection = await this.packagesCollection();
     let result = await collection.update({
-      $or : [
-        {name: packageNameOrId},
-        {id : packageNameOrId}
-      ]
+      $or : query
     }, {
       $set: data
     });
@@ -225,15 +231,20 @@ class MongoDB {
    * id or GitHub id
    * 
    * @param {String|Object} packageNameOrId  
+   * @param {String} host if package name is given
    * @param {Object} project
    * 
    * @returns {Promise} resolves to mongo response
    */
-  async getPackage(packageNameOrId, projection = {}) {
+  async getPackage(packageNameOrId, host, projection = {}) {
     if( !packageNameOrId ) throw new Error('Package name or id required');
 
     if( typeof packageNameOrId === 'object' ) {
       packageNameOrId = packageNameOrId.id || packageNameOrId.name;
+    }
+
+    if( typeof host === 'object' ) {
+      projection = host
     }
 
     if( packageNameOrId.match(new RegExp('^'+config.doi.shoulder)) || 
@@ -250,7 +261,7 @@ class MongoDB {
     let collection = await this.packagesCollection();
     return collection.findOne({
       $or : [
-        {name: packageNameOrId},
+        {name: packageNameOrId, host},
         {id : packageNameOrId},
         {githubId : packageNameOrId}
       ]
@@ -262,14 +273,15 @@ class MongoDB {
    * @description remove a package by name or id
    * 
    * @param {String} packageNameOrId
+   * @param {String} host require if name is provided
    * 
    * @returns {Promise} resolves to mongo response
    */
-  async removePackage(packageNameOrId) {
+  async removePackage(packageNameOrId, host) {
     let collection = await this.packagesCollection();
     let result = await collection.remove({
       $or : [
-        {name: packageNameOrId},
+        {name: packageNameOrId, host},
         {id : packageNameOrId}
       ]
     });

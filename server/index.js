@@ -77,7 +77,7 @@ require('./lib/sync');
  */
 setTimeout(async () => {
   try {
-    await model.clean();
+    await backup.clean();
   } catch(e) {
     logger.error('failed initial backup cleaning: ', e);
   }

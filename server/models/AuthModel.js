@@ -56,29 +56,29 @@ class AuthModel {
    * 
    * @returns {Promise} resolves to boolean
    */
-  async hasAccess(packageNameOrId, user, role) {
-    // first check it it's an admin, they can do everything
-    let isAdmin = await this.isAdmin(user);
-    if( isAdmin ) return true;
+  // async hasAccess(packageNameOrId, user, role) {
+  //   // first check it it's an admin, they can do everything
+  //   let isAdmin = await this.isAdmin(user);
+  //   if( isAdmin ) return true;
     
-    // now grab package
-    let pkg = await mongo.getPackage(packageNameOrId, {owner: 1, organization: 1});
-    if( !pkg ) throw new Error('Unknown package name or id: '+packageNameOrId);
+  //   // now grab package
+  //   let pkg = await mongo.getPackage(packageNameOrId, {owner: 1, organization: 1});
+  //   if( !pkg ) throw new Error('Unknown package name or id: '+packageNameOrId);
 
-    // if user is owner, they can do everything
-    if( pkg.owner === user ) return true;
+  //   // if user is owner, they can do everything
+  //   if( pkg.owner === user ) return true;
 
-    // now see if they have org permissions
-    if( !pkg.organization ) return false;
+  //   // now see if they have org permissions
+  //   if( !pkg.organization ) return false;
 
-    if( role === 'read' ) {
-      return await this.canReadOrg(pkg.organization, user);
-    } else if( role === 'write' ) {
-      return await this.canWriteOrg(pkg.organization, user);
-    }
+  //   if( role === 'read' ) {
+  //     return await this.canReadOrg(pkg.organization, user);
+  //   } else if( role === 'write' ) {
+  //     return await this.canWriteOrg(pkg.organization, user);
+  //   }
 
-    return false;
-  }
+  //   return false;
+  // }
 
   /**
    * @method isAdmin

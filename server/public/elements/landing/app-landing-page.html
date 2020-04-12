@@ -135,13 +135,13 @@
               <div hidden$="[[!isPackageModule]]">
                 <div>Install via <a href="https://pip.pypa.io/en/stable/" target="_blank">pip:</a></div>
                 <div class="script">
-                  <input type="text" class="script-input" value="pip install git+https://github.com/[[githubOrg]]/[[package.name]]@[[release.name]]" />
+                  <input type="text" class="script-input" value="pip install git+https://[[host]].com/[[githubOrg]]/[[package.name]]@[[release.name]]" />
                 </div>
               </div>
             </div>
 
             <div id="install-r">
-              <div style="margin-bottom: 15px">Language: <a href="https://www.r-project.org/" target="_blank">R</a></div>
+              <!-- <div style="margin-bottom: 15px">Language: <a href="https://www.r-project.org/" target="_blank">R</a></div>
               <div hidden$="[[!isPackageModule]]">
                 <div>Install via <a href="https://cran.r-project.org/web/packages/githubinstall/vignettes/githubinstall.html" target="_blank">devtools:</a></div>
                 <div class="script">
@@ -150,7 +150,7 @@
                   <input type="text" class="script-input" value='install_github("ecosml/[[package.name]]", ref="[[release.name]")' />
                   <input type="text" class="script-input" value="library([[package.name]])" />
                 </div>
-              </div>
+              </div> -->
             </div>
 
             <div hidden$="[[!isPackageModule]]">*Note: It is up to individual package maintainers to follow standard practices for 
@@ -170,8 +170,8 @@
 
           <h2 class="uheader blue">Access</h2>
           <div hidden$="[[!release]]"><a href$="[[release.downloadUrl]]">Download Current Release</a></div>
-          <div hidden$="[[!release]]"><a href$="[[package.htmlUrl]]/releases" target="_blank">All Releases</a></div>
-          <div><a href$="[[package.htmlUrl]]" target="_blank">GitHub</a></div>
+          <div hidden$="[[!release]]"><a href$="[[releasesUrl]]" target="_blank">All Releases</a></div>
+          <div><a href$="[[package.htmlUrl]]" target="_blank" style="text-transform: capitalize;">[[host]]</a></div>
 
           <div hidden$="[[!package.theme]]">
             <h2 class="uheader green padded">Theme</h2>

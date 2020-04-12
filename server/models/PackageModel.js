@@ -60,7 +60,7 @@ class PackageModel {
       let exists = await repository.exists(pkg.host, name, org);
       if( !exists ) throw new Error('Repository does not exist: '+pkg.name);
 
-      let ePkg = await mongo.getPackage(pkg.name);
+      let ePkg = await mongo.getPackage(pkg.name, pkg.host || 'github');
       if( ePkg ) throw new Error('Repository already registered: '+pkg.name);
 
       // check things look ok
@@ -73,7 +73,7 @@ class PackageModel {
     } else if( pkg.source === 'managed' ) {
       schema.validate('create', pkg);
 
-      let ePkg = await mongo.getPackage(pkg.name);
+      let ePkg = await mongo.getPackage(pkg.name, 'github');
       if( ePkg ) throw new Error('Repository already registered: '+pkg.name);
 
       // create Github API Request
@@ -237,18 +237,26 @@ class PackageModel {
    * 
    * @return {Promise}
    */
-  async get(pkg, renderMarkdown=false) {
+  async get(pkg, opts={}) {
     let pkgObj;
+
+    if( typeof opts === 'boolean' ) {
+      opts = {
+        renderMarkdown : opts
+      }
+    }
+
+    if( opts.renderMarkdown === undefined ) opts.renderMarkdown = false;
     
     if( typeof pkg === 'object' ) {
       pkgObj = pkg;
     } else {
-      pkgObj = await mongo.getPackage(pkg);
+      pkgObj = await mongo.getPackage(pkg, opts.host);
     }
 
     if( !pkgObj ) throw new Error('Unknown package: '+pkg);
 
-    if( pkgObj.description && renderMarkdown ) {
+    if( pkgObj.description && opts.renderMarkdown ) {
       pkgObj.renderedDescription = await markdown(pkgObj.description, pkgObj.name);
     } else {
       pkgObj.renderedDescription = '';
@@ -366,7 +374,7 @@ class PackageModel {
       throw new Error('Must be a registered repository');
     }
 
-    return registeredRepositories.syncPropertiesToMongo(pkg);
+    return registeredRepositories.syncPropertiesToMongo(pkg.name, pkg.host);
   }
 
   /**
@@ -536,7 +544,15 @@ class PackageModel {
    * @returns {Promise} resolves to Boolean
    */
   async isNameAvailable(host, packageName, org) {
-    return !(await repository.exists(host, packageName, org));
+    let available = !(await repository.exists(host, packageName, org));
+    if( !available ) return {isAvailable: false, message: 'Unable to access'};
+
+    let exists = await repository.exists(host, packageName, org);
+    if( exists ) {
+      return {isAvailable: false, message: 'Already registered'};
+    }
+
+    return {isAvailable: true};
   }
 
   /**

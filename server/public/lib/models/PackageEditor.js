@@ -39,7 +39,7 @@ class PackageEditor extends BaseModel {
   async isNameAvailable(host, packageName, organization) {
     try {
       let {body} = await this.service.isNameAvailable(host, packageName, organization);
-      return body.isAvailable;
+      return body;
     } catch(e) {
       console.error(e);
     }

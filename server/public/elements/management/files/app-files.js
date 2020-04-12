@@ -41,6 +41,11 @@ export default class AppFiles extends Mixin(PolymerElement)
       isManagedSource : {
         type : Boolean,
         value : false
+      },
+
+      zipBundleUrl : {
+        type : String,
+        value : ''
       }
     }
   }
@@ -59,6 +64,12 @@ export default class AppFiles extends Mixin(PolymerElement)
   _onPackageEditorDataUpdate(e) {
     this.editorData = e.payload;
     this.isManagedSource = (e.payload.source === 'registered') ? false : true;
+    
+    if( Object.keys(e.payload).length === 0 ) return;
+
+    let host = e.payload.host || 'github';
+    let name = (e.payload.name || '').replace(/.*\//, '');
+    this.zipBundleUrl = e.payload.htmlUrl + ((host === 'github') ? '/archive/master.zip' : '/-/archive/master/'+name+'-master.zip')
   }
 
 }

@@ -46,6 +46,14 @@ export default class AppLandingPage extends Mixin(PolymerElement)
         type : String,
         value : APP_CONFIG.env.github
       },
+      host : {
+        type : String,
+        value : ''
+      },
+      releasesUrl : {
+        type : String,
+        value : ''
+      },
       userHasWriteAccess : {
         type : Boolean,
         value : false
@@ -124,6 +132,8 @@ export default class AppLandingPage extends Mixin(PolymerElement)
       this.releases = null;
     }
 
+    this.host = this.package.host || 'github';
+    this.releasesUrl = this.package.htmlUrl + ((this.host === 'github') ? '/releases' : '/-/tags');
     this.themes = this._createThemeLinks('theme');
     this.families = this._createThemeLinks('family');
     this.specifics = this._createThemeLinks('specific');

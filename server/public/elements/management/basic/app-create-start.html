@@ -23,6 +23,12 @@
     display: block;
   }
 
+  .help {
+    color: var(--secondary-text-color);
+    margin-top: 10px;
+    font-size: 12px;
+  }
+
   input[type="radio"] {
     margin: 15px;
   }
@@ -67,9 +73,10 @@
       <label for="repositoryTypeRegistered">Registered Repository</label>
     </div>
     <div>
-        Recommended for users who: have experince with git, want to host
-        the repository in their own GitHub organization or already have a GitHub repository.
-        You will provide EcoSML the url to your existing GitHub repository on the next screen.
+        <div>Recommended for users who: have experince with git, want to host
+        the repository in their own organization or already have an online git repository<span class="help">*</span>.
+        You will provide EcoSML the url to your existing git repository on the next screen.</div>
+        <div class="help">*Currently: GitHub and GitLab repositories are supported.</div>
       </div>
   </div>
 </div>

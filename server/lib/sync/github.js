@@ -188,7 +188,7 @@ class GithubSync {
 
       try {
         let releaseInfo = await this._syncReleases(repoName);
-        await mongodb.updatePackage(repoName, releaseInfo);
+        await mongodb.updatePackage(repoName, 'github', releaseInfo);
         await firebase.ackGithubReleaseEvent(e.fsId);
       } catch(error) {
         logger.error('Failed to handle firestore github release sync event', e, error);
@@ -226,7 +226,7 @@ class GithubSync {
 
     let pkgs = (await mongodb.getAllPackageNames())
                .filter((pkg) => repos.indexOf(pkg.name) === -1)
-               .map(pkg => pkg.name);
+               .map(pkg => pkg.id);
 
     logger.info('Removing the following packages found locally in EcoSML but not in GitHub', pkgs);
     for( let i = 0; i < pkgs.length; i++ ) {
@@ -422,7 +422,7 @@ class GithubSync {
         let index = pkgs.findIndex(pkg => pkg.githubId === team.repos[i]);
         if( index === -1 ) {
           // grab current package name from mongo
-          let pkg = await mongodb.getPackage(team.repos[i]);
+          let pkg = await mongodb.getPackage(team.repos[i], 'github');
           await github.removeTeamRepo(team.id, pkg.name);
         }
       }

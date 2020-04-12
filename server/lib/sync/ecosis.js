@@ -1,8 +1,6 @@
-const config = require('../config');
 const redis  = require('../redis');
 const logger = require('../logger');
 const ckan = require('../ckan');
-const mongo = require('../mongo')
 const firebase = require('../firebase');
 const github = require('./github');
 

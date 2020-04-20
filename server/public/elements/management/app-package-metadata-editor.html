@@ -60,6 +60,11 @@
     font-size: 14px;
     color: var(--secondary-text-color);
   }
+
+  h1 small {
+    color: var(--secondary-text-color);
+    font-size: 0.6em;
+  }
 </style>
 
 <paper-toast id="savingToast" duration="0">
@@ -84,7 +89,7 @@
   <div class="narrow-container">
     <h1 hidden$="[[!creating]]">[[currentAction]] Package</h1>
     <div hidden$="[[creating]]">
-      <h1>[[packageName]]</h1>
+      <h1>[[packageName]] <small>[[host]]</small></h1>
       <div class="repo-type">[[repoType]]</div>
     </div>
 

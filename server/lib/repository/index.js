@@ -30,7 +30,7 @@ class Repository {
   }
 
   /**
-   * @method isRepoNameAvailable
+   * @method exists
    * @description does a repository exist
    * 
    * @param {String} host package host, should not include protocol
@@ -43,6 +43,7 @@ class Repository {
     if( host === this.HOSTS.GITHUB ) {
       return !(await github.isRepoNameAvailable(packageName, org));
     } else if ( host === this.HOSTS.GITLAB ) {
+      console.log(packageName, org);
       return gitlab.exists(packageName, org);
     }
     throw new Error('Unknown host: '+host);

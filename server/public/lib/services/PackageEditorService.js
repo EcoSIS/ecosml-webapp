@@ -20,6 +20,12 @@ class PackageEditorService extends BaseService {
     });
   }
 
+  isValid(host, packageName, org='ecosml') {
+    return this.request({
+      url : `${this.baseUrl}/valid/${host}/${org}/${packageName}`
+    });
+  }
+
   syncRegProps(packageId) {
     return this.request({
       url : `${this.baseUrl}/${packageId}/syncRegProps`,

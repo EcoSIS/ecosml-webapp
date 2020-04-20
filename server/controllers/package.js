@@ -80,6 +80,19 @@ router.get('/available/:host/:package', async(req, res) => {
   }
 });
 
+router.get('/valid/:host/:org/:package', async(req, res) => {
+  try {
+    let isAvailable = await model.isValidRepository(req.params.host, req.params.package, req.params.org);
+    isAvailable.host = req.params.host;
+    isAvailable.org = req.params.org;
+    isAvailable.packageName = req.params.package;
+    
+    res.json(isAvailable);
+  } catch(e) {
+    utils.handleError(res, e);
+  }
+});
+
 router.post('/:package/updateFiles', packageWriteAccess, upload.any(),  async (req, res) => {
   try {
     let remove = JSON.parse(req.body.remove || '[]');

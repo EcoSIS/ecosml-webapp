@@ -24,6 +24,10 @@
     font-size: 13px;
   }
 
+  a small {
+    color: var(--text-light-color);
+  }
+
   paper-button {
     font-size: 14px;
     color: var(--default-primary-color);
@@ -88,7 +92,7 @@
                 <div>
                   <template is="dom-repeat" items="[[ownerPackages]]">
                     <div style="margin: 0px 5px 15px 5px">
-                      <div class="my-pkg-title"><a href="/edit/[[item.id]]">[[item.name]]</a></div>
+                      <div class="my-pkg-title"><a href="/edit/[[item.id]]">[[item.fullName]] <small>([[item.host]])</small></a></div>
                       <div class="my-pkg-description">[[item.overview]]</div>
                     </div>
                   </template>

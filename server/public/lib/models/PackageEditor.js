@@ -47,6 +47,27 @@ class PackageEditor extends BaseModel {
     return false // ?
   }
 
+    /**
+   * @method isValid
+   * @description is package name valid
+   * 
+   * @param {String} host
+   * @param {String} packageName
+   * @param {String} organization Optional.  defaults to EcoSML
+   * 
+   * @returns {Promise} resolves to Boolean
+   */
+  async isValid(host, packageName, organization) {
+    try {
+      let {body} = await this.service.isValid(host, packageName, organization);
+      return body;
+    } catch(e) {
+      console.error(e);
+    }
+
+    return false // ?
+  }
+
   /**
    * @method setData
    * @description update the package data editor state
@@ -57,6 +78,7 @@ class PackageEditor extends BaseModel {
    * @param {String} opts.state
    */
   setData(data, opts={}) {
+    console.log(data, opts);
     this.store.setData(data, opts);
   }
 

@@ -11,6 +11,7 @@ services:
       - storage:/storage
     ports:
       - 3001:3000
+    restart: always
     env_file: '.env'
     environment:
       - SERVER_ENV=dev

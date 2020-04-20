@@ -247,10 +247,11 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
   }
 
   async _checkUrlAsync(host, org, repo) {
-    let resp = await this.PackageEditor.isNameAvailable(host, repo, org);
-    this.registeredUrlValid = resp.isAvailable;
+    let {message, valid} = await this.PackageEditor.isValid(host, repo, org);
+    console.log(message, valid);
+    this.registeredUrlValid = valid;
     if( !this.registeredUrlValid ) {
-      this.$.urlMessage.innerHTML = `${resp.message} ${host}: ${org} / ${repo}`;
+      this.$.urlMessage.innerHTML = `${message} ${host}: ${org} / ${repo}`;
     } else {
       this.$.urlMessage.innerHTML = `Valid ${host}: ${org} / ${repo}`;
     }

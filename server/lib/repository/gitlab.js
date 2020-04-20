@@ -22,10 +22,14 @@ class Gitlab {
    */
   async exists(name, org) {
     let resp = await fetch(
-      config.gitlab.host+'/'+name+'/'+org, 
-      {method: 'head'}
+      config.gitlab.host+'/'+org+'/'+name,
+      {
+        method: 'HEAD',
+        redirect : 'manual'
+      }
     );
-    return resp.ok;
+    console.log(config.gitlab.host+'/'+org+'/'+name, resp.status);
+    return resp.status === 200;
   }
 
   /**

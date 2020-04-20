@@ -12,6 +12,7 @@ services:
       - ../secrets.js:/server/secrets.js
     ports:
       - 3000:3000
+    restart: always
     environment:
       - JWT_SECRET=${JWT_SECRET}
       - ECOSIS_HOST=https://ecosis.org

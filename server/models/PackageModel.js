@@ -555,6 +555,25 @@ class PackageModel {
     return {isAvailable: true};
   }
 
+    /**
+   * @method isValidRepository
+   * @description is a package host/name/org valid?  ie it exists
+   * 
+   * @param {String} host 
+   * @param {String} packageName package name
+   * @param {String} org Optional.  Defaults to EcoSML
+   * 
+   * @returns {Promise} resolves to Boolean
+   */
+  async isValidRepository(host, packageName, org) {
+    let exists = await repository.exists(host, packageName, org);
+    if( !exists ) {
+      return {valid: false, message: 'Repository does not exist or is inaccessible'};
+    }
+
+    return {valid: true};
+  }
+
   /**
    * @method getNameAndOrg
    * @description given a package name, return the organization

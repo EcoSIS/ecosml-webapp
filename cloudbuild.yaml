@@ -3,14 +3,6 @@ steps:
   entrypoint: 'bash'
   args: ['-c', 'echo "{\"tag\":\"${TAG_NAME}\",\"branch\":\"${BRANCH_NAME}\",\"commit\":\"${SHORT_SHA}\"}" > ./server/gitinfo.json']
 
-- name: 'ubuntu'
-  entrypoint: 'bash'
-  args: ['-c', "ls ./server"]
-
-- name: 'ubuntu'
-  entrypoint: 'bash'
-  args: ['-c', "pwd"]
-
 - name: gcr.io/cloud-builders/gcloud
   entrypoint: 'bash'
   args: [ '-c', 'gcloud secrets versions access latest --secret=ecosisdev-dockerhub-password > pass.txt' ]

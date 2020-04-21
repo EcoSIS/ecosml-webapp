@@ -12,3 +12,5 @@ cloud-functions-emulator.log
 firebase-debug.log
 .DS_Store
 gitinfo.json
+firebase
+.git

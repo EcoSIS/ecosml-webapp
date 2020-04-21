@@ -18,7 +18,6 @@ steps:
 - name: "gcr.io/cloud-builders/docker"
   entrypoint: "bash"
   args: ["-c", "docker login --username=$_DOCKER_USER_ID --password-stdin < pass.txt"]
-  secretEnv: ["PASSWORD"]
 
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'ecosis/ecosml-webapp:$BRANCH_NAME', './server']

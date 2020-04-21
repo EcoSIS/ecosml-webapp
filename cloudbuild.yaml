@@ -1,7 +1,7 @@
 steps:
 - name: 'ubuntu'
   entrypoint: 'bash'
-  args: ['-c' 'echo "{\"tag\":\"${TAG_NAME}\",\"branch\":\"${BRANCH_NAME}\",\"commit\":\"${SHORT_SHA}\"}" > ./server/gitinfo.json']
+  args: ['-c', 'echo "{\"tag\":\"${TAG_NAME}\",\"branch\":\"${BRANCH_NAME}\",\"commit\":\"${SHORT_SHA}\"}" > ./server/gitinfo.json']
 
 - name: 'ubuntu'
   entrypoint: 'bash'

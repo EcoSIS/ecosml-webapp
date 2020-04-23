@@ -55,7 +55,7 @@ class DoiModel {
     }
 
     // don't wait for this
-    this.sendAdminEmail('EcoSML DOI request ('+config.server.url+') for: '+pkg.name, `
+    this.sendAdminEmail('EcoSML '+(config.server.serverEnv !== 'prod' ? 'DEV' : '')+' DOI request ('+config.server.url+') for: '+pkg.name, `
 A DOI has been requested for the model '${pkg.name}' version ${tag} by user ${user} ${email}.  You can view the model here:  ${config.server.url}/package/${pkg.id} and approve the DOI here: ${config.server.url}/admin
 
 -EcoSML Server`);

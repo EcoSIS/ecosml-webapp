@@ -20,7 +20,7 @@ class Mail {
       to = to.join(',');
     }
 
-    return transporter.sendMail({
+    return this.transporter.sendMail({
       from: config.mail.from,
       to, subject,
       text: msg,

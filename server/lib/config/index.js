@@ -150,7 +150,7 @@ module.exports = {
   datacite : {
     url : (serverEnv === 'prod') ? 'https://api.datacite.org/dois' : 'https://api.test.datacite.org/dois',
     username : secrets.datacite.username,
-    password : secrets.datacite.password
+    password : secrets.datacite.password[serverEnv]
   },
 
   doi : {

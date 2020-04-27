@@ -1,6 +1,7 @@
 const mongodb = require('mongodb');
 const logger = require('../logger');
 const config = require('../config');
+const packageUtils = require('../package');
 const queryMapReduce = require('./query-map-reduce');
 const statsMapReduce = require('./stats-map-reduce');
 
@@ -173,7 +174,7 @@ class MongoDB {
    */
   async getAllOrgPackageNames(orgName) {
     let collection = await this.packagesCollection();
-    return collection.find({organization: orgName}, {name: 1, id: 1, githubId: 1}).toArray();
+    return collection.find({organization: orgName}, {name: 1, id: 1}).toArray();
   }
 
   async getAllRegisteredRepositoryIds() {
@@ -199,23 +200,14 @@ class MongoDB {
    * @description update package data.  this will patch provided data.
    * 
    * @param {String} packageNameOrId package name or id
-   * @param {String} host
    * @param {Object} data package data to update
    * 
    * @returns {Promise}
    */
-  async updatePackage(packageNameOrId, host, data) {
-    let query = [{id : packageNameOrId}];
-
-    if( typeof host === 'object' ) {
-      data = host;
-    } else {
-      query.push({name: packageNameOrId, host});
-    }
-
+  async updatePackage(packageNameOrId, data) {
     let collection = await this.packagesCollection();
     let result = await collection.update({
-      $or : query
+      id: await this.getPackageId(packageNameOrId)
     }, {
       $set: data
     });
@@ -230,42 +222,44 @@ class MongoDB {
    * @description get a package by name, id or DOI.  id can be ecosml
    * id or GitHub id
    * 
-   * @param {String|Object} packageNameOrId  
-   * @param {String} host if package name is given
+   * @param {String|Object} packageNameOrId
    * @param {Object} project
    * 
    * @returns {Promise} resolves to mongo response
    */
-  async getPackage(packageNameOrId, host, projection = {}) {
+  async getPackage(packageNameOrId, projection = {}) {
     if( !packageNameOrId ) throw new Error('Package name or id required');
-
-    if( typeof packageNameOrId === 'object' ) {
-      packageNameOrId = packageNameOrId.id || packageNameOrId.name;
-    }
-
-    if( typeof host === 'object' ) {
-      projection = host
-    }
-
-    if( packageNameOrId.match(new RegExp('^'+config.doi.shoulder)) || 
-        packageNameOrId.match(/^doi:/) ) {
-
-      let doiCollection = await this.getDoiCollection();
-      packageNameOrId = packageNameOrId.replace(/^doi:/, '');
-      let result = await doiCollection.findOne({doi: packageNameOrId}, {id: 1});
-      if( !result ) return null;
-
-      packageNameOrId = result.id;
-    }
-
     let collection = await this.packagesCollection();
-    return collection.findOne({
-      $or : [
-        {name: packageNameOrId, host},
-        {id : packageNameOrId},
-        {githubId : packageNameOrId}
-      ]
-    }, projection);
+    return collection.findOne({id: await this.getPackageId(packageNameOrId)}, projection);
+  }
+
+  /**
+   * @method getPackageId
+   * @description get a package id by provided full host/org/name, doi
+   * or id.
+   * 
+   * @param {String|Object} packageNameOrId
+   * 
+   * @returns {Promise} resolves to mongo response
+   */
+  async getPackageId(packageNameOrId) {
+    let idObj = packageUtils.parseId(packageNameOrId);
+
+    if( idObj.doi ) {
+      let doiCollection = await this.getDoiCollection();
+      let result = await doiCollection.findOne(idObj, {id: 1});
+      if( !result ) throw new Error('Unknown package DOI: '+packageNameOrId);
+      return result.id;
+    }
+
+    if( idObj.name ) {
+      let collection = await this.packagesCollection();
+      let result = collection.findOne(idObj, {id: 1});
+      if( !result ) throw new Error('Unknown packaage name: '+idObj.host+'/'+idObj.name);
+      return result.id;
+    }
+
+    return idObj.id;
   }
 
   /**
@@ -273,18 +267,12 @@ class MongoDB {
    * @description remove a package by name or id
    * 
    * @param {String} packageNameOrId
-   * @param {String} host require if name is provided
    * 
    * @returns {Promise} resolves to mongo response
    */
   async removePackage(packageNameOrId, host) {
     let collection = await this.packagesCollection();
-    let result = await collection.remove({
-      $or : [
-        {name: packageNameOrId, host},
-        {id : packageNameOrId}
-      ]
-    });
+    let result = await collection.remove({id: await this.getPackageId(packageNameOrId)});
 
     this.updateStats(); // don't wait for this
 

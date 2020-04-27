@@ -108,7 +108,7 @@ export default class AppLandingPage extends Mixin(PolymerElement)
     if( this.selectedPackageId === e.selectedPackageId ) return;
 
     this.selectedPackageId = e.selectedPackageId;
-    let pkgWrapper = await this._getPackage(e.selectedPackageId);
+    let pkgWrapper = await this.PackageModel.get(e.selectedPackageId);
 
     if( this.selectedPackageId !== pkgWrapper.payload.id && 
       this.selectedPackageId !== pkgWrapper.payload.name ) return;

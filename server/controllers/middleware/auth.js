@@ -98,7 +98,7 @@ async function packageWriteAccess(req, res, next) {
   let pkg;
   if( req.params.package ) {
     try {
-      pkg = await packageModel.get(req.params.package);
+      pkg = await packageModel.get(decodeURIComponent(req.params.package));
     } catch(e) {
       return utils.handleError(res, e);
     }
@@ -131,7 +131,7 @@ async function packageWriteAccess(req, res, next) {
 async function packageReadAccess(req, res, next) {
   let pkg;
   try {
-    pkg = await packageModel.get(req.params.package);
+    pkg = await packageModel.get(decodeURIComponent(req.params.package));
   } catch(e) {
     return utils.handleError(res, e);
   }

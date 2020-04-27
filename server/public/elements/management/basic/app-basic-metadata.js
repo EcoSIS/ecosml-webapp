@@ -192,6 +192,7 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
       // if(this.editorData.source === 'managed' && value === 'overview' ) data[key] = this.$[value].value;
       // else data[key] = this[value];
     });
+
     return data;
   }
 
@@ -299,7 +300,7 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
         return;
       }
 
-      let resp = await this.PackageEditor.isNameAvailable(name);
+      let resp = await this.PackageEditor.isNameAvailable('github', name, APP_CONFIG.github.org);
       this.nameAvailable = resp.isAvailable;
       if( this.nameAvailable ) {
         this.$.nameMessage.innerHTML = this._getCleanName()+': Available';

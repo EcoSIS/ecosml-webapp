@@ -220,7 +220,7 @@ export default class AppReleases extends Mixin(PolymerElement)
     if( resp.state === 'error' ) {
       alert('Error creating release: '+resp.error.payload.message);
     } else {
-      let e = await this._getPackage(this.pkg.id);
+      let e = await this.PackageModel.get(this.pkg.id);
       this.PackageEditor.setData(e.payload);
       this.showList();
     }

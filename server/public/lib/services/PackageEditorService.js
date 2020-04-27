@@ -28,7 +28,7 @@ class PackageEditorService extends BaseService {
 
   syncRegProps(packageId) {
     return this.request({
-      url : `${this.baseUrl}/${packageId}/syncRegProps`,
+      url : `${this.baseUrl}/${encodeURIComponent(packageId)}/syncRegProps`,
       onLoad : response => this.store.setData(
         {
           description : response.body.description,

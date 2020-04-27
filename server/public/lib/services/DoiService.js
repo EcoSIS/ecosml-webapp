@@ -17,7 +17,7 @@ class DoiService extends BaseService {
    */
   get(id) {
     return this.request({
-      url : this.baseUrl+'/all/'+id,
+      url : this.baseUrl+'/all/'+encodeURIComponent(id),
       onLoading : request => this.store.setGetDoiLoading(request, id),
       onLoad : result => this.store.setGetDoiLoaded(result.body, id),
       onError : e => this.store.setGetDoiError(e, id)

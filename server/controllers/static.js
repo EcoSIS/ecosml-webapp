@@ -41,7 +41,8 @@ module.exports = function(app) {
         admin : req.session.admin,
         github : {
           username : githubInfo.username,
-          data : githubInfo.data
+          data : githubInfo.data,
+          org : config.github.org
         },
         appRoutes : config.server.appRoutes,
         ecosis : {

@@ -21,7 +21,6 @@ class PackageService extends BaseService {
    */
   async create(name, host, overview, organization, language, packageType, source) {
     let payload = {name, host, overview, organization, language, packageType, source};
-    console.log(payload);
 
     return this.request({
       url : this.baseUrl,
@@ -43,7 +42,7 @@ class PackageService extends BaseService {
     };
 
     return this.request({
-      url : this.baseUrl+'/'+pkgNameOrId,
+      url : this.baseUrl+'/'+encodeURIComponent(pkgNameOrId),
       fetchOptions : {
         method : 'PATCH',
         body  : payload
@@ -61,7 +60,7 @@ class PackageService extends BaseService {
    */
   async createRelease(pkgNameOrId, payload) {
     return this.request({
-      url : `${this.baseUrl}/${pkgNameOrId}/createRelease`,
+      url : `${this.baseUrl}/${encodeURIComponent(pkgNameOrId)}/createRelease`,
       fetchOptions : {
         method : 'POST',
         body  : payload
@@ -82,7 +81,7 @@ class PackageService extends BaseService {
    */
   async get(packageId) {
     return this.request({
-      url : `${this.baseUrl}/${packageId}`,
+      url : `${this.baseUrl}/${encodeURIComponent(packageId)}`,
       onLoading : request => this.store.setGetPackageLoading(packageId, request),
       onLoad : result => this.store.setGetPackageSuccess(packageId, result.body),
       onError : error => this.store.setGetPackageError(packageId, error)
@@ -91,14 +90,14 @@ class PackageService extends BaseService {
 
   async getFiles(packageId) {    
     return this.request({
-      url : `${this.baseUrl}/${packageId}/files`,
+      url : `${this.baseUrl}/${encodeURIComponent(packageId)}/files`,
       onLoad : result => this.store.onFilesLoaded(packageId, result.body.files)
     });
   }
 
   async delete(packageId) {
     return this.request({
-      url : `${this.baseUrl}/${packageId}`,
+      url : `${this.baseUrl}/${encodeURIComponent(packageId)}`,
       fetchOptions : {
         method : 'DELETE'
       },
@@ -130,7 +129,7 @@ class PackageService extends BaseService {
   // TODO: move to package editor service?
   previewMarkdown(markdown, pkgName) {
     return this.request({
-      url : `/api/markdown/${pkgName}`,
+      url : `/api/markdown/${encodeURIComponent(pkgName)}`,
       fetchOptions : {
         method : 'POST',
         headers : {

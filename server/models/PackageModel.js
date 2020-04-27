@@ -73,7 +73,7 @@ class PackageModel {
     } else if( pkg.source === 'managed' ) {
       schema.validate('create', pkg);
 
-      let ePkg = await mongo.getPackage(pkg.name, 'github');
+      let ePkg = await mongo.getPackage('github/'+pkg.name);
       if( ePkg ) throw new Error('Repository already registered: '+pkg.name);
 
       // create Github API Request
@@ -93,8 +93,12 @@ class PackageModel {
 
       pkg = Object.assign(pkg, utils.githubRepoToEcosml(body));
       pkg.releaseCount = 0;
+      pkg.host = 'github';
+      pkg.name = config.github.org+'/'+pkg.name;
     }
 
+    pkg.host = pkg.host.replace(/http(s)?:\/\//, '');
+    pkg.fullName = pkg.host+'/'+pkg.name;
     pkg.id = ecosmlId;
 
     await mongo.insertPackage(pkg);

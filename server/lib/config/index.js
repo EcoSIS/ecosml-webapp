@@ -72,7 +72,7 @@ module.exports = {
       }
     },
     from : 'admin@ecosml.org',
-    doiAdminList : 'admins@ecosis.org'
+    doiAdminList : env.DOI_ADMIN_LIST || 'admins@ecosis.org'
   },
 
   backups : {

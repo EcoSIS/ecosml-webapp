@@ -95,9 +95,9 @@ class PackageModel {
       pkg = Object.assign(pkg, utils.githubRepoToEcosml(body));
       pkg.releaseCount = 0;
       pkg.host = 'github';
+      pkg.name = config.github.org+'/'+pkg.name;
     }
 
-    // pkg.name = config.github.org+'/'+pkg.name;
     pkg.host = pkg.host.replace(/http(s)?:\/\//, '');
     pkg.fullName = pkg.host+'/'+pkg.name;
     pkg.id = ecosmlId;

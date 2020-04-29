@@ -26,6 +26,7 @@ class Repository {
     } else if ( host === this.HOSTS.GITLAB ) {
       return config.gitlab.host;
     }
+    // TODO: allow any host?
     throw new Error('Unknown host: '+host);
   }
 

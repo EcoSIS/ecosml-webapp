@@ -28,7 +28,6 @@ class Gitlab {
         redirect : 'manual'
       }
     );
-    console.log(config.gitlab.host+'/'+org+'/'+name, resp.status);
     return resp.status === 200;
   }
 

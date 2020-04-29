@@ -27,9 +27,10 @@ class GithubApi {
    * @returns {Promise} resolves to {Boolean}
    */
   isRepoNameAvailable(name, org) {
+    var {repoName, org} = utils.getRepoNameAndOrg(name, org);
     return new Promise((resolve, reject) => {
       request({
-        uri : `https://github.com/${org || ORG}/${name}`,
+        uri : `https://github.com/${org}/${repoName}`,
         method : 'HEAD'
       }, (error, response) => {
         if( error ) reject(error);
@@ -110,10 +111,11 @@ class GithubApi {
    * 
    * @returns {Promise}
    */
-  async getRepository(repoName) {
+  async getRepository(repoName, org) {
+    var {repoName, org} = utils.getRepoNameAndOrg(repoName, org);
     return this.request({
       method : 'GET',
-      uri : `/repos/${ORG}/${repoName}`,
+      uri : `/repos/${org}/${repoName}`,
     });
   }
 
@@ -126,10 +128,11 @@ class GithubApi {
    * 
    * @returns {Promise}
    */
-  async deleteRepository(repoName) {
+  async deleteRepository(repoName, org) {
+    var {repoName, org} = utils.getRepoNameAndOrg(repoName, org);
     return this.request({
       method : 'DELETE',
-      uri : `/repos/${ORG}/${repoName}`
+      uri : `/repos/${org}/${repoName}`
     });
   }
 
@@ -143,10 +146,11 @@ class GithubApi {
    * 
    * @returns {Promise}
    */
-  async editRepository(repo) {
+  async editRepository(repo, org) {
+    var {repoName, org} = utils.getRepoNameAndOrg(repo.name, org)
     return this.request({
       method : 'PATCH',
-      uri : `/repos/${ORG}/${repo.name}`,
+      uri : `/repos/${org}/${repoName}`,
       body : JSON.stringify(repo)
     });
   }
@@ -178,9 +182,10 @@ class GithubApi {
    * @returns {Promise}
    */
   async createRelease(repoName, release) {
+    var {repoName, org} = utils.getRepoNameAndOrg(repoName);
     return this.request({
       method : 'POST',
-      uri : `/repos/${ORG}/${repoName}/releases`,
+      uri : `/repos/${org}/${repoName}/releases`,
       body : JSON.stringify(release)
     });
   }
@@ -195,9 +200,10 @@ class GithubApi {
    * @returns {Promise}
    */
   async listReleases(repoName) {
+    var {repoName, org} = utils.getRepoNameAndOrg(repoName);
     return this.request({
       method : 'GET',
-      uri : `/repos/${ORG}/${repoName}/releases`
+      uri : `/repos/${org}/${repoName}/releases`
     });
   }
 
@@ -212,9 +218,10 @@ class GithubApi {
    * @returns {Promise}
    */
   async deleteRelease(repoName, releaseId) {
+    var {repoName, org} = utils.getRepoNameAndOrg(repoName);
     return this.request({
       method : 'DELETE',
-      uri : `/repos/${ORG}/${repoName}/releases/${releaseId}`
+      uri : `/repos/${org}/${repoName}/releases/${releaseId}`
     });
   }
 

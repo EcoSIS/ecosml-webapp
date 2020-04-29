@@ -64,7 +64,7 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
       let {org, repo, valid} = this._checkValidUrl();
       return org+'/'+repo;
     }
-    return this.$.name.value || '';
+    return this._getCleanName();
   }
 
   set reponame(value) {
@@ -79,7 +79,7 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
       let {org, repo, host, valid} = this._checkValidUrl();
       return host;
     }
-    return this.$.host.value || '';
+    return 'github';
   }
 
   get overview() {
@@ -272,7 +272,7 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
    * @description strip bad characters, replace spaces with dashes
    */
   _getCleanName() {
-    return this.$.name.value.toLowerCase().replace(/ /g, '-').replace(/[^a-zA-Z0-9_-]/g, '');
+    return (this.$.name.value || '').toLowerCase().replace(/ /g, '-').replace(/[^a-zA-Z0-9_-]/g, '');
   }
 
   /**

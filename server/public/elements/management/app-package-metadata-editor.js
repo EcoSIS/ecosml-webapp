@@ -109,7 +109,7 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
 
   _onPackageEditorDataUpdate(e) {
     this.packageId = e.payload.id || '';
-    this.packageName = e.payload.fullName || e.payload.name || '';
+    this.packageName =  e.payload.name || '';
     this.creating = e.state === 'create' ? true : false;
     this.hasRelease = (e.payload.releaseCount && e.payload.releaseCount > 0) ? true : false;
     this.gitHtmlUrl = e.payload.htmlUrl || '';

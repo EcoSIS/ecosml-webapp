@@ -60,7 +60,7 @@ class PackageModel {
       let exists = await repository.exists(pkg.host, name, org);
       if( !exists ) throw new Error('Repository does not exist: '+pkg.name);
 
-      let ePkg = await mongo.getPackage(pkg.name, pkg.host || 'github');
+      let ePkg = await mongo.getPackage((pkg.host || 'github')+'/'+pkg.name);
       if( ePkg ) throw new Error('Repository already registered: '+pkg.name);
 
       // check things look ok
@@ -73,9 +73,6 @@ class PackageModel {
     } else if( pkg.source === 'managed' ) {
       schema.validate('create', pkg);
 
-      let ePkg = await mongo.getPackage('github/'+pkg.name);
-      if( ePkg ) throw new Error('Repository already registered: '+pkg.name);
-
       // create Github API Request
       let githubRepo = Object.assign({}, pkg);
       delete githubRepo.organization;
@@ -84,19 +81,23 @@ class PackageModel {
       githubRepo.license_template = config.github.default_license;
       githubRepo.homepage = config.github.homepageRoot+ecosmlId;
 
+      // check if name exists
+      pkg.name = config.github.org+'/'+pkg.name;
+      let ePkg = await mongo.getPackage('github/'+pkg.name);
+      if( ePkg ) throw new Error('Repository already registered: '+pkg.name);
+
       // ecosis overview === github description
       githubRepo.description = githubRepo.overview;
       delete githubRepo.overview;
-
       let {response, body} = await github.createRepository(githubRepo);
       this.checkStatus(response, 201);
 
       pkg = Object.assign(pkg, utils.githubRepoToEcosml(body));
       pkg.releaseCount = 0;
       pkg.host = 'github';
-      pkg.name = config.github.org+'/'+pkg.name;
     }
 
+    pkg.name = config.github.org+'/'+pkg.name;
     pkg.host = pkg.host.replace(/http(s)?:\/\//, '');
     pkg.fullName = pkg.host+'/'+pkg.name;
     pkg.id = ecosmlId;

@@ -40,10 +40,10 @@ class Repository {
    * @returns {Promise} resolves to Boolean
    */
   async exists(host, packageName, org='ecosml') {
+    console.log(host, packageName, org);
     if( host === this.HOSTS.GITHUB ) {
       return !(await github.isRepoNameAvailable(packageName, org));
     } else if ( host === this.HOSTS.GITLAB ) {
-      console.log(packageName, org);
       return gitlab.exists(packageName, org);
     }
     throw new Error('Unknown host: '+host);

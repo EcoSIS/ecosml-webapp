@@ -95,8 +95,8 @@ class AppUtils {
    * 
    * @returns {Object}
    */
-  getRepoNameAndOrg(repoName) {
-    let org;
+  getRepoNameAndOrg(repoName, org) {
+    if( org ) return {repoName, org};
     if( repoName.indexOf('/') > -1 ) {
       repoName = repoName.split('/');
       org = repoName[0];

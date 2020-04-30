@@ -43,6 +43,10 @@ class AuthModel {
       }));
     }
 
+    // make sure redis cache is set
+    if( result.admin ) await this.setAdmin(result.username);
+    else await this.removeAdmin(result.username);
+
     return result;
   }
 
@@ -113,7 +117,9 @@ class AuthModel {
    * 
    * @returns {Promise} resolve to boolean
    */
-  removeAdmin(username) {
+  async removeAdmin(username) {
+    let exists = await this.isAdmin(username);
+    if( !exists ) return;
     return redis.client.del(`${config.redis.prefixes.admin}-${username}`);
   }
 

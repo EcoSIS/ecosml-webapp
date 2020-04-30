@@ -1,5 +1,6 @@
 const nodemailer = require('nodemailer');
 const config = require('./config');
+const logger = require('./logger');
 
 class Mail {
 
@@ -19,6 +20,8 @@ class Mail {
     if( Array.isArray(to) ) {
       to = to.join(',');
     }
+
+    logger.info(`Sending email; to: ${to}, from: ${config.mail.from}, subject: ${subject}`);
 
     return this.transporter.sendMail({
       from: config.mail.from,

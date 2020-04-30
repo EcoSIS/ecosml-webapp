@@ -53,7 +53,7 @@ class DoiService extends BaseService {
 
   cancel(doi) {
     return this.request({
-      url : `${this.baseUrl}/request/${doi.package.name}/${doi.tag}/cancel`,
+      url : `${this.baseUrl}/request/${doi.package.id}/${doi.tag}/cancel`,
       fetchOptions : {
         method : 'PUT'
       },
@@ -65,7 +65,7 @@ class DoiService extends BaseService {
 
   update(doi, msg) {
     return this.request({
-      url : `${this.baseUrl}/request/${doi.package.name}/${doi.tag}/update`,
+      url : `${this.baseUrl}/request/${doi.package.id}/${doi.tag}/update`,
       fetchOptions : {
         method : 'PUT',
         body : msg || ''
@@ -78,7 +78,7 @@ class DoiService extends BaseService {
 
   approve(doi) {
     return this.request({
-      url : `${this.baseUrl}/request/${doi.package.name}/${doi.tag}/approve`,
+      url : `${this.baseUrl}/request/${doi.package.id}/${doi.tag}/approve`,
       fetchOptions : {
         method : 'PUT'
       },

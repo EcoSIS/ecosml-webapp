@@ -26,7 +26,7 @@ router.post('/request/:package/:version', packageWriteAccess, async (req, res) =
   }
 });
 
-router.put('/request/:package/:version/cancel', admin, packageWriteAccess, async(req, res) => {
+router.put('/request/:package/:version/cancel', packageWriteAccess, async(req, res) => {
   let pkg = req.ecosmlPackage;
   let version = req.params.version;
 

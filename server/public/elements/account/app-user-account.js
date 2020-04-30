@@ -73,11 +73,14 @@ export default class AppUserAccount extends Mixin(PolymerElement)
     this.renderedOwner = this.username;
 
     let resp = await this._getOwnerPackages(this.username);
-    this.ownerPackages = resp.body.results.map(item => {
+    let pkgs = resp.body.results.map(item => {
       if( !item.fullName ) item.fullName = item.name;
       if( !item.host ) item.host = 'github';
       return item;
     });
+    pkgs.sort((a, b) => a.name > b.name ? 1 : -1);
+
+    this.ownerPackages = pkgs;
   }
 
   _onOrgsUpdate(e) {

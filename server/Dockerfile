@@ -10,8 +10,13 @@ RUN apt-get update && \
     apt-get install -y ruby-full mongodb-clients zip \
     postfix mailutils
 
+RUN update-rc.d postfix enable
+RUN rm /preseed.txt
+
 RUN gem install commonmarker
 RUN npm install -g mocha
+
+COPY ./docker-run.sh /
 
 RUN mkdir server
 COPY ./package* /server/
@@ -30,4 +35,4 @@ COPY ./models /server/models
 COPY ./templates /server/templates
 COPY ./gitinfo.json /server/
 
-CMD node server
+CMD ./docker-run.sh

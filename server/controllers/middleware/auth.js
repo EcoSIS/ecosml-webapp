@@ -85,8 +85,6 @@ function getUserFromJwtToken(token='') {
 async function admin(req, res, next) {
   if( !authenticated(req, res) ) return;
 
-  console.log(req.session);
-
   if( !req.session.username || !req.session.admin ) {
     return sendError(res, 401, 'Nope.');
   }

@@ -64,6 +64,7 @@ export default class AppDoiAdmin extends Mixin(LitElement)
     let index = this.items.findIndex(item => item.id === e.id && item.tag === e.payload.tag);
     if( index === -1 ) return;
 
+    let item = this.items[index];
     let history = [... item.history];
     history.sort((a, b) => a.timestamp < b.timestamp ? 1 : -1);
     this.items[index].history = history;

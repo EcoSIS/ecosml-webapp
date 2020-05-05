@@ -224,7 +224,8 @@ A DOI has been requested for the model '${pkg.name}' version ${tag} by user ${us
       pkg.dois.forEach(doi => {
         doi.package = {
           name : pkg.name,
-          overview : pkg.overview
+          overview : pkg.overview,
+          id : pkg.id
         }
 
         if( options.state ) {

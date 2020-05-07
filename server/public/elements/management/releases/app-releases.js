@@ -109,6 +109,9 @@ export default class AppReleases extends Mixin(PolymerElement)
     this.releases = (e.payload.releases || []);
     this.pkg = e.payload;
 
+    this.host = this.pkg.host || 'github';
+    this.releasesUrl = this.pkg.htmlUrl + ((this.host === 'github') ? '/releases' : '/-/tags');
+
     if( !this.releases.length ) {
       this.release = '';
       this.priorReleases = [];
@@ -116,13 +119,9 @@ export default class AppReleases extends Mixin(PolymerElement)
       this.hasCurrentRelease = false;
       this.hasPriorReleases = false;
       this.packageHtmlUrl = '';
-      this.host = '';
       this._render();
       return;
     }
-
-    this.host = this.pkg.host || 'github';
-    this.releasesUrl = this.pkg.htmlUrl + ((this.host === 'github') ? '/releases' : '/-/tags');
 
     this.packageHtmlUrl = this.pkg.htmlUrl;
     let releasesInverse = this.releases.slice().reverse();
@@ -213,7 +212,7 @@ export default class AppReleases extends Mixin(PolymerElement)
 
     this.saving = true;
     this.$.create.innerHTML = 'Creating...'
-    let resp = await this._createRelease(this.pkg.name, info);
+    let resp = await this._createRelease(this.pkg.id, info);
     this.$.create.innerHTML = 'Create Release'
     this.saving = false;
 

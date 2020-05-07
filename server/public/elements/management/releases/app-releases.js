@@ -147,6 +147,7 @@ export default class AppReleases extends Mixin(PolymerElement)
    */
   _toggleCreate() {
     if( !this.isManagedSource ) {
+      alert(`You are about to be redirected to your repositories release creation page at ${this.releasesUrl}/new.  If you are not signed into your ${this.pkg.host} account, you may see an error screen.  Please login, then continue to the provided url if that happens.`);
       window.open(`${this.releasesUrl}/new`, '_blank');
       return;
     }

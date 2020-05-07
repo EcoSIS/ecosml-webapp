@@ -20,27 +20,12 @@ export default class AppCreatedPopup extends PolymerElement {
     return html([template]);
   }
 
-  connectedCallback() {
-    super.connectedCallback();
-
-    // if( !this._init ) {
-    //   this._init = true;
-    //   (this.parentElement || this.parentNode).removeChild(this);
-    //   document.body.appendChild(this);
-    // }
-  }
-
   _cancel() {
     this.close();
   }
 
   close() {
     this.dispatchEvent(new CustomEvent('close'));
-    // this.$.popup.close();
-  }
-
-  open() {
-    // this.$.popup.open();
   }
 
 }

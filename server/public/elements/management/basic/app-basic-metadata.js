@@ -331,6 +331,7 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
       return alert('Please select a repository type');
     }
 
+    let orgName = data.name;
     if( data.source === 'managed' ) {
       if( !this.nameAvailable ) {
         return alert('Name is not available');
@@ -358,7 +359,10 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
 
     try {
       await this.PackageModel.create(data.name, data.host, data.overview, data.organization, data.language, data.packageType, data.source);
-      if( data.source === 'managed' ) this.$.created.open();
+      if( data.source === 'managed' ) {
+        this.$.createdPopupContent.name = orgName;
+        this.$.createdPopup.open();
+      }
     } catch(e) {
       console.error(e);
       alert('Failed to create package: '+(e.payload ? e.payload.message : e.message));

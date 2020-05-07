@@ -78,7 +78,6 @@ class PackageEditor extends BaseModel {
    * @param {String} opts.state
    */
   setData(data, opts={}) {
-    console.log(data, opts);
     this.store.setData(data, opts);
   }
 

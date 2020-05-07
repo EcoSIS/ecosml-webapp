@@ -1,6 +1,6 @@
 {
   "name": "ecosml-webapp",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "flat": true,
   "main": "index.js",
   "license": "MIT",
@@ -31,7 +31,7 @@
     "@webcomponents/webcomponentsjs": "2.2.10",
     "bytes": "3.0.0",
     "cork-pagination": "cork-elements/cork-pagination",
-    "ecosis-client-commons": "0.0.4",
+    "ecosis-client-commons": "0.0.5",
     "github-markdown-css": "2.10.0",
     "google-charts": "1.5.0",
     "lit-element": "^2.1.0",

@@ -254,8 +254,8 @@ class MongoDB {
 
     if( idObj.name ) {
       let collection = await this.packagesCollection();
-      let result = collection.findOne(idObj, {id: 1});
-      if( !result ) throw new Error('Unknown packaage name: '+idObj.host+'/'+idObj.name);
+      let result = await collection.findOne(idObj, {id: 1});
+      if( !result ) throw new Error('Unknown package name: '+idObj.host+'/'+idObj.name);
       return result.id;
     }
 

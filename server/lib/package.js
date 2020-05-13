@@ -7,6 +7,13 @@ const REGEX = {
 class PackageUtils {
   
   parseId(nameOrId='') {
+    if( typeof nameOrId === 'object' ) {
+      if( nameOrId.id ) return {id: nameOrId.id}
+      if( nameOrId.name && nameOrId.host ) return {host: nameOrId.host, name: nameOrId.name}
+      if( nameOrId.fullName ) return this._parseHostNameFromFullname(nameOrId.fullName);
+      throw new Error('Invalid package name or id object provided');
+    }
+
     if( nameOrId.match(REGEX.GUID) ) {
       return {id : nameOrId}
     }
@@ -14,21 +21,25 @@ class PackageUtils {
       return {doi: nameOrId.match(REGEX.DOI)[0].replace(/^(ark|doi):/, '')}
     }
 
+    return this._parseHostNameFromFullname(nameOrId);
+  }
+
+  _parseHostNameFromFullname(fullname) {
     let hostname, pathname;
-    if( nameOrId.match(/^http/) ) {
-      let url = new URL(nameOrId);
+    if( fullname.match(/^http/) ) {
+      let url = new URL(fullname);
       hostname = url.hostname;
       pathname = url.pathname.split('/');
-    } else if( nameOrId.match(/.*\/.*\/.*/) ) {
-      let parts = nameOrId.split('/');
+    } else if( fullname.match(/.*\/.*\/.*/) ) {
+      let parts = fullname.split('/');
       hostname = parts.shift();
       pathname = parts;
     } else {
-      throw new Error('Invalid package name or id: '+nameOrId);
+      throw new Error('Invalid package name or id: '+fullname);
     }
 
     if( pathname.length !== 2 ) {
-      throw new Error('Invalid package name or id: '+nameOrId);
+      throw new Error('Invalid package name or id: '+fullname);
     }
 
     return {

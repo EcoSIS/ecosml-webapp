@@ -197,7 +197,7 @@ class RegisteredRepositories {
 
   async syncPropertiesToMongo(pkg, host) {
     if( typeof pkg === 'string' ) {
-      pkg = await mongo.getPackage(pkg, host);
+      pkg = await mongo.getPackage((host ? host+'/' : '')+pkg);
     }
     await this.syncProperties(pkg);
     await mongo.updatePackage(pkg.id, pkg);

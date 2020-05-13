@@ -4325,7 +4325,7 @@ ${ie(re.a)}
 
 
 <div class="main-panel">
-  <h2 style="margin-top:0"><a href="/package/${this.data.package.name}" target="_blank">${this.data.package.name}</a></h2>
+  <h2 style="margin-top:0"><a href="/package/${this.data.package.id}" target="_blank">${this.data.package.name}</a></h2>
   <div>${this.data.tag}</div>
   <div class="help">${this.data.package.overview}</div>
 
@@ -4475,7 +4475,7 @@ ${ie(re.a)}
         </tr>
         ${this.items.map((e,t)=>L`<tr>
             <td>
-              <div><a href="/package/${e.package.name}" target="_blank">${e.package.name} ${e.tag}</a></div>
+              <div><a href="/package/${e.package.id}" target="_blank">${e.package.name} ${e.tag}</a></div>
               <div class="help">${e.package.overview}</div>
             </td>
             <td>${e.state}</td>

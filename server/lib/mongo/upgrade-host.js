@@ -5,9 +5,10 @@ let mongo = require('./index');
   let cursor = collection.find();
   let document;
   while ( (document = await cursor.next()) ) {
-    if( !document.host ) continue;
+    if( document.host ) continue;
     document.host = 'github';
     console.log('setting host for: '+document.name);
     await mongo.updatePackage(document.id, document);
   }
+  mongo.disconnect();
 })();

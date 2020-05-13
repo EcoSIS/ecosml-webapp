@@ -230,7 +230,7 @@ class MongoDB {
   async getPackage(packageNameOrId, projection = {}) {
     if( !packageNameOrId ) throw new Error('Package name or id required');
     let collection = await this.packagesCollection();
-    return collection.findOne({id: await this.getPackageId(packageNameOrId)}, projection);
+    return collection.findOne(packageUtils.parseId(packageNameOrId), projection);
   }
 
   /**

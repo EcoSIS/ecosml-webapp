@@ -42,7 +42,7 @@ ${litCss(sharedStylesHtml)}
 
 
 <div class="main-panel">
-  <h2 style="margin-top:0"><a href="/package/${this.data.package.name}" target="_blank">${this.data.package.name}</a></h2>
+  <h2 style="margin-top:0"><a href="/package/${this.data.package.id}" target="_blank">${this.data.package.name}</a></h2>
   <div>${this.data.tag}</div>
   <div class="help">${this.data.package.overview}</div>
 

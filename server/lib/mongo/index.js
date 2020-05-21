@@ -174,7 +174,7 @@ class MongoDB {
    */
   async getAllOrgPackageNames(orgName) {
     let collection = await this.packagesCollection();
-    return collection.find({organization: orgName}, {name: 1, id: 1}).toArray();
+    return collection.find({organization: orgName}, {name: 1, id: 1, host: 1, githubId: 1}).toArray();
   }
 
   async getAllRegisteredRepositoryIds() {

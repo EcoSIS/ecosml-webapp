@@ -93,16 +93,16 @@ class BackupModel {
 
     logger.info('Unziping backup zipfile: '+localfile);
     await this._unzip(localfile, config.backups.tmpRestoreDir);
-    let zipFolder = localfile.replace('.zip', '');
 
-    let [storageDir, snapshotDirName] = config.doi.snapshotDir.replace(/^\//, '').split('/');
     if( fs.existsSync(config.doi.snapshotDir) ) {
       await fs.remove(config.doi.snapshotDir);
     }
 
-    if( fs.existsSync(path.join(zipFolder, snapshotDirName)) ) {
-      logger.info('Moving DOI snapshots: '+path.join(config.backups.tmpRestoreDir, 'mongodump'));
-      await fs.move(path.join(zipFolder, snapshotDirName), config.doi.snapshotDir);
+    if( fs.existsSync(path.join(config.backups.tmpRestoreDir, 'snapshots')) ) {
+      logger.info('Moving DOI snapshots: '+path.join(config.backups.tmpRestoreDir, 'snapshots'));
+      await fs.move(path.join(config.backups.tmpRestoreDir, 'snapshots'), config.doi.snapshotDir);
+    } else {
+      console.warn('No snapshots found in backup: '+path.join(config.backups.tmpRestoreDir, 'snapshots'));
     }
 
     logger.info('Running mongo restore on: '+path.join(config.backups.tmpRestoreDir, 'mongodump'));
@@ -110,8 +110,11 @@ class BackupModel {
     if( stderr ) logger.error(stderr);
     logger.info(stdout);
 
-    await ecosisSync.syncOrgs(true);
+    await ecosisSync.syncOrgs();
     await ecosisSync.syncGithubData();
+
+    // cleanup
+    await fs.emptyDir(config.backups.tmpRestoreDir);
 
     logger.info('Backup complete for '+filename);
   }
@@ -143,11 +146,13 @@ class BackupModel {
     // last 12 months
     date = new Date();
     for( let i = 0; i < 12; i++ ) {
-      date = new Date(date.getFullYear(), date.getMonth()-1, 1, 12, 0, 0, 0, 0);
+      date = new Date(date.getFullYear(), date.getMonth(), 1, 12, 0, 0, 0, 0);
       keep.push(this._getBackupFilename(date));
+      date = new Date(date.getFullYear(), date.getMonth()-1, 1, 12, 0, 0, 0, 0);
     }
 
     let currentBackups = await aws.listFiles(config.backups.bucket);
+    logger.info('Current '+config.backups.bucket+' backups: ', currentBackups);
     for( let file of currentBackups ) {
       if( keep.indexOf(file) === -1 ) {
         logger.info('Backup cleanup removing: ', file, 'from', config.backups.bucket);
@@ -157,15 +162,19 @@ class BackupModel {
 
     // Auto cleanup EcoSIS backups as well
     if( config.backups.ecosisBucket && config.server.serverEnv === 'prod' ) {
+      logger.info('Running backup cleaning of EcoSIS')
       currentBackups = await aws.listFiles(config.backups.ecosisBucket);
+      logger.info('Current '+config.backups.ecosisBucket+' backups: ', currentBackups);
       for( let file of currentBackups ) {
         let check = file.replace(/ecosis/, 'ecosml');
         if( keep.indexOf(check) === -1 ) {
           logger.info('Removing ecosis backup: '+file);
-          // await aws.deleteFile(file, config.backups.bucket);
+          await aws.deleteFile(file, config.backups.ecosisBucket);
         }
       }
     }
+
+    logger.info('Backup cleanup completed');
   }
 
   _upload(filepath, filename) {

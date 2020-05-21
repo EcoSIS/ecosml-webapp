@@ -325,9 +325,17 @@ class GithubSync {
    */
   async syncTeamToMongo(team) {
     if( typeof team !== 'object' ) {
-      let {response} = await github.getTeam(team);
-      team = JSON.parse(response.body);
+      team = {id: team}
     }
+
+    // grab fresh team data from github
+    let {response} = await github.getTeam(team.id);
+    if( response.statusCode === 404 ) {
+      await mongodb.removeGithubTeam(team.id);
+      return null;
+    }
+
+    team = JSON.parse(response.body);
 
     if( team.organization ) {
       delete team.organization;
@@ -380,6 +388,7 @@ class GithubSync {
       });
 
       // if we failed to create team, sync to github
+      // probably was in github but not local
       if( resp.statusCode !== 201 ) {
         // find our team id
         let teams = await github.listTeams();
@@ -393,6 +402,9 @@ class GithubSync {
           return logger.error('Failed to create Github team but could not find team in Github team list:', orgName);
         }
       }
+    } else {
+      await this.syncTeamToMongo(team.id);
+      team = await mongodb.getGithubTeam(orgName);
     }
 
     // something changed, update the github team
@@ -411,6 +423,7 @@ class GithubSync {
 
       // check all packages have permissions
       for( var i = 0; i < pkgs.length; i++ ) {
+        if( pkgs[i].type !== 'managed' ) continue;
         let index = team.repos.findIndex(repoId => repoId === pkgs[i].githubId);
         if( index === -1 ) {
           await github.addTeamRepo(team.id, pkgs[i].name);
@@ -422,7 +435,7 @@ class GithubSync {
         let index = pkgs.findIndex(pkg => pkg.githubId === team.repos[i]);
         if( index === -1 ) {
           // grab current package name from mongo
-          let pkg = await mongodb.getPackage(team.repos[i], 'github');
+          let pkg = await mongodb.getPackage(team.repos[i]);
           await github.removeTeamRepo(team.id, pkg.name);
         }
       }
@@ -443,6 +456,7 @@ class GithubSync {
       let githubUsername = await redis.getGithubUsername(info.user);
       if( !githubUsername ) continue;
       try {
+        logger.info('Adding user '+info.user+' ('+githubUsername+') to github team for: '+org.name);
         await github.addTeamMember(team.id, githubUsername);
       } catch(e) {
         console.error('Failed to sync github user to team: ', e, team, info, githubUsername);
@@ -453,11 +467,11 @@ class GithubSync {
     let orgMembers = org.members.map(m => m.user);
     for( let member of team.members ) {
       if( orgMembers.indexOf(member.login) === -1 ) {
+        logger.info('Removing user '+member.login+' to github team for: '+org.name);
         await github.removeTeamMember(team.id, member.login);
       }
     }
  
-    
   }
 }
 

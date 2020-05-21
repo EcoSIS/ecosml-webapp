@@ -14,12 +14,20 @@ class PackageUtils {
       throw new Error('Invalid package name or id object provided');
     }
 
+    if( typeof nameOrId === 'number' ) {
+      return {githubId: nameOrId};
+    }
+    if( nameOrId.match(/^\d+$/) ) {
+      return {githubId: parseInt(nameOrId)};
+    }
+
     if( nameOrId.match(REGEX.GUID) ) {
       return {id : nameOrId}
     }
     if( nameOrId.match(REGEX.DOI) ) {
       return {doi: nameOrId.match(REGEX.DOI)[0].replace(/^(ark|doi):/, '')}
     }
+
 
     return this._parseHostNameFromFullname(nameOrId);
   }

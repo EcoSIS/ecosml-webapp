@@ -758,7 +758,7 @@ class GithubApi {
           Logger.error(`GitHub API request error: ${options.method || 'GET'} ${options.uri}`, error);
           return reject(error);
         }
-        Logger.info(`GitHub API request: ${options.method || 'GET'} ${options.uri}, request remaining: ${response.headers['x-ratelimit-remaining']}`);
+        Logger.info(`GitHub API request: ${options.method || 'GET'} ${options.uri}, status code: ${response.statusCode}, request remaining: ${response.headers['x-ratelimit-remaining']}`);
         
         if( parseInt(response.headers['x-ratelimit-remaining']) < 500 ) {
           let time = parseInt(response.headers['x-ratelimit-reset']);

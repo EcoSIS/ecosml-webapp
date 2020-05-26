@@ -147,6 +147,10 @@ module.exports = {
     apiRoot : '/api/v4'
   },
 
+  bitbucket : {
+    host : 'https://bitbucket.org'
+  },
+
   datacite : {
     url : (serverEnv === 'prod') ? 'https://api.datacite.org/dois' : 'https://api.test.datacite.org/dois',
     username : secrets.datacite.username,

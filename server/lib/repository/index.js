@@ -1,5 +1,6 @@
 const github = require('./github');
 const gitlab = require('./gitlab');
+const bitbucket = require('./bitbucket');
 const config = require('../config');
 const git = require('../git');
 
@@ -8,7 +9,8 @@ class Repository {
   constructor() {
     this.HOSTS = {
       GITLAB : 'gitlab',
-      GITHUB : 'github'
+      GITHUB : 'github',
+      BITBUCKET : 'bitbucket'
     }
   }
 
@@ -25,6 +27,8 @@ class Repository {
       return config.github.host;
     } else if ( host === this.HOSTS.GITLAB ) {
       return config.gitlab.host;
+    } else if( host === this.HOSTS.BITBUCKET ) {
+      return config.bitbucket.host;
     }
     // TODO: allow any host?
     throw new Error('Unknown host: '+host);
@@ -41,11 +45,12 @@ class Repository {
    * @returns {Promise} resolves to Boolean
    */
   async exists(host, packageName, org='ecosml') {
-    console.log(host, packageName, org);
     if( host === this.HOSTS.GITHUB ) {
       return !(await github.isRepoNameAvailable(packageName, org));
     } else if ( host === this.HOSTS.GITLAB ) {
       return gitlab.exists(packageName, org);
+    } else if ( host === this.HOSTS.BITBUCKET ) {
+      return bitbucket.exists(packageName, org);
     }
     throw new Error('Unknown host: '+host);
   }
@@ -64,6 +69,8 @@ class Repository {
       return github.readme(packageName);
     } else if ( host === this.HOSTS.GITLAB ) {
       return gitlab.readme(packageName);
+    } else if ( host === this.HOSTS.BITBUCKET ) {
+      return bitbucket.readme(packageName);
     }
     throw new Error('Unknown host: '+host);
   }
@@ -83,6 +90,8 @@ class Repository {
       return github.overview(packageName);
     } else if ( host === this.HOSTS.GITLAB ) {
       return gitlab.overview(packageName);
+    } else if ( host === this.HOSTS.BITBUCKET ) {
+      return bitbucket.overview(packageName);
     }
     throw new Error('Unknown host: '+host);
   }
@@ -102,13 +111,15 @@ class Repository {
       return github.latestRelease(packageName);
     } else if ( host === this.HOSTS.GITLAB ) {
       return gitlab.latestRelease(packageName);
+    } else if ( host === this.HOSTS.BITBUCKET ) {
+      return bitbucket.latestRelease(packageName);
     }
     throw new Error('Unknown host: '+host);
   }
 
   /**
    * @method getReleases
-   * @description get the full list of releases
+   * @description get the full list of releases.
    * 
    * @param {String} host 
    * @param {String} packageName
@@ -135,6 +146,15 @@ class Repository {
         tagName : tag,
         tarballUrl : gitlab.getReleaseSnapshotUrl(packageName, tag, 'tar'),
         zipballUrl: gitlab.getReleaseSnapshotUrl(packageName, tag, 'zip')
+      }));
+    } else if ( host === this.HOSTS.BITBUCKET ) {
+      tags = tags.map(tag => ({
+        body : '',
+        htmlUrl,
+        name : tag,
+        tagName : tag,
+        tarballUrl : bitbucket.getReleaseSnapshotUrl(packageName, tag, 'tar.gz'),
+        zipballUrl: bitbucket.getReleaseSnapshotUrl(packageName, tag, 'zip')
       }));
     }
     return tags;

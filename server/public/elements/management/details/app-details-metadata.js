@@ -89,7 +89,17 @@ export default class AppDetailsMetadata extends Mixin(PolymerElement)
     this.$.theme.themes = themes;
 
     this.isManagedSource = (e.payload.source === 'registered') ? false : true;
-    this.githubUrl = e.payload.htmlUrl;
+
+    let masterPath = '';
+    if( !e.payload.host || e.payload.host === 'github' ) {
+      masterPath = '/tree/master';
+    } else if( e.payload.host === 'gitlab' ) {
+      masterPath = '/-/tree/master/'
+    } else if( e.payload.host === 'bitbucket' ) {
+      masterPath = '/src/master/';
+    }
+
+    this.masterUrl = e.payload.htmlUrl+masterPath;
   }
 
   /**

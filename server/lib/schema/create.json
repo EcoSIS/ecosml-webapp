@@ -12,7 +12,7 @@
       },
       "host" : {
         "type" : "string",
-        "enum" : ["github", "gitlab"]
+        "enum" : ["github", "gitlab", "bitbucket"]
       },
       "organization": {
         "type" : "string"

@@ -34,6 +34,16 @@ router.get('/:package', packageReadAccess, async(req, res) => {
   }
 });
 
+router.get('/:host/:org/:package', packageReadAccess, async(req, res) => {
+  try {
+    console.log(req.ecosmlPackage);
+    let package = await model.get(req.ecosmlPackage);
+    res.json(package);
+  } catch(e) {
+    utils.handleError(res, e);
+  }
+});
+
 router.patch('/:package', packageWriteAccess, async(req, res) => {
   try {
     // queue replaces:

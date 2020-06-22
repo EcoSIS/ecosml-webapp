@@ -7,6 +7,7 @@ const logger = require('../lib/logger');
 const pkgModel = require('../models/PackageModel');
 const jsonldTransform = require('../lib/jsonld');
 const spaMiddleware = require('@ucd-lib/spa-router-middleware');
+const mongo = require('../lib/mongo');
 
 /**
  * How we load Webcomponent polyfills and Webpacked Polymer 3 application bundle.
@@ -33,6 +34,13 @@ module.exports = function(app) {
     isRoot : true,
     appRoutes : config.server.appRoutes,
     getConfig : async (req, res, next) => {
+      if( req.originalUrl.replace(/^\/package\//,'').match(config.guidRegex) ) {
+        let pkg = await mongo.getPackage(req.originalUrl.replace(/^\/package\//,''));
+        if( pkg ) {
+          return res.redirect('/package/'+(pkg.host || 'github')+'/'+pkg.fullName);
+        }
+      }
+
       let githubInfo = (await redis.getGithubInfo(req.session.username)) || {};
 
       next({
@@ -56,7 +64,8 @@ module.exports = function(app) {
           github : config.github.org,
           firebase : config.firebase.env,
           git : gitinfo
-        }
+        },
+        guidRegex : config.guidRegex
       });
     },
     template : async (req, res, next) => {

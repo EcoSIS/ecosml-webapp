@@ -80,8 +80,10 @@ class PackageService extends BaseService {
    * @param {String} packageId package ecosml id 
    */
   async get(packageId) {
+    packageId = packageId.replace(/^\//, '');
+
     return this.request({
-      url : `${this.baseUrl}/${encodeURIComponent(packageId)}`,
+      url : `${this.baseUrl}/${packageId}`,
       onLoading : request => this.store.setGetPackageLoading(packageId, request),
       onLoad : result => this.store.setGetPackageSuccess(packageId, result.body),
       onError : error => this.store.setGetPackageError(packageId, error)

@@ -131,7 +131,15 @@ async function packageWriteAccess(req, res, next) {
 async function packageReadAccess(req, res, next) {
   let pkg;
   try {
-    pkg = await packageModel.get(decodeURIComponent(req.params.package));
+    pkg = decodeURIComponent(req.params.package);
+    if( req.params.host && req.params.org ) {
+      pkg = {
+        host : req.params.host,
+        name : req.params.org + '/' + pkg
+      }
+    }
+    console.log(pkg);
+    pkg = await packageModel.get(pkg);
   } catch(e) {
     return utils.handleError(res, e);
   }

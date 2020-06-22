@@ -27,6 +27,8 @@ let clientPackage = require(`../../${assetsDir}/package.json`);
 
 module.exports = {
 
+  guidRegex : /^[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}$/,
+
   server : {
     port : env.SERVER_PORT || '3000',
     url : env.SERVER_URL || 'http://localhost:3000',

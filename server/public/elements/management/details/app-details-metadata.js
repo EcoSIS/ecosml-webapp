@@ -29,7 +29,7 @@ export default class AppDetailsMetadata extends Mixin(PolymerElement)
         value : false
       },
 
-      githubUrl : {
+      masterUrl : {
         type : String,
         value : ''
       }

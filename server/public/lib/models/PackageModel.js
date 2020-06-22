@@ -15,7 +15,11 @@ class PackageModel extends BaseModel {
 
     this.EventBus.on('app-state-update', e => {
       if( e.page === 'package' ) {
-        this.get(e.location.path[1]);
+        if( e.location.path.length === 4 ) {
+          this.get(e.location.path.slice(1, 4).join('/'));
+        } else {
+          this.get(e.location.path[1]);
+        }
       }
     });
       

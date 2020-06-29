@@ -6,6 +6,13 @@
         "type" : "string",
         "format" : "packageName"
       },
+      "fullName" : {
+        "type" : "string",
+        "format" : "packageFullName"
+      },
+      "repoName" : {
+        "type" : "string"
+      },
       "source": {
         "type": "string",
         "enum" : ["registered", "managed"]
@@ -57,5 +64,5 @@
       }
     },
     "additionalProperties": false,
-    "required": ["name", "source", "organization", "overview", "owner", "packageType", "language"]
+    "required": ["name", "host", "repoName", "fullName", "source", "organization", "overview", "owner", "packageType", "language"]
   }

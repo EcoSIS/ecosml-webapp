@@ -37,7 +37,7 @@ module.exports = function(app) {
       if( req.originalUrl.replace(/^\/package\//,'').match(config.guidRegex) ) {
         let pkg = await mongo.getPackage(req.originalUrl.replace(/^\/package\//,''));
         if( pkg ) {
-          return res.redirect('/package/'+(pkg.host || 'github')+'/'+pkg.fullName);
+          return res.redirect('/package/'+pkg.fullName);
         }
       }
 

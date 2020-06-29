@@ -56,12 +56,16 @@ class PackageModel {
       await registeredRepositories.syncProperties(pkg);
       
       // ensure this repo exists and we can access
-      let {name, org} = this.getNameAndOrg(pkg.name);
-      let exists = await repository.exists(pkg.host, name, org);
+      let {name, repoOrg} = this.getNameAndRepoOrg(pkg.name);
+      let exists = await repository.exists(pkg.host, name, repoOrg);
       if( !exists ) throw new Error('Repository does not exist: '+pkg.name);
 
-      let ePkg = await mongo.getPackage((pkg.host || 'github')+'/'+pkg.name);
+      let ePkg = await mongo.getPackage(pkg.host+'/'+pkg.name);
       if( ePkg ) throw new Error('Repository already registered: '+pkg.name);
+
+      pkg.name = name;
+      pkg.repoOrg = repoOrg;
+      pkg.fullName = pkg.host+'/'+repoOrg+'/'+name;
 
       // check things look ok
       schema.validate('create', pkg);
@@ -71,6 +75,10 @@ class PackageModel {
       pkg.private = false;
 
     } else if( pkg.source === 'managed' ) {
+      pkg.repoName = config.github.org;
+      pkg.host = 'github';
+      pkg.fullName = pkg.host+'/'+pkg.organization+'/'+pkg.name;
+
       schema.validate('create', pkg);
 
       // create Github API Request
@@ -82,8 +90,7 @@ class PackageModel {
       githubRepo.homepage = config.github.homepageRoot+ecosmlId;
 
       // check if name exists
-      pkg.name = config.github.org+'/'+pkg.name;
-      let ePkg = await mongo.getPackage('github/'+pkg.name);
+      let ePkg = await mongo.getPackage('github/'+config.github.org+pkg.name);
       if( ePkg ) throw new Error('Repository already registered: '+pkg.name);
 
       // ecosis overview === github description
@@ -94,12 +101,8 @@ class PackageModel {
 
       pkg = Object.assign(pkg, utils.githubRepoToEcosml(body));
       pkg.releaseCount = 0;
-      pkg.host = 'github';
-      pkg.name = config.github.org+'/'+pkg.name;
     }
 
-    pkg.host = pkg.host.replace(/http(s)?:\/\//, '');
-    pkg.fullName = pkg.host+'/'+pkg.name;
     pkg.id = ecosmlId;
 
     await mongo.insertPackage(pkg);
@@ -156,6 +159,9 @@ class PackageModel {
     // don't allow user to update repo type (source)
     update.source = pkg.source;
     update.name = pkg.name;
+    update.fullName = pkg.fullName;
+    update.repoOrg = pkg.repoOrg;
+    update.host = pkg.host;
 
     let gpkg = {};
 
@@ -580,7 +586,7 @@ class PackageModel {
   }
 
   /**
-   * @method getNameAndOrg
+   * @method getNameAndRepoOrg
    * @description given a package name, return the organization
    * and repository name.
    * 
@@ -588,19 +594,16 @@ class PackageModel {
    * 
    * @returns {Object}
    */
-  getNameAndOrg(pkgName) {
+  getNameAndRepoOrg(pkgName) {
     if( pkgName.match('/') ) {
       pkgName = pkgName.split('/');
       return {
-        org : pkgName[0],
+        repoOrg : pkgName[0],
         name : pkgName[1]
       }
     }
 
-    return {
-      org : config.github.org,
-      name : pkgName
-    }
+    throw new Error('Unknown repo org: '+pkgName)
   }
 
   /**

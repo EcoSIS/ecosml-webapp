@@ -5,12 +5,22 @@ const REGEX = {
 }
 
 class PackageUtils {
-  
+
   parseId(nameOrId='') {
     if( typeof nameOrId === 'object' ) {
-      if( nameOrId.id ) return {id: nameOrId.id}
-      if( nameOrId.name && nameOrId.host ) return {host: nameOrId.host, name: nameOrId.name}
-      if( nameOrId.fullName ) return this._parseHostNameFromFullname(nameOrId.fullName);
+      if( nameOrId.id ) {
+        return {id: nameOrId.id}
+      }
+      if( nameOrId.fullName ) {
+        return nameOrId.fullName;
+      }
+      if( nameOrId.name && nameOrId.host && nameOrId.repoOrg ) {
+        return {
+          host: nameOrId.host, 
+          repoOrg: nameOrId.repoOrg,
+          name: nameOrId.name
+        }
+      }
       throw new Error('Invalid package name or id object provided');
     }
 
@@ -52,7 +62,8 @@ class PackageUtils {
 
     return {
       host : hostname,
-      name : pathname.join('/')
+      repoOrg : pathname[0],
+      name : pathname[1]
     }
   }
 }

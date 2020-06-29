@@ -4,6 +4,10 @@ Validator.prototype.customFormats.packageName = function(input) {
   if( input.length < 4 ) throw new Error('Package name must be greater than 4 characters');
   return true;
 };
+Validator.prototype.customFormats.packageFullName = function(input) {
+  if( !input.match(/^.*\/.*\/.*$/) ) throw new Error('Package name must be greater than 4 characters');
+  return true;
+};
 Validator.prototype.customFormats.packageOverview = function(input) {
   if( input.length < 4 ) throw new Error('Please provide a longer package overview');
   return true;

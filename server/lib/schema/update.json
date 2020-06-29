@@ -5,6 +5,13 @@
       "name": {
         "type": "string"
       },
+      "fullName" : {
+        "type" : "string",
+        "format" : "packageFullName"
+      },
+      "repoName" : {
+        "type" : "string"
+      },
       "source": {
         "type": "string",
         "enum" : ["registered", "managed"]

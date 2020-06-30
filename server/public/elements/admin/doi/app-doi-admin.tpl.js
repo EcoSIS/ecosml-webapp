@@ -97,7 +97,7 @@ ${litCss(sharedStylesHtml)}
         ${this.items.map((result, index) => {
           return html`<tr>
             <td>
-              <div><a href="/package/${result.package.id}" target="_blank">${result.package.name} ${result.tag}</a></div>
+              <div><a href="/package/${result.package.id}" target="_blank">${result.package.fullName} ${result.tag}</a></div>
               <div class="help">${result.package.overview}</div>
             </td>
             <td>${result.state}</td>

@@ -36,6 +36,9 @@ class AppStateModelImpl extends AppStateModel {
       if( state.location.path.length > 2 ) {
         state.selectedPackageId += '/'+state.location.path[2];
       }
+      if( state.location.path.length > 3 ) {
+        state.selectedPackageId += '/'+state.location.path[3];
+      }
     } else {
       state.selectedPackageId = '';
     }

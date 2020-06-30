@@ -38,7 +38,7 @@ const controlledVocabulary = require('../../public/lib/controlled-vocabulary');
       repoOrg : document.repoOrg,
       host : document.host
     });
-    // await mongo.updatePackage(document.id, document);
+    await mongo.updatePackage(document.id, document);
   }
   mongo.disconnect();
 })();

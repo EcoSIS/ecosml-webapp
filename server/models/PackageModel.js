@@ -259,16 +259,12 @@ class PackageModel {
 
     if( opts.renderMarkdown === undefined ) opts.renderMarkdown = false;
     
-    if( typeof pkg === 'object' ) {
-      pkgObj = pkg;
-    } else {
-      pkgObj = await mongo.getPackage(pkg, opts.host);
-    }
+    pkgObj = await mongo.getPackage(pkg);
 
     if( !pkgObj ) throw new Error('Unknown package: '+pkg);
 
     if( pkgObj.description && opts.renderMarkdown ) {
-      pkgObj.renderedDescription = await markdown(pkgObj.description, pkgObj.name);
+      pkgObj.renderedDescription = await markdown(pkgObj.description, pkgObj.id);
     } else {
       pkgObj.renderedDescription = '';
     }

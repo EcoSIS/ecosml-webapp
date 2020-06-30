@@ -118,14 +118,14 @@
     </div>
 
     <div style="margin-left: 15px">
-      <h2 class="title">[[package.name]]</h2>
+      <h2 class="title">[[package.repoOrg]]/[[package.name]]</h2>
       <div class="overview">[[package.overview]]</div>
     </div>
 
     <div class="main-panel">
       <div class="layout">
         <div class="main large">
-          <app-markdown id="readmeLg" pkg-name="[[package.name]]"></app-markdown>
+          <app-markdown id="readmeLg" pkg-name="[[package.id]]"></app-markdown>
         </div>
         
         <div class="info-panel">
@@ -135,7 +135,7 @@
               <div hidden$="[[!isPackageModule]]">
                 <div>Install via <a href="https://pip.pypa.io/en/stable/" target="_blank">pip:</a></div>
                 <div class="script">
-                  <input type="text" class="script-input" value="pip install git+https://[[host]].com/[[githubOrg]]/[[package.name]]@[[release.name]]" />
+                  <input type="text" class="script-input" value="pip install git+https://[[host]].com/[[package.repoOrg]]/[[package.name]]@[[release.name]]" />
                 </div>
               </div>
             </div>
@@ -231,7 +231,7 @@
         </div>
 
         <div class="main small">
-          <app-markdown id="readmeSm" pkg-name="[[package.name]]"></app-markdown>
+          <app-markdown id="readmeSm" pkg-name="[[package.id]]"></app-markdown>
         </div>
       </div>
     </div>

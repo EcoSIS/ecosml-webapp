@@ -34,9 +34,8 @@ router.get('/:package', packageReadAccess, async(req, res) => {
   }
 });
 
-router.get('/:host/:org/:package', packageReadAccess, async(req, res) => {
+router.get('/:host/:repoOrg/:package', packageReadAccess, async(req, res) => {
   try {
-    console.log(req.ecosmlPackage);
     let package = await model.get(req.ecosmlPackage);
     res.json(package);
   } catch(e) {
@@ -50,7 +49,7 @@ router.patch('/:package', packageWriteAccess, async(req, res) => {
     // package = await model.update(req.ecosmlPackage, req.body.update, req.body.message);
     let package = await queue.add(
       'update', 
-      req.ecosmlPackage.name, 
+      req.ecosmlPackage.fullName, 
       [req.ecosmlPackage, req.body.update, req.body.message, req.session.username]
     );
     
@@ -123,7 +122,7 @@ router.post('/:package/updateFiles', packageWriteAccess, upload.any(),  async (r
 
     let response = await queue.add(
       'updateFiles', 
-      req.ecosmlPackage.name, 
+      req.ecosmlPackage.fullName, 
       [req.ecosmlPackage, files, remove, message, req.session.username]
     );
 
@@ -146,7 +145,7 @@ router.get('/:package/files', packageReadAccess, async (req, res) => {
   try {
     let files = await model.getFiles(req.ecosmlPackage);
     res.json({
-      package: req.ecosmlPackage.name,
+      package: req.ecosmlPackage.fullName,
       files : files
     });
   } catch(e) {

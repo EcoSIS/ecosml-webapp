@@ -10,14 +10,14 @@ module.exports = pkg => {
     },
     name : pkg.name,
     description : pkg.overview,
-    url : 'https://ecosml.org/package/'+pkg.id,
+    url : 'https://ecosml.org/package/'+pkg.fullName,
     datePublished : pkg.createdAt,
     genre : 'spectroscopy',
     distribution : [
       {
         "@type": "DataDownload",
         "name": "EcoSML Webpage",
-        "contentUrl": 'https://ecosml.org/package/'+pkg.id,
+        "contentUrl": 'https://ecosml.org/package/'+pkg.fullName,
       },
       {
         "@type": "DataDownload",

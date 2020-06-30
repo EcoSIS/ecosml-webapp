@@ -132,13 +132,14 @@ async function packageReadAccess(req, res, next) {
   let pkg;
   try {
     pkg = decodeURIComponent(req.params.package);
-    if( req.params.host && req.params.org ) {
+    if( req.params.host && req.params.repoOrg ) {
       pkg = {
         host : req.params.host,
-        name : req.params.org + '/' + pkg
+        repoOrg : req.params.repoOrg,
+        name : pkg
       }
     }
-    console.log(pkg);
+
     pkg = await packageModel.get(pkg);
   } catch(e) {
     return utils.handleError(res, e);

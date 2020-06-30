@@ -111,7 +111,7 @@ export default class AppLandingPage extends Mixin(PolymerElement)
     let pkgWrapper = await this.PackageModel.get(e.selectedPackageId);
 
     if( this.selectedPackageId !== pkgWrapper.payload.id && 
-      this.selectedPackageId !== pkgWrapper.payload.name ) return;
+      this.selectedPackageId !== pkgWrapper.payload.fullName ) return;
 
     this.package = pkgWrapper.payload;
 
@@ -228,8 +228,8 @@ export default class AppLandingPage extends Mixin(PolymerElement)
 
   render() {
     if( !this.package ) return;
-    this.$.readmeSm.render(this.package.description, null, this.package.name);
-    this.$.readmeLg.render(this.package.description, null, this.package.name);
+    this.$.readmeSm.render(this.package.description, null, this.package.id);
+    this.$.readmeLg.render(this.package.description, null, this.package.id);
   }
 
 }

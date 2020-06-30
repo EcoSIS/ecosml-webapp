@@ -161,7 +161,7 @@ class MongoDB {
 
   async getAllPackageNames() {
     let collection = await this.packagesCollection();
-    return collection.find({}, {name: 1, id: 1}).toArray();
+    return collection.find({}, {name: 1, host: 1, fullName: 1, repoOrg: 1, id: 1}).toArray();
   }
 
   /**
@@ -230,7 +230,15 @@ class MongoDB {
   async getPackage(packageNameOrId, projection = {}) {
     if( !packageNameOrId ) throw new Error('Package name or id required');
     let collection = await this.packagesCollection();
-    return collection.findOne(packageUtils.parseId(packageNameOrId), projection);
+    let idLookup = packageUtils.parseId(packageNameOrId);
+
+    // if this is a doi, we need to lookup package id
+    if( idLookup.doi ) {
+      let doi = await this.getDoi(idLookup.doi);
+      idLookup = {id: doi.id};
+    }
+
+    return collection.findOne(idLookup, projection);
   }
 
   /**

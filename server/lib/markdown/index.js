@@ -1,13 +1,15 @@
 const exec = require('child_process').exec;
 const fs = require('fs-extra');
 const tmp = require('tmp');
-const config = require('../config');
+const mongo = require('../mongo')
 
 const script = 'markdown.rb';
-const ORG = config.github.org;
 
-module.exports = function(markdown, repoName='') {
-  return new Promise((resolve, reject) => {
+module.exports = function(markdown, pkg='') {
+  return new Promise(async (resolve, reject) => {
+
+    pkg = await mongo.getPackage(pkg);
+
     tmp.file(async (err, tmpFilePath, fd, cleanup) => {
       if( err ) return reject(err);
 
@@ -25,16 +27,12 @@ module.exports = function(markdown, repoName='') {
         } else if( stderr ) {
           reject(stderr);
         } else {
-          let org = ORG;
-          if( repoName.indexOf('/') > -1 ) {
-            let parts = repoName.split('/');
-            org = parts[0];
-            repoName = parts[1];
-          }
 
           // replace local image references with GitHub url
-          let imgSrc = `https://github.com/${org}/${repoName}/raw/master`;
-          stdout = (stdout || '').replace(/<img\s+src="\./g, `<img src="${imgSrc}`);
+          if( pkg.host === 'github' ) {
+            let imgSrc = `https://github.com/${pkg.repoOrg}/${pkg.repoName}/raw/master`;
+            stdout = (stdout || '').replace(/<img\s+src="\./g, `<img src="${imgSrc}`);
+          }
 
           resolve(stdout);
         }

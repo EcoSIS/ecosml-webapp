@@ -1,7 +1,7 @@
 const config = require('./config');
 const REGEX = {
   GUID : /(\{){0,1}[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}(\}){0,1}/,
-  DOI : new RegExp(`((ark|doi):)?${config.doi.shoulder}/[a-zA-Z0-9\.]+`)
+  DOI : new RegExp(`((ark|doi):)?${config.doi.shoulder}/[a-zA-Z0-9\._;\(\)-]+`)
 }
 
 class PackageUtils {

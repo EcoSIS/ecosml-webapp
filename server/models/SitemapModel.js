@@ -62,7 +62,7 @@ Sitemap: ${config.server.url}/sitemap.xml`);
 
     (packages || [])
       .map(result => {
-        return `${config.server.url}/package/${result.id}`
+        return `${config.server.url}/package/${result.fullName}`
       })
       .forEach(url => {
         res.write(`<url>

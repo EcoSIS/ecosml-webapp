@@ -4,8 +4,8 @@ const utils = require('./utils');
 
 router.post('/*', async (req, res) => {
   try {
-    let repoName = req.originalUrl.replace('/api/markdown/', '');
-    let html = await markdown(req.body, repoName);
+    let repoNameOrId = req.originalUrl.replace('/api/markdown/', '');
+    let html = await markdown(req.body, repoNameOrId);
     res.set('content-type', 'text/html')
        .send(html);
   } catch(e) {

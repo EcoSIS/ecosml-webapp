@@ -7,7 +7,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const {admin, packageWriteAccess, packageReadAccess} = require('./middleware/auth');
 
-const DOI_REGEX = new RegExp(`((ark|doi):)?${config.doi.shoulder}/[a-zA-Z0-9\.]+`);
+const DOI_REGEX = new RegExp(`((ark|doi):)?${config.doi.shoulder}/[a-zA-Z0-9\._;\(\)-]+`);
 
 router.post('/request/:package/:version', packageWriteAccess, async (req, res) => {
   let pkg = req.ecosmlPackage;
@@ -137,7 +137,7 @@ async function handleDoiRequest(req, res) {
   }
   let doi = await mongo.getDoi(info.doi);
 
-  return res.redirect('/package/'+pkg.name+'?doi-tag='+encodeURIComponent(doi.tag));
+  return res.redirect('/package/'+pkg.fullName+'?doi-tag='+encodeURIComponent(doi.tag));
 }
 
 module.exports = {router, doiResolver};

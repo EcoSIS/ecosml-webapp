@@ -138,9 +138,12 @@ class PackageModel extends BaseModel {
 
     if( state.state === 'loading' ) {
       await state.request;
-    } else if( state.state !== 'loaded' ) {
+    } else {
       await this.service.previewMarkdown(markdown, pkgName);
     }
+    // } else if( state.state !== 'loaded' ) {
+    //   await this.service.previewMarkdown(markdown, pkgName);
+    // }
 
     return this.store.data.markdown[pkgName];
   }

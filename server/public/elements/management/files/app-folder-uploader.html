@@ -62,7 +62,10 @@
   }
 </style>
 
-<app-file-diff id="diff"></app-file-diff>
+<app-popup id="diffPopup" no-auto-move title="Changes">
+  <app-file-diff id="diff"></app-file-diff>
+</app-popup>
+
 
 <div id="dropbox" 
   on-dragover="_onDropBoxDragOver" 

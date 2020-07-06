@@ -13,6 +13,7 @@ import "./details/app-details-metadata"
 import "./files/app-files"
 import "./releases/app-releases"
 import "./dois/app-doi-request"
+import "./app-editor-toast"
 
 class AppPackageMetadataEditor extends Mixin(PolymerElement)
       .with(EventInterface) {
@@ -78,7 +79,6 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
 
     this._injectModel('PackageEditor', 'AppStateModel','PackageModel', 'DoiModel');
 
-
     this._autoUpdateTimer = -1;
     this.schema = this.PackageModel.schema;
   }
@@ -87,7 +87,7 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
     if( this.unsavedData ) {
       if( confirm('You have unsaved changes, are you sure you want to leave?') ) {
         this.unsavedData = null;
-        this.$.savingToast.close();
+        this.$.editorToast.hideAll();
       } else {
         this._setWindowLocation('/edit/'+this.packageId);
         return;
@@ -105,6 +105,7 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
     }
 
     setTimeout(() => this.$.tabs.notifyResize(), 25);
+    setTimeout(() => this.$.tabs.notifyResize(), 100);
   }
 
   _onPackageEditorDataUpdate(e) {
@@ -122,7 +123,7 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
       } else if( e.state === 'edit' ) {
         this.selectedSection = 'basic';
         this.currentAction = 'Update';
-        this.$.commitMsg.value = '';
+        this.$.editorToast.setCommitMessage('');
 
         // get and set files
         //this.$.files.files = await this._getPackageFiles(pkgData.id);
@@ -132,11 +133,9 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
     }
 
     if( e.state === 'edit' && this.PackageEditor.hasDataChanged() ) {
-      this.$.unsavedMsg.style.display = 'block';
-      this.$.savingMsg.style.display = 'none';
-      this.$.savingToast.open();
+      this.$.editorToast.setUnsavedChanges();
     } else {
-      this.$.savingToast.close();
+      this.$.editorToast.hideAll();
     }
   }
 
@@ -150,16 +149,16 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
       let e = await this.PackageModel.get(pkgId);
       this.PackageEditor.setEditStartStateData(e.payload);
       this.PackageEditor.setData(e.payload, {state: 'edit', merge: false});
-      
-      e = await this.DoiModel.get(pkgId);
-      this.PackageEditor.setDoiData(e.payload);
-      
+
       if( e.payload.source === 'managed' ) {
         this.$.files.files = await this.PackageModel.getFiles(pkgId);
         this.repoType = 'EcoSML Managed Repository';
       } else if( e.payload.source === 'registered' ) {
         this.repoType = 'Registered Repository';
-      } 
+      }
+
+      e = await this.DoiModel.get(pkgId);
+      this.PackageEditor.setDoiData(e.payload);
     } catch(e) {
       console.error(e);
       return alert('Failed to fetch package '+pkgId+': '+e.message);
@@ -177,22 +176,19 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
     );
     unsavedData.host = this.host;
 
-    this.PackageModel.update(this.packageId, unsavedData, this.$.commitMsg.value);
+    this.PackageModel.update(this.packageId, unsavedData, this.$.editorToast.getCommitMessage());
   }
 
   _onEditPackageUpdate(e) {
     if( e.state === 'loading' ) {
-      this.$.unsavedMsg.style.display = 'none';
-      this.$.savingMsg.style.display = 'block';
+      this.$.editorToast.setChangesSaving();
     } else if( e.state === 'loaded' ) {
       this.unsavedData = null;
-      this.$.savingToast.close();
-      this.$.savedToast.open();
+      this.$.editorToast.setChangesSaved();
       this.PackageEditor.setEditStartStateData(e.payload);
       this.PackageEditor.setData(e.payload, {state: 'edit', merge: false});
     } else if( e.state === 'error' ) {
-      this.$.unsavedMsg.style.display = 'block';
-      this.$.savingMsg.style.display = 'none';
+      this.$.editorToast.setUnsavedChanges();
       alert('Failed to save package data :( '+e.error.message);
     }
   }

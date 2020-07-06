@@ -75,7 +75,7 @@ class PackageModel {
       pkg.private = false;
 
     } else if( pkg.source === 'managed' ) {
-      pkg.repoName = config.github.org;
+      pkg.repoOrg = config.github.org;
       pkg.host = 'github';
       pkg.fullName = pkg.host+'/'+pkg.organization+'/'+pkg.name;
 
@@ -90,7 +90,7 @@ class PackageModel {
       githubRepo.homepage = config.github.homepageRoot+ecosmlId;
 
       // check if name exists
-      let ePkg = await mongo.getPackage('github/'+config.github.org+pkg.name);
+      let ePkg = await mongo.getPackage('github/'+config.github.org+'/'+pkg.name);
       if( ePkg ) throw new Error('Repository already registered: '+pkg.name);
 
       // ecosis overview === github description
@@ -546,15 +546,15 @@ class PackageModel {
    * 
    * @param {String} host 
    * @param {String} packageName package name
-   * @param {String} org Optional.  Defaults to EcoSML
+   * @param {String} repoOrg Optional.  Defaults to EcoSML
    * 
    * @returns {Promise} resolves to Boolean
    */
-  async isNameAvailable(host, packageName, org) {
-    let available = !(await repository.exists(host, packageName, org));
+  async isNameAvailable(host, packageName, repoOrg) {
+    let available = !(await repository.exists(host, packageName, repoOrg));
     if( !available ) return {isAvailable: false, message: 'Unable to access'};
 
-    let exists = await repository.exists(host, packageName, org);
+    let exists = await repository.exists(host, packageName, repoOrg);
     if( exists ) {
       return {isAvailable: false, message: 'Already registered'};
     }

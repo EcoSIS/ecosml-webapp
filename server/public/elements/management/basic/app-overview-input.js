@@ -22,7 +22,7 @@ export default class AppOverviewInput extends PolymerElement {
       value : {
         type : String,
         value : '',
-        observer : '_valueObserver'
+        observer : '_overviewObserver'
       }
     }
   }

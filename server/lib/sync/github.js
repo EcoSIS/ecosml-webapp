@@ -169,7 +169,7 @@ class GithubSync {
       let e = events[i];
       if( e.fsChangeType === 'removed' ) continue; // noop
 
-      if( e.payload.author === 'ecosml-admin' ) {
+      if( e.payload.sender === 'ecosml-admin' ) {
         await firebase.ackGithubReleaseEvent(e.fsId);
         continue;
       }
@@ -188,7 +188,7 @@ class GithubSync {
 
       try {
         let releaseInfo = await this._syncReleases(repoName);
-        await mongodb.updatePackage(repoName, 'github', releaseInfo);
+        await mongodb.updatePackage('github/'+config.github.org+'/'+repoName, releaseInfo);
         await firebase.ackGithubReleaseEvent(e.fsId);
       } catch(error) {
         logger.error('Failed to handle firestore github release sync event', e, error);

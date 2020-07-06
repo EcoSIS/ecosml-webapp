@@ -9,3 +9,7 @@ from this dir run
 ```
 firebase serve
 ```
+
+# deploy 
+
+firebase deploy --only functions

@@ -21,7 +21,7 @@ export default class AppFolderUploader extends Mixin(PolymerElement)
     super();
     this.files = {};
 
-    this._injectModel('PackageModel');
+    this._injectModel('PackageModel', 'AppStateModel');
 
     this.ignore = ['ecosml-metadata.json']
   }
@@ -31,8 +31,9 @@ export default class AppFolderUploader extends Mixin(PolymerElement)
     this.files[(file.dir !== '/' ? file.dir + '/' : '/')+file.filename] = file;
   }
 
-  _onSelectedPackageUpdate(payload) {
-    this.packageId = payload.id;
+  _onAppStateUpdate(e) {
+    if( this.packageId === e.selectedPackageId ) return;
+    this.packageId = e.selectedPackageId || '';
     this.files = {};
   }
 
@@ -118,6 +119,7 @@ export default class AppFolderUploader extends Mixin(PolymerElement)
     });
 
     this.$.diff.show(diff, this.packageId);
+    this.$.diffPopup.open();
   }
 
   async _checkValidUpload(files, diff) {

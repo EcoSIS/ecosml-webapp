@@ -25,6 +25,51 @@ router.post('/', packageWriteAccess, async (req, res) => {
   }
 });
 
+router.get('/available/:host/:package', async(req, res) => {
+  try {
+    let isAvailable = await model.isNameAvailable(req.params.host, req.params.package, req.query.org);
+    isAvailable.host = req.params.host;
+    isAvailable.packageName = req.params.package;
+    
+    res.json(isAvailable);
+  } catch(e) {
+    utils.handleError(res, e);
+  }
+});
+
+router.get('/valid/:host/:org/:package', async(req, res) => {
+  try {
+    let isAvailable = await model.isValidRepository(req.params.host, req.params.package, req.params.org);
+    isAvailable.host = req.params.host;
+    isAvailable.org = req.params.org;
+    isAvailable.packageName = req.params.package;
+    
+    res.json(isAvailable);
+  } catch(e) {
+    utils.handleError(res, e);
+  }
+});
+
+router.get('/:package/files', packageReadAccess, async (req, res) => {
+  try {
+    let files = await model.getFiles(req.ecosmlPackage);
+    res.json({
+      package: req.ecosmlPackage.fullName,
+      files : files
+    });
+  } catch(e) {
+    utils.handleError(res, e);
+  }
+});
+
+router.get('/:package/syncRegProps', packageWriteAccess, async (req, res) => {
+  try {
+    res.json(await model.syncRegisteredRepository(req.ecosmlPackage));
+  } catch(e) {
+    utils.handleError(res, e);
+  }
+});
+
 router.get('/:package', packageReadAccess, async(req, res) => {
   try {
     let package = await model.get(req.ecosmlPackage);
@@ -77,31 +122,6 @@ router.post('/:package/createRelease', packageWriteAccess, async (req, res) => {
   }
 });
 
-router.get('/available/:host/:package', async(req, res) => {
-  try {
-    let isAvailable = await model.isNameAvailable(req.params.host, req.params.package, req.query.org);
-    isAvailable.host = req.params.host;
-    isAvailable.packageName = req.params.package;
-    
-    res.json(isAvailable);
-  } catch(e) {
-    utils.handleError(res, e);
-  }
-});
-
-router.get('/valid/:host/:org/:package', async(req, res) => {
-  try {
-    let isAvailable = await model.isValidRepository(req.params.host, req.params.package, req.params.org);
-    isAvailable.host = req.params.host;
-    isAvailable.org = req.params.org;
-    isAvailable.packageName = req.params.package;
-    
-    res.json(isAvailable);
-  } catch(e) {
-    utils.handleError(res, e);
-  }
-});
-
 router.post('/:package/updateFiles', packageWriteAccess, upload.any(),  async (req, res) => {
   try {
     let remove = JSON.parse(req.body.remove || '[]');
@@ -139,26 +159,6 @@ router.post('/:package/updateFiles', packageWriteAccess, upload.any(),  async (r
     }
   }
 
-});
-
-router.get('/:package/files', packageReadAccess, async (req, res) => {
-  try {
-    let files = await model.getFiles(req.ecosmlPackage);
-    res.json({
-      package: req.ecosmlPackage.fullName,
-      files : files
-    });
-  } catch(e) {
-    utils.handleError(res, e);
-  }
-});
-
-router.get('/:package/syncRegProps', packageWriteAccess, async (req, res) => {
-  try {
-    res.json(await model.syncRegisteredRepository(req.ecosmlPackage));
-  } catch(e) {
-    utils.handleError(res, e);
-  }
 });
 
 module.exports = router;

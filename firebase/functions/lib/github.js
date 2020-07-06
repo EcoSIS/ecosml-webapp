@@ -57,8 +57,10 @@ function onRelease(collection, msg, req, resp) {
       event : 'release',
       headers : req.headers,
       payload: {
+        action : msg.action,
         id : msg.repository.name,
-        author : msg.release.author.login
+        author : msg.release.author.login,
+        sender : msg.sender.login
       }
     })
     .then((writeResult) => {

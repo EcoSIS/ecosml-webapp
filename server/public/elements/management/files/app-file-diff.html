@@ -25,30 +25,29 @@
   }
 </style>
 
-<app-popup id="popup" no-auto-move>
-  <div style="padding: 10px">
-    <div style="display:flex">
-      <h2 style="margin:0; flex:1">Changes</h2>
-      <paper-icon-button icon="close" on-click="_cancel"></paper-icon-button>
-    </div>
 
-    <div>Please review changes below to ensure appropriate file
-      modifications are being made to your package.
-    </div>
+<div style="padding: 10px">
+  <!-- <div style="display:flex">
+    <h2 style="margin:0; flex:1">Changes</h2>
+    <paper-icon-button icon="close" on-click="_cancel"></paper-icon-button>
+  </div> -->
 
-    <div style="padding: 30px 0">
-      <template is="dom-repeat" items="[[files]]">
-        <div change-type$="[[item.changeType]]" class="row">
-          <div class="file-label">[[item.name]]</div>
-          <div class="change-label">[[item.changeType]]</div>
-        </div>
-      </template>
-    </div>
-
-    <div style="text-align: right" hidden$="[[saving]]">
-      <paper-button on-click="_cancel">Cancel</paper-button>
-      <paper-button on-click="_save">Save Changes</paper-button>
-    </div>
-    <div style="text-align: right" hidden$="[[!saving]]">[[status]]</div>
+  <div>Please review changes below to ensure appropriate file
+    modifications are being made to your package.
   </div>
-</app-popup>
+
+  <div style="padding: 30px 0">
+    <template is="dom-repeat" items="[[files]]">
+      <div change-type$="[[item.changeType]]" class="row">
+        <div class="file-label">[[item.name]]</div>
+        <div class="change-label">[[item.changeType]]</div>
+      </div>
+    </template>
+  </div>
+
+  <div style="text-align: right" hidden$="[[saving]]">
+    <paper-button on-click="hide">Cancel</paper-button>
+    <paper-button on-click="_save">Save Changes</paper-button>
+  </div>
+  <div style="text-align: right" hidden$="[[!saving]]">[[status]]</div>
+</div>

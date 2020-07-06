@@ -23,30 +23,15 @@ export default class AppFileDiff extends PolymerElement {
     }
   }
 
-  connectedCallback() {
-    super.connectedCallback();
-
-    if( !this._init ) {
-      this._init = true;
-      (this.parentElement || this.parentNode).removeChild(this);
-      document.body.appendChild(this);
-    }
-  }
-
   show(files, packageId) {
     this.packageId = packageId;
     this.files = files;
-    this.$.popup.open();
     this.saving = false;
-  }
-
-  _cancel() {
-    this.saving = false;
-    this.hide();
   }
 
   hide() {
-    this.$.popup.close();
+    this.saving = false;
+    this.dispatchEvent(new CustomEvent('close'));
   }
 
   _save() {

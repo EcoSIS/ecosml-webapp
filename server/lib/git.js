@@ -36,12 +36,11 @@ class GitCli {
    * 
    * @return {Promise}
    */
-  async clone(repoName) {
-    var {repoName, org} = utils.getRepoNameAndOrg(repoName);
-    await this.removeRepositoryFromDisk(repoName);
-    let url = BASE_URL+'/'+org+'/'+repoName;
+  async clone(repoOrg, repoName) {
+    await this.removeRepositoryFromDisk(repoOrg, repoName);
+    let url = BASE_URL+'/'+repoOrg+'/'+repoName;
 
-    let orgDir = path.join(ROOT, org);
+    let orgDir = path.join(ROOT, repoOrg);
     if( !fs.existsSync(orgDir) ) {
       await fs.mkdirp(orgDir);
     }
@@ -57,8 +56,8 @@ class GitCli {
    * 
    * @return {Promise}
    */
-  async ensureDir(repoName) {
-    let dir = this.getRepoPath(repoName);
+  async ensureDir(repoOrg, repoName) {
+    let dir = this.getRepoPath(repoOrg, repoName);
     if( !fs.existsSync(dir) ) {
       await this.clone(repoName);
     }
@@ -68,48 +67,55 @@ class GitCli {
   /**
    * @method getRepoPath
    * @description the full path to a repository on disk
+   * 
+   * @param {String} repoOrg
    * @param {String} repoName name of repository
    * 
    * @returns {String} full path 
    */
-  getRepoPath(repoName) {
-    var {repoName, org} = utils.getRepoNameAndOrg(repoName);
-    return path.join(ROOT, org, repoName);
+  getRepoPath(repoOrg, repoName) {
+    return path.join(ROOT, repoOrg, repoName);
   }
 
   /**
    * @method pull
    * @description pull a respository
+   * 
+   * @param {String} repoOrg
    * @param {String} repoName name of repository
    * 
    * @returns {Promise} 
    */
-  async pull(repoName) {
-    let dir = await this.ensureDir(repoName);
+  async pull(repoOrg, repoName) {
+    let dir = await this.ensureDir(repoOrg, repoName);
     return this.exec(`pull`, {cwd: dir});
   }
 
   /**
    * @method push
    * @description push a respository
+   * 
+   * @param {String} repoOrg
    * @param {String} repoName name of repository
    * 
    * @returns {Promise} 
    */
-  async push(repoName) {
-    let dir = await this.ensureDir(repoName);
+  async push(repoOrg, repoName) {
+    let dir = await this.ensureDir(repoOrg, repoName);
     return this.exec(`push`, {cwd: dir});
   }
 
   /**
    * @method resetHEAD
    * @description reset a repository to local HEAD
+   * 
+   * @param {String} repoOrg
    * @param {String} repoName name of repository
    * 
    * @returns {Promise} 
    */
-  async resetHEAD(repoName) {
-    let dir = await this.ensureDir(repoName);
+  async resetHEAD(repoOrg, repoName) {
+    let dir = await this.ensureDir(repoOrg, repoName);
     await this.exec('fetch origin', {cwd: dir});
     return this.exec('reset --hard origin/master', {cwd: dir});
   }
@@ -117,37 +123,43 @@ class GitCli {
   /**
    * @method clean
    * @description remove all untracked files and directories
+   * 
+   * @param {String} repoOrg
    * @param {String} repoName name of repository
    * 
    * @returns {Promise} 
    */
-  async clean(repoName) {
-    let dir = await this.ensureDir(repoName);
+  async clean(repoOrg, repoName) {
+    let dir = await this.ensureDir(repoOrg, repoName);
     return this.exec('clean -f -d', {cwd: dir});
   }
 
   /**
    * @method addAll
    * @description add all changes
+   * 
+   * @param {String} repoOrg
    * @param {String} repoName name of repository
    * 
    * @returns {Promise} 
    */
-  async addAll(repoName) {
-    let dir = await this.ensureDir(repoName);
+  async addAll(repoOrg, repoName) {
+    let dir = await this.ensureDir(repoOrg, repoName);
     return this.exec(`add --all`, {cwd: dir});
   }
 
   /**
    * @method commit
    * @description commit changes
+   * 
+   * @param {String} repoOrg
    * @param {String} repoName name of repository
    * @param {String} message commit message
    * 
    * @returns {Promise} 
    */
-  async commit(repoName, message, username='') {
-    let dir = await this.ensureDir(repoName);
+  async commit(repoOrg, repoName, message, username='') {
+    let dir = await this.ensureDir(repoOrg, repoName);
     if( username ) username = `--author="${username} <>"`;
     return this.exec(`commit ${username} -m "${message}"`, {cwd: dir});
   }
@@ -175,32 +187,35 @@ class GitCli {
   /**
    * @method status
    * @description repo status
+   * 
+   * @param {String} repoOrg
    * @param {String} repoName name of repository
    * 
    * @returns {Promise} 
    */
-  async status(repoName) {
-    let dir = await this.ensureDir(repoName);
+  async status(repoOrg, repoName) {
+    let dir = await this.ensureDir(repoOrg, repoName);
     return this.exec(`status -s`, {cwd: dir});
   }
 
   /**
    * @method removeRepositoryFromDisk
    * @description remove a repository from disk (not github)
+   * 
+   * @param {String} repoOrg
    * @param {String} repoName name of repository
    * 
    * @returns {Promise} 
    */
-  async removeRepositoryFromDisk(repoName) {
-    var {repoName, org} = utils.getRepoNameAndOrg(repoName);
-    let dir = path.join(ROOT, org, repoName);
+  async removeRepositoryFromDisk(repoOrg, repoName) {
+    let dir = path.join(ROOT, repoOrg, repoName);
     if( fs.existsSync(dir) ) {
       await fs.remove(dir);
     }
   }
 
-  async currentChangesCount(repoName) {
-    let dir = await this.ensureDir(repoName);
+  async currentChangesCount(repoOrg, repoName) {
+    let dir = await this.ensureDir(repoOrg, repoName);
     let {stdout, stderr} = await this.exec(`status -s | wc -l`, {cwd: dir});
     return parseInt(stdout.trim());
   }

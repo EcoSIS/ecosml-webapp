@@ -9,7 +9,7 @@ import AppStateInterface from "../../interfaces/AppStateInterface"
 
 // import AppFileTreeLeaf from "../files/tree/app-file-tree-leaf";
 
-const VALUES = ['reponame', 'overview', 'organization', 'language', 'packageType', 'host'];
+const VALUES = ['reponame', 'repoOrg', 'overview', 'organization', 'language', 'packageType', 'host'];
 
 export default class AppBasicMetadata extends Mixin(PolymerElement)
   .with(EventInterface, AppStateInterface, PackageInterface) {
@@ -62,7 +62,7 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
   get reponame() {
     if( this.editorData && this.editorData.source === 'registered') {
       let {org, repo, valid} = this._checkValidUrl();
-      return org+'/'+repo;
+      return repo;
     }
     return this._getCleanName();
   }
@@ -72,6 +72,14 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
       this.$.url.value = value || '';
     }
     this.$.name.value = value || '';
+  }
+
+  get repoOrg() {
+    if( this.editorData && this.editorData.source === 'registered') {
+      let {org, repo, valid} = this._checkValidUrl();
+      return org;
+    }
+    return this.editorData.repoOrg || APP_CONFIG.github.org;
   }
 
   get host() {
@@ -160,10 +168,11 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
 
   setValues(data) {
     for( let key of VALUES ) {
-      if( key === 'host' ) continue;
+      if( key === 'host' || key === 'repoOrg' ) continue;
+
       let value = key;
       if(value === 'reponame') {
-        this.name = (data.host ? `https://${data.host}.com/` : '') + data.reponame;
+        this.name = (data.host === 'registered' ? `https://${data.host}.com/` : '') + data.repoOrg + '/' + data.name;
       } else {
         this[key] = data[value];
       }
@@ -249,7 +258,6 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
 
   async _checkUrlAsync(host, org, repo) {
     let {message, valid} = await this.PackageEditor.isValid(host, repo, org);
-    console.log(message, valid);
     this.registeredUrlValid = valid;
     if( !this.registeredUrlValid ) {
       this.$.urlMessage.innerHTML = `${message} ${host}: ${org} / ${repo}`;
@@ -317,6 +325,7 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
    * @description called when any input changes
    */
   _onInputChange() {
+    console.log(this.getValues());
     this.PackageEditor.setData(this.getValues());
   }
 

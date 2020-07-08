@@ -10,7 +10,7 @@
         "type" : "string",
         "format" : "packageFullName"
       },
-      "repoName" : {
+      "repoOrg" : {
         "type" : "string"
       },
       "source": {
@@ -64,5 +64,5 @@
       }
     },
     "additionalProperties": false,
-    "required": ["name", "host", "repoName", "fullName", "source", "organization", "overview", "owner", "packageType", "language"]
+    "required": ["name", "host", "repoOrg", "fullName", "source", "organization", "overview", "owner", "packageType", "language"]
   }

@@ -36,15 +36,16 @@ class Gitlab {
    * @description load the readme text from repository.  This call
    * does not burn a API request.
    * 
+   * @param {String} repoOrg
    * @param {String} repoName
    * 
    * @returns {Promise} resolves to String 
    */
-  async readme(repoName) {
-    let {response, body} = await this.getRawFile(repoName, 'README.md');
+  async readme(repoOrg, repoName) {
+    let {response, body} = await this.getRawFile(repoOrg, repoName, 'README.md');
     if( response.ok ) return body;
     
-    ({response, body} = await this.getRawFile(repoName, 'README'));
+    ({response, body} = await this.getRawFile(repoOrg, repoName, 'README'));
     if( response.ok ) return body;
 
     return '';
@@ -54,16 +55,15 @@ class Gitlab {
    * @method getRawFile
    * @description download a file directly from gitlab repo
    * 
+   * @param {String} repoOrg
    * @param {String} repoName name of repository
    * @param {String} filePath full path to file in repo
    * @param {String} branch optional. defaults to 'master'
    * 
    * @returns {Promise} resolves to http response
    */
-  async getRawFile(repoName, filePath, branch = 'master') {
-    var {repoName, org} = utils.getRepoNameAndOrg(repoName);
-
-    let uri = `${config.gitlab.host}/${org}/${repoName}/-/raw/${branch}/${filePath}`;
+  async getRawFile(repoOrg, repoName, filePath, branch = 'master') {
+    let uri = `${config.gitlab.host}/${repoOrg}/${repoName}/-/raw/${branch}/${filePath}`;
     let response = await fetch(
       uri,
       {'User-Agent' : 'EcoSML Webapp'}
@@ -73,19 +73,17 @@ class Gitlab {
     return {response, body: await response.text()};
   }
 
-  async overview(repoName) {
-    var {repoName, org} = utils.getRepoNameAndOrg(repoName);
-
-    let response = await fetch(`${config.gitlab.host}/${org}/${repoName}`);
+  async overview(repoOrg, repoName) {
+    let response = await fetch(`${config.gitlab.host}/${repoOrg}/${repoName}`);
 
     if( response.status !== 200 ) {
-      throw new Error(`Unknown repository: ${org}/${repoName}`)
+      throw new Error(`Unknown repository: ${repoOrg}/${repoName}`)
     }
 
     const dom = new JSDOM(await response.text());
     let ele = dom.window.document.querySelector('.home-panel-description-markdown p');
     if( !ele ) {
-      logger.error(`CSS query failed to find gitlab repo overview for: ${org}/${repoName}`);
+      logger.error(`CSS query failed to find gitlab repo overview for: ${repoOrg}/${repoName}`);
       return '';
     } 
 
@@ -97,27 +95,25 @@ class Gitlab {
    * @description return the latest release tag name.  Note, this
    * call does not burn a API request.
    * 
+   * @param {String} repoOrg
    * @param {String} repoName 
    * 
    * @returns {Promise} resolves to null or tag object
    */
-  async latestRelease(repoName) {
-    let fullRepoName = repoName;
-    var {repoName, org} = utils.getRepoNameAndOrg(repoName);
-
+  async latestRelease(repoOrg, repoName) {
     let response = await fetch(
-      `${config.gitlab.host}/${org}/${repoName}/-/tags`,
+      `${config.gitlab.host}/${repoOrg}/${repoName}/-/tags`,
       {redirect : 'manual'}
     );
 
     if( response.status !== 200 ) {
-      throw new Error(`Unknown repository: ${org}/${repoName}`)
+      throw new Error(`Unknown repository: ${repoOrg}/${repoName}`)
     }
 
     const dom = new JSDOM(await response.text());
     let ele = dom.window.document.querySelector('.content-list li:first-child .item-title');
     if( !ele ) {
-      logger.error(`CSS query failed to find gitlab repo overview for: ${org}/${repoName}`);
+      logger.error(`CSS query failed to find gitlab repo overview for: ${repoOrg}/${repoName}`);
       return '';
     }
 
@@ -127,14 +123,13 @@ class Gitlab {
       htmlUrl: ele.getAttribute('href'),
       name : tag,
       tagName : tag,
-      tarballUrl : this.getReleaseSnapshotUrl(fullRepoName, tag, 'tar'),
-      zipballUrl: this.getReleaseSnapshotUrl(fullRepoName, tag, 'zip')
+      tarballUrl : this.getReleaseSnapshotUrl(repoOrg, repoName, tag, 'tar'),
+      zipballUrl: this.getReleaseSnapshotUrl(repoOrg, repoName, tag, 'zip')
     }
   }
 
-  getReleaseSnapshotUrl(repoName, tag, type='zip') {
-    var {repoName, org} = utils.getRepoNameAndOrg(repoName);
-    return `https://gitlab.com/${org}/${repoName}/-/archive/${tag}/${repoName}-${tag}.${type}`;
+  getReleaseSnapshotUrl(repoOrg, repoName, tag, type='zip') {
+    return `https://gitlab.com/${repoOrg}/${repoName}/-/archive/${tag}/${repoName}-${tag}.${type}`;
   }
 
 }

@@ -23,7 +23,7 @@ describe('Package Model Methods', function() {
     }
 
     // make sure the git repo was pulled to filesystem
-    let rpath = git.getRepoPath(pkg.name);
+    let rpath = git.getRepoPath(pkg.repoOrg, pkg.name);
     let readmePath = path.join(rpath, 'README.md');
     assert.equal(fs.existsSync(readmePath), true);
 
@@ -41,7 +41,7 @@ describe('Package Model Methods', function() {
     }
 
     // make sure the package was removed from filesystem
-    let rpath = git.getRepoPath(pkg.name);
+    let rpath = git.getRepoPath(pkg.repoOrg, pkg.name);
     let readmePath = path.join(rpath, 'README.md');
     assert.equal(fs.existsSync(readmePath), false);
 

@@ -38,7 +38,7 @@ class DoiModel {
 
     // download snapshot, if this fails, we should error out
     logger.info('downloading code snapshot', pkg.id, tag);
-    let file = await github.getReleaseSnapshot(pkg.name, tag, config.doi.snapshotDir);
+    let file = await github.getReleaseSnapshot(pkg.repoName, pkg.name, tag, config.doi.snapshotDir);
     let filename = path.parse(file).base;
 
     if( existingRequest && existingRequest.state === config.doi.states.canceled ) {
@@ -137,7 +137,7 @@ A DOI has been requested for the model '${pkg.name}' version ${tag} by user ${us
 
     // download snapshot.  will be stored in S3 backup for safe keeping
     logger.info('downloading code snapshot', pkg.id, tag);
-    await github.getReleaseSnapshot(pkg.name, tag, config.doi.snapshotDir);
+    await github.getReleaseSnapshot(pkg.repoName, pkg.name, tag, config.doi.snapshotDir);
 
     // now mint doi
     logger.info('minting doi', pkg.id, tag);

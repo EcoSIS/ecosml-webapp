@@ -64,13 +64,13 @@ class Repository {
    * 
    * @returns {Promise} resolves to String 
    */
-  readme(host, packageName) {
+  readme(host, repoOrg, packageName) {
     if( host === this.HOSTS.GITHUB ) {
-      return github.readme(packageName);
+      return github.readme(repoOrg, packageName);
     } else if ( host === this.HOSTS.GITLAB ) {
-      return gitlab.readme(packageName);
+      return gitlab.readme(repoOrg, packageName);
     } else if ( host === this.HOSTS.BITBUCKET ) {
-      return bitbucket.readme(packageName);
+      return bitbucket.readme(repoOrg, packageName);
     }
     throw new Error('Unknown host: '+host);
   }
@@ -85,13 +85,13 @@ class Repository {
    * 
    * @returns {Promise} resolves to string
    */
-  overview(host, packageName) {
+  overview(host, repoOrg, packageName) {
     if( host === this.HOSTS.GITHUB ) {
-      return github.overview(packageName);
+      return github.overview(repoOrg, packageName);
     } else if ( host === this.HOSTS.GITLAB ) {
-      return gitlab.overview(packageName);
+      return gitlab.overview(repoOrg, packageName);
     } else if ( host === this.HOSTS.BITBUCKET ) {
-      return bitbucket.overview(packageName);
+      return bitbucket.overview(repoOrg, packageName);
     }
     throw new Error('Unknown host: '+host);
   }
@@ -106,13 +106,13 @@ class Repository {
    * 
    * @returns {Promise} resolves to null or tag object
    */
-  async latestRelease(host, packageName) {
+  async latestRelease(host, repoOrg, packageName) {
     if( host === this.HOSTS.GITHUB ) {
-      return github.latestRelease(packageName);
+      return github.latestRelease(repoOrg, packageName);
     } else if ( host === this.HOSTS.GITLAB ) {
-      return gitlab.latestRelease(packageName);
+      return gitlab.latestRelease(repoOrg, packageName);
     } else if ( host === this.HOSTS.BITBUCKET ) {
-      return bitbucket.latestRelease(packageName);
+      return bitbucket.latestRelease(repoOrg, packageName);
     }
     throw new Error('Unknown host: '+host);
   }
@@ -126,8 +126,8 @@ class Repository {
    * 
    * @returns {Promise} resolves to array 
    */
-  async getReleases(host, packageName) {
-    let htmlUrl = 'https://'+host+'.com/'+packageName;
+  async getReleases(host, repoOrg, packageName) {
+    let htmlUrl = 'https://'+host+'.com/'+repoOrg+'/'+packageName;
     let tags = await git.getRemoteTags(htmlUrl);
     if( host === this.HOSTS.GITHUB ) {
       tags = tags.map(tag => ({
@@ -135,8 +135,8 @@ class Repository {
         htmlUrl,
         name : tag,
         tagName : tag,
-        tarballUrl : github.getReleaseSnapshotUrl(packageName, tag, 'tar'),
-        zipballUrl: github.getReleaseSnapshotUrl(packageName, tag, 'zip')
+        tarballUrl : github.getReleaseSnapshotUrl(repoOrg, packageName, tag, 'tar'),
+        zipballUrl: github.getReleaseSnapshotUrl(repoOrg, packageName, tag, 'zip')
       }));
     } else if ( host === this.HOSTS.GITLAB ) {
       tags = tags.map(tag => ({
@@ -144,8 +144,8 @@ class Repository {
         htmlUrl,
         name : tag,
         tagName : tag,
-        tarballUrl : gitlab.getReleaseSnapshotUrl(packageName, tag, 'tar'),
-        zipballUrl: gitlab.getReleaseSnapshotUrl(packageName, tag, 'zip')
+        tarballUrl : gitlab.getReleaseSnapshotUrl(repoOrg, packageName, tag, 'tar'),
+        zipballUrl: gitlab.getReleaseSnapshotUrl(repoOrg, packageName, tag, 'zip')
       }));
     } else if ( host === this.HOSTS.BITBUCKET ) {
       tags = tags.map(tag => ({
@@ -153,8 +153,8 @@ class Repository {
         htmlUrl,
         name : tag,
         tagName : tag,
-        tarballUrl : bitbucket.getReleaseSnapshotUrl(packageName, tag, 'tar.gz'),
-        zipballUrl: bitbucket.getReleaseSnapshotUrl(packageName, tag, 'zip')
+        tarballUrl : bitbucket.getReleaseSnapshotUrl(repoOrg, packageName, tag, 'tar.gz'),
+        zipballUrl: bitbucket.getReleaseSnapshotUrl(repoOrg, packageName, tag, 'zip')
       }));
     }
     return tags;

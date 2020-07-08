@@ -108,12 +108,12 @@ class PackageModel {
     await mongo.insertPackage(pkg);
     
     if( pkg.source === 'managed' ) {
-      await git.clone(pkg.name);
+      await git.clone(pkg.repoName, pkg.name);
       await initPackage(pkg);
 
       // write and commit ecosis-metadata.json file
       await this.writeMetadataFile(pkg);
-      await this.commit(pkg.name, 'Updating package metadata', username);
+      await this.commit(pkg.repoOrg, pkg.name, 'Updating package metadata', username);
 
       // let travis know about the repo (sync with it)
       // await travis.initRepo(pkg.name);
@@ -167,13 +167,13 @@ class PackageModel {
 
     if( pkg.source === 'managed' ) {
       // first get in sync
-      await git.resetHEAD(pkg.name);
-      await git.clean(pkg.name);
-      await git.pull(pkg.name);
+      await git.resetHEAD(pkg.repoOrg, pkg.name);
+      await git.clean(pkg.repoOrg, pkg.name);
+      await git.pull(pkg.repoOrg, pkg.name);
 
       // update readme if it changed via git
       if( update.description && pkg.description !== update.description ) {
-        let README = path.join(git.getRepoPath(pkg.name), 'README.md');
+        let README = path.join(git.getRepoPath(pkg.repoOrg, pkg.name), 'README.md');
         await fs.writeFile(README, update.description || '');
       }
 
@@ -230,7 +230,7 @@ class PackageModel {
     if( pkg.source === 'managed' ) {
       // write and commit ecosis-metadata.json file or other changes
       await this.writeMetadataFile(pkg);
-      await this.commit(pkg.name, commitMessage || 'Updating package metadata', username);
+      await this.commit(pkg.repoOrg, pkg.name, commitMessage || 'Updating package metadata', username);
     } else {
       // this._updateRegisteredRepo(pkg);
     }
@@ -307,8 +307,8 @@ class PackageModel {
     }
 
     // update repo path
-    await git.resetHEAD(pkg.name);
-    let repoPath = git.getRepoPath(pkg.name);
+    await git.resetHEAD(pkg.repoOrg, pkg.name);
+    let repoPath = git.getRepoPath(pkg.repoOrg, pkg.name);
 
     let result = [];
     for( let i = 0; i < updateFiles.length; i++ ) {
@@ -341,7 +341,7 @@ class PackageModel {
       }
     }
 
-    await this.commit(pkg.name, message || 'Updating package files', username);
+    await this.commit(pkg.repoOrg, pkg.name, message || 'Updating package files', username);
   
     return this.getFiles(pkg);
   }
@@ -361,7 +361,7 @@ class PackageModel {
     }
 
     await mongo.removePackage(pkg.id);
-    await git.removeRepositoryFromDisk(pkg.name);
+    await git.removeRepositoryFromDisk(pkg.repoOrg, pkg.name);
 
     // if( pkg.source === 'registered' ) {
     //   this._updateRegisteredRepo(pkg, true);
@@ -454,7 +454,7 @@ class PackageModel {
    */
   async writeMetadataFile(pkg) {
     let metadata = utils.ecosmlToMetadataFile(pkg);
-    let filepath = path.join(git.getRepoPath(pkg.name), METADATA_FILENAME);
+    let filepath = path.join(git.getRepoPath(pkg.repoOrg, pkg.name), METADATA_FILENAME);
     await fs.writeFile(filepath, JSON.stringify(metadata, '  ', '  '));
   }
 
@@ -462,25 +462,28 @@ class PackageModel {
    * @method readMetadataFile
    * @description given a ecosml repo object, write the git repo metadata file
    * 
+   * @param {String} repoOrg
    * @param {String} repoName repo to read. must be already pulled to disk
+   * 
    * @returns {Promise}
    */
-  async readMetadataFile(repoName) {
-    let filepath = path.join(git.getRepoPath(repoName), METADATA_FILENAME);
-    let metadata = await fs.readFile(filepath, 'utf-8');
-    return JSON.parse(metadata || {});
-  }
+  // async readMetadataFile(repoOrg, repoName) {
+  //   let filepath = path.join(git.getRepoPath(repoOrg, repoName), METADATA_FILENAME);
+  //   let metadata = await fs.readFile(filepath, 'utf-8');
+  //   return JSON.parse(metadata || {});
+  // }
 
   /**
    * @method commit
    * @description commit change to a package to github
    * 
+   * @param {String} repoOrg
    * @param {String} packageName actual package name (not id)
    * @param {String} message commit message
    * @param {String} username
    */
-  async commit(packageName, message, username) {
-    let changes = await git.currentChangesCount(packageName);
+  async commit(repoOrg, packageName, message, username) {
+    let changes = await git.currentChangesCount(repoOrg, packageName);
     if( changes === 0 ) {
       logger.warn(`Package ${packageName} committing: told to commit, but no changes have been made`);
       return;
@@ -488,13 +491,13 @@ class PackageModel {
     
     logger.debug(`Package ${packageName} committing: ${changes} change(s)`);
     
-    var {stdout, stderr} = await git.addAll(packageName);
+    var {stdout, stderr} = await git.addAll(repoOrg, packageName);
     logger.debug(`Package ${packageName} add --all`, stdout, stderr);
 
-    var {stdout, stderr} = await git.commit(packageName, message, username);
+    var {stdout, stderr} = await git.commit(repoOrg, packageName, message, username);
     logger.debug(`Package ${packageName} commit`, stdout, stderr);
 
-    var {stdout, stderr} = await git.push(packageName);
+    var {stdout, stderr} = await git.push(repoOrg, packageName);
     logger.debug(`Package ${packageName} push`, stdout, stderr);
   }
 
@@ -513,7 +516,7 @@ class PackageModel {
       throw new Error(`${pkg.name} is not a managed repository`);
     }
 
-    let dir = await git.ensureDir(pkg.name);
+    let dir = await git.ensureDir(pkg.repoName, pkg.name);
     return this._walkPackage(dir, dir, [], pkg);
   }
 

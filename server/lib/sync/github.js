@@ -109,9 +109,9 @@ class GithubSync {
 
   async _verifyPackageMetadata(pkg) {
     // first get in sync
-    await git.resetHEAD(pkg.name);
-    await git.clean(pkg.name);
-    await git.pull(pkg.name);
+    await git.resetHEAD(pkg.repoOrg, pkg.name);
+    await git.clean(pkg.repoOrg, pkg.name);
+    await git.pull(pkg.repoOrg, pkg.name);
 
     let {overview, description} = await regRepos.getGitHubProperties(pkg.name);
     pkg.overview = overview;
@@ -187,7 +187,7 @@ class GithubSync {
       }
 
       try {
-        let releaseInfo = await this._syncReleases(repoName);
+        let releaseInfo = await this._syncReleases(config.github.org, name);
         await mongodb.updatePackage('github/'+config.github.org+'/'+repoName, releaseInfo);
         await firebase.ackGithubReleaseEvent(e.fsId);
       } catch(error) {
@@ -217,7 +217,8 @@ class GithubSync {
     logger.info(`Syncing ${repos.length} GitHub repositories`);
 
     for( let i = 0; i < repos.length; i++ ) {
-      await this.syncRepo(repos[i]);
+      let [org, name] = repos[i].split('/');
+      await this.syncRepo(org, name);
     }
 
     logger.info(`Starting GitHub repository sync for Registered Repositories\n`);
@@ -240,30 +241,31 @@ class GithubSync {
    * github repo metadata, stores ecosml-metadata.json file, README.md (description)
    * and all Github releases
    * 
+   * @param {String} repoOrg
    * @param {String} repoName repository name to sync
    * 
    * @return {Promise}
    */
-  async syncRepo(repoName) {
-    logger.info(`Syncing GitHub repository ${repoName}`);
+  async syncRepo(repoOrg, repoName) {
+    logger.info(`Syncing GitHub repository ${repoOrg}/${repoName}`);
     let metadata;
 
     try {
-      var {body} = await github.getRepository(repoName);
+      var {body} = await github.getRepository(repoOrg, repoName);
       if( body ) metadata = utils.githubRepoToEcosml(JSON.parse(body));
 
-      var {body} = await github.getRawFile(repoName, 'ecosml-metadata.json');
+      var {body} = await github.getRawFile(repoOrg, repoName, 'ecosml-metadata.json');
       if( body ) metadata = Object.assign(metadata, JSON.parse(body));
      
-      var {body} = await github.getRawFile(repoName, 'README.md');
+      var {body} = await github.getRawFile(repoOrg, repoName, 'README.md');
       if( body ) metadata.description = body;
 
-      let {releases, releaseCount} = await this._syncReleases(repoName);
+      let {releases, releaseCount} = await this._syncReleases(repoOrg, repoName);
       metadata.releases = releases;
       metadata.releaseCount = releaseCount;
 
     } catch(e) {
-      logger.error('Failed to download metadata file for repo '+repoName+', ignoring');
+      logger.error('Failed to download metadata file for repo '+repoOrg+'/'+repoName+', ignoring');
       logger.error(e);
       return;
     }
@@ -271,8 +273,8 @@ class GithubSync {
     await mongodb.insertPackage(metadata);
   }
 
-  async _syncReleases(repoName) {
-    var {body} = await github.listReleases(repoName);
+  async _syncReleases(repoOrg, repoName) {
+    var {body} = await github.listReleases(repoOrg, repoName);
     let releases = JSON.parse(body).map(release => utils.githubReleaseToEcosml(release));
     releases.sort((a, b) => {
       if( a.publishedAt.getTime() < b.publishedAt.getTime() ) return -1;

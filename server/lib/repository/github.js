@@ -27,10 +27,9 @@ class GithubApi {
    * @returns {Promise} resolves to {Boolean}
    */
   isRepoNameAvailable(name, org) {
-    var {repoName, org} = utils.getRepoNameAndOrg(name, org);
     return new Promise((resolve, reject) => {
       request({
-        uri : `https://github.com/${org}/${repoName}`,
+        uri : `https://github.com/${org}/${name}`,
         method : 'HEAD'
       }, (error, response) => {
         if( error ) reject(error);
@@ -230,21 +229,19 @@ class GithubApi {
    * @description return the latest release tag name.  Note, this
    * call does not burn a API request.
    * 
+   * @param {String} repoOrg
    * @param {String} repoName 
    * 
    * @returns {Promise} resolves to null or tag object
    */
-  async latestRelease(repoName) {
-    let fullRepoName = repoName;
-    var {repoName, org} = utils.getRepoNameAndOrg(repoName);
-
+  async latestRelease(repoOrg, repoName) {
     let {response} = await this.requestRaw({
-      uri : `https://github.com/${org}/${repoName}/releases/latest`,
+      uri : `https://github.com/${repoOrg}/${repoName}/releases/latest`,
       followRedirect : false
     });
 
     if( response.statusCode !== 302 ) {
-      throw new Error(`Unknown repository: ${org}/${repoName}`)
+      throw new Error(`Unknown repository: ${repoOrg}/${repoName}`)
     }
 
     let url = response.headers.location.replace(/.*releases\/?/, '');
@@ -253,22 +250,21 @@ class GithubApi {
     let tag = url.replace(/.*tag\//, '');
     return {
       body : '',
-      htmlUrl: `https://github.com/${org}/${repoName}/releases/tag/${tag}`,
+      htmlUrl: `https://github.com/${repoOrg}/${repoName}/releases/tag/${tag}`,
       name : tag,
       tagName : tag,
-      tarballUrl : this.getReleaseSnapshotUrl(fullRepoName, tag, 'tar'),
-      zipballUrl: this.getReleaseSnapshotUrl(fullRepoName, tag, 'zip')
+      tarballUrl : this.getReleaseSnapshotUrl(repoOrg, repoName, tag, 'tar'),
+      zipballUrl: this.getReleaseSnapshotUrl(repoOrg, repoName, tag, 'zip')
     }
   }
 
-  getReleaseSnapshotUrl(repoName, tag, type='zip') {
-    var {repoName, org} = utils.getRepoNameAndOrg(repoName);
+  getReleaseSnapshotUrl(repoOrg, repoName, tag, type='zip') {
     // so it's supposed to be this:
     // return `https://api.github.com/repos/${org}/${repoName}/zipball/${tag}`
     // but that is returning the latest master(?) snapshot.  It doesn't make sense
     // below seems to work
 
-    return `https://github.com/${org}/${repoName}/archive/${tag}.${type}`;
+    return `https://github.com/${repoOrg}/${repoName}/archive/${tag}.${type}`;
   }
 
   /**
@@ -282,19 +278,17 @@ class GithubApi {
    * 
    * @returns {Promise} resolves to full path to download (including filename)
    */
-  getReleaseSnapshot(repoName, tag, downloadPath, type='zip') {
+  getReleaseSnapshot(repoOrg, repoName, tag, downloadPath, type='zip') {
     if( type === 'zip' ) type = 'zipball';
     else if( type === 'tar' ) type = 'tarball';
     else throw new Error('Unknown snapshot type: '+type);
 
     let options = {
-      uri : this.getReleaseSnapshotUrl(repoName, tag, 'zip'),
+      uri : this.getReleaseSnapshotUrl(repoOrg, repoName, tag, 'zip'),
       headers : {
         'User-Agent' : 'EcoSML Webapp'
       }
     }
-
-    var {repoName, org} = utils.getRepoNameAndOrg(repoName);
 
     return new Promise((resolve, reject) => {
       request.get(options)
@@ -309,8 +303,8 @@ class GithubApi {
             .filter(p => p.match(/^filename=/i))[0]
             .replace(/^filename=/i, '');
 
-          if( !filename.match(org) ) {
-            filename = org+'-'+filename;
+          if( !filename.match(repoOrg) ) {
+            filename = repoOrg+'-'+filename;
           }
 
           downloadPath = path.join(downloadPath, filename);
@@ -334,11 +328,11 @@ class GithubApi {
    * 
    * @returns {Promise} resolves to String 
    */
-  async readme(repoName) {
-    let {response} = await this.getRawFile(repoName, 'README.md');
+  async readme(repoOrg, repoName) {
+    let {response} = await this.getRawFile(repoOrg, repoName, 'README.md');
     if( response.statusCode === 200 ) return response.body;
     
-    ({response} = await this.getRawFile(repoName, 'README'));
+    ({response} = await this.getRawFile(repoOrg, repoName, 'README'));
     if( response.statusCode === 200 ) return response.body;
 
     return '';
@@ -349,26 +343,25 @@ class GithubApi {
    * @description load the package overview text.  Note, this parses from
    * standard HTML request so does not take a API hit.
    * 
+   * @param {String} repoOrg
    * @param {String} packageName 
    * 
    * @returns {Promise} resolves to string
    */
-  async overview(repoName) {
-    var {repoName, org} = utils.getRepoNameAndOrg(repoName);
-
+  async overview(repoOrg, repoName) {
     let {response} = await this.requestRaw({
-      uri : `https://github.com/${org}/${repoName}`,
+      uri : `https://github.com/${repoOrg}/${repoName}`,
       followRedirect : false
     });
 
     if( response.statusCode !== 200 ) {
-      throw new Error(`Unknown repository: ${org}/${repoName}`)
+      throw new Error(`Unknown repository: ${repoOrg}/${repoName}`)
     }
 
     const dom = new JSDOM(response.body);
     let ele = dom.window.document.querySelector('[itemscope][itemtype="http://schema.org/SoftwareSourceCode"] [itemprop="about"]');
     if( !ele ) {
-      Logger.error(`CSS query failed to find github repo overview for: ${org}/${repoName}`);
+      Logger.error(`CSS query failed to find github repo overview for: ${repoOrg}/${repoName}`);
       return '';
     } 
 
@@ -619,17 +612,16 @@ class GithubApi {
    * @method getRawFile
    * @description download a file directly from github repo
    * 
+   * @param {String} repoOrg
    * @param {String} repoName name of repository
    * @param {String} filePath full path to file in repo
    * @param {String} branch optional. defaults to 'master'
    * 
    * @returns {Promise} resolves to http response
    */
-  getRawFile(repoName, filePath, branch = 'master') {
-    var {repoName, org} = utils.getRepoNameAndOrg(repoName);
-
+  getRawFile(repoOrg, repoName, filePath, branch = 'master') {
     let options = {
-      uri : `${RAW_ROOT}/${org}/${repoName}/${branch}/${filePath}`,
+      uri : `${RAW_ROOT}/${repoOrg}/${repoName}/${branch}/${filePath}`,
       headers : {
         'User-Agent' : 'EcoSML Webapp'
       }

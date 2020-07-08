@@ -32,15 +32,16 @@ class Bitbucket {
    * @description load the readme text from repository.  This call
    * does not burn a API request.
    * 
+   * @param {String} repoOrg
    * @param {String} repoName
    * 
    * @returns {Promise} resolves to String 
    */
-  async readme(repoName) {
-    let {response, body} = await this.getRawFile(repoName, 'README.md');
+  async readme(repoOrg, repoName) {
+    let {response, body} = await this.getRawFile(repoOrg, repoName, 'README.md');
     if( response.ok ) return body;
     
-    ({response, body} = await this.getRawFile(repoName, 'README'));
+    ({response, body} = await this.getRawFile(repoOrg, repoName, 'README'));
     if( response.ok ) return body;
 
     return '';
@@ -50,16 +51,15 @@ class Bitbucket {
    * @method getRawFile
    * @description download a file directly from bitbucket repo
    * 
+   * @param {String} repoOrg
    * @param {String} repoName name of repository
    * @param {String} filePath full path to file in repo
    * @param {String} branch optional. defaults to 'master'
    * 
    * @returns {Promise} resolves to http response
    */
-  async getRawFile(repoName, filePath, branch = 'master') {
-    var {repoName, org} = utils.getRepoNameAndOrg(repoName);
-
-    let uri = `${config.bitbucket.host}/${org}/${repoName}/raw/${branch}/${filePath}`;
+  async getRawFile(repoOrg, repoName, filePath, branch = 'master') {
+    let uri = `${config.bitbucket.host}/${repoOrg}/${repoName}/raw/${branch}/${filePath}`;
     let response = await fetch(
       uri,
       {'User-Agent' : 'EcoSML Webapp'}
@@ -73,15 +73,14 @@ class Bitbucket {
    * @method overview
    * @description extract overview description of a repository
    * 
+   * @param {String} repoOrg
    * @param {*} repoName 
    */
-  async overview(repoName) {
-    var {repoName, org} = utils.getRepoNameAndOrg(repoName);
-
-    let response = await fetch(`${config.bitbucket.host}/${org}/${repoName}`);
+  async overview(repoOrg, repoName) {
+    let response = await fetch(`${config.bitbucket.host}/${repoOrg}/${repoName}`);
 
     if( response.status !== 200 ) {
-      throw new Error(`Unknown repository: ${org}/${repoName}`)
+      throw new Error(`Unknown repository: ${repoOrg}/${repoName}`)
     }
 
     const dom = new JSDOM(await response.text(), {runScripts: "dangerously"});
@@ -94,16 +93,13 @@ class Bitbucket {
     return '';
   }
 
-  async latestRelease(repoName) {
-    let fullRepoName = repoName;
-    var {repoName, org} = utils.getRepoNameAndOrg(repoName);
-
+  async latestRelease(repoOrg, repoName) {
     let response = await fetch(
-      `${config.bitbucket.host}/!api/2.0/repositories/${org}/${repoName}/refs/tags?pagelen=50&sort=-target.date`,
+      `${config.bitbucket.host}/!api/2.0/repositories/${repoOrg}/${repoName}/refs/tags?pagelen=50&sort=-target.date`,
     );
 
     if( response.status !== 200 ) {
-      throw new Error(`Unknown repository: ${org}/${repoName}`)
+      throw new Error(`Unknown repository: ${repoOrg}/${repoName}`)
     }
 
     let tag = (await response.json()).values[0];
@@ -112,14 +108,13 @@ class Bitbucket {
       htmlUrl: tag.links.html.href,
       name : tag.name,
       tagName : tag.name,
-      tarballUrl : this.getReleaseSnapshotUrl(fullRepoName, tag.name, 'tar.gz'),
-      zipballUrl: this.getReleaseSnapshotUrl(fullRepoName, tag.name, 'zip')
+      tarballUrl : this.getReleaseSnapshotUrl(repoOrg, repoName, tag.name, 'tar.gz'),
+      zipballUrl: this.getReleaseSnapshotUrl(repoOrg, repoName, tag.name, 'zip')
     }
   }
 
-  getReleaseSnapshotUrl(repoName, tag, type='zip') {
-    var {repoName, org} = utils.getRepoNameAndOrg(repoName);
-    return `${config.bitbucket.host}/${org}/${repoName}/get/${tag}.${type}`;
+  getReleaseSnapshotUrl(repoOrg, repoName, tag, type='zip') {
+    return `${config.bitbucket.host}/${repoOrg}/${repoName}/get/${tag}.${type}`;
   }
 
 }

@@ -30,7 +30,7 @@ module.exports = function(markdown, pkg='') {
 
           // replace local image references with GitHub url
           if( pkg.host === 'github' ) {
-            let imgSrc = `https://github.com/${pkg.repoOrg}/${pkg.repoName}/raw/master`;
+            let imgSrc = `https://github.com/${pkg.repoOrg}/${pkg.name}/raw/master`;
             stdout = (stdout || '').replace(/<img\s+src="\./g, `<img src="${imgSrc}`);
           }
 

@@ -140,16 +140,16 @@ class GithubApi {
    * @description Requires admin.
    * https://developer.github.com/v3/repos/#edit
    * 
+   * @param {String} repoOrg
    * @param {Object} repo repository updates, must include name
    * @param {String} repo.name repository name to update
    * 
    * @returns {Promise}
    */
-  async editRepository(repo, org) {
-    var {repoName, org} = utils.getRepoNameAndOrg(repo.name, org)
+  async editRepository(repoOrg, repo) {
     return this.request({
       method : 'PATCH',
-      uri : `/repos/${org}/${repoName}`,
+      uri : `/repos/${repoOrg}/${repoName}`,
       body : JSON.stringify(repo)
     });
   }
@@ -169,6 +169,7 @@ class GithubApi {
    *  "prerelease": false
    * }
    * 
+   * @param {String} repoOrg
    * @param {String} repoName repository name
    * @param {Object} release
    * @param {String} release.tag_name
@@ -180,11 +181,10 @@ class GithubApi {
    * 
    * @returns {Promise}
    */
-  async createRelease(repoName, release) {
-    var {repoName, org} = utils.getRepoNameAndOrg(repoName);
+  async createRelease(repoOrg, repoName, release) {
     return this.request({
       method : 'POST',
-      uri : `/repos/${org}/${repoName}/releases`,
+      uri : `/repos/${repoOrg}/${repoName}/releases`,
       body : JSON.stringify(release)
     });
   }
@@ -194,15 +194,15 @@ class GithubApi {
    * @description List all releases
    * https://developer.github.com/v3/repos/releases/#list-releases-for-a-repository
    *
+   * @param {String} repoOrg
    * @param {String} repoName repository name
    * 
    * @returns {Promise}
    */
-  async listReleases(repoName) {
-    var {repoName, org} = utils.getRepoNameAndOrg(repoName);
+  async listReleases(repoOrg, repoName) {
     return this.request({
       method : 'GET',
-      uri : `/repos/${org}/${repoName}/releases`
+      uri : `/repos/${repoOrg}/${repoName}/releases`
     });
   }
 
@@ -216,11 +216,10 @@ class GithubApi {
    * 
    * @returns {Promise}
    */
-  async deleteRelease(repoName, releaseId) {
-    var {repoName, org} = utils.getRepoNameAndOrg(repoName);
+  async deleteRelease(repoOrg, repoName, releaseId) {
     return this.request({
       method : 'DELETE',
-      uri : `/repos/${org}/${repoName}/releases/${releaseId}`
+      uri : `/repos/${repoOrg}/${repoName}/releases/${releaseId}`
     });
   }
 
@@ -263,7 +262,7 @@ class GithubApi {
     // return `https://api.github.com/repos/${org}/${repoName}/zipball/${tag}`
     // but that is returning the latest master(?) snapshot.  It doesn't make sense
     // below seems to work
-
+    if( type === 'tar' || type === 'gz' ) type = 'tar.gz';
     return `https://github.com/${repoOrg}/${repoName}/archive/${tag}.${type}`;
   }
 
@@ -279,12 +278,10 @@ class GithubApi {
    * @returns {Promise} resolves to full path to download (including filename)
    */
   getReleaseSnapshot(repoOrg, repoName, tag, downloadPath, type='zip') {
-    if( type === 'zip' ) type = 'zipball';
-    else if( type === 'tar' ) type = 'tarball';
-    else throw new Error('Unknown snapshot type: '+type);
+    if( type === 'tar' || type === 'gz' ) type = 'tar.gz';
 
     let options = {
-      uri : this.getReleaseSnapshotUrl(repoOrg, repoName, tag, 'zip'),
+      uri : this.getReleaseSnapshotUrl(repoOrg, repoName, tag, type),
       headers : {
         'User-Agent' : 'EcoSML Webapp'
       }
@@ -297,16 +294,7 @@ class GithubApi {
             return reject(res);
           }
 
-          let filename = res.headers['content-disposition']
-            .split(';')
-            .map(p => p.replace(/ /g, ''))
-            .filter(p => p.match(/^filename=/i))[0]
-            .replace(/^filename=/i, '');
-
-          if( !filename.match(repoOrg) ) {
-            filename = repoOrg+'-'+filename;
-          }
-
+          let filename = 'github-'+repoOrg+'-'+repoName+'-'+tag+'.'+type;
           downloadPath = path.join(downloadPath, filename);
 
           let wstream = fs.createWriteStream(downloadPath)

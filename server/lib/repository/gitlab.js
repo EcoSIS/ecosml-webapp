@@ -129,7 +129,49 @@ class Gitlab {
   }
 
   getReleaseSnapshotUrl(repoOrg, repoName, tag, type='zip') {
+    if( type === 'tar' || type === 'gz' ) type = 'tar.gz';
     return `https://gitlab.com/${repoOrg}/${repoName}/-/archive/${tag}/${repoName}-${tag}.${type}`;
+  }
+
+    /**
+   * @method getReleaseSnapshot
+   * @description download a release zip or tarball for a given repo and tag
+   * 
+   * @param {String} repoName name of repository, can include org in path
+   * @param {String} tag tag name of release
+   * @param {String} downloadPath path to download file to
+   * @param {String} type zip or tar. defaults to zip.
+   * 
+   * @returns {Promise} resolves to full path to download (including filename)
+   */
+  getReleaseSnapshot(repoOrg, repoName, tag, downloadPath, type='zip') {
+    if( type === 'tar' || type === 'gz' ) type = 'tar.gz';
+
+    let options = {
+      uri : this.getReleaseSnapshotUrl(repoOrg, repoName, tag, type),
+      headers : {
+        'User-Agent' : 'EcoSML Webapp'
+      }
+    }
+
+    return new Promise((resolve, reject) => {
+      request.get(options)
+        .on('response', res => {
+          if( res.statusCode !== 200 ) {
+            return reject(res);
+          }
+
+          let filename = 'gitlab-'+repoOrg+'-'+repoName+'-'+tag+'.'+type;
+          downloadPath = path.join(downloadPath, filename);
+
+          let wstream = fs.createWriteStream(downloadPath)
+            .on('close', () => resolve(downloadPath))
+            .on('error', e => reject(e));
+
+          res.pipe(wstream);
+        })
+        .on('error', e => reject(e));
+    });
   }
 
 }

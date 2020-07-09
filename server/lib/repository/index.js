@@ -106,13 +106,35 @@ class Repository {
    * 
    * @returns {Promise} resolves to null or tag object
    */
-  async latestRelease(host, repoOrg, packageName) {
+  async latestRelease(host, repoOrg, repoName) {
     if( host === this.HOSTS.GITHUB ) {
-      return github.latestRelease(repoOrg, packageName);
+      return github.latestRelease(repoOrg, repoName);
     } else if ( host === this.HOSTS.GITLAB ) {
-      return gitlab.latestRelease(repoOrg, packageName);
+      return gitlab.latestRelease(repoOrg, repoName);
     } else if ( host === this.HOSTS.BITBUCKET ) {
-      return bitbucket.latestRelease(repoOrg, packageName);
+      return bitbucket.latestRelease(repoOrg, repoName);
+    }
+    throw new Error('Unknown host: '+host);
+  }
+
+  getReleaseSnapshotUrl(host, repoOrg, repoName, tag, type='zip') {
+    if( host === this.HOSTS.GITHUB ) {
+      return github.getReleaseSnapshotUrl(repoOrg, repoName, tag, type);
+    } else if ( host === this.HOSTS.GITLAB ) {
+      return gitlab.getReleaseSnapshotUrl(repoOrg, repoName, tag, type);
+    } else if ( host === this.HOSTS.BITBUCKET ) {
+      return bitbucket.getReleaseSnapshotUrl(repoOrg, repoName, tag, type);
+    }
+    throw new Error('Unknown host: '+host);
+  }
+
+  getReleaseSnapshot(host, repoOrg, repoName, tag, downloadPath, type='zip') {
+    if( host === this.HOSTS.GITHUB ) {
+      return github.getReleaseSnapshot(repoOrg, repoName, tag, downloadPath, type);
+    } else if ( host === this.HOSTS.GITLAB ) {
+      return gitlab.getReleaseSnapshot(repoOrg, repoName, tag, downloadPath, type);
+    } else if ( host === this.HOSTS.BITBUCKET ) {
+      return bitbucket.getReleaseSnapshot(repoOrg, repoName, tag, downloadPath, type);
     }
     throw new Error('Unknown host: '+host);
   }
@@ -129,35 +151,14 @@ class Repository {
   async getReleases(host, repoOrg, packageName) {
     let htmlUrl = 'https://'+host+'.com/'+repoOrg+'/'+packageName;
     let tags = await git.getRemoteTags(htmlUrl);
-    if( host === this.HOSTS.GITHUB ) {
-      tags = tags.map(tag => ({
-        body : '',
-        htmlUrl,
-        name : tag,
-        tagName : tag,
-        tarballUrl : github.getReleaseSnapshotUrl(repoOrg, packageName, tag, 'tar'),
-        zipballUrl: github.getReleaseSnapshotUrl(repoOrg, packageName, tag, 'zip')
-      }));
-    } else if ( host === this.HOSTS.GITLAB ) {
-      tags = tags.map(tag => ({
-        body : '',
-        htmlUrl,
-        name : tag,
-        tagName : tag,
-        tarballUrl : gitlab.getReleaseSnapshotUrl(repoOrg, packageName, tag, 'tar'),
-        zipballUrl: gitlab.getReleaseSnapshotUrl(repoOrg, packageName, tag, 'zip')
-      }));
-    } else if ( host === this.HOSTS.BITBUCKET ) {
-      tags = tags.map(tag => ({
-        body : '',
-        htmlUrl,
-        name : tag,
-        tagName : tag,
-        tarballUrl : bitbucket.getReleaseSnapshotUrl(repoOrg, packageName, tag, 'tar.gz'),
-        zipballUrl: bitbucket.getReleaseSnapshotUrl(repoOrg, packageName, tag, 'zip')
-      }));
-    }
-    return tags;
+    tags = tags.map(tag => ({
+      body : '',
+      htmlUrl,
+      name : tag,
+      tagName : tag,
+      tarballUrl : this.getReleaseSnapshotUrl(host, repoOrg, packageName, tag, 'tar'),
+      zipballUrl: this.getReleaseSnapshotUrl(host, repoOrg, packageName, tag, 'zip')
+    }));
   }
 
 }

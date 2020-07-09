@@ -59,7 +59,7 @@ class GitCli {
   async ensureDir(repoOrg, repoName) {
     let dir = this.getRepoPath(repoOrg, repoName);
     if( !fs.existsSync(dir) ) {
-      await this.clone(repoName);
+      await this.clone(repoOrg, repoName);
     }
     return dir;
   }
@@ -208,6 +208,7 @@ class GitCli {
    * @returns {Promise} 
    */
   async removeRepositoryFromDisk(repoOrg, repoName) {
+    console.log(repoOrg, repoName);
     let dir = path.join(ROOT, repoOrg, repoName);
     if( fs.existsSync(dir) ) {
       await fs.remove(dir);

@@ -187,7 +187,7 @@ class GithubSync {
       }
 
       try {
-        let releaseInfo = await this._syncReleases(config.github.org, name);
+        let releaseInfo = await this._syncReleases(config.github.org, repoName);
         await mongodb.updatePackage('github/'+config.github.org+'/'+repoName, releaseInfo);
         await firebase.ackGithubReleaseEvent(e.fsId);
       } catch(error) {

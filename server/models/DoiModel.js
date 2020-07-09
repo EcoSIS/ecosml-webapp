@@ -1,7 +1,7 @@
 const doi = require('../lib/doi');
 const mongo = require('../lib/mongo');
 const config = require('../lib/config');
-const github = require('../lib/repository/github');
+const repository = require('../lib/repository');
 const path = require('path');
 const fs = require('fs-extra');
 const logger = require('../lib/logger');
@@ -38,7 +38,7 @@ class DoiModel {
 
     // download snapshot, if this fails, we should error out
     logger.info('downloading code snapshot', pkg.id, tag);
-    let file = await github.getReleaseSnapshot(pkg.repoName, pkg.name, tag, config.doi.snapshotDir);
+    let file = await repository.getReleaseSnapshot(pkg.host, pkg.repoOrg, pkg.name, tag, config.doi.snapshotDir);
     let filename = path.parse(file).base;
 
     if( existingRequest && existingRequest.state === config.doi.states.canceled ) {
@@ -137,7 +137,7 @@ A DOI has been requested for the model '${pkg.name}' version ${tag} by user ${us
 
     // download snapshot.  will be stored in S3 backup for safe keeping
     logger.info('downloading code snapshot', pkg.id, tag);
-    await github.getReleaseSnapshot(pkg.repoName, pkg.name, tag, config.doi.snapshotDir);
+    await repository.getReleaseSnapshot(pkg.host, pkg.repoOrg, pkg.name, tag, config.doi.snapshotDir);
 
     // now mint doi
     logger.info('minting doi', pkg.id, tag);
@@ -157,7 +157,7 @@ A DOI has been requested for the model '${pkg.name}' version ${tag} by user ${us
 
   /**
    * @method getSnapshotPath
-   * @description get a snapshot (zip) that we have downloaded from github / repo
+   * @description get a snapshot (zip) that we have downloaded from repository / repo
    * at the time of minting.
    * 
    * @param {Object} pkg package object

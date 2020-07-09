@@ -108,7 +108,7 @@ class PackageModel {
     await mongo.insertPackage(pkg);
     
     if( pkg.source === 'managed' ) {
-      await git.clone(pkg.repoName, pkg.name);
+      await git.clone(pkg.repoOrg, pkg.name);
       await initPackage(pkg);
 
       // write and commit ecosis-metadata.json file
@@ -198,7 +198,7 @@ class PackageModel {
       // update package overview in github
       let body;
       if( update.overview && update.overview !== pkg.overview ) {
-        let response = await github.editRepository({
+        let response = await github.editRepository(pkg.repoOrg, {
           name : pkg.name,
           description : update.overview
         });
@@ -418,7 +418,7 @@ class PackageModel {
     }
 
     // create release on github
-    let {response} = await github.createRelease(pkg.name, release);
+    let {response} = await github.createRelease(pkg.repoOrg, pkg.name, release);
     if( response.statusCode !== 201 ) {
       let body = JSON.parse(response.body);
       if( body.errors && body.errors.length ) {
@@ -516,7 +516,7 @@ class PackageModel {
       throw new Error(`${pkg.name} is not a managed repository`);
     }
 
-    let dir = await git.ensureDir(pkg.repoName, pkg.name);
+    let dir = await git.ensureDir(pkg.repoOrg, pkg.name);
     return this._walkPackage(dir, dir, [], pkg);
   }
 

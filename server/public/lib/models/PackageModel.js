@@ -37,7 +37,17 @@ class PackageModel extends BaseModel {
    * @param {String} language package programming language
    * @returns {Promise} fetch promise
    */
-  async create(name, host, overview, organization, language, packageType, source) {
+  async create(pkg) {
+    pkg = {
+      name : pkg.name, 
+      repoOrg : pkg.repoOrg,
+      host: pkg.host, 
+      overview: pkg.overview, 
+      organization: pkg.organization, 
+      language: pkg.language, 
+      packageType: pkg.packageType, 
+      source: pkg.source
+    }
     return this.service.create(name, host, overview, organization, language, packageType, source);
   }
 

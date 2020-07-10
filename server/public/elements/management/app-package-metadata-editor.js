@@ -52,6 +52,11 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
         value : ''
       },
 
+      fullName : {
+        type : String,
+        value : ''
+      },
+
       repoType : {
         type : String,
         value : ''
@@ -110,6 +115,7 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
 
   _onPackageEditorDataUpdate(e) {
     this.packageId = e.payload.id || '';
+    this.fullName = e.payload.fullName || '';
     this.packageName =  (e.payload.repoOrg ? e.payload.repoOrg+'/' : '')+(e.payload.name || '');
     this.creating = e.state === 'create' ? true : false;
     this.hasRelease = (e.payload.releaseCount && e.payload.releaseCount > 0) ? true : false;

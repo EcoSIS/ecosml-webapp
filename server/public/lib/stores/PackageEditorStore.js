@@ -78,7 +78,6 @@ class PackageEditorStore extends BaseStore {
         }
         return state;
       });
-
     return this.stateChanged(states[0], states[1]);
   }
 

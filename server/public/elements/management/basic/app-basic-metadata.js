@@ -60,6 +60,10 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
   }
 
   get reponame() {
+    if( !this.creating && this.editorData ) {
+      return this.editorData.name;
+    }
+
     if( this.editorData && this.editorData.source === 'registered') {
       let {org, repo, valid} = this._checkValidUrl();
       return repo;
@@ -194,6 +198,7 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
     let data = {};
     VALUES.forEach(value => {
       let key = value;
+
       if(key === 'reponame') key = 'name';
       data[key] = this[value];
 
@@ -325,7 +330,6 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
    * @description called when any input changes
    */
   _onInputChange() {
-    console.log(this.getValues());
     this.PackageEditor.setData(this.getValues());
   }
 
@@ -367,7 +371,7 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
     }
 
     try {
-      await this.PackageModel.create(data.name, data.host, data.overview, data.organization, data.language, data.packageType, data.source);
+      await this.PackageModel.create(data);
       if( data.source === 'managed' ) {
         this.$.createdPopupContent.name = orgName;
         this.$.createdPopup.open();

@@ -13,21 +13,22 @@ class RegisteredRepositories {
    * @return {Promise}
    */
   async syncProperties(pkg) {
-    let {release, releases, overview, description} = await this.getProperties(pkg.host, pkg.repoOrg, pkg.name);
+    let {releases, overview, description} = await this.getProperties(pkg.host, pkg.repoOrg, pkg.name);
 
     // add properties stored in github repo
     if( releases ) {
       pkg.releases = releases;
       pkg.releaseCount = releases.length;
 
+      // JM - sorting by semver in getReleases now
       // insure the latest release is the last in the list
-      if( release ) {
-        let index = pkg.releases.findIndex(r => r.tag === release.tag);
-        if( index !== pkg.releaseCount-1 ) {
-          let r = pkg.releases.splice(index, 1);
-          pkg.releases.push(r[0]);
-        }
-      }
+      // if( release ) {
+      //   let index = pkg.releases.findIndex(r => r.tag === release.tag);
+      //   if( index !== pkg.releaseCount-1 ) {
+      //     let r = pkg.releases.splice(index, 1);
+      //     pkg.releases.push(r[0]);
+      //   }
+      // }
 
     } else {
       pkg.releases = [];
@@ -39,9 +40,10 @@ class RegisteredRepositories {
     return pkg;
   }
 
-  async syncPropertiesToMongo(pkg, host) {
-    if( typeof pkg === 'string' ) {
-      pkg = await mongo.getPackage((host ? host+'/' : '')+pkg);
+  async syncPropertiesToMongo(host, repoOrg, name) {
+    let pkg = host;
+    if( typeof host === 'string' ) {
+      pkg = await mongo.getPackage(host+'/'+repoOrg+'/'+name);
     }
     await this.syncProperties(pkg);
     await mongo.updatePackage(pkg.id, pkg);
@@ -58,12 +60,12 @@ class RegisteredRepositories {
    * 
    * @returns {Promise} resolves to object
    */
-  async getProperties(host, repoName) {
-    let release = await repository.latestRelease(host, repoOrg, repoName);
+  async getProperties(host, repoOrg, repoName) {
+    // let release = await repository.latestRelease(host, repoOrg, repoName);
     let overview = await repository.overview(host, repoOrg, repoName);
     let description = await repository.readme(host, repoOrg, repoName);
     let releases = await repository.getReleases(host, repoOrg, repoName);
-    return {release, releases, overview, description};
+    return {releases, overview, description};
   }
 
 }

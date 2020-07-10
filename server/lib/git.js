@@ -176,12 +176,46 @@ class GitCli {
     if( repoUrl.match(/\.git$/) ) repoUrl += '.git';  
     let {stdout, stderr} = await this.exec(`ls-remote --tags ${repoUrl}`);
 
-    return  stdout.split('\n')
+    let tags = stdout.split('\n')
       .filter(tag => tag ? true : false)
       .map(tag => tag.split(/\t/)[1])
       .filter(tag => tag ? true : false)
       .map( tag => tag.replace(/.*\//, ''))
-      .filter(tag => !tag.match(/\^\{\}$/));
+      .filter(tag => !tag.match(/\^\{\}$/))
+      .map(tag => {
+        let semver = tag.match(/(\d+)\.(\d+)\.(\d+)/);
+        let noPatch = false;
+        if( !semver ) {
+          semver = tag.match(/(\d+)\.(\d+)/);
+          noPatch = true;
+        }
+        if( !semver ) {
+          return {
+            tag, major : -1, minor : -1, patch : -1
+          }
+        }
+        return {
+          tag,
+          major : parseInt(semver[1]),
+          minor : parseInt(semver[2]),
+          patch : noPatch ? -1 : parseInt(semver[3])
+        }
+      });
+
+    tags.sort((a, b) => {
+      if( a.major > b.major ) return 1;
+      if( a.major < b.major ) return -1;
+
+      if( a.minor > b.minor ) return 1;
+      if( a.minor < b.minor ) return -1;
+
+      if( a.patch > b.patch ) return 1;
+      if( a.patch < b.patch ) return -1;
+
+      return 0;
+    });
+
+    return tags.map(tag => tag.tag);
   }
 
   /**

@@ -159,6 +159,7 @@ class Repository {
       tarballUrl : this.getReleaseSnapshotUrl(host, repoOrg, packageName, tag, 'tar'),
       zipballUrl: this.getReleaseSnapshotUrl(host, repoOrg, packageName, tag, 'zip')
     }));
+    return tags
   }
 
 }

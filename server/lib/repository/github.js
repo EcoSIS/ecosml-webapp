@@ -347,13 +347,13 @@ class GithubApi {
     }
 
     const dom = new JSDOM(response.body);
-    let ele = dom.window.document.querySelector('[itemscope][itemtype="http://schema.org/SoftwareSourceCode"] [itemprop="about"]');
+    let ele = dom.window.document.querySelector('meta[name="description"]');
     if( !ele ) {
       Logger.error(`CSS query failed to find github repo overview for: ${repoOrg}/${repoName}`);
       return '';
     } 
 
-    return ele.innerHTML.trim();
+    return ele.getAttribute('content').replace(`- ${repoOrg}/${repoName}`, '').trim();
   }
 
   /**

@@ -56,22 +56,19 @@ class PackageModel {
       await registeredRepositories.syncProperties(pkg);
       
       // ensure this repo exists and we can access
-      let {name, repoOrg} = this.getNameAndRepoOrg(pkg.name);
-      let exists = await repository.exists(pkg.host, name, repoOrg);
+      let exists = await repository.exists(pkg.host, pkg.name, pkg.repoOrg);
       if( !exists ) throw new Error('Repository does not exist: '+pkg.name);
 
-      let ePkg = await mongo.getPackage(pkg.host+'/'+pkg.name);
-      if( ePkg ) throw new Error('Repository already registered: '+pkg.name);
+      let ePkg = await mongo.getPackage(pkg.host+'/'+pkg.repoOrg+'/'+pkg.name);
+      if( ePkg ) throw new Error('Repository already registered: '+pkg.host+'/'+pkg.repoOrg+'/'+pkg.name);
 
-      pkg.name = name;
-      pkg.repoOrg = repoOrg;
-      pkg.fullName = pkg.host+'/'+repoOrg+'/'+name;
+      pkg.fullName = pkg.host+'/'+pkg.repoOrg+'/'+pkg.name;
 
       // check things look ok
       schema.validate('create', pkg);
 
       // fake some of the github api properties
-      pkg.htmlUrl = repository.getHost(pkg.host)+'/'+pkg.name;
+      pkg.htmlUrl = repository.getHost(pkg.host)+'/'+pkg.repoOrg+'/'+pkg.name;
       pkg.private = false;
 
     } else if( pkg.source === 'managed' ) {
@@ -381,7 +378,7 @@ class PackageModel {
       throw new Error('Must be a registered repository');
     }
 
-    return registeredRepositories.syncPropertiesToMongo(pkg.name, pkg.host);
+    return registeredRepositories.syncPropertiesToMongo(pkg.host, pkg.repoOrg, pkg.name);
   }
 
   /**

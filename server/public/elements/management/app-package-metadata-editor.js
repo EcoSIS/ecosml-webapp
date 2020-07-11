@@ -75,6 +75,11 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
       host : {
         type : String, 
         value : ''
+      },
+
+      source : {
+        type : String,
+        value : ''
       }
     }
   }
@@ -121,6 +126,7 @@ class AppPackageMetadataEditor extends Mixin(PolymerElement)
     this.hasRelease = (e.payload.releaseCount && e.payload.releaseCount > 0) ? true : false;
     this.gitHtmlUrl = e.payload.htmlUrl || '';
     this.host = e.payload.host || 'github';
+    this.source = e.payload.source;
 
     if( this.lastState !== e.state || e.reset ) {
       if( e.state === 'create' ) {

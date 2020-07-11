@@ -39,7 +39,7 @@ ${litCss(sharedStylesHtml)}
       You have unsaved changes  
       <paper-button @click="${this._onSaveChangesClicked}">Commit Changes</paper-button> 
     </div> 
-    <div>
+    <div ?hidden="${this.source == "registered"}">
       <input type="text" placeholder="Commit message" id="commitMsg">
     </div>
   </div>

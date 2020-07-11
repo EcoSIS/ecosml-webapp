@@ -69,7 +69,19 @@ export default class AppFiles extends Mixin(PolymerElement)
 
     let host = e.payload.host || 'github';
     let name = (e.payload.name || '').replace(/.*\//, '');
-    this.zipBundleUrl = e.payload.htmlUrl + ((host === 'github') ? '/archive/master.zip' : '/-/archive/master/'+name+'-master.zip')
+
+    let masterZipDownload = '';
+    if( host === 'github' ) {
+      masterZipDownload = '/archive/master.zip';
+    } else if( host === 'gitlab' ) {
+      masterZipDownload = '/-/archive/master/'+name+'-master.zip';
+    } else if( host === 'bitbucket' ) {
+      masterZipDownload = '/get/master.zip';
+    } else {
+      console.error('Unknown source: ', host);
+    }
+
+    this.zipBundleUrl = e.payload.htmlUrl + masterZipDownload;
   }
 
 }

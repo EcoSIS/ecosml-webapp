@@ -242,7 +242,6 @@ class GitCli {
    * @returns {Promise} 
    */
   async removeRepositoryFromDisk(repoOrg, repoName) {
-    console.log(repoOrg, repoName);
     let dir = path.join(ROOT, repoOrg, repoName);
     if( fs.existsSync(dir) ) {
       await fs.remove(dir);

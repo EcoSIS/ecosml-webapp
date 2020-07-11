@@ -48,7 +48,7 @@ class PackageModel extends BaseModel {
       packageType: pkg.packageType, 
       source: pkg.source
     }
-    return this.service.create(name, host, overview, organization, language, packageType, source);
+    return this.service.create(pkg);
   }
 
   /**

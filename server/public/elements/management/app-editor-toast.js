@@ -7,7 +7,10 @@ export default class AppEditorToast extends LitElement {
 
   static get properties() {
     return {
-      
+      source : {
+        type : String,
+        value : ''
+      }
     }
   }
 

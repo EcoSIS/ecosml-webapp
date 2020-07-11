@@ -1,8 +1,10 @@
 const fetch = require('node-fetch');
+const request = require('request');
 const config = require('../config');
-const utils = require('../utils');
 const {JSDOM} = require('jsdom');
 const logger = require('../logger');
+const fs = require('fs');
+const path = require('path');
 
 class Gitlab {
 

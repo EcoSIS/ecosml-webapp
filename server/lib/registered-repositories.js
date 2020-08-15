@@ -13,7 +13,7 @@ class RegisteredRepositories {
    * @return {Promise}
    */
   async syncProperties(pkg) {
-    let {releases, overview, description} = await this.getProperties(pkg.host, pkg.repoOrg, pkg.name);
+    let {releases, overview, description} = await this.getProperties(pkg);
 
     // add properties stored in github repo
     if( releases ) {
@@ -46,6 +46,7 @@ class RegisteredRepositories {
       pkg = await mongo.getPackage(host+'/'+repoOrg+'/'+name);
     }
     await this.syncProperties(pkg);
+    pkg.lastSynced = new Date();
     await mongo.updatePackage(pkg.id, pkg);
     return pkg;
   }
@@ -60,11 +61,11 @@ class RegisteredRepositories {
    * 
    * @returns {Promise} resolves to object
    */
-  async getProperties(host, repoOrg, repoName) {
+  async getProperties(pkg) {
     // let release = await repository.latestRelease(host, repoOrg, repoName);
-    let overview = await repository.overview(host, repoOrg, repoName);
-    let description = await repository.readme(host, repoOrg, repoName);
-    let releases = await repository.getReleases(host, repoOrg, repoName);
+    let overview = await repository.overview(pkg.host, pkg.repoOrg, pkg.name);
+    let description = await repository.readme(pkg.host, pkg.repoOrg, pkg.name);
+    let releases = await repository.getReleases(pkg);
     return {releases, overview, description};
   }
 

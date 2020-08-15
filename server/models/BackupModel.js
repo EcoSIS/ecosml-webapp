@@ -13,15 +13,15 @@ class BackupModel {
     fs.mkdirpSync(config.backups.tmpDir);
     fs.mkdirpSync(config.backups.tmpRestoreDir);
 
-    setInterval(async () => {
-      if( new Date().getHours() !== 3 ) return;
-      try {
-        await this.run();
-      } catch(e) {
-        logger.error('Failed to run backup', e);
-      }
+    // setInterval(async () => {
+    //   if( new Date().getHours() !== 3 ) return;
+    //   try {
+    //     await this.run();
+    //   } catch(e) {
+    //     logger.error('Failed to run backup', e);
+    //   }
       
-    }, 1000 * 60 * 60);
+    // }, 1000 * 60 * 60);
   }
 
   /**
@@ -29,6 +29,10 @@ class BackupModel {
    * @description create backup.  Includes mongodb snapshot
    */
   async run() {
+    if( config.backups.enabled === false ) {
+      return logger.info('Backups disabled, ignoring backup process');
+    }
+
     logger.info('Creating backup...');
     await fs.emptyDir(config.backups.tmpDir);
     await fs.mkdirp(config.backups.tmpDir);
@@ -131,6 +135,10 @@ class BackupModel {
   }
 
   async clean(filename) {
+    if( config.backups.enabled === false ) {
+      return logger.info('Backups disabled, ignoring backup cleanup process');
+    }
+
     logger.info('Backup running cleanup: ', (filename || 'all'));
     let date = new Date();
     let keep = [];

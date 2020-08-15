@@ -6,6 +6,7 @@ const config = require('./lib/config');
 const logger = require('./lib/logger');
 const sitemap = require('./models/SitemapModel');
 const backup = require('./models/BackupModel');
+require('./models/CronModel');
 
 const app = express();
 

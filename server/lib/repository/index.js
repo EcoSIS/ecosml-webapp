@@ -148,16 +148,18 @@ class Repository {
    * 
    * @returns {Promise} resolves to array 
    */
-  async getReleases(host, repoOrg, packageName) {
-    let htmlUrl = 'https://'+host+'.com/'+repoOrg+'/'+packageName;
-    let tags = await git.getRemoteTags(htmlUrl);
+  async getReleases(pkg) {
+    await git.noCheckoutClone(pkg.htmlUrl);
+    let tags = await git.noCheckoutTagDates(pkg.htmlUrl);
     tags = tags.map(tag => ({
       body : '',
-      htmlUrl,
-      name : tag,
-      tagName : tag,
-      tarballUrl : this.getReleaseSnapshotUrl(host, repoOrg, packageName, tag, 'tar'),
-      zipballUrl: this.getReleaseSnapshotUrl(host, repoOrg, packageName, tag, 'zip')
+      htmlUrl: pkg.htmlUrl, // TODO: make this point at real url for release
+      createdAt : tag.timestamp,
+      publishedAt : tag.timestamp,
+      name : tag.tag,
+      tagName : tag.tag,
+      tarballUrl : this.getReleaseSnapshotUrl(pkg.host, pkg.repoOrg, pkg.packageName, tag, 'tar'),
+      zipballUrl: this.getReleaseSnapshotUrl(pkg.host, pkg.repoOrg, pkg.packageName, tag, 'zip')
     }));
     return tags
   }

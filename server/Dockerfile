@@ -1,14 +1,16 @@
-FROM node:12
+FROM node:14
 
 RUN echo "postfix postfix/main_mailer_type string Internet site" > /preseed.txt
 RUN echo "postfix postfix/mailname string ecosml.org" >> /preseed.txt
 RUN DEBIAN_FRONTEND=noninteractive
 RUN debconf-set-selections /preseed.txt
 
+RUN echo "deb http://ftp.us.debian.org/debian testing main contrib non-free" >> /etc/apt/sources.list
+
 # install ruby and markdown library, mongodump
 RUN apt-get update && \
     apt-get install -y ruby-full mongodb-clients zip \
-    postfix mailutils
+    postfix mailutils git/testing
 
 RUN update-rc.d postfix enable
 RUN rm /preseed.txt

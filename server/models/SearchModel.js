@@ -3,6 +3,9 @@ const github = require('../lib/repository/github');
 const logger = require('../lib/logger');
 const utils = require('../lib/utils');
 
+const REGEX_MATCH = /^\/.*\/$/;
+const DATE_MATCH = /\d\d\d\d-\d\d-\d\dT\d\d:\d\d:.*/;
+
 class SearchModel {
 
   /**
@@ -48,6 +51,7 @@ class SearchModel {
       mongoQuery.$text = {$search: query.text};
     }
     if( query.filters && query.filters.length > 0 ) {
+      this._replaceDateAndRegex(query.filters);
       mongoQuery.$and = query.filters;
     }
 
@@ -76,6 +80,31 @@ class SearchModel {
     }
 
     return result;
+  }
+
+  /**
+   * @method _replaceDateAndRegex
+   * @description given a search query, replace stringified Date and Regex
+   * objects with real instances
+   * 
+   * @param {Object|Array} obj 
+   */
+  _replaceDateAndRegex(obj) {
+    if( Array.isArray(obj) ) {
+      return obj.forEach(o => this._replaceDateAndRegex(o));
+    } else if( typeof obj === 'object') {
+      for( let key in obj ) {
+        if( typeof obj[key] == 'object' ) {
+          this._replaceDateAndRegex(obj[key]);
+        } else if ( typeof obj[key] == 'string' && obj[key].match(DATE_MATCH) ) {
+          obj[key] = new Date(obj[key]);
+        } else if ( typeof obj[key] === 'string' && obj[key].match(REGEX_MATCH) ) {
+          try {
+            obj[key] = new RegExp(obj[key].replace(/\//g, ''), 'i');
+          } catch(e) {}
+        }
+      }
+    }
   }
 
   /**

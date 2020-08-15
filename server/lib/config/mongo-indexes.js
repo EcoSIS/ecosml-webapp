@@ -73,6 +73,14 @@ module.exports = {
       options : {
         name: "PackageTypeIndex"
       }
+    },
+    {
+      index : {
+        'releases.createdAt': 1
+      },
+      options : {
+        name: "PackageTypeIndex"
+      }
     }
 
   ],

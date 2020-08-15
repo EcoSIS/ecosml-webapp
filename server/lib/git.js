@@ -1,9 +1,11 @@
 const { exec } = require('child_process');
+const {URL} = require('url');
 const fs = require('fs-extra');
 const config = require('./config');
 const utils = require('./utils');
 const logger = require('./logger');
 const path = require('path');
+const { stdin } = require('process');
 const GITHUB_ACCESS = config.github.access;
 
 const ROOT = config.github.fsRoot;
@@ -162,6 +164,67 @@ class GitCli {
     let dir = await this.ensureDir(repoOrg, repoName);
     if( username ) username = `--author="${username} <>"`;
     return this.exec(`commit ${username} -m "${message}"`, {cwd: dir});
+  }
+
+  /**
+   * @method _getPartsFromUrl
+   * @description parse repo url returning url object, repo names; repoOrg, repoName
+   * as well as path information; repoPath repoOrgPath.  The nocheckout flag is a switch
+   * for the shallow (--no-checkout) path checkouts
+   * 
+   * @param {String} repoUrl 
+   * @param {Boolean} nocheckout
+   * 
+   * @return {String}
+   */
+  _getPartsFromUrl(repoUrl, nocheckout=false) {
+    repoUrl = repoUrl.replace(/\.git$/, '');
+    repoUrl = new URL(repoUrl);
+    let [repoOrg, repoName] = repoUrl.pathname.replace(/^\//, '').split('/');
+    let repoOrgPath = path.join((nocheckout ? config.git.noCheckoutFsRoot : ROOT), repoUrl.host, repoOrg);
+    let repoPath = path.join(repoOrgPath, repoName);
+    return {url: repoUrl, repoOrg, repoName, repoPath, repoOrgPath};
+  }
+
+  /**
+   * @method noCheckoutClone
+   * @description either clone or re-pull a repo using --no-checkout flag (just pulls .git dir)
+   * 
+   * @param {String} repoUrl 
+   * 
+   * @returns {Promise}
+   */
+  async noCheckoutClone(repoUrl) {
+    let {repoPath, repoOrgPath} = this._getPartsFromUrl(repoUrl, true);
+    if( fs.existsSync(repoPath) ) {
+      return this.exec(`pull`, {cwd: repoPath});
+    }
+
+    await fs.mkdirp(repoOrgPath);
+    return this.exec(`clone --filter=blob:none --no-checkout ${repoUrl}`, {cwd: repoOrgPath});
+  }
+
+  /**
+   * @method noCheckoutTagDates
+   * @description return array of tag/date objects for repo that has been pulled via
+   * the noCheckoutClone() method.
+   * 
+   * @param {String} repoUrl 
+   * 
+   * @returns {Promise} resolves to Array
+   */
+  async noCheckoutTagDates(repoUrl) {
+    let {repoPath} = this._getPartsFromUrl(repoUrl, true);
+    let {stdout, stderr} = await this.exec(`tag -l --sort=-creatordate --format='%(creatordate:iso-strict):  %(refname:short)'`, {cwd: repoPath});
+
+    return stdout.split('\n')
+      .filter(line => line ? true : false)
+      .map(line => line.trim().replace(/( |\t)+/, ' ').split(/: /))
+
+      .map(line => ({
+        timestamp : new Date(line[0]),
+        tag : line[1]
+      }));
   }
 
   /**

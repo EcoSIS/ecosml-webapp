@@ -8,7 +8,7 @@ RUN debconf-set-selections /preseed.txt
 # install ruby and markdown library, mongodump
 RUN apt-get update && \
     apt-get install -y ruby-full mongodb-clients zip \
-    postfix mailutils git/testing
+    postfix mailutils
 
 # hack for latest git.  adding testing AFTER install above
 RUN echo "deb http://ftp.us.debian.org/debian testing main contrib non-free" >> /etc/apt/sources.list

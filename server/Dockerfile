@@ -5,12 +5,15 @@ RUN echo "postfix postfix/mailname string ecosml.org" >> /preseed.txt
 RUN DEBIAN_FRONTEND=noninteractive
 RUN debconf-set-selections /preseed.txt
 
-RUN echo "deb http://ftp.us.debian.org/debian testing main contrib non-free" >> /etc/apt/sources.list
-
 # install ruby and markdown library, mongodump
 RUN apt-get update && \
     apt-get install -y ruby-full mongodb-clients zip \
     postfix mailutils git/testing
+
+# hack for latest git.  adding testing AFTER install above
+RUN echo "deb http://ftp.us.debian.org/debian testing main contrib non-free" >> /etc/apt/sources.list
+RUN apt-get update && \
+    apt-get install -y git/testing
 
 RUN update-rc.d postfix enable
 RUN rm /preseed.txt

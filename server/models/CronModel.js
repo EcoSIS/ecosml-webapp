@@ -19,15 +19,7 @@ class Cron {
     logger.info('Running cron tasks');
 
     try {
-      let collection = await mongo.packagesCollection();
-      let pkgs = await collection.find({source: 'registered'}, {}).toArray();
-      for( let pkg of pkgs ) {
-        try {
-          await regRepos.syncPropertiesToMongo(pkg);
-        } catch(e) {
-          logger.error('Cron package sync error: ', e);
-        }
-      }
+      this.syncRegRepos();
     } catch(e) {
       logger.error('Cron error: ', e);
     }
@@ -38,6 +30,18 @@ class Cron {
       logger.error('Cron error: ', e);
     }
   }
+
+  async syncRegRepos() {
+    let collection = await mongo.packagesCollection();
+    let pkgs = await collection.find({source: 'registered'}, {}).toArray();
+    for( let pkg of pkgs ) {
+      try {
+        await regRepos.syncPropertiesToMongo(pkg);
+      } catch(e) {
+        logger.error('Cron package sync error: ', e);
+      }
+    }
+  }
 }
 
-new Cron();
+module.exports = new Cron();

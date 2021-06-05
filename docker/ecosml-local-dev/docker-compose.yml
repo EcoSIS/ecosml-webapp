@@ -20,6 +20,7 @@ services:
       - storage:/storage
     ports:
       - 3000:3000
+      - 9229:9229
     env_file: '.env'
     environment:
       - GITHUB_ORG=ecosml-dev

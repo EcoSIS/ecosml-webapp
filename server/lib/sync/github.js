@@ -109,9 +109,14 @@ class GithubSync {
 
   async _verifyPackageMetadata(pkg) {
     // first get in sync
-    await git.resetHEAD(pkg.repoOrg, pkg.name);
-    await git.clean(pkg.repoOrg, pkg.name);
-    await git.pull(pkg.repoOrg, pkg.name);
+    try { 
+      await git.resetHEAD(pkg.repoOrg, pkg.name);
+      await git.clean(pkg.repoOrg, pkg.name);
+      await git.pull(pkg.repoOrg, pkg.name);
+    } catch(e) {
+      logger.error('Failed to pull repo, re-cloning', e);
+      await git.clone(pkg.repoOrg, pkg.name);
+    }
 
     let {overview, description} = await regRepos.getGitHubProperties(pkg.name);
     pkg.overview = overview;

@@ -18,7 +18,7 @@ RUN apt-get update && \
 RUN update-rc.d postfix enable
 RUN rm /preseed.txt
 
-RUN gem install commonmarker
+RUN gem install commonmarker -v 0.20.1
 RUN npm install -g mocha
 
 COPY ./docker-run.sh /

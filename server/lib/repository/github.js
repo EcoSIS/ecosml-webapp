@@ -149,7 +149,7 @@ class GithubApi {
   async editRepository(repoOrg, repo) {
     return this.request({
       method : 'PATCH',
-      uri : `/repos/${repoOrg}/${repoName}`,
+      uri : `/repos/${repoOrg}/${repo.name}`,
       body : JSON.stringify(repo)
     });
   }
@@ -347,13 +347,13 @@ class GithubApi {
     }
 
     const dom = new JSDOM(response.body);
-    let ele = dom.window.document.querySelector('meta[name="description"]');
+    let ele = dom.window.document.querySelector('title');
     if( !ele ) {
       Logger.error(`CSS query failed to find github repo overview for: ${repoOrg}/${repoName}`);
       return '';
     } 
 
-    return ele.getAttribute('content').replace(`- ${repoOrg}/${repoName}`, '').trim();
+    return ele.innerHTML.replace(new RegExp(`(GitHub - )?${repoOrg}/${repoName}:?`, 'i'), '').trim();
   }
 
   /**

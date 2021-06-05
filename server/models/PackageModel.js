@@ -53,6 +53,10 @@ class PackageModel {
     let ecosmlId = uuid.v4();
 
     if( pkg.source === 'registered' ) {
+      // fake some of the github api properties
+      pkg.htmlUrl = repository.getHost(pkg.host)+'/'+pkg.repoOrg+'/'+pkg.name;
+      pkg.private = false;
+
       await registeredRepositories.syncProperties(pkg);
       
       // ensure this repo exists and we can access
@@ -66,10 +70,6 @@ class PackageModel {
 
       // check things look ok
       schema.validate('create', pkg);
-
-      // fake some of the github api properties
-      pkg.htmlUrl = repository.getHost(pkg.host)+'/'+pkg.repoOrg+'/'+pkg.name;
-      pkg.private = false;
 
     } else if( pkg.source === 'managed' ) {
       pkg.repoOrg = config.github.org;
@@ -149,7 +149,7 @@ class PackageModel {
    */
   async update(pkg, update, commitMessage, username, refreshFromGithub = false) {
     pkg = await this.get(pkg);
-    schema.validate('update', update);
+    schema.validate('update', update, pkg.source);
 
     if( pkg.organizationInfo ) delete pkg.organizationInfo;
 
@@ -159,14 +159,20 @@ class PackageModel {
     update.fullName = pkg.fullName;
     update.repoOrg = pkg.repoOrg;
     update.host = pkg.host;
+    update.htmlUrl = pkg.htmlUrl;
 
     let gpkg = {};
 
     if( pkg.source === 'managed' ) {
       // first get in sync
-      await git.resetHEAD(pkg.repoOrg, pkg.name);
-      await git.clean(pkg.repoOrg, pkg.name);
-      await git.pull(pkg.repoOrg, pkg.name);
+      try { 
+        await git.resetHEAD(pkg.repoOrg, pkg.name);
+        await git.clean(pkg.repoOrg, pkg.name);
+        await git.pull(pkg.repoOrg, pkg.name);
+      } catch(e) {
+        logger.error('Failed to pull repo, re-cloning', e);
+        await git.clone(pkg.repoOrg, pkg.name);
+      }
 
       // update readme if it changed via git
       if( update.description && pkg.description !== update.description ) {

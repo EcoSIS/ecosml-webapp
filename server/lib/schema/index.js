@@ -17,11 +17,16 @@ const v = new Validator();
 
 const schemas = {
   create : require('./create.json'),
-  update : require('./update.json')
+  update : require('./update.js')
 }
 
-function validate(schema, instance) {
+function validate(schema, instance, type) {
   schemaImpl = schemas[schema];
+  console.log(type);
+  if( typeof schemaImpl === 'function' ) {
+    schemaImpl = schemaImpl(type);
+  }
+
   if( !schemaImpl ) throw new Error('Unknown schema: '+schema);
   v.validate(instance, schemaImpl, {throwError: true})
 }

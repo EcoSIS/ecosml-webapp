@@ -195,11 +195,18 @@ class GitCli {
    * @returns {Promise}
    */
   async noCheckoutClone(repoUrl) {
-    let {repoPath, repoOrgPath} = this._getPartsFromUrl(repoUrl, true);
+    let {repoPath, repoOrgPath, repoOrg, repoName} = this._getPartsFromUrl(repoUrl, true);
     if( fs.existsSync(repoPath) ) {
-      return this.exec(`pull`, {cwd: repoPath});
+      try {
+        await this.exec(`pull`, {cwd: repoPath});
+      } catch(e) {
+        logger.warn('failed to pull repo, cloning', e);
+      }
     }
 
+    if( fs.existsSync(repoOrgPath) ) {
+      await fs.remove(repoOrgPath);
+    }
     await fs.mkdirp(repoOrgPath);
     return this.exec(`clone --filter=blob:none --no-checkout ${repoUrl}`, {cwd: repoOrgPath});
   }

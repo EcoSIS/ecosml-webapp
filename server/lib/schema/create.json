@@ -13,6 +13,9 @@
       "repoOrg" : {
         "type" : "string"
       },
+      "htmlUrl" : {
+        "type" : "string"
+      },
       "source": {
         "type": "string",
         "enum" : ["registered", "managed"]
@@ -61,6 +64,9 @@
       },
       "releaseCount" : {
         "type": "integer"
+      },
+      "private" : {
+        "type" : "boolean"
       }
     },
     "additionalProperties": false,

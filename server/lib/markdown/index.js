@@ -29,8 +29,9 @@ module.exports = function(markdown, pkg='') {
         } else {
 
           // replace local image references with GitHub url
+          // TODO: This is going to be a problem for registered repositories... 
           if( pkg.host === 'github' ) {
-            let imgSrc = `https://github.com/${pkg.repoOrg}/${pkg.name}/raw/master`;
+            let imgSrc = `https://github.com/${pkg.repoOrg}/${pkg.name}/raw/${pkg.defaultBranch || 'master'}`;
             stdout = (stdout || '').replace(/<img\s+src="\./g, `<img src="${imgSrc}`);
           }
 

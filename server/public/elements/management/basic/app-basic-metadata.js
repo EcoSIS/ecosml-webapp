@@ -371,9 +371,10 @@ export default class AppBasicMetadata extends Mixin(PolymerElement)
     }
 
     try {
-      await this.PackageModel.create(data);
+      let resp = await this.PackageModel.create(data);
       if( data.source === 'managed' ) {
         this.$.createdPopupContent.name = orgName;
+        this.$.createdPopupContent.defaultBranch = resp.body.defaultBranch || 'master';
         this.$.createdPopup.open();
       }
     } catch(e) {

@@ -39,11 +39,11 @@ class Bitbucket {
    * 
    * @returns {Promise} resolves to String 
    */
-  async readme(repoOrg, repoName) {
-    let {response, body} = await this.getRawFile(repoOrg, repoName, 'README.md');
+  async readme(repoOrg, repoName, branch='master') {
+    let {response, body} = await this.getRawFile(repoOrg, repoName, 'README.md', branch);
     if( response.ok ) return body;
     
-    ({response, body} = await this.getRawFile(repoOrg, repoName, 'README'));
+    ({response, body} = await this.getRawFile(repoOrg, repoName, 'README', branch));
     if( response.ok ) return body;
 
     return '';

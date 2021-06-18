@@ -111,17 +111,17 @@ class SearchModel {
    * @method reindexRepositories
    * @description
    */
-  async reindexRepositories() {
-    let repos = await github.listRepositories();
-    let inserted = [];
+  // async reindexRepositories() {
+  //   let repos = await github.listRepositories();
+  //   let inserted = [];
 
-    for( var i = 0; i < repos.length; i++ ) {
-      await this.reindexRepository(repos[i].name);
-      inserted.push(repos[i].name);
-    }
+  //   for( var i = 0; i < repos.length; i++ ) {
+  //     await this.reindexRepository(repos[i].name);
+  //     inserted.push(repos[i].name);
+  //   }
 
-    return inserted;
-  }
+  //   return inserted;
+  // }
 
   /**
    * @method reindexRepository
@@ -129,23 +129,23 @@ class SearchModel {
    * 
    * @param {String} repoName 
    */
-  async reindexRepository(repoName) {
-    // have to access api for release info
-    let repo = await github.getRepository(repoName);
-    repo = utils.githubRepoToEcosml(JSON.parse(repo.body));
+  // async reindexRepository(repoName) {
+  //   // have to access api for release info
+  //   let repo = await github.getRepository(repoName);
+  //   repo = utils.githubRepoToEcosml(JSON.parse(repo.body));
 
-    // assign any additional metadata fields
-    let {response} = await github.getRawFile(repo.name, 'ecosml-metadata.json');
-    if( response.body ) {
-      let metadata = utils.ecosmlToMetadataFile(JSON.parse(response.body));
-      repo = Object.assign(metadata, repo);
-    }
+  //   // assign any additional metadata fields
+  //   let {response} = await github.getRawFile(repo.name, 'ecosml-metadata.json');
+  //   if( response.body ) {
+  //     let metadata = utils.ecosmlToMetadataFile(JSON.parse(response.body));
+  //     repo = Object.assign(metadata, repo);
+  //   }
 
-    repo.releaseCount = (repo.releases || []).length;
+  //   repo.releaseCount = (repo.releases || []).length;
 
-    await mongo.insertPackage(repo);
-    return repo;
-  }
+  //   await mongo.insertPackage(repo);
+  //   return repo;
+  // }
 
   /**
    * @method recreateIndex

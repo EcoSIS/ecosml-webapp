@@ -29,9 +29,14 @@ export default class AppDetailsMetadata extends Mixin(PolymerElement)
         value : false
       },
 
-      masterUrl : {
+      mainUrl : {
         type : String,
         value : ''
+      },
+
+      defaultBranch : {
+        type : String,
+        value : 'master'
       }
     }
   }
@@ -90,16 +95,19 @@ export default class AppDetailsMetadata extends Mixin(PolymerElement)
 
     this.isManagedSource = (e.payload.source === 'registered') ? false : true;
 
-    let masterPath = '';
+    this.defaultBranch = e.payload.defaultBranch || 'master';
+
+    let mainPath = '';
     if( !e.payload.host || e.payload.host === 'github' ) {
-      masterPath = '/tree/master';
+      mainPath = '/tree/'+this.defaultBranch;
     } else if( e.payload.host === 'gitlab' ) {
-      masterPath = '/-/tree/master/'
+      mainPath = '/-/tree/'+this.defaultBranch+'/'
     } else if( e.payload.host === 'bitbucket' ) {
-      masterPath = '/src/master/';
+      mainPath = '/src/'+this.defaultBranch+'/';
     }
 
-    this.masterUrl = e.payload.htmlUrl+masterPath;
+
+    this.mainUrl = e.payload.htmlUrl+mainPath;
   }
 
   /**

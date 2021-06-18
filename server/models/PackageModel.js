@@ -101,8 +101,9 @@ class PackageModel {
     }
 
     pkg.id = ecosmlId;
-
     await mongo.insertPackage(pkg);
+
+    await this.syncRepoBranchName(pkg, true);
     
     if( pkg.source === 'managed' ) {
       await git.clone(pkg.repoOrg, pkg.name);
@@ -122,9 +123,6 @@ class PackageModel {
           await github.addTeamRepo(team.id, pkg.name);
         }
       }
-    } else if( pkg.source === 'registered' ) {
-      // write to backup repo, don't need to await on this...
-      // this._updateRegisteredRepo(pkg);
     }
 
     return pkg;
@@ -166,7 +164,7 @@ class PackageModel {
     if( pkg.source === 'managed' ) {
       // first get in sync
       try { 
-        await git.resetHEAD(pkg.repoOrg, pkg.name);
+        await git.resetHEAD(pkg.repoOrg, pkg.name, pkg.defaultBranch);
         await git.clean(pkg.repoOrg, pkg.name);
         await git.pull(pkg.repoOrg, pkg.name);
       } catch(e) {
@@ -230,6 +228,8 @@ class PackageModel {
     await mongo.updatePackage(pkg.id, gpkg);
     pkg = await mongo.getPackage(pkg.id);
 
+    await this.syncRepoBranchName(pkg);
+
     if( pkg.source === 'managed' ) {
       // write and commit ecosis-metadata.json file or other changes
       await this.writeMetadataFile(pkg);
@@ -239,6 +239,29 @@ class PackageModel {
     }
 
     return pkg;
+  }
+
+  /**
+   * @method syncRepoBranchName
+   * @description ensure the correct default branch name is set for repository
+   * 
+   * @param {Object} pkg 
+   * 
+   * @returns {Promise} Resolves to string
+   */
+  async syncRepoBranchName(pkg, clean) {
+    // make sure we have the correct repo
+    let defaultBranch = await git.defaultBranchName(
+      repository.getHost(pkg.host), 
+      pkg.repoOrg, 
+      pkg.name,
+      {clean}
+    );
+
+    await mongo.updatePackage(pkg.id, {defaultBranch});
+    pkg.defaultBranch = defaultBranch;
+
+    return defaultBranch;
   }
 
   /**
@@ -310,7 +333,7 @@ class PackageModel {
     }
 
     // update repo path
-    await git.resetHEAD(pkg.repoOrg, pkg.name);
+    await git.resetHEAD(pkg.repoOrg, pkg.name, pkg.defaultBranch);
     let repoPath = git.getRepoPath(pkg.repoOrg, pkg.name);
 
     let result = [];

@@ -64,7 +64,7 @@ class RegisteredRepositories {
   async getProperties(pkg) {
     // let release = await repository.latestRelease(host, repoOrg, repoName);
     let overview = await repository.overview(pkg.host, pkg.repoOrg, pkg.name);
-    let description = await repository.readme(pkg.host, pkg.repoOrg, pkg.name);
+    let description = await repository.readme(pkg.host, pkg.repoOrg, pkg.name, pkg.defaultBranch);
     let releases = await repository.getReleases(pkg);
     return {releases, overview, description};
   }

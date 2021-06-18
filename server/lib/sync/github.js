@@ -110,7 +110,7 @@ class GithubSync {
   async _verifyPackageMetadata(pkg) {
     // first get in sync
     try { 
-      await git.resetHEAD(pkg.repoOrg, pkg.name);
+      await git.resetHEAD(pkg.repoOrg, pkg.name, pkg.defaultBranch);
       await git.clean(pkg.repoOrg, pkg.name);
       await git.pull(pkg.repoOrg, pkg.name);
     } catch(e) {
@@ -246,23 +246,27 @@ class GithubSync {
    * github repo metadata, stores ecosml-metadata.json file, README.md (description)
    * and all Github releases
    * 
+   * TODO: test default branch
+   * 
    * @param {String} repoOrg
    * @param {String} repoName repository name to sync
    * 
    * @return {Promise}
    */
   async syncRepo(repoOrg, repoName) {
-    logger.info(`Syncing GitHub repository ${repoOrg}/${repoName}`);
-    let metadata;
+    logger.info(`Syncing GitHub repository ${repoOrg}/${repoName}, branch:${branch}`);
+    let metadata = {};
 
     try {
       var {body} = await github.getRepository(repoOrg, repoName);
       if( body ) metadata = utils.githubRepoToEcosml(JSON.parse(body));
 
-      var {body} = await github.getRawFile(repoOrg, repoName, 'ecosml-metadata.json');
+      metadata.defaultBranch = await git.defaultBranchName('https://github.com', repoOrg, repoName);
+
+      var {body} = await github.getRawFile(repoOrg, repoName, 'ecosml-metadata.json', metadata.defaultBranch);
       if( body ) metadata = Object.assign(metadata, JSON.parse(body));
      
-      var {body} = await github.getRawFile(repoOrg, repoName, 'README.md');
+      var {body} = await github.getRawFile(repoOrg, repoName, 'README.md', metadata.defaultBranch);
       if( body ) metadata.description = body;
 
       let {releases, releaseCount} = await this._syncReleases(repoOrg, repoName);

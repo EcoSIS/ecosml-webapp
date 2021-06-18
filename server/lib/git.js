@@ -9,6 +9,7 @@ const { stdin } = require('process');
 const GITHUB_ACCESS = config.github.access;
 
 const ROOT = config.github.fsRoot;
+const SHALLOW_ROOT = path.join(ROOT, '_');
 const BASE_URL = `https://${GITHUB_ACCESS.username}:${GITHUB_ACCESS.token}@github.com`;
 
 if( !fs.existsSync(ROOT) ) {
@@ -34,6 +35,7 @@ class GitCli {
   /**
    * @method clone
    * @description clone a ecosml repository
+   * 
    * @param {String} repoName 
    * 
    * @return {Promise}
@@ -113,13 +115,49 @@ class GitCli {
    * 
    * @param {String} repoOrg
    * @param {String} repoName name of repository
+   * @param {String} branch main branch
    * 
    * @returns {Promise} 
    */
-  async resetHEAD(repoOrg, repoName) {
+  async resetHEAD(repoOrg, repoName, branch='master') {
     let dir = await this.ensureDir(repoOrg, repoName);
     await this.exec('fetch origin', {cwd: dir});
-    return this.exec('reset --hard origin/master', {cwd: dir});
+    return this.exec('reset --hard origin/'+branch, {cwd: dir});
+  }
+
+  /**
+   * @method defaultBranchName
+   * @description get default branch name.  This is a special command
+   * that runs in the shallow root and requires the host
+   * 
+   * @param {String} repoHost
+   * @param {String} repoOrg 
+   * @param {String} repoName 
+   * @returns {String}
+   */
+  async defaultBranchName(repoHost, repoOrg, repoName, opts={}) {
+    let orgDir = path.join(SHALLOW_ROOT, repoHost.replace(/.*\//, ''), repoOrg);
+
+    if( !fs.existsSync(orgDir) ) {
+      await fs.mkdirp(orgDir);
+    }
+   
+    let repoDir = path.join(orgDir, repoName);
+    if( opts.clean && fs.existsSync(repoDir) ) {
+      await fs.remove(repoDir);
+    }
+
+    
+    if( fs.existsSync(repoDir) ) {
+      await this.exec(`pull`, {cwd: repoDir, });
+    } else {
+       // set a dumby username/password in url
+      let url = repoHost.replace(/\/\//, '//user:password@')+'/'+repoOrg+'/'+repoName; 
+      await this.exec(`clone -n --depth 1 ${url}`, {cwd: orgDir});
+    }
+
+    let {stdout, stderr} = await this.exec('symbolic-ref refs/remotes/origin/HEAD', {cwd: repoDir});
+    return stdout.replace(/.*\//, '').trim();
   }
 
   /**
@@ -313,6 +351,11 @@ class GitCli {
    */
   async removeRepositoryFromDisk(repoOrg, repoName) {
     let dir = path.join(ROOT, repoOrg, repoName);
+    if( fs.existsSync(dir) ) {
+      await fs.remove(dir);
+    }
+
+    dir = path.join(SHALLOW_ROOT, repoOrg, repoName);
     if( fs.existsSync(dir) ) {
       await fs.remove(dir);
     }

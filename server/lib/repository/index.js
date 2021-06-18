@@ -64,13 +64,13 @@ class Repository {
    * 
    * @returns {Promise} resolves to String 
    */
-  readme(host, repoOrg, packageName) {
+  readme(host, repoOrg, packageName, defaultBranch) {
     if( host === this.HOSTS.GITHUB ) {
-      return github.readme(repoOrg, packageName);
+      return github.readme(repoOrg, packageName, defaultBranch);
     } else if ( host === this.HOSTS.GITLAB ) {
-      return gitlab.readme(repoOrg, packageName);
+      return gitlab.readme(repoOrg, packageName, defaultBranch);
     } else if ( host === this.HOSTS.BITBUCKET ) {
-      return bitbucket.readme(repoOrg, packageName);
+      return bitbucket.readme(repoOrg, packageName, defaultBranch);
     }
     throw new Error('Unknown host: '+host);
   }

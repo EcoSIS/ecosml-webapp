@@ -316,11 +316,11 @@ class GithubApi {
    * 
    * @returns {Promise} resolves to String 
    */
-  async readme(repoOrg, repoName) {
-    let {response} = await this.getRawFile(repoOrg, repoName, 'README.md');
+  async readme(repoOrg, repoName, branch='master') {
+    let {response} = await this.getRawFile(repoOrg, repoName, 'README.md', branch);
     if( response.statusCode === 200 ) return response.body;
     
-    ({response} = await this.getRawFile(repoOrg, repoName, 'README'));
+    ({response} = await this.getRawFile(repoOrg, repoName, 'README', branch));
     if( response.statusCode === 200 ) return response.body;
 
     return '';

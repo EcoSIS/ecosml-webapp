@@ -12,6 +12,10 @@ export default class AppCreatedPopup extends PolymerElement {
       name : {
         type : String,
         value : ''
+      },
+      defaultBranch : {
+        type : String,
+        value : 'master'
       }
     }
   }

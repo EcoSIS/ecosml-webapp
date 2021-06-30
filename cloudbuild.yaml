@@ -12,7 +12,7 @@ steps:
   args: ["-c", "docker login --username=$_DOCKER_USER_ID --password-stdin < pass.txt"]
 
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['pull', 'ecosis/ecosml-webapp:$BRANCH_NAME']
+  args: ['pull', 'ecosis/ecosml-webapp:$BRANCH_NAME', '||', 'true']
 
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'ecosis/ecosml-webapp:$BRANCH_NAME', '--cache-from', 'ecosis/ecosml-webapp:$BRANCH_NAME', './server']

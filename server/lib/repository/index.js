@@ -158,8 +158,8 @@ class Repository {
       publishedAt : tag.timestamp,
       name : tag.tag,
       tagName : tag.tag,
-      tarballUrl : this.getReleaseSnapshotUrl(pkg.host, pkg.repoOrg, pkg.name, tag, 'tar'),
-      zipballUrl: this.getReleaseSnapshotUrl(pkg.host, pkg.repoOrg, pkg.name, tag, 'zip')
+      tarballUrl : this.getReleaseSnapshotUrl(pkg.host, pkg.repoOrg, pkg.name, tag.tag, 'tar'),
+      zipballUrl: this.getReleaseSnapshotUrl(pkg.host, pkg.repoOrg, pkg.name, tag.tag, 'zip')
     }));
     return tags
   }

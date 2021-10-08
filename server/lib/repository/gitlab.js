@@ -103,6 +103,7 @@ class Gitlab {
    * @returns {Promise} resolves to null or tag object
    */
   async latestRelease(repoOrg, repoName) {
+    console.log(repoOrg, repoName);
     let response = await fetch(
       `${config.gitlab.host}/${repoOrg}/${repoName}/-/tags`,
       {redirect : 'manual'}

@@ -161,6 +161,8 @@ class Repository {
       tarballUrl : this.getReleaseSnapshotUrl(pkg.host, pkg.repoOrg, pkg.name, tag.tag, 'tar'),
       zipballUrl: this.getReleaseSnapshotUrl(pkg.host, pkg.repoOrg, pkg.name, tag.tag, 'zip')
     }));
+    tags.sort((a, b) => a.createdAt < b.createdAt ? -1 : 1);
+
     return tags
   }
 

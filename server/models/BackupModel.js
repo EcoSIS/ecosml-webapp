@@ -169,7 +169,7 @@ class BackupModel {
     }
 
     // Auto cleanup EcoSIS backups as well
-    if( config.backups.ecosisBucket && config.server.serverEnv === 'prod' ) {
+    if( config.backups.ecosisBucket && config.backups.env ) {
       logger.info('Running backup cleaning of EcoSIS')
       currentBackups = await aws.listFiles(config.backups.ecosisBucket);
       logger.info('Current '+config.backups.ecosisBucket+' backups: ', currentBackups);

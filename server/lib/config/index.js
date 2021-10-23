@@ -83,7 +83,7 @@ module.exports = {
     tmpDir : path.join(MOUNT_PATH, 'backup'),
     tmpRestoreDir : path.join(MOUNT_PATH, 'backup-restore'),
     bucket : env.BACKUP_ENV === 'prod' ? 'ecosml-backups' : 'ecosml-'+(env.BACKUP_ENV || 'local')+'-backups',
-    ecosisBucket : env.BACKUP_ENV === 'prod' ? 'ecosml-backups' : 'ecosml-'+(env.BACKUP_ENV || 'local')+'-backups'
+    ecosisBucket : env.BACKUP_ENV === 'prod' ? 'ecosis-backups' : 'ecosis-'+(env.BACKUP_ENV || 'local')+'-backups'
   },
 
   cron : {

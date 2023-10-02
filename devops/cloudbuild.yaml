@@ -1,0 +1,26 @@
+steps:
+# - name: 'ubuntu'
+#   entrypoint: 'bash'
+#   args: ['-c', 'echo "{\"tag\":\"${TAG_NAME}\",\"branch\":\"${BRANCH_NAME}\",\"commit\":\"${SHORT_SHA}\"}" > ./server/gitinfo.json']
+
+# - name: gcr.io/cloud-builders/gcloud
+#   entrypoint: 'bash'
+#   args: [ '-c', 'gcloud secrets versions access latest --secret=ecosisdev-dockerhub-password > pass.txt' ]
+
+# - name: "gcr.io/cloud-builders/docker"
+#   entrypoint: "bash"
+#   args: ["-c", "docker login --username=$_DOCKER_USER_ID --password-stdin < pass.txt"]
+
+- name: 'gcr.io/cloud-builders/docker'
+  entrypoint: "bash"
+  args: ['-c', 'docker pull gcr.io/ecosis-prod/ecosml-webapp:$BRANCH_NAME || true']
+
+- name: 'gcr.io/cloud-builders/docker'
+  entrypoint: "bash"
+  args: ['-c', './devops/build.sh']
+  env:
+    - "GIT_DISCOVERY_ACROSS_FILESYSTEM=true"
+    - "BRANCH_NAME=$BRANCH_NAME"
+
+
+images: ['gcr.io/ecosis-prod/ecosml-webapp:$BRANCH_NAME']

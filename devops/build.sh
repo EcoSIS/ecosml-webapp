@@ -13,6 +13,6 @@ if [[ -z $BRANCH_NAME ]]; then
 fi
 
 echo "building $ORG/ecosml-webapp:$BRANCH_NAME"
-docker build -t $ORG/ecosml-webapp:$BRANCH_NAME ./server
+docker build --cache-from $ORG/ecosml-webapp:$BRANCH_NAME -t $ORG/ecosml-webapp:$BRANCH_NAME ./server
 # echo "building ecosis/ecosml-webapp:dev"
 # docker build -t ecosis/ecosml-webapp:dev .

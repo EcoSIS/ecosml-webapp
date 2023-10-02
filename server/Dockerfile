@@ -1,13 +1,19 @@
-FROM node:14
+FROM node:18
 
 RUN echo "postfix postfix/main_mailer_type string Internet site" > /preseed.txt
 RUN echo "postfix postfix/mailname string ecosml.org" >> /preseed.txt
 RUN DEBIAN_FRONTEND=noninteractive
 RUN debconf-set-selections /preseed.txt
 
+RUN curl -fsSL https://pgp.mongodb.com/server-7.0.asc | \
+   gpg -o /usr/share/keyrings/mongodb-server-7.0.gpg \
+   --dearmor
+# RUN echo "deb [ signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] http://repo.mongodb.org/apt/debian bookworm/mongodb-org/7.0 main" | tee /etc/apt/sources.list.d/mongodb-org-7.0.list
+RUN echo "deb [ signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] http://repo.mongodb.org/apt/debian bullseye/mongodb-org/7.0 main" | tee /etc/apt/sources.list.d/mongodb-org-7.0.list
+
 # install ruby and markdown library, mongodump
 RUN apt-get update && \
-    apt-get install -y ruby-full mongodb-clients zip \
+    apt-get install -y ruby-full mongodb-org-shell mongodb-org-tools zip \
     postfix mailutils
 
 # hack for latest git.  adding testing AFTER install above
@@ -38,6 +44,6 @@ COPY ./controllers /server/controllers
 COPY ./lib /server/lib
 COPY ./models /server/models
 COPY ./templates /server/templates
-COPY ./gitinfo.json /server/
+# COPY ./gitinfo.json /server/
 
 CMD ./docker-run.sh

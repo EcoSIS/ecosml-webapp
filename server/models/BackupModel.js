@@ -70,8 +70,12 @@ class BackupModel {
    * 
    * @param {Date} from Optional. Defaults to latest
    */
-  async restore(from) {
+  async restore(from, isLocalFile=false) {
+    logger.info('Starting restore: ', {from, isLocalFile});
+
     let filename;
+    if( isLocalFile ) filename = from;
+  
     if( !from ) {
       let currentBackups = await aws.listFiles(config.backups.bucket);
       currentBackups = currentBackups.map(file => {
@@ -83,17 +87,23 @@ class BackupModel {
         throw new Error('No backups found and no date provided');
       }
       filename = this._getBackupFilename(currentBackups[0]);
-    } else {
+    } else if( !filename ) {
       filename = this._getBackupFilename(from);
     }
 
-    logger.info('Restoring system from backup: '+config.backups.bucket+'/'+filename);
+    logger.info('Restoring system from backup: '+(!isLocalFile ? config.backups.bucket+'/' : '')+filename);
     await fs.emptyDir(config.backups.tmpRestoreDir);
     await fs.mkdirp(config.backups.tmpRestoreDir);
 
-    logger.info('Downloading backup zipfile: '+config.backups.bucket+'/'+filename);
-    let localfile = path.join(config.backups.tmpRestoreDir, filename);
-    await aws.downloadFile(localfile, config.backups.bucket, filename);
+    let localfile;
+    if( !isLocalFile ) {
+      logger.info('Downloading backup zipfile: '+config.backups.bucket+'/'+filename);
+      localfile = path.join(config.backups.tmpRestoreDir, filename);
+      await aws.downloadFile(localfile, config.backups.bucket, filename);
+    } else {
+      localfile = path.join(config.backups.tmpRestoreDir, from);
+      await fs.move(from, localfile);
+    }
 
     logger.info('Unziping backup zipfile: '+localfile);
     await this._unzip(localfile, config.backups.tmpRestoreDir);
@@ -169,7 +179,7 @@ class BackupModel {
     }
 
     // Auto cleanup EcoSIS backups as well
-    if( config.backups.ecosisBucket && config.server.serverEnv === 'prod' ) {
+    if( config.backups.ecosisBucket && config.backups.env ) {
       logger.info('Running backup cleaning of EcoSIS')
       currentBackups = await aws.listFiles(config.backups.ecosisBucket);
       logger.info('Current '+config.backups.ecosisBucket+' backups: ', currentBackups);

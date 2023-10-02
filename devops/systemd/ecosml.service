@@ -1,0 +1,13 @@
+[Unit]
+Description=EcoSML Production Environment
+After=network.target docker.service
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/ecosml-webapp/docker/ecosml
+ExecStart=/usr/local/bin/docker compose -f /opt/ecosml-webapp/docker/ecosml/docker compose.yml up
+ExecStop=/usr/local/bin/docker compose -f /opt/ecosml-webapp/docker/ecosml/docker compose.yml down
+#Restart=always
+
+[Install]
+WantedBy=multi-user.target

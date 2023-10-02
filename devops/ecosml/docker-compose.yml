@@ -3,7 +3,7 @@ version: '2'
 services:
 
   server:
-    image: ecosis/ecosml-webapp:main
+    image: gcr.io/ecosis-prod/ecosml-webapp:main
     volumes:
       - snapshot-data:/server/snapshots
       - git-data:/server/gitdata

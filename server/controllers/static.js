@@ -1,13 +1,19 @@
 const config = require('../lib/config');
 const path = require('path');
 const express = require('express');
-const gitinfo = require('../gitinfo');
+// const gitinfo = require('../gitinfo');
 const redis = require('../lib/redis');
 const logger = require('../lib/logger');
 const pkgModel = require('../models/PackageModel');
 const jsonldTransform = require('../lib/jsonld');
 const spaMiddleware = require('@ucd-lib/spa-router-middleware');
 const mongo = require('../lib/mongo');
+
+const gitinfo = {
+  BRANCH : process.env.BRANCH,
+  TAG : process.env.TAG,
+  SHA : process.env.SHA
+}
 
 /**
  * How we load Webcomponent polyfills and Webpacked Polymer 3 application bundle.

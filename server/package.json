@@ -35,7 +35,7 @@
     "node-fetch": "^2.6.0",
     "nodemailer": "^6.4.6",
     "papaparse": "^4.3.6",
-    "parse-link-header": "^1.0.1",
+    "parse-link-header": "^2.0.0",
     "redis": "^2.8.0",
     "request": "^2.83.0",
     "shortid": "^2.2.15",

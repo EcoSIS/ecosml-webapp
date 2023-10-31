@@ -14,7 +14,7 @@ let secrets = {
 const MOUNT_PATH = env.MOUNT_PATH || '/storage';
 
 if( fs.existsSync(path.resolve(__dirname, '../../secrets.js')) ) {
-  secrets = require('../../secrets');
+  secrets = require(path.resolve(__dirname, '../../secrets.js'));
 }
 
 const mongoHost = env.MONGO_HOST || 'mongo';
